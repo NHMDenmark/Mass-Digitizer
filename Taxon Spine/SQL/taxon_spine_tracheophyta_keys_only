@@ -1,3 +1,4 @@
+--#I left the taxonFullName in there for sanity checking if joining this table on 'taxon' or perhaps others.
 SELECT 	
 			tking.TaxonID kingdom,			
         tdivis.TaxonTreeDefID AS taxonTree,
