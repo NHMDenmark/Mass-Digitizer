@@ -1,4 +1,38 @@
 --#I left the taxonFullName in there for sanity checking if joining this table on 'taxon' or perhaps others.
+/*
+Name	RankID
+Class	60
+Division	30
+Family	140
+forma	260
+Genus	180
+Infraclass	80
+Infraorder	120
+Kingdom	10
+Life	0
+Order	100
+Phylum	30
+Species	220
+Subclass	70
+Subdivision	40
+Subfamily	150
+subforma	270
+Subgenus	190
+Subkingdom	20
+Suborder	110
+Subphylum	40
+Subspecies	230
+Subtribe	170
+subvariety	250
+Superclass	50
+Superfamily	130
+Superorder	90
+Tribe	160
+variety	240
+	
+All these taxon ranks are included except 'life'.
+*/
+
 SELECT 	
 			tking.TaxonID kingdom,			
         tdivis.TaxonTreeDefID AS taxonTree,
