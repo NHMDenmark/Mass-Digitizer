@@ -17,7 +17,7 @@ print('CSRF Token: ', csrftoken)
 # Next step is to use token to log in 
 headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer' : baseUrl }
 data = {"username" : "test", "password" : "testtest", "collection": 4}
-response = requests.put(loginUrl, data=data, headers=headers, verify=False)
+response = requests.put(loginUrl, json=data, headers=headers, verify=False)
 
 print('REQUEST: ', response.request.headers)
 print('RESPONSE: ', response.status_code)
