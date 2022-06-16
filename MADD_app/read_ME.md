@@ -15,6 +15,8 @@ The response size shrinks with every subsequent input until the result is less t
   
 ## Process considerations
 Several fast search options were considered to solve the issue of large taxonomies. I tested two of them: TypeSense and MeiliSearch and it was not a happy experience.
-I ended up rejecting them because one returned data inconsistent with the ground truth dataset, and the other had issues with csv files though not with .json files. However the json file was three times larger than the corresponding csv file. I bumped into a 100MB limit soon enough.  
+I ended up rejecting them because one returned data inconsistent with the ground truth dataset, and the other had issues with csv files though not with .json files. However the json file was three times larger than the corresponding csv file. I bumped into a 100MB limit soon enough.
+Well known solutions such as ElasticSearch were not considered because the requirements stated that the app should work even if wifi was unavailable for a period of time. We ended up settling on using SQLite in memory as an adequate solution.  
 
+## PS
 Be aware that this code is still a work in progress.
