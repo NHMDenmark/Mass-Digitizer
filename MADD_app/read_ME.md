@@ -9,4 +9,12 @@ The UI console will look like this:
 
 ![img](https://github.com/NHMDenmark/DaSSCo/blob/main/MADD_app/MADD_beta.png)
 
+Once three or more characters have been put into the taxon name field, then the initial SQLite query is submitted. From thereon all operations are made on dictionaries.
+The response size shrinks with every subsequent input until the result is less than 20, then a pop up window appears:
+![pop](https://github.com/NHMDenmark/DaSSCo/blob/main/MADD_app/popup.png)  
+  
+## Process considerations
+Several fast search options were considered to solve the issue of large taxonomies. I tested two of them: TypeSense and MeiliSearch and it was not a happy experience.
+I ended up rejecting them because one returned data inconsistent with the ground truth dataset, and the other had issues with csv files though not with .json files. However the json file was three times larger than the corresponding csv file. I bumped into a 100MB limit soon enough.  
+
 Be aware that this code is still a work in progress.
