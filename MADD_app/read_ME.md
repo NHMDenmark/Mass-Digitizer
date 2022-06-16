@@ -5,6 +5,8 @@ Please unzip powo_uniq.zip or download this file: https://alumni-my.sharepoint.c
 
 The code will work with any taxonomy having the fields "taxon_name","family","authors","status".
 
+The UI console will look like this:
 
+![img](https://github.com/NHMDenmark/DaSSCo/blob/main/MADD_app/MADD_beta.png)
 
 Be aware that this code is still a work in progress.
