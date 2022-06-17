@@ -15,45 +15,53 @@
 
 import csv, sqlite3
 import time
-from pprint import pprint
+import taxonomy_shrinker
 
 con = sqlite3.connect(":memory:")
 # sets the DB to be in memory exclusively
 cur = con.cursor()
 ####This part is necessary due to the nature of in-memory SQLite, since the DB disappears at session end.####
-cur.execute('CREATE TABLE pow ("taxon_name","family","authors","status");') # use your column names here
 
-with open('C:/Users/bxq762/Desktop/MADD_APP/powo_uniq.csv', 'r', encoding='utf-8') as fin: # `with` statement available in 2.5+
-    # csv.DictReader uses first line in file for column headings by default
-    dr = csv.DictReader(fin) # comma is default delimiter
-    to_db = [(i['taxon_name'], i['family'], i['authors'], i['status']) for i in dr]
+def make_taxonomylite(hc):
+    cur.execute('CREATE TABLE pow ("taxon_name","family","authors","status");') # use your column names here
 
-cur.executemany("INSERT INTO pow (taxon_name,family,authors,status) VALUES (?, ?, ?, ?);", to_db)
-con.commit()
+    with open('C:/Users/bxq762/Desktop/MADD_APP/powo_uniq.csv', 'r', encoding='utf-8') as fin: # `with` statement available in 2.5+
+        # csv.DictReader uses first line in file for column headings by default
+        dr = csv.DictReader(fin) # comma is default delimiter
+        to_db = [(i['taxon_name'], i['family'], i['authors'], i['status']) for i in dr]
+
+    start = time.time()
+    cur.executemany("INSERT INTO pow (taxon_name,family,authors,status) VALUES (?, ?, ?, ?);", to_db)
+    con.commit()
+    end = time.time()
+    print('exe time for SQLite "botany" taxonomy build is= ', end - start)
 ####This needs only run once at the start of session####
-input_field = 'Cor'
-query = "SELECT pow.taxon_name from pow WHERE pow.taxon_name LIKE '{}%';".format(input_field)
-start = time.time()
-out = cur.execute(query)
-end = time.time()
-print('exe time for SQLite is= ', end - start)
-taxon_dict = {}
-for j in out:
-    # print(j[0])
-    taxon_dict[j[0]] = ''
 
-# pprint(taxon_dict)
-print(len(taxon_dict))
-input_field = 'Cora'
+make_taxonomylite('hard coder')
 
-start2 = time.time()
-keys = taxon_dict.keys()
-res = any(key.startswith(input_field) for key in taxon_dict)
-print(res)
-candidates = [elem for elem in keys if elem[0:4] == input_field]
-end2 = time.time()
-print(candidates)
-print(len(candidates))
-print('exe dicts = ', end2 - start2)
+def run_query(name_part):
+    #name_part: string to be queried by
+    #return: a dict of names
 
-# con.close()
+    # input_field = 'Cor'
+    input_field = name_part
+    query = "SELECT pow.taxon_name from pow WHERE pow.taxon_name LIKE '{}%';".format(input_field)
+
+    out = cur.execute(query)
+
+
+    taxon_dict = {}
+    for j in out:
+        # print(j[0])
+        taxon_dict[j[0]] = ''
+
+    return taxon_dict
+# FOR DEMO PURPOSE
+# res = run_query('Cor')
+# print('length - - ', len(res))
+# res2 = taxonomy_shrinker.refine_taxon_dict(res, 'Cora')
+# print('length of new taxonomy - - ', len(res2))
+####END FOR DEMO
+
+
+
