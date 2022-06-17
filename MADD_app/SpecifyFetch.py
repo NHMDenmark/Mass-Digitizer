@@ -3,34 +3,54 @@
 import requests
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+from getpass import getpass
 
-baseUrl = "https://specify-test.science.ku.dk/"
-loginUrl = baseUrl + "context/login/"
-username = 'test'
-password = 'testtest'
+baseURL = "https://specify-test.science.ku.dk/"
+loginURL = baseURL + "context/login/"
+
+# Create a session for storing cookies 
+sess = requests.Session() 
 
 #Connect to Specify7 API
 # First step is to get a CSRF token 
-csrftoken = requests.get(loginUrl, verify=False).cookies.get('csrftoken')
+print('get CSRF token')
+response = sess.get(loginURL, verify=False)
+csrftoken = response.cookies.get('csrftoken')
+print('response: ' + str(response.status_code) + " " + response.reason)
 print('CSRF Token: ', csrftoken)
 
-# Next step is to use token to log in 
-headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer' : baseUrl }
-data = {"username" : "test", "password" : "testtest", "collection": 4}
-response = requests.put(loginUrl, json=data, headers=headers, verify=False)
+# Ask for username and password from user
+print('get username/password from input')
+username = input()
+passwd = getpass()
+print('username: "%", password: "%"', username, passwd)
 
-print('REQUEST: ', response.request.headers)
-print('RESPONSE: ', response.status_code)
-print(response.headers)
+# Next step is to use csrf token to log in 
+print('log in using CSRF token & username/password')
+headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': baseURL}
+response = sess.put(baseURL + "context/login/", json={"username": username, "password": passwd, "collection": 851970}, headers=headers, verify=False)
+cookies = response.cookies
+csrftoken = response.cookies.get('csrftoken') # Keep and use new CSRF token after login
+print('response: ' + str(response.status_code) + " " + response.reason)
+print('New CSRF Token: ', csrftoken)
+
+#verify session
+print('verify session')
+headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': baseURL}
+response = sess.get(baseURL + "context/user.json", headers=headers)
+print('response: ' + str(response.status_code) + " " + response.reason)
+if response.status_code > 299:
+  # print(response.text)
+  print('something went wrong...')
+else:
+  print('user id: ' + str(response.json()['id']))
+
+#query object 
+print('query object')
+response = sess.get(baseURL + "api/specify/collectionobject/501269/", headers=headers)
+print('response: ' + str(response.status_code) + " " + response.reason)
+print('catalog number: ' + response.json()['catalognumber'])
 print()
-print('***closer look at prepared request***')
-print(response.request.method)
-print(response.request.headers['Content-Type'])
-print(response.request.headers['Referer'])
-print(response.request.headers['X-CSRFToken'])
-print(response.request.body)
-
-
 
 """
   Created on Tuesday June 14, 2022
