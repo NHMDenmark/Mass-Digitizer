@@ -1,28 +1,35 @@
 # -*- coding: utf-8 -*-
 import requests
+import json 
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 from getpass import getpass
 
-baseURL = "https://specify-test.science.ku.dk/"
-loginURL = baseURL + "context/login/"
-
 # global variables 
-# 
+institutions = json.load(open('bootstrap/institutions.json'))
+baseURL = institutions[0]['URL']
+loginURL = baseURL + 'context/login/'
+collections = {}
+
 # Create a session for storing cookies 
 spSession = requests.Session() 
- 
 
 def getCSRFToken():
+  # Specify7 requires a token to prevent Cross Site Request Forgery 
+  # This will also return a list of the institution's collections 
   print('get CSRF token')
   response = spSession.get(loginURL, verify=False)
   csrftoken = response.cookies.get('csrftoken')
+  # collections = json.load(response.text)
   print('response: ' + str(response.status_code) + " " + response.reason)
   print('CSRF Token: ', csrftoken)
+  # print(collections[0])
   print('----------')
   return csrftoken
 
 def login(username, passwd, csrftoken):
+  # username and password should be passed to the login function along with CSRF token 
+  # after successful login a new CSRF token is issued that should be used for the continuing session 
   print('log in using CSRF token & username/password')
   headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': baseURL}
   response = spSession.put(baseURL + "context/login/", json={"username": username, "password": passwd, "collection": 851970}, headers=headers, verify=False)
@@ -33,7 +40,8 @@ def login(username, passwd, csrftoken):
   return csrftoken
 
 def verifySession(csrftoken):
-  #verify session
+  # Attempt to retrieve data on the current user being logged in as a way to verify the session  
+  # The CSRF token is required for security reasons 
   print('verify session')
   headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': baseURL}
   response = spSession.get(baseURL + "context/user.json", headers=headers)
@@ -46,7 +54,8 @@ def verifySession(csrftoken):
   print('----------')
 
 def queryCollObject(collectionObjectId, csrftoken):
-  #query object 
+  # Collection Objects can be queried using their primary key, which is not the same as catalog number  
+  # The CSRF token is required for security reasons 
   print('query object')
   headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': baseURL}
   response = spSession.get(baseURL + "api/specify/collectionobject/" + str(collectionObjectId)  + "/", headers=headers)
@@ -55,7 +64,10 @@ def queryCollObject(collectionObjectId, csrftoken):
   print('----------')
 
 def logout(csrftoken):
-  headers = {'content-type': 'applicatiob/json', 'X-CSRFToken': csrftoken, 'Referer': baseURL}
+  # Logging out closes the session on both ends 
+  # The CSRF token is required for security reasons 
+  print('log out')
+  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': baseURL}
   response = spSession.put(baseURL + "context/login/", data="{\"username\": null, \"password\": null, \"collection\": 688130}", headers=headers)
   print(str(response.status_code) + " " + response.reason)
   print('----------')
