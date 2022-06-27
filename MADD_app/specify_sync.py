@@ -11,6 +11,7 @@
 
   PURPOSE: Synchronizing local database with Specify 
 """
+import json
 from getpass import getpass
 import specify_interface as sp
 import data_access as db
@@ -42,10 +43,11 @@ def syncSpecifyCollections(csrftoken):
         print(' - checking for collection {%s,"%s"} in db:' %(spCollection['id'], spCollection['collectionname']))
         dbCollection = db.getRowsOnFilters('collections', {'spid': spCollection['id']})
         if(len(dbCollection)> 0):
-            print(' - found')
+            print('   - found')
         else:
-            print(' - not found')
-        pass
+            print('   - not found')
+            fields = {"spid" : spCollection["id"],"name" : '"%s"' % spCollection["collectionname"],"institutionid" : institution[0],"taxontreedefid" : "17"}
+            db.insertRow('collections', fields)
 
 # TEST CODE
 util.clear()
