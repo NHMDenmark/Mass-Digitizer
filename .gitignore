@@ -1,2 +1,4 @@
 
 MADD_app/.vscode/launch.json
+*.pyc
+
