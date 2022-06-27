@@ -12,6 +12,7 @@
   PURPOSE: Generic Data Access Object for reading/writing local database file 
   """
 import sqlite3, json
+import specify_sync
 
 def getRows(tableName):
     # Getting all rows from the table specified by name
@@ -66,25 +67,40 @@ def getRowsOnFilters(tableName, filters):
     for key, value in filters.items():
         sqlString += '%s = %s AND ' % (key, str(value))
     sqlString = sqlString[0:len(sqlString)-4] # Remove trailing " AND "
-    print(sqlString)
+    #print(sqlString)
     rows = cursor.execute(sqlString).fetchall()
     connection.close()
     return rows
 
 def insertRow(tableName, fields):
-    # TODO 
+    # Inserting a row of field values into a table specified by name
+    # CONTRACT 
+    #   tableName (String): The name of the table to be queried
+    #   fields (Dictionary) : A dictionary where the key is the field name and the value is the field value 
+    #       NOTE: Strings should be formatted with enclosing double quotation marks (") 
+    #             Numbers should be formatted as strings 
+    #   RETURNS SQL result (String)
     connection = sqlite3.connect('db\db.sqlite3')
     cursor = connection.cursor()
-    sqlString = "INSERT INTO %s "
+    fieldsString = ""
     for key in fields:
-        print('key')
-    pass
-
+        fieldsString += "%s, " % key
+    fieldsString  = fieldsString[0:len(fieldsString)-2]
+    sqlString = "INSERT INTO %s (%s) VALUES (" %(tableName, fieldsString)
+    for key in fields:
+        sqlString += str(fields[key]) + ", "
+    sqlString = sqlString[0:len(sqlString)-2] + ");" # Remove trailing ", " and close Sql 
+    #print(sqlString)
+    cursor.execute(sqlString)
+    connection.commit()
     connection.close()
+    return "   - row inserted"
 
 def getFieldMap(cursor):
-    """ Given a DB API 2.0 cursor object that has been executed, returns
-    a dictionary that maps each field name to a column index; 0 and up. """
+    # Get fields for a given DB API 2.0 cursor object that has been executed
+    # CONTRACT 
+    #   cursor (Cursor) : Cursor object to be field mapped 
+    #   RETURNS a dictionary that maps each field name to a column index; 0 and up.
     results = {}
     column = 0
     for d in cursor.description:
@@ -92,23 +108,3 @@ def getFieldMap(cursor):
         column = column + 1
     return results
 
-
-
-# CODE STUB JUNKYARD 
-
-"""
-institutions = json.load(open('bootstrap/institutions.json'))
-for institution in institutions:
-    pass
-"""
-
-# print(getRowsOnFilters('institutions', {'code': '"TEST"','id' : '0'}))
-
-"""
-print('---')
-print(getRows('institutions'))
-print('---')
-print(getRowOnId('institutions', 0))
-print('---')
-print(getRowsOnFilters('institutions', [{'code': 'TEST'}]))
-"""
