@@ -12,7 +12,6 @@
   PURPOSE: Generic Data Access Object for reading/writing local database file 
   """
 import sqlite3, json
-import specify_sync
 
 def getRows(tableName):
     # Getting all rows from the table specified by name
@@ -90,7 +89,7 @@ def insertRow(tableName, fields):
     for key in fields:
         sqlString += str(fields[key]) + ", "
     sqlString = sqlString[0:len(sqlString)-2] + ");" # Remove trailing ", " and close Sql 
-    #print(sqlString)
+    print(sqlString)
     cursor.execute(sqlString)
     connection.commit()
     connection.close()

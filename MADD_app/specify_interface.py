@@ -128,7 +128,7 @@ def fetchSpecifyObjects(objectName, csrftoken, limit=100, offset=0):
   objectSet = {}
   headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': baseURL}
   apiCallString = "%sapi/specify/%s/?limit=%d&offset=%d" %(baseURL, objectName, limit, offset)
-  print(apiCallString)
+  #print(apiCallString)
   response = spSession.get(apiCallString, headers=headers)
   print(' - Response: %s %s' %(str(response.status_code), response.reason))
   if response.status_code < 299:
@@ -137,6 +137,21 @@ def fetchSpecifyObjects(objectName, csrftoken, limit=100, offset=0):
     #objectSet = response.json()
   #print('------------------------------')
   return objectSet 
+
+def directAPIcall(callString, csrftoken):
+  # Generic method for allowing a direct call to the API using a call string that is appended to the baseURL
+  # CONTRACT
+  #   callString (String): The string to the appended to the base URL of the API
+  #   csrftoken (String): The CSRF token is required for security reasons
+  apiCallString = "%s%s" %(baseURL, callString)
+  print(apiCallString)
+  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': baseURL}
+  response = spSession.get(apiCallString, headers=headers)
+  print(' - Response: %s %s' %(str(response.status_code), response.reason))
+  
+  if response.status_code < 299:
+    return json.loads(response.text)
+  return {}
 
 def logout(csrftoken):
   # Logging out closes the session on both ends 
