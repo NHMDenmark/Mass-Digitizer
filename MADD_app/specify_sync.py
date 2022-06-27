@@ -36,18 +36,15 @@ def specifyLogout(csrftoken):
 def syncSpecifyCollections(csrftoken):
     # TODO
     print('Syncing collections with Specify...')
-    specifyCollections = sp.fetchSpecifyObjects('collection', csrftoken)
-    
+    specifyCollections = sp.fetchSpecifyObjects('collection', csrftoken)    
     for i in range(0, len(specifyCollections)):
         spCollection = specifyCollections[i]
         print(' - checking for collection {%s,"%s"} in db:' %(spCollection['id'], spCollection['collectionname']))
         dbCollection = db.getRowsOnFilters('collections', {'spid': spCollection['id']})
-        if(len(dbCollection)> 0):
-            print('   - found')
-        else:
-            print('   - not found')
-            fields = {"spid" : spCollection["id"],"name" : '"%s"' % spCollection["collectionname"],"institutionid" : institution[0],"taxontreedefid" : "17"}
-            db.insertRow('collections', fields)
+        if len(dbCollection)==0:
+            discipline = sp.directAPIcall(spCollection["discipline"], csrftoken)
+            fields = {"spid" : spCollection["id"],"name" : '"%s"' % spCollection["collectionname"],"institutionid" : institution[0],"taxontreedefid" : discipline["taxontreedef"].split(r'/')[4]}
+            print(db.insertRow('collections', fields))
 
 # TEST CODE
 util.clear()
