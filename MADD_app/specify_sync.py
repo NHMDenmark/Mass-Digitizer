@@ -39,21 +39,36 @@ def syncSpecifyCollections(csrftoken):
     specifyCollections = sp.fetchSpecifyObjects('collection', csrftoken)    
     for i in range(0, len(specifyCollections)):
         spCollection = specifyCollections[i]
-        print(' - checking for collection {%s,"%s"} in db:' %(spCollection['id'], spCollection['collectionname']))
-        dbCollection = db.getRowsOnFilters('collections', {'spid': spCollection['id']})
+        print(' - checking db for collection {%s,"%s"} ...' %(spCollection['id'], spCollection['collectionname']))
+        dbCollection = db.getRowsOnFilters('collection', {'spid': spCollection['id']})
         if len(dbCollection)==0:
             discipline = sp.directAPIcall(spCollection["discipline"], csrftoken)
             fields = {"spid" : spCollection["id"],"name" : '"%s"' % spCollection["collectionname"],"institutionid" : institution[0],"taxontreedefid" : discipline["taxontreedef"].split(r'/')[4]}
-            print(db.insertRow('collections', fields))
+            print(db.insertRow('collection', fields))
+
+def syncTaxonNames(taxontreedefid, csrftoken):
+    # TODO 
+    print('Syncing taxonnames with Specify...')
+    taxonnames = sp.fetchSpecifyObjects('taxon', csrftoken, 100,0,{"definition":str(taxontreedefid), "rankid":"60"})
+    #print(taxonnames)
+    for i in range(0, len(taxonnames)):
+        print(taxonnames[i]['fullname'])
+
+
 
 # TEST CODE
 util.clear()
 print('------- Running specify_sync.py --------')
-institution = db.getRowOnId('institutions', 0)
+institution = db.getRowOnId('institution', 0)
 # print(institution)
-token = specifyLogin(institution[3], 'test', 'testtest') #input('Enter username: '), getpass('Enter password: '))
+token = specifyLogin(institution[3], input('Enter username: '), getpass('Enter password: '))
 if token != '':
-    syncSpecifyCollections(token)
+    choice = input('Sync what? [1] collections [2] taxonnames ')
+    print('Your choice: "%s"' % choice)
+    if choice == "1": syncSpecifyCollections(token)
+    elif choice == "2": 
+        syncTaxonNames(13, token)
+    else: print('You are the weakest link. Goodbye! ')
 else:
     print('Login failed...')
 print('----------- done --------------')
@@ -63,11 +78,11 @@ print('----------- done --------------')
 """
 specifyCollections = sp.getInitialCollections()
 #sp.
-localdbCollections = db.getRows('collections')
+localdbCollections = db.getRows('collection')
 
 for key in specifyCollections:
     print('checking for collection {%s,%s} in db:' %(key, specifyCollections[key]))
-    if(len(db.getRowsOnFilters('collections', {'spid': key, 'name' : '"%s"' % specifyCollections[key]}))> 0):
+    if(len(db.getRowsOnFilters('collection', {'spid': key, 'name' : '"%s"' % specifyCollections[key]}))> 0):
         print('found')
     else:
         print('not found')
