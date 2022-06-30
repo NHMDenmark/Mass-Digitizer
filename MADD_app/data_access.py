@@ -63,8 +63,8 @@ def getRowsOnFilters(tableName, filters):
     sqlString = 'SELECT * FROM %s ' % tableName 
     if filters.items():
         sqlString += "WHERE "
-    for key, value in filters.items():
-        sqlString += '%s = %s AND ' % (key, str(value))
+        for key, value in filters.items():
+            sqlString += '%s = %s AND ' % (key, str(value))
     sqlString = sqlString[0:len(sqlString)-4] # Remove trailing " AND "
     #print(sqlString)
     rows = cursor.execute(sqlString).fetchall()

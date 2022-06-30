@@ -123,7 +123,7 @@ def fetchSpecifyObjects(objectName, csrftoken, limit=100, offset=0, filters={}):
   #   csrftoken (String): The CSRF token is required for security reasons
   #   limit (Integer): Maximum amount of records to be retrieve at a time. Default value: 100 
   #   offset (Integer): Offset of the records to be retrieved for enabling paging. Default value: 0 
-  #   filters TODO 
+  #   filters (Dictionary) : Optional filters as a key, value pair of strings 
   #   RETURNS fetched object set 
   print('Fetching "%s" with limit %d and offset %d ' %(objectName, limit, offset))
   objectSet = {}
