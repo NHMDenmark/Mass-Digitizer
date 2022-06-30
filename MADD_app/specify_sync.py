@@ -49,11 +49,37 @@ def syncSpecifyCollections(csrftoken):
 def syncTaxonNames(taxontreedefid, csrftoken):
     # TODO 
     print('Syncing taxonnames with Specify...')
-    taxonnames = sp.fetchSpecifyObjects('taxon', csrftoken, 100,0,{"definition":str(taxontreedefid), "rankid":"60"})
-    #print(taxonnames)
-    for i in range(0, len(taxonnames)):
-        print(taxonnames[i]['fullname'])
+    print(' - fetch available ranks for taxontree: %d' % taxontreedefid)
+    # First get available ranks for taxon tree in question
+    taxonranks = sp.fetchSpecifyObjects('taxontreedefitem', csrftoken, 13, 0,{"treedef":str(taxontreedefid)})
 
+    for rank in taxonranks:
+        rankid = rank['rankid']
+        rankname = rank['name']
+        if rankid > 10:
+            print(' Rank %s:"%s" ' %(rankid, rankname))
+            taxonnames = sp.fetchSpecifyObjects('taxon', csrftoken, 100,0,{"definition":str(taxontreedefid), "rankid":str(rankid)})
+            for i in range(0, len(taxonnames)):
+                id = taxonnames[i]['id']
+                fullname = taxonnames[i]['fullname']
+                name = taxonnames[i]['name']
+                
+                dbTaxonNames = db.getRowsOnFilters('taxonname', {'fullname':'"%s"' % fullname})
+                #print(' - found %d rows for %s:"%s" ' % (len(dbTaxonNames), id, fullname))
+                #print(dbTaxonNames)
+                if len(dbTaxonNames)==0: 
+                    print(' - %s:"%s" not in DB ' %(id, fullname))
+
+"""def getTaxonClass(taxonid, csrftoken):
+    # TODO
+    print(' - Retrieving class for taxon with id %s ...'%taxonid)
+    
+def getTaxonParent(taxonid, csrftoken):
+    # TODO 
+    print(' - Retrieving parent for taxon with id %s ...'%taxonid)
+    taxon = sp.fetchSpecifyObject('taxon', taxonid, csrftoken)
+    parent = sp.directAPIcall(taxon['parent'], csrftoken)
+    return parent"""
 
 
 # TEST CODE
@@ -61,9 +87,10 @@ util.clear()
 print('------- Running specify_sync.py --------')
 institution = db.getRowOnId('institution', 0)
 # print(institution)
-token = specifyLogin(institution[3], input('Enter username: '), getpass('Enter password: '))
+token = specifyLogin(institution[3], 'test', 'testtest') #input('Enter username: '), getpass('Enter password: '))
 if token != '':
-    choice = input('Sync what? [1] collections [2] taxonnames ')
+    #choice = input('Sync what? [1] collections [2] taxonnames ')
+    choice = "2"
     print('Your choice: "%s"' % choice)
     if choice == "1": syncSpecifyCollections(token)
     elif choice == "2": 
