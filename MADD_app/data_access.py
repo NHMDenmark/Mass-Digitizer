@@ -13,17 +13,24 @@
   """
 import sqlite3, json
 
+from debugpy import connect
+
+def getDbCursor():
+    connection = sqlite3.connect('db\db.sqlite3')
+    connection.row_factory = sqlite3.Row # Enable column access by name: row['column_name']
+    cursor = connection.cursor()
+    return cursor
+
 def getRows(tableName):
     # Getting all rows from the table specified by name
     # CONTRACT 
     #   tableName (String): The name of the table to be queried
     #   RETURNS table rows (list)
     print('Get all rows from table "%s" ...' % tableName)
-    connection = sqlite3.connect('db\db.sqlite3')
-    cursor = connection.cursor()
+    cursor = getDbCursor()
     rows = cursor.execute("SELECT * FROM " + tableName).fetchall()
     print('found %d rows ' % len(rows))
-    connection.close()
+    cursor.connection.close()
     return rows
 
 def getRowOnId(tableName, id):
@@ -32,10 +39,9 @@ def getRowOnId(tableName, id):
     #   tableName (String): The name of the table to be queried
     #   id (Integer) : The primary key of the row to be returned 
     #   RETURNS single table row 
-    connection = sqlite3.connect('db\db.sqlite3')
-    cursor = connection.cursor()
+    cursor = getDbCursor()
     row = cursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(id)).fetchone()
-    connection.close()
+    cursor.connection.close()
     return row
 
 def getRowOnSpecifyId(tableName, id):
@@ -44,10 +50,9 @@ def getRowOnSpecifyId(tableName, id):
     #   tableName (String): The name of the table to be queried
     #   id (Integer) : The primary key of the row to be returned 
     #   RETURNS single table row 
-    connection = sqlite3.connect('db\db.sqlite3')
-    cursor = connection.cursor()
+    cursor = getDbCursor()
     row = cursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(id)).fetchone()
-    connection.close()
+    cursor.connection.close()
     return row
 
 def getRowsOnFilters(tableName, filters):
@@ -58,8 +63,7 @@ def getRowsOnFilters(tableName, filters):
     #       NOTE: Strings should be formatted with enclosing double quotation marks (") 
     #             Numbers should be formatted as strings 
     #   RETURNS table rows (list)
-    connection = sqlite3.connect('db\db.sqlite3')
-    cursor = connection.cursor()
+    cursor = getDbCursor()
     sqlString = 'SELECT * FROM %s ' % tableName 
     if filters.items():
         sqlString += "WHERE "
@@ -68,7 +72,7 @@ def getRowsOnFilters(tableName, filters):
     sqlString = sqlString[0:len(sqlString)-4] # Remove trailing " AND "
     #print(sqlString)
     rows = cursor.execute(sqlString).fetchall()
-    connection.close()
+    cursor.connection.close()
     return rows
 
 def insertRow(tableName, fields):
@@ -79,8 +83,7 @@ def insertRow(tableName, fields):
     #       NOTE: Strings should be formatted with enclosing double quotation marks (") 
     #             Numbers should be formatted as strings 
     #   RETURNS SQL result (String)
-    connection = sqlite3.connect('db\db.sqlite3')
-    cursor = connection.cursor()
+    cursor = getDbCursor()
     fieldsString = ""
     for key in fields:
         fieldsString += "%s, " % key
@@ -91,8 +94,8 @@ def insertRow(tableName, fields):
     sqlString = sqlString[0:len(sqlString)-2] + ");" # Remove trailing ", " and close Sql 
     print(sqlString)
     cursor.execute(sqlString)
-    connection.commit()
-    connection.close()
+    cursor.connection.commit()
+    cursor.connection.close()
     return "   - row inserted"
 
 def getFieldMap(cursor):
