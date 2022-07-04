@@ -125,19 +125,19 @@ def fetchSpecifyObjects(objectName, csrftoken, limit=100, offset=0, filters={}):
   #   offset (Integer): Offset of the records to be retrieved for enabling paging. Default value: 0 
   #   filters (Dictionary) : Optional filters as a key, value pair of strings 
   #   RETURNS fetched object set 
-  print('Fetching "%s" with limit %d and offset %d ' %(objectName, limit, offset))
+  #print('Fetching "%s" with limit %d and offset %d ' %(objectName, limit, offset))
   objectSet = {}
   headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': baseURL}
   filterString = ""
   for key in filters:
     filterString += '&' + key + '=' + filters[key]
   apiCallString = "%sapi/specify/%s/?limit=%d&offset=%d%s" %(baseURL, objectName, limit, offset, filterString)
-  print(" -> " + apiCallString)
+  #print(" -> " + apiCallString)
   response = spSession.get(apiCallString, headers=headers)
-  print(' - Response: %s %s' %(str(response.status_code), response.reason))
+  #print(' - Response: %s %s' %(str(response.status_code), response.reason))
   if response.status_code < 299:
     objectSet = json.loads(response.text)['objects'] # get collections from json string and convert into dictionary
-    print(' - Received %d object(s)' % len(objectSet))
+    #print(' - Received %d object(s)' % len(objectSet))
   #print('------------------------------')
   return objectSet 
 

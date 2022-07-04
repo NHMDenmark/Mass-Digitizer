@@ -46,13 +46,15 @@ def syncSpecifyCollections(csrftoken):
             fields = {"spid" : spCollection["id"],"name" : '"%s"' % spCollection["collectionname"],"institutionid" : institution[0],"taxontreedefid" : discipline["taxontreedef"].split(r'/')[4]}
             print(db.insertRow('collection', fields))
 
-def syncTaxonNames(taxontreedefid, csrftoken):
+def syncTaxonNames(taxontreedefid, csrftoken, limit=10):
     # TODO 
     print('Syncing taxonnames with Specify...')
-    print(' - fetch available ranks for taxontree: %d' % taxontreedefid)
     # First get available ranks for taxon tree in question
-    taxonranks = sp.fetchSpecifyObjects('taxontreedefitem', csrftoken, 13, 0,{"treedef":str(taxontreedefid)})
-
+    taxonranks = sp.fetchSpecifyObjects('taxontreedefitem', csrftoken, limit, 0,{"treedef":str(taxontreedefid)})
+    
+    # 1. Sync database with specify taxa 
+    print(' - Checking local database for Specify taxa with taxontree: %d' % taxontreedefid)
+    # Loop through each rank, checking whether local db has an entry for this taxon 
     for rank in taxonranks:
         rankid = rank['rankid']
         rankname = rank['name']
@@ -63,12 +65,37 @@ def syncTaxonNames(taxontreedefid, csrftoken):
                 id = taxonnames[i]['id']
                 fullname = taxonnames[i]['fullname']
                 name = taxonnames[i]['name']
-                
-                dbTaxonNames = db.getRowsOnFilters('taxonname', {'fullname':'"%s"' % fullname})
+                dbTaxonName = db.getRowsOnFilters('taxonname', {'fullname':'"%s"' % fullname, 'taxonid':'%s' % id}) # TODO filter on taxontreedefid !!! 
                 #print(' - found %d rows for %s:"%s" ' % (len(dbTaxonNames), id, fullname))
                 #print(dbTaxonNames)
-                if len(dbTaxonNames)==0: 
-                    print(' - %s:"%s" not in DB ' %(id, fullname))
+                if len(dbTaxonName)==0: 
+                    print(' - %s:"%s" ("%s") not in DB ' %(id, fullname, name))
+
+    # 2. Next: Sync specify with database taxa 
+    # NOTE restrict to taxonnames with taxonid = NULL ? 
+    print(' - Checking Specify API for local db taxa with taxontree: %d' % taxontreedefid)
+    for rank in taxonranks:
+        rankid = rank['rankid']
+        rankname = rank['name']
+        if rankid > 10:
+            print(' - For rank %s:"%s" ' %(rankid, rankname))
+            dbTaxonNames = db.getRowsOnFilters('taxonname', {'rankid': '%s' % rankid, 'taxontreedefid': '%s' % taxontreedefid})
+            print(' - found %d rows for %s:"%s" ' % (len(dbTaxonNames), rankid, rankname))
+            for i in range(0, len(dbTaxonNames)):
+                id = dbTaxonNames[i]['taxonid']
+                fullname = dbTaxonNames[i]['fullname']
+                name = dbTaxonNames[i]['name']
+                #print(' - checking Specify API for taxon:%s:"%s" ("%s")' %(id, fullname, name))
+                spTaxonName = sp.fetchSpecifyObjects('taxon', csrftoken, 100,0,{"id":str(id), "rankid":str(rankid),"name":name,"fullname":fullname})
+                if not spTaxonName:
+                    print(' - taxon taxon:%s:"%s" ("%s") not found! ' %(id, fullname, name))
+                #if input('continue?') == 'n':break
+        if input('continue?') == 'n':break
+    
+
+
+
+    
 
 """def getTaxonClass(taxonid, csrftoken):
     # TODO
@@ -87,14 +114,14 @@ util.clear()
 print('------- Running specify_sync.py --------')
 institution = db.getRowOnId('institution', 0)
 # print(institution)
-token = specifyLogin(institution[3], 'test', 'testtest') #input('Enter username: '), getpass('Enter password: '))
+token = specifyLogin(institution[3], 'test', 'testytest') #input('Enter username: '), getpass('Enter password: '))
 if token != '':
     #choice = input('Sync what? [1] collections [2] taxonnames ')
     choice = "2"
     print('Your choice: "%s"' % choice)
     if choice == "1": syncSpecifyCollections(token)
     elif choice == "2": 
-        syncTaxonNames(13, token)
+        syncTaxonNames(13, token, 15)
     else: print('You are the weakest link. Goodbye! ')
 else:
     print('Login failed...')
