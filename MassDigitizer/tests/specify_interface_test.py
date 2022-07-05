@@ -26,8 +26,8 @@ def test_specify_interface():
 
   # Ask for username and password from user
   print(' - get username/password from input')
-  username = 'test' #input('Enter username: ')
-  passwd = 'testytest' #getpass('Enter password: ')
+  username = input('Enter username: ')
+  passwd = getpass('Enter password: ')
 
   # Next step is to use csrf token to log in 
   csrftoken = s.login(username, passwd, csrftoken)
