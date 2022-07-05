@@ -94,8 +94,13 @@ def fetchCollObject(collectionObjectId, csrftoken):
   headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': baseURL}
   response = spSession.get(baseURL + "api/specify/collectionobject/" + str(collectionObjectId)  + "/", headers=headers)
   print(' - Response: %s %s' %(str(response.status_code), response.reason))
-  print(' - Catalog number: %s' & response.json()['catalognumber'])
+  if response.status_code < 299:
+    object = response.json()
+    print(' - Catalog number: %s' % response.json()['catalognumber'])
+  else:
+    object = {}
   #print('------------------------------')
+  return object 
 
 def fetchSpecifyObject(objectName, objectId, csrftoken):
   # Generic method for fetching objects from the Specify API using their primary key

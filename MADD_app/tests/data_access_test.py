@@ -1,14 +1,15 @@
 from queue import Empty
 import pytest
-import sys, random, json
+import sys 
+import random
 from getpass import getpass
 from pathlib import Path
 sys.path.append(sys.path[0] + '/..')
 import specify_interface as s
 
 # global variables 
-institutions = json.load(open(r'MADD_app\bootstrap\institutions.json'))
-baseURL = institutions[0]['URL']
+# institutions = json.load(open('bootstrap/institutions.json'))
+baseURL = 'https://specify-test.science.ku.dk/' # institutions[0]['URL']
 loginURL = baseURL + 'context/login/'
 collections = {}
 

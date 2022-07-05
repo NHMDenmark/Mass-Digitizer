@@ -11,12 +11,20 @@
 
   PURPOSE: Generic Data Access Object for reading/writing local database file 
   """
+import sys 
 import sqlite3, json
-
 from debugpy import connect
 
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent.joinpath('src')))
+
+FILEPATH = Path(__file__).parent
+dbfile = str(FILEPATH.joinpath('db\db.sqlite3'))
+
 def getDbCursor():
-    connection = sqlite3.connect('db\db.sqlite3')
+    # TODO 
+    #print('path: "%s"' % dbfile)
+    connection = sqlite3.connect(dbfile)
     connection.row_factory = sqlite3.Row # Enable column access by name: row['column_name']
     cursor = connection.cursor()
     return cursor
