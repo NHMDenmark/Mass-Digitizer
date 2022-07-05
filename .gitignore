@@ -3,3 +3,4 @@ MADD_app/.vscode/launch.json
 *.pyc
 *.py[cod]     # Will match .pyc, .pyo and .pyd files.
 __pycache__/  # Exclude the whole folder
+.pytest_cache
