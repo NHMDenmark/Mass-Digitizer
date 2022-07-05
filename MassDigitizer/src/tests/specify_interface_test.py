@@ -3,7 +3,7 @@ import pytest
 import sys, random, json
 from getpass import getpass
 from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent))
+sys.path.append(str(Path(__file__).parent.parent)) #.joinpath('src')))
 import specify_interface as s
 
 # global variables 
