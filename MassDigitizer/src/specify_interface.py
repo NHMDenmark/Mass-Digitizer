@@ -12,6 +12,7 @@
   PURPOSE: Interface to the Specify API 
 """
 
+from queue import Empty
 import requests
 import json 
 import urllib3
@@ -113,17 +114,28 @@ def fetchSpecifyObject(objectName, objectId, csrftoken):
   #   objectId (Integer): The primary key of the object
   #   csrftoken (String): The CSRF token is required for security reasons  
   #   RETURNS fetched object 
-  print('Fetching ' + objectName + ' object on id: ' + str(objectId))
-  object = {}
+  #print('Fetching ' + objectName + ' object on id: ' + str(objectId))
+  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': baseURL, 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0'}
+  apiCallString = "%sapi/specify/%s/%d/" %(baseURL, objectName, objectId)
+  #print(apiCallString)
+  response = spSession.get(apiCallString, headers=headers)
+  #print(' - Response: %s %s' %(str(response.status_code), response.reason))
+  if response.status_code < 299:
+    object = response.json()
+  else: 
+    object = Empty
+  #print('------------------------------')
+  return object 
+
+def putSpecifyObject(objectName, objectId, specifyObject, csrftoken):
+  # TODO 
   headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': baseURL}
   apiCallString = "%sapi/specify/%s/%d/" %(baseURL, objectName, objectId)
   print(apiCallString)
-  response = spSession.get(apiCallString, headers=headers)
+  # TODO API PUT command throws 403 Error ("Forbidden")
+  response = spSession.put(apiCallString, headers=headers, data=specifyObject)
   print(' - Response: %s %s' %(str(response.status_code), response.reason))
-  if response.status_code < 299:
-    object = response.json()
-  #print('------------------------------')
-  return object 
+  pass
 
 def fetchSpecifyObjects(objectName, csrftoken, limit=100, offset=0, filters={}):
   # Generic method for fetching object sets from the Specify API based on object name 

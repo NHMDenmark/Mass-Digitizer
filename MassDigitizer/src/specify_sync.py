@@ -13,6 +13,7 @@
 """
 import json
 from getpass import getpass
+from queue import Empty
 import specify_interface as sp
 import data_access as db
 import util
@@ -74,6 +75,7 @@ def syncTaxonomy(taxontreedefid, csrftoken, limit=10):
 
     # 1. Sync local database with Specify taxon names  
     addSpecifyTaxonNamesToLocal(taxonranks, taxontreedefid, csrftoken)    
+
     # 2. Sync Specify with local DB taxon names  
     addLocalTaxonNamesToSpecify(taxonranks, taxontreedefid, csrftoken)
 
@@ -115,7 +117,7 @@ def addLocalTaxonNamesToSpecify(taxonranks, taxontreedefid, csrftoken):
     for rank in taxonranks:
         rankid = rank['rankid']
         rankname = rank['name']
-        if rankid > 10:
+        if rankid > 10: 
             print(' - For rank %s:"%s" ' %(rankid, rankname))
             dbTaxonNames = db.getRowsOnFilters('taxonname', {'rankid': '=%s' % rankid, 'taxontreedefid': '=%s' % taxontreedefid, 'taxonid' : 'IS NULL'})
             print(' - checking Specify7 API for %d rows from local DB for %s:"%s" ' % (len(dbTaxonNames), rankid, rankname))
@@ -133,15 +135,41 @@ def addLocalTaxonNamesToSpecify(taxonranks, taxontreedefid, csrftoken):
                     #       1. Insert taxon into Specify
                     #       2. Get newly inserted taxon's key (id) 
                     #       3. If rank lower than class, get newly inserted taxon's class foreign key 
-                #if input('continue?') == 'n':break
+                if input('continue?') == 'n':break
             if not found:
                 print(' - All rows accounted for...')
         #if input('continue?') == 'n':break
 
 def updateSpecifyTaxonNames(taxonranks, taxontreedefid, csrftoken):
     # TODO Sync local database taxon names with those in Specify 
-    pass
-    
+    # 
+    # TODO Doesn't work yet due to API PUT call throwing error 403 (Forbidden)
+    for rank in taxonranks:
+        rankid = rank['rankid']
+        rankname = rank['name']
+        if rankid > 220: # Restrict to infraspecific taxa 
+            print(' - For rank %s:"%s" ' %(rankid, rankname))
+            dbTaxonNames = db.getRowsOnFilters('taxonname', {'rankid': '=%s' % rankid, 'taxontreedefid': '=%s' % taxontreedefid, 'taxonid' : 'IS NOT NULL'})
+            print(' - checking Specify7 API for %d rows from local DB for rank %s:"%s" ' % (len(dbTaxonNames), rankid, rankname))
+            found = False
+            for i in range(0, len(dbTaxonNames)):
+                id = dbTaxonNames[i]['taxonid']
+                fullname = dbTaxonNames[i]['fullname']
+                #name = dbTaxonNames[i]['name']
+                #print(' - checking Specify API for taxon:%s:"%s" ("%s")' %(id, fullname, name))
+                spTaxonName = sp.fetchSpecifyObject('taxon',id, csrftoken)
+                if spTaxonName is not Empty:
+                    if spTaxonName['fullname'] != fullname:
+                        #print('  -> taxon(%s) full name "%s" doesn\'t match "%s"' %(id,spTaxonName['fullname'],fullname))
+                        # Update Specify with local DB fullname
+                        #print('  -> updating Specify  for taxon:%s:"%s"' %(id, fullname))
+                        spTaxonName['fullname'] = fullname
+                        # TODO API PUT command throws 403 Error ("Forbidden")
+                        #sp.putSpecifyObject('taxon', id, spTaxonName, csrftoken)
+                        #if input('continue?') != 'y': break
+                        print('UPDATE taxon SET fullname = "%s" WHERE taxonid = %s; ' %(fullname,id))
+                else:
+                    print('  -> taxon "%s" not found on primary key: %s!' %(fullname, id))
 
 
 #def syncLocalTaxonHierarchyWithSpecify
