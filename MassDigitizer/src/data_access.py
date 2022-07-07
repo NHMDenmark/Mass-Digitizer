@@ -120,7 +120,7 @@ def insertRow(tableName, fields):
     cursor.execute(sqlString)
     cursor.connection.commit()
     cursor.connection.close()
-    return "   - row inserted"
+    return "   - row [%s] inserted in table '%s'" %(fields,tableName)
 
 def getFieldMap(cursor):
     # Get fields for a given DB API 2.0 cursor object that has been executed

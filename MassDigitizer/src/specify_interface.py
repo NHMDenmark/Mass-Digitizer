@@ -90,7 +90,7 @@ def verifySession(csrftoken):
   #print('------------------------------')
   return validity
 
-def fetchCollObject(collectionObjectId, csrftoken):
+def getCollObject(collectionObjectId, csrftoken):
   # Fetches collection objects from the Specify API using their primary key 
   # CONTRACT 
   #   collectionObjectId (Integer): The primary key of the collectionObject, which is not the same as catalog number  
@@ -107,7 +107,7 @@ def fetchCollObject(collectionObjectId, csrftoken):
   #print('------------------------------')
   return object 
 
-def fetchSpecifyObject(objectName, objectId, csrftoken):
+def getSpecifyObject(objectName, objectId, csrftoken):
   # Generic method for fetching objects from the Specify API using their primary key
   # CONTRACT 
   #   objectName (String): The API's name for the object to be fetched  
@@ -120,6 +120,7 @@ def fetchSpecifyObject(objectName, objectId, csrftoken):
   #print(apiCallString)
   response = spSession.get(apiCallString, headers=headers)
   #print(' - Response: %s %s' %(str(response.status_code), response.reason))
+  #print(' - Referer: %s' % response.request.headers['referer'])
   if response.status_code < 299:
     object = response.json()
   else: 
@@ -127,17 +128,35 @@ def fetchSpecifyObject(objectName, objectId, csrftoken):
   #print('------------------------------')
   return object 
 
+def postSpecifyObject(objectName, objectId, specifyObject, csrftoken):
+  # TODO 
+  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'referer': baseURL}
+  apiCallString = "%sapi/specify/%s/%d/" %(baseURL, objectName, objectId)
+  print(apiCallString)
+  # TODO API PUT command throws 403 Error ("Forbidden")
+  response = spSession.post(apiCallString, headers=headers, data=specifyObject)
+  print(' - Response: %s %s' %(str(response.status_code), response.reason))
+  if response.status_code < 299:
+    object = response.json()
+  else: 
+    object = Empty
+  return object 
+
 def putSpecifyObject(objectName, objectId, specifyObject, csrftoken):
   # TODO 
-  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': baseURL}
+  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'referer': baseURL}
   apiCallString = "%sapi/specify/%s/%d/" %(baseURL, objectName, objectId)
   print(apiCallString)
   # TODO API PUT command throws 403 Error ("Forbidden")
   response = spSession.put(apiCallString, headers=headers, data=specifyObject)
   print(' - Response: %s %s' %(str(response.status_code), response.reason))
-  pass
+  if response.status_code < 299:
+    object = response.json()
+  else: 
+    object = Empty
+  return object 
 
-def fetchSpecifyObjects(objectName, csrftoken, limit=100, offset=0, filters={}):
+def getSpecifyObjects(objectName, csrftoken, limit=100, offset=0, filters={}):
   # Generic method for fetching object sets from the Specify API based on object name 
   # CONTRACT 
   #   objectName (String): The API's name for the objects to be queried  
@@ -199,6 +218,15 @@ def getInitialCollections():
   print(' - Received %d collection(s)' % len(collections))
   #print('------------------------------')
   return collections
+
+def mergeTaxa(originalTaxonId, targetTaxonId, csrfToken):
+  # TODO 
+  pass
+  #   Example: 
+  #     POST URL:   https://specify-test.science.ku.dk/api/specify_tree/taxon/367622/merge/ 
+  #     POST DATA:  target=367624
+  # 
+
 
 #util.clear()
 #getInitialCollections()
