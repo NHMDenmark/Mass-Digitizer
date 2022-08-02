@@ -78,11 +78,11 @@ def syncTaxonomy(taxontreedefid, csrftoken, limit=10):
 
     # 2. Add local DB taxon names to Specify  
     # TODO This doesn't work yet, because of several issues 
-    addLocalTaxonNamesToSpecify(taxonranks, taxontreedefid, csrftoken)
+    #addLocalTaxonNamesToSpecify(taxonranks, taxontreedefid, csrftoken)
 
     # 3. Update Specify taxon names with those recorded in local database 
     # TODO This doesn't work yet, as API returns "403 Forbidden"
-    updateSpecifyTaxonNames(taxonranks, taxontreedefid, csrftoken) 
+    #updateSpecifyTaxonNames(taxonranks, taxontreedefid, csrftoken) 
 
     # TODO 4. Sync taxonomic hierarchy table  
     
