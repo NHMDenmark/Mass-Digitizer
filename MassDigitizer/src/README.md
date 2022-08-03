@@ -1,3 +1,6 @@
+
+
+
 # SQLite as a fast read in-memory structure in Python
 
 In order for the code `import_csv_memory.py` to work, there needs to be a taxonomy available in csv format.

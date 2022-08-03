@@ -11,22 +11,22 @@
 
   PURPOSE: Synchronizing local database with Specify 
 """
+from ast import Is, Not
 import json
 from getpass import getpass
 from queue import Empty
 import specify_interface as sp
 import data_access as db
+import global_settings as gs
 import util
 
-def specifyLogin(baseURL, username, passwd):
+def specifyLogin(username, passwd):
     # Function for logging in to the Specify7 API and getting the CSRF token necessary for further interactions in the session 
     # CONTRACT
-    #   baseURL (String) : the base URL for the institution's Specify7 instance
     #   username (String): Specify account user name  
     #   passwd (String) : Specify account password  
     #   RETURNS (String) : The CSRF token necessary for further interactions in the session 
-    print('Connecting to Specify7 API...')
-    sp.initInstitution(baseURL)
+    print('Connecting to Specify7 API at: ' + gs.baseURL)
     csrftoken = sp.getCSRFToken()
     csrftoken = sp.login(username, passwd, csrftoken)
     if sp.verifySession(csrftoken):
@@ -45,21 +45,25 @@ def syncSpecifyCollections(csrftoken):
     # Function for synchronizing collections between the Specify7 API and the local database 
     # CONTRACT
     #   csrftoken (String) : The CSRF token required during logging in for the session 
-    print('Syncing collections with Specify...')
+    #   RETURNS (Boolean) : True to indicate the jobs was successfully finished
+    
+    print('Syncing collections with Specify API at: ' + gs.baseURL)
     # Get collection list from Specify7 API
     specifyCollections = sp.getSpecifyObjects('collection', csrftoken)    
     # Search for each entry in local database  
     for i in range(0, len(specifyCollections)):
-        print(' - checking db for collection {%s,"%s"} ...' %(spCollection['id'], spCollection['collectionname']))
         spCollection = specifyCollections[i]
+        print(' - checking db for collection {%s,"%s"} ...' %(spCollection['id'], spCollection['collectionname']))
         dbCollection = db.getRowsOnFilters('collection', {'spid': '=%s'%spCollection['id']})
         if len(dbCollection)==0:
             # Collection entry not found! Getting discipline info from Sp7API and inserting missing row...
+            print(' - Collection entry not found! Inserting missing row...')
             discipline = sp.directAPIcall(spCollection["discipline"], csrftoken)
             fields = {"spid" : spCollection["id"],"name" : '"%s"' % spCollection["collectionname"],"institutionid" : institution[0],"taxontreedefid" : discipline["taxontreedef"].split(r'/')[4]}
             print(db.insertRow('collection', fields))
+    return True
 
-def syncTaxonomy(taxontreedefid, csrftoken, limit=10):
+def syncTaxonomy(taxontreedefid, csrftoken, limit=1000):
     # Function for synchronizing collections between the Specify7 API and the local database 
     # CONTRACT
     #   taxontreedefid (Integer) : The primary key of the taxon tree definition for the collection in question 
@@ -67,28 +71,26 @@ def syncTaxonomy(taxontreedefid, csrftoken, limit=10):
     #   limit (Integer) :   The maximum depth of taxon ranks during this sweep; 
     #                       This depth depends on the number of ranks defined for the taxon tree in question 
     #                       Default value: 10 
-    # TODO Split this function's stages up into separate functions  
-    print('Syncing taxonomy with Specify...')
+    #   RETURNS (Boolean) : True to indicate the jobs was successfully finished
+    print('Syncing taxonomy with Specify7 API at: ' + gs.baseURL)
     
     # First get available ranks for taxon tree in question from Sp7API 
     taxonranks = sp.getSpecifyObjects('taxontreedefitem', csrftoken, limit, 0,{"treedef":str(taxontreedefid)})
 
     # 1. Sync local database with Specify taxon names  
-    addSpecifyTaxonNamesToLocal(taxonranks, taxontreedefid, csrftoken)    
+    addSpecifyTaxonNamesToLocal(taxonranks, taxontreedefid, csrftoken, limit)    
 
-    # 2. Add local DB taxon names to Specify  
-    # TODO This doesn't work yet, because of several issues 
-    #addLocalTaxonNamesToSpecify(taxonranks, taxontreedefid, csrftoken)
+    # TODO 2. Check for changes in Specify taxa (edited, deleted etc.) 
 
-    # 3. Update Specify taxon names with those recorded in local database 
-    # TODO This doesn't work yet, as API returns "403 Forbidden"
-    #updateSpecifyTaxonNames(taxonranks, taxontreedefid, csrftoken) 
-
-    # TODO 4. Sync taxonomic hierarchy table  
+    # TODO 3. Sync taxonomic hierarchy table  
     
     print('Finished syncing taxonomy with Specify...')
+    return True
 
-def addSpecifyTaxonNamesToLocal(taxonranks, taxontreedefid, csrftoken):
+def addSpecifyTaxonNamesToLocal(taxonranks, taxontreedefid, csrftoken, limit=1000):
+    
+    #TODO Write function contract
+
     # Sync local database with Specify taxon names  
     print('*************************************************************')
     print('Checking local database for Specify taxa with taxontree: %d' % taxontreedefid)
@@ -98,32 +100,38 @@ def addSpecifyTaxonNamesToLocal(taxonranks, taxontreedefid, csrftoken):
         rankname = rank['name']
         if rankid > 10:
             print(' Rank %s:"%s" ' %(rankid, rankname))
-            taxonnames = sp.getSpecifyObjects('taxon', csrftoken, 100,0,{"definition":str(taxontreedefid), "rankid":str(rankid)})
+            print(' Getting taxa from Specify7 API at: ' + gs.baseURL)
+            taxonnames = sp.getSpecifyObjects('taxon', csrftoken, limit,0,{"definition":str(taxontreedefid), "rankid":str(rankid)})
             for i in range(0, len(taxonnames)):
                 id = taxonnames[i]['id']
                 fullname = taxonnames[i]['fullname']
                 name = taxonnames[i]['name']
                 dbTaxonName = db.getRowsOnFilters('taxonname', {'fullname':'="%s"' % fullname, 'taxonid':'=%s' % id, 'taxontreedefid':'=%s'%taxontreedefid}) 
                 #print(' - found %d rows for %s:"%s" ' % (len(dbTaxonName), id, fullname))
-                #print(dbTaxonName)
                 if len(dbTaxonName)==0: 
-                    print('NOTE: %s:"%s" ("%s") [rank: %s] not in DB ' %(id, fullname, name, str(rankid)))
-                    if name.rfind("*") == -1:
+                    #print('   > NOTE: %s:"%s" ("%s") [rank: %s] not in DB ' %(id, fullname, name, str(rankid)))
+                    if name.rfind("*") == -1 and name != 'IncertaeSedis' and name.rfind(":") == -1:
                         classid = 'NULL' 
                         if rankid >= 60:
                             classid = searchParentTaxon(id, 60, csrftoken)
-                        #print(' - classid: %s' % str(classid))
-                        # TODO add missing taxon to local database
+                        #print('   > Retrieved classid: %s' % str(classid))
+                        
+                        # Add missing taxon to local database
                         #if input('Insert missing taxon into local DB? (y/n/maybe)') == 'y':
-                        taxonFields = {'taxonid':'%s'%id, 'name':'"%s"'%name, 'fullname':'"%s"'%fullname,'rankid':'%s'%rankid,'classid':'%s'%classid,'taxontreedefid':'%s'%taxontreedefid}
-                        print(' - Inserting: %s' %taxonFields)
-                        print(db.insertRow('taxonname',taxonFields))
-                    else: print(' - skipping invalid taxon name "%s"'%name)
-        #if input('continue?') == 'n':break
-                    
+                        if True:
+                            # TODO explain code 
+                            parentId = int(str(taxonnames[i]['parent']).split('/')[4])
+                            parenttaxon = sp.getSpecifyObject('taxon', parentId, csrftoken)
+                            taxonFields = {'taxonid':'%s'%id, 'name':'"%s"'%name, 'fullname':'"%s"'%fullname,'rankid':'%s'%rankid,'classid':'%s'%classid,'taxontreedefid':'%s'%taxontreedefid, 'parentfullname': '"%s"'%parenttaxon['fullname']}
+                            #print('   > Inserting: %s' %taxonFields)
+                            print('   > ', db.insertRow('taxonname',taxonFields))
+                    else: print('   > skipping invalid taxon name "%s"'%name)
+        #if input('continue?') == 'n':break           
 
 def searchParentTaxon(taxonId, rankid, csrftoken):
-    # TODO 
+
+    #TODO Write function contract
+    
     parentId = 'NULL' 
     taxonRankId = 999
     while(taxonRankId > rankid):
@@ -137,62 +145,20 @@ def searchParentTaxon(taxonId, rankid, csrftoken):
             #print(' - retrieved parent taxon %s|%s|%s: "%s" ' %(taxonId,taxonRankId,parentId,taxonName))
             if taxonRankId > rankid: taxonId = parentId
         else: 
-            print(' - taxon with id %s could not be retrieved! ' % str(taxonId))
+            print('   > taxon with id %s could not be retrieved! ' % str(taxonId))
             break
 
     if taxonRankId != rankid: taxonId = 'NULL'
 
-    print(' - retrieved parent id: %s ' % str(taxonId))
+    print('   > retrieved parent id: %s ' % str(taxonId))
 
     return taxonId 
-
-def addLocalTaxonNamesToSpecify(taxonranks, taxontreedefid, csrftoken):
-    # Sync Specify with local DB taxon names  
-    # NOTE  Restricted to taxonnames where taxonid is NULL ('None')
-    #       We're only looking at those taxa where the Sp7 foreign key is not set  
-    print('*************************************************************')
-    print('Checking Specify7 API for local db taxa with taxontree: %d' % taxontreedefid)
-    for rank in taxonranks:
-        rankid = rank['rankid']
-        rankname = rank['name']
-        if rankid > 10: 
-            print(' - For rank %s:"%s" ' %(rankid, rankname))
-            dbTaxonNames = db.getRowsOnFilters('taxonname', {'rankid': '=%s' % rankid, 'taxontreedefid': '=%s' % taxontreedefid, 'taxonid' : 'IS NULL'})
-            print(' - checking Specify7 API for %d rows from local DB for %s:"%s" ' % (len(dbTaxonNames), rankid, rankname))
-            found = False
-            for i in range(0, len(dbTaxonNames)):
-                id = dbTaxonNames[i]['taxonid']
-                fullname = dbTaxonNames[i]['fullname']
-                name = dbTaxonNames[i]['name']
-                print(' - checking Specify API for taxon:%s:"%s" ("%s")' %(id, fullname, name))
-                spTaxonName = sp.getSpecifyObjects('taxon', csrftoken, 100,0,{"taxontreedefid":str(taxontreedefid), "rankid":str(rankid),"name":name,"fullname":fullname})
-                if not spTaxonName:
-                    print(' - taxon: "%s" ("%s") not found! ' %(fullname, name))
-                    found = True
-                    # TODO  Add missing taxon to Specify 
-                    #       1. Get taxon parent from ??? 
-                    parentId = 0
-                    #       2. Get Specify taxontreedefitem from Specify7 API 
-                    taxonTreeDefItem = sp.getSpecifyObjects('taxontreedefitem', csrftoken,1,0,{"treedef":str(taxontreedefid),"rankid":str(rankid)})
-                    if len(taxonTreeDefItem)>0:
-                    #       3. Insert taxon into Specify
-                        taxonTreeDefItemId = taxonTreeDefItem[0]['id']
-                        newSpTaxon = '{"isaccepted":True,"parent":"/api/specify/taxon/%s/","ishybrid":False,"fullname":"%s","definitionitem":"/api/specify/taxontreedefitem/%s/","name":"%s","taxoncitations":[],"taxonattachments":[]}' %(parentId,fullname,taxonTreeDefItemId,name)
-                        print(newSpTaxon)
-                    #       4. Get newly inserted taxon's key (id) 
-                    #       5. If rank lower than class, get newly inserted taxon's class foreign key 
-                    #       6. Update local database taxonname record with taxonid and classid 
-                    #       7. Update local 
-                    else: print(' -  ERROR! Could not retrieve taxontreedefitem!')
-                #if input('continue?') == 'n':break
-            if not found:
-                print(' - All rows accounted for...')
-        if input('continue?') == 'n':break
 
 def updateSpecifyTaxonNames(taxonranks, taxontreedefid, csrftoken):
     # TODO Sync local database taxon names with those in Specify 
     # 
     # TODO Doesn't work yet due to API PUT call throwing error 403 (Forbidden)
+
     for rank in taxonranks:
         rankid = rank['rankid']
         rankname = rank['name']
@@ -224,51 +190,41 @@ def updateSpecifyTaxonNames(taxonranks, taxontreedefid, csrftoken):
 
 #def syncLocalTaxonHierarchyWithSpecify
     # TODO Sync taxononomic hierarchy table  
-    
-"""def getTaxonClass(taxonid, csrftoken):
-    # TODO
-    print(' - Retrieving class for taxon with id %s ...'%taxonid)
-    
-def getTaxonParent(taxonid, csrftoken):
-    # TODO 
-    print(' - Retrieving parent for taxon with id %s ...'%taxonid)
-    taxon = sp.getSpecifyObject('taxon', taxonid, csrftoken)
-    parent = sp.directAPIcall(taxon['parent'], csrftoken)
-    return parent"""
 
 # TEST CODE
 util.clear()
 print('------- Running specify_sync.py --------')
-institution = db.getRowOnId('institution', 0)
-# print(institution)
-finished = False
-while finished == False:
-    token = specifyLogin(institution[3], input('Enter username: '), getpass('Enter password: '))
-    if token != '':
-        finished = True
-        choice = input('Sync what? [1] collections [2] taxonomy ')
-        #choice = "2"
-        print('Your choice: "%s"' % choice)
-        if choice == "1": syncSpecifyCollections(token)
-        elif choice == "2": syncTaxonomy(13, token, 20)
-        else: print('You are the weakest link. Goodbye! ')
+institutions = db.getRows('institution')
+#max_instutionid = 
+# for institution in institutions:
+#     print(institution)
+selected_institutionid = 0 # -1
+# while selected_institutionid < 0:
+selected_institutionid = input('Please choose institution (0-2):')
+institution = db.getRowOnId('institution', selected_institutionid)
+print(institution[1], institution[2], institution[3])
+gs.baseURL = institution[3]
+
+max_tries = 10
+while max_tries > 0:
+    token = specifyLogin(input('Enter username: '), getpass('Enter password: '))
+    if token != '': break
     else:
         print('Login failed...')
-        if input('Try again? (y/n)') == 'n': finished == True
+        if input('Try again? (y/n)') == 'n': break
+    max_tries = max_tries - 1
+    print('Attempts left: %i' % max_tries)
+    
+choice = input('Sync what? [1] collections [2] taxonomy ')
+#choice = "2"
+print('Your choice: "%s"' % choice)
+if choice == "1": 
+    syncSpecifyCollections(token)
+elif choice == "2": 
+    syncTaxonomy(13, token, 1000000)
+else: 
+    print('You are the weakest link. Goodbye! ')
+
+sp.logout(token)
+
 print('----------- done --------------')
-
-
-
-"""
-specifyCollections = sp.getInitialCollections()
-#sp.
-localdbCollections = db.getRows('collection')
-
-for key in specifyCollections:
-    print('checking for collection {%s,%s} in db:' %(key, specifyCollections[key]))
-    if(len(db.getRowsOnFilters('collection', {'spid': key, 'name' : '="%s"' % specifyCollections[key]}))> 0):
-        print('found')
-    else:
-        print('not found')
-    pass
-"""

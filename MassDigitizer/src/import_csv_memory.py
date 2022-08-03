@@ -15,8 +15,9 @@
 
 import csv, sqlite3
 import time
-import taxonomy_shrinker
 from pathlib import Path
+
+import util
 
 con = sqlite3.connect(":memory:")
 # sets the DB to be in memory exclusively
@@ -62,7 +63,7 @@ def run_query(name_part):
 # FOR DEMO PURPOSE
 # res = run_query('Cor')
 # print('length - - ', len(res))
-# res2 = taxonomy_shrinker.refine_taxon_dict(res, 'Cora')
+# res2 = util.shrink_dict(res, 'Cora')
 # print('length of new taxonomy - - ', len(res2))
 ####END FOR DEMO
 
