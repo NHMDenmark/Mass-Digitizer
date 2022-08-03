@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 import import_csv_memory
-import taxonomy_shrinker
+import util
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
     Accomplished by removing last character input if not a valid character
@@ -80,13 +80,13 @@ while True:
         print('In Geo domain')
     print('event:', event)
     input_string = values[event]
-    print('values:', input_string, len(input_string))
+    print('values:', input_string, len( ))
     if len(input_string) == 3:
         print('will collect taxonomy based on three char input string!')
         res_dict = import_csv_memory.run_query(input_string)
         print('length of refined taxonomy = ', len(res_dict))
     elif len(input_string) >= 4:
-        res_dict = taxonomy_shrinker.refine_taxon_dict(res_dict, input_string)
+        res_dict = util.shrink_dict(res_dict, input_string)
         print('length of shrunk taxonomy = ', len(res_dict))
         rg = range(1,20)
         if len(res_dict) in rg:

@@ -12,6 +12,8 @@
   PURPOSE: Interface to the Specify API 
 """
 
+#TODO Make into singleton class ??? 
+
 from queue import Empty
 import requests
 import json 
@@ -19,35 +21,28 @@ import urllib3
 from pathlib import Path
 from asyncio.windows_events import NULL
 
+import global_settings as gs
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # global variables 
 filepath = str(Path(__file__).parent.joinpath('bootstrap').joinpath('institutions.json'))
 #print('Initializing Specify Interface institutions with path: %s' % filepath)
 institutions = json.load(open(filepath))
-baseURL = institutions[0]['URL'] # 'https://specify-test.science.ku.dk/' # 
-loginURL = baseURL + 'context/login/'
+#baseURL = gs.baseURL
+#loginURL = baseURL + 'context/login/'
 collections = {}
 
 # Create a session for storing cookies 
 spSession = requests.Session() 
-
-def initInstitution(_baseURL):
-  # Set up baseURL for relevant institution
-  # CONTRACT 
-  #    _baseURL (String): institution's base URL 
-  print('Set base URL: ' + _baseURL)
-  baseURL = _baseURL
-  loginURL = baseURL + 'context/login/'
-  #print('------------------------------')
 
 def getCSRFToken():
   # Specify7 requires a token to prevent Cross Site Request Forgery 
   # This will also return a list of the institution's collections 
   # CONTRACT
   #   Returns csrftoken (String)
-  print('Get CSRF token')
-  response = spSession.get(loginURL, verify=False)
+  print('Get CSRF token from ', gs.baseURL)
+  response = spSession.get(gs.baseURL + 'context/login/', verify=False)
   csrftoken = response.cookies.get('csrftoken')
   print(' - CSRF Token: %s' % csrftoken)
   print(' - Response: %s %s' %(str(response.status_code), response.reason))
@@ -62,8 +57,8 @@ def login(username, passwd, csrftoken):
   #   passwd (String): The password for the Specify account
   #   csrftoken (String): The CSRF token is required for security reasons  
   print('Log in using CSRF token & username/password')
-  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': baseURL}
-  response = spSession.put(baseURL + "context/login/", json={"username": username, "password": passwd, "collection": 851970}, headers=headers, verify=False)
+  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL}
+  response = spSession.put(gs.baseURL + "context/login/", json={"username": username, "password": passwd, "collection": 851970}, headers=headers, verify=False)
   csrftoken = response.cookies.get('csrftoken') # Keep and use new CSRF token after login
   print(' - Response: %s %s' %(str(response.status_code), response.reason))
   print(' - New CSRF Token: ', csrftoken)
@@ -77,8 +72,8 @@ def verifySession(csrftoken):
   #   Returns boolean to indicate session validity
   print('Verify session')
   validity = NULL
-  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': baseURL}
-  response = spSession.get(baseURL + "context/user.json", headers=headers)
+  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL}
+  response = spSession.get(gs.baseURL + "context/user.json", headers=headers)
   print(' - Response: %s %s' %(str(response.status_code), response.reason))
   if response.status_code > 299:
     # print(response.text)
@@ -96,8 +91,8 @@ def getCollObject(collectionObjectId, csrftoken):
   #   collectionObjectId (Integer): The primary key of the collectionObject, which is not the same as catalog number  
   #   csrftoken (String): The CSRF token is required for security reasons 
   print('Query collection object')
-  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': baseURL}
-  response = spSession.get(baseURL + "api/specify/collectionobject/" + str(collectionObjectId)  + "/", headers=headers)
+  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL}
+  response = spSession.get(gs.baseURL + "api/specify/collectionobject/" + str(collectionObjectId)  + "/", headers=headers)
   print(' - Response: %s %s' %(str(response.status_code), response.reason))
   if response.status_code < 299:
     object = response.json()
@@ -115,8 +110,8 @@ def getSpecifyObject(objectName, objectId, csrftoken):
   #   csrftoken (String): The CSRF token is required for security reasons  
   #   RETURNS fetched object 
   #print('Fetching ' + objectName + ' object on id: ' + str(objectId))
-  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': baseURL, 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0'}
-  apiCallString = "%sapi/specify/%s/%d/" %(baseURL, objectName, objectId)
+  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL, 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0'}
+  apiCallString = "%sapi/specify/%s/%d/" %(gs.baseURL, objectName, objectId)
   #print(apiCallString)
   response = spSession.get(apiCallString, headers=headers)
   #print(' - Response: %s %s' %(str(response.status_code), response.reason))
@@ -130,8 +125,8 @@ def getSpecifyObject(objectName, objectId, csrftoken):
 
 def postSpecifyObject(objectName, objectId, specifyObject, csrftoken):
   # TODO 
-  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'referer': baseURL}
-  apiCallString = "%sapi/specify/%s/%d/" %(baseURL, objectName, objectId)
+  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'referer': gs.baseURL}
+  apiCallString = "%sapi/specify/%s/%d/" %(gs.baseURL, objectName, objectId)
   print(apiCallString)
   # TODO API PUT command throws 403 Error ("Forbidden")
   response = spSession.post(apiCallString, headers=headers, data=specifyObject)
@@ -144,8 +139,8 @@ def postSpecifyObject(objectName, objectId, specifyObject, csrftoken):
 
 def putSpecifyObject(objectName, objectId, specifyObject, csrftoken):
   # TODO 
-  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'referer': baseURL}
-  apiCallString = "%sapi/specify/%s/%d/" %(baseURL, objectName, objectId)
+  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'referer': gs.baseURL}
+  apiCallString = "%sapi/specify/%s/%d/" %(gs.baseURL, objectName, objectId)
   print(apiCallString)
   # TODO API PUT command throws 403 Error ("Forbidden")
   response = spSession.put(apiCallString, headers=headers, data=specifyObject)
@@ -167,12 +162,15 @@ def getSpecifyObjects(objectName, csrftoken, limit=100, offset=0, filters={}):
   #   RETURNS fetched object set 
   #print('Fetching "%s" with limit %d and offset %d ' %(objectName, limit, offset))
   objectSet = {}
-  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': baseURL}
+  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL}
   filterString = ""
   for key in filters:
     filterString += '&' + key + '=' + filters[key]
-  apiCallString = "%sapi/specify/%s/?limit=%d&offset=%d%s" %(baseURL, objectName, limit, offset, filterString)
-  #print(" -> " + apiCallString)
+  apiCallString = "%sapi/specify/%s/?limit=%d&offset=%d%s" %(gs.baseURL, objectName, limit, offset, filterString)
+  print("   -> " + apiCallString)
+  
+  #if input('continue?') == 'n':return
+
   response = spSession.get(apiCallString, headers=headers)
   #print(' - Response: %s %s' %(str(response.status_code), response.reason))
   if response.status_code < 299:
@@ -186,9 +184,9 @@ def directAPIcall(callString, csrftoken):
   # CONTRACT
   #   callString (String): The string to the appended to the base URL of the API
   #   csrftoken (String): The CSRF token is required for security reasons
-  apiCallString = "%s%s" %(baseURL, callString)
+  apiCallString = "%s%s" %(gs.baseURL, callString)
   print(apiCallString)
-  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': baseURL}
+  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL}
   response = spSession.get(apiCallString, headers=headers)
   print(' - Response: %s %s' %(str(response.status_code), response.reason))
   
@@ -201,8 +199,8 @@ def logout(csrftoken):
   # CONTRACT 
   #   csrftoken (String): The CSRF token is required for security reasons
   print('Log out')
-  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': baseURL}
-  response = spSession.put(baseURL + "context/login/", data="{\"username\": null, \"password\": null, \"collection\": 688130}", headers=headers)
+  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL}
+  response = spSession.put(gs.baseURL + "context/login/", data="{\"username\": null, \"password\": null, \"collection\": 688130}", headers=headers)
   print(' - %s %s ' %(str(response.status_code), response.reason))
   #print('------------------------------')
 
@@ -211,7 +209,7 @@ def getInitialCollections():
   # CONTRACT
   #   RETURNS collections list (dictionary)
   print('Get initial collections')
-  response = spSession.get(loginURL, verify=False)
+  response = spSession.get(gs.baseURL + "context/login/", verify=False)
   print(' - Response: ' + str(response.status_code) + " " + response.reason)
   collections = json.loads(response.text)['collections'] # get collections from json string and convert into dictionary
   collections = {k: v for v, k in collections.items()} # invert keys and values that for some reason are delivered switched around 

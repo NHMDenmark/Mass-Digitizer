@@ -1,6 +1,7 @@
 from os import system, name
 
 def clear():
+   # Clear CLI screen 
    # for windows
    if name == 'nt':
       _ = system('cls')
@@ -9,6 +10,13 @@ def clear():
    else:
     _ = system('clear')
 
+def shrink_dict(original_dict, input_string):
+   # TODO Complete function contract
+   # Filter entries in dictionary based on initial string (starts with)
 
-
-clear()
+   shrunken_dict = {}
+   print('Dictionary length = ', len(original_dict))
+   for j in original_dict:
+      if j[0:len(input_string)] == input_string:
+         shrunken_dict[j] = original_dict[j]
+   return shrunken_dict
