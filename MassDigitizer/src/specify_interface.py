@@ -19,7 +19,6 @@ import requests
 import json 
 import urllib3
 from pathlib import Path
-from asyncio.windows_events import NULL
 
 import global_settings as gs
 
@@ -71,7 +70,7 @@ def verifySession(csrftoken):
   #   csrftoken (String): The CSRF token is required for security reasons
   #   Returns boolean to indicate session validity
   print('Verify session')
-  validity = NULL
+  validity = Empty
   headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL}
   response = spSession.get(gs.baseURL + "context/user.json", headers=headers)
   print(' - Response: %s %s' %(str(response.status_code), response.reason))
@@ -167,16 +166,14 @@ def getSpecifyObjects(objectName, csrftoken, limit=100, offset=0, filters={}):
   for key in filters:
     filterString += '&' + key + '=' + filters[key]
   apiCallString = "%sapi/specify/%s/?limit=%d&offset=%d%s" %(gs.baseURL, objectName, limit, offset, filterString)
-  print("   -> " + apiCallString)
-  
-  #if input('continue?') == 'n':return
+  #print("   -> " + apiCallString)
 
   response = spSession.get(apiCallString, headers=headers)
   #print(' - Response: %s %s' %(str(response.status_code), response.reason))
   if response.status_code < 299:
     objectSet = json.loads(response.text)['objects'] # get collections from json string and convert into dictionary
     #print(' - Received %d object(s)' % len(objectSet))
-  #print('------------------------------')
+  
   return objectSet 
 
 def directAPIcall(callString, csrftoken):

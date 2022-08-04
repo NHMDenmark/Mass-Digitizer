@@ -116,11 +116,11 @@ def insertRow(tableName, fields):
     for key in fields:
         sqlString += str(fields[key]) + ", "
     sqlString = sqlString[0:len(sqlString)-2] + ");" # Remove trailing ", " and close Sql 
-    print(sqlString)
+    #print(sqlString)
     cursor.execute(sqlString)
     cursor.connection.commit()
     cursor.connection.close()
-    return "   - row [%s] inserted in table '%s'" %(fields,tableName)
+    return "Row [%s] inserted in table '%s'" %(fields,tableName)
 
 def getFieldMap(cursor):
     # Get fields for a given DB API 2.0 cursor object that has been executed
