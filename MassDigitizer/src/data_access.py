@@ -11,6 +11,7 @@
 
   PURPOSE: Generic Data Access Object for reading/writing local database file 
   """
+from queue import Empty
 import sys 
 import sqlite3, json
 from debugpy import connect
@@ -21,12 +22,20 @@ sys.path.append(str(Path(__file__).parent.parent.joinpath('src')))
 # Point to database file 
 FILEPATH = Path(__file__).parent.joinpath('db')
 dbFilePath = str(FILEPATH.joinpath('db.sqlite3'))
+currentCursor = Empty
 
 def setDatabase(dbFileName='db'):
     # This optional function allows for setting a different database file like e.g. 'test' 
     # CONTRACT 
     #   dbFileName (String): the name of the file excluding the extension '.sqlite3' 
     dbFilePath = str(FILEPATH.joinpath('%s.sqlite3' % dbFileName))
+
+# def setDbCursor(dbFilePath, in_memory=False):
+#     # TODO
+#     connection = sqlite3.connect('file:%s?mode=memory'%dbFilePath)
+#     connection.row_factory = sqlite3.Row # Enable column access by name: row['column_name']
+#
+#     cursor = connection.cursor()
 
 def getDbCursor():
     # Generic function needed for database access 

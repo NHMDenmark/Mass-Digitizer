@@ -98,7 +98,7 @@ def addSpecifyTaxonNamesToLocal(taxonranks, taxontreedefid, csrftoken):
     for rank in taxonranks:
         rankid = rank['rankid']
         rankname = rank['name']
-        if rankid > 10:
+        if rankid > 220:
             print(' Rank %s:"%s" ' %(rankid, rankname))
             #print(' Getting taxa from Specify7 API at: ' + gs.baseURL)
 
@@ -123,7 +123,15 @@ def addSpecifyTaxonNamesToLocal(taxonranks, taxontreedefid, csrftoken):
                     #print(' - found %d rows for %s:"%s" ' % (len(dbTaxonName), id, fullname))
                     if len(dbTaxonName)==0: 
                         #print('   > Taxon %s:"%s" ("%s") [rank: %s] not in DB ' %(id, fullname, name, str(rankid)))
-                        if name.rfind("*") == -1 and name != 'IncertaeSedis' and name.rfind(":") == -1:
+                        # Check wether taxon name is valid
+                        taxon_name_valid = True  
+                        invalid_name_strings = {'*', ':', '.', 'Incertae'}
+                        for s in invalid_name_strings:
+                            if name.rfind(s) != -1:
+                                taxon_name_valid = False
+                                break
+                        # If taxon name is valid then add to local app database, else skip
+                        if taxon_name_valid:
                             classid = 'NULL' 
                             if rankid >= 60:
                                 classid = searchParentTaxon(id, 60, csrftoken)
@@ -136,12 +144,13 @@ def addSpecifyTaxonNamesToLocal(taxonranks, taxontreedefid, csrftoken):
                                 parentId = int(str(taxonnames[i]['parent']).split('/')[4])
                                 parenttaxon = sp.getSpecifyObject('taxon', parentId, csrftoken)
                                 taxonFields = {'taxonid':'%s'%id, 'name':'"%s"'%name, 'fullname':'"%s"'%fullname,'rankid':'%s'%rankid,'classid':'%s'%classid,'taxontreedefid':'%s'%taxontreedefid, 'parentfullname': '"%s"'%parenttaxon['fullname']}
-                                #print('   > Inserting: %s' %taxonFields)
+                                print('   > Inserting: %s' %taxonFields)
                                 #print('   > ', 
                                 db.insertRow('taxonname',taxonFields)#)
                                 taxa_inserted = taxa_inserted + 1 
                             #else: print('Alrighty then...')
                         else: print('   > skipping invalid taxon name "%s"'%name)
+                
                 # Check whether we reached the end, otherwise continue
                 if len(taxonnames) < page_size: 
                     print(' - %i taxa < page size %i, therefore end of list; escaping...'%(len(taxonnames), page_size))
