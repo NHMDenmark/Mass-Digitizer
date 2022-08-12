@@ -1,1 +1,3 @@
-Documentation following soon... 
+# DaSSCo Mass Digitization App 
+
+
