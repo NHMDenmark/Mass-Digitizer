@@ -5,3 +5,8 @@ MADD_app/.vscode/launch.json
 __pycache__/  # Exclude the whole folder
 .pytest_cache
 /MassDigitizer/.vscode
+dist
+build
+.vscode
+src/.vscode/launch.json
+src/.vscode/launch.json
