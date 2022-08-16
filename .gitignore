@@ -10,3 +10,4 @@ build
 .vscode
 src/.vscode/launch.json
 src/.vscode/launch.json
+.vscode
