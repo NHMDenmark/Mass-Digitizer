@@ -12,7 +12,6 @@
   PURPOSE: Synchronizing local database with Specify 
 """
 from ast import Is, Not
-import json
 from getpass import getpass
 from queue import Empty
 import specify_interface as sp
@@ -98,7 +97,7 @@ def addSpecifyTaxonNamesToLocal(taxonranks, taxontreedefid, csrftoken):
     for rank in taxonranks:
         rankid = rank['rankid']
         rankname = rank['name']
-        if rankid > 220:
+        if rankid > 80:
             print(' Rank %s:"%s" ' %(rankid, rankname))
             #print(' Getting taxa from Specify7 API at: ' + gs.baseURL)
 
