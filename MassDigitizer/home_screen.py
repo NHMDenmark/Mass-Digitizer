@@ -7,6 +7,7 @@ sys.path.append(str(Path(__file__).joinpath('MassDigitizer')))
 
 import data_access as db
 import util
+import specimen_data_entry as de
 
 #window = Empty
 
@@ -21,7 +22,7 @@ btn_exit = [sg.Button("Exit", key='exit')]
 institutions = util.convert_dbrow_list(db.getRows('institution'))
 
 lbl_select_institution = [sg.Text('Please choose your institution in order to proceed:')]
-ddl_select_institution = [sg.Combo(list(institutions), readonly=True, enable_events=True, key='Institution')]
+ddl_select_institution = [sg.Combo(list(institutions), readonly=True, enable_events=True, key='institution')]
 
 col_main = [ 
     header, 
@@ -48,20 +49,29 @@ def main(window):
         if event == sg.WIN_CLOSED or event == 'Bye!':
             break
         
-        if event == 'Institution':
+        if event == 'institution':
             
-            selected_institution = values['Institution']
+            selected_institution = values['institution']
+            #selected_institution_id = keys['']
             
             print(event, selected_institution)
 
-            
+            institution = db.getRowsOnFilters('institution', {' name = ':'"%s"'%selected_institution})
+
+            institution_id = institution[0]['id']
+
+            print(institution_id)
+
+            collections = util.convert_dbrow_list(db.getRowsOnFilters('collection', {' institutionid = ':'%s'%institution_id}))
+
+            print(len(collections))
 
             next_col_main = [ 
                 [sg.Text("Welcome to the DaSSCo Mass Digitizer App", size=(48,1), font=header_font, justification='center')],
                 [sg.Text('You selected the following instutition:')], 
                 [sg.Text(selected_institution)], 
                 [sg.Text('Please choose a collection:')],
-                [sg.Combo(list(institutions), readonly=True, enable_events=True, key='collection')]
+                [sg.Combo(list(collections), readonly=True, enable_events=True, key='collection')]
                 ]
 
             next_col_side = [
@@ -73,6 +83,19 @@ def main(window):
             next_window = sg.Window('Start', next_layout, size=(640, 480))
             window.close()
             window = next_window
+
+        if event == 'collection':
+            window.close()
+
+            selected_collection = values['collection']
+
+            collection = db.getRowsOnFilters('collection', {' name = ':'"%s"'%selected_collection})
+
+            collection_id = collection[0]['id']
+
+            de.init(collection_id)
+
+            pass
 
         
     window.close()
