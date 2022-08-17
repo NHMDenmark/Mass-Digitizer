@@ -1,3 +1,4 @@
+from hashlib import new
 from os import system, name
 
 def clear():
@@ -20,3 +21,12 @@ def shrink_dict(original_dict, input_string):
       if j[0:len(input_string)] == input_string:
          shrunken_dict[j] = original_dict[j]
    return shrunken_dict
+
+def convert_dbrow_list(list):
+   # TODO complete function contract
+   # Converts datarow list to name array 
+   new_list = []
+   for item in list:
+      new_list.append(item['name'])
+
+   return new_list

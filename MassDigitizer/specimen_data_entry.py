@@ -1,40 +1,42 @@
 import PySimpleGUI as sg
 import import_csv_memory
 import util
-""" TO DO:
-    Restrict the characters allowed in an input element to digits and . or -
-    Accomplished by removing last character input if not a valid character
-"""
 
-headlineFont = ("Corbel, 18")
-names_ = ['Liliaceae', 'Chloranthales', 'Nymphaeales']
-#above should be a complete high level taxonomy that is useful for narrowing the taxon lookup table. Perhaps this is irrelevant as the digitizer will choose 'discipline'
-# or taxonomic theme in the log-in part of the app.
-preparations = ['pinned', 'alchohol']
-geoRegionsCopenhagen = ['Nearctic', 'Palearctic', 'Neotropical', 'Afrotropical', 'Oriental', 'Australian']
+lst_higher_taxa = ['Liliaceae', 'Chloranthales', 'Nymphaeales']
+lst_preparations = ['pinned', 'alchohol']
+lst_geo_regions = ['Nearctic', 'Palearctic', 'Neotropical', 'Afrotropical', 'Oriental', 'Australian']
+lst_storage_locations = ['location 1', 'location 2', 'location 3', 'location 4']
+lst_type_status = [ 'holotype', 'paratype', 'lectotype', 'no type' ]
 
-headline = [
-        sg.Text("Mass Annotated Digitization Desk MADD", font=headlineFont),
-        # sg.In(size=(45, 1), enable_events=True, key="-HEADLINE-")
-]
-hi_taxonomy_prep_type = [sg.Text('Prep Type'), sg.OptionMenu(list(preparations), size=(10,1), key='__PICK_LIST__'), sg.Text('Higher Taxon'),
-     sg.OptionMenu(list(names_), size=(10,1), key='__HIGHERTAXON__') ]
+sg.theme('Light Grey')
 
-barcode_alt_cat = [sg.Text('barcode'), sg.Input(size=(20,1), key='-BARCODE-'), sg.Text('Alt catalog no.'), sg.Input(size=(20,1), key='-ALTCAT-'), sg.Checkbox('Barcode=CatNr', key='-EQUALS-')]
-broad_geo_region = [sg.Input(size=(30,1), key='-GEO-')]
+header_font = ("Corbel, 18")
+header = [ sg.Text("Mass Annotated Digitisation Desk MADD", font=header_font) ]
 
-layout = [  [headline],
-            [hi_taxonomy_prep_type],
-            [barcode_alt_cat],
-            [sg.Text('BroadGeographical region')],
-            [broad_geo_region],
-            [sg.Text('Start typing the taxon name')],
-            [sg.Input(key='-IN-', size=(30,1), enable_events=True), sg.Checkbox('Type', key='-TYPE-')],
-            [sg.Text('Storage')],
-            [sg.Input(size=(30, 1), key='-CHOSEN-')],
-            [sg.Button('Submit', key='-SUBMIT-')]  ]
+ddl_storage_loc = [ sg.Text('Storage Location'), sg.Combo(list(lst_storage_locations), readonly=True, size=(10,1), key='storage') ]
+ddl_prep_types = [ sg.Text('Preparation Type'), sg.Combo(list(lst_preparations), readonly=True, size=(10,1), key='preptype') ]
+ddl_higher_taxa = [ sg.Text('Taxonomic Group'), sg.Combo(list(lst_higher_taxa), readonly=True, size=(10,1), key='higher_taxon') ]
+ddl_type_status = [ sg.Text('Type Status'), sg.Combo(list(lst_type_status), readonly=True, size=(10,1), key='typestatus') ]
 
-window = sg.Window('Mass Digitizer', layout)
+txt_barcode_alt_cat = [sg.Text('Barcode'), sg.Input(size=(20,1), key='catalognr'), sg.Text('Alt catalog no.'), sg.Input(size=(20,1), key='-ALTCAT-'), sg.Checkbox('Barcode=CatNr', key='-EQUALS-')]
+ddl_broad_geo_region = [
+    sg.Text('Broad Geographical region:'), 
+    sg.Combo(list(lst_geo_regions), readonly=True, size=(30,1), key='georegion')
+    ]
+
+inp_taxonomic_name = [sg.Text('Taxonomic name:'), sg.Input(key='-IN-', size=(30,1), enable_events=True)]
+
+layout = [  [header],
+            [
+                sg.Column([[sg.Text('box1')]],background_color='#ebf0df', size=(400,200)),
+                sg.Column([[sg.Text('box3')]],background_color='lightgrey', size=(300,200))
+            ],
+            [sg.Column([[sg.Text('box2')]],background_color='#deecf1', size=(400,100))],
+            #[sg.Input(size=(30, 1), key='-CHOSEN-')],
+            [sg.Button('Save', key='save'), sg.Button('Go back', key='goback')]  
+        ]
+
+window = sg.Window('Mass Digitizer', layout, size=(800, 480), background_color='white') #, theme='LightGrey'
 taxon_candidates = []
 master_dict = {}
 
@@ -108,3 +110,10 @@ while True:
     if event == sg.WIN_CLOSED or event == 'Bye!':
         break
 window.close()
+
+
+
+""" TO DO:
+    Restrict the characters allowed in an input element to digits and . or -
+    Accomplished by removing last character input if not a valid character
+"""
