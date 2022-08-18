@@ -86,21 +86,20 @@ collections =  [sg.Text('Collection name:', size=defaultSize, background_color=g
 work_station =  [sg.Text('Workstation:', size=defaultSize, background_color=greyArea), sg.Combo(workstations, key="-WORKSTATION-", text_color='black', background_color='white'),
          ]
 
+settings_ = [sg.Text('Settings ', size=defaultSize, justification='center', background_color=greyArea), sg.Button('', image_filename=r'options_gear.png',
+                                                                                          button_color=greyArea, key='-SETTING-', border_width=0)
+         ]
+
 layout_grey = [loggedIn, dateTime, [sg.Text("_______________" * 5, background_color=greyArea)], institution_,
-               collections, work_station]
+               collections, work_station, settings_, [sg.Button('LOG OUT', key="-LOGOUT-", button_color='grey40')]]
 
 layout = [
     [sg.Frame('green area',  [[sg.Column(layout_frame1, background_color=greenArea)]], size=(250,200), expand_x=True, expand_y=True, background_color=greenArea),
      sg.Frame('grey area',   [[sg.Column(layout_grey, background_color=greyArea)]], size=(250,300), expand_x=True, expand_y=True, background_color=greyArea)],
-    [sg.Frame('blue area',   [[sg.Column(layout_frame22, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea)],
+    [sg.Frame('blue area',   [[sg.Column(layout_frame22, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],
 ]
-# layout = [
-#     [sg.Frame("green area", layout_frame1, size=(280, 250), expand_x=True, expand_y=True, background_color='#ccffcc')],
-#
-#      [sg.Frame("blue area ", layout_frame22, size=(380, 250), background_color='#99ccff', expand_x=True, expand_y=True, title_location=sg.TITLE_LOCATION_TOP)],],
 
-
-window = sg.Window("Title", layout, margins=(2, 2), size=(900,420), resizable=True, finalize=True)
+window = sg.Window("Simple Annotated Digitization Desk  (SADD)", layout, margins=(2, 2), size=(900,500), resizable=True, finalize=True, )
 window['-NOTES-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
 window['-LOGGED-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
 window['-DATETIME-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
