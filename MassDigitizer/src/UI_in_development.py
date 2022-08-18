@@ -86,8 +86,8 @@ collections =  [sg.Text('Collection name:', size=defaultSize, background_color=g
 work_station =  [sg.Text('Workstation:', size=defaultSize, background_color=greyArea), sg.Combo(workstations, key="-WORKSTATION-", text_color='black', background_color='white'),
          ]
 
-settings_ = [sg.Text('Settings ', size=defaultSize, justification='center', background_color=greyArea), sg.Button('', image_filename=r'options_gear.png',
-                                                                                          button_color=greyArea, key='-SETTING-', border_width=0)
+settings_ = [sg.Text('Settings ', size=defaultSize, justification='center', background_color=greyArea), sg.Button('', image_filename=r'../options_gear.png',
+                                                                                                                  button_color=greyArea, key='-SETTING-', border_width=0)
          ]
 
 layout_grey = [loggedIn, dateTime, [sg.Text("_______________" * 5, background_color=greyArea)], institution_,
