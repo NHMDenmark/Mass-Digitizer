@@ -1,4 +1,7 @@
 import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.joinpath('src')))
+
 import MassDigitizer.home_screen as home
 
 def main() -> None:
