@@ -94,9 +94,9 @@ layout_grey = [loggedIn, dateTime, [sg.Text("_______________" * 5, background_co
                collections, work_station, settings_, [sg.Button('LOG OUT', key="-LOGOUT-", button_color='grey40')]]
 
 layout = [
-    [sg.Frame('green area',  [[sg.Column(layout_frame1, background_color=greenArea)]], size=(250,200), expand_x=True, expand_y=True, background_color=greenArea),
-     sg.Frame('grey area',   [[sg.Column(layout_grey, background_color=greyArea)]], size=(250,300), expand_x=True, expand_y=True, background_color=greyArea)],
-    [sg.Frame('blue area',   [[sg.Column(layout_frame22, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],
+    [sg.Frame('',  [[sg.Column(layout_frame1, background_color=greenArea)]], size=(250,200), expand_x=True, expand_y=True, background_color=greenArea),
+     sg.Frame('',   [[sg.Column(layout_grey, background_color=greyArea)]], size=(250,300), expand_x=True, expand_y=True, background_color=greyArea)],
+    [sg.Frame('',   [[sg.Column(layout_frame22, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],
 ]
 
 window = sg.Window("Simple Annotated Digitization Desk  (SADD)", layout, margins=(2, 2), size=(900,500), resizable=True, finalize=True, )
