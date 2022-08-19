@@ -81,7 +81,7 @@ def getRowsOnFilters(tableName, filters, limit=100):
     sqlString = sqlString[0:len(sqlString)-4] # Remove trailing " AND "
     if limit > 0:
         sqlString += ' LIMIT %s' %str(limit)
-    print(sqlString)
+    #print(sqlString)
     rows = cursor.execute(sqlString).fetchall()
     cursor.connection.close()
     return rows
