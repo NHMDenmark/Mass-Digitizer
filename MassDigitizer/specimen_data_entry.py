@@ -47,6 +47,8 @@ workstations = ['Commodore_64', 'VIC_20', 'HAL2000', 'Cray']
 defaultSize = (20,1)
 #defaultSize is used to space all data entry elements so that they line up.
 font = ('Bahnschrift', 12)
+element_size = (30,1)
+#size for making all fields uniform
 
 #Input elements (below) are stored in variables with brackets to make it easier to include and position in the frames
 storage = [
@@ -56,63 +58,67 @@ storage = [
 
 preparation = [
                     sg.Text("Preparation type:", size=defaultSize, background_color=greenArea, font=font),
-                    sg.Combo(prepType, key='-PREP-',text_color='black', background_color='white'),
+                    sg.Combo(prepType, key='-PREP-', size=element_size ,text_color='black', background_color='white'),
                     ]
 
 taxonomy = [
                     sg.Text("Taxonomic group:", size=defaultSize, background_color=greenArea, font=font),
-                    sg.Combo(taxonomicGroups, key='-TAXON-',text_color='black', background_color='white'),
+                    sg.Combo(taxonomicGroups, size=element_size, key='-TAXON-',text_color='black', background_color='white'),
                     ]
 
 type_status = [
                     sg.Text('Type status:', size=defaultSize, background_color=greenArea, font=font),
-                    sg.Combo(typeStatus, key='-TYPE-', text_color='black', background_color='white', font=font),
+                    sg.Combo(typeStatus, key='-TYPE-', size=element_size, text_color='black', background_color='white', font=font),
                  ]
 
-notes = [sg.Text('Notes', size=defaultSize, background_color=greenArea, font=font), sg.Multiline(size=(24,5), background_color='white', text_color='black', key='-NOTES-'),
-         ]
+notes_title = [sg.Text('Notes', size=defaultSize, background_color=greenArea, font=font)]
+
+
+notes_box = [ sg.Multiline(size=(24,5), background_color='white', text_color='black', key='-NOTES-'),]
 
 layout_greenarea = [
-    storage, preparation, taxonomy, type_status, notes, [sg.Checkbox('Multispecimen sheet', background_color=greenArea)],
+    storage, preparation, taxonomy, type_status, notes_title, notes_box, [sg.Checkbox('Multispecimen sheet', background_color=greenArea)],
     ]
 #Above is the so-called 'green area'
 
 broadGeo = [
-                    sg.Text('Broad geographic region:', size=defaultSize ,background_color=blueArea, text_color='black'),
-                    sg.Combo(geoRegionsCopenhagen, key='-GEOREGION-', text_color='black', background_color='white'),
+                    sg.Text('Broad geographic region:', size=defaultSize ,background_color=blueArea, text_color='black', font=font),
+                    sg.Combo(geoRegionsCopenhagen, size=(28,1), key='-GEOREGION-', text_color='black', background_color='white'),
                  ]
 
 taxonomicName = [
-                    sg.Text('Taxonomic name:', size=defaultSize, background_color=blueArea, text_color='black'),
-                    sg.Combo(taxonomicNames, key='-TAXNAMES-', text_color='black', background_color='white'),
+                    sg.Text('Taxonomic name:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
+                    sg.InputText('', size=element_size, key='-TAXNAMES-', text_color='black', background_color='white'),
                  ]
 
 barcode = [
-                    sg.Text('Barcode:', size=defaultSize, background_color=blueArea, text_color='black'),
-                    sg.Combo(barcode, key='-BARCODE-', text_color='black', background_color='white'),
+                    sg.Text('Barcode:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
+                    sg.StatusBar('', size=(15,1), key='-BARCODE-', text_color='black', background_color='white'),
                  ]
+
+
 
 layout_bluearea = [
     broadGeo, taxonomicName, barcode,
     [sg.Button('SAVE', key="-SAVE-", button_color='seagreen'), sg.Button('Go Back', key="-GOBACK-", button_color='firebrick', pad=(120,0))]
 ]
 
-loggedIn = [sg.Text('Logged in as:', size=defaultSize, background_color=greyArea), sg.InputText(size=(24,1), background_color='white', text_color='black', key='-LOGGED-'),
+loggedIn = [sg.Text('Logged in as:', size=defaultSize, background_color=greyArea, font=font), sg.InputText(size=(24,1), background_color='white', text_color='black', key='-LOGGED-'),
          ]
 
-dateTime = [sg.Text('Date / Time:', size=defaultSize, background_color=greyArea), sg.InputText(size=(24,1), background_color='white', text_color='black', key='-DATETIME-'),
+dateTime = [sg.Text('Date / Time:', size=defaultSize, background_color=greyArea, font=font), sg.InputText(size=(24,1), background_color='white', text_color='black', key='-DATETIME-'),
          ]
 
-institution_ = [sg.Text('Institution:', size=defaultSize, background_color=greyArea), sg.Combo(institutions, key="-INSTITUTION-", text_color='black', background_color='white'),
+institution_ = [sg.Text('Institution:', size=defaultSize, background_color=greyArea, font=font), sg.Combo(institutions, key="-INSTITUTION-", size=element_size, text_color='black', background_color='white'),
          ]
 
-collections =  [sg.Text('Collection name:', size=defaultSize, background_color=greyArea), sg.Combo(collections, key="-COLLECTION-", text_color='black', background_color='white'),
+collections =  [sg.Text('Collection name:', size=defaultSize, background_color=greyArea, font=font), sg.Combo(collections, key="-COLLECTION-", size=element_size, text_color='black', background_color='white'),
          ]
 
-work_station =  [sg.Text('Workstation:', size=defaultSize, background_color=greyArea), sg.Combo(workstations, key="-WORKSTATION-", text_color='black', background_color='white'),
+work_station =  [sg.Text('Workstation:', size=defaultSize, background_color=greyArea, font=font), sg.Combo(workstations, key="-WORKSTATION-", size=element_size, text_color='black', background_color='white'),
          ]
 
-settings_ = [sg.Text('Settings ', size=defaultSize, justification='center', background_color=greyArea), sg.Button('', image_filename='%soptions_gear.png'%currentpath, button_color=greyArea, key='-SETTING-', border_width=0)
+settings_ = [sg.Text('Settings ', size=defaultSize, justification='center', background_color=greyArea, font=('Bahnschrift', 10)), sg.Button('', image_filename='%soptions_gear.png'%currentpath, button_color=greyArea, key='-SETTING-', border_width=0)
          ]
 
 layout_greyarea = [loggedIn, dateTime, [sg.Text("_______________" * 5, background_color=greyArea)], institution_,
@@ -140,7 +146,7 @@ def init(collection_id):
 
     window.close()
 
-#init(1)
+init(1)
 
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
