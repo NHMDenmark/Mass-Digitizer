@@ -19,27 +19,6 @@ import data_access as db
 import global_settings as gs
 import util
 
-def specifyLogin(username, passwd):
-    # Function for logging in to the Specify7 API and getting the CSRF token necessary for further interactions in the session 
-    # CONTRACT
-    #   username (String): Specify account user name  
-    #   passwd (String) : Specify account password  
-    #   RETURNS (String) : The CSRF token necessary for further interactions in the session 
-    print('Connecting to Specify7 API at: ' + gs.baseURL)
-    csrftoken = sp.getCSRFToken()
-    csrftoken = sp.login(username, passwd, csrftoken)
-    if sp.verifySession(csrftoken):
-        return csrftoken
-    else:
-        return '' 
-
-def specifyLogout(csrftoken):
-    # Function for logging out of the Specify7 API again 
-    # CONTRACT
-    #   csrftoken (String) : The CSRF token required during logging in for the session 
-    print('logging out of Specify...')
-    sp.logout(csrftoken)
-
 def syncSpecifyCollections(csrftoken):
     # Function for synchronizing collections between the Specify7 API and the local database 
     # CONTRACT
@@ -242,7 +221,7 @@ gs.baseURL = institution[3]
 
 max_tries = 10
 while max_tries > 0:
-    token = specifyLogin(input('Enter username: '), getpass('Enter password: '))
+    token = sp.specifyLogin(input('Enter username: '), getpass('Enter password: '))
     if token != '': break
     else:
         print('Login failed...')
