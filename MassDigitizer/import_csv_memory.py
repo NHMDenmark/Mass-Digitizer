@@ -41,8 +41,6 @@ def make_taxonomylite(hc):
     print('exe time for SQLite "botany" taxonomy build is= ', end - start)
 ####This needs only run once at the start of session####
 
-make_taxonomylite('hard coder')
-
 def run_query(name_part):
     #name_part: string to be queried by
     #return: a dict of names
@@ -67,5 +65,5 @@ def run_query(name_part):
 # print('length of new taxonomy - - ', len(res2))
 ####END FOR DEMO
 
-
+#make_taxonomylite('hard coder')
 

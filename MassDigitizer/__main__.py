@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-sys.path.append(str(Path(__file__).parent.joinpath('src')))
+sys.path.append(str(Path(__file__).parent.joinpath('MassDigitizer')))
 
 import MassDigitizer.home_screen as home
 
@@ -9,7 +9,7 @@ def main() -> None:
     home.start()
 
 
-
+    # TODO start background processes? 
 
 
 
