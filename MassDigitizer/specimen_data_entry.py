@@ -17,9 +17,14 @@ software distributed under the License is distributed on an "AS IS" BASIS, WITHO
 either express or implied. See the License for the specific language governing permissions and limitations under the License.
 """
 import PySimpleGUI as sg
-import import_csv_memory
-import util
+import os
+import sys
 
+import pathlib
+sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer')))
+
+currentpath = os.path.join(pathlib.Path(__file__).parent, '')
+print(currentpath)
 
 sg.theme('Material2')
 blueArea = '#99ccff'
@@ -107,8 +112,7 @@ collections =  [sg.Text('Collection name:', size=defaultSize, background_color=g
 work_station =  [sg.Text('Workstation:', size=defaultSize, background_color=greyArea), sg.Combo(workstations, key="-WORKSTATION-", text_color='black', background_color='white'),
          ]
 
-settings_ = [sg.Text('Settings ', size=defaultSize, justification='center', background_color=greyArea), sg.Button('', image_filename=r'options_gear.png',
-                                                                                          button_color=greyArea, key='-SETTING-', border_width=0)
+settings_ = [sg.Text('Settings ', size=defaultSize, justification='center', background_color=greyArea), sg.Button('', image_filename='%soptions_gear.png'%currentpath, button_color=greyArea, key='-SETTING-', border_width=0)
          ]
 
 layout_greyarea = [loggedIn, dateTime, [sg.Text("_______________" * 5, background_color=greyArea)], institution_,
@@ -121,20 +125,22 @@ layout = [
     [sg.Frame('',   [[sg.Column(layout_bluearea, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],
 ]
 
-window = sg.Window("Simple Annotated Digitization Desk  (SADD)", layout, margins=(2, 2), size=(900,500), resizable=True, finalize=True, )
-#The three lines below are there to ensure that the cursor in the input text fields is visible. It is invisible against a white background.
-window['-NOTES-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
-window['-LOGGED-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
-window['-DATETIME-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
+def init(collection_id):
+    window = sg.Window("Simple Annotated Digitization Desk  (SADD)", layout, margins=(2, 2), size=(900,500), resizable=True, finalize=True, )
+    #The three lines below are there to ensure that the cursor in the input text fields is visible. It is invisible against a white background.
+    window['-NOTES-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
+    window['-LOGGED-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
+    window['-DATETIME-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
 
-while True:
+    while True:
 
-    event, values = window.read()
-    if event == sg.WINDOW_CLOSED:
-        break
+        event, values = window.read()
+        if event == sg.WINDOW_CLOSED:
+            break
 
-window.close()
+    window.close()
 
+#init(1)
 
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
