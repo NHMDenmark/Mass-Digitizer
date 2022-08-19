@@ -17,7 +17,7 @@ import sqlite3, json
 from debugpy import connect
 
 from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent.joinpath('src')))
+sys.path.append(str(Path(__file__).parent.parent.joinpath('MassDigitizer')))
 
 # Point to database file 
 FILEPATH = Path(__file__).parent.joinpath('db')
