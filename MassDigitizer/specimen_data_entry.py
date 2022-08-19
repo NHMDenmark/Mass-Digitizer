@@ -41,29 +41,30 @@ workstations = ['Commodore_64', 'VIC_20', 'HAL2000', 'Cray']
 
 defaultSize = (20,1)
 #defaultSize is used to space all data entry elements so that they line up.
+font = ('Bahnschrift', 12)
 
 #Input elements (below) are stored in variables with brackets to make it easier to include and position in the frames
 storage = [
-                    sg.Text("Storage location:", size=defaultSize, background_color=greenArea),
+                    sg.Text("Storage location:", size=defaultSize, background_color=greenArea, font=font),
                     sg.Combo(institutions, key='-STORAGE-', text_color='black', background_color='white'),
                 ]
 
 preparation = [
-                    sg.Text("Preparation type:", size=defaultSize, background_color=greenArea),
+                    sg.Text("Preparation type:", size=defaultSize, background_color=greenArea, font=font),
                     sg.Combo(prepType, key='-PREP-',text_color='black', background_color='white'),
                     ]
 
 taxonomy = [
-                    sg.Text("Taxonomic group:", size=defaultSize, background_color=greenArea),
+                    sg.Text("Taxonomic group:", size=defaultSize, background_color=greenArea, font=font),
                     sg.Combo(taxonomicGroups, key='-TAXON-',text_color='black', background_color='white'),
                     ]
 
 type_status = [
-                    sg.Text('Type status:', size=defaultSize, background_color=greenArea),
-                    sg.Combo(typeStatus, key='-TYPE-', text_color='black', background_color='white'),
+                    sg.Text('Type status:', size=defaultSize, background_color=greenArea, font=font),
+                    sg.Combo(typeStatus, key='-TYPE-', text_color='black', background_color='white', font=font),
                  ]
 
-notes = [sg.Text('Notes', size=defaultSize, background_color=greenArea), sg.InputText(size=(24,1), background_color='white', text_color='black', key='-NOTES-'),
+notes = [sg.Text('Notes', size=defaultSize, background_color=greenArea, font=font), sg.Multiline(size=(24,5), background_color='white', text_color='black', key='-NOTES-'),
          ]
 
 layout_greenarea = [
@@ -115,9 +116,9 @@ layout_greyarea = [loggedIn, dateTime, [sg.Text("_______________" * 5, backgroun
 #there is a hacky horizontal line element in the code above to create space between inputs
 
 layout = [
-    [sg.Frame('green area',  [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(250,200), expand_x=True, expand_y=True, background_color=greenArea),
-     sg.Frame('grey area', [[sg.Column(layout_greyarea, background_color=greyArea)]], size=(250, 300), expand_x=True, expand_y=True, background_color=greyArea)],
-    [sg.Frame('blue area',   [[sg.Column(layout_bluearea, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],
+    [sg.Frame('',  [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(250,200), expand_x=True, expand_y=True, background_color=greenArea),
+     sg.Frame('', [[sg.Column(layout_greyarea, background_color=greyArea)]], size=(250, 300), expand_x=True, expand_y=True, background_color=greyArea)],
+    [sg.Frame('',   [[sg.Column(layout_bluearea, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],
 ]
 
 window = sg.Window("Simple Annotated Digitization Desk  (SADD)", layout, margins=(2, 2), size=(900,500), resizable=True, finalize=True, )
