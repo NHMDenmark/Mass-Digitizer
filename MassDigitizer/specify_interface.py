@@ -21,6 +21,7 @@ import urllib3
 from pathlib import Path
 
 import global_settings as gs
+import util 
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -48,7 +49,21 @@ def getCSRFToken():
   #print('------------------------------')
   return csrftoken
 
-def login(username, passwd, csrftoken):
+def specifyLogin(username, passwd, collection_id):
+    # Function for logging in to the Specify7 API and getting the CSRF token necessary for further interactions in the session 
+    # CONTRACT
+    #   username (String): Specify account user name  
+    #   passwd (String) : Specify account password  
+    #   RETURNS (String) : The CSRF token necessary for further interactions in the session 
+    print('Connecting to Specify7 API at: ' + gs.baseURL)
+    csrftoken = getCSRFToken()
+    csrftoken = login(username, passwd, collection_id, csrftoken)
+    if verifySession(csrftoken):
+        return csrftoken
+    else:
+        return '' 
+
+def login(username, passwd, collectionid, csrftoken):
   # Username and password should be passed to the login function along with CSRF token 
   # After successful login a new CSRF token is issued that should be used for the continuing session 
   # CONTRACT 
@@ -57,18 +72,25 @@ def login(username, passwd, csrftoken):
   #   csrftoken (String): The CSRF token is required for security reasons  
   print('Log in using CSRF token & username/password')
   headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL}
-  response = spSession.put(gs.baseURL + "context/login/", json={"username": username, "password": passwd, "collection": 851970}, headers=headers, verify=False)
+  response = spSession.put(gs.baseURL + "context/login/", json={"username": username, "password": passwd, "collection": collectionid}, headers=headers, verify=False) 
   csrftoken = response.cookies.get('csrftoken') # Keep and use new CSRF token after login
   print(' - Response: %s %s' %(str(response.status_code), response.reason))
   print(' - New CSRF Token: ', csrftoken)
   #print('------------------------------')
   return csrftoken
 
+def specifyLogout(csrftoken):
+    # Function for logging out of the Specify7 API again 
+    # CONTRACT
+    #   csrftoken (String) : The CSRF token required during logging in for the session 
+    print('logging out of Specify...')
+    logout(csrftoken)
+
 def verifySession(csrftoken):
   # Attempt to fetch data on the current user being logged in as a way to verify the session  
   # CONTRACT 
   #   csrftoken (String): The CSRF token is required for security reasons
-  #   Returns boolean to indicate session validity
+  #   RETURNS boolean to indicate session validity
   print('Verify session')
   validity = Empty
   headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL}
@@ -89,6 +111,7 @@ def getCollObject(collectionObjectId, csrftoken):
   # CONTRACT 
   #   collectionObjectId (Integer): The primary key of the collectionObject, which is not the same as catalog number  
   #   csrftoken (String): The CSRF token is required for security reasons 
+  #   RETURNS fetched object 
   print('Query collection object')
   headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL}
   response = spSession.get(gs.baseURL + "api/specify/collectionobject/" + str(collectionObjectId)  + "/", headers=headers)
@@ -123,7 +146,8 @@ def getSpecifyObject(objectName, objectId, csrftoken):
   return object 
 
 def postSpecifyObject(objectName, objectId, specifyObject, csrftoken):
-  # TODO 
+  # TODO not yet working 
+  #   RETURNS posted object 
   headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'referer': gs.baseURL}
   apiCallString = "%sapi/specify/%s/%d/" %(gs.baseURL, objectName, objectId)
   print(apiCallString)
@@ -137,7 +161,8 @@ def postSpecifyObject(objectName, objectId, specifyObject, csrftoken):
   return object 
 
 def putSpecifyObject(objectName, objectId, specifyObject, csrftoken):
-  # TODO 
+  # TODO not yet working 
+  #   RETURNS put object 
   headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'referer': gs.baseURL}
   apiCallString = "%sapi/specify/%s/%d/" %(gs.baseURL, objectName, objectId)
   print(apiCallString)
@@ -180,7 +205,8 @@ def directAPIcall(callString, csrftoken):
   # Generic method for allowing a direct call to the API using a call string that is appended to the baseURL
   # CONTRACT
   #   callString (String): The string to the appended to the base URL of the API
-  #   csrftoken (String): The CSRF token is required for security reasons
+  #   csrftoken (String): The CSRF token is required for security reasons  
+  #   RETURNS response object  
   apiCallString = "%s%s" %(gs.baseURL, callString)
   print(apiCallString)
   headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL}
@@ -189,7 +215,7 @@ def directAPIcall(callString, csrftoken):
   
   if response.status_code < 299:
     return json.loads(response.text)
-  return {}
+  return {} 
 
 def logout(csrftoken):
   # Logging out closes the session on both ends 
@@ -214,13 +240,32 @@ def getInitialCollections():
   #print('------------------------------')
   return collections
 
-def mergeTaxa(originalTaxonId, targetTaxonId, csrfToken):
+def mergeTaxa(source_id, target_id, csrftoken):
   # TODO 
-  pass
   #   Example: 
   #     POST URL:   https://specify-test.science.ku.dk/api/specify_tree/taxon/367622/merge/ 
-  #     POST DATA:  target=367624
-  # 
+  #     POST DATA:  target: "432192"  
+  #   RETURNS response object 
+  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'referer': gs.baseURL, } 
+  apiCallString = "%sapi/specify_tree/taxon/%s/merge/?target=%s"%(gs.baseURL, source_id, target_id)
+  print(" - API call: %s"%apiCallString)
+
+  #print(spSession.cookies)
+
+  input('ready?')
+  response = spSession.post(apiCallString, headers=headers, json={"target": target_id}) 
+
+  #print(response.request.body)
+  util.pretty_print_POST(response.request)
+  #print('---------------------------')
+  print(' - Response: %s %s' %(str(response.status_code), response.reason))
+
+  if response.status_code < 299:
+    object = response.json()
+  else: 
+    object = Empty
+  return object  
+
 
 
 #util.clear()
