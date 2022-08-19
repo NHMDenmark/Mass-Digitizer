@@ -1,121 +1,142 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu May 26 17:44:00 2022
+
+@author: Jan K. Legind, NHMD
+
+Copyright 2022 Natural History Museum of Denmark (NHMD)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+either express or implied. See the License for the specific language governing permissions and limitations under the License.
+"""
 import PySimpleGUI as sg
 import import_csv_memory
 import util
 
-def init(collectionid):
 
-    lst_higher_taxa = ['Liliaceae', 'Chloranthales', 'Nymphaeales']
-    lst_preparations = ['pinned', 'alchohol']
-    lst_geo_regions = ['Nearctic', 'Palearctic', 'Neotropical', 'Afrotropical', 'Oriental', 'Australian']
-    lst_storage_locations = ['location 1', 'location 2', 'location 3', 'location 4']
-    lst_type_status = [ 'holotype', 'paratype', 'lectotype', 'no type' ]
+sg.theme('Material2')
+blueArea = '#99ccff'
+greenArea = '#ccffcc'
+greyArea = '#e6e6e6'
 
-    sg.theme('Light Grey')
+#All hardcoded stuff are likely to be replaced by DB queries
+institutions = ['NHMD: Natural History Museum of Denmark (Copenhagen)', 'NHMA: Natural History Museum Aarhus', 'TEST: Test server']
+prepType = ['pinned', 'herbarium sheets']
+taxonomicGroups = ['placeholder...']
+typeStatus =  ['placeholder...']
+#Georegions /blue area below -v
+geoRegionsCopenhagen = ['Nearctic', 'Palearctic', 'Neotropical', 'Afrotropical', 'Oriental', 'Australian']
+taxonomicNames = ['Acanthohelicospora aurea','Acremonium alternatum','Actinonema actaeae','Aegerita alba','Agaricus aestivalis','Agaricus aestivalis var. flavotacta','Agaricus altipes']
+barcode = [58697014]
+#Grey area hardcoding below
+collections = ['Botany', 'Entomology', 'Ichthyology']
+workstations = ['Commodore_64', 'VIC_20', 'HAL2000', 'Cray']
 
-    header_font = ("Corbel, 18")
-    header = [ sg.Text("Mass Annotated Digitisation Desk MADD", font=header_font) ]
+defaultSize = (20,1)
+#defaultSize is used to space all data entry elements so that they line up.
 
-    ddl_storage_loc = [ sg.Text('Storage Location'), sg.Combo(list(lst_storage_locations), readonly=True, size=(10,1), key='storage') ]
-    ddl_prep_types = [ sg.Text('Preparation Type'), sg.Combo(list(lst_preparations), readonly=True, size=(10,1), key='preptype') ]
-    ddl_higher_taxa = [ sg.Text('Taxonomic Group'), sg.Combo(list(lst_higher_taxa), readonly=True, size=(10,1), key='higher_taxon') ]
-    ddl_type_status = [ sg.Text('Type Status'), sg.Combo(list(lst_type_status), readonly=True, size=(10,1), key='typestatus') ]
+#Input elements (below) are stored in variables with brackets to make it easier to include and position in the frames
+storage = [
+                    sg.Text("Storage location:", size=defaultSize, background_color=greenArea),
+                    sg.Combo(institutions, key='-STORAGE-', text_color='black', background_color='white'),
+                ]
 
-    txt_barcode_alt_cat = [sg.Text('Barcode'), sg.Input(size=(20,1), key='catalognr'), sg.Text('Alt catalog no.'), sg.Input(size=(20,1), key='-ALTCAT-'), sg.Checkbox('Barcode=CatNr', key='-EQUALS-')]
-    ddl_broad_geo_region = [
-        sg.Text('Broad Geographical region:'), 
-        sg.Combo(list(lst_geo_regions), readonly=True, size=(30,1), key='georegion')
-        ]
+preparation = [
+                    sg.Text("Preparation type:", size=defaultSize, background_color=greenArea),
+                    sg.Combo(prepType, key='-PREP-',text_color='black', background_color='white'),
+                    ]
 
-    inp_taxonomic_name = [sg.Text('Taxonomic name:'), sg.Input(key='-IN-', size=(30,1), enable_events=True)]
+taxonomy = [
+                    sg.Text("Taxonomic group:", size=defaultSize, background_color=greenArea),
+                    sg.Combo(taxonomicGroups, key='-TAXON-',text_color='black', background_color='white'),
+                    ]
 
-    layout = [  [header],
-                [
-                    sg.Column([[sg.Text('box1')]],background_color='#ebf0df', size=(400,200)),
-                    sg.Column([[sg.Text('box3')]],background_color='lightgrey', size=(300,200))
-                ],
-                [sg.Column([[sg.Text('box2')]],background_color='#deecf1', size=(400,100))],
-                #[sg.Input(size=(30, 1), key='-CHOSEN-')],
-                [sg.Button('Save', key='save'), sg.Button('Go back', key='goback')]  
-            ]
+type_status = [
+                    sg.Text('Type status:', size=defaultSize, background_color=greenArea),
+                    sg.Combo(typeStatus, key='-TYPE-', text_color='black', background_color='white'),
+                 ]
 
-    window = sg.Window('Mass Digitizer', layout, size=(800, 480), background_color='white') #, theme='LightGrey'
-    taxon_candidates = []
-    master_dict = {}
+notes = [sg.Text('Notes', size=defaultSize, background_color=greenArea), sg.InputText(size=(24,1), background_color='white', text_color='black', key='-NOTES-'),
+         ]
 
+layout_greenarea = [
+    storage, preparation, taxonomy, type_status, notes, [sg.Checkbox('Multispecimen sheet', background_color=greenArea)],
+    ]
+#Above is the so-called 'green area'
 
-    def TAX_POPUP(title, names):
-        # This is the window where taxonomic candidate names appear to be selected by the operator
-        # title: is the string going into the window bar
-        # names: are the taxonomic names submitted by the initial DB query
-        names = list(names)
-        print(names)
-        layout = [
-            [sg.Listbox(names, size=(50, 20), font=("Courier New", 16), enable_events=True, key="-LISTBOX-")],
-            [sg.StatusBar("", size=(30, 1), key='-STATUS-')],
-        ]
+broadGeo = [
+                    sg.Text('Broad geographic region:', size=defaultSize ,background_color=blueArea, text_color='black'),
+                    sg.Combo(geoRegionsCopenhagen, key='-GEOREGION-', text_color='black', background_color='white'),
+                 ]
 
-        window = sg.Window(title, layout, finalize=True)
-        listbox, status = window['-LISTBOX-'], window['-STATUS-']
+taxonomicName = [
+                    sg.Text('Taxonomic name:', size=defaultSize, background_color=blueArea, text_color='black'),
+                    sg.Combo(taxonomicNames, key='-TAXNAMES-', text_color='black', background_color='white'),
+                 ]
 
-        while True:
+barcode = [
+                    sg.Text('Barcode:', size=defaultSize, background_color=blueArea, text_color='black'),
+                    sg.Combo(barcode, key='-BARCODE-', text_color='black', background_color='white'),
+                 ]
 
-            event, values = window.read()
-            if event == sg.WIN_CLOSED or event == 'Exit':
-                break
-            elif event == '-LISTBOX-':
-                selection = values[event]
-                if selection:
-                    item = selection[0]
-                    index = listbox.get_indexes()[0]
-                    print(f'Line {index + 1}, {item} selected')
-                    # break
+layout_bluearea = [
+    broadGeo, taxonomicName, barcode,
+    [sg.Button('SAVE', key="-SAVE-", button_color='seagreen'), sg.Button('Go Back', key="-GOBACK-", button_color='firebrick', pad=(120,0))]
+]
 
-                    window.close()
-            elif event == '-EXIT-':
-                window.close()
+loggedIn = [sg.Text('Logged in as:', size=defaultSize, background_color=greyArea), sg.InputText(size=(24,1), background_color='white', text_color='black', key='-LOGGED-'),
+         ]
 
+dateTime = [sg.Text('Date / Time:', size=defaultSize, background_color=greyArea), sg.InputText(size=(24,1), background_color='white', text_color='black', key='-DATETIME-'),
+         ]
 
-    while True:
-        event, values = window.read()
-        if event == '-EXIT-':
-            print('exiiiit - - -')
-            window.close()
-        if event == '-GEO-':
-            print('In Geo domain')
-        print('event:', event)
-        input_string = values[event]
-        print('values:', input_string, len( ))
-        if len(input_string) == 3:
-            print('will collect taxonomy based on three char input string!')
-            res_dict = import_csv_memory.run_query(input_string)
-            print('length of refined taxonomy = ', len(res_dict))
-        elif len(input_string) >= 4:
-            res_dict = util.shrink_dict(res_dict, input_string)
-            print('length of shrunk taxonomy = ', len(res_dict))
-            rg = range(1,20)
-            if len(res_dict) in rg:
-                print('res_dict: ', res_dict)
-                ###!
-                for key, val in res_dict.items():
-                    taxon_candidates.append([key, val])
-                    ###!!
-                selected = TAX_POPUP('Candidates', taxon_candidates)
+institution_ = [sg.Text('Institution:', size=defaultSize, background_color=greyArea), sg.Combo(institutions, key="-INSTITUTION-", text_color='black', background_color='white'),
+         ]
 
-                if selected:
+collections =  [sg.Text('Collection name:', size=defaultSize, background_color=greyArea), sg.Combo(collections, key="-COLLECTION-", text_color='black', background_color='white'),
+         ]
 
-                    window['Candidates'].update(selected)
-                    mask = (taxon_candidates == selected)
-                    print('selected--:', selected)
-                    print('[GUI_POPUP] event:', event)
-                    print('[GUI_POPUP] values:', values)
+work_station =  [sg.Text('Workstation:', size=defaultSize, background_color=greyArea), sg.Combo(workstations, key="-WORKSTATION-", text_color='black', background_color='white'),
+         ]
 
-        if event == sg.WIN_CLOSED or event == 'Bye!':
-            break
-    window.close()
+settings_ = [sg.Text('Settings ', size=defaultSize, justification='center', background_color=greyArea), sg.Button('', image_filename=r'options_gear.png',
+                                                                                          button_color=greyArea, key='-SETTING-', border_width=0)
+         ]
+
+layout_greyarea = [loggedIn, dateTime, [sg.Text("_______________" * 5, background_color=greyArea)], institution_,
+                   collections, work_station, settings_, [sg.Button('LOG OUT', key="-LOGOUT-", button_color='grey40')]]
+#there is a hacky horizontal line element in the code above to create space between inputs
+
+layout = [
+    [sg.Frame('green area',  [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(250,200), expand_x=True, expand_y=True, background_color=greenArea),
+     sg.Frame('grey area', [[sg.Column(layout_greyarea, background_color=greyArea)]], size=(250, 300), expand_x=True, expand_y=True, background_color=greyArea)],
+    [sg.Frame('blue area',   [[sg.Column(layout_bluearea, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],
+]
+
+window = sg.Window("Simple Annotated Digitization Desk  (SADD)", layout, margins=(2, 2), size=(900,500), resizable=True, finalize=True, )
+#The three lines below are there to ensure that the cursor in the input text fields is visible. It is invisible against a white background.
+window['-NOTES-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
+window['-LOGGED-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
+window['-DATETIME-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
+
+while True:
+
+    event, values = window.read()
+    if event == sg.WINDOW_CLOSED:
+        break
+
+window.close()
 
 
-
-    """ TO DO:
-        Restrict the characters allowed in an input element to digits and . or -
-        Accomplished by removing last character input if not a valid character
-    """
+""" TO DO:
+    Restrict the characters allowed in an input element to digits and . or -
+    Accomplished by removing last character input if not a valid character
+    This link provides some ideas for input sanitazion https://github.com/PySimpleGUI/PySimpleGUI/issues/1119
+"""
