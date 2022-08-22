@@ -19,12 +19,17 @@ from debugpy import connect
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.joinpath('MassDigitizer')))
 
+import sqlite3
+from io import StringIO
+
+import global_settings as gs
+
 # Point to database file 
 FILEPATH = Path(__file__).parent.joinpath('db')
 dbFilePath = str(FILEPATH.joinpath('db.sqlite3'))
 currentCursor = Empty
 
-def setDatabase(dbFileName='db'):
+def set_database(dbFileName='db'):
     # This optional function allows for setting a different database file like e.g. 'test' 
     # CONTRACT 
     #   dbFileName (String): the name of the file excluding the extension '.sqlite3' 
@@ -37,11 +42,41 @@ def setDatabase(dbFileName='db'):
 #
 #     cursor = connection.cursor()
 
-def getDbCursor():
+
+
+def get_db_cursor():#do_in_memory=False):
     # Generic function needed for database access 
+    # CONTRACT
+    #   do_in_memory (boolean): Whether the database file should be run in-memory 
     #   RETURNS database cursor object 
+#     connection = sqlite3.connect(dbFilePath)
+#     connection.row_factory = sqlite3.Row # Enable column access by name: row['column_name']
+#     cursor = connection.cursor()
+#     return cursor
+
+# def get_inmemory_cursor(in_memory=True):
+#     # TODO write function contract
+
     connection = sqlite3.connect(dbFilePath)
-    connection.row_factory = sqlite3.Row # Enable column access by name: row['column_name']
+    
+    #gs.db_in_memory = do_in_memory # apply in-memory flag to global  
+    if gs.db_in_memory == True:
+        print(' - running database in-memory')
+        # Read database to tempfile
+        tempfile = StringIO()
+        for line in connection.iterdump():
+            tempfile.write('%s\n' % line)
+        connection.close()
+        tempfile.seek(0)
+
+        # Create a database in memory and import from tempfile
+        connection = sqlite3.connect(":memory:")
+        connection.cursor().executescript(tempfile.read())
+        connection.commit()
+    else:
+        print(' - running database as file')
+
+    connection.row_factory = sqlite3.Row
     cursor = connection.cursor()
     return cursor
 
@@ -52,7 +87,7 @@ def getRows(tableName, limit=100):
     #   limit (Integer) : The maximum number of rows - 0 means all rows 
     #   RETURNS table rows (list)
     print('Get all rows from table "%s" ...' % tableName)
-    cursor = getDbCursor()
+    cursor = get_db_cursor()
     sqlString = "SELECT * FROM " + tableName
     if limit > 0:
         sqlString += ' LIMIT %s' %str(limit)
@@ -72,7 +107,7 @@ def getRowsOnFilters(tableName, filters, limit=100):
     #       NOTE: Strings should be formatted with enclosing double quotation marks (") 
     #             Numbers should be formatted as strings 
     #   RETURNS table rows (list)
-    cursor = getDbCursor()
+    cursor = get_db_cursor()
     sqlString = 'SELECT * FROM %s ' % tableName 
     if filters.items():
         sqlString += "WHERE "
@@ -92,7 +127,7 @@ def getRowOnId(tableName, id):
     #   tableName (String): The name of the table to be queried
     #   id (Integer) : The primary key of the row to be returned 
     #   RETURNS single table row 
-    cursor = getDbCursor()
+    cursor = get_db_cursor()
     row = cursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(id)).fetchone()
     cursor.connection.close()
     return row
@@ -103,7 +138,7 @@ def getRowOnSpecifyId(tableName, id):
     #   tableName (String): The name of the table to be queried
     #   id (Integer) : The primary key of the row to be returned 
     #   RETURNS single table row 
-    cursor = getDbCursor()
+    cursor = get_db_cursor()
     row = cursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(id)).fetchone()
     cursor.connection.close()
     return row
@@ -116,7 +151,7 @@ def insertRow(tableName, fields):
     #       NOTE: Strings should be formatted with enclosing double quotation marks (") 
     #             Numbers should be formatted as strings 
     #   RETURNS SQL result (String)
-    cursor = getDbCursor()
+    cursor = get_db_cursor()
     fieldsString = ""
     for key in fields:
         fieldsString += "%s, " % key
@@ -143,4 +178,4 @@ def getFieldMap(cursor):
         column = column + 1
     return results
 
-setDatabase()
+set_database()
