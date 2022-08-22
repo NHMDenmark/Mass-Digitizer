@@ -19,12 +19,20 @@ either express or implied. See the License for the specific language governing p
 import PySimpleGUI as sg
 # import import_csv_memory
 import util
+import os
+import sys
+import pathlib
+
+sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer')))
+
+currentpath = os.path.join(pathlib.Path(__file__).parent, '')
+import kick_off_sql_searches as koss
 
 
 sg.theme('Material2')
 blueArea = '#99ccff'
-greenArea = '#ccffcc'
-greyArea = '#e6e6e6'
+greenArea = '#E8F4EA'
+greyArea = '#BFD1DF'
 
 #All hardcoded stuff are likely to be replaced by DB queries
 institutions = ['NHMD: Natural History Museum of Denmark (Copenhagen)', 'NHMA: Natural History Museum Aarhus', 'TEST: Test server']
@@ -33,7 +41,7 @@ taxonomicGroups = ['placeholder...']
 typeStatus =  ['placeholder...']
 #Georegions /blue area below -v
 geoRegionsCopenhagen = ['Nearctic', 'Palearctic', 'Neotropical', 'Afrotropical', 'Oriental', 'Australian']
-taxonomicNames = ['Acanthohelicospora aurea','Acremonium alternatum','Actinonema actaeae','Aegerita alba','Agaricus aestivalis','Agaricus aestivalis var. flavotacta','Agaricus altipes']
+# taxonomicNames = ['Acanthohelicospora aurea','Acremonium alternatum','Actinonema actaeae','Aegerita alba','Agaricus aestivalis','Agaricus aestivalis var. flavotacta','Agaricus altipes']
 barcode = [58697014]
 #Grey area hardcoding below
 collections = ['Botany', 'Entomology', 'Ichthyology']
@@ -82,7 +90,7 @@ broadGeo = [
 
 taxonomicName = [
                     sg.Text('Taxonomic name:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
-                    sg.Combo(taxonomicNames, key='-TAXNAMES-', size=blue_size, text_color='black', background_color='white', enable_events=True),
+                    sg.InputText('', key='-TAXNAMES-', size=blue_size, text_color='black', background_color='white', enable_events=True),
                  ]
 
 barcode = [
@@ -116,9 +124,10 @@ collections =  [sg.Text('Collection name:', size=defaultSize, background_color=g
 work_station =  [sg.Text('Workstation:', size=defaultSize, background_color=greyArea, font=font), sg.Combo(workstations, key="-WORKSTATION-", size=element_size, text_color='black', background_color='white'),
          ]
 
-settings_ = [sg.Text('Settings ', size=defaultSize, justification='center', background_color=greyArea, font=14), sg.Button('', image_filename=r'options_gear.png',
+settings_ = [sg.Text('Settings ', size=defaultSize, justification='center', background_color=greyArea, font=14), sg.Button('', image_filename='%soptions_gear.png'%currentpath,
                                                                                           button_color=greyArea, key='-SETTING-', border_width=0)
          ]
+
 
 layout_greyarea = [loggedIn, dateTime, [sg.Text("_______________" * 5, background_color=greyArea)], institution_,
                    collections, work_station, settings_, [sg.Button('LOG OUT', key="-LOGOUT-", button_color='grey40')]]
@@ -135,23 +144,68 @@ window = sg.Window("Simple Annotated Digitization Desk  (SADD)", layout, margins
 window['-NOTES-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
 window['-LOGGED-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
 window['-DATETIME-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
+window['-TAXNAMES-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
+
+def taxonomic_candidates_popup(title, names):
+    # This is the window where taxonomic candidate names appear to be selected by the operator
+    # title: is the string going into the window bar
+    # names: are the taxonomic names submitted by the initial DB query
+    names = list(names)
+    print(names)
+    layout = [
+        [sg.Listbox(names, size=(50, 20), font=("Courier New", 16), enable_events=True, key="-LISTBOX-")],
+        [sg.StatusBar("", size=(30, 1), key='-STATUS-')],
+    ]
+
+    window = sg.Window(title, layout, finalize=True)
+    listbox, status = window['-LISTBOX-'], window['-STATUS-']
+
+    while True:
+
+        event, values = window.read()
+        if event == sg.WIN_CLOSED or event == 'Exit':
+            break
+        elif event == '-LISTBOX-':
+            selection = values[event]
+            if selection:
+                item = selection[0]
+                index = listbox.get_indexes()[0]
+                print(f'Line {index + 1}, {item} selected')
+                # break
+
+                window.close()
+        elif event == '-EXIT-':
+            window.close()
 
 while True:
 
     event, values = window.read()
-    print(event, '##', values)
+    taxon_candidates = None
     #SWITCH CONSTRUCT
     if event == '-STORAGE-':
         print('event:', event)
         print('In storage domain')
     if event == '-PREP-':
         print('In preparation type')
+        prepper = values[event]
+        print('chosen isss: ', prepper)
     if event == '-TAXON-':
         print('IN taxonomy section')
     if event == '-TYPE-':
         print('IN type status section')
     if event == '-NOTES-':
         print('IN notes section')
+    if event == '-TAXNAMES-':
+        print('in TAXNAMES -')
+        print('len string : ', len(values[event]))
+
+        if len(values[event]) >= 3:
+            print('submitted string: ', values[event])
+            response = koss.auto_suggest_taxonomy(values[event])
+            if response and response[1] <= 20:
+                print('the auto suggeter SAYS :) -- ', response[0])
+                taxonomic_candidates_popup('Candidate names', response[0])
+
     if event == sg.WINDOW_CLOSED:
         break
 
