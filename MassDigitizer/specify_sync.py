@@ -76,71 +76,94 @@ def addSpecifyTaxonNamesToLocal(taxonranks, taxontreedefid, csrftoken):
     for rank in taxonranks:
         rankid = rank['rankid']
         rankname = rank['name']
-        if rankid > 80:
+        if rankid > 200:
             print(' Rank %s:"%s" ' %(rankid, rankname))
             #print(' Getting taxa from Specify7 API at: ' + gs.baseURL)
 
             # Taxon list is split in pages of 1000 to spare bandwidth and avoid timeouts
-            page_number = 0  #  
+            page_number = 340  #  
             page_size = 1000 # 
             end_of_list = False
             taxa_inserted = 0
             while end_of_list == False:
                 # Fetch first page of taxa from the Specify7 API 
+                print(' - Fetching "%s" with limit %d and offset %d ' %('taxa', page_size, page_number*page_size))
                 taxonnames = sp.getSpecifyObjects('taxon', csrftoken, page_size, page_number*page_size, {"definition":str(taxontreedefid), "rankid":str(rankid)})
                 
                 # Safety hatch (to be removed later)
                 #if input('continue?') != 'y':return
                 
                 # Iterate through taxon names retrieved from Specify7 API to check for entries that aren't already present in local app database 
+                print(' - Iterating through  %i taxa found'%len(taxonnames))
                 for i in range(0, len(taxonnames)):
-                    id = taxonnames[i]['id']
-                    fullname = taxonnames[i]['fullname']
-                    name = taxonnames[i]['name']
-                    dbTaxonName = db.getRowsOnFilters('taxonname', {'fullname':'="%s"' % fullname, 'taxonid':'=%s' % id, 'taxontreedefid':'=%s'%taxontreedefid}) 
-                    #print(' - found %d rows for %s:"%s" ' % (len(dbTaxonName), id, fullname))
-                    if len(dbTaxonName)==0: 
-                        #print('   > Taxon %s:"%s" ("%s") [rank: %s] not in DB ' %(id, fullname, name, str(rankid)))
-                        # Check wether taxon name is valid
-                        taxon_name_valid = True  
-                        invalid_name_strings = {'*', ':', '.', 'Incertae'}
-                        for s in invalid_name_strings:
-                            if name.rfind(s) != -1:
-                                taxon_name_valid = False
-                                break
-                        # If taxon name is valid then add to local app database, else skip
-                        if taxon_name_valid:
-                            classid = 'NULL' 
-                            if rankid >= 60:
-                                classid = searchParentTaxon(id, 60, csrftoken)
-                            #print('   > Retrieved classid: %s' % str(classid))
-                            
-                            # Add missing taxon to local database
-                            #if input('Insert missing taxon into local DB? (y/n/maybe)') == 'y':
-                            if True:
-                                # TODO explain code 
-                                parentId = int(str(taxonnames[i]['parent']).split('/')[4])
-                                parenttaxon = sp.getSpecifyObject('taxon', parentId, csrftoken)
-                                taxonFields = {'taxonid':'%s'%id, 'name':'"%s"'%name, 'fullname':'"%s"'%fullname,'rankid':'%s'%rankid,'classid':'%s'%classid,'taxontreedefid':'%s'%taxontreedefid, 'parentfullname': '"%s"'%parenttaxon['fullname']}
-                                print('   > Inserting: %s' %taxonFields)
-                                #print('   > ', 
-                                db.insertRow('taxonname',taxonFields)#)
-                                taxa_inserted = taxa_inserted + 1 
-                            #else: print('Alrighty then...')
-                        else: print('   > skipping invalid taxon name "%s"'%name)
+                    try:
+                        id = taxonnames[i]['id']
+                        fullname = taxonnames[i]['fullname']
+                        name = taxonnames[i]['name']
+                        #gs.db_in_memory = True
+                        dbTaxonName = db.getRowsOnFilters('taxonname', {'fullname':'="%s"' % fullname, 'taxonid':'=%s' % id, 'taxontreedefid':'=%s'%taxontreedefid}) 
+                        print(' - found %d rows for %s:"%s" ' % (len(dbTaxonName), id, fullname))
+                        #print('%i'%len(dbTaxonName), end=' ')
+                        if len(dbTaxonName)>1:
+                            #print('')
+                            print('   > located pre-existing duplicate: %d: %s'%(id,fullname))
+                        if len(dbTaxonName)==0: 
+                            print('   > Taxon %s:"%s" ("%s") [rank: %s] not in DB ' %(id, fullname, name, str(rankid)))
+                            # Check wether taxon name is valid
+                            taxon_name_valid = True  
+                            invalid_name_strings = {'*', ':', '.', 'Incertae'}
+                            for s in invalid_name_strings:
+                                if name.rfind(s) != -1:
+                                    taxon_name_valid = False
+                                    break
+                            # If taxon name is valid then add to local app database, else skip
+                            if taxon_name_valid:
+                                classid = 'NULL' 
+                                if rankid >= 60:
+                                    classid = searchParentTaxon(id, 60, csrftoken)
+                                #print('   > Retrieved classid: %s' % str(classid))
+                                
+                                # Add missing taxon to local database
+                                if True: #input('Insert missing taxon into local DB? (y/n/maybe)') == 'y':
+                                    if len(db.getRowsOnFilters('taxonname', {'fullname': '="%s"' % fullname})) == 0:
+                                        # TODO explain code 
+                                        parentId = int(str(taxonnames[i]['parent']).split('/')[4])
+                                        parenttaxon = sp.getSpecifyObject('taxon', parentId, csrftoken)
+                                        taxonFields = {'taxonid':'%s'%id, 'name':'"%s"'%name, 'fullname':'"%s"'%fullname,'rankid':'%s'%rankid,'classid':'%s'%classid,'taxontreedefid':'%s'%taxontreedefid, 'parentfullname': '"%s"'%parenttaxon['fullname']}
+                                        #print('   > Inserting: %s' %taxonFields)
+                                        print('   > Inserting: %s:%s'%(id,fullname)) 
+                                        db.insertRow('taxonname',taxonFields)#)
+                                        taxa_inserted = taxa_inserted + 1 
+                                    else: print('   > skipping duplicate: %s'%fullname)
+                            else: print('   > skipping invalid taxon name "%s"'%name)
+                    except Exception as e:
+                        print(e)
+                        input('press a key to continue')   
+                print('') 
+                #print('.', end=' ')
                 
                 # Check whether we reached the end, otherwise continue
                 if len(taxonnames) < page_size: 
+                    print('')
                     print(' - %i taxa < page size %i, therefore end of list; escaping...'%(len(taxonnames), page_size))
                     page_number = 0 
                     end_of_list = True
                     break
                 else:        
                     page_number = page_number + 1 # Next page 
-            
+            print('')
             print(' - Finished rank %s and inserted %i taxa '%(rankname,taxa_inserted))
 
     # This line needs a comment, just because 
+
+def check_taxon_duplicates(fullname):
+
+    #TODO Write function contract
+    
+    duplicates = db.getRowsOnFilters('taxonname', {'fullname': '=%s' % fullname})
+
+    if len(duplicates) > 0: return True
+    else: return False
 
 def searchParentTaxon(taxonId, rankid, csrftoken):
 
@@ -221,7 +244,7 @@ gs.baseURL = institution[3]
 
 max_tries = 10
 while max_tries > 0:
-    token = sp.specifyLogin(input('Enter username: '), getpass('Enter password: '))
+    token = sp.specifyLogin(input('Enter username: '), getpass('Enter password: '), 688130)
     if token != '': break
     else:
         print('Login failed...')
