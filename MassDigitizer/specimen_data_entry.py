@@ -170,7 +170,7 @@ def taxonomic_candidates_popup(title, names):
             if selection:
                 item = selection[0]
                 index = listbox.get_indexes()[0]
-                print(f'Line {index + 1}, {item} selected')
+                print(f'Line {index + 1}, "{item}" selected')
                 # break
 
                 window.close()
@@ -205,7 +205,8 @@ while True:
             if response and response[1] <= 20:
                 print('the auto suggeter SAYS :) -- ', response[0])
                 taxonomic_candidates_popup('Candidate names', response[0])
-
+    if event == '-INSTITUTIONS-':
+        pass
     if event == sg.WINDOW_CLOSED:
         break
 
