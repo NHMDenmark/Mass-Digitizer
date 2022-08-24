@@ -29,7 +29,7 @@ currentpath = os.path.join(pathlib.Path(__file__).parent, '')
 import kick_off_sql_searches as koss
 
 
-sg.theme('Material2')
+sg.theme('SystemDefault')
 blueArea = '#99ccff'
 greenArea = '#E8F4EA'
 greyArea = '#BFD1DF'
@@ -87,10 +87,14 @@ broadGeo = [
                     sg.Text('Broad geographic region:', size=defaultSize ,background_color=blueArea, text_color='black', font=font),
                     sg.Combo(geoRegionsCopenhagen, size=blue_size, key='-GEOREGION-', text_color='black', background_color='white', enable_events=True),
                  ]
+taxonInput = [
+                    sg.Text('Taxonomic name:     ', size=(21,1) ,background_color=blueArea, text_color='black', font=font),
+                    sg.Input('', size=blue_size, key='-TAXONINPUT-', text_color='black', background_color='white', enable_events=True, pad=((5,0),(0,0))),
+                 ]
+taxonomicPicklist = [
+                    sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
 
-taxonomicName = [
-                    sg.Text('Taxonomic name:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
-                    sg.InputText('', key='-TAXNAMES-', size=blue_size, text_color='black', background_color='white', enable_events=True),
+                    sg.Listbox('', key='-TAXNAMESBOX-', size=(28,6), text_color='black', background_color='white', enable_events=True, pad=((5,0),(0,0))),
                  ]
 
 barcode = [
@@ -104,7 +108,7 @@ barcode = [
 
 
 layout_bluearea = [
-    broadGeo, taxonomicName, barcode,
+    broadGeo, taxonInput, taxonomicPicklist, barcode,
     # button_frame,
     [sg.StatusBar('', relief=None, size=(32,1), background_color=blueArea), sg.Button('SAVE', key="-SAVE-", button_color='seagreen'), sg.StatusBar('', relief=None, size=(20,1), background_color=blueArea), sg.Button('Go Back', key="-GOBACK-", button_color='firebrick', pad=(120,0))]
 ]
@@ -139,12 +143,13 @@ layout = [
     [sg.Frame('',   [[sg.Column(layout_bluearea, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],
 ]
 
-window = sg.Window("Simple Annotated Digitization Desk  (SADD)", layout, margins=(2, 2), size=(900,500), resizable=True, finalize=True )
+window = sg.Window("Simple Annotated Digitization Desk  (SADD)", layout, margins=(2, 2), size=(900,550), resizable=True, finalize=True )
 #The three lines below are there to ensure that the cursor in the input text fields is visible. It is invisible against a white background.
 window['-NOTES-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
 window['-LOGGED-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
 window['-DATETIME-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
-window['-TAXNAMES-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
+# window['-TAXNAMES-'].Widget.config(insertbackground='black')
+                                   # , highlightcolor='firebrick', highlightthickness=2)
 
 def taxonomic_candidates_popup(title, names):
     # This is the window where taxonomic candidate names appear to be selected by the operator
@@ -156,9 +161,9 @@ def taxonomic_candidates_popup(title, names):
         [sg.Listbox(names, size=(50, 20), font=("Courier New", 16), enable_events=True, key="-LISTBOX-")],
         [sg.StatusBar("", size=(30, 1), key='-STATUS-')],
     ]
-
-    window = sg.Window(title, layout, finalize=True)
-    listbox, status = window['-LISTBOX-'], window['-STATUS-']
+    #
+    # window = sg.Window(title, layout, finalize=True)
+    # listbox, status = window['-LISTBOX-'], window['-STATUS-']
 
     while True:
 
@@ -169,8 +174,8 @@ def taxonomic_candidates_popup(title, names):
             selection = values[event]
             if selection:
                 item = selection[0]
-                index = listbox.get_indexes()[0]
-                print(f'Line {index + 1}, "{item}" selected')
+                # index = listbox.get_indexes()[0]
+                print(f'"{item}" selected')
                 # break
 
                 window.close()
@@ -178,8 +183,8 @@ def taxonomic_candidates_popup(title, names):
             window.close()
 
 while True:
-
     event, values = window.read()
+    # print('---', event, values)
     taxon_candidates = None
     #SWITCH CONSTRUCT
     if event == '-STORAGE-':
@@ -195,8 +200,9 @@ while True:
         print('IN type status section')
     if event == '-NOTES-':
         print('IN notes section')
-    if event == '-TAXNAMES-':
-        print('in TAXNAMES -')
+    if event == '-TAXONINPUT-':
+        input_ = values['-TAXONINPUT-']
+        print('in taxon input -')
         print('len string : ', len(values[event]))
 
         if len(values[event]) >= 3:
@@ -204,9 +210,18 @@ while True:
             response = koss.auto_suggest_taxonomy(values[event])
             if response and response[1] <= 20:
                 print('the auto suggeter SAYS :) -- ', response[0])
-                taxonomic_candidates_popup('Candidate names', response[0])
+                window['-TAXNAMESBOX-'].update(values=response[0])
+            #     taxonomic_candidates_popup('Candidate names', response[0])
+    if event == '-TAXNAMESBOX-':
+        selection = values[event]
+        if selection:
+            item = selection[0]
+            # index = listbox.get_indexes()[0]
+            print(f'"{item}" selected')
     if event == '-INSTITUTIONS-':
-        pass
+        selection = values[event]
+        output = koss.small_list_lookup('institution', '-INSTITUTION-')
+        print(output)
     if event == sg.WINDOW_CLOSED:
         break
 
