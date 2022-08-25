@@ -6,7 +6,7 @@ import home_screen as home
 
 def main() -> None:
     print("* Mass Digitizer for DaSSCo *")
-    home.start()
+    home.init()
 
 
     # TODO start background processes? 

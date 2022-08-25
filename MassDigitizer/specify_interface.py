@@ -253,7 +253,7 @@ def mergeTaxa(source_id, target_id, csrftoken):
   #print(spSession.cookies)
 
   input('ready?')
-  response = spSession.post(apiCallString, headers=headers, json={"target": target_id}) 
+  response = spSession.post(apiCallString, headers=headers, data='target:%s'%target_id) 
 
   #print(response.request.body)
   util.pretty_print_POST(response.request)
