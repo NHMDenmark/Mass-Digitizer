@@ -143,15 +143,75 @@ layout = [
     [sg.Frame('',   [[sg.Column(layout_bluearea, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],
 ]
 
-window = sg.Window("Simple Annotated Digitization Desk  (SADD)", layout, margins=(2, 2), size=(900,550), resizable=True, finalize=True )
-#The three lines below are there to ensure that the cursor in the input text fields is visible. It is invisible against a white background.
-window['-NOTES-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
-window['-LOGGED-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
-window['-DATETIME-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
-# window['-TAXNAMES-'].Widget.config(insertbackground='black')
+def init(collection_id):
+    window = sg.Window("Simple Annotated Digitization Desk  (SADD)", layout, margins=(2, 2), size=(900,550), resizable=True, finalize=True )
+    #The three lines below are there to ensure that the cursor in the input text fields is visible. It is invisible against a white background.
+    window['-NOTES-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
+    window['-LOGGED-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
+    window['-DATETIME-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
+
+    #window['-TAXNAMES-'].Widget.config(insertbackground='black')
                                    # , highlightcolor='firebrick', highlightthickness=2)
 
-# def taxonomic_candidates_popup(title, names):
+    currrent_selection_index = 0
+    window.Element('-TAXNAMESBOX-').Update(set_to_index=0)     # start with first item highlighted
+    while True:
+        event, values = window.read()
+        # print('---', event, values)
+        taxon_candidates = None
+        listbox_values = ['','','']
+        if 'Up' in event or '16777235' in event:
+            currrent_selection_index = (currrent_selection_index - 1) % len(listbox_values)
+            window.Element('-TAXNAMESBOX-').Update(set_to_index=currrent_selection_index)
+        elif 'Down' in event or '16777237' in event:
+            cur_index = window.Element('selected_value').Widget.curselection()
+            cur_index = (cur_index[0] + 1) % window.Element('selected_value').Widget.size()
+            window.Element('-TAXNAMESBOX-').Update(set_to_index=cur_index)
+            window.Element('-TAXNAMESBOX-').Update(scroll_to_index=cur_index)
+            window.write_event_value('-TAXNAMESBOX-', [window.Element('-TAXNAMESBOX-').GetListValues()[cur_index]])
+        if event == '-TAXNAMESBOX-':
+            # window.Element('-TAXNAMESBOX-').Update(set_to_index=currrent_selection_index)
+            pass
+        #SWITCH CONSTRUCT
+        if event == '-STORAGE-':
+            print('event:', event)
+            print('In storage domain')
+        if event == '-PREP-':
+            print('In preparation type')
+            prepper = values[event]
+            print('chosen isss: ', prepper)
+        if event == '-TAXON-':
+            print('IN taxonomy section')
+        if event == '-TYPE-':
+            print('IN type status section')
+        if event == '-NOTES-':
+            print('IN notes section')
+        if event == '-TAXONINPUT-':
+            input_ = values['-TAXONINPUT-']
+            print('in taxon input -')
+            print('len string : ', len(values[event]))
+
+            if len(values[event]) >= 2:
+                print('submitted string: ', values[event])
+                response = koss.auto_suggest_taxonomy(values[event])
+                # if response and response[1] <= 20:
+                print('the auto suggeter SAYS :) -- ', response[0])
+                window['-TAXNAMESBOX-'].update(values=response[0])
+                #     taxonomic_candidates_popup('Candidate names', response[0])
+        if event == '-TAXNAMESBOX-':
+            selection = values[event]
+            if selection:
+                item = selection[0]
+                # index = listbox.get_indexes()[0]
+                print(f'"{item}" selected')
+        if event == '-INSTITUTIONS-':
+            output = koss.small_list_lookup('institution', '-INSTITUTION-')
+            print(output)
+        if event == sg.WINDOW_CLOSED:
+            break
+    window.close()
+
+#def taxonomic_candidates_popup(title, names):
 #     # This is the window where taxonomic candidate names appear to be selected by the operator
 #     # title: is the string going into the window bar
 #     # names: are the taxonomic names submitted by the initial DB query
@@ -181,65 +241,8 @@ window['-DATETIME-'].Widget.config(insertbackground='black', highlightcolor='fir
 #                 window.close()
 #         elif event == '-EXIT-':
 #             window.close()
-currrent_selection_index = 0
-window.Element('-TAXNAMESBOX-').Update(set_to_index=0)     # start with first item highlighted
-while True:
-    event, values = window.read()
-    # print('---', event, values)
-    taxon_candidates = None
-    listbox_values = ['','','']
-    if 'Up' in event or '16777235' in event:
-        currrent_selection_index = (currrent_selection_index - 1) % len(listbox_values)
-        window.Element('-TAXNAMESBOX-').Update(set_to_index=currrent_selection_index)
-    elif 'Down' in event or '16777237' in event:
-        cur_index = window.Element('selected_value').Widget.curselection()
-        cur_index = (cur_index[0] + 1) % window.Element('selected_value').Widget.size()
-        window.Element('-TAXNAMESBOX-').Update(set_to_index=cur_index)
-        window.Element('-TAXNAMESBOX-').Update(scroll_to_index=cur_index)
-        window.write_event_value('-TAXNAMESBOX-', [window.Element('-TAXNAMESBOX-').GetListValues()[cur_index]])
-    if event == '-TAXNAMESBOX-':
-        # window.Element('-TAXNAMESBOX-').Update(set_to_index=currrent_selection_index)
-        pass
-    #SWITCH CONSTRUCT
-    if event == '-STORAGE-':
-        print('event:', event)
-        print('In storage domain')
-    if event == '-PREP-':
-        print('In preparation type')
-        prepper = values[event]
-        print('chosen isss: ', prepper)
-    if event == '-TAXON-':
-        print('IN taxonomy section')
-    if event == '-TYPE-':
-        print('IN type status section')
-    if event == '-NOTES-':
-        print('IN notes section')
-    if event == '-TAXONINPUT-':
-        input_ = values['-TAXONINPUT-']
-        print('in taxon input -')
-        print('len string : ', len(values[event]))
 
-        if len(values[event]) >= 2:
-            print('submitted string: ', values[event])
-            response = koss.auto_suggest_taxonomy(values[event])
-            # if response and response[1] <= 20:
-            print('the auto suggeter SAYS :) -- ', response[0])
-            window['-TAXNAMESBOX-'].update(values=response[0])
-            #     taxonomic_candidates_popup('Candidate names', response[0])
-    if event == '-TAXNAMESBOX-':
-        selection = values[event]
-        if selection:
-            item = selection[0]
-            # index = listbox.get_indexes()[0]
-            print(f'"{item}" selected')
-    if event == '-INSTITUTIONS-':
-        output = koss.small_list_lookup('institution', '-INSTITUTION-')
-        print(output)
-    if event == sg.WINDOW_CLOSED:
-        break
-
-window.close()
-
+#init(1)
 
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
