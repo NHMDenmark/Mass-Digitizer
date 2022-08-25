@@ -13,7 +13,7 @@ gs.baseURL = 'https://specify-test.science.ku.dk/'
     pass """
 
 # TEST CODE
-util.clear()
+#util.clear()
 
 # Save SSL keys to "sslkeylog.txt" in this directory
 # Note that you only have to do this once while this is in scope

@@ -70,8 +70,10 @@ def addSpecifyTaxonNamesToLocal(taxonranks, taxontreedefid, csrftoken):
     #TODO Write function contract
 
     # Sync local database with Specify taxon names  
-    #print('*************************************************************')
     print('Checking local database for Specify taxa with taxontree: %d' % taxontreedefid)
+    # Initialize in-memory database
+    db = db
+    db.init('db', True)
     # Loop through each rank, checking whether local DB has an entry for this taxon 
     for rank in taxonranks:
         rankid = rank['rankid']
@@ -231,6 +233,7 @@ def updateSpecifyTaxonNames(taxonranks, taxontreedefid, csrftoken):
 # TEST CODE
 util.clear()
 print('------- Running specify_sync.py --------')
+#db = db()
 institutions = db.getRows('institution')
 #max_instutionid = 
 # for institution in institutions:
