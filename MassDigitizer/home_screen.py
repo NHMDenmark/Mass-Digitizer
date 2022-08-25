@@ -5,9 +5,11 @@ import PySimpleGUI as sg
 from pathlib import Path
 sys.path.append(str(Path(__file__).joinpath('MassDigitizer')))
 
-import data_access as db
 import util
+import global_settings as gs
+import data_access as db
 import specimen_data_entry as de
+import specify_interface as sp
 
 #window = Empty
 
@@ -27,7 +29,8 @@ ddl_select_institution = [sg.Combo(list(institutions), readonly=True, enable_eve
 col_main = [ 
     header, 
     lbl_select_institution, 
-    ddl_select_institution 
+    ddl_select_institution, 
+    [sg.Text('Authentication Error!', text_color='red', visible=False)], 
     ]
 
 col_side = [
@@ -41,7 +44,6 @@ window = sg.Window('Start', layout, size=(640, 480))
 def init():
     main(window)
 
-
 def main(window):
     while True:
         event, values = window.read()
@@ -53,25 +55,24 @@ def main(window):
             
             selected_institution = values['institution']
             #selected_institution_id = keys['']
-            
-            print(event, selected_institution)
-
+            #print(event, selected_institution)
             institution = db.getRowsOnFilters('institution', {' name = ':'"%s"'%selected_institution})
-
             institution_id = institution[0]['id']
-
-            print(institution_id)
-
-            collections = util.convert_dbrow_list(db.getRowsOnFilters('collection', {' institutionid = ':'%s'%institution_id}))
-
-            print(len(collections))
+            institution_url = institution[0]['url']
+            collections = util.convert_dbrow_list(db.getRowsOnFilters('collection', {' institutionid = ':'%s'%institution_id, 'visible = ': '1'}), True)
 
             next_col_main = [ 
                 [sg.Text("Welcome to the DaSSCo Mass Digitizer App", size=(48,1), font=header_font, justification='center')],
                 [sg.Text('You selected the following instutition:')], 
-                [sg.Text(selected_institution)], 
-                [sg.Text('Please choose a collection:')],
-                [sg.Combo(list(collections), readonly=True, enable_events=True, key='collection')]
+                [sg.Text(selected_institution), ], 
+                [sg.Text('Specify username:')], 
+                [sg.InputText(size=(24,1), background_color='white', text_color='black', key='username')],
+                [sg.Text('Specify password:')], 
+                [sg.InputText(size=(24,1), background_color='white', text_color='black', key='password', password_char='*')],
+                [sg.Text('Choose a collection to log in:')],
+                [sg.Combo(list(collections), readonly=True, enable_events=True, key='collection')],
+                [sg.Text('Please fill in username/password!', text_color='red', visible=False, key='incomplete')], 
+                [sg.Text('Authentication Error!', text_color='red', visible=False, key='autherror')], 
                 ]
 
             next_col_side = [
@@ -85,19 +86,37 @@ def main(window):
             window = next_window
 
         if event == 'collection':
-            window.close()
+            username = values['username']
+            password = values['password']
+            print(username,password)
 
-            selected_collection = values['collection']
+            if username != '' and password != '':
 
-            collection = db.getRowsOnFilters('collection', {' name = ':'"%s"'%selected_collection})
+                selected_collection = values['collection']
+                collection = db.getRowsOnFilters('collection', {
+                                                'name = ':'"%s"'%selected_collection, 
+                                                'institutionid = ':'%s'%institution_id,
+                                                })
+                collection_id = collection[0]['id']
+                
+                gs.baseURL = institution_url
+                gs.csrfToken = sp.specifyLogin(username, password, collection_id)
 
-            collection_id = collection[0]['id']
-
-            de.init(collection_id)
-
-            pass
-
+                if gs.csrfToken != '':
+                    gs.spUserName = username
+                    gs.collectionId = collection_id
+                    gs.institutionId = institution_id
+                    window.close()
+                    de.init(collection_id)
+                else:
+                    window['autherror'].Update(visible=True)
+                    #window['collection'].set_value([])
+                    pass
+            else:
+                window['incomplete'].Update(visible=True)
+                #window['collection'].set_value([])
+                pass
         
     window.close()
 
-init()
+#init()

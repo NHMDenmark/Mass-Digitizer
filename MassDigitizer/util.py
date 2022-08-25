@@ -23,10 +23,11 @@ def shrink_dict(original_dict, input_string):
          shrunken_dict[j] = original_dict[j]
    return shrunken_dict
 
-def convert_dbrow_list(list):
+def convert_dbrow_list(list, addEmptyRow=False):
    # TODO complete function contract
    # Converts datarow list to name array 
    new_list = []
+   if addEmptyRow: new_list.append('-please select-')
    for item in list:
       new_list.append(item['name'])
 
