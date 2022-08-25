@@ -11,3 +11,5 @@ build
 src/.vscode/launch.json
 src/.vscode/launch.json
 .vscode
+*.sqlite3-journal
+.venv
