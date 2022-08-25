@@ -13,8 +13,8 @@
   """
 from queue import Empty
 import sys 
-import sqlite3, json
-from debugpy import connect
+import sqlite3
+#from debugpy import connect
 
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.joinpath('MassDigitizer')))
@@ -24,27 +24,50 @@ from io import StringIO
 
 import global_settings as gs
 
-# Point to database file 
+#class DataAccess:
+
+        
 FILEPATH = Path(__file__).parent.joinpath('db')
 dbFilePath = str(FILEPATH.joinpath('db.sqlite3'))
 currentCursor = Empty
 
-def set_database(dbFileName='db'):
+# Point to database file 
+def __init__(self,databaseName='db', do_in_memory=False):
+    # Initialize for database access 
+    # CONTRACT
+    #   do_in_memory (boolean): Whether the database file should be run in-memory 
+
+    self.set_database(databaseName)
+    
+    connection = sqlite3.connect(self.dbFilePath)
+    
+    if gs.db_in_memory == True or do_in_memory == True:
+        print(' - running database in-memory')
+        # Read database to tempfile
+        tempfile = StringIO()
+        for line in connection.iterdump():
+            tempfile.write('%s\n' % line)
+        connection.close()
+        tempfile.seek(0)
+
+        # Create a database in memory and import from tempfile
+        connection = sqlite3.connect(":memory:")
+        connection.cursor().executescript(tempfile.read())
+        connection.commit()
+    else:
+        print(' - running database as file')
+
+    connection.row_factory = sqlite3.Row
+    currentCursor = connection.cursor()
+
+
+def setDatabase(self, dbFileName='db'):
     # This optional function allows for setting a different database file like e.g. 'test' 
     # CONTRACT 
     #   dbFileName (String): the name of the file excluding the extension '.sqlite3' 
-    dbFilePath = str(FILEPATH.joinpath('%s.sqlite3' % dbFileName))
+    dbFilePath = str(self.FILEPATH.joinpath('%s.sqlite3' % dbFileName))
 
-# def setDbCursor(dbFilePath, in_memory=False):
-#     # TODO
-#     connection = sqlite3.connect('file:%s?mode=memory'%dbFilePath)
-#     connection.row_factory = sqlite3.Row # Enable column access by name: row['column_name']
-#
-#     cursor = connection.cursor()
-
-
-
-def get_db_cursor():#do_in_memory=False):
+def getDbCursor():#do_in_memory=False):
     # Generic function needed for database access 
     # CONTRACT
     #   do_in_memory (boolean): Whether the database file should be run in-memory 
@@ -80,20 +103,21 @@ def get_db_cursor():#do_in_memory=False):
     cursor = connection.cursor()
     return cursor
 
+
 def getRows(tableName, limit=100):
     # Getting all rows from the table specified by name
     # CONTRACT 
     #   tableName (String): The name of the table to be queried
     #   limit (Integer) : The maximum number of rows - 0 means all rows 
     #   RETURNS table rows (list)
+    currentCursor = getDbCursor()        
     print('Get all rows from table "%s" ...' % tableName)
-    cursor = get_db_cursor()
     sqlString = "SELECT * FROM " + tableName
     if limit > 0:
         sqlString += ' LIMIT %s' %str(limit)
-    rows = cursor.execute(sqlString).fetchall()
+    rows = currentCursor.execute(sqlString).fetchall()
     print('found %d rows ' % len(rows))
-    cursor.connection.close()
+    currentCursor.connection.close()
     return rows
 
 def getRowsOnFilters(tableName, filters, limit=100):
@@ -107,7 +131,7 @@ def getRowsOnFilters(tableName, filters, limit=100):
     #       NOTE: Strings should be formatted with enclosing double quotation marks (") 
     #             Numbers should be formatted as strings 
     #   RETURNS table rows (list)
-    cursor = get_db_cursor()
+    currentCursor = getDbCursor()   
     sqlString = 'SELECT * FROM %s ' % tableName 
     if filters.items():
         sqlString += "WHERE "
@@ -117,8 +141,8 @@ def getRowsOnFilters(tableName, filters, limit=100):
     if limit > 0:
         sqlString += ' LIMIT %s' %str(limit)
     #print(sqlString)
-    rows = cursor.execute(sqlString).fetchall()
-    cursor.connection.close()
+    rows = currentCursor.execute(sqlString).fetchall()
+    currentCursor.connection.close()
     return rows
 
 def getRowOnId(tableName, id):
@@ -127,9 +151,9 @@ def getRowOnId(tableName, id):
     #   tableName (String): The name of the table to be queried
     #   id (Integer) : The primary key of the row to be returned 
     #   RETURNS single table row 
-    cursor = get_db_cursor()
-    row = cursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(id)).fetchone()
-    cursor.connection.close()
+    currentCursor = getDbCursor()   
+    row = currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(id)).fetchone()
+    currentCursor.connection.close()
     return row
 
 def getRowOnSpecifyId(tableName, id):
@@ -138,9 +162,9 @@ def getRowOnSpecifyId(tableName, id):
     #   tableName (String): The name of the table to be queried
     #   id (Integer) : The primary key of the row to be returned 
     #   RETURNS single table row 
-    cursor = get_db_cursor()
-    row = cursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(id)).fetchone()
-    cursor.connection.close()
+    currentCursor = getDbCursor()   
+    row = currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(id)).fetchone()
+    currentCursor.connection.close()
     return row
 
 def insertRow(tableName, fields):
@@ -151,7 +175,7 @@ def insertRow(tableName, fields):
     #       NOTE: Strings should be formatted with enclosing double quotation marks (") 
     #             Numbers should be formatted as strings 
     #   RETURNS SQL result (String)
-    cursor = get_db_cursor()
+    currentCursor = getDbCursor()   
     fieldsString = ""
     for key in fields:
         fieldsString += "%s, " % key
@@ -161,9 +185,9 @@ def insertRow(tableName, fields):
         sqlString += str(fields[key]) + ", "
     sqlString = sqlString[0:len(sqlString)-2] + ");" # Remove trailing ", " and close Sql 
     #print(sqlString)
-    cursor.execute(sqlString)
-    cursor.connection.commit()
-    cursor.connection.close()
+    currentCursor.execute(sqlString)
+    currentCursor.connection.commit()
+    currentCursor.connection.close()
     return "Row [%s] inserted in table '%s'" %(fields,tableName)
 
 def getFieldMap(cursor):
@@ -171,11 +195,12 @@ def getFieldMap(cursor):
     # CONTRACT 
     #   cursor (Cursor) : Cursor object to be field mapped 
     #   RETURNS a dictionary that maps each field name to a column index; 0 and up.
+    currentCursor = getDbCursor()   
     results = {}
     column = 0
-    for d in cursor.description:
+    for d in currentCursor.description:
         results[d[0]] = column
         column = column + 1
     return results
 
-set_database()
+#init()
