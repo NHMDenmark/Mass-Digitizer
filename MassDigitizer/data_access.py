@@ -55,7 +55,8 @@ def __init__(self,databaseName='db', do_in_memory=False):
         connection.cursor().executescript(tempfile.read())
         connection.commit()
     else:
-        print(' - running database as file')
+        #print(' - running database as file')
+        pass
 
     connection.row_factory = sqlite3.Row
     currentCursor = connection.cursor()
@@ -97,7 +98,8 @@ def getDbCursor():#do_in_memory=False):
         connection.cursor().executescript(tempfile.read())
         connection.commit()
     else:
-        print(' - running database as file')
+        #print(' - running database as file')
+        pass
 
     connection.row_factory = sqlite3.Row
     cursor = connection.cursor()
@@ -140,7 +142,7 @@ def getRowsOnFilters(tableName, filters, limit=100):
     sqlString = sqlString[0:len(sqlString)-4] # Remove trailing " AND "
     if limit > 0:
         sqlString += ' LIMIT %s' %str(limit)
-    #print(sqlString)
+    print(sqlString)
     rows = currentCursor.execute(sqlString).fetchall()
     currentCursor.connection.close()
     return rows
