@@ -35,7 +35,7 @@ greenArea = '#E8F4EA'
 greyArea = '#BFD1DF'
 
 #All hardcoded stuff are likely to be replaced by DB queries
-institutions = ['NHMD: Natural History Museum of Denmark (Copenhagen)', 'NHMA: Natural History Museum Aarhus', 'TEST: Test server']
+institutions = ['NHMD: Natural History Museum of Denmark (Copenhagen)', 'NHMA: Natural History Museum Aarhus']
 prepType = ['pinned', 'herbarium sheets']
 taxonomicGroups = ['placeholder...']
 typeStatus =  ['placeholder...']
@@ -151,41 +151,55 @@ window['-DATETIME-'].Widget.config(insertbackground='black', highlightcolor='fir
 # window['-TAXNAMES-'].Widget.config(insertbackground='black')
                                    # , highlightcolor='firebrick', highlightthickness=2)
 
-def taxonomic_candidates_popup(title, names):
-    # This is the window where taxonomic candidate names appear to be selected by the operator
-    # title: is the string going into the window bar
-    # names: are the taxonomic names submitted by the initial DB query
-    names = list(names)
-    print(names)
-    layout = [
-        [sg.Listbox(names, size=(50, 20), font=("Courier New", 16), enable_events=True, key="-LISTBOX-")],
-        [sg.StatusBar("", size=(30, 1), key='-STATUS-')],
-    ]
-    #
-    # window = sg.Window(title, layout, finalize=True)
-    # listbox, status = window['-LISTBOX-'], window['-STATUS-']
-
-    while True:
-
-        event, values = window.read()
-        if event == sg.WIN_CLOSED or event == 'Exit':
-            break
-        elif event == '-LISTBOX-':
-            selection = values[event]
-            if selection:
-                item = selection[0]
-                # index = listbox.get_indexes()[0]
-                print(f'"{item}" selected')
-                # break
-
-                window.close()
-        elif event == '-EXIT-':
-            window.close()
-
+# def taxonomic_candidates_popup(title, names):
+#     # This is the window where taxonomic candidate names appear to be selected by the operator
+#     # title: is the string going into the window bar
+#     # names: are the taxonomic names submitted by the initial DB query
+#     names = list(names)
+#     print(names)
+#     layout = [
+#         [sg.Listbox(names, size=(50, 20), font=("Courier New", 16), enable_events=True, key="-LISTBOX-")],
+#         [sg.StatusBar("", size=(30, 1), key='-STATUS-')],
+#     ]
+#     #
+#     # window = sg.Window(title, layout, finalize=True)
+#     # listbox, status = window['-LISTBOX-'], window['-STATUS-']
+#
+#     while True:
+#
+#         event, values = window.read()
+#         if event == sg.WIN_CLOSED or event == 'Exit':
+#             break
+#         elif event == '-LISTBOX-':
+#             selection = values[event]
+#             if selection:
+#                 item = selection[0]
+#                 # index = listbox.get_indexes()[0]
+#                 print(f'"{item}" selected')
+#                 # break
+#
+#                 window.close()
+#         elif event == '-EXIT-':
+#             window.close()
+currrent_selection_index = 0
+window.Element('-TAXNAMESBOX-').Update(set_to_index=0)     # start with first item highlighted
 while True:
     event, values = window.read()
     # print('---', event, values)
     taxon_candidates = None
+    listbox_values = ['','','']
+    if 'Up' in event or '16777235' in event:
+        currrent_selection_index = (currrent_selection_index - 1) % len(listbox_values)
+        window.Element('-TAXNAMESBOX-').Update(set_to_index=currrent_selection_index)
+    elif 'Down' in event or '16777237' in event:
+        cur_index = window.Element('selected_value').Widget.curselection()
+        cur_index = (cur_index[0] + 1) % window.Element('selected_value').Widget.size()
+        window.Element('-TAXNAMESBOX-').Update(set_to_index=cur_index)
+        window.Element('-TAXNAMESBOX-').Update(scroll_to_index=cur_index)
+        window.write_event_value('-TAXNAMESBOX-', [window.Element('-TAXNAMESBOX-').GetListValues()[cur_index]])
+    if event == '-TAXNAMESBOX-':
+        # window.Element('-TAXNAMESBOX-').Update(set_to_index=currrent_selection_index)
+        pass
     #SWITCH CONSTRUCT
     if event == '-STORAGE-':
         print('event:', event)
@@ -205,12 +219,12 @@ while True:
         print('in taxon input -')
         print('len string : ', len(values[event]))
 
-        if len(values[event]) >= 3:
+        if len(values[event]) >= 2:
             print('submitted string: ', values[event])
             response = koss.auto_suggest_taxonomy(values[event])
-            if response and response[1] <= 20:
-                print('the auto suggeter SAYS :) -- ', response[0])
-                window['-TAXNAMESBOX-'].update(values=response[0])
+            # if response and response[1] <= 20:
+            print('the auto suggeter SAYS :) -- ', response[0])
+            window['-TAXNAMESBOX-'].update(values=response[0])
             #     taxonomic_candidates_popup('Candidate names', response[0])
     if event == '-TAXNAMESBOX-':
         selection = values[event]
@@ -219,7 +233,6 @@ while True:
             # index = listbox.get_indexes()[0]
             print(f'"{item}" selected')
     if event == '-INSTITUTIONS-':
-        selection = values[event]
         output = koss.small_list_lookup('institution', '-INSTITUTION-')
         print(output)
     if event == sg.WINDOW_CLOSED:
