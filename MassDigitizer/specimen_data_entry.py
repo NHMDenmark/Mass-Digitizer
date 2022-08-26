@@ -55,35 +55,35 @@ blue_size = (28,1)
 
 #Input elements (below) are stored in variables with brackets to make it easier to include and position in the frames
 storage = [sg.Text("Storage location:", size=defaultSize, background_color=greenArea, font=font),
-           sg.Combo(institutions, key='-STORAGE-', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
+           sg.Combo(institutions, key='cbxStorage', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
 
 preparation = [sg.Text("Preparation type:", size=defaultSize, background_color=greenArea, font=font),
-               sg.Combo(prepType, key='-PREP-', size=element_size, text_color='black', background_color='white', enable_events=True),]
+               sg.Combo(prepType, key='cbxPrepType', size=element_size, text_color='black', background_color='white', enable_events=True),]
 
 taxonomy = [sg.Text("Taxonomic group:", size=defaultSize, background_color=greenArea, font=font),
-            sg.Combo(taxonomicGroups, key='-TAXON-', size=element_size, text_color='black', background_color='white', enable_events=True),]
+            sg.Combo(taxonomicGroups, key='cbxHigherTaxon', size=element_size, text_color='black', background_color='white', enable_events=True),]
 
 type_status = [sg.Text('Type status:', size=defaultSize, background_color=greenArea, font=font),
-               sg.Combo(typeStatus, key='-TYPE-', size=element_size, text_color='black', background_color='white', font=font, enable_events=True),]
+               sg.Combo(typeStatus, key='cbxTypeStatus', size=element_size, text_color='black', background_color='white', font=font, enable_events=True),]
 
 notes = [sg.Text('Notes', size=defaultSize, background_color=greenArea, font=font),
-         sg.Multiline(size=(29,5), background_color='white', text_color='black', key='-NOTES-', enable_events=False)]
-# note_box = [sg.Multiline(size=(24,5), background_color='white', text_color='black', key='-NOTES-')]
+         sg.Multiline(size=(29,5), background_color='white', text_color='black', key='txtNotes', enable_events=False)]
+# note_box = [sg.Multiline(size=(24,5), background_color='white', text_color='black', key='txtNotes')]
 
 layout_greenarea = [storage, preparation, taxonomy, type_status, notes, [sg.Checkbox('Multispecimen sheet', background_color=greenArea, font=(11))],]
 #Above is the so-called 'green area'
 
 broadGeo = [sg.Text('Broad geographic region:', size=defaultSize ,background_color=blueArea, text_color='black', font=font),
-            sg.Combo(geoRegionsCopenhagen, size=blue_size, key='-GEOREGION-', text_color='black', background_color='white', enable_events=True),]
+            sg.Combo(geoRegionsCopenhagen, size=blue_size, key='cbxGeoRegion', text_color='black', background_color='white', enable_events=True),]
 
 taxonInput = [sg.Text('Taxonomic name:     ', size=(21,1) ,background_color=blueArea, text_color='black', font=font),
-              sg.Input('', size=blue_size, key='-TAXONINPUT-', text_color='black', background_color='white', enable_events=True, pad=((5,0),(0,0))),]
+              sg.Input('', size=blue_size, key='txtDetermination', text_color='black', background_color='white', enable_events=True, pad=((5,0),(0,0))),]
 
 taxonomicPicklist = [sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
-                    sg.Listbox('', key='-TAXNAMESBOX-', size=(28,6), text_color='black', background_color='white', enable_events=True, pad=((5,0),(0,0))),]
+                    sg.Listbox('', key='txtDetermination', size=(28,6), text_color='black', background_color='white', enable_events=True, pad=((5,0),(0,0))),]
 
 barcode = [sg.Text('Barcode:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
-           sg.InputText('', key='-BARCODE-', size=blue_size, text_color='black', background_color='white', enable_events=True),]
+           sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', enable_events=True),]
 
 # button_frame = [sg.Frame(layout=[[sg.Button('SAVE', key='-SAVE-', button_color='seagreen'), sg.StatusBar('', relief=None, size=(30,1), background_color=blueArea),
 #                                   sg.Button('Go back', key='-GOBACK', button_color='firebrick'),
@@ -95,7 +95,7 @@ layout_bluearea = [broadGeo, taxonInput, taxonomicPicklist, barcode,
     [sg.StatusBar('', relief=None, size=(32,1), background_color=blueArea), 
      sg.Button('SAVE', key="btnSave", button_color='seagreen'), 
      sg.StatusBar('', relief=None, size=(20,1), background_color=blueArea), 
-     sg.Button('Go Back', key="-GOBACK-", button_color='firebrick', pad=(120,0))]]
+     sg.Button('Go Back', key="btnBack", button_color='firebrick', pad=(120,0))]]
 
 loggedIn = [sg.Text('Logged in as:', size=defaultSize, background_color=greyArea, font=font), sg.Input(size=(24,1), background_color='white', text_color='black', readonly=True, key='txtUserName'),]
 
@@ -119,7 +119,7 @@ layout = [[sg.Frame('',  [[sg.Column(layout_greenarea, background_color=greenAre
 def init(collection_id):
     window = sg.Window("Mass Annotated Digitization Desk  (MADD)", layout, margins=(2, 2), size=(900,550), resizable=True, finalize=True )
     #The three lines below are there to ensure that the cursor in the input text fields is visible. It is invisible against a white background.
-    window['-NOTES-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
+    window['txtNotes'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
     window['txtUserName'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
 
     #window['-TAXNAMES-'].Widget.config(insertbackground='black')
@@ -135,7 +135,7 @@ def init(collection_id):
     window.Element('txtWorkStation').Update(value='TRS-80') 
 
     currrent_selection_index = 0
-    window.Element('-TAXNAMESBOX-').Update(set_to_index=0)     # start with first item highlighted
+    window.Element('txtDetermination').Update(set_to_index=0)     # start with first item highlighted
     while True:
         event, values = window.read()
         # print('---', event, values)
@@ -144,36 +144,36 @@ def init(collection_id):
         try: 
             if 'Up' in event or '16777235' in event:
                 currrent_selection_index = (currrent_selection_index - 1) % len(listbox_values)
-                window.Element('-TAXNAMESBOX-').Update(set_to_index=currrent_selection_index)
+                window.Element('txtDetermination').Update(set_to_index=currrent_selection_index)
             elif 'Down' in event or '16777237' in event:
                 cur_index = window.Element('selected_value').Widget.curselection()
                 cur_index = (cur_index[0] + 1) % window.Element('selected_value').Widget.size()
-                window.Element('-TAXNAMESBOX-').Update(set_to_index=cur_index)
-                window.Element('-TAXNAMESBOX-').Update(scroll_to_index=cur_index)
-                window.write_event_value('-TAXNAMESBOX-', [window.Element('-TAXNAMESBOX-').GetListValues()[cur_index]])
+                window.Element('txtDetermination').Update(set_to_index=cur_index)
+                window.Element('txtDetermination').Update(scroll_to_index=cur_index)
+                window.write_event_value('txtDetermination', [window.Element('txtDetermination').GetListValues()[cur_index]])
         except:
             print('An error occurred')
             pass
 
-        if event == '-TAXNAMESBOX-':
-            # window.Element('-TAXNAMESBOX-').Update(set_to_index=currrent_selection_index)
+        if event == 'txtDetermination':
+            # window.Element('txtDetermination').Update(set_to_index=currrent_selection_index)
             pass
         #SWITCH CONSTRUCT
-        if event == '-STORAGE-':
+        if event == 'cbxStorage':
             print('event:', event)
             print('In storage domain')
-        if event == '-PREP-':
+        if event == 'cbxPrepType':
             print('In preparation type')
             prepper = values[event]
             print('chosen isss: ', prepper)
-        if event == '-TAXON-':
+        if event == 'cbxHigherTaxon':
             print('IN taxonomy section')
-        if event == '-TYPE-':
+        if event == 'cbxTypeStatus':
             print('IN type status section')
-        if event == '-NOTES-':
+        if event == 'txtNotes':
             print('IN notes section')
-        if event == '-TAXONINPUT-':
-            input_ = values['-TAXONINPUT-']
+        if event == 'txtDetermination':
+            input_ = values['txtDetermination']
             print('in taxon input -')
             print('len string : ', len(values[event]))
 
@@ -182,9 +182,9 @@ def init(collection_id):
                 response = koss.auto_suggest_taxonomy(values[event])
                 # if response and response[1] <= 20:
                 print('the auto suggeter SAYS :) -- ', response[0])
-                window['-TAXNAMESBOX-'].update(values=response[0])
+                window['txtDetermination'].update(values=response[0])
                 #     taxonomic_candidates_popup('Candidate names', response[0])
-        if event == '-TAXNAMESBOX-':
+        if event == 'txtDetermination':
             selection = values[event]
             if selection:
                 item = selection[0]
