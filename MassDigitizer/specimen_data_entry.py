@@ -26,6 +26,7 @@ import pathlib
 
 import data_access as db
 import global_settings as gs
+import home_screen as hs
 
 sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer')))
 currentpath = os.path.join(pathlib.Path(__file__).parent, '')
@@ -140,13 +141,13 @@ def init(collection_id):
         try: 
             if 'Up' in event or '16777235' in event:
                 currrent_selection_index = (currrent_selection_index - 1) % len(listbox_values)
-                window.Element('txtDetermination').Update(set_to_index=currrent_selection_index)
+                window.Element('cbxDetermination').Update(set_to_index=currrent_selection_index)
             elif 'Down' in event or '16777237' in event:
                 cur_index = window.Element('selected_value').Widget.curselection()
                 cur_index = (cur_index[0] + 1) % window.Element('selected_value').Widget.size()
-                window.Element('txtDetermination').Update(set_to_index=cur_index)
-                window.Element('txtDetermination').Update(scroll_to_index=cur_index)
-                window.write_event_value('txtDetermination', [window.Element('txtDetermination').GetListValues()[cur_index]])
+                window.Element('cbxDetermination').Update(set_to_index=cur_index)
+                window.Element('cbxDetermination').Update(scroll_to_index=cur_index)
+                window.write_event_value('txtDetermination', [window.Element('cbxDetermination').GetListValues()[cur_index]])
         except:
             print('An error occurred')
             pass
@@ -187,9 +188,10 @@ def init(collection_id):
                 item = selection[0]
                 # index = listbox.get_indexes()[0]
                 print(f'"{item}" selected')
-        if event == '-INSTITUTIONS-':
-            output = koss.small_list_lookup('institution', '-INSTITUTION-')
-            print(output)
+        if event == 'btnLogout':
+            gs.clearSession()
+            hs.window.reappear()
+            window.close()
         if event == sg.WINDOW_CLOSED:
             break
     window.close()
