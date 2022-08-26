@@ -13,3 +13,11 @@ collectionId = 0
 collectionName = '...'
 spUserName = '...'
 csrfToken = ''
+
+def clearSession():
+    institutionId = 0
+    institutionName = '...'
+    collectionId = 0
+    collectionName = '...'
+    spUserName = '...'
+    csrfToken = ''

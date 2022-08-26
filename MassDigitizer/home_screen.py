@@ -81,7 +81,7 @@ def main(window):
             next_layout = [ [sg.Column(next_col_main), sg.Column(next_col_side, element_justification='left')] ]
 
             next_window = sg.Window('Start', next_layout, size=(640, 480))
-            window.close()
+            window.disappear()
             window = next_window
 
         if event == 'collection':
