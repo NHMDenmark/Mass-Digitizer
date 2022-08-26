@@ -45,7 +45,7 @@ def auto_suggest_taxonomy(name, highLimit=20):
     #highLimit: at or below this the auto-suggest fires of its names
     #returns: a list of names
 
-    cur = data_access.get_db_cursor()
+    cur = data_access.getDbCursor()
     sql = "SELECT fullname FROM taxonname WHERE lower(fullname) LIKE lower('{}%');".format(name)
     print(sql)
     rows = cur.execute(sql).fetchall()

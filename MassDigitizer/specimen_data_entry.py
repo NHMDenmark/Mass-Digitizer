@@ -31,7 +31,6 @@ sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer
 currentpath = os.path.join(pathlib.Path(__file__).parent, '')
 import kick_off_sql_searches as koss
 
-
 sg.theme('SystemDefault')
 blueArea = '#99ccff'
 greenArea = '#E8F4EA'
@@ -68,10 +67,8 @@ type_status = [sg.Text('Type status:', size=defaultSize, background_color=greenA
 
 notes = [sg.Text('Notes', size=defaultSize, background_color=greenArea, font=font),
          sg.Multiline(size=(29,5), background_color='white', text_color='black', key='txtNotes', enable_events=False)]
-# note_box = [sg.Multiline(size=(24,5), background_color='white', text_color='black', key='txtNotes')]
 
 layout_greenarea = [storage, preparation, taxonomy, type_status, notes, [sg.Checkbox('Multispecimen sheet', background_color=greenArea, font=(11))],]
-#Above is the so-called 'green area'
 
 broadGeo = [sg.Text('Broad geographic region:', size=defaultSize ,background_color=blueArea, text_color='black', font=font),
             sg.Combo(geoRegionsCopenhagen, size=blue_size, key='cbxGeoRegion', text_color='black', background_color='white', enable_events=True),]
@@ -80,7 +77,7 @@ taxonInput = [sg.Text('Taxonomic name:     ', size=(21,1) ,background_color=blue
               sg.Input('', size=blue_size, key='txtDetermination', text_color='black', background_color='white', enable_events=True, pad=((5,0),(0,0))),]
 
 taxonomicPicklist = [sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
-                    sg.Listbox('', key='txtDetermination', size=(28,6), text_color='black', background_color='white', enable_events=True, pad=((5,0),(0,0))),]
+                    sg.Listbox('', key='cbxDetermination', size=(28,6), text_color='black', background_color='white', enable_events=True, pad=((5,0),(0,0))),]
 
 barcode = [sg.Text('Barcode:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
            sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', enable_events=True),]
@@ -115,7 +112,6 @@ layout = [[sg.Frame('',  [[sg.Column(layout_greenarea, background_color=greenAre
            sg.Frame('', [[sg.Column(layout_greyarea, background_color=greyArea)]], size=(250, 300), expand_x=True, expand_y=True, background_color=greyArea)],
           [sg.Frame('',   [[sg.Column(layout_bluearea, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],]
 
-
 def init(collection_id):
     window = sg.Window("Mass Annotated Digitization Desk  (MADD)", layout, margins=(2, 2), size=(900,550), resizable=True, finalize=True )
     #The three lines below are there to ensure that the cursor in the input text fields is visible. It is invisible against a white background.
@@ -126,7 +122,7 @@ def init(collection_id):
                                    # , highlightcolor='firebrick', highlightthickness=2)
 
     # Set session Widget fields
-    window.Element('txtWorkStation').Update(value=gs.spUserName) 
+    window.Element('txtUserName').Update(value=gs.spUserName) 
     collection = db.getRowOnId('collection', collection_id)
     if collection is not Empty:
         window.Element('txtCollection').Update(value=collection[2]) 
@@ -135,7 +131,7 @@ def init(collection_id):
     window.Element('txtWorkStation').Update(value='TRS-80') 
 
     currrent_selection_index = 0
-    window.Element('txtDetermination').Update(set_to_index=0)     # start with first item highlighted
+    window.Element('cbxDetermination').Update(set_to_index=0)     # start with first item highlighted
     while True:
         event, values = window.read()
         # print('---', event, values)
@@ -181,9 +177,10 @@ def init(collection_id):
                 print('submitted string: ', values[event])
                 response = koss.auto_suggest_taxonomy(values[event])
                 # if response and response[1] <= 20:
-                print('the auto suggeter SAYS :) -- ', response[0])
-                window['txtDetermination'].update(values=response[0])
-                #     taxonomic_candidates_popup('Candidate names', response[0])
+                if response is not None:
+                    print('the auto suggeter SAYS :) -- ', response[0])
+                    window['cbxDetermination'].update(values=response[0])
+                    #     taxonomic_candidates_popup('Candidate names', response[0])
         if event == 'txtDetermination':
             selection = values[event]
             if selection:
@@ -228,7 +225,7 @@ def init(collection_id):
 #         elif event == '-EXIT-':
 #             window.close()
 
-#init(1)
+#init(2)
 
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
