@@ -1,4 +1,3 @@
-from queue import Empty
 import sys
 import PySimpleGUI as sg
 
@@ -97,21 +96,24 @@ def main(window):
                                                 'name = ':'"%s"'%selected_collection, 
                                                 'institutionid = ':'%s'%institution_id,
                                                 })
-                collection_id = collection[0]['id']
-                
-                gs.baseURL = institution_url
-                gs.csrfToken = sp.specifyLogin(username, password, collection_id)
+                if len(collection) > 0:
+                    collection_id = collection[0]['id']
+                    
+                    gs.baseURL = institution_url
+                    gs.csrfToken = sp.specifyLogin(username, password, collection_id)
 
-                if gs.csrfToken != '':
-                    gs.spUserName = username
-                    gs.collectionId = collection_id
-                    gs.institutionId = institution_id
-                    window.close()
-                    de.init(collection_id)
-                else:
-                    window['autherror'].Update(visible=True)
-                    #window['collection'].set_value([])
-                    pass
+                    if gs.csrfToken != '':
+                        gs.spUserName = username
+                        gs.collectionId = collection_id
+                        gs.collectionName = selected_collection
+                        gs.institutionId = institution_id
+                        gs.institutionName = selected_institution
+                        window.close()
+                        de.init(collection_id)
+                    else:
+                        window['autherror'].Update(visible=True)
+                        #window['collection'].set_value([])
+                        pass
             else:
                 window['incomplete'].Update(visible=True)
                 #window['collection'].set_value([])
