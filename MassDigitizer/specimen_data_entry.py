@@ -16,6 +16,7 @@ Unless required by applicable law or agreed to in writing,
 software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 either express or implied. See the License for the specific language governing permissions and limitations under the License.
 """
+from queue import Empty
 import PySimpleGUI as sg
 # import import_csv_memory
 import util
@@ -23,11 +24,13 @@ import os
 import sys
 import pathlib
 
-sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer')))
+import data_access as db
+import global_settings as gs
+import home_screen as hs
 
+sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer')))
 currentpath = os.path.join(pathlib.Path(__file__).parent, '')
 import kick_off_sql_searches as koss
-
 
 sg.theme('SystemDefault')
 blueArea = '#99ccff'
@@ -35,17 +38,14 @@ greenArea = '#E8F4EA'
 greyArea = '#BFD1DF'
 
 #All hardcoded stuff are likely to be replaced by DB queries
-institutions = ['NHMD: Natural History Museum of Denmark (Copenhagen)', 'NHMA: Natural History Museum Aarhus']
 prepType = ['pinned', 'herbarium sheets']
 taxonomicGroups = ['placeholder...']
 typeStatus =  ['placeholder...']
+institutions = ['NHMD: Natural History Museum of Denmark (Copenhagen)', 'NHMA: Natural History Museum Aarhus']
 #Georegions /blue area below -v
 geoRegionsCopenhagen = ['Nearctic', 'Palearctic', 'Neotropical', 'Afrotropical', 'Oriental', 'Australian']
 # taxonomicNames = ['Acanthohelicospora aurea','Acremonium alternatum','Actinonema actaeae','Aegerita alba','Agaricus aestivalis','Agaricus aestivalis var. flavotacta','Agaricus altipes']
 barcode = [58697014]
-#Grey area hardcoding below
-collections = ['Botany', 'Entomology', 'Ichthyology']
-workstations = ['Commodore_64', 'VIC_20', 'HAL2000', 'Cray']
 
 defaultSize = (21,1)
 #defaultSize is used to space all data entry elements so that they line up.
@@ -54,140 +54,123 @@ element_size = (30,1)
 blue_size = (28,1)
 
 #Input elements (below) are stored in variables with brackets to make it easier to include and position in the frames
-storage = [
-                    sg.Text("Storage location:", size=defaultSize, background_color=greenArea, font=font),
-                    sg.Combo(institutions, key='-STORAGE-', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),
-                ]
+storage = [sg.Text("Storage location:", size=defaultSize, background_color=greenArea, font=font),
+           sg.Combo(institutions, key='cbxStorage', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
 
-preparation = [
-                    sg.Text("Preparation type:", size=defaultSize, background_color=greenArea, font=font),
-                    sg.Combo(prepType, key='-PREP-', size=element_size, text_color='black', background_color='white', enable_events=True),
-                    ]
+preparation = [sg.Text("Preparation type:", size=defaultSize, background_color=greenArea, font=font),
+               sg.Combo(prepType, key='cbxPrepType', size=element_size, text_color='black', background_color='white', enable_events=True),]
 
-taxonomy = [
-                    sg.Text("Taxonomic group:", size=defaultSize, background_color=greenArea, font=font),
-                    sg.Combo(taxonomicGroups, key='-TAXON-', size=element_size, text_color='black', background_color='white', enable_events=True),
-                    ]
+taxonomy = [sg.Text("Taxonomic group:", size=defaultSize, background_color=greenArea, font=font),
+            sg.Combo(taxonomicGroups, key='cbxHigherTaxon', size=element_size, text_color='black', background_color='white', enable_events=True),]
 
-type_status = [
-                    sg.Text('Type status:', size=defaultSize, background_color=greenArea, font=font),
-                    sg.Combo(typeStatus, key='-TYPE-', size=element_size, text_color='black', background_color='white', font=font, enable_events=True),
-                 ]
+type_status = [sg.Text('Type status:', size=defaultSize, background_color=greenArea, font=font),
+               sg.Combo(typeStatus, key='cbxTypeStatus', size=element_size, text_color='black', background_color='white', font=font, enable_events=True),]
 
 notes = [sg.Text('Notes', size=defaultSize, background_color=greenArea, font=font),
-         sg.Multiline(size=(29,5), background_color='white', text_color='black', key='-NOTES-', enable_events=False)]
-# note_box = [sg.Multiline(size=(24,5), background_color='white', text_color='black', key='-NOTES-')]
+         sg.Multiline(size=(29,5), background_color='white', text_color='black', key='txtNotes', enable_events=False)]
 
-layout_greenarea = [
-    storage, preparation, taxonomy, type_status, notes, [sg.Checkbox('Multispecimen sheet', background_color=greenArea, font=(11))],
-    ]
-#Above is the so-called 'green area'
+layout_greenarea = [storage, preparation, taxonomy, type_status, notes, [sg.Checkbox('Multispecimen sheet', background_color=greenArea, font=(11))],]
 
-broadGeo = [
-                    sg.Text('Broad geographic region:', size=defaultSize ,background_color=blueArea, text_color='black', font=font),
-                    sg.Combo(geoRegionsCopenhagen, size=blue_size, key='-GEOREGION-', text_color='black', background_color='white', enable_events=True),
-                 ]
-taxonInput = [
-                    sg.Text('Taxonomic name:     ', size=(21,1) ,background_color=blueArea, text_color='black', font=font),
-                    sg.Input('', size=blue_size, key='-TAXONINPUT-', text_color='black', background_color='white', enable_events=True, pad=((5,0),(0,0))),
-                 ]
-taxonomicPicklist = [
-                    sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
+broadGeo = [sg.Text('Broad geographic region:', size=defaultSize ,background_color=blueArea, text_color='black', font=font),
+            sg.Combo(geoRegionsCopenhagen, size=blue_size, key='cbxGeoRegion', text_color='black', background_color='white', enable_events=True),]
 
-                    sg.Listbox('', key='-TAXNAMESBOX-', size=(28,6), text_color='black', background_color='white', enable_events=True, pad=((5,0),(0,0))),
-                 ]
+taxonInput = [sg.Text('Taxonomic name:     ', size=(21,1) ,background_color=blueArea, text_color='black', font=font),
+              sg.Input('', size=blue_size, key='txtDetermination', text_color='black', background_color='white', enable_events=True, pad=((5,0),(0,0))),]
 
-barcode = [
-                    sg.Text('Barcode:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
-                    sg.InputText('', key='-BARCODE-', size=blue_size, text_color='black', background_color='white', enable_events=True),
-                 ]
+taxonomicPicklist = [sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
+                    sg.Listbox('', key='cbxDetermination', size=(28,6), text_color='black', background_color='white', enable_events=True, pad=((5,0),(0,0))),]
+
+barcode = [sg.Text('Barcode:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
+           sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', enable_events=True),]
 
 # button_frame = [sg.Frame(layout=[[sg.Button('SAVE', key='-SAVE-', button_color='seagreen'), sg.StatusBar('', relief=None, size=(30,1), background_color=blueArea),
 #                                   sg.Button('Go back', key='-GOBACK', button_color='firebrick'),
 #         sg.Sizer(280, 10)]] , title='', relief=None, background_color=blueArea, border_width=0)]
 
 
-layout_bluearea = [
-    broadGeo, taxonInput, taxonomicPicklist, barcode,
+layout_bluearea = [broadGeo, taxonInput, taxonomicPicklist, barcode,
     # button_frame,
-    [sg.StatusBar('', relief=None, size=(32,1), background_color=blueArea), sg.Button('SAVE', key="-SAVE-", button_color='seagreen'), sg.StatusBar('', relief=None, size=(20,1), background_color=blueArea), sg.Button('Go Back', key="-GOBACK-", button_color='firebrick', pad=(120,0))]
-]
+    [sg.StatusBar('', relief=None, size=(32,1), background_color=blueArea), 
+     sg.Button('SAVE', key="btnSave", button_color='seagreen'), 
+     sg.StatusBar('', relief=None, size=(20,1), background_color=blueArea), 
+     sg.Button('Go Back', key="btnBack", button_color='firebrick', pad=(120,0))]]
 
-loggedIn = [sg.Text('Logged in as:', size=defaultSize, background_color=greyArea, font=font), sg.InputText(size=(24,1), background_color='white', text_color='black', key='-LOGGED-'),
-         ]
+loggedIn = [sg.Text('Logged in as:', size=defaultSize, background_color=greyArea, font=font), sg.Input(size=(24,1), background_color='white', text_color='black', readonly=True, key='txtUserName'),]
 
-dateTime = [sg.Text('Date / Time:', size=defaultSize, background_color=greyArea, font=font), sg.InputText(size=(24,1), background_color='white', text_color='black', key='-DATETIME-'),
-         ]
+institution_ = [sg.Text('Institution:', size=defaultSize, background_color=greyArea, font=font), sg.Input(size=(24,1), background_color='white', text_color='black', readonly=True, key="txtInstitution"),]
 
-institution_ = [sg.Text('Institution:', size=defaultSize, background_color=greyArea, font=font), sg.Combo(institutions, key="-INSTITUTION-", size=element_size, text_color='black', background_color='white'),
-         ]
+collections =  [sg.Text('Collection:', size=defaultSize, background_color=greyArea, font=font), sg.Input(size=(24,1), background_color='white', text_color='black', readonly=True, key="txtCollection"),]
 
-collections =  [sg.Text('Collection name:', size=defaultSize, background_color=greyArea, font=font), sg.Combo(collections, key="-COLLECTION-", size=element_size, text_color='black', background_color='white'),
-         ]
+work_station =  [sg.Text('Workstation:', size=defaultSize, background_color=greyArea, font=font), sg.Input(size=(24,1), background_color='white', text_color='black', readonly=True, key="txtWorkStation"),]
 
-work_station =  [sg.Text('Workstation:', size=defaultSize, background_color=greyArea, font=font), sg.Combo(workstations, key="-WORKSTATION-", size=element_size, text_color='black', background_color='white'),
-         ]
+settings_ = [sg.Text('Settings ', size=defaultSize, justification='center', background_color=greyArea, font=14), 
+             sg.Button('', image_filename='%soptions_gear.png'%currentpath, button_color=greyArea, key='btnSettings', border_width=0)]
 
-settings_ = [sg.Text('Settings ', size=defaultSize, justification='center', background_color=greyArea, font=14), sg.Button('', image_filename='%soptions_gear.png'%currentpath,
-                                                                                          button_color=greyArea, key='-SETTING-', border_width=0)
-         ]
+horizontal_line = [sg.Text("_______________" * 5, background_color=greyArea)] #horizontal line element hack
+layout_greyarea = [loggedIn, institution_, horizontal_line, collections, work_station, settings_, [sg.Button('LOG OUT', key="btnLogout", button_color='grey40')]]
 
-
-layout_greyarea = [loggedIn, dateTime, [sg.Text("_______________" * 5, background_color=greyArea)], institution_,
-                   collections, work_station, settings_, [sg.Button('LOG OUT', key="-LOGOUT-", button_color='grey40')]]
-#there is a hacky horizontal line element in the code above to create space between inputs
-
-layout = [
-    [sg.Frame('',  [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(250,200), expand_x=True, expand_y=True, background_color=greenArea),
-     sg.Frame('', [[sg.Column(layout_greyarea, background_color=greyArea)]], size=(250, 300), expand_x=True, expand_y=True, background_color=greyArea)],
-    [sg.Frame('',   [[sg.Column(layout_bluearea, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],
-]
+layout = [[sg.Frame('',  [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(250,200), expand_x=True, expand_y=True, background_color=greenArea),
+           sg.Frame('', [[sg.Column(layout_greyarea, background_color=greyArea)]], size=(250, 300), expand_x=True, expand_y=True, background_color=greyArea)],
+          [sg.Frame('',   [[sg.Column(layout_bluearea, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],]
 
 def init(collection_id):
-    window = sg.Window("Simple Annotated Digitization Desk  (SADD)", layout, margins=(2, 2), size=(900,550), resizable=True, finalize=True )
+    window = sg.Window("Mass Annotated Digitization Desk  (MADD)", layout, margins=(2, 2), size=(900,550), resizable=True, finalize=True )
     #The three lines below are there to ensure that the cursor in the input text fields is visible. It is invisible against a white background.
-    window['-NOTES-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
-    window['-LOGGED-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
-    window['-DATETIME-'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
+    window['txtNotes'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
+    window['txtUserName'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
 
     #window['-TAXNAMES-'].Widget.config(insertbackground='black')
                                    # , highlightcolor='firebrick', highlightthickness=2)
 
+    # Set session Widget fields
+    window.Element('txtUserName').Update(value=gs.spUserName) 
+    collection = db.getRowOnId('collection', collection_id)
+    if collection is not Empty:
+        window.Element('txtCollection').Update(value=collection[2]) 
+        institution = db.getRowOnId('institution', collection[3])
+        window.Element('txtInstitution').Update(value=institution[2]) 
+    window.Element('txtWorkStation').Update(value='TRS-80') 
+
     currrent_selection_index = 0
-    window.Element('-TAXNAMESBOX-').Update(set_to_index=0)     # start with first item highlighted
+    window.Element('cbxDetermination').Update(set_to_index=0)     # start with first item highlighted
     while True:
         event, values = window.read()
         # print('---', event, values)
         taxon_candidates = None
         listbox_values = ['','','']
-        if 'Up' in event or '16777235' in event:
-            currrent_selection_index = (currrent_selection_index - 1) % len(listbox_values)
-            window.Element('-TAXNAMESBOX-').Update(set_to_index=currrent_selection_index)
-        elif 'Down' in event or '16777237' in event:
-            cur_index = window.Element('selected_value').Widget.curselection()
-            cur_index = (cur_index[0] + 1) % window.Element('selected_value').Widget.size()
-            window.Element('-TAXNAMESBOX-').Update(set_to_index=cur_index)
-            window.Element('-TAXNAMESBOX-').Update(scroll_to_index=cur_index)
-            window.write_event_value('-TAXNAMESBOX-', [window.Element('-TAXNAMESBOX-').GetListValues()[cur_index]])
-        if event == '-TAXNAMESBOX-':
-            # window.Element('-TAXNAMESBOX-').Update(set_to_index=currrent_selection_index)
+        try: 
+            if 'Up' in event or '16777235' in event:
+                currrent_selection_index = (currrent_selection_index - 1) % len(listbox_values)
+                window.Element('cbxDetermination').Update(set_to_index=currrent_selection_index)
+            elif 'Down' in event or '16777237' in event:
+                cur_index = window.Element('selected_value').Widget.curselection()
+                cur_index = (cur_index[0] + 1) % window.Element('selected_value').Widget.size()
+                window.Element('cbxDetermination').Update(set_to_index=cur_index)
+                window.Element('cbxDetermination').Update(scroll_to_index=cur_index)
+                window.write_event_value('txtDetermination', [window.Element('cbxDetermination').GetListValues()[cur_index]])
+        except:
+            print('An error occurred')
+            pass
+
+        if event == 'txtDetermination':
+            # window.Element('txtDetermination').Update(set_to_index=currrent_selection_index)
             pass
         #SWITCH CONSTRUCT
-        if event == '-STORAGE-':
+        if event == 'cbxStorage':
             print('event:', event)
             print('In storage domain')
-        if event == '-PREP-':
+        if event == 'cbxPrepType':
             print('In preparation type')
             prepper = values[event]
             print('chosen isss: ', prepper)
-        if event == '-TAXON-':
+        if event == 'cbxHigherTaxon':
             print('IN taxonomy section')
-        if event == '-TYPE-':
+        if event == 'cbxTypeStatus':
             print('IN type status section')
-        if event == '-NOTES-':
+        if event == 'txtNotes':
             print('IN notes section')
-        if event == '-TAXONINPUT-':
-            input_ = values['-TAXONINPUT-']
+        if event == 'txtDetermination':
+            input_ = values['txtDetermination']
             print('in taxon input -')
             print('len string : ', len(values[event]))
 
@@ -195,18 +178,20 @@ def init(collection_id):
                 print('submitted string: ', values[event])
                 response = koss.auto_suggest_taxonomy(values[event])
                 # if response and response[1] <= 20:
-                print('the auto suggeter SAYS :) -- ', response[0])
-                window['-TAXNAMESBOX-'].update(values=response[0])
-                #     taxonomic_candidates_popup('Candidate names', response[0])
-        if event == '-TAXNAMESBOX-':
+                if response is not None:
+                    print('the auto suggeter SAYS :) -- ', response[0])
+                    window['cbxDetermination'].update(values=response[0])
+                    #     taxonomic_candidates_popup('Candidate names', response[0])
+        if event == 'txtDetermination':
             selection = values[event]
             if selection:
                 item = selection[0]
                 # index = listbox.get_indexes()[0]
                 print(f'"{item}" selected')
-        if event == '-INSTITUTIONS-':
-            output = koss.small_list_lookup('institution', '-INSTITUTION-')
-            print(output)
+        if event == 'btnLogout':
+            gs.clearSession()
+            hs.window.reappear()
+            window.close()
         if event == sg.WINDOW_CLOSED:
             break
     window.close()
@@ -242,7 +227,7 @@ def init(collection_id):
 #         elif event == '-EXIT-':
 #             window.close()
 
-#init(1)
+#init(2)
 
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
