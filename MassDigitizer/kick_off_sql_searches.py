@@ -19,52 +19,52 @@ either express or implied. See the License for the specific language governing p
 import data_access
 from itertools import chain
 
-def small_list_lookup(tableName, inputKey, indicesForColumn):
+def small_list_lookup(tableName, inputKey, indicesForColumn=2):
     ###For retreiving values stored in the minor tables ('institution' and 'collection')
     #tableName: String can be 'Storage location', ' Prep type' , 'institution', etc.
     #inputKey: Is the field key from the specimen_data_entry interface like: Prep type, Broad geographic region
 
-    #return: content of particular table along with inputKey
+    #return: content of particular table
 
     rows = data_access.getRows(tableName, limit=200)
 
-    result = inputKey , rows
+    result = rows
     return result
 
-#
-# res = small_list_lookup('institution', '-STORAGE-', 2)
-# print('len rows = ', len(res))
-#
-# for j in res[1]:
-#     print(j[1], j[2])
 
-def auto_suggest_taxonomy(name, highLimit=20):
+def auto_suggest_taxonomy(name, taxDefItemId=None, rowLimit=2000):
     # Purpose: for helping digitizer staff rapidly input names by returning suggestions based on the three or
     #  more entered characters.
     #trigger: means how many keystrokes it takes to trigger the auto-suggest functionality
-    #highLimit: at or below this the auto-suggest fires of its names
+    #rowLimit: at or below this the auto-suggest fires of its names
     #returns: a list of names
 
     cur = data_access.getDbCursor()
     sql = "SELECT fullname FROM taxonname WHERE lower(fullname) LIKE lower('{}%');".format(name)
-    print(sql)
+    if taxDefItemId:
+        sql = sql[:-1]
+        sql = sql + ' AND taxontreedefid = {};'.format(taxDefItemId)
+        print(sql)
     rows = cur.execute(sql).fetchall()
 
     print('len rows = ', len(rows))
     lengthOfRows =len(rows)
-    if lengthOfRows <= highLimit:
+    if lengthOfRows <= rowLimit:
         print('AUTOSUGGEST!!!')
         flatCandidates = list(chain.from_iterable(rows))
         # print(flatCandidates)
+        rows = list(flatCandidates)
 
-        # candidates = [[k for k in j ] for j in rows]
-        # print([[k for k in j] for j in rows])
-        return flatCandidates , lengthOfRows
+        return rows , lengthOfRows
 
 ###TEST AREA
-# outcome = auto_suggest_taxonomy('Rosa rug')
+# outcome = auto_suggest_taxonomy('Rosa rug', taxDefItemId=13)
+# # outcome = small_list_lookup('institution', 'k')
 # if outcome:
-#     print(outcome[0])
-#     print('length of outcome = ', outcome[1])
+#     print('outcome sörenme,,, ',type(outcome[0]), outcome)
+#     for elem in outcome:
+#     # print(elem['name'])
+#         print('length of outcome = ', outcome[1])
+#
 # else:
 #     print('NO outcome')
