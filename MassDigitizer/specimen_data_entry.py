@@ -210,9 +210,10 @@ def init(collection_id):
                     print('the auto suggeter SAYS :) -- ', response[0])
                     window['cbxDetermination'].update(values=response[0])
                     #     taxonomic_candidates_popup('Candidate names', response[0])
-        if event == 'txtDetermination':
+        if event == 'cbxDetermination':
             selection = values[event]
             if selection:
+                # item = selection[0]
                 item = selection[0]
                 # index = listbox.get_indexes()[0]
                 print(f'"{item}" selected')
@@ -255,7 +256,7 @@ def init(collection_id):
 #         elif event == '-EXIT-':
 #             window.close()
 
-# init(2)
+init(2)
 
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
