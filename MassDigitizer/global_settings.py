@@ -8,16 +8,17 @@ db_in_memory = False
 
 # session 
 institutionId = 0
-institutionName = '...'
+institutionName = '-not set-'
 collectionId = 0
-collectionName = '...'
-spUserName = '...'
+collectionName = '-not set-'
+spUserName = '-not set-'
+spUserId = -1
 csrfToken = ''
 
 def clearSession():
     institutionId = 0
-    institutionName = '...'
+    institutionName = '-not set-'
     collectionId = 0
-    collectionName = '...'
-    spUserName = '...'
+    collectionName = '-not set-'
+    spUserName = '-not set-'
     csrfToken = ''
