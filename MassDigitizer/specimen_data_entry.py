@@ -38,6 +38,10 @@ collectionId = -1
 #function for converting predefined table data into list for dropdownlist 
 def getList(tablename, collectionid): return util.convert_dbrow_list(db.getRowsOnFilters(tablename,{'collectionid =':'%s'%collectionid}))
 
+#function for fetching id (primary key) on name value 
+def getPrimaryKey(tableName, name): 
+    return db.getRowsOnFilters(tableName, {' name = ':'"%s"'%name})[0]['id']
+
 sg.theme('SystemDefault')
 blueArea = '#99ccff'
 greenArea = '#E8F4EA'
@@ -81,10 +85,10 @@ def init(collection_id):
                 sg.Combo(getList('georegion',c), size=blue_size, key='cbxGeoRegion', text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
 
     taxonInput = [sg.Text('Taxonomic name:     ', size=(21,1) ,background_color=blueArea, text_color='black', font=font),
-                sg.Input('', size=blue_size, key='txtDetermination', text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
+                sg.Input('', size=blue_size, key='txtTaxonName', text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
 
     taxonomicPicklist = [sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
-                        sg.Listbox('', key='cbxDetermination', size=(28,6), text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
+                        sg.Listbox('', key='cbxTaxonName', size=(28,6), text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
 
     barcode = [sg.Text('Barcode:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
             sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
@@ -114,7 +118,6 @@ def init(collection_id):
             sg.Frame('', [[sg.Column(layout_greyarea, background_color=greyArea)]], size=(250, 300), expand_x=True, expand_y=True, background_color=greyArea)],
             [sg.Frame('',   [[sg.Column(layout_bluearea, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],]
 
-
     collectionId = collection_id
 
     window = sg.Window("Mass Annotated Digitization Desk  (MADD)", layout, margins=(2, 2), size=(950,580), resizable=True, finalize=True )
@@ -122,8 +125,7 @@ def init(collection_id):
     window['txtNotes'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
     window['txtUserName'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
 
-    #window['-TAXNAMES-'].Widget.config(insertbackground='black')
-                                   # , highlightcolor='firebrick', highlightthickness=2)
+    #window['-TAXNAMES-'].Widget.config(insertbackground='black') , highlightcolor='firebrick', highlightthickness=2)
 
     # Set session Widget fields
     window.Element('txtUserName').Update(value=gs.spUserName) 
@@ -135,7 +137,7 @@ def init(collection_id):
     window.Element('txtWorkStation').Update(value='TRS-80') 
 
     currrent_selection_index = 0
-    window.Element('cbxDetermination').Update(set_to_index=0)     # start with first item highlighted
+    window.Element('cbxTaxonName').Update(set_to_index=0)     # start with first item highlighted
     while True:
         event, values = window.read()
         # print('---', event, values)
@@ -144,13 +146,13 @@ def init(collection_id):
         try: 
             if 'Up' in event or '16777235' in event:
                 currrent_selection_index = (currrent_selection_index - 1) % len(listbox_values)
-                window.Element('cbxDetermination').Update(set_to_index=currrent_selection_index)
+                window.Element('cbxTaxonName').Update(set_to_index=currrent_selection_index)
             elif 'Down' in event or '16777237' in event:
                 cur_index = window.Element('selected_value').Widget.curselection()
                 cur_index = (cur_index[0] + 1) % window.Element('selected_value').Widget.size()
-                window.Element('cbxDetermination').Update(set_to_index=cur_index)
-                window.Element('cbxDetermination').Update(scroll_to_index=cur_index)
-                window.write_event_value('txtDetermination', [window.Element('cbxDetermination').GetListValues()[cur_index]])
+                window.Element('cbxTaxonName').Update(set_to_index=cur_index)
+                window.Element('cbxTaxonName').Update(scroll_to_index=cur_index)
+                window.write_event_value('txtTaxonName', [window.Element('cbxTaxonName').GetListValues()[cur_index]])
         except:
             print('An error occurred')
             pass
@@ -169,8 +171,8 @@ def init(collection_id):
             print('IN type status section')
         if event == 'txtNotes':
             print('IN notes section')
-        if event == 'txtDetermination':
-            input_ = values['txtDetermination']
+        if event == 'txtTaxonName':
+            input_ = values['txtTaxonName']
             print('in taxon input -')
             print('len string : ', len(values[event]))
 
@@ -180,9 +182,9 @@ def init(collection_id):
                 # if response and response[1] <= 20:
                 if response is not None:
                     print('the auto suggeter SAYS :) -- ', response[0])
-                    window['cbxDetermination'].update(values=response[0])
+                    window['cbxTaxonName'].update(values=response[0])
                     #     taxonomic_candidates_popup('Candidate names', response[0])
-        if event == 'cbxDetermination':
+        if event == 'cbxTaxonName':
             selection = values[event]
             if selection:
                 # item = selection[0]
@@ -200,12 +202,18 @@ def init(collection_id):
         if event == 'btnSave':
             print('Saving form')
             # first get verbatim field values 
-            storageName = ""
+            fields = {'catalognumber' : '"%s"'%values['txtCatalogNumber'],
+                      #'taxonnameid' : getPrimaryKey('taxonname',values['cbxTaxonName']),
+                      'georegionname' : getPrimaryKey('georegion',values['cbxGeoRegion']),
+                      'storageid' : getPrimaryKey('storage',values['cbxStorage']),
+                     }
+            
 
 
 
 
-
+            print(fields)
+            #db.insertRow('specimen', '')
 
         if event == sg.WINDOW_CLOSED:
             break
