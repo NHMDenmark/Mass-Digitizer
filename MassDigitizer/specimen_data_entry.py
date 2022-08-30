@@ -2,7 +2,7 @@
 """
 Created on Thu May 26 17:44:00 2022
 
-@author: Jan K. Legind, NHMD
+@authors: Jan K. Legind, NHMD; Fedor A. Steeman NHMD 
 
 Copyright 2022 Natural History Museum of Denmark (NHMD)
 
@@ -16,35 +16,32 @@ Unless required by applicable law or agreed to in writing,
 software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 either express or implied. See the License for the specific language governing permissions and limitations under the License.
 """
-from queue import Empty
-import PySimpleGUI as sg
-# import import_csv_memory
 
 import os
 import sys
 import pathlib
+import PySimpleGUI as sg
 
+# internal dependencies
 import util 
 import data_access as db
 import global_settings as gs
 import home_screen as hs 
+import kick_off_sql_searches as koss
 
+# Make sure that current folder is registrered to be able to access other app files 
 sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer')))
 currentpath = os.path.join(pathlib.Path(__file__).parent, '')
-import kick_off_sql_searches as koss
 
 collectionId = -1
 
 #function for converting predefined table data into list for dropdownlist 
-def getList(tablename): return util.convert_dbrow_list(db.getRows(tablename))
+def getList(tablename, collectionid): return util.convert_dbrow_list(db.getRowsOnFilters(tablename,{'collectionid =':'%s'%collectionid}))
 
 sg.theme('SystemDefault')
 blueArea = '#99ccff'
 greenArea = '#E8F4EA'
 greyArea = '#BFD1DF'
-
-# TODO when taxonomic_groups becomes a table in SQLite
-taxonomicGroups = ['placeholder...']
 
 defaultSize = (21,1)
 #defaultSize is used to space all data entry element labels so that they line up.
@@ -54,62 +51,69 @@ element_size = (30,1)
 blue_size = (28,1)
 # blue_size is the width of all fields in the 'blue area'
 
-#Input elements (below) are stored in variables with brackets to make it easier to include and position in the frames
-storage = [sg.Text("Storage location:", size=defaultSize, background_color=greenArea, font=font),
-           sg.Combo(getList('storage'), key='cbxStorage', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
-
-preparation = [sg.Text("Preparation type:", size=defaultSize, background_color=greenArea, font=font),
-               sg.Combo(getList('preptype'), key='cbxPrepType', size=element_size, text_color='black', background_color='white',font=('Arial', 12), enable_events=True),]
-
-taxonomy = [sg.Text("Taxonomic group:", size=defaultSize, background_color=greenArea, font=font),
-            sg.Combo(taxonomicGroups, key='cbxHigherTaxon', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
-
-type_status = [sg.Text('Type status:', size=defaultSize, background_color=greenArea, font=font),
-               sg.Combo(getList('typeStatus'), key='cbxTypeStatus', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
-
-notes = [sg.Text('Notes', size=defaultSize, background_color=greenArea, font=font),
-         sg.Multiline(size=(31,5), background_color='white', text_color='black', key='txtNotes', enable_events=False)]
-
-layout_greenarea = [storage, preparation, taxonomy, type_status, notes, [sg.Checkbox('Multispecimen sheet', background_color=greenArea, font=(11))],]
-
-broadGeo = [sg.Text('Broad geographic region:', size=defaultSize ,background_color=blueArea, text_color='black', font=font),
-            sg.Combo(getList('georegion'), size=blue_size, key='cbxGeoRegion', text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
-
-taxonInput = [sg.Text('Taxonomic name:     ', size=(21,1) ,background_color=blueArea, text_color='black', font=font),
-              sg.Input('', size=blue_size, key='txtDetermination', text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
-
-taxonomicPicklist = [sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
-                    sg.Listbox('', key='cbxDetermination', size=(28,6), text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
-
-barcode = [sg.Text('Barcode:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
-           sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
-
-layout_bluearea = [broadGeo, taxonInput, taxonomicPicklist, barcode,
-    # button_frame,
-    [sg.StatusBar('', relief=None, size=(32,1), background_color=blueArea), 
-     sg.Button('SAVE', key="btnSave", button_color='seagreen'), 
-     sg.StatusBar('', relief=None, size=(20,1), background_color=blueArea), 
-     sg.Button('Go Back', key="btnBack", button_color='firebrick', pad=(120,0))]]
-
-loggedIn = [sg.Text('Logged in as:', size=defaultSize, background_color=greyArea, font=font), sg.Input(size=(24,1), background_color='white', text_color='black', readonly=True, key='txtUserName'),]
-
-institution_ = [sg.Text('Institution:', size=defaultSize, background_color=greyArea, font=font), sg.Input(size=(24,1), background_color='white', text_color='black', readonly=True, key="txtInstitution"),]
-
-collections =  [sg.Text('Collection:', size=defaultSize, background_color=greyArea, font=font), sg.Input(size=(24,1), background_color='white', text_color='black', readonly=True, key="txtCollection"),]
-
-work_station =  [sg.Text('Workstation:', size=defaultSize, background_color=greyArea, font=font), sg.Input(size=(24,1), background_color='white', text_color='black', readonly=True, key="txtWorkStation"),]
-
-settings_ = [sg.Text('Settings ', size=defaultSize, justification='center', background_color=greyArea, font=14), 
-             sg.Button('', image_filename='%soptions_gear.png'%currentpath, button_color=greyArea, key='btnSettings', border_width=0)]
-
-horizontal_line = [sg.Text("_______________" * 5, background_color=greyArea)] #horizontal line element hack
-layout_greyarea = [loggedIn, institution_, horizontal_line, collections, work_station, settings_, [sg.Button('LOG OUT', key="btnLogout", button_color='grey40')]]
-
-layout = [[sg.Frame('',  [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(250,200), expand_x=True, expand_y=True, background_color=greenArea),
-           sg.Frame('', [[sg.Column(layout_greyarea, background_color=greyArea)]], size=(250, 300), expand_x=True, expand_y=True, background_color=greyArea)],
-          [sg.Frame('',   [[sg.Column(layout_bluearea, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],]
-
 def init(collection_id):
+    # Set collection id  
+    collectionId = collection_id
+    c = collection_id
+    
+    # TODO when taxonomic_groups becomes a table in SQLite
+    taxonomicGroups = ['placeholder...']
+
+    # Input elements (below) are stored in variables with brackets to make it easier to include and position in the frames
+    storage = [sg.Text("Storage location:", size=defaultSize, background_color=greenArea, font=font),
+            sg.Combo(getList('storage',c), key='cbxStorage', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
+
+    preparation = [sg.Text("Preparation type:", size=defaultSize, background_color=greenArea, font=font),
+                sg.Combo(getList('preptype',c), key='cbxPrepType', size=element_size, text_color='black', background_color='white',font=('Arial', 12), enable_events=True),]
+
+    taxonomy = [sg.Text("Taxonomic group:", size=defaultSize, background_color=greenArea, font=font),
+                sg.Combo(taxonomicGroups, key='cbxHigherTaxon', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
+
+    type_status = [sg.Text('Type status:', size=defaultSize, background_color=greenArea, font=font),
+                sg.Combo(getList('typeStatus',c), key='cbxTypeStatus', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
+
+    notes = [sg.Text('Notes', size=defaultSize, background_color=greenArea, font=font),
+            sg.Multiline(size=(31,5), background_color='white', text_color='black', key='txtNotes', enable_events=False)]
+
+    layout_greenarea = [storage, preparation, taxonomy, type_status, notes, [sg.Checkbox('Multispecimen sheet', background_color=greenArea, font=(11))],]
+
+    broadGeo = [sg.Text('Broad geographic region:', size=defaultSize ,background_color=blueArea, text_color='black', font=font),
+                sg.Combo(getList('georegion',c), size=blue_size, key='cbxGeoRegion', text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
+
+    taxonInput = [sg.Text('Taxonomic name:     ', size=(21,1) ,background_color=blueArea, text_color='black', font=font),
+                sg.Input('', size=blue_size, key='txtDetermination', text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
+
+    taxonomicPicklist = [sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
+                        sg.Listbox('', key='cbxDetermination', size=(28,6), text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
+
+    barcode = [sg.Text('Barcode:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
+            sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
+
+    layout_bluearea = [broadGeo, taxonInput, taxonomicPicklist, barcode,
+        # button_frame,
+        [sg.StatusBar('', relief=None, size=(32,1), background_color=blueArea), 
+        sg.Button('SAVE', key="btnSave", button_color='seagreen'), 
+        sg.StatusBar('', relief=None, size=(20,1), background_color=blueArea), 
+        sg.Button('Go Back', key="btnBack", button_color='firebrick', pad=(120,0))]]
+
+    loggedIn = [sg.Text('Logged in as:', size=defaultSize, background_color=greyArea, font=font), sg.Input(size=(24,1), background_color='white', text_color='black', readonly=True, key='txtUserName'),]
+
+    institution_ = [sg.Text('Institution:', size=defaultSize, background_color=greyArea, font=font), sg.Input(size=(24,1), background_color='white', text_color='black', readonly=True, key="txtInstitution"),]
+
+    collections =  [sg.Text('Collection:', size=defaultSize, background_color=greyArea, font=font), sg.Input(size=(24,1), background_color='white', text_color='black', readonly=True, key="txtCollection"),]
+
+    work_station =  [sg.Text('Workstation:', size=defaultSize, background_color=greyArea, font=font), sg.Input(size=(24,1), background_color='white', text_color='black', readonly=True, key="txtWorkStation"),]
+
+    settings_ = [sg.Text('Settings ', size=defaultSize, justification='center', background_color=greyArea, font=14), 
+                sg.Button('', image_filename='%soptions_gear.png'%currentpath, button_color=greyArea, key='btnSettings', border_width=0)]
+
+    horizontal_line = [sg.Text("_______________" * 5, background_color=greyArea)] #horizontal line element hack
+    layout_greyarea = [loggedIn, institution_, horizontal_line, collections, work_station, settings_, [sg.Button('LOG OUT', key="btnLogout", button_color='grey40')]]
+
+    layout = [[sg.Frame('',  [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(250,200), expand_x=True, expand_y=True, background_color=greenArea),
+            sg.Frame('', [[sg.Column(layout_greyarea, background_color=greyArea)]], size=(250, 300), expand_x=True, expand_y=True, background_color=greyArea)],
+            [sg.Frame('',   [[sg.Column(layout_bluearea, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],]
+
 
     collectionId = collection_id
 
@@ -124,7 +128,7 @@ def init(collection_id):
     # Set session Widget fields
     window.Element('txtUserName').Update(value=gs.spUserName) 
     collection = db.getRowOnId('collection', collection_id)
-    if collection is not Empty:
+    if collection is not None:
         window.Element('txtCollection').Update(value=collection[2]) 
         institution = db.getRowOnId('institution', collection[3])
         window.Element('txtInstitution').Update(value=institution[2]) 
@@ -207,7 +211,7 @@ def init(collection_id):
             break
     window.close()
 
-init(2)
+#init(2)
 
 #def taxonomic_candidates_popup(title, names):
 #     # This is the window where taxonomic candidate names appear to be selected by the operator
