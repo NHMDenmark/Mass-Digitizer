@@ -145,6 +145,9 @@ def getRowsOnFilters(tableName, filters, limit=100):
     print(sqlString)
     rows = currentCursor.execute(sqlString).fetchall()
     currentCursor.connection.close()
+    # If no rows in results, insert an empty dummy row to prevent errors
+    if len(rows) < 1: 
+        rows = {'id':'-1', 'name':''}
     return rows
 
 def getRowOnId(tableName, id):
