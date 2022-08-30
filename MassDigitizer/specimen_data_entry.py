@@ -19,59 +19,32 @@ either express or implied. See the License for the specific language governing p
 from queue import Empty
 import PySimpleGUI as sg
 # import import_csv_memory
-import util
+
 import os
 import sys
 import pathlib
 
+import util 
 import data_access as db
 import global_settings as gs
-import home_screen as hs
+import home_screen as hs 
 
 sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer')))
 currentpath = os.path.join(pathlib.Path(__file__).parent, '')
 import kick_off_sql_searches as koss
+
+collectionId = -1
+
+#function for converting predefined table data into list for dropdownlist 
+def getList(tablename): return util.convert_dbrow_list(db.getRows(tablename))
 
 sg.theme('SystemDefault')
 blueArea = '#99ccff'
 greenArea = '#E8F4EA'
 greyArea = '#BFD1DF'
 
-#Drop-down list parameters populated by DB queries
-prepType = []
-prep_objects = koss.small_list_lookup('preptype', 5)
-for j in prep_objects:
-    prepType_name = j['name']
-    print(j['name'])
-    prepType.append(prepType_name)
-#TO BE DONE when taxonomic_groups becomes a table in SQLite
+# TODO when taxonomic_groups becomes a table in SQLite
 taxonomicGroups = ['placeholder...']
-#END to-do
-
-typeStatus = []
-type_objects = koss.small_list_lookup('typestatus', 5)
-for j in type_objects:
-    type_name = j['name']
-    print(j['name'])
-    typeStatus.append(type_name)
-
-institutions = []
-storage_objects = koss.small_list_lookup('institution', 5)
-for j in storage_objects:
-    institution_name = j['name']
-    print(j['name'])
-    institutions.append(institution_name)
-
-#Georegions /blue area below -v
-geoRegionsCopenhagen = []
-geo_objects = koss.small_list_lookup('georegion', 5)
-for j in geo_objects:
-    georegion_name = j['name']
-    print(j['name'])
-    geoRegionsCopenhagen.append(georegion_name)
-
-# Hardcoded barcode
-barcode = [58697014]
 
 defaultSize = (21,1)
 #defaultSize is used to space all data entry element labels so that they line up.
@@ -83,16 +56,16 @@ blue_size = (28,1)
 
 #Input elements (below) are stored in variables with brackets to make it easier to include and position in the frames
 storage = [sg.Text("Storage location:", size=defaultSize, background_color=greenArea, font=font),
-           sg.Combo(institutions, key='cbxStorage', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
+           sg.Combo(getList('storage'), key='cbxStorage', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
 
 preparation = [sg.Text("Preparation type:", size=defaultSize, background_color=greenArea, font=font),
-               sg.Combo(prepType, key='cbxPrepType', size=element_size, text_color='black', background_color='white',font=('Arial', 12), enable_events=True),]
+               sg.Combo(getList('preptype'), key='cbxPrepType', size=element_size, text_color='black', background_color='white',font=('Arial', 12), enable_events=True),]
 
 taxonomy = [sg.Text("Taxonomic group:", size=defaultSize, background_color=greenArea, font=font),
             sg.Combo(taxonomicGroups, key='cbxHigherTaxon', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
 
 type_status = [sg.Text('Type status:', size=defaultSize, background_color=greenArea, font=font),
-               sg.Combo(typeStatus, key='cbxTypeStatus', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
+               sg.Combo(getList('typeStatus'), key='cbxTypeStatus', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
 
 notes = [sg.Text('Notes', size=defaultSize, background_color=greenArea, font=font),
          sg.Multiline(size=(31,5), background_color='white', text_color='black', key='txtNotes', enable_events=False)]
@@ -100,7 +73,7 @@ notes = [sg.Text('Notes', size=defaultSize, background_color=greenArea, font=fon
 layout_greenarea = [storage, preparation, taxonomy, type_status, notes, [sg.Checkbox('Multispecimen sheet', background_color=greenArea, font=(11))],]
 
 broadGeo = [sg.Text('Broad geographic region:', size=defaultSize ,background_color=blueArea, text_color='black', font=font),
-            sg.Combo(geoRegionsCopenhagen, size=blue_size, key='cbxGeoRegion', text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
+            sg.Combo(getList('georegion'), size=blue_size, key='cbxGeoRegion', text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
 
 taxonInput = [sg.Text('Taxonomic name:     ', size=(21,1) ,background_color=blueArea, text_color='black', font=font),
               sg.Input('', size=blue_size, key='txtDetermination', text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
@@ -110,11 +83,6 @@ taxonomicPicklist = [sg.Text('', size=defaultSize, background_color=blueArea, te
 
 barcode = [sg.Text('Barcode:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
            sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
-
-# button_frame = [sg.Frame(layout=[[sg.Button('SAVE', key='-SAVE-', button_color='seagreen'), sg.StatusBar('', relief=None, size=(30,1), background_color=blueArea),
-#                                   sg.Button('Go back', key='-GOBACK', button_color='firebrick'),
-#         sg.Sizer(280, 10)]] , title='', relief=None, background_color=blueArea, border_width=0)]
-
 
 layout_bluearea = [broadGeo, taxonInput, taxonomicPicklist, barcode,
     # button_frame,
@@ -142,6 +110,9 @@ layout = [[sg.Frame('',  [[sg.Column(layout_greenarea, background_color=greenAre
           [sg.Frame('',   [[sg.Column(layout_bluearea, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],]
 
 def init(collection_id):
+
+    collectionId = collection_id
+
     window = sg.Window("Mass Annotated Digitization Desk  (MADD)", layout, margins=(2, 2), size=(950,580), resizable=True, finalize=True )
     #The three lines below are there to ensure that the cursor in the input text fields is visible. It is invisible against a white background.
     window['txtNotes'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
@@ -180,10 +151,7 @@ def init(collection_id):
             print('An error occurred')
             pass
 
-        if event == 'txtDetermination':
-            # window.Element('txtDetermination').Update(set_to_index=currrent_selection_index)
-            pass
-        #SWITCH CONSTRUCT
+        # Checking field events as switch construct 
         if event == 'cbxStorage':
             print('event:', event)
             print('In storage domain')
@@ -221,9 +189,25 @@ def init(collection_id):
             gs.clearSession()
             hs.window.reappear()
             window.close()
+
+        
+        
+        # Save form 
+        if event == 'btnSave':
+            print('Saving form')
+            # first get verbatim field values 
+            storageName = ""
+
+
+
+
+
+
         if event == sg.WINDOW_CLOSED:
             break
     window.close()
+
+init(2)
 
 #def taxonomic_candidates_popup(title, names):
 #     # This is the window where taxonomic candidate names appear to be selected by the operator
@@ -255,8 +239,6 @@ def init(collection_id):
 #                 window.close()
 #         elif event == '-EXIT-':
 #             window.close()
-
-init(2)
 
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
