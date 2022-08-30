@@ -20,6 +20,7 @@ either express or implied. See the License for the specific language governing p
 import os
 import sys
 import pathlib
+from datetime import datetime
 import PySimpleGUI as sg
 
 # internal dependencies
@@ -65,40 +66,41 @@ def init(collection_id):
 
     # Input elements (below) are stored in variables with brackets to make it easier to include and position in the frames
     storage = [sg.Text("Storage location:", size=defaultSize, background_color=greenArea, font=font),
-            sg.Combo(getList('storage',c), key='cbxStorage', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
+               sg.Combo(getList('storage',c), key='cbxStorage', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
 
     preparation = [sg.Text("Preparation type:", size=defaultSize, background_color=greenArea, font=font),
-                sg.Combo(getList('preptype',c), key='cbxPrepType', size=element_size, text_color='black', background_color='white',font=('Arial', 12), enable_events=True),]
+                   sg.Combo(getList('preptype',c), key='cbxPrepType', size=element_size, text_color='black', background_color='white',font=('Arial', 12), enable_events=True),]
 
     taxonomy = [sg.Text("Taxonomic group:", size=defaultSize, background_color=greenArea, font=font),
                 sg.Combo(taxonomicGroups, key='cbxHigherTaxon', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
 
     type_status = [sg.Text('Type status:', size=defaultSize, background_color=greenArea, font=font),
-                sg.Combo(getList('typeStatus',c), key='cbxTypeStatus', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
+                   sg.Combo(getList('typeStatus',c), key='cbxTypeStatus', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
 
     notes = [sg.Text('Notes', size=defaultSize, background_color=greenArea, font=font),
-            sg.Multiline(size=(31,5), background_color='white', text_color='black', key='txtNotes', enable_events=False)]
+             sg.Multiline(size=(31,5), background_color='white', text_color='black', key='txtNotes', enable_events=False)]
 
-    layout_greenarea = [storage, preparation, taxonomy, type_status, notes, [sg.Checkbox('Multispecimen sheet', background_color=greenArea, font=(11))],]
+    layout_greenarea = [storage, preparation, taxonomy, type_status, notes, 
+                        [sg.Checkbox('Multispecimen sheet', key='chkMultiSpecimen', background_color=greenArea, font=(11))],]
 
     broadGeo = [sg.Text('Broad geographic region:', size=defaultSize ,background_color=blueArea, text_color='black', font=font),
                 sg.Combo(getList('georegion',c), size=blue_size, key='cbxGeoRegion', text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
 
     taxonInput = [sg.Text('Taxonomic name:     ', size=(21,1) ,background_color=blueArea, text_color='black', font=font),
-                sg.Input('', size=blue_size, key='txtTaxonName', text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
+                  sg.Input('', size=blue_size, key='txtTaxonName', text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
 
     taxonomicPicklist = [sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
-                        sg.Listbox('', key='cbxTaxonName', size=(28,6), text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
+                         sg.Listbox('', key='cbxTaxonName', size=(28,6), text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
 
     barcode = [sg.Text('Barcode:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
-            sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
+               sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
 
     layout_bluearea = [broadGeo, taxonInput, taxonomicPicklist, barcode,
         # button_frame,
         [sg.StatusBar('', relief=None, size=(32,1), background_color=blueArea), 
-        sg.Button('SAVE', key="btnSave", button_color='seagreen'), 
-        sg.StatusBar('', relief=None, size=(20,1), background_color=blueArea), 
-        sg.Button('Go Back', key="btnBack", button_color='firebrick', pad=(120,0))]]
+         sg.Button('SAVE', key="btnSave", button_color='seagreen'), 
+         sg.StatusBar('', relief=None, size=(20,1), background_color=blueArea), 
+         sg.Button('Go Back', key="btnBack", button_color='firebrick', pad=(120,0))]]
 
     loggedIn = [sg.Text('Logged in as:', size=defaultSize, background_color=greyArea, font=font), sg.Input(size=(24,1), background_color='white', text_color='black', readonly=True, key='txtUserName'),]
 
@@ -109,14 +111,14 @@ def init(collection_id):
     work_station =  [sg.Text('Workstation:', size=defaultSize, background_color=greyArea, font=font), sg.Input(size=(24,1), background_color='white', text_color='black', readonly=True, key="txtWorkStation"),]
 
     settings_ = [sg.Text('Settings ', size=defaultSize, justification='center', background_color=greyArea, font=14), 
-                sg.Button('', image_filename='%soptions_gear.png'%currentpath, button_color=greyArea, key='btnSettings', border_width=0)]
+                 sg.Button('', image_filename='%soptions_gear.png'%currentpath, button_color=greyArea, key='btnSettings', border_width=0)]
 
     horizontal_line = [sg.Text("_______________" * 5, background_color=greyArea)] #horizontal line element hack
     layout_greyarea = [loggedIn, institution_, horizontal_line, collections, work_station, settings_, [sg.Button('LOG OUT', key="btnLogout", button_color='grey40')]]
 
     layout = [[sg.Frame('',  [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(250,200), expand_x=True, expand_y=True, background_color=greenArea),
-            sg.Frame('', [[sg.Column(layout_greyarea, background_color=greyArea)]], size=(250, 300), expand_x=True, expand_y=True, background_color=greyArea)],
-            [sg.Frame('',   [[sg.Column(layout_bluearea, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],]
+               sg.Frame('', [[sg.Column(layout_greyarea, background_color=greyArea)]], size=(250, 300), expand_x=True, expand_y=True, background_color=greyArea)],
+              [sg.Frame('',   [[sg.Column(layout_bluearea, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],]
 
     collectionId = collection_id
 
@@ -203,9 +205,23 @@ def init(collection_id):
             print('Saving form')
             # first get verbatim field values 
             fields = {'catalognumber' : '"%s"'%values['txtCatalogNumber'],
-                      #'taxonnameid' : getPrimaryKey('taxonname',values['cbxTaxonName']),
-                      'georegionname' : getPrimaryKey('georegion',values['cbxGeoRegion']),
-                      'storageid' : getPrimaryKey('storage',values['cbxStorage']),
+                      'multispecimen' : values['chkMultiSpecimen'],
+                      'taxonname'     : '"%s"'%values['cbxTaxonName'],
+                      #'taxonnameid'  : getPrimaryKey('taxonname',values['cbxTaxonName']),,
+                      'typestatusid'  : getPrimaryKey('georegion',values['cbxTypeStatus']),
+                      'georegionname' : '"%s"'%values['cbxGeoRegion'], 
+                      'georegionid'   : getPrimaryKey('georegion',values['cbxGeoRegion']),
+                      'storagename'   : '"%s"'%values['cbxStorage'], 
+                      'storageid'     : getPrimaryKey('storage',values['cbxStorage']),
+                      'preptypename'  : '"%s"'%values['cbxPrepType'], 
+                      'preptypeid'    : getPrimaryKey('storage',values['cbxPrepType']),
+                      'notes'         : '"%s"'%values['txtNotes'], 
+                      '':'',
+                      'collectionid'  : collectionId,
+                      'username'      : '"%s"'%values['txtUserName'],
+                      #'userid'        : getPrimaryKey('"%s"'%values['txtUserName']),
+                      'workstation'   : '"%s"'%values['txtWorkStation'],
+                      'datetime'      : '"%s"'%datetime.now(),
                      }
             
 

@@ -132,7 +132,7 @@ def getRowsOnFilters(tableName, filters, limit=100):
     #   limit (Integer) : The maximum number of rows - 0 means all rows 
     #       NOTE: Strings should be formatted with enclosing double quotation marks (") 
     #             Numbers should be formatted as strings 
-    #   RETURNS table rows (list)
+    #   RETURNS table rows as list
     currentCursor = getDbCursor()   
     sqlString = 'SELECT * FROM %s ' % tableName 
     if filters.items():
@@ -144,10 +144,10 @@ def getRowsOnFilters(tableName, filters, limit=100):
         sqlString += ' LIMIT %s' %str(limit)
     print(sqlString)
     rows = currentCursor.execute(sqlString).fetchall()
-    currentCursor.connection.close()
     # If no rows in results, insert an empty dummy row to prevent errors
     if len(rows) < 1: 
-        rows = {'id':'-1', 'name':''}
+        rows = currentCursor.execute("SELECT * FROM dummyrecord LIMIT 1").fetchall()
+    currentCursor.connection.close()
     return rows
 
 def getRowOnId(tableName, id):
