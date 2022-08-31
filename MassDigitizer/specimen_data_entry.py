@@ -40,7 +40,7 @@ collectionId = -1
 def getList(tablename, collectionid): return util.convert_dbrow_list(db.getRowsOnFilters(tablename,{'collectionid =':'%s'%collectionid}))
 
 #function for fetching id (primary key) on name value 
-def getPrimaryKey(tableName, name, field='name'): return db.getRowsOnFilters(tableName, {' %s = ':'"%s"'%(field, name)})[0]['id']
+def getPrimaryKey(tableName, name, field='name'): return db.getRowsOnFilters(tableName, {' name = ':'"%s"'%name})[0]['id'] # return db.getRowsOnFilters(tableName, {' %s = ':'"%s"'%(field, name)})[0]['id']
 
 sg.theme('SystemDefault')
 blueArea = '#99ccff'
@@ -65,34 +65,34 @@ def init(collection_id):
 
     # Input elements (below) are stored in variables with brackets to make it easier to include and position in the frames
     storage = [sg.Text("Storage location:", size=defaultSize, background_color=greenArea, font=font),
-               sg.Combo(getList('storage',c), key='cbxStorage', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
+               sg.Combo(getList('storage',c), key='cbxStorage', size=element_size, text_color='black', background_color='white', font=('Arial', 12), readonly=True, enable_events=True),]
 
     preparation = [sg.Text("Preparation type:", size=defaultSize, background_color=greenArea, font=font),
-                   sg.Combo(getList('preptype',c), key='cbxPrepType', size=element_size, text_color='black', background_color='white',font=('Arial', 12), enable_events=True),]
+                   sg.Combo(getList('preptype',c), key='cbxPrepType', size=element_size, text_color='black', background_color='white',font=('Arial', 12), readonly=True, enable_events=True),]
 
     taxonomy = [sg.Text("Taxonomic group:", size=defaultSize, background_color=greenArea, font=font),
-                sg.Combo(taxonomicGroups, key='cbxHigherTaxon', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
+                sg.Combo(taxonomicGroups, key='cbxHigherTaxon', size=element_size, text_color='black', background_color='white', font=('Arial', 12), readonly=True, enable_events=True),]
 
     type_status = [sg.Text('Type status:', size=defaultSize, background_color=greenArea, font=font),
-                   sg.Combo(getList('typeStatus',c), key='cbxTypeStatus', size=element_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
+                   sg.Combo(getList('typeStatus',c), key='cbxTypeStatus', size=element_size, text_color='black', background_color='white', font=('Arial', 12), readonly=True, enable_events=True),]
 
     notes = [sg.Text('Notes', size=defaultSize, background_color=greenArea, font=font),
-             sg.Multiline(size=(31,5), background_color='white', text_color='black', key='txtNotes', enable_events=False)]
+             sg.Text(size=(31,5), background_color='white', text_color='black', key='txtNotes', enable_events=False)]
 
     layout_greenarea = [storage, preparation, taxonomy, type_status, notes, 
                         [sg.Checkbox('Multispecimen sheet', key='chkMultiSpecimen', background_color=greenArea, font=(11))],]
 
     broadGeo = [sg.Text('Broad geographic region:', size=defaultSize ,background_color=blueArea, text_color='black', font=font),
-                sg.Combo(getList('georegion',c), size=blue_size, key='cbxGeoRegion', text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
+                sg.Combo(getList('georegion',c), size=blue_size, key='cbxGeoRegion', text_color='black', background_color='white', font=('Arial', 12), readonly=True, enable_events=True),]
 
     taxonInput = [sg.Text('Taxonomic name:     ', size=(21,1) ,background_color=blueArea, text_color='black', font=font),
-                  sg.Input('', size=blue_size, key='txtTaxonName', text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
+                  sg.Input('', size=blue_size, key='txtTaxonName', text_color='black', background_color='white', font=('Arial', 12), readonly=True, enable_events=True, pad=((5,0),(0,0))),]
 
     taxonomicPicklist = [sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
-                         sg.Listbox('', key='cbxTaxonName', size=(28,6), text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
+                         sg.Listbox('', key='cbxTaxonName', size=(28,6), text_color='black', background_color='white', font=('Arial', 12), readonly=True, enable_events=True, pad=((5,0),(0,0))),]
 
     barcode = [sg.Text('Barcode:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
-               sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
+               sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', font=('Arial', 12), readonly=True, enable_events=True),]
 
     layout_bluearea = [broadGeo, taxonInput, taxonomicPicklist, barcode,
         # button_frame,
