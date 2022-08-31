@@ -40,8 +40,7 @@ collectionId = -1
 def getList(tablename, collectionid): return util.convert_dbrow_list(db.getRowsOnFilters(tablename,{'collectionid =':'%s'%collectionid}))
 
 #function for fetching id (primary key) on name value 
-def getPrimaryKey(tableName, name): 
-    return db.getRowsOnFilters(tableName, {' name = ':'"%s"'%name})[0]['id']
+def getPrimaryKey(tableName, name, field='name'): return db.getRowsOnFilters(tableName, {' %s = ':'"%s"'%(field, name)})[0]['id']
 
 sg.theme('SystemDefault')
 blueArea = '#99ccff'
@@ -181,11 +180,11 @@ def init(collection_id):
             if len(values[event]) >= 2:
                 print('submitted string: ', values[event])
                 response = koss.auto_suggest_taxonomy(values[event])
-                # if response and response[1] <= 20:
+                # if response and response[1] <= 20: # obsolete filtering of results by list length
                 if response is not None:
-                    print('the auto suggeter SAYS :) -- ', response[0])
-                    window['cbxTaxonName'].update(values=response[0])
-                    #     taxonomic_candidates_popup('Candidate names', response[0])
+                    print('Suggested taxa based on input:) -- ', response)
+                    window['cbxTaxonName'].update(values=response)
+                    #     taxonomic_candidates_popup('Candidate names', response)
         if event == 'cbxTaxonName':
             selection = values[event]
             if selection:
@@ -203,33 +202,33 @@ def init(collection_id):
         # Save form 
         if event == 'btnSave':
             print('Saving form')
-            # first get verbatim field values 
+
+            taxonName = ''
+            if len(values['cbxTaxonName']) > 0:
+                taxonName = values['cbxTaxonName'][0]
+
+            #  
             fields = {'catalognumber' : '"%s"'%values['txtCatalogNumber'],
                       'multispecimen' : values['chkMultiSpecimen'],
-                      'taxonname'     : '"%s"'%values['cbxTaxonName'],
-                      #'taxonnameid'  : getPrimaryKey('taxonname',values['cbxTaxonName']),,
-                      'typestatusid'  : getPrimaryKey('georegion',values['cbxTypeStatus']),
+                      'taxonname'     : '"%s"'%taxonName,
+                      #'taxonnameid'   : getPrimaryKey('taxonname',taxonName,'fullname'),
+                      'typestatusid'  : getPrimaryKey('typestatus',values['cbxTypeStatus']),
                       'georegionname' : '"%s"'%values['cbxGeoRegion'], 
                       'georegionid'   : getPrimaryKey('georegion',values['cbxGeoRegion']),
                       'storagename'   : '"%s"'%values['cbxStorage'], 
                       'storageid'     : getPrimaryKey('storage',values['cbxStorage']),
                       'preptypename'  : '"%s"'%values['cbxPrepType'], 
-                      'preptypeid'    : getPrimaryKey('storage',values['cbxPrepType']),
+                      'preptypeid'    : getPrimaryKey('preptype',values['cbxPrepType']),
                       'notes'         : '"%s"'%values['txtNotes'], 
-                      '':'',
                       'collectionid'  : collectionId,
                       'username'      : '"%s"'%values['txtUserName'],
-                      #'userid'        : getPrimaryKey('"%s"'%values['txtUserName']),
+                      #'userid'        : getPrimaryKey('"%s"'%values['txtUserName'],'username'),
                       'workstation'   : '"%s"'%values['txtWorkStation'],
                       'datetime'      : '"%s"'%datetime.now(),
                      }
             
-
-
-
-
             print(fields)
-            #db.insertRow('specimen', '')
+            db.insertRow('specimen', fields)
 
         if event == sg.WINDOW_CLOSED:
             break

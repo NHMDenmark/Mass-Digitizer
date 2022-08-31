@@ -55,7 +55,7 @@ def auto_suggest_taxonomy(name, taxDefItemId=None, rowLimit=2000):
         # print(flatCandidates)
         rows = list(flatCandidates)
 
-        return rows , lengthOfRows
+        return rows
 
 ###TEST AREA
 # outcome = auto_suggest_taxonomy('Rosa rug', taxDefItemId=13)
