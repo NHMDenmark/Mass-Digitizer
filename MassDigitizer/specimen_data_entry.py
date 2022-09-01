@@ -89,11 +89,7 @@ def init(collection_id):
                   sg.Input('', size=blue_size, key='txtTaxonName', text_color='black', background_color='white', font=('Arial', 12), readonly=True, enable_events=True, pad=((5,0),(0,0))),]
 
     taxonomicPicklist = [sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
-<<<<<<< HEAD
-                        sg.Listbox('', key='cbxDetermination', select_mode='browse', size=(28,6), text_color='black', background_color='white', font=('Arial', 12), pad=((5,0),(0,0))),]
-=======
                          sg.Listbox('', key='cbxTaxonName', size=(28,6), text_color='black', background_color='white', font=('Arial', 12), readonly=True, enable_events=True, pad=((5,0),(0,0))),]
->>>>>>> 9b3664a37823e4fb1b23dcd3faeeda001b082934
 
     barcode = [sg.Text('Barcode:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
                sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', font=('Arial', 12), readonly=True, enable_events=True),]
@@ -238,7 +234,7 @@ def init(collection_id):
             break
     window.close()
 
-init(2)
+#init(2)
 
 #def taxonomic_candidates_popup(title, names):
 #     # This is the window where taxonomic candidate names appear to be selected by the operator
