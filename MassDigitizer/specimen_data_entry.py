@@ -122,7 +122,7 @@ def init(collection_id):
     collectionId = collection_id
 
     window = sg.Window("Mass Annotated Digitization Desk  (MADD)", layout, margins=(2, 2), size=(950,580), resizable=True, finalize=True )
-    window['cbxDetermination'].bind("<Return>", "_Enter")
+    window['cbxTaxonName'].bind("<Return>", "_Enter")
     #The three lines below are there to ensure that the cursor in the input text fields is visible. It is invisible against a white background.
     window['txtNotes'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
     window['txtUserName'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
@@ -192,7 +192,7 @@ def init(collection_id):
                 item = selection[0]
                 # index = listbox.get_indexes()[0]
                 # print(f'"{item}" selected')
-        elif event == "cbxDetermination" + "_Enter":
+        elif event == "cbxTaxonName" + "_Enter":
             print(event, values)
         if event == 'btnLogout':
             gs.clearSession()
