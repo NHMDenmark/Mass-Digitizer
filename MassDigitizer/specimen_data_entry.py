@@ -89,7 +89,7 @@ def init(collection_id):
                   sg.Input('', size=blue_size, key='txtTaxonName', text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
 
     taxonomicPicklist = [sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
-                         sg.Combo('', key='cbxTaxonName', size=(28,6), text_color='black', background_color='white', font=('Arial', 12), readonly=True, enable_events=True, pad=((5,0),(0,0))),]
+                         sg.Listbox('', key='cbxTaxonName', size=(28,6), text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
 
     barcode = [sg.Text('Barcode:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
                sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
