@@ -132,10 +132,10 @@ def init(collection_id):
     currrent_selection_index = 0
     window.Element('cbxTaxonName').Update(set_to_index=0)     # Start with first item highlighted
 
-    # Loop through events 
+    # Loop through events
+    item = None
     while True:
         event, values = window.read()
-        #print('---', event, values)
 
         # Checking field events as switch construct 
         if event == 'cbxStorage':
@@ -151,8 +151,8 @@ def init(collection_id):
             print('IN type status section')
         if event == 'txtNotes':
             print('IN notes section')
-        if event.endswith('+TAB'):
-            window['cbxGeoRegion'].set_focus()
+        # if event.endswith('+TAB'):
+        #     window['cbxGeoRegion'].set_focus()
         if event == 'txtTaxonName':
             input_ = values['txtTaxonName']
             print('in taxon input -')
@@ -166,18 +166,22 @@ def init(collection_id):
                     window['cbxTaxonName'].update(values=response)
                     window['cbxTaxonName'].update(set_to_index=[0], scroll_to_index=0)
                     #taxonomic_candidates_popup('Candidate names', response)
+
         if event == 'cbxTaxonName':
+
             index = 0 # Reset highlighted item 
             window['cbxTaxonName'].update(scroll_to_index=index)
             selection = values[event]
+            print('selection ;', selection)
             if selection:
                 # item = selection[0]
                 item = selection[0]
+                print('item at selection=', item)
                 # index = listbox.get_indexes()[0]
                 # print(f'"{item}" selected')
         elif event == "cbxTaxonName" + "_Enter":
-            print(event, values)
-            # TODO overwrite txtTaxonName 
+            window['txtTaxonName'].update(values['cbxTaxonName'][0])
+
         if event == 'btnLogout':
             gs.clearSession()
             hs.window.reappear()
