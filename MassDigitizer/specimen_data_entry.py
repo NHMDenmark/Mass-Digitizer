@@ -124,7 +124,9 @@ def init(collection_id):
         window.Element('txtCollection').Update(value=collection[2]) 
         institution = db.getRowOnId('institution', collection[3])
         window.Element('txtInstitution').Update(value=institution[2]) 
-    window.Element('txtWorkStation').Update(value='TRS-80') 
+    window.Element('txtWorkStation').Update(value='TRS-80')
+    window['txtNotes'].bind('<Tab>', '+TAB')
+    window['cbxStorage'].set_focus()
 
     # Reset taxonname field 
     currrent_selection_index = 0
@@ -149,6 +151,8 @@ def init(collection_id):
             print('IN type status section')
         if event == 'txtNotes':
             print('IN notes section')
+        if event.endswith('+TAB'):
+            window['cbxGeoRegion'].set_focus()
         if event == 'txtTaxonName':
             input_ = values['txtTaxonName']
             print('in taxon input -')
@@ -209,11 +213,18 @@ def init(collection_id):
             
             print(fields)
             db.insertRow('specimen', fields)
+            # reset/blank out elements that are NOT sticky
+            window['cbxTypeStatus'].update([])
+            window['cbxTaxonName'].update([])
+            window['txtNotes'].update('')
+            window['txtTaxonName'].update([])
+            window['txtCatalogNumber'].update([])
 
         if event == sg.WINDOW_CLOSED:
             break
     window.close()
 
+init(2)
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
     Accomplished by removing last character input if not a valid character
