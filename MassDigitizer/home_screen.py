@@ -109,7 +109,7 @@ def main(window):
                             gs.collectionId = collection_id
                             gs.collectionName = selected_collection
                             gs.institutionId = institution_id
-                            gs.institutionName = selected_institution
+                            gs.institutionName = selected_institution 
                             window.close()
                             de.init(collection_id)
                         else:

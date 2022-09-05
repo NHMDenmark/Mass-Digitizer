@@ -36,26 +36,28 @@ currentpath = os.path.join(pathlib.Path(__file__).parent, '')
 
 collectionId = -1
 
-#function for converting predefined table data into list for dropdownlist 
+# Function for converting predefined table data into list for dropdownlist 
 def getList(tablename, collectionid): return util.convert_dbrow_list(db.getRowsOnFilters(tablename,{'collectionid =':'%s'%collectionid}))
 
-#function for fetching id (primary key) on name value 
+# Function for fetching id (primary key) on name value 
 def getPrimaryKey(tableName, name, field='name'): return db.getRowsOnFilters(tableName, {' %s = '%field : '"%s"'%name})[0]['id'] # return db.getRowsOnFilters(tableName, {' %s = ':'"%s"'%(field, name)})[0]['id']
 
 def init(collection_id):
+    # TODO function contract 
+
     # Set collection id  
     collectionId = collection_id
     c = collection_id
 
     # Define UI areas
     sg.theme('SystemDefault')
-    greenArea = '#E8F4EA'   # Sticky fields
+    greenArea = '#E8F4EA'   # Stable fields 
     blueArea = '#99ccff'    # Variable fields 
     greyArea = '#BFD1DF'    # Session & Settings 
 
-    defaultSize = (21,1)  # Ensure element labels are the same size so that they line up
-    element_size = (30,1) # Default width of all fields in the 'green area' 
-    blue_size = (28,1)    # Default width of all fields in the 'blue area'
+    defaultSize = (21,1)    # Ensure element labels are the same size so that they line up
+    element_size = (30,1)   # Default width of all fields in the 'green area' 
+    blue_size = (28,1)      # Default width of all fields in the 'blue area'
     
     font = ('Bahnschrift', 13)
     
@@ -80,7 +82,7 @@ def init(collection_id):
     taxonInput = [sg.Text('Taxonomic name:     ', size=(21,1) ,background_color=blueArea, text_color='black', font=font),
                   sg.Input('', size=blue_size, key='txtTaxonName', text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
     taxonomicPicklist = [sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
-                         sg.Listbox('', key='cbxTaxonName', size=(28,6), text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
+                         sg.Listbox('', key='cbxTaxonName', select_mode='browse', size=(28, 6), text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5, 0), (0, 0))), ]
     barcode = [sg.Text('Barcode:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
                sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
     layout_bluearea = [broadGeo, taxonInput, taxonomicPicklist, barcode,
@@ -110,9 +112,9 @@ def init(collection_id):
     window = sg.Window("Mass Annotated Digitization Desk  (MADD)", layout, margins=(2, 2), size=(950,580), resizable=True, finalize=True )
     window['cbxTaxonName'].bind("<Return>", "_Enter")
 
-    #The three lines below are there to ensure that the cursor in the input text fields is visible. It is invisible against a white background.
-    # window['txtNotes'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
-    # window['txtUserName'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
+    # The three lines below are there to ensure that the cursor in the input text fields is visible. It is invisible against a white background.
+    #window['txtNotes'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
+    #window['txtUserName'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
     #window['-TAXNAMES-'].Widget.config(insertbackground='black') , highlightcolor='firebrick', highlightthickness=2)
 
     # Set session Widget fields
@@ -124,25 +126,14 @@ def init(collection_id):
         window.Element('txtInstitution').Update(value=institution[2]) 
     window.Element('txtWorkStation').Update(value='TRS-80') 
 
+    # Reset taxonname field 
     currrent_selection_index = 0
-    window.Element('cbxTaxonName').Update(set_to_index=0)     # start with first item highlighted
+    window.Element('cbxTaxonName').Update(set_to_index=0)     # Start with first item highlighted
+
+    # Loop through events 
     while True:
         event, values = window.read()
-        # print('---', event, values)
-        taxon_candidates = None
-        listbox_values = ['','','']
-        try: 
-            if 'Up' in event or '16777235' in event:
-                currrent_selection_index = (currrent_selection_index - 1) % len(listbox_values)
-                window.Element('cbxTaxonName').Update(set_to_index=currrent_selection_index)
-            elif 'Down' in event or '16777237' in event:
-                cur_index = window.Element('selected_value').Widget.curselection()
-                cur_index = (cur_index[0] + 1) % window.Element('selected_value').Widget.size()
-                window.Element('cbxTaxonName').Update(set_to_index=cur_index)
-                window.Element('cbxTaxonName').Update(scroll_to_index=cur_index)
-                window.write_event_value('txtTaxonName', [window.Element('cbxTaxonName').GetListValues()[cur_index]])
-        except:
-            print('An error occurred')
+        #print('---', event, values)
 
         # Checking field events as switch construct 
         if event == 'cbxStorage':
@@ -162,16 +153,18 @@ def init(collection_id):
             input_ = values['txtTaxonName']
             print('in taxon input -')
             print('len string : ', len(values[event]))
-
             if len(values[event]) >= 2:
                 print('submitted string: ', values[event])
                 response = koss.auto_suggest_taxonomy(values[event])
-                # if response and response[1] <= 20: # obsolete filtering of results by list length
+                #if response and response[1] <= 20: # obsolete filtering of results by list length
                 if response is not None:
                     print('Suggested taxa based on input:) -- ', response)
                     window['cbxTaxonName'].update(values=response)
-                    #     taxonomic_candidates_popup('Candidate names', response)
+                    window['cbxTaxonName'].update(set_to_index=[0], scroll_to_index=0)
+                    #taxonomic_candidates_popup('Candidate names', response)
         if event == 'cbxTaxonName':
+            index = 0 # Reset highlighted item 
+            window['cbxTaxonName'].update(scroll_to_index=index)
             selection = values[event]
             if selection:
                 # item = selection[0]
@@ -180,6 +173,7 @@ def init(collection_id):
                 # print(f'"{item}" selected')
         elif event == "cbxTaxonName" + "_Enter":
             print(event, values)
+            # TODO overwrite txtTaxonName 
         if event == 'btnLogout':
             gs.clearSession()
             hs.window.reappear()
@@ -220,41 +214,10 @@ def init(collection_id):
             break
     window.close()
 
-#init(2)
-
-#def taxonomic_candidates_popup(title, names):
-#     # This is the window where taxonomic candidate names appear to be selected by the operator
-#     # title: is the string going into the window bar
-#     # names: are the taxonomic names submitted by the initial DB query
-#     names = list(names)
-#     print(names)
-#     layout = [
-#         [sg.Listbox(names, size=(50, 20), font=("Courier New", 16), enable_events=True, key="-LISTBOX-")],
-#         [sg.StatusBar("", size=(30, 1), key='-STATUS-')],
-#     ]
-#     #
-#     # window = sg.Window(title, layout, finalize=True)
-#     # listbox, status = window['-LISTBOX-'], window['-STATUS-']
-#
-#     while True:
-#
-#         event, values = window.read()
-#         if event == sg.WIN_CLOSED or event == 'Exit':
-#             break
-#         elif event == '-LISTBOX-':
-#             selection = values[event]
-#             if selection:
-#                 item = selection[0]
-#                 # index = listbox.get_indexes()[0]
-#                 print(f'"{item}" selected')
-#                 # break
-#
-#                 window.close()
-#         elif event == '-EXIT-':
-#             window.close()
-
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
     Accomplished by removing last character input if not a valid character
     This link provides some ideas for input sanitazion https://github.com/PySimpleGUI/PySimpleGUI/issues/1119
+    What if the taxon name is a new one (not in the taxon table)? Needs to be handled? 
+        - Covered by ticket #68 
 """
