@@ -72,6 +72,7 @@ def main(window):
                 [sg.Combo(list(collections), readonly=True, enable_events=True, key='collection')],
                 [sg.Text('Please fill in username/password!', text_color='red', visible=False, key='incomplete')], 
                 [sg.Text('Authentication Error!', text_color='red', visible=False, key='autherror')], 
+                [sg.Text('Please choose a collection!', text_color='red', visible=False, key='collerror')], 
                 ]
 
             next_col_side = [
@@ -98,22 +99,25 @@ def main(window):
                                                 })
                 if len(collection) > 0:
                     collection_id = collection[0]['id']
-                    
-                    gs.baseURL = institution_url
-                    gs.csrfToken = sp.specifyLogin(username, password, collection_id)
 
-                    if gs.csrfToken != '':
-                        gs.spUserName = username
-                        gs.collectionId = collection_id
-                        gs.collectionName = selected_collection
-                        gs.institutionId = institution_id
-                        gs.institutionName = selected_institution
-                        window.close()
-                        de.init(collection_id)
+                    if collection_id > 0:
+                        gs.baseURL = institution_url
+                        gs.csrfToken = sp.specifyLogin(username, password, collection_id)
+
+                        if gs.csrfToken != '':
+                            gs.spUserName = username
+                            gs.collectionId = collection_id
+                            gs.collectionName = selected_collection
+                            gs.institutionId = institution_id
+                            gs.institutionName = selected_institution
+                            window.close()
+                            de.init(collection_id)
+                        else:
+                            window['autherror'].Update(visible=True)
+                            #window['collection'].set_value([])
+                            pass
                     else:
-                        window['autherror'].Update(visible=True)
-                        #window['collection'].set_value([])
-                        pass
+                        window['collerror'].Update(visible=True)
             else:
                 window['incomplete'].Update(visible=True)
                 #window['collection'].set_value([])
