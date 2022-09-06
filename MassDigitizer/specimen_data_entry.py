@@ -87,7 +87,7 @@ def init(collection_id):
                sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
     layout_bluearea = [broadGeo, taxonInput, taxonomicPicklist, barcode, # button_frame,
         [sg.StatusBar('', relief=None, size=(32,1), background_color=blueArea), 
-         sg.Button('SAVE', key="btnSave", button_color='seagreen'), 
+         sg.Button('SAVE', key="btnSave", button_color='seagreen', bind_return_key=True),
          sg.StatusBar('', relief=None, size=(20,1), background_color=blueArea), 
          sg.Button('Go Back', key="btnBack", button_color='firebrick', pad=(120,0))]]
     loggedIn = [sg.Text('Logged in as:', size=defaultSize, background_color=greyArea, font=font), sg.Input(size=(24,1), background_color='white', text_color='black', 
@@ -109,10 +109,13 @@ def init(collection_id):
               [sg.Frame('',   [[sg.Column(layout_bluearea, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],]
 
     window = sg.Window("Mass Annotated Digitization Desk  (MADD)", layout, margins=(2, 2), size=(950,580), resizable=True, return_keyboard_events=True, finalize=True )
-    # window['cbxTaxonName'].bind("<Return>", "_Enter")
+
     window['cbxTaxonName'].bind("<Return>", "_Enter")
+
     entry_barcode = window['txtCatalogNumber']
     entry_barcode.bind("<Return>", "_RETURN")
+    # Above forces a <RETURN> when barcode is scanned. This requires the scanner
+    # to be set to <ENTER>. See scanner user manual.
 
     # The three lines below are there to ensure that the cursor in the input text fields is visible. It is invisible against a white background.
     #window['txtNotes'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
@@ -169,13 +172,11 @@ def init(collection_id):
                     window['cbxTaxonName'].update(set_to_index=[0], scroll_to_index=0)
 
         if event == 'cbxTaxonName':
-
             index = 0 # Reset highlighted item 
             window['cbxTaxonName'].update(scroll_to_index=index)
             selection = values[event]
             print('selection ;', selection)
             if selection:
-                # item = selection[0]
                 item = selection[0]
                 print('item at selection=', item)
                 # index = listbox.get_indexes()[0]
@@ -186,6 +187,7 @@ def init(collection_id):
         if event == "txtCatalogNumber_RETURN":
             print('vals= ', values)
             print(f"Input barcode dude: {values['txtCatalogNumber']}")
+            window['btnSave'].set_focus()
 
         if event == 'btnLogout':
             gs.clearSession()
