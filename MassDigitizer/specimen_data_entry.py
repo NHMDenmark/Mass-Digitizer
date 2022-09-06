@@ -135,11 +135,11 @@ def init(collection_id):
 
     # Reset taxonname field 
     currrent_selection_index = 0
-    window.Element('cbxTaxonName').Update(set_to_index=0)     # Start with first item highlighted
+    window.Element('cbxTaxonName').Update(set_to_index=0)  # Start with first item highlighted
 
     # Loop through events
     item = None
-    barcodeList = [] # for appending barcode because it is read digit-by-digit building up to the complete barcode
+
     while True:
         event, values = window.read()
 
@@ -150,7 +150,7 @@ def init(collection_id):
         if event == 'cbxPrepType':
             print('In preparation type')
             prepper = values[event]
-            print('chosen isss: ', prepper)
+
         if event == 'cbxHigherTaxon':
             print('IN taxonomy section')
         if event == 'cbxTypeStatus':
@@ -159,6 +159,7 @@ def init(collection_id):
             print('IN notes section')
         if event.endswith('+TAB'):
             window['cbxGeoRegion'].set_focus()
+        #     Prevents tab characters in the Notes box and allows to tab on to next element.
         if event == 'txtTaxonName':
             input_ = values['txtTaxonName']
             print('in taxon input -')
@@ -170,6 +171,7 @@ def init(collection_id):
                     print('Suggested taxa based on input:) -- ', response)
                     window['cbxTaxonName'].update(values=response)
                     window['cbxTaxonName'].update(set_to_index=[0], scroll_to_index=0)
+        #             Forces 1st item in list to be highlighted which makes it selectable by Return key
 
         if event == 'cbxTaxonName':
             index = 0 # Reset highlighted item 
@@ -179,9 +181,8 @@ def init(collection_id):
             if selection:
                 item = selection[0]
                 print('item at selection=', item)
-                # index = listbox.get_indexes()[0]
-                # print(f'"{item}" selected')
-        elif event == "cbxTaxonName" + "_Enter":
+
+        elif event == "cbxTaxonName" + "_Enter": # For arrowing down to relevant taxon name and pressing Enter
             window['txtTaxonName'].update(values['cbxTaxonName'][0])
             print(f"Input: {values['cbxTaxonName']}")
         if event == "txtCatalogNumber_RETURN":
@@ -224,6 +225,7 @@ def init(collection_id):
             
             print(fields)
             db.insertRow('specimen', fields)
+
             # reset/blank out elements that are NOT sticky
             window['cbxTypeStatus'].update([])
             window['cbxTaxonName'].update([])
