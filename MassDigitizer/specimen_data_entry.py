@@ -83,7 +83,7 @@ def init(collection_id):
                   sg.Input('', size=blue_size, key='txtTaxonName', text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
     taxonomicPicklist = [sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
                          sg.Listbox('', key='cbxTaxonName', select_mode='browse', size=(28, 6), text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5, 0), (0, 0))), ]
-    barcode = [sg.Text('Barcode:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
+    barcode = [sg.Text('Barcode:', size=defaultSize, background_color=blueArea, enable_events=True, text_color='black', font=font),
                sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
     layout_bluearea = [broadGeo, taxonInput, taxonomicPicklist, barcode, # button_frame,
         [sg.StatusBar('', relief=None, size=(32,1), background_color=blueArea), 
@@ -109,7 +109,9 @@ def init(collection_id):
               [sg.Frame('',   [[sg.Column(layout_bluearea, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],]
 
     window = sg.Window("Mass Annotated Digitization Desk  (MADD)", layout, margins=(2, 2), size=(950,580), resizable=True, finalize=True )
-    window['cbxTaxonName'].bind("<Return>", "_Enter")
+    # window['cbxTaxonName'].bind("<Return>", "_Enter")
+    entry_barcode = window['txtCatalogNumber']
+    entry_barcode.bind("<Return>", "_RETURN")
 
     # The three lines below are there to ensure that the cursor in the input text fields is visible. It is invisible against a white background.
     #window['txtNotes'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
@@ -133,6 +135,7 @@ def init(collection_id):
 
     # Loop through events
     item = None
+    barcodeList = [] # for appending barcode because it is read digit-by-digit building up to the complete barcode
     while True:
         event, values = window.read()
 
@@ -178,6 +181,8 @@ def init(collection_id):
                 # print(f'"{item}" selected')
         elif event == "cbxTaxonName" + "_Enter":
             window['txtTaxonName'].update(values['cbxTaxonName'][0])
+        if event == "txtCatalogNumber_RETURN":
+            print(f"Input: {values['txtCatalogNumber']}")
 
         if event == 'btnLogout':
             gs.clearSession()
