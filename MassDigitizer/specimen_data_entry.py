@@ -108,8 +108,9 @@ def init(collection_id):
                sg.Frame('', [[sg.Column(layout_greyarea, background_color=greyArea)]], size=(250, 300), expand_x=True, expand_y=True, background_color=greyArea)],
               [sg.Frame('',   [[sg.Column(layout_bluearea, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],]
 
-    window = sg.Window("Mass Annotated Digitization Desk  (MADD)", layout, margins=(2, 2), size=(950,580), resizable=True, finalize=True )
+    window = sg.Window("Mass Annotated Digitization Desk  (MADD)", layout, margins=(2, 2), size=(950,580), resizable=True, return_keyboard_events=True, finalize=True )
     # window['cbxTaxonName'].bind("<Return>", "_Enter")
+    window['cbxTaxonName'].bind("<Return>", "_Enter")
     entry_barcode = window['txtCatalogNumber']
     entry_barcode.bind("<Return>", "_RETURN")
 
@@ -153,8 +154,8 @@ def init(collection_id):
             print('IN type status section')
         if event == 'txtNotes':
             print('IN notes section')
-        # if event.endswith('+TAB'):
-        #     window['cbxGeoRegion'].set_focus()
+        if event.endswith('+TAB'):
+            window['cbxGeoRegion'].set_focus()
         if event == 'txtTaxonName':
             input_ = values['txtTaxonName']
             print('in taxon input -')
@@ -181,8 +182,10 @@ def init(collection_id):
                 # print(f'"{item}" selected')
         elif event == "cbxTaxonName" + "_Enter":
             window['txtTaxonName'].update(values['cbxTaxonName'][0])
+            print(f"Input: {values['cbxTaxonName']}")
         if event == "txtCatalogNumber_RETURN":
-            print(f"Input: {values['txtCatalogNumber']}")
+            print('vals= ', values)
+            print(f"Input barcode dude: {values['txtCatalogNumber']}")
 
         if event == 'btnLogout':
             gs.clearSession()
