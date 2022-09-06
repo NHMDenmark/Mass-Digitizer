@@ -22,19 +22,18 @@ btn_exit = [sg.Button("Exit", key='exit')]
 #institutions = ['NHMD: Natural History Museum of Denmark (Copenhagen)', 'NHMA: Natural History Museum Aarhus', 'TEST: Test server']
 institutions = util.convert_dbrow_list(db.getRows('institution'))
 
-lbl_select_institution = [sg.Text('Please choose your institution in order to proceed:')]
-ddl_select_institution = [sg.Combo(list(institutions), readonly=True, enable_events=True, key='institution')]
+lblSelectInstitution = [sg.Text('Please choose your institution in order to proceed:')]
+lstSelectInstitution = [sg.Combo(list(institutions), readonly=True, enable_events=True, key='institution')]
 
-col_main = [ 
-    header, 
-    lbl_select_institution, 
-    ddl_select_institution, 
-    [sg.Text('Authentication Error!', text_color='red', visible=False)], 
-    ]
+lblSelectCollection = [sg.Text('Choose a collection to log in:', visible=False, key='lblSelectCollection')]
+lstSelectCollection = [sg.Listbox( {}, key='lstSelectCollection', size=(28, 1), select_mode='browse', enable_events=True, visible=False)]
 
-col_side = [
-    btn_exit
-    ]
+col_main = [header, 
+            lblSelectInstitution, lstSelectInstitution, 
+            lblSelectCollection, lstSelectCollection, 
+            [sg.Text('Authentication Error!', text_color='red', visible=False)], ]
+
+col_side = [btn_exit]
 
 layout = [ [sg.Column(col_main), sg.Column(col_side, element_justification='left')] ]
 
@@ -84,6 +83,8 @@ def main(window):
             next_window = sg.Window('Start', next_layout, size=(640, 480))
             window.disappear()
             window = next_window
+            #window['lblSelectCollection'].update(visible=True)
+            #window['lstSelectCollection'].update(visible=True)
 
         if event == 'collection':
             username = values['username']

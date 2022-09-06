@@ -85,8 +85,7 @@ def init(collection_id):
                          sg.Listbox('', key='cbxTaxonName', select_mode='browse', size=(28, 6), text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5, 0), (0, 0))), ]
     barcode = [sg.Text('Barcode:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
                sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
-    layout_bluearea = [broadGeo, taxonInput, taxonomicPicklist, barcode,
-        # button_frame,
+    layout_bluearea = [broadGeo, taxonInput, taxonomicPicklist, barcode, # button_frame,
         [sg.StatusBar('', relief=None, size=(32,1), background_color=blueArea), 
          sg.Button('SAVE', key="btnSave", button_color='seagreen'), 
          sg.StatusBar('', relief=None, size=(20,1), background_color=blueArea), 
@@ -160,12 +159,10 @@ def init(collection_id):
             if len(values[event]) >= 2:
                 print('submitted string: ', values[event])
                 response = koss.auto_suggest_taxonomy(values[event])
-                #if response and response[1] <= 20: # obsolete filtering of results by list length
                 if response is not None:
                     print('Suggested taxa based on input:) -- ', response)
                     window['cbxTaxonName'].update(values=response)
                     window['cbxTaxonName'].update(set_to_index=[0], scroll_to_index=0)
-                    #taxonomic_candidates_popup('Candidate names', response)
 
         if event == 'cbxTaxonName':
 
