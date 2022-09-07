@@ -69,8 +69,8 @@ def init(collection_id):
                sg.Combo(getList('storage',c), key='cbxStorage', size=element_size, text_color='black', background_color='white', font=('Arial', 12), readonly=True, enable_events=True),]
     preparation = [sg.Text("Preparation type:", size=defaultSize, background_color=greenArea, font=font),
                    sg.Combo(getList('preptype',c), key='cbxPrepType', size=element_size, text_color='black', background_color='white',font=('Arial', 12), readonly=True, enable_events=True),]
-    taxonomy = [sg.Text("Taxonomic group:", size=defaultSize, background_color=greenArea, font=font),
-                sg.Combo(taxonomicGroups, key='cbxHigherTaxon', size=element_size, text_color='black', background_color='white', font=('Arial', 12), readonly=True, enable_events=True),]
+    taxonomy = [sg.Text("Taxonomic group:", size=defaultSize, visible=False, background_color=greenArea, font=font),
+                sg.Combo(taxonomicGroups, key='cbxHigherTaxon', visible=False, size=element_size, text_color='black', background_color='white', font=('Arial', 12), readonly=True, enable_events=True),]
     type_status = [sg.Text('Type status:', size=defaultSize, background_color=greenArea, font=font),
                    sg.Combo(getList('typeStatus',c), key='cbxTypeStatus', size=element_size, text_color='black', background_color='white', font=('Arial', 12), readonly=True, enable_events=True),]
     notes = [sg.Text('Notes', size=defaultSize, background_color=greenArea, font=font),
@@ -243,8 +243,11 @@ def init(collection_id):
             print(fields)
             db.insertRow('specimen', fields)
             window['txtCatalogNumber'].set_focus()  # returns focus to barcode field after 'save'
-
-
+            recordID = db.getRowOnId('specimen', 0, maxID=True)
+            print('the latest record ID is : ', recordID[0])
+            currentRecordID = recordID[0]
+            earlierRecordID = db.arbitrarySQL_statement(SEE_BELOW)
+            # select * from specimen s  order by s.id DESC LIMIT 2,1;    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             # reset/blank out elements that are NOT sticky
             window['txtCatalogNumber'].update([])
 
