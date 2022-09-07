@@ -242,14 +242,11 @@ def init(collection_id):
             
             print(fields)
             db.insertRow('specimen', fields)
+            window['txtCatalogNumber'].set_focus()  # returns focus to barcode field after 'save'
+
 
             # reset/blank out elements that are NOT sticky
             window['txtCatalogNumber'].update([])
-            # window['cbxTypeStatus'].update([])
-            # window['cbxTaxonName'].update([])
-            # window['txtNotes'].update('')
-            # window['txtTaxonName'].update([])
-            # window['txtCatalogNumber'].update([])
 
         if event == sg.WINDOW_CLOSED:
             break
