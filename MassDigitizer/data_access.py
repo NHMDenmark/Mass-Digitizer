@@ -150,16 +150,29 @@ def getRowsOnFilters(tableName, filters, limit=100):
     currentCursor.connection.close()
     return rows
 
-def getRowOnId(tableName, id):
+def getRowOnId(tableName, id, maxID=False):
     # Getting specific row from the table specified by name using its primary key (id)  
     # CONTRACT 
     #   tableName (String): The name of the table to be queried
     #   id (Integer) : The primary key of the row to be returned 
-    #   RETURNS single table row 
+    #   RETURNS single table row
+    if maxID:
+        currentCursor = getDbCursor()
+        sql = "SELECT MAX({}.id) FROM {};".format(tableName, tableName)
+        row = currentCursor.execute(sql).fetchone()
+        currentCursor.connection.close()
+        return row
+
     currentCursor = getDbCursor()   
     row = currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(id)).fetchone()
     currentCursor.connection.close()
     return row
+
+def arbitrarySQL_statement(sql):
+    currentCursor = getDbCursor()
+    rows = currentCursor.execute(sql)
+    currentCursor.connection.close()
+    return rows
 
 def getRowOnSpecifyId(tableName, id):
     # Getting specific row from the table specified by name using the primary key of the corresponding table in Specify
