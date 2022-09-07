@@ -103,7 +103,7 @@ def init(collection_id):
     work_station =  [sg.Text('Workstation:', size=defaultSize, background_color=greyArea, font=font), sg.Input(size=(24,1), background_color='white', text_color='black', 
                 readonly=True, key="txtWorkStation"),]
     settings_ = [sg.Text('Settings ', size=defaultSize, justification='center', background_color=greyArea, font=14), 
-                 sg.Button('', image_filename='%soptions_gear.png'%currentpath, button_color=greyArea, key='btnSettings', border_width=0)]
+                 sg.Button('', image_filename='%soptions_gear.png'%currentpath, key='btnSettings', button_color=greyArea, border_width=0)]
     horizontal_line = [sg.Text("_______________" * 5, background_color=greyArea)] # horizontal line element hack
     layout_greyarea = [loggedIn, institution_, horizontal_line, collections, work_station, settings_, [sg.Button('LOG OUT', key="btnLogout", button_color='grey40')]]
 
@@ -116,6 +116,12 @@ def init(collection_id):
 
     window['cbxTaxonName'].bind("<Return>", "_Enter")
     window['chkMultiSpecimen'].bind("<Return>", "_Enter")
+    window.Element('txtUserName').Widget.config(takefocus=0)
+    window.Element('txtInstitution').Widget.config(takefocus=0)
+    window.Element('txtCollection').Widget.config(takefocus=0)
+    window.Element('txtWorkStation').Widget.config(takefocus=0)
+    window.Element('btnSettings').Widget.config(takefocus=0)
+    window.Element('btnLogout').Widget.config(takefocus=0)
 
     entry_barcode = window['txtCatalogNumber']
     entry_barcode.bind("<Return>", "_RETURN")
@@ -165,8 +171,8 @@ def init(collection_id):
         if event.endswith('+TAB'):
             window['chkMultiSpecimen'].set_focus()
         #     Prevents tab characters in the Notes box and allows to tab on to next element.
-        if event.endswith('+TAB'):
-            window['cbxGeoRegion'].set_focus()
+        # if event.endswith('+TAB'):
+        #     window['cbxGeoRegion'].set_focus()
         if event == 'chkMultiSpecimen_Enter':
             print('Multi specimen herbarium sheet was set to TRUE')
             window['chkMultiSpecimen'].update(True)
@@ -238,11 +244,12 @@ def init(collection_id):
             db.insertRow('specimen', fields)
 
             # reset/blank out elements that are NOT sticky
-            window['cbxTypeStatus'].update([])
-            window['cbxTaxonName'].update([])
-            window['txtNotes'].update('')
-            window['txtTaxonName'].update([])
             window['txtCatalogNumber'].update([])
+            # window['cbxTypeStatus'].update([])
+            # window['cbxTaxonName'].update([])
+            # window['txtNotes'].update('')
+            # window['txtTaxonName'].update([])
+            # window['txtCatalogNumber'].update([])
 
         if event == sg.WINDOW_CLOSED:
             break
