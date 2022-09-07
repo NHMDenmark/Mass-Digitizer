@@ -85,12 +85,16 @@ def init(collection_id):
                          sg.Listbox('', key='cbxTaxonName', select_mode='browse', size=(28, 6), text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5, 0), (0, 0))), ]
     barcode = [sg.Text('Barcode:', size=defaultSize, background_color=blueArea, enable_events=True, text_color='black', font=font),
                sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
-    layout_bluearea = [broadGeo, taxonInput, taxonomicPicklist, barcode, # button_frame,
+    # statusLabel = [sg.Text('Specimen record has been saved', font=('Arial',20),size=(20,10),justification='center',background_color='#4f280a',text_color = 'yellow',key='texto')]
+
+
+    layout_bluearea = [broadGeo, taxonInput, taxonomicPicklist, barcode,
+
         [sg.StatusBar('', relief=None, size=(32,1), background_color=blueArea), 
          sg.Button('SAVE', key="btnSave", button_color='seagreen', bind_return_key=True),
          sg.StatusBar('', relief=None, size=(20,1), background_color=blueArea), 
          sg.Button('Go Back', key="btnBack", button_color='firebrick', pad=(120,0))]]
-    loggedIn = [sg.Text('Logged in as:', size=defaultSize, background_color=greyArea, font=font), sg.Input(size=(24,1), background_color='white', text_color='black', 
+    loggedIn = [sg.Text('Logged in as:', size=defaultSize, background_color=greyArea, font=font), sg.Input(disabled=True, size=(24,1), background_color='white', text_color='black',
                 readonly=True, key='txtUserName'),]
     institution_ = [sg.Text('Institution:', size=defaultSize, background_color=greyArea, font=font), sg.Input(size=(24,1), background_color='white', text_color='black', 
                 readonly=True, key="txtInstitution"),]
@@ -111,6 +115,7 @@ def init(collection_id):
     window = sg.Window("Mass Annotated Digitization Desk  (MADD)", layout, margins=(2, 2), size=(950,580), resizable=True, return_keyboard_events=True, finalize=True )
 
     window['cbxTaxonName'].bind("<Return>", "_Enter")
+    window['chkMultiSpecimen'].bind("<Return>", "_Enter")
 
     entry_barcode = window['txtCatalogNumber']
     entry_barcode.bind("<Return>", "_RETURN")
@@ -158,8 +163,14 @@ def init(collection_id):
         if event == 'txtNotes':
             print('IN notes section')
         if event.endswith('+TAB'):
-            window['cbxGeoRegion'].set_focus()
+            window['chkMultiSpecimen'].set_focus()
         #     Prevents tab characters in the Notes box and allows to tab on to next element.
+        if event.endswith('+TAB'):
+            window['cbxGeoRegion'].set_focus()
+        if event == 'chkMultiSpecimen_Enter':
+            print('Multi specimen herbarium sheet was set to TRUE')
+            window['chkMultiSpecimen'].update(True)
+            window['cbxGeoRegion'].set_focus()
         if event == 'txtTaxonName':
             input_ = values['txtTaxonName']
             print('in taxon input -')
@@ -187,7 +198,7 @@ def init(collection_id):
             print(f"Input: {values['cbxTaxonName']}")
         if event == "txtCatalogNumber_RETURN":
             print('vals= ', values)
-            print(f"Input barcode dude: {values['txtCatalogNumber']}")
+            print(f"Input barcode yowsa: {values['txtCatalogNumber']}")
             window['btnSave'].set_focus()
 
         if event == 'btnLogout':
