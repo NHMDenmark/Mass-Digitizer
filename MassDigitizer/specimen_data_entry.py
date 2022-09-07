@@ -250,7 +250,7 @@ def init(collection_id):
             # select * from specimen s  order by s.id DESC LIMIT 2,1;    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             # reset/blank out elements that are NOT sticky
             window['txtCatalogNumber'].update([])
-
+# blah blah
         if event == sg.WINDOW_CLOSED:
             break
     window.close()
