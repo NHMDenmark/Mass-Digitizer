@@ -171,7 +171,12 @@ def getRowOnId(tableName, id, maxID=False):
 
 def arbitrarySQL_statement(sql):
     currentCursor = getDbCursor()
-    rows = currentCursor.execute(sql)
+    rows_object = currentCursor.execute(sql).fetchall()
+    rows = [dict(row) for row in rows_object]
+    # print('in data-access: The row(s) = ', rows)
+    for j in rows:
+        print(j)
+        # print([x for x in j])
     currentCursor.connection.close()
     return rows
 

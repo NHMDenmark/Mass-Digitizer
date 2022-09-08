@@ -90,10 +90,11 @@ def init(collection_id):
 
     layout_bluearea = [broadGeo, taxonInput, taxonomicPicklist, barcode,
 
-        [sg.StatusBar('', relief=None, size=(32,1), background_color=blueArea), 
-         sg.Button('SAVE', key="btnSave", button_color='seagreen', bind_return_key=True),
-         sg.StatusBar('', relief=None, size=(20,1), background_color=blueArea), 
-         sg.Button('Go Back', key="btnBack", button_color='firebrick', pad=(120,0))]]
+        [sg.Text('Record ID: ', key='lblRecordID', background_color='#99dcff', visible=True, size=(12,1)),
+         sg.StatusBar('', relief=None, size=(10,1), background_color=blueArea),
+         sg.Button('SAVE', key="btnSave", button_color='seagreen', size=9, bind_return_key=True),
+         sg.StatusBar('', relief=None, size=(14,1), background_color=blueArea),
+         sg.Button('Go Back', key="btnBack", button_color='firebrick', pad=(130,0))]]
     loggedIn = [sg.Text('Logged in as:', size=defaultSize, background_color=greyArea, font=font), sg.Input(disabled=True, size=(24,1), background_color='white', text_color='black',
                 readonly=True, key='txtUserName'),]
     institution_ = [sg.Text('Institution:', size=defaultSize, background_color=greyArea, font=font), sg.Input(size=(24,1), background_color='white', text_color='black', 
@@ -113,7 +114,7 @@ def init(collection_id):
               [sg.Frame('',   [[sg.Column(layout_bluearea, background_color=blueArea)]], expand_x=True, expand_y=True, background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)],]
 
     window = sg.Window("Mass Annotated Digitization Desk  (MADD)", layout, margins=(2, 2), size=(950,580), resizable=True, return_keyboard_events=True, finalize=True )
-
+    window.TKroot.focus_force()
     window['cbxTaxonName'].bind("<Return>", "_Enter")
     window['chkMultiSpecimen'].bind("<Return>", "_Enter")
     window.Element('txtUserName').Widget.config(takefocus=0)
@@ -122,6 +123,7 @@ def init(collection_id):
     window.Element('txtWorkStation').Widget.config(takefocus=0)
     window.Element('btnSettings').Widget.config(takefocus=0)
     window.Element('btnLogout').Widget.config(takefocus=0)
+
 
     entry_barcode = window['txtCatalogNumber']
     entry_barcode.bind("<Return>", "_RETURN")
@@ -149,7 +151,7 @@ def init(collection_id):
     window.Element('cbxTaxonName').Update(set_to_index=0)  # Start with first item highlighted
 
     # Loop through events
-    item = None
+    backtrackCounter = 1
 
     while True:
         event, values = window.read()
@@ -202,6 +204,7 @@ def init(collection_id):
         elif event == "cbxTaxonName" + "_Enter": # For arrowing down to relevant taxon name and pressing Enter
             window['txtTaxonName'].update(values['cbxTaxonName'][0])
             print(f"Input: {values['cbxTaxonName']}")
+
         if event == "txtCatalogNumber_RETURN":
             print('vals= ', values)
             print(f"Input barcode yowsa: {values['txtCatalogNumber']}")
@@ -217,9 +220,10 @@ def init(collection_id):
             print('Saving form')
 
             taxonName = ''
-            if len(values['cbxTaxonName']) > 0:
-                taxonName = values['cbxTaxonName'][0]
-
+            if len(values['txtCatalogNumber']) > 0:
+                print('in catalognumber')
+                taxonName = values['txtTaxonName']
+            window['txtCatalogNumber'].update([])
             # pull data entered from form fields  
             fields = {'catalognumber' : '"%s"'%values['txtCatalogNumber'],
                       'multispecimen' : values['chkMultiSpecimen'],
@@ -243,16 +247,33 @@ def init(collection_id):
             print(fields)
             db.insertRow('specimen', fields)
             window['txtCatalogNumber'].set_focus()  # returns focus to barcode field after 'save'
-            recordID = db.getRowOnId('specimen', 0, maxID=True)
-            print('the latest record ID is : ', recordID[0])
-            ##Prep for go-back button
-            # currentRecordID = recordID[0]
-            # earlierRecordID = db.arbitrarySQL_statement(SEE_BELOW)
-            ##end prep
-            # select * from specimen s  order by s.id DESC LIMIT 2,1;    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            # reset/blank out elements that are NOT sticky
-            window['txtCatalogNumber'].update([])
-# blah blah and more ...
+
+
+        print('backtrack counter is = ', backtrackCounter)
+        if event == 'btnBack':
+            print('Pressed go-back /')
+            # Functionality for going back through the session records to make changes, or do checkups.
+            sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
+            rows = db.arbitrarySQL_statement(sql)
+            print(rows[0])
+            recordIDbacktrack = rows[0]['id']
+            record = rows[0]
+            backtrackCounter += 1
+            print('the ID of interest is= ', recordIDbacktrack)
+            window['lblRecordID'].update('Record ID: {}'.format(recordIDbacktrack), visible=True)
+            # Updating elements from previous record
+            window['cbxStorage'].update(record['storagename'])
+            window['cbxPrepType'].update(record['preptypename'])
+            window['cbxHigherTaxon'].update('')
+            window['cbxTypeStatus'].update('')
+            window['txtNotes'].update(record['notes'])
+            # multiSpecimen??
+            window['cbxGeoRegion'].update(record['georegionname'])
+            window['txtTaxonName'].update(record['taxonname'])
+            window['txtCatalogNumber'].update(record['catalognumber'])
+
+
+
         if event == sg.WINDOW_CLOSED:
             break
     window.close()
