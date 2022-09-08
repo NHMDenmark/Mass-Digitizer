@@ -214,6 +214,23 @@ def insertRow(tableName, fields):
     currentCursor.connection.close()
     return "Row [%s] inserted in table '%s'" %(fields,tableName)
 
+def updateRow(tableName, recordID, values):
+    currentCursor = getDbCursor()
+    fieldsString = ""
+    for key in values:
+        fieldsString += "%s, " % key
+    fieldsString = fieldsString[0:len(fieldsString) - 2]
+    sqlString = "INSERT INTO %s (%s) VALUES (" % (tableName, fieldsString)
+    for key in values:
+        sqlString += str(values[key]) + ", "
+    sqlString = sqlString[0:len(sqlString) - 2] + ");"  # Remove trailing ", " and close Sql
+    print(sqlString)
+    currentCursor.execute(sqlString)
+    currentCursor.connection.commit()
+    currentCursor.connection.close()
+    return "Row [%s] inserted in table '%s'" % (values, tableName)
+
+
 def getFieldMap(cursor):
     # Get fields for a given DB API 2.0 cursor object that has been executed
     # CONTRACT 
