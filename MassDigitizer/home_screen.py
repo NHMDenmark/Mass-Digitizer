@@ -15,8 +15,8 @@ def init():
     # TODO function contract 
 
     header_font = ("Corbel, 18")
-    header = [sg.Text("DaSSCo Mass Digitizer App", size=(48,1), font=header_font, justification='center')]
-    separator_line = [sg.Text('_'  * 80)],
+    header = [sg.Text("DaSSCo Mass Digitizer App", size=(32,1), font=header_font, justification='center')]
+    separator_line = [sg.Text('_'  * 80)]
 
     btn_exit = [sg.Button("Exit", key='exit')]
 
@@ -30,9 +30,10 @@ def init():
     lblSelectCollection = [sg.Text('Choose a collection to log in:', key='lblSelectCollection')]
     lstSelectCollection = [sg.Combo({'-select a collection-'}, key='lstSelectCollection', readonly=True, size=(28, 1), enable_events=True)]
 
-    col_main = [header, lblSelectInstitution, lstSelectInstitution, ]
+    col_main = [header, separator_line, lblSelectInstitution, lstSelectInstitution, ]
 
-    col_next = [[sg.Text('Specify username:')], 
+    col_next = [[sg.Text('Enter your Specify username & password and then choose collection.')],
+                [sg.Text('Specify username:')], 
                 [sg.InputText(size=(24,1), background_color='white', text_color='black', key='inpUsername')],
                 [sg.Text('Specify password:')], 
                 [sg.InputText(size=(24,1), background_color='white', text_color='black', key='inpPassword', password_char='*')],
@@ -43,11 +44,11 @@ def init():
 
     col_side = [btn_exit]
 
-    layout = [[[sg.Column(col_main, key='colMain', size=(640,96))]],
-            [[sg.Column(col_next, key='colNext', size=(480,256), visible=False)],
+    layout = [[[sg.Column(col_main, key='colMain', size=(480,128))]],
+            [[sg.Column(col_next, key='colNext', size=(480,200), visible=False)],
             [sg.Column(col_side, key='colSide', size=(480,64))]], ]
 
-    window = sg.Window('Start', layout, size=(640, 480))
+    window = sg.Window('Start', layout, size=(480, 400))
 
     main(window)
 
