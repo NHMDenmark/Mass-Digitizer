@@ -270,6 +270,7 @@ def init(collection_id):
             # multiSpecimen??
             window['cbxGeoRegion'].update(record['georegionname'])
             window['txtTaxonName'].update(record['taxonname'])
+            window['cbxTaxonName'].update([])
             window['txtCatalogNumber'].update(record['catalognumber'])
 
 
