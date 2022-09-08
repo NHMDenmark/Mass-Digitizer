@@ -245,8 +245,10 @@ def init(collection_id):
             window['txtCatalogNumber'].set_focus()  # returns focus to barcode field after 'save'
             recordID = db.getRowOnId('specimen', 0, maxID=True)
             print('the latest record ID is : ', recordID[0])
+            ##Prep for go-back button
             currentRecordID = recordID[0]
             earlierRecordID = db.arbitrarySQL_statement(SEE_BELOW)
+            ##end prep
             # select * from specimen s  order by s.id DESC LIMIT 2,1;    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             # reset/blank out elements that are NOT sticky
             window['txtCatalogNumber'].update([])
