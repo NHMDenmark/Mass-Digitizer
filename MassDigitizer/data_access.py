@@ -154,7 +154,8 @@ def getRowOnId(tableName, id, maxID=False):
     # Getting specific row from the table specified by name using its primary key (id)  
     # CONTRACT 
     #   tableName (String): The name of the table to be queried
-    #   id (Integer) : The primary key of the row to be returned 
+    #   id (Integer) : The primary key of the row to be returned
+    #maxID is added functionality to get the latest record ID
     #   RETURNS single table row
     if maxID:
         currentCursor = getDbCursor()
