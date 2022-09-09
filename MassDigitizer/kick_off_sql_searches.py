@@ -40,7 +40,7 @@ def auto_suggest_taxonomy(name, taxDefItemId=None, rowLimit=2000):
     #returns: a list of names
 
     cur = data_access.getDbCursor()
-    sql = "SELECT fullname FROM taxonname WHERE lower(fullname) LIKE lower('{}%');".format(name)
+    sql = "SELECT fullname FROM taxonname WHERE lower(fullname) LIKE lower('%{}%');".format(name)
     if taxDefItemId:
         sql = sql[:-1]
         sql = sql + ' AND taxontreedefid = {};'.format(taxDefItemId)
