@@ -169,7 +169,7 @@ def getRowOnId(tableName, id, maxID=False):
     currentCursor.connection.close()
     return row
 
-def arbitrarySQL_statement(sql):
+def executeSqlStatement(sql):
     currentCursor = getDbCursor()
     rows_object = currentCursor.execute(sql).fetchall()
     rows = [dict(row) for row in rows_object]

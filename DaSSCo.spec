@@ -5,10 +5,11 @@ block_cipher = None
 
 
 a = Analysis(['DaSSCo.py'],
-             pathex=[],
-             binaries=[],
-             datas=[],
-             hiddenimports=['MassDigitizer\\data_access'],
+            pathex=['.\\MassDigitizer\\'],
+            binaries=[],
+            datas=[('MassDigitizer\\bootstrap\\institutions.json', '.'),
+           ('MassDigitizer\\db\\db.sqlite3', '.'),
+          ],
              hookspath=[],
              hooksconfig={},
              runtime_hooks=[],
