@@ -1,14 +1,15 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+
 block_cipher = None
+
 
 a = Analysis(
     ['DaSSCo.py'],
     pathex=['.\\MassDigitizer\\'],
     binaries=[],
-    datas=[('MassDigitizer\\bootstrap\\institutions.json', '.'),
-           ('MassDigitizer\\db\\db.sqlite3', '.'),
-          ],
+    datas=[('MassDigitizer\\db\\db.sqlite3', '.'),
+           ('MassDigitizer\\options_gear.png', '.'),],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

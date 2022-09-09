@@ -1,15 +1,13 @@
-from queue import Empty
 import pytest
-import sys, random, json
+import random
 from getpass import getpass
-from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent)) #.joinpath('src')))
-import specify_interface as s
+from queue import Empty
+
+from MassDigitizer import specify_interface as s
+from MassDigitizer import util
 
 # global variables 
-filepath = str(Path(__file__).parent.parent.joinpath('bootstrap').joinpath('institutions.json'))
-print(' -> %s' % filepath)
-institutions = json.load(open(filepath))
+institutions = util.convert_dbrow_list(db.getRows('institution'))
 baseURL = institutions[0]['URL']
 loginURL = baseURL + 'context/login/'
 collections = {}
