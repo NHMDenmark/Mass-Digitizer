@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(
-    ['DaSSCo.py'],
+    ['__main__.py'],
     pathex=['.\\MassDigitizer\\'],
     binaries=[],
     datas=[],
@@ -28,7 +28,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='DaSSCo',
+    name='__main__',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
