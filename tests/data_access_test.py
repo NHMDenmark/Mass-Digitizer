@@ -1,15 +1,14 @@
 from cgi import test
 from queue import Empty
-import pytest
+from MassDigitizer import util
 import sys, random, json
 from getpass import getpass
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
-import data_access as db
+from MassDigitizer import data_access as db
 
 # global variables 
-filepath = str(Path(__file__).parent.parent.joinpath('bootstrap').joinpath('institutions.json'))
-institutions = json.load(open(filepath))
+institutions = util.convert_dbrow_list(db.getRows('institution'))
 
 def test_data_access():
   print('*** Data Access test run ***')
