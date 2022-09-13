@@ -40,7 +40,8 @@ collectionId = -1
 def getList(tablename, collectionid): return util.convert_dbrow_list(db.getRowsOnFilters(tablename,{'collectionid =':'%s'%collectionid}))
 
 # Function for fetching id (primary key) on name value 
-def getPrimaryKey(tableName, name, field='name'): return db.getRowsOnFilters(tableName, {' %s = '%field : '"%s"'%name})[0]['id'] # return db.getRowsOnFilters(tableName, {' %s = ':'"%s"'%(field, name)})[0]['id']
+def getPrimaryKey(tableName, name, field='name'):
+    return db.getRowsOnFilters(tableName, {' %s = '%field : '"%s"'%name})[0]['id'] # return db.getRowsOnFilters(tableName, {' %s = ':'"%s"'%(field, name)})[0]['id']
 
 def init(collection_id):
     # TODO function contract 
@@ -138,6 +139,7 @@ def init(collection_id):
     # Set session Widget fields
     window.Element('txtUserName').Update(value=gs.spUserName) 
     collection = db.getRowOnId('collection', collection_id)
+    print('collection isss: ', collection[2])
     if collection is not None:
         window.Element('txtCollection').Update(value=collection[2]) 
         institution = db.getRowOnId('institution', collection[3])
@@ -151,8 +153,30 @@ def init(collection_id):
     window.Element('cbxTaxonName').Update(set_to_index=0)  # Start with first item highlighted
 
     # Loop through events
-    backtrackCounter = 1
+    # backtrackCounter = 0
 
+
+    def getRecordIDbyBacktracking(backtrackCounter):
+        sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
+        rows = db.arbitrarySQL_statement(sql)
+        print('COUNTER row::::', rows[0])
+        recordIDcurrent = rows[0]['id']
+        return recordIDcurrent
+
+    dasRecordID = 0
+    def obtainTrack(ID=0, incrementor=0):
+        print('the obtain ID  is --', ID)
+        if ID == 0:
+            print('IN ID of obtainTrack()')
+            recordID = getRecordIDbyBacktracking(incrementor)
+
+            return recordID
+        else:
+            print('In ELSE obtainTrack()')
+            recordID = ID - 1
+            return recordID
+
+    onecrementor = 0
     while True:
         event, values = window.read()
 
@@ -203,7 +227,7 @@ def init(collection_id):
 
         elif event == "cbxTaxonName" + "_Enter": # For arrowing down to relevant taxon name and pressing Enter
             window['txtTaxonName'].update(values['cbxTaxonName'][0])
-            print(f"Input: {values['cbxTaxonName']}")
+            print(f"InputTax: {values['cbxTaxonName'][0]}")
 
         if event == "txtCatalogNumber_RETURN":
             print('vals= ', values)
@@ -215,51 +239,160 @@ def init(collection_id):
             hs.window.reappear()
             window.close()
 
-        # Save form 
+        # Save form
+        unpackedTaxonName = ''
+        taxonName = values['cbxTaxonName']
+        for item in taxonName: unpackedTaxonName = item
+        print('cbxTaxonName value type and length: ', unpackedTaxonName, type(taxonName), len(taxonName))
+        recordIDbacktrack = 0
+        # print('recordIDbacktrack is = ', recordIDbacktrack)
+
+        recordIDnow = 0
         if event == 'btnSave':
-            print('Saving form')
+            # print('after save press /updating/ var...', is_update)
+            fields = {'catalognumber': '"%s"' % values['txtCatalogNumber'],
+                      'multispecimen': values['chkMultiSpecimen'],
+                      'taxonname': '"%s"' % unpackedTaxonName,
+                      'taxonnameid': getPrimaryKey('taxonname', taxonName, 'fullname'),
+                      'typestatusid': getPrimaryKey('typestatus', values['cbxTypeStatus']),
+                      'georegionname': '"%s"' % values['cbxGeoRegion'],
+                      'georegionid': getPrimaryKey('georegion', values['cbxGeoRegion']),
+                      'storagename': '"%s"' % values['cbxStorage'],
+                      'storageid': getPrimaryKey('storage', values['cbxStorage']),
+                      'preptypename': '"%s"' % values['cbxPrepType'],
+                      'preptypeid': getPrimaryKey('preptype', values['cbxPrepType']),
+                      'notes': '"%s"' % values['txtNotes'],
+                      'collectionid': collectionId,
+                      'username': '"%s"' % values['txtUserName'],
+                      # 'userid'        : getPrimaryKey('"%s"'%values['txtUserName'],'username'),
+                      'workstation': '"%s"' % values['txtWorkStation'],
+                      'datetime': '"%s"' % datetime.now(),
+                      }
+            # for k, v in fields.items():
+            #     if isinstance(v, str):
+            #         fields[k] = v.replace('"','')
+            #     else:
+            #         pass
+            print('FIELDS ::: : ', fields)
 
-            taxonName = ''
-            if len(values['txtCatalogNumber']) > 0:
-                print('in catalognumber')
-                taxonName = values['txtTaxonName']
-            window['txtCatalogNumber'].update([])
-            # pull data entered from form fields  
-            fields = {'catalognumber' : '"%s"'%values['txtCatalogNumber'],
-                      'multispecimen' : values['chkMultiSpecimen'],
-                      'taxonname'     : '"%s"'%taxonName,
-                      'taxonnameid'   : getPrimaryKey('taxonname',taxonName,'fullname'),
-                      'typestatusid'  : getPrimaryKey('typestatus',values['cbxTypeStatus']),
-                      'georegionname' : '"%s"'%values['cbxGeoRegion'], 
-                      'georegionid'   : getPrimaryKey('georegion',values['cbxGeoRegion']),
-                      'storagename'   : '"%s"'%values['cbxStorage'], 
-                      'storageid'     : getPrimaryKey('storage',values['cbxStorage']),
-                      'preptypename'  : '"%s"'%values['cbxPrepType'], 
-                      'preptypeid'    : getPrimaryKey('preptype',values['cbxPrepType']),
-                      'notes'         : '"%s"'%values['txtNotes'], 
-                      'collectionid'  : collectionId,
-                      'username'      : '"%s"'%values['txtUserName'],
-                      #'userid'        : getPrimaryKey('"%s"'%values['txtUserName'],'username'),
-                      'workstation'   : '"%s"'%values['txtWorkStation'],
-                      'datetime'      : '"%s"'%datetime.now(),
-                     }
-            
-            print(fields)
-            db.insertRow('specimen', fields)
-            window['txtCatalogNumber'].set_focus()  # returns focus to barcode field after 'save'
+            # recordID_forSave = getRecordIDbyBacktracking(0)
+            recordID = dasRecordID
+            print('pre existing id ...recordID == ', recordID)
+            if recordID > 0:
+                print('We are updating! ')
+                currentID = recordID
+                    # db.getRowsOnFilters('specimen', {'id': '= ' + str(recordID_forSave)}, limit=1)
+
+                print('the row with ID - ', currentID)
+                topicalRecordID = currentID
+                db.updateRow('specimen', topicalRecordID, fields)
+            # existingID = db.getRowsOnFilters('specimen', {'id': '= '+str(recordID_forSave)}, limit=1)
+            # print('existing ID ??? : ', [item[0] for item in existingID], 'or', existingID[0][0])
+            # if existingID[0][0] > 0:
+            #     recordID = existingID[0][0]
+            #     print('is UPDATING now')
+            #     # sql = f"UPDATE {'specimen'} SET "
+            #     # setList = []
+            #     # # print(key, fields[key])
+            #     # for key in fields:
+            #     #     setList.append(f"{key} = {fields[key]}")
+            #     # sqlString = ', '.join(setList)
+            #     #
+            #     # print('SQL string = ', sqlString)
+            #     # sql = sql + sqlString + f" WHERE id = {recordID};"
+            #     # print('FINAL SQL str::: ', sql)
+            #     # db.updateRow('specimen', recordID, where=' WHERE ')
+            #
+            else:
+                print('Saving now')
+                db.insertRow('specimen', fields)
+
+            # def saveButtonBehavior(fieldDict, recordID):
+            #     pass
 
 
-        print('backtrack counter is = ', backtrackCounter)
+
+
+            # def setSaveButton(tableName, fieldDict, updating=is_update):
+            #     print('IN setsaveButton - status update === ', updating)
+            #     opsSQL = ''
+            #     if updating:
+            #         print('is UPDATING')
+            #
+            #         def assembleSQLupdate(tableName, recordID , fields):
+            #             # RecordID is the ID of record to be updated.
+            #             # Dict are the field, value pairs for the update
+            #             print('fields is ¤¤¤¤ - ', fields)
+            #             sql = f"UPDATE {tableName} SET "
+            #             setList = []
+            #             for key in fields:
+            #                 print(key, fieldDict[key])
+            #                 setList.append(f"{key} = {fieldDict[key]}")
+            #             sqlString = ', '.join(setList)
+            #
+            #             print('SQL string = ', sqlString)
+            #             sql = sql + sqlString + f" WHERE id = {recordID};"
+            #             return sql
+            #
+            #         recordID = getRecordIDbyBacktracking(backtrackCounter)
+            #         returnedSQL = assembleSQLupdate(tableName, recordID, fieldDict)
+            #         print('RETURNED SQL is :_: ', returnedSQL)
+            #
+            #         opsSQL = returnedSQL
+            #         is_update = False
+            #
+            #         res = setSaveButton('specimen', fields)
+            #         print('the /res/ is == ', res)
+            #     else:
+            #
+            #         print('Saving form')
+            #
+            #         taxonName = ''
+            #         if len(values['txtCatalogNumber']) > 0:
+            #             print('in catalognumber')
+            #             taxonName = values['txtTaxonName']
+            #         window['txtCatalogNumber'].update([])
+            #         print(fields)
+            #         db.insertRow('specimen', fields)
+            #         window['txtCatalogNumber'].set_focus()  # returns focus to barcode field after 'save'
+            #
+            #     return opsSQL
+
+            # mintedID = setSaveButton('specimen', fields)
+
+
+
+        # print('backtrack step counter is = ', backtrackCounter)
+
         if event == 'btnBack':
             print('Pressed go-back /')
+
             # Functionality for going back through the session records to make changes, or do checkups.
-            sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
-            rows = db.executeSqlStatement(sql)
-            print(rows[0])
-            recordIDbacktrack = rows[0]['id']
-            record = rows[0]
-            backtrackCounter += 1
+            # sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
+            currentRecordID = obtainTrack(incrementor=onecrementor)
+            onecrementor += 1
+            print('oneicrementor at -- ', onecrementor)
+            print('current recordID :  ', currentRecordID)
+            rows = db.getRowOnId('specimen', currentRecordID)
+            # rows = db.arbitrarySQL_statement(sql)
+            print('RAW row::::', rows[0])
+            recordIDbacktrack = rows[0]
+            dasRecordID = recordIDbacktrack
+            print('record past ID : ', recordIDbacktrack)
+            rowRecord = db.getRowOnId('specimen', currentRecordID)
+            record = rowRecord
+            print('the record is such:= ', record[0])
+
+            if recordIDbacktrack:
+                print('recordbactrack - // is_update IS TRUE')
+                is_update = True
+                recordIDnow = recordIDbacktrack
+            else :
+                is_update = False
+            # backtrackCounter += 1
+            print('the backtrack counter is now at: ', recordIDbacktrack)
             print('the ID of interest is= ', recordIDbacktrack)
+
             window['lblRecordID'].update('Record ID: {}'.format(recordIDbacktrack), visible=True)
             # Updating elements from previous record
             window['cbxStorage'].update(record['storagename'])
@@ -273,13 +406,41 @@ def init(collection_id):
             window['cbxTaxonName'].update([])
             window['txtCatalogNumber'].update(record['catalognumber'])
 
+            fields = {'catalognumber' : values['txtCatalogNumber'],
+                      'multispecimen' : values['chkMultiSpecimen'],
+                      'taxonname'     : '"%s"'%taxonName,
+                      'taxonnameid'   : getPrimaryKey('taxonname',taxonName,'fullname'),
+                      'typestatusid'  : getPrimaryKey('typestatus',values['cbxTypeStatus']),
+                      'georegionname' : '"%s"'%values['cbxGeoRegion'],
+                      'georegionid'   : getPrimaryKey('georegion',values['cbxGeoRegion']),
+                      'storagename'   : '"%s"'%values['cbxStorage'],
+                      'storageid'     : getPrimaryKey('storage',values['cbxStorage']),
+                      'preptypename'  : '"%s"'%values['cbxPrepType'],
+                      'preptypeid'    : getPrimaryKey('preptype',values['cbxPrepType']),
+                      'notes'         : '"%s"'%values['txtNotes'],
+                      'collectionid'  : collectionId,
+                      'username'      : '"%s"'%values['txtUserName'],
+                      #'userid'        : getPrimaryKey('"%s"'%values['txtUserName'],'username'),
+                      'workstation'   : '"%s"'%values['txtWorkStation'],
+                      'datetime'      : '"%s"'%datetime.now(),
+                     }
+            print('updated row dict=', fields)
+            print('status for /updating/ bool = ', is_update)
+
+            if currentRecordID:
+                print(recordIDbacktrack, ' row should be UPDATED')
+                print('updated fields::: ', fields)
+
+
+
 
 
         if event == sg.WINDOW_CLOSED:
             break
+
     window.close()
 
-#init(2)
+init(2)
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
     Accomplished by removing last character input if not a valid character
