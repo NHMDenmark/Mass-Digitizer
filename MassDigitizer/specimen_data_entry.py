@@ -254,7 +254,7 @@ def init(collection_id):
             print('Pressed go-back /')
             # Functionality for going back through the session records to make changes, or do checkups.
             sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
-            rows = db.arbitrarySQL_statement(sql)
+            rows = db.executeSqlStatement(sql)
             print(rows[0])
             recordIDbacktrack = rows[0]['id']
             record = rows[0]
@@ -279,7 +279,7 @@ def init(collection_id):
             break
     window.close()
 
-init(2)
+#init(2)
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
     Accomplished by removing last character input if not a valid character

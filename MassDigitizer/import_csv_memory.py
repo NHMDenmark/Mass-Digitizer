@@ -11,7 +11,8 @@
   Plants of the World Online taxonomy https://hosted-datasets.gbif.org/datasets/wcvp.zip is used in this exploration.
 
   PURPOSE: To make a large (1M+) table available in SQLite in :memory: in order to gain speed. Initial result takes < 40 miliseconds - rom there
-  all operations should go into native fast data structures such as dictionaries. On subsequent keystrokes the list of candidates will shrink as accuracy increases."""
+  all operations should go into native fast data structures such as dictionaries. On subsequent keystrokes the list of candidates will shrink as accuracy increases.
+"""
 
 import csv, sqlite3
 import time

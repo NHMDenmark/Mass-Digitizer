@@ -16,6 +16,7 @@ Unless required by applicable law or agreed to in writing,
 software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 either express or implied. See the License for the specific language governing permissions and limitations under the License.
 """
+
 import data_access
 from itertools import chain
 
@@ -40,7 +41,7 @@ def auto_suggest_taxonomy(name, taxDefItemId=None, rowLimit=2000):
     #returns: a list of names
 
     cur = data_access.getDbCursor()
-    sql = "SELECT fullname FROM taxonname WHERE lower(fullname) LIKE lower('{}%');".format(name)
+    sql = "SELECT fullname FROM taxonname WHERE lower(fullname) LIKE lower('%{}%');".format(name)
     if taxDefItemId:
         sql = sql[:-1]
         sql = sql + ' AND taxontreedefid = {};'.format(taxDefItemId)

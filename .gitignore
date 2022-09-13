@@ -14,3 +14,4 @@ src/.vscode/launch.json
 *.sqlite3-journal
 .venv
 /MassDigitizer/*.bak
+*.bak
