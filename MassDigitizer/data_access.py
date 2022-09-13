@@ -68,6 +68,12 @@ def setDatabase(self, dbFileName='db'):
     #   dbFileName (String): the name of the file excluding the extension '.sqlite3' 
     dbFilePath = str(self.FILEPATH.joinpath('%s.sqlite3' % dbFileName))
 
+def getConnection():
+    connection = sqlite3.connect(dbFilePath)
+    return connection
+
+
+connection = None
 def getDbCursor():#do_in_memory=False):
     # Generic function needed for database access 
     # CONTRACT
@@ -134,7 +140,8 @@ def getRowsOnFilters(tableName, filters, limit=100):
     #             Numbers should be formatted as strings 
     #   RETURNS table rows as list
     currentCursor = getDbCursor()   
-    sqlString = 'SELECT * FROM %s ' % tableName 
+    sqlString = 'SELECT * FROM %s ' % tableName
+    print('IN getRowsONFilter - the SQL is: ', sqlString, '//STOP//')
     if filters.items():
         sqlString += "WHERE "
         for key, value in filters.items():
@@ -143,11 +150,15 @@ def getRowsOnFilters(tableName, filters, limit=100):
     if limit > 0:
         sqlString += ' LIMIT %s' %str(limit)
     print(sqlString)
-    rows = currentCursor.execute(sqlString).fetchall()
+    try:
+        rows = currentCursor.execute(sqlString).fetchall()
     # If no rows in results, insert an empty dummy row to prevent errors
-    if len(rows) < 1: 
+        if len(rows) < 1:
+            rows = currentCursor.execute("SELECT * FROM dummyrecord LIMIT 1").fetchall()
+            currentCursor.connection.close()
+    except sqlite3.OperationalError:
         rows = currentCursor.execute("SELECT * FROM dummyrecord LIMIT 1").fetchall()
-    currentCursor.connection.close()
+        currentCursor.connection.close()
     return rows
 
 def getRowOnId(tableName, id, maxID=False):
@@ -179,6 +190,7 @@ def arbitrarySQL_statement(sql):
         # print([x for x in j])
     currentCursor.connection.close()
     return rows
+
 
 def getRowOnSpecifyId(tableName, id):
     # Getting specific row from the table specified by name using the primary key of the corresponding table in Specify
@@ -214,18 +226,47 @@ def insertRow(tableName, fields):
     currentCursor.connection.close()
     return "Row [%s] inserted in table '%s'" %(fields,tableName)
 
-def updateRow(tableName, recordID, values):
+
+def updateRow(tableName, recordID, values, where='', sqlString=None):
+    # Funtion is patterned after insertRow()
     currentCursor = getDbCursor()
     fieldsString = ""
+
     for key in values:
         fieldsString += "%s, " % key
-    fieldsString = fieldsString[0:len(fieldsString) - 2]
-    sqlString = "INSERT INTO %s (%s) VALUES (" % (tableName, fieldsString)
-    for key in values:
-        sqlString += str(values[key]) + ", "
-    sqlString = sqlString[0:len(sqlString) - 2] + ");"  # Remove trailing ", " and close Sql
-    print(sqlString)
-    currentCursor.execute(sqlString)
+
+    if len(where) > 1:
+        print('adding ', where, ' to sql')
+    else:
+        # Building the SQL query string below
+        sqlStringPrepend = f"UPDATE {tableName} SET "
+        sqlStringAppend = []
+
+        for key in values:
+            try:
+                val = values[key]
+
+                sqlString = f"{key} = {val}, "
+                sqlStringAppend.append(sqlString)
+
+            except AttributeError:
+                print('ATTRIBUTE ERRRORRRRRR')
+                sqlStringAppend.append(values[key])
+        sqlStringLastPart = " WHERE id = {}".format(recordID)
+        try:
+
+            sqlAdd = ' '.join(sqlStringAppend)
+
+            sqlAdd = sqlAdd[:-2]
+
+            sqlStringFinal = sqlStringPrepend+' '+sqlAdd+sqlStringLastPart
+            print('FINAL SQL is : ', sqlStringFinal)
+        except TypeError:
+            print('IN sql build except typeError!')
+            sqlStringFinal = ','.join(map(str, sqlStringAppend))
+
+        print('SQL going into execute: ', sqlStringFinal)
+    currentCursor.execute(sqlStringFinal)
     currentCursor.connection.commit()
     currentCursor.connection.close()
     return "Row [%s] inserted in table '%s'" % (values, tableName)
