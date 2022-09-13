@@ -10,26 +10,23 @@
   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
   PURPOSE: Generic Data Access Object for reading/writing local database file 
-  """
-from queue import Empty
+"""
+
 import sys 
 import sqlite3
-#from debugpy import connect
-
-from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent.joinpath('MassDigitizer')))
-
-import sqlite3
 from io import StringIO
+from pathlib import Path
 
+# Local imports
 import global_settings as gs
 
-#class DataAccess:
+# Set os path to local files: 
+#sys.path.append(str(Path(__file__).parent.parent.joinpath('MassDigitizer')))
 
-        
-FILEPATH = Path(__file__).parent.joinpath('db')
-dbFilePath = str(FILEPATH.joinpath('db.sqlite3'))
-currentCursor = Empty
+#class DataAccess:
+#FILEPATH =  #Path(__file__).parent.joinpath('db')
+dbFilePath = Path(__file__).resolve().with_name('db.sqlite3') #str(FILEPATH.joinpath('db.sqlite3'))
+currentCursor = None
 
 # Point to database file 
 def __init__(self,databaseName='db', do_in_memory=False):
@@ -38,7 +35,7 @@ def __init__(self,databaseName='db', do_in_memory=False):
     #   do_in_memory (boolean): Whether the database file should be run in-memory 
 
     self.set_database(databaseName)
-    
+    print('Connecting to db file: %s ...'%self.dbFilePath)
     connection = sqlite3.connect(self.dbFilePath)
     
     if gs.db_in_memory == True or do_in_memory == True:
@@ -86,7 +83,7 @@ def getDbCursor():#do_in_memory=False):
 
 # def get_inmemory_cursor(in_memory=True):
 #     # TODO write function contract
-
+    print('Connecting to db file: %s ...'%dbFilePath)
     connection = sqlite3.connect(dbFilePath)
     
     #gs.db_in_memory = do_in_memory # apply in-memory flag to global  
@@ -180,7 +177,7 @@ def getRowOnId(tableName, id, maxID=False):
     currentCursor.connection.close()
     return row
 
-def arbitrarySQL_statement(sql):
+def executeSqlStatement(sql):
     currentCursor = getDbCursor()
     rows_object = currentCursor.execute(sql).fetchall()
     rows = [dict(row) for row in rows_object]
