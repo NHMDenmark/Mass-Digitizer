@@ -21,16 +21,13 @@ import urllib3
 from pathlib import Path
 
 import global_settings as gs
+import data_access as db
 import util 
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # global variables 
-filepath = str(Path(__file__).parent.joinpath('bootstrap').joinpath('institutions.json'))
-#print('Initializing Specify Interface institutions with path: %s' % filepath)
-institutions = json.load(open(filepath))
-#baseURL = gs.baseURL
-#loginURL = baseURL + 'context/login/'
+institutions = util.convert_dbrow_list(db.getRows('institution'))
 collections = {}
 
 # Create a session for storing cookies 
