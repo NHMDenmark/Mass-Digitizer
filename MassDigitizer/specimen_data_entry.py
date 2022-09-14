@@ -35,6 +35,17 @@ sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer
 currentpath = os.path.join(pathlib.Path(__file__).parent, '')
 
 collectionId = -1
+selectionIndex = 0
+global indexer
+indexer = []
+def getIncrementedIndex(currentIndex):
+    global indexer
+    print('indexer now: ', indexer)
+    if currentIndex == -1:
+        indexer.pop()
+    indexer.append(currentIndex)
+    countElements = len(indexer)
+    return countElements
 
 # Function for converting predefined table data into list for dropdownlist 
 def getList(tablename, collectionid): return util.convert_dbrow_list(db.getRowsOnFilters(tablename,{'collectionid =':'%s'%collectionid}))
@@ -83,7 +94,7 @@ def init(collection_id):
     taxonInput = [sg.Text('Taxonomic name:     ', size=(21,1) ,background_color=blueArea, text_color='black', font=font),
                   sg.Input('', size=blue_size, key='txtTaxonName', text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
     taxonomicPicklist = [sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
-                         sg.Listbox('', key='cbxTaxonName', select_mode='browse', size=(28, 6), text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5, 0), (0, 0))), ]
+                         sg.Listbox('', key='cbxTaxonName', select_mode='browse', size=(28, 6), text_color='black', background_color='white', font=('Arial', 12),bind_return_key=True, enable_events=True, pad=((5, 0), (0, 0))), ]
     barcode = [sg.Text('Barcode:', size=defaultSize, background_color=blueArea, enable_events=True, text_color='black', font=font),
                sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
     # statusLabel = [sg.Text('Specimen record has been saved', font=('Arial',20),size=(20,10),justification='center',background_color='#4f280a',text_color = 'yellow',key='texto')]
@@ -164,12 +175,13 @@ def init(collection_id):
         return recordIDcurrent
 
     dasRecordID = 0
+    # Yes , it is a global var :[
     def obtainTrack(ID=0, incrementor=0):
+        # Keeps track of record IDs in relation to the Go-back button functionality.
         print('the obtain ID  is --', ID)
         if ID == 0:
             print('IN ID of obtainTrack()')
             recordID = getRecordIDbyBacktracking(incrementor)
-
             return recordID
         else:
             print('In ELSE obtainTrack()')
@@ -177,6 +189,7 @@ def init(collection_id):
             return recordID
 
     onecrementor = 0
+
     while True:
         event, values = window.read()
 
@@ -208,17 +221,56 @@ def init(collection_id):
             print('in taxon input -')
             # print('len string : ', len(values[event]))
             if len(values[event]) >= 2:
+
                 print('submitted string: ', values[event])
                 response = koss.auto_suggest_taxonomy(values[event])
                 if response is not None:
                     print('Suggested taxa based on input:) -- ', response)
                     window['cbxTaxonName'].update(values=response)
                     window['cbxTaxonName'].update(set_to_index=[0], scroll_to_index=0)
+                    # selection_index = 0
+                    # if event.startswith('Up'):
+                    #     selectionIndex = (currentIndex - 1) % len(window['cbxTaxonName'])
+                    #     print('UP and index is ', selectionIndex)
+                    #     window['cbxTaxonName'].Update(set_to_index=selectionIndex, scroll_to_index=selectionIndex)
+                    # if event.startswith('Down'):
+                    #     selectionIndex = (currentIndex + 1) % len(window['cbxTaxonName'])
+                    #     print('DOWN and index is ', selectionIndex)
+                    #     window['cbxTaxonName'].Update(set_to_index=selectionIndex, scroll_to_index=selectionIndex)
         #             Forces 1st item in list to be highlighted which makes it selectable by Return key
+        # down = False
+        if event.startswith('Down'):
+            print('In DOWN press')
+            sizeAutosuggest = len(response)
+            # print('length of cbx is : ', sizeAutosuggest)
+            selectionIndex = getIncrementedIndex(1) % sizeAutosuggest
+            print('selection index= ', selectionIndex)
+            window['cbxTaxonName'].Update(set_to_index=selectionIndex, scroll_to_index=selectionIndex)
+        if event.startswith('Down'):
+            print('In UP press')
+            sizeAutosuggest = len(response)
+            # print('length of cbx is : ', sizeAutosuggest)
+            selectionIndex = getIncrementedIndex(-1) % sizeAutosuggest
+            print('selection index= ', selectionIndex)
+            window['cbxTaxonName'].Update(set_to_index=selectionIndex, scroll_to_index=selectionIndex)
 
         if event == 'cbxTaxonName':
+            if event.startswith('Down'):
+                print('down is -v')
+            # if down: print('DOWM')
+            if event.startswith('Up'): print('UP')
             index = 0 # Reset highlighted item 
             window['cbxTaxonName'].update(scroll_to_index=index)
+            if event.startswith('Up'):
+                print('UP')
+                # selectionIndex = (currentIndex - 1) % len(window['cbxTaxonName'])
+                # print('UP and index is ', selectionIndex)
+                # window['cbxTaxonName'].Update(set_to_index=selectionIndex, scroll_to_index=selectionIndex)
+            if event.startswith('Down'):
+                print('DOWN')
+                # selectionIndex = getIncrementedIndex(1) % len(window['cbxTaxonName'])
+                print('DOWN and index is ', selectionIndex)
+                window['cbxTaxonName'].Update(set_to_index=selectionIndex, scroll_to_index=selectionIndex)
             selection = values[event]
             print('selection ;', selection)
             if selection:
@@ -241,22 +293,21 @@ def init(collection_id):
 
         # Save form
         unpackedTaxonName = ''
-        taxonName = values['cbxTaxonName']
-        print('PREP back/save cbxTaxonName == ', taxonName)
-        if not taxonName:
-            taxonName = values['txtTaxonName']
+        if values:
+            taxonName = values['cbxTaxonName']
+            for item in taxonName: taxonName = item
+            print('PREP back/save cbxTaxonName == ', unpackedTaxonName)
 
-        for item in taxonName: unpackedTaxonName = item
-        # print('cbxTaxonName value type and length: ', unpackedTaxonName, type(taxonName), len(taxonName))
-        recordIDbacktrack = 0
-        # print('recordIDbacktrack is = ', recordIDbacktrack)
+            if not taxonName:
+                taxonName = values['txtTaxonName']
+                # for item in taxonName: unpackedTaxonName = item
+                print('txtTaxonName bist: : ', taxonName)
 
-        recordIDnow = 0
         if event == 'btnSave':
             # print('after save press /updating/ var...', is_update)
             fields = {'catalognumber': '"%s"' % values['txtCatalogNumber'],
                       'multispecimen': values['chkMultiSpecimen'],
-                      'taxonname': '"%s"' % unpackedTaxonName,
+                      'taxonname': '"%s"' % taxonName,
                       'taxonnameid': getPrimaryKey('taxonname', taxonName, 'fullname'),
                       'typestatusid': getPrimaryKey('typestatus', values['cbxTypeStatus']),
                       'georegionname': '"%s"' % values['cbxGeoRegion'],
@@ -283,6 +334,7 @@ def init(collection_id):
             recordID = dasRecordID
             print('pre existing id ...recordID == ', recordID)
             if recordID > 0:
+                # Checking if Save is a novel record , or if it is updating existing record.
                 print('We are updating! ')
                 currentID = recordID
                     # db.getRowsOnFilters('specimen', {'id': '= ' + str(recordID_forSave)}, limit=1)
@@ -290,32 +342,13 @@ def init(collection_id):
                 print('the row with ID - ', currentID)
                 topicalRecordID = currentID
                 db.updateRow('specimen', topicalRecordID, fields)
-            # existingID = db.getRowsOnFilters('specimen', {'id': '= '+str(recordID_forSave)}, limit=1)
-            # print('existing ID ??? : ', [item[0] for item in existingID], 'or', existingID[0][0])
-            # if existingID[0][0] > 0:
-            #     recordID = existingID[0][0]
-            #     print('is UPDATING now')
-            #     # sql = f"UPDATE {'specimen'} SET "
-            #     # setList = []
-            #     # # print(key, fields[key])
-            #     # for key in fields:
-            #     #     setList.append(f"{key} = {fields[key]}")
-            #     # sqlString = ', '.join(setList)
-            #     #
-            #     # print('SQL string = ', sqlString)
-            #     # sql = sql + sqlString + f" WHERE id = {recordID};"
-            #     # print('FINAL SQL str::: ', sql)
-            #     # db.updateRow('specimen', recordID, where=' WHERE ')
-            #
+
             else:
                 print('Saving now ', datetime.now(pytz.timezone("Europe/Copenhagen")))
                 db.insertRow('specimen', fields)
 
             # def saveButtonBehavior(fieldDict, recordID):
             #     pass
-
-
-
 
             # def setSaveButton(tableName, fieldDict, updating=is_update):
             #     print('IN setsaveButton - status update === ', updating)
@@ -365,35 +398,29 @@ def init(collection_id):
             # mintedID = setSaveButton('specimen', fields)
 
 
-
-        # print('backtrack step counter is = ', backtrackCounter)
-
         if event == 'btnBack':
             print('Pressed go-back /')
 
             # Functionality for going back through the session records to make changes, or do checkups.
-            # sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
             currentRecordID = obtainTrack(incrementor=onecrementor)
             onecrementor += 1
             print('oneicrementor at -- ', onecrementor)
             print('current recordID :  ', currentRecordID)
             rows = db.getRowOnId('specimen', currentRecordID)
-            # rows = db.arbitrarySQL_statement(sql)
             print('RAW row::::', rows[0])
             recordIDbacktrack = rows[0]
             dasRecordID = recordIDbacktrack
             print('record past ID : ', recordIDbacktrack)
             rowRecord = db.getRowOnId('specimen', currentRecordID)
             record = rowRecord
-            print('the record is such:= ', record[0])
 
             if recordIDbacktrack:
                 print('recordbactrack - // is_update IS TRUE')
                 is_update = True
-                recordIDnow = recordIDbacktrack
+
             else :
                 is_update = False
-            # backtrackCounter += 1
+
             print('the backtrack counter is now at: ', recordIDbacktrack)
             print('the ID of interest is= ', recordIDbacktrack)
 
@@ -429,14 +456,10 @@ def init(collection_id):
                       'datetime'      : '"%s"'%datetime.now(),
                      }
             print('updated row dict=', fields)
-            print('status for /updating/ bool = ', is_update)
 
             if currentRecordID:
                 print(recordIDbacktrack, ' row should be UPDATED')
                 print('updated fields::: ', fields)
-
-
-
 
 
         if event == sg.WINDOW_CLOSED:
