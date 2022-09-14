@@ -22,7 +22,7 @@ import sys
 import pathlib
 from datetime import datetime
 import PySimpleGUI as sg
-
+import pytz
 # internal dependencies
 import util 
 import data_access as db
@@ -206,7 +206,7 @@ def init(collection_id):
         if event == 'txtTaxonName':
             input_ = values['txtTaxonName']
             print('in taxon input -')
-            print('len string : ', len(values[event]))
+            # print('len string : ', len(values[event]))
             if len(values[event]) >= 2:
                 print('submitted string: ', values[event])
                 response = koss.auto_suggest_taxonomy(values[event])
@@ -242,8 +242,12 @@ def init(collection_id):
         # Save form
         unpackedTaxonName = ''
         taxonName = values['cbxTaxonName']
+        print('PREP back/save cbxTaxonName == ', taxonName)
+        if not taxonName:
+            taxonName = values['txtTaxonName']
+
         for item in taxonName: unpackedTaxonName = item
-        print('cbxTaxonName value type and length: ', unpackedTaxonName, type(taxonName), len(taxonName))
+        # print('cbxTaxonName value type and length: ', unpackedTaxonName, type(taxonName), len(taxonName))
         recordIDbacktrack = 0
         # print('recordIDbacktrack is = ', recordIDbacktrack)
 
@@ -304,7 +308,7 @@ def init(collection_id):
             #     # db.updateRow('specimen', recordID, where=' WHERE ')
             #
             else:
-                print('Saving now')
+                print('Saving now ', datetime.now(pytz.timezone("Europe/Copenhagen")))
                 db.insertRow('specimen', fields)
 
             # def saveButtonBehavior(fieldDict, recordID):
