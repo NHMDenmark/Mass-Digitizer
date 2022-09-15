@@ -26,11 +26,15 @@ import global_settings as gs
 
 #class DataAccess: 
 # TODO turn into class 
+
 #FILEPATH = Path(__file__).parent.joinpath('db')
-dbFilePath = os.path.expanduser('~\Documents\DaSSCO\db.sqlite3') 
 #str(FILEPATH.joinpath('db.sqlite3')) # Path(__file__).joinpath('db').resolve().with_name('db.sqlite3') #
+
+# Moved database file to user documents (Windows) otherwise it will be readonly 
+dbFilePath = os.path.expanduser('~\Documents\DaSSCO\db.sqlite3') # In order to debug / run, a copy of the db file should be moved into this folder on Windows machines 
+
+# Reset cursor pointer 
 currentCursor = None
-print()
 print(dbFilePath)
 
 # Point to database file 
