@@ -15,3 +15,12 @@ src/.vscode/launch.json
 .venv
 /MassDigitizer/*.bak
 *.bak
+*.exe
+DaSSCo.build/
+DaSSCo.dist/
+DaSSCo.onefile-build/
+MassDigitizer/__main__.build/
+MassDigitizer/__main__.dist/
+MassDigitizer/__main__.onefile-build/
+DaSSCo.exe
+*.exe
