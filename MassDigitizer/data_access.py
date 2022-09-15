@@ -12,7 +12,8 @@
   PURPOSE: Generic Data Access Object for reading/writing local database file 
 """
 
-import sys 
+import os
+#import sys 
 import sqlite3
 from io import StringIO
 from pathlib import Path
@@ -23,10 +24,18 @@ import global_settings as gs
 # Set os path to local files: 
 #sys.path.append(str(Path(__file__).parent.parent.joinpath('MassDigitizer')))
 
-#class DataAccess:
-#FILEPATH =  #Path(__file__).parent.joinpath('db')
-dbFilePath = Path(__file__).resolve().with_name('db.sqlite3') #str(FILEPATH.joinpath('db.sqlite3'))
+#class DataAccess: 
+# TODO turn into class 
+
+#FILEPATH = Path(__file__).parent.joinpath('db')
+#str(FILEPATH.joinpath('db.sqlite3')) # Path(__file__).joinpath('db').resolve().with_name('db.sqlite3') #
+
+# Moved database file to user documents (Windows) otherwise it will be readonly 
+dbFilePath = os.path.expanduser('~\Documents\DaSSCO\db.sqlite3') # In order to debug / run, a copy of the db file should be moved into this folder on Windows machines 
+
+# Reset cursor pointer 
 currentCursor = None
+print(dbFilePath)
 
 # Point to database file 
 def __init__(self,databaseName='db', do_in_memory=False):
