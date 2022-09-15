@@ -169,7 +169,7 @@ def init(collection_id):
 
     def getRecordIDbyBacktracking(backtrackCounter):
         sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
-        rows = db.arbitrarySQL_statement(sql)
+        rows = db.executeSqlStatement(sql)
         print('COUNTER row::::', rows[0])
         recordIDcurrent = rows[0]['id']
         return recordIDcurrent
@@ -467,7 +467,7 @@ def init(collection_id):
 
     window.close()
 
-init(2)
+#init(2)
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
     Accomplished by removing last character input if not a valid character
