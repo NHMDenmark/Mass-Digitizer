@@ -18,6 +18,7 @@ either express or implied. See the License for the specific language governing p
 """
 
 import os
+import sqlite3
 import sys
 import pathlib
 from datetime import datetime
@@ -38,12 +39,16 @@ collectionId = -1
 selectionIndex = 0
 global indexer
 indexer = []
+
 def getIncrementedIndex(currentIndex):
     global indexer
     print('indexer now: ', indexer)
-    if currentIndex == -1:
+    if currentIndex == -1 and len(indexer) > 0:
+        print('-1 and popping!')
+        print('indexer after pop(): ', indexer)
         indexer.pop()
-    indexer.append(currentIndex)
+    else:
+        indexer.append(currentIndex)
     countElements = len(indexer)
     return countElements
 
@@ -53,6 +58,9 @@ def getList(tablename, collectionid): return util.convert_dbrow_list(db.getRowsO
 # Function for fetching id (primary key) on name value 
 def getPrimaryKey(tableName, name, field='name'):
     return db.getRowsOnFilters(tableName, {' %s = '%field : '"%s"'%name})[0]['id'] # return db.getRowsOnFilters(tableName, {' %s = ':'"%s"'%(field, name)})[0]['id']
+
+def emptyGobackPopup():
+    sg.popup('No more rows to step back to!')
 
 def init(collection_id):
     # TODO function contract 
@@ -72,6 +80,7 @@ def init(collection_id):
     blue_size = (28,1)      # Default width of all fields in the 'blue area'
     
     font = ('Bahnschrift', 13)
+    element_keys = ['cbxStorage', 'cbxPrepType', 'cbxHigherTaxon', 'cbxTypeStatus', 'txtNotes', 'chkMultiSpecimen', 'cbxGeoRegion', 'txtTaxonName', 'cbxTaxonName', 'txtCatalogNumber', ]
     
     # TODO placeholder until higher taxonomic groups become available in SQLite 
     taxonomicGroups = ['placeholder...']
@@ -94,7 +103,7 @@ def init(collection_id):
     taxonInput = [sg.Text('Taxonomic name:     ', size=(21,1) ,background_color=blueArea, text_color='black', font=font),
                   sg.Input('', size=blue_size, key='txtTaxonName', text_color='black', background_color='white', font=('Arial', 12), enable_events=True, pad=((5,0),(0,0))),]
     taxonomicPicklist = [sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
-                         sg.Listbox('', key='cbxTaxonName', select_mode='browse', size=(28, 6), text_color='black', background_color='white', font=('Arial', 12),bind_return_key=True, enable_events=True, pad=((5, 0), (0, 0))), ]
+                         sg.Listbox('', key='cbxTaxonName', select_mode=sg.LISTBOX_SELECT_MODE_BROWSE, size=(28, 6), text_color='black', background_color='white', font=('Arial', 12),bind_return_key=True, enable_events=True, pad=((5, 0), (0, 0))), ]
     barcode = [sg.Text('Barcode:', size=defaultSize, background_color=blueArea, enable_events=True, text_color='black', font=font),
                sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
     # statusLabel = [sg.Text('Specimen record has been saved', font=('Arial',20),size=(20,10),justification='center',background_color='#4f280a',text_color = 'yellow',key='texto')]
@@ -106,7 +115,9 @@ def init(collection_id):
          sg.StatusBar('', relief=None, size=(10,1), background_color=blueArea),
          sg.Button('SAVE', key="btnSave", button_color='seagreen', size=9, bind_return_key=True),
          sg.StatusBar('', relief=None, size=(14,1), background_color=blueArea),
-         sg.Button('Go Back', key="btnBack", button_color='firebrick', pad=(130,0))]]
+         sg.Button('Go Back', key="btnBack", button_color='firebrick', pad=(13,0)),
+         sg.Text('Beginning of the name list reached. No more Go-back!', visible=False, key='lblWarning', background_color="#ff5588", border_width=3)],
+                                ]
     loggedIn = [sg.Text('Logged in as:', size=defaultSize, background_color=greyArea, font=font), sg.Input(disabled=True, size=(24,1), background_color='white', text_color='black',
                 readonly=True, key='txtUserName'),]
     institution_ = [sg.Text('Institution:', size=defaultSize, background_color=greyArea, font=font), sg.Input(size=(24,1), background_color='white', text_color='black', 
@@ -168,11 +179,28 @@ def init(collection_id):
 
 
     def getRecordIDbyBacktracking(backtrackCounter):
-        sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
-        rows = db.arbitrarySQL_statement(sql)
-        print('COUNTER row::::', rows[0])
-        recordIDcurrent = rows[0]['id']
-        return recordIDcurrent
+        sql = "select * from specimen s order by s.id DESC LIMIT {},1;".format(backtrackCounter)
+        print('the SQL: ', sql)
+        try:
+            rows = db.arbitrarySQL_statement(sql)
+        except sqlite3.OperationalError:
+            window['txtTaxonName'].update("Beginning of taxon names reached.")
+
+        if rows:
+            print('COUNTER row::::', rows[0])
+            recordIDcurrent = rows[0]['id']
+            return recordIDcurrent
+        else:
+            print('IN else clause due to no more GO_BACK !!')
+            window['txtTaxonName'].update(value='No more Goback!', background_color='#ff5500')
+            window['btnBack'].update(disabled=True)
+            window['lblWarning'].update(visible=True)
+            backtrackCounter = backtrackCounter - 1
+            sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
+            rows = db.arbitrarySQL_statement(sql)
+
+            # recordIDcurrent = rows[0]['id']
+            # return recordIDcurrent
 
     dasRecordID = 0
     # Yes , it is a global var :[
@@ -245,8 +273,8 @@ def init(collection_id):
             # print('length of cbx is : ', sizeAutosuggest)
             selectionIndex = getIncrementedIndex(1) % sizeAutosuggest
             print('selection index= ', selectionIndex)
-            window['cbxTaxonName'].Update(set_to_index=selectionIndex, scroll_to_index=selectionIndex)
-        if event.startswith('Down'):
+            window['cbxTaxonName'].Update(scroll_to_index=selectionIndex) #, scroll_to_index=selectionIndex)set_to_index=selectionIndex
+        if event.startswith('Up'):
             print('In UP press')
             sizeAutosuggest = len(response)
             # print('length of cbx is : ', sizeAutosuggest)
@@ -264,8 +292,8 @@ def init(collection_id):
             if event.startswith('Up'):
                 print('UP')
                 # selectionIndex = (currentIndex - 1) % len(window['cbxTaxonName'])
-                # print('UP and index is ', selectionIndex)
-                # window['cbxTaxonName'].Update(set_to_index=selectionIndex, scroll_to_index=selectionIndex)
+                print('UP and index is ', selectionIndex)
+                window['cbxTaxonName'].Update(set_to_index=selectionIndex, scroll_to_index=selectionIndex)
             if event.startswith('Down'):
                 print('DOWN')
                 # selectionIndex = getIncrementedIndex(1) % len(window['cbxTaxonName'])
@@ -331,17 +359,21 @@ def init(collection_id):
             print('FIELDS ::: : ', fields)
 
             # recordID_forSave = getRecordIDbyBacktracking(0)
-            recordID = dasRecordID
-            print('pre existing id ...recordID == ', recordID)
-            if recordID > 0:
+            existingRecordID = dasRecordID
+            # recordID, via global dsRecordID, is here used to determine if a record is new, or if it is already existing
+            print('pre existing id ...recordID == ', existingRecordID)
+            if existingRecordID > 0:
                 # Checking if Save is a novel record , or if it is updating existing record.
                 print('We are updating! ')
-                currentID = recordID
+                currentID = existingRecordID
                     # db.getRowsOnFilters('specimen', {'id': '= ' + str(recordID_forSave)}, limit=1)
 
                 print('the row with ID - ', currentID)
                 topicalRecordID = currentID
                 db.updateRow('specimen', topicalRecordID, fields)
+                for key in element_keys:
+                    window[key]('')
+                dasRecordID = 0
 
             else:
                 print('Saving now ', datetime.now(pytz.timezone("Europe/Copenhagen")))
@@ -406,20 +438,16 @@ def init(collection_id):
             onecrementor += 1
             print('oneicrementor at -- ', onecrementor)
             print('current recordID :  ', currentRecordID)
-            rows = db.getRowOnId('specimen', currentRecordID)
-            print('RAW row::::', rows[0])
-            recordIDbacktrack = rows[0]
-            dasRecordID = recordIDbacktrack
-            print('record past ID : ', recordIDbacktrack)
-            rowRecord = db.getRowOnId('specimen', currentRecordID)
-            record = rowRecord
-
-            if recordIDbacktrack:
-                print('recordbactrack - // is_update IS TRUE')
-                is_update = True
-
-            else :
-                is_update = False
+            if not currentRecordID:
+                window['txtTaxonName'].update("Beginning of taxon names reached.")
+            else:
+                rows = db.getRowOnId('specimen', currentRecordID)
+                print('RAW row::::', rows[0])
+                recordIDbacktrack = rows[0]
+                dasRecordID = recordIDbacktrack
+                print('record past ID : ', recordIDbacktrack)
+                rowRecord = db.getRowOnId('specimen', currentRecordID)
+                record = rowRecord
 
             print('the backtrack counter is now at: ', recordIDbacktrack)
             print('the ID of interest is= ', recordIDbacktrack)
