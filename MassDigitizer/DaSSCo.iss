@@ -33,12 +33,12 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "C:\Users\vsb582\Documents\Work\Data Coordination\DanSpecify\Code\GitHub\DaSSCo\MassDigitizer\__main__.dist\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\vsb582\Documents\Work\Data Coordination\DanSpecify\Code\GitHub\DaSSCo\MassDigitizer\__main__.dist\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\vsb582\Documents\Work\Data Coordination\DanSpecify\Code\GitHub\DaSSCo\MassDigitizer\db\*"; DestDir: "{userdocs}\DaSSCo"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\vsb582\Documents\Work\Data Coordination\DanSpecify\Code\GitHub\DaSSCo\MassDigitizer\db\db.sqlite3"; DestDir: "{userdocs}\DaSSCo"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "C:\Users\vsb582\Documents\Work\Data Coordination\DanSpecify\Code\GitHub\DaSSCo\MassDigitizer\options_gear.png"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
-Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
+Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"                                                     
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
