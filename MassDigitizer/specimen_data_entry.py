@@ -178,10 +178,6 @@ def init(collection_id):
     currrent_selection_index = 0
     window.Element('cbxTaxonName').Update(set_to_index=0)  # Start with first item highlighted
 
-    # Loop through events
-    # backtrackCounter = 0
-
-
     def getRecordIDbyBacktracking(backtrackCounter):
 
         sql = "select * from specimen s order by s.id DESC LIMIT {},1;".format(backtrackCounter)
@@ -204,9 +200,6 @@ def init(collection_id):
             backtrackCounter = backtrackCounter - 1
             sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
             rows = db.executeSqlStatement(sql)
-
-            # recordIDcurrent = rows[0]['id']
-            # return recordIDcurrent
 
         sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
         rows = db.executeSqlStatement(sql)
@@ -251,9 +244,7 @@ def init(collection_id):
             print('IN notes section')
         if event.endswith('+TAB'):
             window['chkMultiSpecimen'].set_focus()
-        #     Prevents tab characters in the Notes box and allows to tab on to next element.
-        # if event.endswith('+TAB'):
-        #     window['cbxGeoRegion'].set_focus()
+
         if event == 'chkMultiSpecimen_Enter':
             print('Multi specimen herbarium sheet was set to TRUE')
             window['chkMultiSpecimen'].update(True)
@@ -270,17 +261,7 @@ def init(collection_id):
                     print('Suggested taxa based on input:) -- ', response)
                     window['cbxTaxonName'].update(values=response)
                     window['cbxTaxonName'].update(set_to_index=[0], scroll_to_index=0)
-                    # selection_index = 0
-                    # if event.startswith('Up'):
-                    #     selectionIndex = (currentIndex - 1) % len(window['cbxTaxonName'])
-                    #     print('UP and index is ', selectionIndex)
-                    #     window['cbxTaxonName'].Update(set_to_index=selectionIndex, scroll_to_index=selectionIndex)
-                    # if event.startswith('Down'):
-                    #     selectionIndex = (currentIndex + 1) % len(window['cbxTaxonName'])
-                    #     print('DOWN and index is ', selectionIndex)
-                    #     window['cbxTaxonName'].Update(set_to_index=selectionIndex, scroll_to_index=selectionIndex)
-        #             Forces 1st item in list to be highlighted which makes it selectable by Return key
-        # down = False
+
         if event.startswith('Down'):
             print('In DOWN press')
             try:
