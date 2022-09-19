@@ -3,6 +3,8 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.joinpath('')))
 
 import home_screen as home
+import data_access as db
+import specify_interface as sp
 
 def main() -> None:
     print("* Mass Digitizer for DaSSCo *")
