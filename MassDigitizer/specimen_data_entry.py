@@ -185,7 +185,7 @@ def init(collection_id):
         sql = "select * from specimen s order by s.id DESC LIMIT {},1;".format(backtrackCounter)
         print('the SQL: ', sql)
         try:
-            rows = db.arbitrarySQL_statement(sql)
+            rows = db.executeSqlStatement(sql)
         except sqlite3.OperationalError:
             window['txtTaxonName'].update("Beginning of taxon names reached.")
 
@@ -201,13 +201,13 @@ def init(collection_id):
             print("VALuesss ### ", values)
             backtrackCounter = backtrackCounter - 1
             sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
-            rows = db.arbitrarySQL_statement(sql)
+            rows = db.executeSqlStatement(sql)
 
             # recordIDcurrent = rows[0]['id']
             # return recordIDcurrent
 
         sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
-        rows = db.arbitrarySQL_statement(sql)
+        rows = db.executeSqlStatement(sql)
         print('COUNTER row::::', rows[0])
         recordIDcurrent = rows[0]['id']
         return recordIDcurrent
@@ -372,7 +372,7 @@ def init(collection_id):
             #         pass
             print('FIELDS ::: : ', fields)
             minSQL = "SELECT min(id) FROM specimen s;"
-            minRecordID = db.arbitrarySQL_statement(minSQL)
+            minRecordID = db.executeSqlStatement(minSQL)
             lowestID = minRecordID[0]
             minimumID = lowestID
             minimumID = list(minimumID.values())
