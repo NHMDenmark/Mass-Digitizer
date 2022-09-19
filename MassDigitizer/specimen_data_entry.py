@@ -30,6 +30,8 @@ import data_access as db
 import global_settings as gs
 import home_screen as hs 
 import kick_off_sql_searches as koss
+from saveOrInsert_functionGUI import saving_to_db
+    # import saveOrInsert_functionGUI as saver
 
 # Make sure that current folder is registrered to be able to access other app files 
 sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer')))
@@ -117,7 +119,7 @@ def init(collection_id):
          sg.StatusBar('', relief=None, size=(14,1), background_color=blueArea),
          sg.Button('Go Back', key="btnBack", button_color='firebrick', pad=(13,0)),
          sg.Text('Beginning of the name list reached. No more Go-back!', visible=False, key='lblWarning', background_color="#ff5588", border_width=3),
-         sg.InputText(default_text='ready', key='status', visible=True, size=(5,1))],
+         sg.Button('Clear form', key='btnClear', button_color='black on white')],
 
                                 ]
     loggedIn = [sg.Text('Logged in as:', size=defaultSize, background_color=greyArea, font=font), sg.Input(disabled=True, size=(24,1), background_color='white', text_color='black',
@@ -195,7 +197,7 @@ def init(collection_id):
             return recordIDcurrent
         else:
             print('IN else clause due to no more GO_BACK !!')
-            window['status'].update(value='stop', background_color='#ff5500')
+
             window['btnBack'].update(disabled=True)
             window['lblWarning'].update(visible=True)
             print("VALuesss ### ", values)
@@ -281,11 +283,14 @@ def init(collection_id):
         # down = False
         if event.startswith('Down'):
             print('In DOWN press')
-            sizeAutosuggest = len(response)
+            try:
+                sizeAutosuggest = len(response)
             # print('length of cbx is : ', sizeAutosuggest)
-            selectionIndex = getIncrementedIndex(1) % sizeAutosuggest
-            print('selection index= ', selectionIndex)
-            window['cbxTaxonName'].Update(scroll_to_index=selectionIndex) #, scroll_to_index=selectionIndex)set_to_index=selectionIndex
+                selectionIndex = getIncrementedIndex(1) % sizeAutosuggest
+                print('selection index= ', selectionIndex)
+                window['cbxTaxonName'].Update(scroll_to_index=selectionIndex) #, scroll_to_index=selectionIndex)set_to_index=selectionIndex
+            except UnboundLocalError:
+                continue
         if event.startswith('Up'):
             print('In UP press')
             sizeAutosuggest = len(response)
@@ -376,7 +381,7 @@ def init(collection_id):
             lowestID = minRecordID[0]
             minimumID = lowestID
             minimumID = list(minimumID.values())
-            print('record ID iz\ ', type(minimumID), minimumID)
+            print('minimum record ID iz\ ', type(minimumID), minimumID)
             for j in minimumID: lowestID = j
             print('now miin ist: ', lowestID)
             # recordID_forSave = getRecordIDbyBacktracking(0)
@@ -385,16 +390,18 @@ def init(collection_id):
             print('pre existing id ...recordID == ', existingRecordID)
             if existingRecordID > 0:
                 # Checking if Save is a novel record , or if it is updating existing record.
+                res = saving_to_db(fields, insert=False, recordID=existingRecordID)
                 print('We are updating! ')
-                currentID = existingRecordID
-                    # db.getRowsOnFilters('specimen', {'id': '= ' + str(recordID_forSave)}, limit=1)
-
-                print('the row with ID - ', currentID)
-                topicalRecordID = currentID
-                db.updateRow('specimen', topicalRecordID, fields)
-                for key in element_keys:
-                    window[key]('')
-                dasRecordID = 0
+                #
+                # currentID = existingRecordID
+                #     # db.getRowsOnFilters('specimen', {'id': '= ' + str(recordID_forSave)}, limit=1)
+                #
+                # print('the row with ID - ', currentID)
+                # topicalRecordID = currentID
+                # db.updateRow('specimen', topicalRecordID, fields)
+                # for key in element_keys:
+                #     window[key]('')
+                # dasRecordID = 0
 
             else:
                 print('Saving now ', datetime.now(pytz.timezone("Europe/Copenhagen")))
@@ -453,7 +460,7 @@ def init(collection_id):
 
         if event == 'btnBack':
             print('Pressed go-back /')
-            window['status'].update(value='stop', background_color='#ff5500')
+
 
             # Functionality for going back through the session records to make changes, or do checkups.
             currentRecordID = obtainTrack(incrementor=onecrementor)
