@@ -505,7 +505,7 @@ def init(collection_id):
 
     window.close()
 
-init(2)
+#init(2)
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
     Accomplished by removing last character input if not a valid character
