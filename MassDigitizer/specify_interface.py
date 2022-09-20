@@ -243,14 +243,18 @@ def mergeTaxa(source_id, target_id, csrftoken):
   #     POST URL:   https://specify-test.science.ku.dk/api/specify_tree/taxon/367622/merge/ 
   #     POST DATA:  target: "432192"  
   #   RETURNS response object 
-  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'referer': gs.baseURL, } 
-  apiCallString = "%sapi/specify_tree/taxon/%s/merge/?target=%s"%(gs.baseURL, source_id, target_id)
+  #application/x-www-form-urlencoded
+  headers = {'content-type': 'Content-Type: application/x-www-form-urlencoded', 
+             'X-CSRFToken': csrftoken, 
+             'referer': gs.baseURL, } 
+  #apiCallString = "%sapi/specify_tree/taxon/%s/merge/?target=%s"%(gs.baseURL, source_id, target_id)
+  apiCallString = "%sapi/specify_tree/taxon/%s/merge/"%(gs.baseURL, source_id)
   print(" - API call: %s"%apiCallString)
 
   #print(spSession.cookies)
 
-  input('ready?')
-  response = spSession.post(apiCallString, headers=headers, data='target:%s'%target_id) 
+  #input('ready?')
+  response = spSession.post(apiCallString, headers=headers, data={'target' : target_id }) 
 
   #print(response.request.body)
   util.pretty_print_POST(response.request)

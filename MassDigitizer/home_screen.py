@@ -21,9 +21,8 @@ sys.path.append(str(Path(__file__).joinpath('MassDigitizer')))
 import util
 import global_settings as gs
 import data_access as db
-import specimen_data_entry as de
 import specify_interface as sp
-
+import specimen_data_entry as de
 
 def init():
     # TODO function contract 
@@ -121,5 +120,3 @@ def main(window):
                 pass
         
     window.close()
-
-#init()

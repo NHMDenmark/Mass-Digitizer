@@ -44,7 +44,7 @@ def __init__(self,databaseName='db', do_in_memory=False):
     #   do_in_memory (boolean): Whether the database file should be run in-memory 
 
     self.set_database(databaseName)
-    print('Connecting to db file: %s ...'%self.dbFilePath)
+    print('Initializing with db file: %s ...'%self.dbFilePath)
     connection = sqlite3.connect(self.dbFilePath)
     
     if gs.db_in_memory == True or do_in_memory == True:

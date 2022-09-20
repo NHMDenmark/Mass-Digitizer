@@ -16,7 +16,6 @@ from getpass import getpass
 
 import specify_interface as sp
 import global_settings as gs 
-import util
 
 gs.baseURL = 'https://specify-test.science.ku.dk/'
 
