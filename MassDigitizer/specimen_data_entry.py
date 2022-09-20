@@ -31,7 +31,6 @@ import global_settings as gs
 import home_screen as hs
 import kick_off_sql_searches as koss
 from saveOrInsert_functionGUI import saving_to_db
-
 # import saveOrInsert_functionGUI as saver
 
 # Make sure that current folder is registrered to be able to access other app files
@@ -229,16 +228,21 @@ def init(collection_id):
             print('IN else clause due to no more GO_BACK !!')
 
             window['btnBack'].update(disabled=True)
-            # window['lblWarning'].update(visible=True)
-            print("VALuesss ### ", values)
+            window['lblWarning'].update(visible=True)
+            print("Values ### ", values)
             backtrackCounter = backtrackCounter - 1
             sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
             rows = db.executeSqlStatement(sql)
 
         sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
+
         rows = db.executeSqlStatement(sql)
-        print('COUNTER row::::', rows[0])
-        recordIDcurrent = rows[0]['id']
+        if len(rows) > 0:
+            print('COUNTER row::::', rows[0])
+            recordIDcurrent = rows[0]['id']
+        else :
+            recordIDcurrent = 0
+
         return recordIDcurrent
 
     dasRecordID = 0
@@ -269,6 +273,7 @@ def init(collection_id):
                 window[key].update('')
 
         # Checking field events as switch construct
+        if event is None: break # Empty event indicates user closing window  
         if event == 'cbxStorage':
             print('event:', event)
             print('In storage domain')
@@ -502,8 +507,6 @@ def init(collection_id):
 
     window.close()
 
-
-init(2)
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
     Accomplished by removing last character input if not a valid character
