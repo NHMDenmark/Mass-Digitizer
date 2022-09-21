@@ -41,8 +41,8 @@ def getCSRFToken():
   print('Get CSRF token from ', gs.baseURL)
   response = spSession.get(gs.baseURL + 'context/login/', verify=False)
   csrftoken = response.cookies.get('csrftoken')
-  print(' - CSRF Token: %s' % csrftoken)
-  print(' - Response: %s %s' %(str(response.status_code), response.reason))
+  #print(' - Response: %s %s' %(str(response.status_code), response.reason))
+  #print(' - CSRF Token: %s' % csrftoken)
   #print('------------------------------')
   return csrftoken
 
@@ -53,8 +53,8 @@ def specifyLogin(username, passwd, collection_id):
     #   passwd (String) : Specify account password  
     #   RETURNS (String) : The CSRF token necessary for further interactions in the session 
     print('Connecting to Specify7 API at: ' + gs.baseURL)
-    csrftoken = getCSRFToken()
-    csrftoken = login(username, passwd, collection_id, csrftoken)
+    csrftoken = login(username, passwd, collection_id, getCSRFToken())
+    #print(' - Log in CSRF Token: %s' % csrftoken)
     if verifySession(csrftoken):
         return csrftoken
     else:
@@ -76,13 +76,6 @@ def login(username, passwd, collectionid, csrftoken):
   #print('------------------------------')
   return csrftoken
 
-def specifyLogout(csrftoken):
-    # Function for logging out of the Specify7 API again 
-    # CONTRACT
-    #   csrftoken (String) : The CSRF token required during logging in for the session 
-    print('logging out of Specify...')
-    logout(csrftoken)
-
 def verifySession(csrftoken):
   # Attempt to fetch data on the current user being logged in as a way to verify the session  
   # CONTRACT 
@@ -102,6 +95,13 @@ def verifySession(csrftoken):
     validity = True
   #print('------------------------------')
   return validity
+
+def specifyLogout(csrftoken):
+    # Function for logging out of the Specify7 API again 
+    # CONTRACT
+    #   csrftoken (String) : The CSRF token required during logging in for the session 
+    print('logging out of Specify...')
+    logout(csrftoken)
 
 def getCollObject(collectionObjectId, csrftoken):
   # Fetches collection objects from the Specify API using their primary key 
@@ -243,8 +243,7 @@ def mergeTaxa(source_id, target_id, csrftoken):
   #     POST URL:   https://specify-test.science.ku.dk/api/specify_tree/taxon/367622/merge/ 
   #     POST DATA:  target: "432192"  
   #   RETURNS response object 
-  #application/x-www-form-urlencoded
-  headers = {'content-type': 'Content-Type: application/x-www-form-urlencoded', 
+  headers = {#'content-type': 'Content-Type: application/multipart/form-data', #x-www-form-urlencoded #multipart/form-data; boundary=--someboundary', 
              'X-CSRFToken': csrftoken, 
              'referer': gs.baseURL, } 
   #apiCallString = "%sapi/specify_tree/taxon/%s/merge/?target=%s"%(gs.baseURL, source_id, target_id)
