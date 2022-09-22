@@ -7,6 +7,7 @@ import data_access as db
 import specify_interface as sp
 
 def main() -> None:
+    print()
     print("* Mass Digitizer for DaSSCo *")
     home.init()
 
