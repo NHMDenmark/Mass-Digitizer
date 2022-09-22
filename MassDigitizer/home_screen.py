@@ -33,8 +33,6 @@ def init():
 
     btn_exit = [sg.Button("Exit", key='exit')]
 
-    # Set up insitution selection field 
-    #institutions = ['NHMD: Natural History Museum of Denmark (Copenhagen)', 'NHMA: Natural History Museum Aarhus', 'TEST: Test server']
     institutions = util.convert_dbrow_list(db.getRows('institution'))
 
     lblSelectInstitution = [sg.Text('Please choose your institution to proceed:')]

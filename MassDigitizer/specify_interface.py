@@ -26,10 +26,6 @@ import util
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-# global variables 
-institutions = util.convert_dbrow_list(db.getRows('institution'))
-collections = {}
-
 # Create a session for storing cookies 
 spSession = requests.Session() 
 
