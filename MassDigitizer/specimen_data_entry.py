@@ -22,8 +22,8 @@ import sqlite3
 import sys
 import pathlib
 from datetime import datetime
-from textwrap import wrap
 import PySimpleGUI as sg
+import tkinter as tk
 
 # internal dependencies
 import util
@@ -36,6 +36,7 @@ import data_exporter as dx
 # import saveOrInsert_functionGUI as saver
 
 # Make sure that current folder is registrered to be able to access other app files
+
 sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer')))
 currentpath = os.path.join(pathlib.Path(__file__).parent, '')
 
@@ -45,36 +46,107 @@ global indexer
 indexer = []
 
 
-def getIncrementedIndex(currentIndex):
-    global indexer
-    print('indexer now: ', indexer)
-    if currentIndex == -1 and len(indexer) > 0:
-        print('-1 and popping!')
-        print('indexer after pop(): ', indexer)
-        indexer.pop()
-    else:
-        indexer.append(currentIndex)
-    countElements = len(indexer)
-    return countElements
+def taxonomic_autosuggest_gui(partialName):
 
+    # The list of choices that are going to be searched
+    # In this example, the PySimpleGUI Element names are used
+    choices = koss.auto_suggest_taxonomy(partialName)
+    print(type(choices))
 
-# Function for converting predefined table data into list for dropdownlist
+    print('len of choices is; ', len(choices), type(choices), '\n choices are;; ', choices)
+    # sorted([elem.__name__ for elem in sg.Element.__subclasses__()])
+    # choices =
+
+    input_width = 20
+    num_items_to_show = 4
+
+    layout = [
+
+        [sg.Text('Input Name:')],
+        [sg.Input(size=(input_width, 1), enable_events=True, key='-IN-')],
+        [sg.pin(
+            sg.Col([[sg.Listbox(values=[], size=(input_width, num_items_to_show), enable_events=True, key='-BOX-',
+                                select_mode=sg.LISTBOX_SELECT_MODE_SINGLE)]],
+                   key='-BOX-CONTAINER-', pad=(0, 0), visible=True))],
+
+    ]
+
+    window = sg.Window('AutoComplete', layout, return_keyboard_events=True, finalize=True, modal=False,
+                       font=('Helvetica', 16))
+    # The parameter "modal" is explicitly set to False. If True the auto close behavior
+    # won't work.
+
+    list_element: sg.Listbox = window.Element(
+        '-BOX-')  # store listbox element for easier access and to get to docstrings
+    prediction_list, input_text, sel_item = choices, "", 0
+    window['-IN-'].update(partialName)
+    window.write_event_value('-IN-', partialName)
+    # global windowAutosuggest
+    # windowAutosuggest = window
+
+    while True:  # Event Loop
+
+        win, event, values = sg.read_all_windows()
+        # print(win.close_destroys_window)
+        if event is None:
+            print('EVENT  , NONE')
+            break
+        # pressing down arrow will trigger event -IN- then aftewards event Down:40
+        elif event.startswith('Escape'):
+            window['-IN-'].update('')
+            window['-BOX-CONTAINER-'].update(visible=False)
+        elif event.startswith('Down') and len(prediction_list):
+            sel_item = (sel_item + 1) % len(prediction_list)
+            list_element.update(set_to_index=sel_item, scroll_to_index=sel_item)
+        elif event.startswith('Up') and len(prediction_list):
+            sel_item = (sel_item + (len(prediction_list) - 1)) % len(prediction_list)
+            list_element.update(set_to_index=sel_item, scroll_to_index=sel_item)
+        elif event == '\r':
+            print('pressed Enter/Return')
+            window.Hide()
+            if len(values['-BOX-']) > 0:
+                boxVal = values['-BOX-']
+                print('boxval ISS - ', boxVal[0])
+                window['-IN-'].update(value=boxVal[0])
+                window['-BOX-CONTAINER-'].update(visible=False)
+                return boxVal[0]
+
+        elif event == '-IN-':
+            # this concerns all keystrokes except the above ones.
+            text = values['-IN-'].lower()
+            if text == input_text:
+                continue
+            else:
+                input_text = text
+
+            prediction_list = []
+            if len(text) >= 3:
+                # condition for activating the autosuggest feature.
+                prediction_list = [item for item in choices if item.lower().find(text) != -1]
+
+            list_element.update(values=prediction_list)
+            sel_item = 0
+            list_element.update(set_to_index=sel_item)
+
+            if len(prediction_list) > 0:
+                window['-BOX-CONTAINER-'].update(visible=True)
+            else:
+                window['-BOX-CONTAINER-'].update(visible=False)
+        elif event == '-BOX-':
+            window['-IN-'].update(value=values['-BOX-'])
+            window['-BOX-CONTAINER-'].update(visible=False)
+
+    window.close()
+
 def getList(tablename, collectionid): return util.convert_dbrow_list(
     db.getRowsOnFilters(tablename, {'collectionid =': '%s' % collectionid}))
 
-
 # Function for fetching id (primary key) on name value
 def getPrimaryKey(tableName, name, field='name'):
-    return db.getRowsOnFilters(tableName, {' %s = ' % field: '"%s"' % name})[0][
-        'id']  # return db.getRowsOnFilters(tableName, {' %s = ':'"%s"'%(field, name)})[0]['id']
+    return db.getRowsOnFilters(tableName, {' %s = ' % field: '"%s"' % name})[0]['id']
 
-
-def emptyGobackPopup():
-    sg.popup('No more rows to step back to!')
-
-
-def init(collection_id):
-    # TODO function contract
+def gui_main(collection_id):
+    #
 
     # Set collection id
     collectionId = collection_id
@@ -124,6 +196,7 @@ def init(collection_id):
         sg.Text('Taxonomic name:     ', size=(21, 1), background_color=blueArea, text_color='black', font=font),
         sg.Input('', size=blue_size, key='txtTaxonName', text_color='black', background_color='white',
                  font=('Arial', 12), enable_events=True, pad=((5, 0), (0, 0))), ]
+
     taxonomicPicklist = [sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
                          sg.Listbox('', key='cbxTaxonName', select_mode=sg.LISTBOX_SELECT_MODE_BROWSE, size=(28, 6),
                                     text_color='black', background_color='white', font=('Arial', 12),
@@ -164,11 +237,12 @@ def init(collection_id):
     work_station = [sg.Text('Workstation:', size=defaultSize, background_color=greyArea, font=font),
                     sg.Input(size=(24, 1), background_color='white', text_color='black',
                              readonly=True, key="txtWorkStation"), ]
-    settings_ = [sg.Text('Settings ', size=defaultSize, justification='center', background_color=greyArea, font=14),
-                 sg.Button('', image_filename='%soptions_gear.png' % currentpath, key='btnSettings',
-                           button_color=greyArea, border_width=0)]
+    # settings_ = [sg.Text('Settings ', size=defaultSize, justification='center', background_color=greyArea, font=14),
+    #              sg.Button('', image_filename='%soptions_gear.png' % currentpath, key='btnSettings',
+    #                        button_color=greyArea, border_width=0)]
     horizontal_line = [sg.Text("_______________" * 5, background_color=greyArea)]  # horizontal line element hack
-    layout_greyarea = [loggedIn, institution_, horizontal_line, collections, work_station, settings_,
+    layout_greyarea = [loggedIn, institution_, horizontal_line, collections, work_station,
+                       # settings_,
                        [sg.Button('LOG OUT', key="btnLogout", button_color='grey40')]]
 
     # Combine elements into full layout
@@ -182,43 +256,22 @@ def init(collection_id):
     window = sg.Window("Mass Annotated Digitization Desk  (MADD)", layout, margins=(2, 2), size=(960, 640),
                        resizable=True, return_keyboard_events=True, finalize=True)
     window.TKroot.focus_force()
+    window['txtNotes'].bind('<Tab>', '+TAB')
     window['cbxTaxonName'].bind("<Return>", "_Enter")
     window['chkMultiSpecimen'].bind("<Return>", "_Enter")
     window.Element('txtUserName').Widget.config(takefocus=0)
     window.Element('txtInstitution').Widget.config(takefocus=0)
     window.Element('txtCollection').Widget.config(takefocus=0)
     window.Element('txtWorkStation').Widget.config(takefocus=0)
-    window.Element('btnSettings').Widget.config(takefocus=0)
+    # window.Element('btnSettings').Widget.config(takefocus=0)
     window.Element('btnLogout').Widget.config(takefocus=0)
 
     entry_barcode = window['txtCatalogNumber']
     entry_barcode.bind("<Return>", "_RETURN")
-    # Above forces a <RETURN> when barcode is scanned. This requires the scanner
-    # to be set to <ENTER>. See scanner user manual.
-
-    # The three lines below are there to ensure that the cursor in the input text fields is visible. It is invisible against a white background.
-    # window['txtNotes'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
-    # window['txtUserName'].Widget.config(insertbackground='black', highlightcolor='firebrick', highlightthickness=2)
-    # window['-TAXNAMES-'].Widget.config(insertbackground='black') , highlightcolor='firebrick', highlightthickness=2)
-
-    # Set session Widget fields
-    window.Element('txtUserName').Update(value=gs.spUserName)
-    collection = db.getRowOnId('collection', collection_id)
-    print('collection isss: ', collection[2])
-    if collection is not None:
-        window.Element('txtCollection').Update(value=collection[2])
-        institution = db.getRowOnId('institution', collection[3])
-        window.Element('txtInstitution').Update(value=institution[2])
-    window.Element('txtWorkStation').Update(value='TRS-80')
-    window['txtNotes'].bind('<Tab>', '+TAB')
-    window['cbxStorage'].set_focus()
-
-    # Reset taxonname field
-    currrent_selection_index = 0
-    window.Element('cbxTaxonName').Update(set_to_index=0)  # Start with first item highlighted
+    #
 
     def getRecordIDbyBacktracking(backtrackCounter):
-
+        # TODO must be reworked to use SQL statements rather than "counters" which rely on sequential IDs!
         sql = "select * from specimen s order by s.id DESC LIMIT {},1;".format(backtrackCounter)
         print('the SQL: ', sql)
         try:
@@ -234,8 +287,8 @@ def init(collection_id):
             print('IN else clause due to no more GO_BACK !!')
 
             window['btnBack'].update(disabled=True)
-            window['lblWarning'].update(visible=True)
-            print("Values ### ", values)
+            # window['lblWarning'].update(visible=True)
+
             backtrackCounter = backtrackCounter - 1
             sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
             rows = db.executeSqlStatement(sql)
@@ -251,9 +304,9 @@ def init(collection_id):
 
         return recordIDcurrent
 
-    dasRecordID = 0
-
+    onecrementor = 0
     # Yes , it is a global var :[
+
     def obtainTrack(ID=0, incrementor=0):
         # Keeps track of record IDs in relation to the Go-back button functionality.
         print('the obtain ID  is --', ID)
@@ -266,13 +319,8 @@ def init(collection_id):
             recordID = ID - 1
             return recordID
 
-    onecrementor = 0
-
     while True:
         event, values = window.read()
-        #print('EVENT ;;; ', event)
-        #print('VALUES //', values)
-
         def clear_all_of(fieldKeys):
             for key in fieldKeys:
                 print(key)
@@ -294,68 +342,30 @@ def init(collection_id):
         if event == 'txtNotes':
             print('IN notes section')
         if event.endswith('+TAB'):
+            print('tabbing!!!')
             window['chkMultiSpecimen'].set_focus()
 
         if event == 'chkMultiSpecimen_Enter':
             print('Multi specimen herbarium sheet was set to TRUE')
             window['chkMultiSpecimen'].update(True)
             window['cbxGeoRegion'].set_focus()
+
         if event == 'txtTaxonName':
-            input_ = values['txtTaxonName']
+            partialName = values['txtTaxonName']
             print('in taxon input -')
             # print('len string : ', len(values[event]))
-            if len(values[event]) >= 2:
+            if len(values[event]) >= 3:
 
                 print('submitted string: ', values[event])
                 response = koss.auto_suggest_taxonomy(values[event])
                 if response is not None:
                     print('Suggested taxa based on input:) -- ', response)
-                    window['cbxTaxonName'].update(values=response)
-                    window['cbxTaxonName'].update(set_to_index=[0], scroll_to_index=0)
+                    res = taxonomic_autosuggest_gui(partialName)
+                    print('RESs is :: ', res)
+                    window['txtTaxonName'].update(res)
+                    window['txtCatalogNumber'].set_focus()
 
-        if event.startswith('Down'):
-            print('In DOWN press')
-            try:
-                sizeAutosuggest = len(response)
-                # print('length of cbx is : ', sizeAutosuggest)
-                selectionIndex = getIncrementedIndex(1) % sizeAutosuggest
-                print('selection index= ', selectionIndex)
-                window['cbxTaxonName'].Update(
-                    scroll_to_index=selectionIndex)  # , scroll_to_index=selectionIndex)set_to_index=selectionIndex
-            except UnboundLocalError:
-                continue
-        if event.startswith('Up'):
-            print('In UP press')
-            sizeAutosuggest = len(response)
-            # print('length of cbx is : ', sizeAutosuggest)
-            selectionIndex = getIncrementedIndex(-1) % sizeAutosuggest
-            print('selection index= ', selectionIndex)
-            window['cbxTaxonName'].Update(set_to_index=selectionIndex, scroll_to_index=selectionIndex)
-
-        if event == 'cbxTaxonName':
-            if event.startswith('Down'):
-                print('down is -v')
-            # if down: print('DOWM')
-            if event.startswith('Up'): print('UP')
-            index = 0  # Reset highlighted item
-            window['cbxTaxonName'].update(scroll_to_index=index)
-            if event.startswith('Up'):
-                print('UP')
-                # selectionIndex = (currentIndex - 1) % len(window['cbxTaxonName'])
-                print('UP and index is ', selectionIndex)
-                window['cbxTaxonName'].Update(set_to_index=selectionIndex, scroll_to_index=selectionIndex)
-            if event.startswith('Down'):
-                print('DOWN')
-                # selectionIndex = getIncrementedIndex(1) % len(window['cbxTaxonName'])
-                print('DOWN and index is ', selectionIndex)
-                window['cbxTaxonName'].Update(set_to_index=selectionIndex, scroll_to_index=selectionIndex)
-            selection = values[event]
-            print('selection ;', selection)
-            if selection:
-                item = selection[0]
-                print('item at selection=', item)
-                window['txtTaxonName'].update(item)
-
+                    # window['cbxTaxonName'].update(set_to_index=[0], scroll_to_index=0)
 
         elif event == "cbxTaxonName" + "_Enter":  # For arrowing down to relevant taxon name and pressing Enter
             window['txtTaxonName'].update(values['cbxTaxonName'][0])
@@ -367,27 +377,13 @@ def init(collection_id):
             print(f"Input barcode yowsa: {values['txtCatalogNumber']}")
             window['btnSave'].set_focus()
 
-        if event == 'btnLogout':
-            gs.clearSession()
-            hs.window.reappear()
-            window.close()
-
         # Save form
-        unpackedTaxonName = ''
         if values:
-            taxonName = values['cbxTaxonName']
-            for item in taxonName: taxonName = item
-            #print('PREP back/save cbxTaxonName == ', unpackedTaxonName)
-
-            if not taxonName:
-                taxonName = values['txtTaxonName']
-                # for item in taxonName: unpackedTaxonName = item
-                #print('txtTaxonName bist: : ', taxonName)
+            taxonName = values['txtTaxonName']
+            # for item in taxonName: unpackedTaxonName = item
+            print('txtTaxonName bist: : ', taxonName)
 
         if event == 'btnSave':
-            currentRecordID = obtainTrack()
-            print('CCurrentRecordID === ', currentRecordID)
-            # print('after save press /updating/ var...', is_update)
             fields = {'catalognumber': '"%s"' % values['txtCatalogNumber'],
                       'multispecimen': values['chkMultiSpecimen'],
                       'taxonname': '"%s"' % taxonName,
@@ -407,40 +403,38 @@ def init(collection_id):
                       'datetime': '"%s"' % datetime.now(),
                       }
 
-            print('FIELDS ::: : ', fields)
-            minSQL = "SELECT min(id) FROM specimen s;"
-            minRecordID = db.executeSqlStatement(minSQL)
-            lowestID = minRecordID[0]
-            minimumID = lowestID
-            minimumID = list(minimumID.values())
-            print('minimum record ID iz\ ', type(minimumID), minimumID)
-            for j in minimumID: lowestID = j
-            print('now miin ist: ', lowestID)
-            # recordID_forSave = getRecordIDbyBacktracking(0)
-            existingRecordID = dasRecordID
-            # recordID, via global dsRecordID, is here used to determine if a record is new, or if it is already existing
-            print('pre existing id ...recordID == ', existingRecordID)
-            acute_ID = window['txtRecordID'].get()
-            print(f'value win here:¤{acute_ID}¤')
+            existTable = db.getRows('specimen', limit=1)
+            recordIDlabel = window['txtRecordID'].get()
+            print('recordIDlabel:;: ', recordIDlabel)
+            if existTable and not recordIDlabel:
+                print('TTable existsss and no recordID operational<<')
+                existResult = [j for j in existTable[0]]
+                print("THE existing rec ///", existResult)
+                res = saving_to_db(fields, insert=True)
+                print('inserting roww :', res)
+            elif recordIDlabel:
+                print("we are in UPDATE mode")
+                # print("! Empty tibble !")
+                existingRecordID = recordIDlabel
+                # recordID, via global dsRecordID, is here used to determine if a record is new, or if it is already existing
+                print('pre existing id ...recordID == ', existingRecordID)
 
-            print(type(acute_ID), 'length: ', len(acute_ID))
-            if len(acute_ID) > 0:
                 # Checking if Save is a novel record , or if it is updating existing record.
                 res = saving_to_db(fields, insert=False, recordID=existingRecordID)
-                print('We are updating! ')
-            # elif not (acute_ID > 0):
-            #     recordID = acute_ID
-            #     print('recordID is now= ', recordID)
-            #     if not (recordID > 0):
-            #         print('we HAVE INSERT switch ! !')
-            #         res = db.insertRow('specimen', fields)
-            else:
-                print('WE ARE INSERTING')
-                # print('something is OFF with the updat switch -¤¤-')
-                res = saving_to_db(fields, insert=True)
-                print('We are INSERTING! \n', res)
-            window['txtCatalogNumber'].update('')
+                print('We are updating! ', res)
+                clearingList = ['cbxStorage', 'cbxPrepType', 'cbxHigherTaxon', 'cbxTypeStatus', 'txtNotes',
+                                'chkMultiSpecimen',
+                                'cbxGeoRegion', 'txtTaxonName', 'cbxTaxonName', 'txtCatalogNumber']
+                clear_all_of(clearingList)
+                window['txtRecordID'].update('')
 
+
+        if event == 'btnClear':
+            clearingList = ['cbxStorage', 'cbxPrepType', 'cbxHigherTaxon', 'cbxTypeStatus', 'txtNotes',
+                            'chkMultiSpecimen',
+                            'cbxGeoRegion', 'txtTaxonName', 'cbxTaxonName', 'txtCatalogNumber']
+            clear_all_of(clearingList)
+            window['txtRecordID'].update('')
 
         if event == 'btnBack':
             print('Pressed go-back /')
@@ -523,6 +517,10 @@ def init(collection_id):
 
     window.close()
 
+
+
+# gui_main(2)
+#plz commit!!
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
     Accomplished by removing last character input if not a valid character
@@ -530,3 +528,4 @@ def init(collection_id):
     What if the taxon name is a new one (not in the taxon table)? Needs to be handled? 
         - Covered by ticket #68 
 """
+
