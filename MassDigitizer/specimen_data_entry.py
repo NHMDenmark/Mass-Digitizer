@@ -145,7 +145,7 @@ def getList(tablename, collectionid): return util.convert_dbrow_list(
 def getPrimaryKey(tableName, name, field='name'):
     return db.getRowsOnFilters(tableName, {' %s = ' % field: '"%s"' % name})[0]['id']
 
-def gui_main(collection_id):
+def init(collection_id):
     #
 
     # Set collection id
