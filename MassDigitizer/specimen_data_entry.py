@@ -14,7 +14,10 @@ import home_screen as hs
 import kick_off_sql_searches as koss
 from saveOrInsert_functionGUI import saving_to_db
 
-# --- functions ---
+# import saveOrInsert_functionGUI as saver
+
+# Make sure that current folder is registrered to be able to access other app files
+
 sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer')))
 currentpath = os.path.join(pathlib.Path(__file__).parent, '')
 
@@ -263,6 +266,7 @@ def gui_main(collection_id):
 
             window['btnBack'].update(disabled=True)
             # window['lblWarning'].update(visible=True)
+
             backtrackCounter = backtrackCounter - 1
             sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
             rows = db.executeSqlStatement(sql)
@@ -270,8 +274,12 @@ def gui_main(collection_id):
         sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
 
         rows = db.executeSqlStatement(sql)
-        print('COUNTER row::::', rows[0])
-        recordIDcurrent = rows[0]['id']
+        if len(rows) > 0:
+            print('COUNTER row::::', rows[0])
+            recordIDcurrent = rows[0]['id']
+        else :
+            recordIDcurrent = 0
+
         return recordIDcurrent
 
     onecrementor = 0
@@ -297,6 +305,7 @@ def gui_main(collection_id):
                 window[key].update('')
 
         # Checking field events as switch construct
+        if event is None: break # Empty event indicates user closing window  
         if event == 'cbxStorage':
             print('event:', event)
             print('In storage domain')
@@ -470,4 +479,14 @@ def gui_main(collection_id):
     window.close()
 
 
+
 # gui_main(2)
+
+""" TO DO:
+    Restrict the characters allowed in an input element to digits and . or -
+    Accomplished by removing last character input if not a valid character
+    This link provides some ideas for input sanitazion https://github.com/PySimpleGUI/PySimpleGUI/issues/1119
+    What if the taxon name is a new one (not in the taxon table)? Needs to be handled? 
+        - Covered by ticket #68 
+"""
+

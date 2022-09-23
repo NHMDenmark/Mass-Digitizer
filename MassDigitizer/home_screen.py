@@ -21,9 +21,8 @@ sys.path.append(str(Path(__file__).joinpath('MassDigitizer')))
 import util
 import global_settings as gs
 import data_access as db
-import specimen_data_entry as de
 import specify_interface as sp
-
+import specimen_data_entry as de
 
 def init():
     # TODO function contract 
@@ -34,8 +33,6 @@ def init():
 
     btn_exit = [sg.Button("Exit", key='exit')]
 
-    # Set up insitution selection field 
-    #institutions = ['NHMD: Natural History Museum of Denmark (Copenhagen)', 'NHMA: Natural History Museum Aarhus', 'TEST: Test server']
     institutions = util.convert_dbrow_list(db.getRows('institution'))
 
     lblSelectInstitution = [sg.Text('Please choose your institution to proceed:')]
@@ -121,5 +118,3 @@ def main(window):
                 pass
         
     window.close()
-
-#init()

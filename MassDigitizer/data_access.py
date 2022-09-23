@@ -32,10 +32,10 @@ import global_settings as gs
 
 # Moved database file to user documents (Windows) otherwise it will be readonly 
 dbFilePath = os.path.expanduser('~\Documents\DaSSCO\db.sqlite3') # In order to debug / run, a copy of the db file should be moved into this folder on Windows machines 
+dbAltFilePath = os.path.expanduser('~\OneDrive - University of Copenhagen\Documents\DaSSCO\db.sqlite3') # For OneDrive users this is the file location 
 
 # Reset cursor pointer 
 currentCursor = None
-print(dbFilePath)
 
 # Point to database file 
 def __init__(self,databaseName='db', do_in_memory=False):
@@ -44,7 +44,7 @@ def __init__(self,databaseName='db', do_in_memory=False):
     #   do_in_memory (boolean): Whether the database file should be run in-memory 
 
     self.set_database(databaseName)
-    print('Connecting to db file: %s ...'%self.dbFilePath)
+    print('Initializing with db file: %s ...'%self.dbFilePath)
     connection = sqlite3.connect(self.dbFilePath)
     
     if gs.db_in_memory == True or do_in_memory == True:
@@ -78,7 +78,6 @@ def getConnection():
     connection = sqlite3.connect(dbFilePath)
     return connection
 
-
 connection = None
 def getDbCursor():#do_in_memory=False):
     # Generic function needed for database access 
@@ -93,7 +92,10 @@ def getDbCursor():#do_in_memory=False):
 # def get_inmemory_cursor(in_memory=True):
 #     # TODO write function contract
     print('Connecting to db file: %s ...'%dbFilePath)
-    connection = sqlite3.connect(dbFilePath)
+    try:
+        connection = sqlite3.connect(dbFilePath)
+    except:
+        connection = sqlite3.connect(dbAltFilePath)
     
     #gs.db_in_memory = do_in_memory # apply in-memory flag to global  
     if gs.db_in_memory == True:
