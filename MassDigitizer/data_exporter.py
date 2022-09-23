@@ -11,25 +11,40 @@
 
   PURPOSE: Exporting data from local database 
 """
-
+import os
+from fileinput import filename
+from tarfile import LENGTH_NAME
 import pandas as pd
-from pandas import DataFrame as df
+import tempfile as tf
+from datetime import datetime as dt
 
-# local imports
+# internal dependencies
 import data_access as db
 
-specimens = db.getRowsOnFilters('specimen', {'exported':'IS NULL'},100000)
+exportableTables = {'specimen'}
 
-print('Found %s specimens: '%len(specimens))
+filePath = os.path.expanduser('~\Documents\DaSSCO') # In order to debug / run, a copy of the db file should be moved into this folder on Windows machines 
+altFilePath = os.path.expanduser('~\OneDrive - University of Copenhagen\Documents\DaSSCO\db.sqlite3') # For OneDrive users this is the file location 
 
-for specimen in specimens:
-    print(' - ', specimen['taxonname'])
+def exportSpecimens(file_type):
+  # TODO method contract
+  return exportTable('specimen', file_type)
 
-db_df = pd.read_sql_query("SELECT * FROM specimen WHERE exported IS NULL", db.getConnection())
+def exportTable(table_name, file_type):
+  # TODO method contract
+  if table_name in exportableTables:
+    db_df = pd.read_sql_query("SELECT * FROM %s WHERE exported IS NULL"%table_name, db.getConnection())
+    try:
+      file_name = generateFilename(table_name,file_type, filePath)
+    except:
+      file_name = generateFilename(table_name,file_type, altFilePath)
+    db_df.to_excel(file_name)
+    return 'Exported file to %s'%file_name
+  else:
+    return 'The table "%s" cannot be exported '%table_name
 
-#db_df.to_csv('database.csv', index=False)
+def generateFilename(object_name, file_type, file_path):
+  # TODO method contract
+  return tf.NamedTemporaryFile(prefix='%s-export_%s'%(object_name,dt.now().strftime("%Y%m%d%H%M_")), suffix='.%s'%file_type, dir=file_path).name
 
-for row in db_df:
-  print(row)
-
-db_df.to_excel('test.xlsx')
+#exportTable('specimen','xlsx')

@@ -22,6 +22,7 @@ import sqlite3
 import sys
 import pathlib
 from datetime import datetime
+from textwrap import wrap
 import PySimpleGUI as sg
 
 # internal dependencies
@@ -31,6 +32,7 @@ import global_settings as gs
 import home_screen as hs
 import kick_off_sql_searches as koss
 from saveOrInsert_functionGUI import saving_to_db
+import data_exporter as dx
 # import saveOrInsert_functionGUI as saver
 
 # Make sure that current folder is registrered to be able to access other app files
@@ -125,15 +127,16 @@ def init(collection_id):
     taxonomicPicklist = [sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
                          sg.Listbox('', key='cbxTaxonName', select_mode=sg.LISTBOX_SELECT_MODE_BROWSE, size=(28, 6),
                                     text_color='black', background_color='white', font=('Arial', 12),
-                                    bind_return_key=True, enable_events=True, pad=((5, 0), (0, 0))), ]
-    barcode = [sg.Text('Barcode:', size=defaultSize, background_color=blueArea, enable_events=True, text_color='black',
-                       font=font),
-               sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white',
-                            font=('Arial', 12), enable_events=True), ]
+                                    bind_return_key=True, enable_events=True, pad=((5, 0), (0, 0))), 
+                        ]
+    barcode = [sg.Text('Barcode:', size=defaultSize, background_color=blueArea, enable_events=True, text_color='black', font=font),
+               sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),
+               ]
     # statusLabel = [sg.Text('Specimen record has been saved', font=('Arial',20),size=(20,10),justification='center',background_color='#4f280a',text_color = 'yellow',key='texto')]
+    lblExport = [sg.Text('', key='lblExport', visible=False, size=(100,2)), ]
 
-    layout_bluearea = [broadGeo, taxonInput, taxonomicPicklist, barcode,
-
+    layout_bluearea = [broadGeo, taxonInput, taxonomicPicklist, barcode, 
+                        
                        [sg.Text('Record ID: ', key='lblRecordID', background_color='#99dcff', visible=True,
                                 size=(9, 1)),
                         sg.Text('', key='txtRecordID', size=(4,1), background_color=blueArea),
@@ -143,8 +146,11 @@ def init(collection_id):
                         sg.Button('Go Back', key="btnBack", button_color='firebrick', pad=(13, 0)),
                         sg.Text('Beginning of the name list reached. No more Go-back!', visible=False, key='lblWarning',
                                 background_color="#ff5588", border_width=3),
-                        sg.Button('Clear form', key='btnClear', button_color='black on white')],
-
+                        sg.Button('Clear form', key='btnClear', button_color='black on white'),
+                        sg.Button('Export data', key='btnExport', button_color='blue'),
+                        sg.Button('Dismiss', key='btnDismiss', button_color='white on black'),
+                        ],
+                        lblExport
                        ]
     loggedIn = [sg.Text('Logged in as:', size=defaultSize, background_color=greyArea, font=font),
                 sg.Input(disabled=True, size=(24, 1), background_color='white', text_color='black',
@@ -173,7 +179,7 @@ def init(collection_id):
               [sg.Frame('', [[sg.Column(layout_bluearea, background_color=blueArea)]], expand_x=True, expand_y=True,
                         background_color=blueArea, title_location=sg.TITLE_LOCATION_TOP)], ]
 
-    window = sg.Window("Mass Annotated Digitization Desk  (MADD)", layout, margins=(2, 2), size=(950, 580),
+    window = sg.Window("Mass Annotated Digitization Desk  (MADD)", layout, margins=(2, 2), size=(960, 640),
                        resizable=True, return_keyboard_events=True, finalize=True)
     window.TKroot.focus_force()
     window['cbxTaxonName'].bind("<Return>", "_Enter")
@@ -264,8 +270,8 @@ def init(collection_id):
 
     while True:
         event, values = window.read()
-        print('EVENT ;;; ', event)
-        print('VALUES //', values)
+        #print('EVENT ;;; ', event)
+        #print('VALUES //', values)
 
         def clear_all_of(fieldKeys):
             for key in fieldKeys:
@@ -371,12 +377,12 @@ def init(collection_id):
         if values:
             taxonName = values['cbxTaxonName']
             for item in taxonName: taxonName = item
-            print('PREP back/save cbxTaxonName == ', unpackedTaxonName)
+            #print('PREP back/save cbxTaxonName == ', unpackedTaxonName)
 
             if not taxonName:
                 taxonName = values['txtTaxonName']
                 # for item in taxonName: unpackedTaxonName = item
-                print('txtTaxonName bist: : ', taxonName)
+                #print('txtTaxonName bist: : ', taxonName)
 
         if event == 'btnSave':
             currentRecordID = obtainTrack()
@@ -501,6 +507,16 @@ def init(collection_id):
                             'cbxGeoRegion', 'txtTaxonName', 'cbxTaxonName', 'txtCatalogNumber']
             clear_all_of(clearingList)
             window['txtRecordID'].update('')
+            window['lblExport'].update(visible=False)
+            window['lblWarning'].update(visible=False)
+
+        if event == 'btnExport':
+            export_result = dx.exportSpecimens('xlsx')
+            window['lblExport'].update(export_result,visible=True)
+
+        if event == 'btnDismiss':
+            window['lblExport'].update(visible=False)
+            window['lblWarning'].update(visible=False)
 
         if event == sg.WINDOW_CLOSED:
             break
