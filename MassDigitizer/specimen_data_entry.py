@@ -173,6 +173,8 @@ def init(collection_id):
     storage = [sg.Text("Storage location:", size=defaultSize, background_color=greenArea, font=font),
                sg.Combo(getList('storage', c), key='cbxStorage', size=element_size, text_color='black',
                         background_color='white', font=('Arial', 12), readonly=True, enable_events=True), ]
+    storageFullname = [sg.Text("", size=defaultSize, background_color=greenArea, font=font), #Storage full name:
+                       sg.Text("", key='txtStorageFullname', size=element_size, background_color='#99ffdc')]
     preparation = [sg.Text("Preparation type:", size=defaultSize, background_color=greenArea, font=font),
                    sg.Combo(getList('preptype', c), key='cbxPrepType', size=element_size, text_color='black',
                             background_color='white', font=('Arial', 12), readonly=True, enable_events=True), ]
@@ -185,7 +187,7 @@ def init(collection_id):
     notes = [sg.Text('Notes', size=defaultSize, background_color=greenArea, font=font),
              sg.Multiline(size=(31, 5), background_color='white', text_color='black', key='txtNotes',
                           enable_events=False)]
-    layout_greenarea = [storage, preparation, taxonomy, type_status, notes,
+    layout_greenarea = [storage, storageFullname, preparation, taxonomy, type_status, notes, 
                         [sg.Checkbox('Multispecimen sheet', key='chkMultiSpecimen', background_color=greenArea,
                                      font=(11))], ]
     broadGeo = [
@@ -331,6 +333,13 @@ def init(collection_id):
         if event == 'cbxStorage':
             print('event:', event)
             print('In storage domain')
+            # Fetch storage location full name and put in label 
+            storageloc = db.getRowOnId('storage', getPrimaryKey('storage', values['cbxStorage']))
+            if storageloc is not None:    
+                window['txtStorageFullname'].update(storageloc['fullname'])
+            else:
+                window['txtStorageFullname'].update('')
+
         if event == 'cbxPrepType':
             print('In preparation type')
             prepper = values[event]
@@ -391,7 +400,7 @@ def init(collection_id):
                       'typestatusid': getPrimaryKey('typestatus', values['cbxTypeStatus']),
                       'georegionname': '"%s"' % values['cbxGeoRegion'],
                       'georegionid': getPrimaryKey('georegion', values['cbxGeoRegion']),
-                      #'storagefullname': '"%s"' % values['lblStorage'],
+                      #'storagefullname': '"%s"' % values['txtStorageFullname'],
                       'storagename': '"%s"' % values['cbxStorage'],
                       'storageid': getPrimaryKey('storage', values['cbxStorage']),
                       'preptypename': '"%s"' % values['cbxPrepType'],
