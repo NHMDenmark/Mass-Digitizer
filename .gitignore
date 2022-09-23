@@ -24,3 +24,4 @@ MassDigitizer/__main__.onefile-build/
 DaSSCo.exe
 *.exe
 /MassDigitizer/Output/*.zip
+*.xlsx
