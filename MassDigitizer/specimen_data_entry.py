@@ -391,6 +391,7 @@ def gui_main(collection_id):
                       'typestatusid': getPrimaryKey('typestatus', values['cbxTypeStatus']),
                       'georegionname': '"%s"' % values['cbxGeoRegion'],
                       'georegionid': getPrimaryKey('georegion', values['cbxGeoRegion']),
+                      #'storagefullname': '"%s"' % values['lblStorage'],
                       'storagename': '"%s"' % values['cbxStorage'],
                       'storageid': getPrimaryKey('storage', values['cbxStorage']),
                       'preptypename': '"%s"' % values['cbxPrepType'],

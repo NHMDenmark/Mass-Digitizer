@@ -99,6 +99,7 @@ def main(window):
                         gs.csrfToken = sp.specifyLogin(username, password, collection_id)
 
                         if gs.csrfToken != '':
+                            #gs.spUserId = userid
                             gs.spUserName = username
                             gs.collectionId = collection_id
                             gs.collectionName = selected_collection
