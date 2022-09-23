@@ -3,3 +3,4 @@ pysimplegui
 pytest
 pytz
 pandas
+openpyxl

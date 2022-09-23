@@ -12,7 +12,8 @@
   PURPOSE: Exporting data from local database 
 """
 
-from pandas import DataFrame as pdf
+import pandas as pd
+from pandas import DataFrame as df
 
 # local imports
 import data_access as db
@@ -23,3 +24,12 @@ print('Found %s specimens: '%len(specimens))
 
 for specimen in specimens:
     print(' - ', specimen['taxonname'])
+
+db_df = pd.read_sql_query("SELECT * FROM specimen WHERE exported IS NULL", db.getConnection())
+
+#db_df.to_csv('database.csv', index=False)
+
+for row in db_df:
+  print(row)
+
+db_df.to_excel('test.xlsx')
