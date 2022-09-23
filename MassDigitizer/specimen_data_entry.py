@@ -470,4 +470,4 @@ def gui_main(collection_id):
     window.close()
 
 
-gui_main(2)
+# gui_main(2)
