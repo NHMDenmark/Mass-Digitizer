@@ -220,7 +220,7 @@ def init(collection_id):
                         sg.Text('Beginning of the name list reached. No more Go-back!', visible=False, key='lblWarning',
                                 background_color="#ff5588", border_width=3),
                         sg.Button('Clear form', key='btnClear', button_color='black on white'),
-                        sg.Button('Export data', key='btnExport', button_color='blue'),
+                        sg.Button('Export data', key='btnExport', button_color='royal blue'),
                         sg.Button('Dismiss', key='btnDismiss', button_color='white on black'),
                         ],
                         lblExport
@@ -407,6 +407,7 @@ def init(collection_id):
             existTable = db.getRows('specimen', limit=1)
             recordIDlabel = window['txtRecordID'].get()
             print('recordIDlabel:;: ', recordIDlabel)
+            window['txtRecordID'].update('')
             if existTable and not recordIDlabel:
                 print('TTable existsss and no recordID operational<<')
                 existResult = [j for j in existTable[0]]
@@ -520,7 +521,7 @@ def init(collection_id):
 
 
 
-# gui_main(2)
+# init(2)
 #plz commit!!
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
