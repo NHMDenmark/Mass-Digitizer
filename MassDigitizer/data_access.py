@@ -196,6 +196,7 @@ def executeSqlStatement(sql):
     for j in rows:
         print(j)
         # print([x for x in j])
+    currentCursor.connection.commit()
     currentCursor.connection.close()
     return rows
 
