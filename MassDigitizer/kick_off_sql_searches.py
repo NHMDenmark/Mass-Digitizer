@@ -33,7 +33,7 @@ def small_list_lookup(tableName, inputKey, indicesForColumn=2):
     return result
 
 
-def auto_suggest_taxonomy(name, taxDefItemId=None, rowLimit=2000):
+def auto_suggest_taxonomy(name, taxDefItemId=None, rowLimit=200):
     # Purpose: for helping digitizer staff rapidly input names by returning suggestions based on the three or
     #  more entered characters.
     #trigger: means how many keystrokes it takes to trigger the auto-suggest functionality
@@ -41,7 +41,9 @@ def auto_suggest_taxonomy(name, taxDefItemId=None, rowLimit=2000):
     #returns: a list of names
 
     cur = data_access.getDbCursor()
-    sql = "SELECT fullname FROM taxonname WHERE lower(fullname) LIKE lower('%{}%');".format(name)
+    sql = "SELECT fullname FROM taxonname WHERE fullname LIKE lower('% {}%') " \
+          "OR fullname LIKE lower('{}%');".format(name, name)
+    print('In autosuggest & sql isz: ', sql)
     if taxDefItemId:
         sql = sql[:-1]
         sql = sql + ' AND taxontreedefid = {};'.format(taxDefItemId)
