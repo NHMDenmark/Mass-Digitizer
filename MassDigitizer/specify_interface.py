@@ -249,12 +249,12 @@ def mergeTaxa(source_id, target_id, csrftoken):
   #print(spSession.cookies)
 
   #input('ready?')
-  response = spSession.post(apiCallString, headers=headers, data={'target' : target_id }) 
+  response = spSession.post(apiCallString, headers=headers, data={'target' : target_id }, timeout=60) 
 
   #print(response.request.body)
   util.pretty_print_POST(response.request)
   #print('---------------------------')
-  print(' - Response: %s %s' %(str(response.status_code), response.reason))
+  print(' - Response: %s %s %s.' %(str(response.status_code), response.reason, response.text))
 
   if response.status_code < 299:
     object = response.json()

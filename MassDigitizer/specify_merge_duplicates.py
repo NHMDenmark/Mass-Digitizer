@@ -12,43 +12,58 @@
   PURPOSE: Automate merging duplicates through the Specify API 
 """
 
-from getpass import getpass
+#from getpass import getpass
 
 import specify_interface as sp
 import global_settings as gs 
 
 gs.baseURL = 'https://specify-test.science.ku.dk/'
 
-""" def merge(source_taxon_id, target_taxon_id):
+def merge(source_target_tuple_list, spusername, sppassword, collection_id):
+    #TODO function contract   
+    # 
+
+    token = sp.specifyLogin(spusername, sppassword, collection_id)
+    if token == '': return 'Authentication error!'
     
-    sp.mergeTaxa(source_taxon_id, target_taxon_id)
+    for duplicate in source_target_tuple_list: 
+        source_taxon_id = duplicate[0]
+        target_taxon_id = duplicate[1]
+        print('merging %s with %s ...'%(source_taxon_id, target_taxon_id))
+        print(sp.mergeTaxa(source_taxon_id, target_taxon_id, token))
+        
 
-    pass """
 
-# TEST CODE
-#util.clear()
+def testcode():
+    duplicate1 = ()#(1,2)
+    duplicate2 = ()#(3,4)
 
-# Save SSL keys to "sslkeylog.txt" in this directory
-# Note that you only have to do this once while this is in scope
-#sslkeylog.set_keylog("sslkeylog.txt")
+    duplicate_list = [duplicate1, duplicate2]
 
-max_tries = 10
-while max_tries > 0:
-    token = sp.specifyLogin(input('Enter username: '), getpass('Enter password: '), 688130)
-    if token != '': break
-    else:
-        print('Login failed...')
-        if input('Try again? (y/n)') == 'n': break
-    max_tries = max_tries - 1
-    print('Attempts left: %i' % max_tries)
+    merge(duplicate_list,'fedor.steeman','XmgrNuitCrowd', 688130)
 
-if token != '':
-    #collectionid = input('choose collection:')
-    #sp.choose_collection(collectionid,token)
+    
 
-    source_taxon_id = 367103 #input('enter source taxon id:')
-    target_taxon_id = 367558 #input('enter target taxon id:')
 
-    sp.mergeTaxa(source_taxon_id, target_taxon_id, token)
+"""
+def testcode():
+    max_tries = 10
+    while max_tries > 0:
+        token = sp.specifyLogin(input('Enter username: '), getpass('Enter password: '), 688130)
+        if token != '': break
+        else:
+            print('Login failed...')
+            if input('Try again? (y/n)') == 'n': break
+        max_tries = max_tries - 1
+        print('Attempts left: %i' % max_tries)
 
-print('exiting...')
+    if token != '':
+        source_taxon_id = input('enter source taxon id:')
+        target_taxon_id = input('enter target taxon id:')
+
+        sp.mergeTaxa(source_taxon_id, target_taxon_id, token)
+
+    print('exiting...')
+"""
+
+testcode()
