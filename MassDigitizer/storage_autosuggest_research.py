@@ -1,13 +1,9 @@
 
-
-import PySimpleGUI as sg
-
 import data_access as db
 import fnmatch
 from timeit import default_timer as timer
 from datetime import timedelta
-import time
-from time import time
+
 
 start = timer()
 sql = "SELECT name, fullname FROM storage"
@@ -17,7 +13,7 @@ for j in rows:
     storageDict[j['name']] = j['fullname']
 
 end = timer()
-print('performance population dictionary storageDict= ', timedelta(seconds=end-start))
+print('Time performance for populating dictionary storageDict= ', timedelta(seconds=end-start))
 
 print(len(storageDict))
 
