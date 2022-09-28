@@ -52,13 +52,13 @@ def auto_suggest_taxonomy(name, taxDefItemId=None, rowLimit=200):
 
     print('len rows = ', len(rows))
     lengthOfRows =len(rows)
-    if lengthOfRows <= rowLimit:
-        print('AUTOSUGGEST!!!')
-        flatCandidates = list(chain.from_iterable(rows))
-        # print(flatCandidates)
-        rows = list(flatCandidates)
-
-        return rows
+    #if lengthOfRows <= rowLimit:
+    print('AUTOSUGGEST!!!')
+    flatCandidates = list(chain.from_iterable(rows))
+    # print(flatCandidates)
+    rows = list(flatCandidates)
+    
+    return rows
 
 ###TEST AREA
 # outcome = auto_suggest_taxonomy('Rosa rug', taxDefItemId=13)
