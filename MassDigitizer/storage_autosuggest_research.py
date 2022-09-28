@@ -20,13 +20,13 @@ print(len(storageDict))
 def storage_autosuggest(partialName, storage_dictionary):
 
     print('IN storage_auto!! partial=', partialName)
-    keys = fnmatch.filter(storage_dictionary, "Box 38*")
+    keys = fnmatch.filter(storage_dictionary, f"{partialName}*")
     # fnmatch is a unix style pattern matching module
     print('length return dict: ', len(keys))
 
     return keys
 
-suggestions = storage_autosuggest('Box 38', storageDict)
-print(suggestions)
+suggestions = storage_autosuggest('Shelf', storageDict)
+print('suggestions: ', suggestions)
 end = timer()
 print('performance running the entire module= ', timedelta(seconds=end-start))
