@@ -51,8 +51,8 @@ onecrementor = 0
 
 window = None
 
-# Specimen record variables (TODO turn into class)
-collobj = specimen.specimen()
+# Specimen record 
+collobj = None #specimen.specimen()
 
 # Predefined data for listboxes 
 storageLocations = {}
@@ -66,13 +66,15 @@ clearingList = ['cbxStorage', 'cbxPrepType', 'cbxHigherTaxon', 'cbxTypeStatus', 
 
 def init(collection_id):
     # TODO function contract
+    
+    collobj = specimen.specimen(collection_id)
+    print(len(collobj.storageLocations))
 
     # Set collection id
-    collobj.collectionid = collection_id
     c = collection_id
 
     # Get predefined data 
-    storageLocations = db.getRowsOnFilters('storage', {'collectionid =': '%s'%c})
+    #storageLocations = db.getRowsOnFilters('storage', {'collectionid =': '%s'%c})
     prepTypes = db.getRowsOnFilters('prep', {'collectionid =': '%s'%c})
     typeStatuses = db.getRowsOnFilters('typestatus', {'collectionid =': '%s'%c})
     geoRegions = db.getRowsOnFilters('georegion', {'collectionid =': '%s'%c}) 
@@ -98,7 +100,7 @@ def init(collection_id):
 
     # Store elements in variables to make it easier to include and position in the frames
     storage = [sg.Text("Storage location:", size=defaultSize, background_color=greenArea, font=font),
-               sg.Combo(util.convert_dbrow_list(storageLocations), key='cbxStorage', size=element_size, text_color='black',
+               sg.Combo(util.convert_dbrow_list(collobj.storageLocations), key='cbxStorage', size=element_size, text_color='black',
                         background_color='white', font=('Arial', 12), readonly=True, enable_events=True),
                sg.Text("", key='txtStorageFullname', size=element_size, background_color='#99ffdc', font=smallLabelFont)]
     preparation = [sg.Text("Preparation type:", size=defaultSize, background_color=greenArea, font=font),
@@ -206,8 +208,9 @@ def init(collection_id):
         window.Element('txtInstitution').Update(value=institution[2])
     window.Element('txtWorkStation').Update(value='TRS-80')
 
+    window['txtCatalogNumber'].bind('<Leave>', '_Edit')
     window['txtNotes'].bind('<Tab>', '+TAB')
-    window['txtNotes'].bind('<Leave>', '+NOTE_EDIT')
+    window['txtNotes'].bind('<Leave>', '_Edit')
     window['cbxTaxonName'].bind("<Return>", "_Enter")
     window['chkMultiSpecimen'].bind("<Return>", "_Enter")
     window.Element('txtUserName').Widget.config(takefocus=0)
@@ -228,15 +231,15 @@ def init(collection_id):
 
         if event == 'cbxStorage':
             index = window[event].widget.current()
-            collobj.storageId = storageLocations[index]['id']
-            collobj.storagename = storageLocations[index]['name']
-            collobj.storageFullname = storageLocations[index]['fullname']
+            
+            collobj.setStorageFields(index)
+
             window['txtStorageFullname'].update(collobj.storageFullname)
             
         if event == 'cbxPrepType':
             index = window[event].widget.current()
-            collobj.preptypeid = storageLocations[index]['id']
-            collobj.preptypename = storageLocations[index]['name']
+            collobj.preptypeid = prepTypes[index]['id']
+            collobj.preptypename = prepTypes[index]['name']
 
         if event == 'cbxHigherTaxon':
             pass
@@ -247,11 +250,12 @@ def init(collection_id):
             collobj.typestatusname = typeStatuses[index]['name']
         
         #if event == 'txtNotes':
-        if event == '+NOTE_EDIT':
-            collobj.notes = values[event]
+        if event == 'txtNotes_Edit':
+            collobj.notes = values['txtNotes']
+            pass
         
         if event.endswith('+TAB'):
-            collobj.notes = values[event]
+            collobj.notes = values['txtNotes']
             window['chkMultiSpecimen'].set_focus()
 
         if event == 'chkMultiSpecimen_Enter':
@@ -262,8 +266,12 @@ def init(collection_id):
         if event == 'txtCatalogNumber':
             collobj.CatalogNumber = values[event]
 
+        if event == 'txtCatalogNumber_Edit':
+            collobj.CatalogNumber = values['txtCatalogNumber']
+            pass
+
         if event == "txtCatalogNumber_RETURN":
-            collobj.CatalogNumber = values[event]
+            collobj.CatalogNumber = values['txtCatalogNumber']
             window['btnSave'].set_focus()
         
         if event == 'chkMultiSpecimen': 
@@ -297,15 +305,15 @@ def init(collection_id):
             print('Pressed go-back /')
 
             # Functionality for going back through the session records to make changes, or do checkups.
-            currentRecordID = obtainTrack(incrementor=onecrementor)
+            currentRecordID = collobj.obtainTrack(incrementor=onecrementor)
             onecrementor += 1
-            print('oneicrementor at -- ', onecrementor)
-            print('current recordID :  ', currentRecordID)
+            #print('oneicrementor at -- ', onecrementor)
+            #print('current recordID :  ', currentRecordID)
             if not currentRecordID:
                 window['txtTaxonName'].update("Beginning of taxon names reached.")
             else:
                 rows = db.getRowOnId('specimen', currentRecordID)
-                print('RAW row::::', rows[0])
+                #print('RAW row::::', rows[0])
                 recordIDbacktrack = rows[0]
                 dasRecordID = recordIDbacktrack
                 print('record past ID : ', recordIDbacktrack)
@@ -359,7 +367,9 @@ def init(collection_id):
                 clear_all_of(window)
                 window['txtRecordID'].update('')
             
-            collobj.save()
+            previousId = collobj.save()
+            collobj = specimen.specimen()
+            collobj.previousId = previousId
 
     window.close()
 
@@ -369,53 +379,53 @@ def clear_all_of(win):
         print(key)
         win[key].update('')
 
-def getRecordIDbyBacktracking(backtrackCounter):
-    # TODO function contract
-    # TODO must be reworked to use SQL statements rather than "counters" which rely on sequential IDs!
-    sql = "select * from specimen s order by s.id DESC LIMIT {},1;".format(backtrackCounter)
-    print('the SQL: ', sql)
-    try:
-        rows = db.executeSqlStatement(sql)
-    except sqlite3.OperationalError:
-        window['txtTaxonName'].update("Beginning of taxon names reached.")
+# def getRecordIDbyBacktracking(backtrackCounter):
+#     # TODO function contract
+#     # TODO must be reworked to use SQL statements rather than "counters" which rely on sequential IDs!
+#     sql = "select * from specimen s order by s.id DESC LIMIT {},1;".format(backtrackCounter)
+#     print('the SQL: ', sql)
+#     try:
+#         rows = db.executeSqlStatement(sql)
+#     except sqlite3.OperationalError:
+#         window['txtTaxonName'].update("Beginning of taxon names reached.")
 
-    if rows:
-        print('COUNTER row::::', rows[0])
-        recordIDcurrent = rows[0]['id']
-        return recordIDcurrent
-    else:
-        print('IN else clause due to no more GO_BACK !!')
+#     if rows:
+#         print('COUNTER row::::', rows[0])
+#         recordIDcurrent = rows[0]['id']
+#         return recordIDcurrent
+#     else:
+#         print('IN else clause due to no more GO_BACK !!')
 
-        window['btnBack'].update(disabled=True)
-        # window['lblWarning'].update(visible=True)
+#         window['btnBack'].update(disabled=True)
+#         # window['lblWarning'].update(visible=True)
 
-        backtrackCounter = backtrackCounter - 1
-        sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
-        rows = db.executeSqlStatement(sql)
+#         backtrackCounter = backtrackCounter - 1
+#         sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
+#         rows = db.executeSqlStatement(sql)
 
-    sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
+#     sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
 
-    rows = db.executeSqlStatement(sql)
-    if len(rows) > 0:
-        print('COUNTER row::::', rows[0])
-        recordIDcurrent = rows[0]['id']
-    else :
-        recordIDcurrent = 0
+#     rows = db.executeSqlStatement(sql)
+#     if len(rows) > 0:
+#         print('COUNTER row::::', rows[0])
+#         recordIDcurrent = rows[0]['id']
+#     else :
+#         recordIDcurrent = 0
 
-    return recordIDcurrent
+#     return recordIDcurrent
 
-def obtainTrack(ID=0, incrementor=0):
-    # TODO function contract
-    # Keeps track of record IDs in relation to the Go-back button functionality.
-    print('the obtain ID  is --', ID)
-    if ID == 0:
-        print('IN ID of obtainTrack()')
-        recordID = getRecordIDbyBacktracking(incrementor)
-        return recordID
-    else:
-        print('In ELSE obtainTrack()')
-        recordID = ID - 1
-        return recordID
+# def obtainTrack(ID=0, incrementor=0):
+#     # TODO function contract
+#     # Keeps track of record IDs in relation to the Go-back button functionality.
+#     print('the obtain ID  is --', ID)
+#     if ID == 0:
+#         print('IN ID of obtainTrack()')
+#         recordID = getRecordIDbyBacktracking(incrementor)
+#         return recordID
+#     else:
+#         print('In ELSE obtainTrack()')
+#         recordID = ID - 1
+#         return recordID
 
 def taxonomic_autosuggest_gui(partialName):
     # TODO Function contract 

@@ -121,20 +121,21 @@ def getDbCursor():#do_in_memory=False):
 
 
 def getRows(tableName, limit=100):
-    # Getting all rows from the table specified by name
+    # Getting all records from the table specified by name
     # CONTRACT 
     #   tableName (String): The name of the table to be queried
-    #   limit (Integer) : The maximum number of rows - 0 means all rows 
+    #   limit (Integer) : The maximum number of records - 0 means all records 
     #   RETURNS table rows (list)
     currentCursor = getDbCursor()        
     print('Get all rows from table "%s" ...' % tableName)
     sqlString = "SELECT * FROM " + tableName
     if limit > 0:
         sqlString += ' LIMIT %s' %str(limit)
-    rows = currentCursor.execute(sqlString).fetchall()
-    print('found %d rows ' % len(rows))
+    records = currentCursor.execute(sqlString).fetchall()
+    print('found %d records ' % len(records))
     currentCursor.connection.close()
-    return rows
+    
+    return records
 
 def getRowsOnFilters(tableName, filters, limit=100):
     # Getting specific rows specified by filters from the table specified by name
@@ -159,46 +160,52 @@ def getRowsOnFilters(tableName, filters, limit=100):
         sqlString += ' LIMIT %s' %str(limit)
     print(sqlString)
     try:
-        rows = currentCursor.execute(sqlString).fetchall()
-    # If no rows in results, insert an empty dummy row to prevent errors
-        if len(rows) < 1:
-            rows = currentCursor.execute("SELECT * FROM dummyrecord LIMIT 1").fetchall()
+        records = currentCursor.execute(sqlString).fetchall()
+    # If no records in results, insert an empty dummy row to prevent errors
+        if len(records) < 1:
+            records = currentCursor.execute("SELECT * FROM dummyrecord LIMIT 1").fetchall()
             currentCursor.connection.close()
     except sqlite3.OperationalError:
-        rows = currentCursor.execute("SELECT * FROM dummyrecord LIMIT 1").fetchall()
+        records = currentCursor.execute("SELECT * FROM dummyrecord LIMIT 1").fetchall()
         currentCursor.connection.close()
-    return rows
 
-def getRowOnId(tableName, id, maxID=False):
+    return records
+
+def getRowOnId(tableName, id):
     # Getting specific row from the table specified by name using its primary key (id)  
     # CONTRACT 
     #   tableName (String): The name of the table to be queried
     #   id (Integer) : The primary key of the row to be returned
-    #maxID is added functionality to get the latest record ID
     #   RETURNS single table row
-    if maxID:
-        currentCursor = getDbCursor()
-        sql = "SELECT MAX({}.id) FROM {};".format(tableName, tableName)
-        row = currentCursor.execute(sql).fetchone()
-        currentCursor.connection.close()
-        return row
-
     currentCursor = getDbCursor()   
-    row = currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(id)).fetchone()
+    record = currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(id)).fetchone()
     currentCursor.connection.close()
-    return row
+
+    return record
+
+def getMaxRow(tableName):
+    # TODO description 
+    #   maxID(Boolean) : is added functionality to get the latest record ID
+    #   RETURNS single table row
+    currentCursor = getDbCursor()
+    sql = "SELECT MAX({}.id) FROM {};".format(tableName, tableName)
+    record = currentCursor.execute(sql).fetchone()
+    currentCursor.connection.close()
+
+    return record
 
 def executeSqlStatement(sql):
     currentCursor = getDbCursor()
     rows_object = currentCursor.execute(sql).fetchall()
-    rows = [dict(row) for row in rows_object]
-    # print('in data-access: The row(s) = ', rows)
-    # for j in rows:
+    records = [dict(row) for row in rows_object]
+    # print('in data-access: The row(s) = ', records)
+    # for j in records:
     #     print(j)
         # print([x for x in j])
     currentCursor.connection.commit()
     currentCursor.connection.close()
-    return rows
+
+    return records
 
 
 def getRowOnSpecifyId(tableName, id):
@@ -208,9 +215,10 @@ def getRowOnSpecifyId(tableName, id):
     #   id (Integer) : The primary key of the row to be returned 
     #   RETURNS single table row 
     currentCursor = getDbCursor()   
-    row = currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(id)).fetchone()
+    record = currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(id)).fetchone()
     currentCursor.connection.close()
-    return row
+    
+    return record
 
 def insertRow(tableName, fields):
     # Inserting a row of field values into a table specified by name
@@ -219,7 +227,7 @@ def insertRow(tableName, fields):
     #   fields (Dictionary) : A dictionary where the key is the field name and the value is the field value 
     #       NOTE: Strings should be formatted with enclosing double quotation marks (") 
     #             Numbers should be formatted as strings 
-    #   RETURNS SQL result (String)
+    #   RETURNS inserted record row
     currentCursor = getDbCursor()   
     fieldsString = ""
     for key in fields:
@@ -230,14 +238,18 @@ def insertRow(tableName, fields):
         sqlString += str(fields[key]) + ", "
     sqlString = sqlString[0:len(sqlString)-2] + ");" # Remove trailing ", " and close Sql 
     print(sqlString)
+
     currentCursor.execute(sqlString)
     currentCursor.connection.commit()
+    recordID = currentCursor.lastrowid
+    record = currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(recordID)).fetchone()
     currentCursor.connection.close()
-    return "Row [%s] inserted in table '%s'" %(fields,tableName)
 
+    return record
 
 def updateRow(tableName, recordID, values, where='', sqlString=None):
-    # Funtion is patterned after insertRow()
+    # TODO Function contract 
+    #   RETURNS updated record row
     currentCursor = getDbCursor()
     fieldsString = ""
 
@@ -275,11 +287,13 @@ def updateRow(tableName, recordID, values, where='', sqlString=None):
             sqlStringFinal = ','.join(map(str, sqlStringAppend))
 
         print('SQL going into execute: ', sqlStringFinal)
+
     currentCursor.execute(sqlStringFinal)
     currentCursor.connection.commit()
+    record = currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(recordID)).fetchone()
     currentCursor.connection.close()
-    return "Row [%s] inserted in table '%s'" % (values, tableName)
 
+    return record 
 
 def getFieldMap(cursor):
     # Get fields for a given DB API 2.0 cursor object that has been executed
@@ -292,6 +306,7 @@ def getFieldMap(cursor):
     for d in currentCursor.description:
         results[d[0]] = column
         column = column + 1
+    
     return results
 
 #init()
