@@ -15,6 +15,8 @@
 from hashlib import new
 from os import system, name
 
+import data_access as db
+
 def clear():
    # Clear CLI screen 
    # for windows
@@ -47,6 +49,7 @@ def convert_dbrow_list(list, addEmptyRow=False):
    return new_list
 
 def pretty_print_POST(req):
+   # TODO description  
     """
     At this point it is completely built and ready
     to be fired; it is "prepared".
@@ -63,3 +66,6 @@ def pretty_print_POST(req):
     ))
     print('------------END------------')
 
+def getPrimaryKey(tableName, name, field='name'): 
+   # Function for fetching id (primary key) on name value
+   return db.getRowsOnFilters(tableName, {' %s = ' % field: '"%s"' % name})[0]['id']
