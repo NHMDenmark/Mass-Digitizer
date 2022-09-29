@@ -71,6 +71,7 @@ class AutoSuggest_popup():
         while True:  # Event Loop
 
             event, values = window.read()
+            operational_name = values['-IN-']
             # print(win.close_destroys_window)
             if event is None:
                 print('EVENT  , NONE')
@@ -99,12 +100,15 @@ class AutoSuggest_popup():
 
             elif event == '-IN-':
                 # this concerns all keystrokes except the above ones.
+                print(f'keystroking after init value...{partialName}')
                 text = values['-IN-'].lower()
+                print('current entry text:: ', text)
                 if text == input_text:
                     continue
                 else:
                     input_text = text
-
+                if len(text) < len(partialName):
+                    choices = self.auto_suggest_taxonomy(self.tableName, text)
                 prediction_list = []
                 if len(text) >= 3:
                     # condition for activating the autosuggest feature.
@@ -122,5 +126,5 @@ class AutoSuggest_popup():
                 window['-IN-'].update(value=values['-BOX-'])
                 window['-BOX-CONTAINER-'].update(visible=False)
 
-r = AutoSuggest_popup('taxonname')
-r.autosuggest_gui('delta')
+r = AutoSuggest_popup('storage')
+r.autosuggest_gui('shelf 8')
