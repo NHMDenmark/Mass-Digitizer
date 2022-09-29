@@ -29,6 +29,7 @@ class specimen:
     taxonNameid     = 0
     #taxonspid 
     typeStatusName  = ''
+    #typeStatusName is not in table specimen.
     typeStatusId    = 0
     geoRegionName   = ''
     geoRegionId     = 0
@@ -129,7 +130,8 @@ class specimen:
                 'multiSpecimen':'"%s"' % self.multiSpecimen ,
                 'taxonName':'"%s"' % self.taxonName ,
                 'taxonNameid':'"%s"' % self.taxonNameid ,
-                'typeStatusName':'"%s"' % self.typeStatusName ,
+                #'typeStatusName':'"%s"' % self.typeStatusName ,
+                #NOT implemented as a field in the db table 'specimen'
                 'typeStatusId':'"%s"' % self.typeStatusId ,
                 'geoRegionName':'"%s"' % self.geoRegionName ,
                 'geoRegionId':'"%s"' % self.geoRegionId ,
@@ -144,7 +146,7 @@ class specimen:
                 'userName':'"%s"' % self.userName ,
                 'userId':'"%s"' % self.userId ,
                 'workStation':'"%s"' % self.workStation ,
-                'recordDateTime':'"%s"' % self.recordDateTime ,
+                'datetime':'"%s"' % self.recordDateTime ,
                 'exported':'"%s"' % self.exported ,
                 'exportDateTime':'"%s"' % self.exportDateTime ,
                 'exportUserId':'"%s"' % self.exportUserId ,
