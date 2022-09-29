@@ -134,7 +134,7 @@ def auto_suggest_taxonomy(name, taxDefItemId=None, rowLimit=200):
     #rowLimit: at or below this the auto-suggest fires of its names
     #returns: a list of names
 
-    cur = data_access.getDbCursor()
+    cur = db.getDbCursor()
     sql = "SELECT fullname FROM taxonname WHERE fullname LIKE lower('% {}%') " \
           "OR fullname LIKE lower('{}%');".format(name, name)
     print('In autosuggest & sql isz: ', sql)
