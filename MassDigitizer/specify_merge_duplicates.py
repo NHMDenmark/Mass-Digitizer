@@ -40,7 +40,7 @@ def testcode():
 
     duplicate_list = [duplicate1, duplicate2]
 
-    merge(duplicate_list,'fedor.steeman','XmgrNuitCrowd', 688130)
+    merge(duplicate_list,'fedor.steeman','*********', 688130)
 
     
 

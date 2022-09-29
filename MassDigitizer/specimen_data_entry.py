@@ -198,31 +198,35 @@ def init(collection_id):
     
     window.TKroot.focus_force()
 
-    # Set session Widget fields
+    # Set session fields
     window.Element('txtUserName').Update(value=gs.spUserName)
     collection = db.getRowOnId('collection', collection_id)
-    print('collection isss: ', collection[2])
     if collection is not None:
         window.Element('txtCollection').Update(value=collection[2])
         institution = db.getRowOnId('institution', collection[3])
         window.Element('txtInstitution').Update(value=institution[2])
     window.Element('txtWorkStation').Update(value='TRS-80')
 
-    window['txtCatalogNumber'].bind('<Leave>', '_Edit')
-    window['txtNotes'].bind('<Tab>', '+TAB')
-    window['txtNotes'].bind('<Leave>', '_Edit')
-    window['cbxTaxonName'].bind("<Return>", "_Enter")
-    window['chkMultiSpecimen'].bind("<Return>", "_Enter")
-    window.Element('txtUserName').Widget.config(takefocus=0)
-    # window.Element('txtInstitution').Widget.config(takefocus=0)
-    # window.Element('txtCollection').Widget.config(takefocus=0)
-    # window.Element('txtWorkStation').Widget.config(takefocus=0)
+    # Set control events 
+    # Header area
     window.Element('btnSettings').Widget.config(takefocus=0)
     window.Element('btnLogOut').Widget.config(takefocus=0)
-
+    window.Element('txtUserName').Widget.config(takefocus=0)
+    # Green area 
+    #cbxStorage 
+    #cbxPrepType 
+    #cbxTypeStatus 
+    window['txtNotes'].bind('<Tab>', '+TAB')
+    window['txtNotes'].bind('<Leave>', '_Edit')
+    window['chkMultiSpecimen'].bind("<Return>", "_Enter")
+    # Blue area     
+    #cbxGeoRegion    
+    window['cbxTaxonName'].bind("<Return>", "_Enter")
+    window['txtCatalogNumber'].bind('<Leave>', '_Edit')    
     entry_barcode = window['txtCatalogNumber']
     entry_barcode.bind("<Return>", "_RETURN")
 
+    # Loop through GUI events
     while True:
         event, values = window.read()
 
@@ -230,29 +234,20 @@ def init(collection_id):
         if event is None: break # Empty event indicates user closing window  
 
         if event == 'cbxStorage':
-            index = window[event].widget.current()
-            
-            collobj.setStorageFields(index)
-
+            collobj.setStorageFields(window[event].widget.current())
             window['txtStorageFullname'].update(collobj.storageFullname)
             
         if event == 'cbxPrepType':
-            index = window[event].widget.current()
-            collobj.preptypeid = prepTypes[index]['id']
-            collobj.preptypename = prepTypes[index]['name']
+            collobj.setPrepTypeFields(window[event].widget.current())
 
-        if event == 'cbxHigherTaxon':
-            pass
+        #if event == 'cbxHigherTaxon':
+        #    pass
         
         if event == 'cbxTypeStatus':
-            index = window[event].widget.current()
-            collobj.typestatusid = typeStatuses[index]['id']
-            collobj.typestatusname = typeStatuses[index]['name']
+            collobj.setTypeStatusFields(window[event].widget.current())
         
-        #if event == 'txtNotes':
         if event == 'txtNotes_Edit':
             collobj.notes = values['txtNotes']
-            pass
         
         if event.endswith('+TAB'):
             collobj.notes = values['txtNotes']
@@ -264,11 +259,10 @@ def init(collection_id):
             window['cbxGeoRegion'].set_focus()
 
         if event == 'txtCatalogNumber':
-            collobj.CatalogNumber = values[event]
+            collobj.catalogNumber = values[event]
 
         if event == 'txtCatalogNumber_Edit':
             collobj.CatalogNumber = values['txtCatalogNumber']
-            pass
 
         if event == "txtCatalogNumber_RETURN":
             collobj.CatalogNumber = values['txtCatalogNumber']
@@ -277,6 +271,9 @@ def init(collection_id):
         if event == 'chkMultiSpecimen': 
             collobj.multispecimen = values[event]
 
+        if event == 'cbxGeoRegion':
+            collobj.setgeoRegionFields(window[event].widget.current())
+        
         if event == 'txtTaxonName':
             partialName = values['txtTaxonName']
             if len(values[event]) >= 3:
@@ -368,7 +365,7 @@ def init(collection_id):
                 window['txtRecordID'].update('')
             
             previousId = collobj.save()
-            collobj = specimen.specimen()
+            collobj = specimen.specimen(collection_id)
             collobj.previousId = previousId
 
     window.close()

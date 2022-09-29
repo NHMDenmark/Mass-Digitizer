@@ -156,6 +156,18 @@ class specimen:
         self.storageId = self.storageLocations[index]['id']
         self.storagename = self.storageLocations[index]['name']
         self.storageFullname = self.storageLocations[index]['fullname']
+    
+    def setPrepTypeFields(self,index):
+        self.preptypeid = self.prepTypes[index]['id']
+        self.preptypename = self.prepTypes[index]['name']
+
+    def setTypeStatusFields(self,index):
+        self.typestatusid = self.typeStatuses[index]['id']
+        self.typestatusname = self.typeStatuses[index]['name']
+
+    def setgeoRegionFields(self,index):
+        self.geoRegionId = self.geoRegions[index]['id']
+        self.geoRegionName = self.geoRegions[index]['name']
 
     def obtainTrack(self, ID=0, incrementor=0):
         # TODO function contract
