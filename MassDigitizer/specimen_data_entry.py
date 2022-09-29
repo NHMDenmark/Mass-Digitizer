@@ -300,11 +300,11 @@ def init(collection_id):
 
         if event == 'btnBack':
             print('Pressed go-back /')
-
+            global  onecrementor
             # Functionality for going back through the session records to make changes, or do checkups.
             currentRecordID = collobj.obtainTrack(incrementor=onecrementor)
             onecrementor += 1
-            #print('oneicrementor at -- ', onecrementor)
+            print('oneicrementor at -- ', onecrementor)
             #print('current recordID :  ', currentRecordID)
             if not currentRecordID:
                 window['txtTaxonName'].update("Beginning of taxon names reached.")
@@ -512,6 +512,7 @@ def taxonomic_autosuggest_gui(partialName):
             window['-BOX-CONTAINER-'].update(visible=False)
 
     window.close()
+
 
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
