@@ -84,13 +84,13 @@ def getDbCursor():#do_in_memory=False):
     # CONTRACT
     #   do_in_memory (boolean): Whether the database file should be run in-memory 
     #   RETURNS database cursor object 
-#     connection = sqlite3.connect(dbFilePath)
-#     connection.row_factory = sqlite3.Row # Enable column access by name: row['column_name']
-#     cursor = connection.cursor()
-#     return cursor
+    #     connection = sqlite3.connect(dbFilePath)
+    #     connection.row_factory = sqlite3.Row # Enable column access by name: row['column_name']
+    #     cursor = connection.cursor()
+    #     return cursor
 
-# def get_inmemory_cursor(in_memory=True):
-#     # TODO write function contract
+    # def get_inmemory_cursor(in_memory=True):
+    #     # TODO write function contract
     print('Connecting to db file: %s ...'%dbFilePath)
     try:
         connection = sqlite3.connect(dbFilePath)

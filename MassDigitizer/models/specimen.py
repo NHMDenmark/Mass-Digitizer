@@ -11,6 +11,7 @@
 
   PURPOSE: TODO 
 """
+from attr import fields_dict
 import pytz
 from datetime import datetime
 
@@ -22,50 +23,80 @@ import util
 class specimen:
     # TODO description
 
-    id              = 0
-    catalogNumber   = ''
-    multiSpecimen   = ''
-    taxonName       = ''
-    taxonNameid     = 0
-    #taxonspid 
-    typeStatusName  = ''
-    #typeStatusName is not in table specimen.
-    typeStatusId    = 0
-    geoRegionName   = ''
-    geoRegionId     = 0
-    storageFullName = ''
-    storageName     = ''
-    storageId       = 0
-    prepTypeName    = ''
-    prepTypeId      = 0
-    notes           = ''
-    institutionId   = 0
-    collectionId    = 0
-    userName        = ''
-    userId          = 0
-    workStation     = ''
-    recordDateTime  = str(datetime.now())
-    exported        = 0
-    exportDateTime  = ''
-    exportUserId    = ''
+    # id              = 0
+    # catalogNumber   = ''
+    # multiSpecimen   = 'False'
+    # taxonName       = ''
+    # taxonNameid     = 0
+    # #taxonspid 
+    # typeStatusName  = ''
+    # typeStatusId    = 0
+    # geoRegionName   = ''
+    # geoRegionId     = 0
+    # storageFullName = ''
+    # storageName     = ''
+    # storageId       = 0
+    # prepTypeName    = ''
+    # prepTypeId      = 0
+    # notes           = ''
+    # institutionId   = 0
+    # collectionId    = 0
+    # userName        = ''
+    # userId          = 0
+    # workStation     = ''
+    # recordDateTime  = str(datetime.now())
+    # exported        = 0
+    # exportDateTime  = ''
+    # exportUserId    = ''
 
-    # Predefined data
-    storageLocations = {}
-    prepTypes = {}
-    typeStatuses = {}
-    geoRegions = {} 
-    geoRegionSources = {}
+    # # Predefined data
+    # storageLocations = {}
+    # prepTypes = {}
+    # typeStatuses = {}
+    # geoRegions = {} 
+    # geoRegionSources = {}
 
-    # Navigation 
-    previousId = 0
-    nextId = 0
+    # # Navigation 
+    # previousId = 0
+    # nextId = 0
 
     def __init__(self, collectionId):
+        self.id              = 0
+        self.catalogNumber   = ''
+        self.multiSpecimen   = 'False'
+        self.taxonName       = ''
+        self.taxonNameid     = 0
+        #self.taxonspid 
+        self.typeStatusName  = ''
+        self.typeStatusId    = 0
+        self.geoRegionName   = ''
+        self.geoRegionId     = 0
+        self.storageFullName = ''
+        self.storageName     = ''
+        self.storageId       = 0
+        self.prepTypeName    = ''
+        self.prepTypeId      = 0
+        self.notes           = ''
+        self.institutionId   = 0
+        self.collectionId    = 0
+        self.userName        = ''
+        self.userId          = 0
+        self.workStation     = ''
+        self.recordDateTime  = str(datetime.now())
+        self.exported        = 0
+        self.exportDateTime  = ''
+        self.exportUserId    = ''
+        
+        # Predefined data
         self.storageLocations = db.getRowsOnFilters('storage', {'collectionid =': '%s'%collectionId})
-        self.prepTypes = db.getRowsOnFilters('prep', {'collectionid =': '%s'%collectionId})
+        self.prepTypes = db.getRowsOnFilters('preptype', {'collectionid =': '%s'%collectionId})
         self.typeStatuses = db.getRowsOnFilters('typestatus', {'collectionid =': '%s'%collectionId})
         self.geoRegions = db.getRowsOnFilters('georegion', {'collectionid =': '%s'%collectionId}) 
         self.geoRegionSources = db.getRowsOnFilters('georegionsource', {'collectionid =': '%s'%collectionId}) 
+        
+        # Navigation 
+        self.previousId = 0
+        self.nextId = 0
     
     def save(self):
         # TODO Function description & contract     
@@ -125,32 +156,33 @@ class specimen:
 
     def getFieldsAsDict(self):
         # TODO function description 
-        return {
+        fieldsDict = {
                 'catalogNumber':'"%s"' % self.catalogNumber , # TODO "{}".format(var...)
                 'multiSpecimen':'"%s"' % self.multiSpecimen ,
                 'taxonName':'"%s"' % self.taxonName ,
                 'taxonNameid':'"%s"' % self.taxonNameid ,
-                #'typeStatusName':'"%s"' % self.typeStatusName ,
-                #NOT implemented as a field in the db table 'specimen'
-                'typeStatusId':'"%s"' % self.typeStatusId ,
+                'typeStatusName':'"%s"' % self.typeStatusName ,
+                'typeStatusId':'%s' % self.typeStatusId ,
                 'geoRegionName':'"%s"' % self.geoRegionName ,
                 'geoRegionId':'"%s"' % self.geoRegionId ,
                 'storageFullName':'"%s"' % self.storageFullName,
-                'storageName':'"%s"' % self.storageName ,
-                'storageId':'"%s"' % self.storageId ,
-                'prepTypeName':'"%s"' % self.prepTypeName ,
-                'prepTypeId':'"%s"' % self.prepTypeId ,
+                'storagename':'"%s"' % self.storageName ,
+                'storageid':'"%s"' % self.storageId ,
+                'preptypename':'"%s"' % self.prepTypeName ,
+                'preptypeid':'"%s"' % self.prepTypeId ,
                 'notes':'"%s"' % self.notes ,
-                'institutionId':'"%s"' % self.institutionId ,
-                'collectionId':'"%s"' % self.collectionId ,
-                'userName':'"%s"' % self.userName ,
-                'userId':'"%s"' % self.userId ,
-                'workStation':'"%s"' % self.workStation ,
-                'datetime':'"%s"' % self.recordDateTime ,
+                'institutionid':'"%s"' % self.institutionId ,
+                'collectionid':'"%s"' % self.collectionId ,
+                'username':'"%s"' % self.userName ,
+                'userid':'"%s"' % self.userId ,
+                'workstation':'"%s"' % self.workStation ,
+                'recorddatetime':'"%s"' % self.recordDateTime ,
                 'exported':'"%s"' % self.exported ,
-                'exportDateTime':'"%s"' % self.exportDateTime ,
-                'exportUserId':'"%s"' % self.exportUserId ,
+                'exportdatetime':'"%s"' % self.exportDateTime ,
+                'exportuserid':'"%s"' % self.exportUserId ,
                 }
+        print(len(fieldsDict))
+        return fieldsDict
     
     def setStorageFields(self, index):
         self.storageId = self.storageLocations[index]['id']
@@ -182,7 +214,7 @@ class specimen:
             recordID = ID - 1
             return recordID
 
-    def getRecordIDbyBacktracking(backtrackCounter):
+    def getRecordIDbyBacktracking(self, backtrackCounter):
         # TODO function contract
         # TODO must be reworked to use SQL statements rather than "counters" which rely on sequential IDs!
         sql = "select * from specimen s order by s.id DESC LIMIT {},1;".format(backtrackCounter)
