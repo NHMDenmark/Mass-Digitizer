@@ -201,17 +201,17 @@ class specimen:
         self.geoRegionId = self.geoRegions[index]['id']
         self.geoRegionName = self.geoRegions[index]['name']
 
-    def obtainTrack(self, ID=0, incrementor=0):
+    def obtainTrack(self, incrementor=0):
         # TODO function contract
         # Keeps track of record IDs in relation to the Go-back button functionality.
-        print('the obtain ID  is --', ID)
-        if ID == 0:
-            print('IN ID of obtainTrack()')
-            recordID = self.getRecordIDbyBacktracking(incrementor)
+        recordID = self.getRecordIDbyBacktracking(incrementor)
+        if recordID:
+            print(f'IN ID of obtainTrack() ;; {recordID}')
+            # recordID = self.getRecordIDbyBacktracking(incrementor)
             return recordID
         else:
-            print('In ELSE obtainTrack()')
-            recordID = ID - 1
+            print(f'In ELSE obtainTrack() -- {recordID}')
+            # recordID = recordID - 1
             return recordID
 
     def getRecordIDbyBacktracking(self, backtrackCounter):
@@ -234,9 +234,10 @@ class specimen:
             #window['btnBack'].update(disabled=True)
             #window['lblWarning'].update(visible=True)
 
-            backtrackCounter = backtrackCounter - 1
-            sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
-            rows = db.executeSqlStatement(sql)
+            # backtrackCounter = backtrackCounter - 1
+            return False
+            # sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
+            # rows = db.executeSqlStatement(sql)
 
         sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
 
