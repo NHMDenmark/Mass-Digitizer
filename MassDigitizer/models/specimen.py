@@ -23,43 +23,6 @@ import util
 class specimen:
     # TODO description
 
-    # id              = 0
-    # catalogNumber   = ''
-    # multiSpecimen   = 'False'
-    # taxonName       = ''
-    # taxonNameid     = 0
-    # #taxonspid 
-    # typeStatusName  = ''
-    # typeStatusId    = 0
-    # geoRegionName   = ''
-    # geoRegionId     = 0
-    # storageFullName = ''
-    # storageName     = ''
-    # storageId       = 0
-    # prepTypeName    = ''
-    # prepTypeId      = 0
-    # notes           = ''
-    # institutionId   = 0
-    # collectionId    = 0
-    # userName        = ''
-    # userId          = 0
-    # workStation     = ''
-    # recordDateTime  = str(datetime.now())
-    # exported        = 0
-    # exportDateTime  = ''
-    # exportUserId    = ''
-
-    # # Predefined data
-    # storageLocations = {}
-    # prepTypes = {}
-    # typeStatuses = {}
-    # geoRegions = {} 
-    # geoRegionSources = {}
-
-    # # Navigation 
-    # previousId = 0
-    # nextId = 0
-
     def __init__(self, collectionId):
         self.id              = 0
         self.catalogNumber   = ''
