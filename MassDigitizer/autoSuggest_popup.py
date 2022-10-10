@@ -1,13 +1,20 @@
 import PySimpleGUI as sg
 import data_access as db
 from itertools import chain
+import additional_popup
 
 
 class AutoSuggest_popup():
+    startQueryLimit = 3
     def __init__(self, table):
+        # self.startQuery = startQueryLimit
         self.tableName = table
+        self.popped = False
 
-    def auto_suggest(self, tableName, name, taxDefItemId=None, rowLimit=200):
+    def __exit__(self, exc_type, exc_value, traceback):
+        print("\nInside __exit__")
+
+    def auto_suggest(self, tableName, name, columnName='fullname', taxDefItemId=None, rowLimit=200):
         # Purpose: for helping digitizer staff rapidly input names by returning suggestions based on the three or
         #  more entered characters.
         # trigger: means how many keystrokes it takes to trigger the auto-suggest functionality
@@ -16,7 +23,7 @@ class AutoSuggest_popup():
         # TODO implement 'taxonTreeDefid' at convienient time.
         cur = db.getDbCursor()
         if self.tableName == 'taxonname':
-            sql = f"SELECT fullname FROM {tableName} WHERE fullname LIKE lower('% {name}%') OR fullname LIKE lower('{name}%');"
+            sql = f"SELECT fullname FROM {tableName} WHERE {columnName} LIKE lower('% {name}%') OR {columnName} LIKE lower('{name}%');"
 
         else:
             sql =f"SELECT fullname FROM storage WHERE name LIKE '{name}%'"
@@ -31,14 +38,21 @@ class AutoSuggest_popup():
         # if lengthOfRows <= rowLimit:
         flatCandidates = list(chain.from_iterable(rows))
         rows = list(flatCandidates)
+        print('length flattened rows ::: ', len(rows))
 
         return rows
 
-    def autosuggest_gui(self, partialName):
+    def autosuggest_gui(self, partialName, startQuery=3, colName=None):
         # TODO Function contract
         # Parameter partialName is the 'name' as it is being inputted, keystroke-by-keystroke
-
-        choices = self.auto_suggest(self.tableName, partialName)
+        # startQuery is an integer on how many key strokes it takes to start the auto-suggester.
+        print('IN autosuggest_GUI :.: ', partialName, self.tableName)
+        if colName:
+            print('colName == ', colName)
+            choices = self.auto_suggest(self.tableName, partialName, columnName=colName)
+        else:
+            print('No set colname! Normal function ...')
+            choices = self.auto_suggest(self.tableName, partialName)
         print(type(choices))
 
         input_width = 95
@@ -46,8 +60,11 @@ class AutoSuggest_popup():
         # dimensions of the popup box
 
         layout = [
-            [sg.Text('Input Name:')],
-            [sg.Input(size=(input_width, 1), enable_events=True, key='-IN-')],
+            [sg.Text('Input Name:'), sg.Text('Taxon not found. Please add higher taxonomy to create new taxon record?', key='lblNewName', visible=False, background_color='Turquoise3')],
+            [sg.Input(size=(input_width, 1), enable_events=True, key='-IN-'),
+             sg.Button('', key='btnReturn', visible=False, bind_return_key=True)],
+            [sg.Text('Input higher taxonomy:', key='lblHiTax', visible=False), sg.Input(size=(input_width, 1), enable_events=True, key='txtHiTax', visible=False)],
+            # 'btnReturn' is for binding return to nothing in case of a new name and higher taxonomy lacking.
             [sg.pin(
                 sg.Col([[sg.Listbox(values=[], size=(input_width, lines_to_show), enable_events=True, key='-BOX-', select_mode=sg.LISTBOX_SELECT_MODE_SINGLE)]],
                        key='-BOX-CONTAINER-', pad=(0, 0), visible=True))],]
@@ -61,11 +78,14 @@ class AutoSuggest_popup():
         window['-IN-'].update(partialName)
         window.write_event_value('-IN-', partialName)
 
+
         while True:  # Event Loop
-
+            window['txtHiTax'].bind('<FocusIn>', '+INPUT FOCUS+')
             event, values = window.read()
+            # window.bind('<Key>', 'keyPress')
             operational_name = values['-IN-']
-
+            if event == sg.WIN_CLOSED or event == 'Exit':
+                break
             if event is None:
                 print('EVENT  , NONE')
                 break
@@ -79,18 +99,12 @@ class AutoSuggest_popup():
             elif event.startswith('Up') and len(prediction_list):
                 sel_item = (sel_item + (len(prediction_list) - 1)) % len(prediction_list)
                 list_element.update(set_to_index=sel_item, scroll_to_index=sel_item)
-            elif event == '\r':
-                print('pressed Enter/Return')
-                window.Hide()
-                # A patch on the issue around the popup not being closed properly.
-                # Likely to be a PySimpleGUI bug.
-                if len(values['-BOX-']) > 0:
-                    boxVal = values['-BOX-']
-                    print('Selected boxvalue is -/ '
-                          , boxVal[0])
-                    window['-IN-'].update(value=boxVal[0])
-                    window['-BOX-CONTAINER-'].update(visible=False)
-                    return boxVal[0]
+
+
+            if event.endswith('+TAB'):
+                print('pressed TAB')
+                break
+                window.close()
 
             elif event == '-IN-':
                 # this concerns all keystrokes except the above ones.
@@ -102,23 +116,70 @@ class AutoSuggest_popup():
                     input_text = text
                 if len(text) < len(partialName):
                     choices = self.auto_suggest(self.tableName, text)
+                    print('in line 110 - 112')
                 prediction_list = []
-                if len(text) >= 3:
+                print('pressed key', values['-IN-'])
+                if len(text) >= len(partialName):
                     # condition for activating the autosuggest feature.
                     prediction_list = [item for item in choices if item.lower().find(text) != -1]
 
                 list_element.update(values=prediction_list)
                 sel_item = 0
                 list_element.update(set_to_index=sel_item)
+                if len(prediction_list) == 0:
+                    print('Prediction list == 0,,, potential new name!? ')
+                    window.set_title("Higher taxon autosuggest")
+                    window['lblNewName'].update(visible=True)
+                    window['btnReturn'].BindReturnKey = False
+                    window['lblHiTax'].update(visible=True)
+                    window['txtHiTax'].update(visible=True)
+                    window.bind("<KeyPress>", "kPress")
+                    if event in ("kPress"):
+                        print('key pressed : ', values['txtHiTax'])
+                    hiTax = window['txtHiTax'].get()
+                    print('press / event is ; ', event, hiTax)
+                    if len(hiTax) >= 3:
+                        print('HiTax is -- ', window['txtHiTax'].get())
+                        resHT = additional_popup.highTaxLookup(window['txtHiTax'])
+                        rowsHT = self.autosuggest_gui(hiTax, colName='parentfullname')
+                        print("highher taxonomy candidates arr: : ", rowsHT)
+                    ###CALL AUTOsUGGEST_POPUP.py to get the higher taxonomy which is "parentfullname" column
 
-                if len(prediction_list) > 0:
+                    # if len()
+                elif len(prediction_list) > 0:
+                    print('pred list more than NONE """')
+                    window['lblNewName'].update(visible=False)
+                    window['lblHiTax'].update(visible=False)
+                    window['txtHiTax'].update(visible=False)
+                    window['btnReturn'].BindReturnKey = True
+
                     window['-BOX-CONTAINER-'].update(visible=True)
                 else:
                     window['-BOX-CONTAINER-'].update(visible=False)
+
+            elif event == 'txtHiTax':
+                # window.bind("<KeyPress>", "kPress")
+                print('1n hiTAX')
             elif event == '-BOX-':
                 window['-IN-'].update(value=values['-BOX-'])
                 window['-BOX-CONTAINER-'].update(visible=False)
 
-#EXE section
-r = AutoSuggest_popup('storage')
-r.autosuggest_gui('box 8')
+            elif event == 'btnReturn':
+                print('pressed Enter/Return|| len vlaues box= ', len(values['-BOX-']))
+                # window.Hide()
+                # A patch on the issue around the popup not being closed properly.
+                # Likely to be a PySimpleGUI bug.
+                if len(values['-BOX-']) > 0:
+                    boxVal = values['-BOX-']
+
+                    print('Selected boxvalue is -/ '
+                          , boxVal[0])
+                    return boxVal[0]
+                    window['-IN-'].update(value=boxVal[0])
+                    window['-BOX-CONTAINER-'].update(visible=False)
+
+                    break
+                    window.Hide()
+        window.Hide()
+        window.close()
+# EXE section -- remember "taxonname"
