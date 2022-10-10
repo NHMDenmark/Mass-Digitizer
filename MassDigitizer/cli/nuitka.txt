@@ -1,0 +1,1 @@
+nuitka --follow-imports --standalone .\DaSSCo.py --enable-plugin=tk-inter --enable-plugin=numpy
