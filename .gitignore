@@ -25,3 +25,7 @@ DaSSCo.exe
 *.exe
 /MassDigitizer/Output/*.zip
 *.xlsx
+MassDigitizer/.idea/
+*.vsidx
+.vs
+.idea
