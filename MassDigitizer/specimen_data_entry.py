@@ -443,7 +443,6 @@ def taxonomic_autosuggest_gui(partialName):
 
     window.close()
 
-#init(29)
 
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
