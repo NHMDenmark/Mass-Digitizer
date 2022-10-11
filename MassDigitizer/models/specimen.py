@@ -67,13 +67,16 @@ class specimen:
         # insert is a switch to mark whether an INSERT or an UPDATE is called for.
         # recordID is required for updates.
         #   RETURNS record id (primary key)
+        print('IN N obj.SAVE()')
         if self.id > 0:
             print('Update specimen record with id: ', self.id)
+            print(self.getFieldsAsDict())
             record = db.updateRow('specimen', self.id, self.getFieldsAsDict())
         else:
             # Checking if Save is a novel record , or if it is updating existing record.
             print('Insert new specimen record.')
             record = db.insertRow('specimen', self.getFieldsAsDict())
+            print("self.getFieldsAsDict", self.getFieldsAsDict())
             self.id = record['id']
 
         return self.id
@@ -85,31 +88,32 @@ class specimen:
 
     def setFields(self, record):
         # TODO function description 
-        self.id = record['id']
-        self.catalogNumber = record['catalogNumber'] 
-        self.multiSpecimen = record['multiSpecimen'] 
-        self.taxonName = record['taxonName'] 
-        self.taxonNameid = record['taxonNameid'] 
+        # self.id = record['id']
+        print('record.keys()',record.keys())
+        self.catalogNumber = record['catalogNumber']
+        self.multiSpecimen = record['multiSpecimen']
+        self.taxonName = record['taxonName']
+        self.taxonNameid = record['taxonNameid']
         #self.taxonspid = record['taxonspid']
-        self.typeStatusName = record['typeStatusName'] 
-        self.typeStatusId = record['typeStatusId'] 
-        self.geoRegionName = record['geoRegionName'] 
-        self.geoRegionId = record['geoRegionId'] 
+        self.typeStatusName = record['typeStatusName']
+        self.typeStatusId = record['typeStatusId']
+        self.geoRegionName = record['geoRegionName']
+        self.geoRegionId = record['geoRegionId']
         self.storageFullName = record['storageFullName']
-        self.storageName = record['storageName'] 
-        self.storageId = record['storageId'] 
-        self.prepTypeName = record['prepTypeName'] 
-        self.prepTypeId = record['prepTypeId'] 
+        self.storageName = record['storagename']
+        self.storageId = record['storageid']
+        self.prepTypeName = record['preptypename']
+        self.prepTypeId = record['preptypeid']
         self.notes = record['notes'] 
-        self.institutionId = record['institutionId'] 
-        self.collectionId = record['collectionId'] 
-        self.userName = record['userName'] 
-        self.userId = record['userId'] 
-        self.workStation = record['workStation'] 
-        self.recordDateTime = record['recorddateTime']
+        self.institutionId = record['institutionid']
+        self.collectionId = record['collectionid']
+        self.userName = record['username']
+        self.userId = record['userid']
+        self.workStation = record['workstation']
+        self.recordDateTime = record['recorddatetime']
         self.exported = record['exported']
-        self.exportDateTime = record['exportDateTime']
-        self.exportUserId = record['exportUserId']
+        self.exportDateTime = record['exportdatetime']
+        self.exportUserId = record['exportuserid']
 
         # TODO navigation?
         #self.previousId = ? 
