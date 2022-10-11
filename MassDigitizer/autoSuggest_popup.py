@@ -179,7 +179,10 @@ class AutoSuggest_popup():
                 # Likely to be a PySimpleGUI bug.
                 if len(values['-BOX-']) > 0:
                     boxVal = values['-BOX-']
-
+                    sql = "SELECT id, fullname FROM {} WHERE fullname = '{}'".format(self.tableName, boxVal[0])
+                    print(sql)
+                    boxID = db.executeSqlStatement(sql)
+                    print([item for item in boxID])
                     print('Selected boxvalue is -/ '
                           , boxVal[0])
                     return boxVal[0]
@@ -194,5 +197,4 @@ class AutoSuggest_popup():
         window.Hide()
         window.close()
 # EXE section -- remember "taxonname"
-# ob = AutoSuggest_popup('taxonname')
-# res = ob.autosuggest_gui('delt')
+# ob = AutoSuggest_popup('storagreturn
