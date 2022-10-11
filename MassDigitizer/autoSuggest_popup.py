@@ -1,7 +1,11 @@
 import PySimpleGUI as sg
 import data_access as db
 from itertools import chain
-import additional_popup
+# import additional_popup
+import tkinter as tk
+
+
+# root = tk.Tk()
 
 
 class AutoSuggest_popup():
@@ -62,7 +66,8 @@ class AutoSuggest_popup():
         layout = [
             [sg.Text('Input Name:'), sg.Text('Taxon not found. Please add higher taxonomy to create new taxon record?', key='lblNewName', visible=False, background_color='Turquoise3')],
             [sg.Input(size=(input_width, 1), enable_events=True, key='-IN-'),
-             sg.Button('', key='btnReturn', visible=False, bind_return_key=True)],
+             sg.Button('', key='btnReturn', visible=False, bind_return_key=True),
+             sg.Button('Exit', visible=False)],
             [sg.Text('Input higher taxonomy:', key='lblHiTax', visible=False), sg.Input(size=(input_width, 1), enable_events=True, key='txtHiTax', visible=False)],
             # 'btnReturn' is for binding return to nothing in case of a new name and higher taxonomy lacking.
             [sg.pin(
@@ -80,8 +85,11 @@ class AutoSuggest_popup():
 
 
         while True:  # Event Loop
+
             window['txtHiTax'].bind('<FocusIn>', '+INPUT FOCUS+')
             event, values = window.read()
+            if event is None:
+                break
             # window.bind('<Key>', 'keyPress')
             operational_name = values['-IN-']
             if event == sg.WIN_CLOSED or event == 'Exit':
@@ -126,27 +134,27 @@ class AutoSuggest_popup():
                 list_element.update(values=prediction_list)
                 sel_item = 0
                 list_element.update(set_to_index=sel_item)
-                if len(prediction_list) == 0:
-                    print('Prediction list == 0,,, potential new name!? ')
-                    window.set_title("Higher taxon autosuggest")
-                    window['lblNewName'].update(visible=True)
-                    window['btnReturn'].BindReturnKey = False
-                    window['lblHiTax'].update(visible=True)
-                    window['txtHiTax'].update(visible=True)
-                    window.bind("<KeyPress>", "kPress")
-                    if event in ("kPress"):
-                        print('key pressed : ', values['txtHiTax'])
-                    hiTax = window['txtHiTax'].get()
-                    print('press / event is ; ', event, hiTax)
-                    if len(hiTax) >= 3:
-                        print('HiTax is -- ', window['txtHiTax'].get())
-                        resHT = additional_popup.highTaxLookup(window['txtHiTax'])
-                        rowsHT = self.autosuggest_gui(hiTax, colName='parentfullname')
-                        print("highher taxonomy candidates arr: : ", rowsHT)
+                # if len(prediction_list) == 0:
+                #     print('Prediction list == 0,,, potential new name!? ')
+                #     window.set_title("Higher taxon autosuggest")
+                #     window['lblNewName'].update(visible=True)
+                #     window['btnReturn'].BindReturnKey = False
+                #     window['lblHiTax'].update(visible=True)
+                #     window['txtHiTax'].update(visible=True)
+                #     window.bind("<KeyPress>", "kPress")
+                #     if event in ("kPress"):
+                #         print('key pressed : ', values['txtHiTax'])
+                #     hiTax = window['txtHiTax'].get()
+                #     print('press / event is ; ', event, hiTax)
+                #     if len(hiTax) >= 3:
+                #         print('HiTax is -- ', window['txtHiTax'].get())
+                #         resHT = additional_popup.highTaxLookup(window['txtHiTax'])
+                #         rowsHT = self.autosuggest_gui(hiTax, colName='parentfullname')
+                #         print("highher taxonomy candidates arr: : ", rowsHT)
                     ###CALL AUTOsUGGEST_POPUP.py to get the higher taxonomy which is "parentfullname" column
 
                     # if len()
-                elif len(prediction_list) > 0:
+                if len(prediction_list) > 0:
                     print('pred list more than NONE """')
                     window['lblNewName'].update(visible=False)
                     window['lblHiTax'].update(visible=False)
@@ -175,11 +183,16 @@ class AutoSuggest_popup():
                     print('Selected boxvalue is -/ '
                           , boxVal[0])
                     return boxVal[0]
-                    window['-IN-'].update(value=boxVal[0])
-                    window['-BOX-CONTAINER-'].update(visible=False)
+                window.hide()
+            #         window['-IN-'].update(value=boxVal[0])
+            # event is None
+                # window['-BOX-CONTAINER-'].update(visible=False)
+                # tk.Tk.protocol("WM_DELETE_WINDOW", on_closing)
 
-                    break
-                    window.Hide()
+
+                    # window.Hide()
         window.Hide()
         window.close()
 # EXE section -- remember "taxonname"
+# ob = AutoSuggest_popup('taxonname')
+# res = ob.autosuggest_gui('delt')

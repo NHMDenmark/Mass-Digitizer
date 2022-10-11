@@ -37,6 +37,7 @@ from saveOrInsert_functionGUI import saving_to_db
 # TODO model functions 
 from models import specimen
 import data_exporter as dx
+import autoSuggest_popup
 # import saveOrInsert_functionGUI as saver
 
 # Make sure that current folder is registrered to be able to access other app files
@@ -254,6 +255,7 @@ def init(collection_id):
             collobj.setgeoRegionFields(window[event].widget.current())
         
         if event == 'txtTaxonName':
+            suggester = autoSuggest_popup.AutoSuggest_popup('taxonname')
             partialName = values['txtTaxonName']
             if len(values[event]) >= 3:
                 #print('submitted string: ', values[event])
