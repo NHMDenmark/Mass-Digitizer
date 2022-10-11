@@ -56,7 +56,7 @@ window = None
 collobj = None #specimen.specimen()
 
 # Functional data
-clearingList = ['cbxStorage', 'cbxPrepType', 'cbxHigherTaxon', 'cbxTypeStatus', 'txtNotes', 'chkMultiSpecimen', 'cbxGeoRegion', 'txtTaxonName', 'txtCatalogNumber'] #, 'cbxTaxonName']
+clearingList = ['txtStorage', 'cbxPrepType', 'cbxHigherTaxon', 'cbxTypeStatus', 'txtNotes', 'chkMultiSpecimen', 'cbxGeoRegion', 'txtTaxonName', 'txtCatalogNumber'] #, 'cbxTaxonName']
 
 def init(collection_id):
     # TODO function contract
@@ -86,7 +86,7 @@ def init(collection_id):
     # Store elements in variables to make it easier to include and position in the frames
     storage = [
         sg.Text("Storage location:", size=defaultSize, background_color=greenArea, font=font),
-        sg.Combo(util.convert_dbrow_list(collobj.storageLocations), key='cbxStorage', size=green_size, text_color='black',
+        sg.InputText('', key='txtStorage', size=green_size, text_color='black',
                  background_color='white', font=('Arial', 12), readonly=True, enable_events=True),
         sg.Text("", key='txtStorageFullname', size=(50,2), background_color=greenArea, font=smallLabelFont)]    
     
@@ -117,7 +117,8 @@ def init(collection_id):
     taxonInput = [
         sg.Text('Taxonomic name:     ', size=(21, 1), background_color=blueArea, text_color='black', font=font),
         sg.Input('', size=blue_size, key='txtTaxonName', text_color='black', background_color='white',
-                 font=('Arial', 12), enable_events=True, pad=((5, 0), (0, 0))), ]
+                 font=('Arial', 12), enable_events=True, pad=((5, 0), (0, 0))),
+    sg.Text('Beginning of the name list reached. No more Go-back!', key='lblWarning', visible=False, background_color="#ff5588", border_width=3)]
     # taxonomicPicklist = [
     #     sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
     #     sg.Listbox('', key='cbxTaxonName', select_mode=sg.LISTBOX_SELECT_MODE_BROWSE, size=(28, 6),
@@ -129,14 +130,13 @@ def init(collection_id):
     # statusLabel = [sg.Text('Specimen record has been saved', font=('Arial',20),size=(20,10),justification='center',background_color='#4f280a',text_color = 'yellow',key='texto')]
     lblExport = [sg.Text('', key='lblExport', visible=False, size=(100,2)), ]
 
-    layout_bluearea = [broadGeo, taxonInput, barcode, [ # taxonomicPicklist, 
+    layout_bluearea = [broadGeo, taxonInput, barcode, [ # taxonomicPicklist,
         sg.Text('Record ID: ', key='lblRecordID', background_color='#99dcff', visible=True, size=(9, 1)),
         sg.Text('', key='txtRecordID', size=(4,1), background_color=blueArea),
         sg.StatusBar('', relief=None, size=(7, 1), background_color=blueArea),
         sg.Button('SAVE', key="btnSave", button_color='seagreen', size=9, bind_return_key=True),
         sg.StatusBar('', relief=None, size=(14, 1), background_color=blueArea),
         sg.Button('GO BACK', key="btnBack", button_color='firebrick', pad=(13, 0)),
-        sg.Text('Beginning of the name list reached. No more Go-back!', key='lblWarning', visible=False, background_color="#ff5588", border_width=3),
         sg.Button('GO FORWARDS', key='btnGoForward', button_color=('black','LemonChiffon2')),
         sg.Button('CLEAR FORM', key='btnClear', button_color='black on white'),
         #sg.Button('Export data', key='btnExport', button_color='royal blue'),  # Export data should be a backend feature says Pip 
@@ -192,7 +192,7 @@ def init(collection_id):
     window.Element('btnLogOut').Widget.config(takefocus=0)
     window.Element('txtUserName').Widget.config(takefocus=0)
     # Green area 
-    #cbxStorage 
+
     #cbxPrepType 
     #cbxTypeStatus 
     window['txtNotes'].bind('<Tab>', '+TAB')
@@ -205,7 +205,8 @@ def init(collection_id):
     window['txtCatalogNumber'].bind('<Leave>', '_Edit')    
     entry_barcode = window['txtCatalogNumber']
     entry_barcode.bind("<Return>", "_RETURN")
-
+    recordDict = {}
+    storageName = ''
     # Loop through GUI events
     while True:
         event, values = window.read()
@@ -213,9 +214,17 @@ def init(collection_id):
         # Checking field events as switch construct
         if event is None: break # Empty event indicates user closing window  
 
-        if event == 'cbxStorage':
+        if event == 'txtStorage':
+            suggester = autoSuggest_popup.AutoSuggest_popup()
+            partialName = values['txtStorage']
+            if len(values[event]) >= 3:
+                print('more than three', partialName)
+                # res =
             collobj.setStorageFields(window[event].widget.current())
             window['txtStorageFullname'].update(collobj.storageFullname)
+            print('collobj.storageFullname', collobj.storageFullname)
+            storageName = collobj.storageFullname.split('|').pop()
+            print('storagename -- ', storageName)
             
         if event == 'cbxPrepType':
             collobj.setPrepTypeFields(window[event].widget.current())
@@ -224,7 +233,9 @@ def init(collection_id):
         #    pass
         
         if event == 'cbxTypeStatus':
-            collobj.setTypeStatusFields(window[event].widget.current())
+            # collobj.setTypeStatusFields(window[event].widget.current())
+            collobj.typeStatusName = window['cbxTypeStatus'].get()
+            print('typeStatsu :: ', window['cbxTypeStatus'].get())
         
         if event == 'txtNotes_Edit':
             collobj.notes = values['txtNotes']
@@ -264,9 +275,9 @@ def init(collection_id):
                     print('Suggested taxa based on input:) -- ', response)
                     # TODO OUTCOMMENTED THIS BECAUSE IT STARTED TO GIVE ERRORS AND
                     #      IT WILL BE WIRED THROUGH THE GENERIC AUTOSUGGEST ANYWAY
-                    #res = taxonomic_autosuggest_gui(partialName)
-                    #window['txtTaxonName'].update(res)
-                    #collobj.taxonName = res
+                    res = taxonomic_autosuggest_gui(partialName)
+                    window['txtTaxonName'].update(res)
+                    collobj.taxonName = res
                     window['txtCatalogNumber'].set_focus()
                     # window['cbxTaxonName'].update(set_to_index=[0], scroll_to_index=0)
 
@@ -280,16 +291,19 @@ def init(collection_id):
             window['txtRecordID'].update('')
 
         if event == 'btnBack':
-            # TODO handle in specimen class 
+            # TODO handle in specimen class
+
             print('Pressed go-back /')
             global  onecrementor
             # Functionality for going back through the session records to make changes, or do checkups.
             currentRecordID = collobj.obtainTrack(incrementor=onecrementor)
             onecrementor += 1
             print('oneicrementor at -- ', onecrementor)
-            #print('current recordID :  ', currentRecordID)
+            print('current recordID :  ', currentRecordID)
             if not currentRecordID:
-                window['txtTaxonName'].update("Beginning of taxon names reached.")
+                print('in NOT current rec ID !!!!!')
+                window['lblWarning'].update("Beginning of taxon names reached.", visible=True)
+                window['btnBack'].update(disabled=True)
             else:
                 rows = db.getRowOnId('specimen', currentRecordID)
                 #print('RAW row::::', rows[0])
@@ -298,13 +312,16 @@ def init(collection_id):
                 print('record past ID : ', recordIDbacktrack)
                 rowRecord = db.getRowOnId('specimen', currentRecordID)
                 record = rowRecord
+                recordDict = dict(zip(record.keys(), record))
+                print('RD, ', recordDict)
 
             print('the backtrack counter is now at: ', recordIDbacktrack)
             print('the ID of interest is= ', recordIDbacktrack)
+            print('row dict =', type(recordDict), recordDict)
 
             window['txtRecordID'].update('{}'.format(recordIDbacktrack), visible=True)
             # Updating elements from previous record
-            window['cbxStorage'].update(record['storagename'])
+            window['txtStorage'].update(record['storagename'])
             window['cbxPrepType'].update(record['preptypename'])
             window['cbxHigherTaxon'].update('')
             window['cbxTypeStatus'].update('')
@@ -340,14 +357,24 @@ def init(collection_id):
             pass
 
         if event == 'btnSave':
+            recordID = window['txtRecordID'].get()
+            if recordID:
+                collobj.id = int(recordID)
+            recordFromCollobj = collobj.getFieldsAsDict()
 
+            print('collobj,, ', collobj.getFieldsAsDict())
             # TODO explain code 
             if collobj.id >= 0:
                 clear_all_of(window)
                 window['txtRecordID'].update('')
-            
+
+
+            recordFromCollobj['storageFullName'] = window['txtStorageFullname'].get()
+            recordFromCollobj['storagename'] = storageName
+
+            print('recordDICT ===', recordFromCollobj)
+            collobj.setFields(recordFromCollobj)
             previousId = collobj.save()
-            collobj = specimen.specimen(collection_id)
             collobj.previousId = previousId
 
     window.close()
@@ -379,7 +406,7 @@ def taxonomic_autosuggest_gui(partialName):
             sg.Col([[sg.Listbox(values=[], size=(input_width, num_items_to_show), enable_events=True, key='-BOX-', select_mode=sg.LISTBOX_SELECT_MODE_SINGLE)]],
                    key='-BOX-CONTAINER-', pad=(0, 0), visible=True))],]
 
-    window = sg.Window('AutoComplete', layout, return_keyboard_events=True, finalize=True, modal=False, font=('Helvetica', 16))
+    window = sg.Window('AutoComplete', layout, return_keyboard_events=True, finalize=True, modal=False, font=('Arial', 16))
     # The parameter "modal" is explicitly set to False. If True the auto close behavior won't work.
 
     list_element: sg.Listbox = window.Element('-BOX-')  # store listbox element for easier access and to get to docstrings
@@ -391,7 +418,7 @@ def taxonomic_autosuggest_gui(partialName):
 
     while True:  # Event Loop
         
-        event, values = sg.read_all_windows()
+        event, values = window.read()
         # print(win.close_destroys_window)
         if event is None:
             print('EVENT  , NONE')
@@ -445,7 +472,7 @@ def taxonomic_autosuggest_gui(partialName):
 
     window.close()
 
-
+# init(13)
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
     Accomplished by removing last character input if not a valid character
