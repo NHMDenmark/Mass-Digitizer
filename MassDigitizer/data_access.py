@@ -233,13 +233,29 @@ def insertRow(tableName, fields):
     for key in fields:
         fieldsString += "%s, " % key
     fieldsString  = fieldsString[0:len(fieldsString)-2]
-    sqlString = "INSERT INTO %s (%s) VALUES (" %(tableName, fieldsString)
+    sqlString = "INSERT INTO {} ({}) VALUES (".format(tableName, fieldsString)
+    sqlValues = []
     for key in fields:
-        sqlString += str(fields[key]) + ", "
-    sqlString = sqlString[0:len(sqlString)-2] + ");" # Remove trailing ", " and close Sql 
-    print(sqlString)
+        print('---', key, fields[key])
+        addSql = fields[key].replace('""', '')
+        sqlValues.append(addSql)
+        sqlValues = [item.replace('"', '') for item in sqlValues]
+    print("sqlValues", sqlValues)
+    finSql = '","'.join(sqlValues)
+    print(finSql)
+    finSql = '"'+finSql+'")'
+    finSql = sqlString+finSql
+    print('finsql =', finSql)
 
-    currentCursor.execute(sqlString)
+        # sqlString += str(formattedSql) + ','
+    # sqlList = ['"' + item + '",' for item in sqlValues]
+    # formattedSql = ''.join(sqlList)
+    # print('The sqlVALS are: ', ''.join(sqlList))
+    # sqlString = sqlString+formattedSql
+    # sqlString = sqlString[0:len(sqlString)-1] + ");" # Remove trailing ", " and close Sql
+    # print('final sql', sqlString)
+
+    currentCursor.execute(finSql)
     currentCursor.connection.commit()
     recordID = currentCursor.lastrowid
     record = currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(recordID)).fetchone()
@@ -266,7 +282,10 @@ def updateRow(tableName, recordID, values, where='', sqlString=None):
         for key in values:
             try:
                 val = values[key]
-
+                val = val.replace('"', '')
+                print(val)
+                val = '"'+val+'"'
+                print('new val:', val)
                 sqlString = f"{key} = {val}, "
                 sqlStringAppend.append(sqlString)
 
@@ -295,6 +314,7 @@ def updateRow(tableName, recordID, values, where='', sqlString=None):
 
     return record 
 
+
 def getFieldMap(cursor):
     # Get fields for a given DB API 2.0 cursor object that has been executed
     # CONTRACT 
@@ -308,5 +328,3 @@ def getFieldMap(cursor):
         column = column + 1
     
     return results
-
-#init()
