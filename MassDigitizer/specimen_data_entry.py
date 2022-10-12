@@ -87,7 +87,7 @@ def init(collection_id):
     storage = [
         sg.Text("Storage location:", size=defaultSize, background_color=greenArea, font=font),
         sg.InputText('', key='txtStorage', size=green_size, text_color='black',
-                 background_color='white', font=('Arial', 12), readonly=True, enable_events=True),
+                 background_color='white', font=('Arial', 12), enable_events=True),
         sg.Text("", key='txtStorageFullname', size=(50,2), background_color=greenArea, font=smallLabelFont)]    
     
     preparation = [
@@ -215,16 +215,41 @@ def init(collection_id):
         if event is None: break # Empty event indicates user closing window  
 
         if event == 'txtStorage':
-            suggester = autoSuggest_popup.AutoSuggest_popup()
-            partialName = values['txtStorage']
-            if len(values[event]) >= 3:
-                print('more than three', partialName)
-                # res =
-            collobj.setStorageFields(window[event].widget.current())
-            window['txtStorageFullname'].update(collobj.storageFullname)
-            print('collobj.storageFullname', collobj.storageFullname)
-            storageName = collobj.storageFullname.split('|').pop()
-            print('storagename -- ', storageName)
+            autoStorage = autoSuggest_popup.AutoSuggest_popup('storage')
+            if len(values['txtStorage']) >= 3:
+                print(' more than 3 three {}'.format(values['txtStorage']))
+                partialName = values['txtStorage']
+                selected_storage = autoStorage.autosuggest_gui(partialName)
+                storageID = selected_storage[0]
+                storageFullName = selected_storage[1]
+                print('SS :', selected_storage)
+                collobj.setStorageFields(storageID)
+                window['txtStorageFullname'].update(collobj.storageFullname)
+            # print('in txtSTORAGE // ', values['txtStorage'])
+            # if len(values['txtStorage']) >= 3:
+            #     partialName = values['txtStorage']
+            #     print('partialname ## ', partialName)
+            #     location = collobj.autoSuggest('storage', partialName)
+            #     print('Storage location is s s :: ', location)
+            #     window['txtStorageFullname'].update(location)
+            #     collobj.storageFullName = location
+            #     splitLoc = location.split(' ')
+            #     last2Tokens = splitLoc[-2:]o
+            #     endPoint = ' '.join(last2Tokens)
+            #     collobj.storageName = endPoint
+            #     window['txtStorage'].update(endPoint)
+            #     window['cbxPrepType'].set_focus()
+            #     window['lgoPrep'].update(visible=True)
+            # suggester = autoSuggest_popup.AutoSuggest_popup()
+            # partialName = values['txtStorage']
+            # if len(values[event]) >= 3:
+            #     print('more than three', partialName)
+            #     # res =
+            # collobj.setStorageFields(window[event].widget.current())
+            # window['txtStorageFullname'].update(collobj.storageFullname)
+            # print('collobj.storageFullname', collobj.storageFullname)
+            # storageName = collobj.storageFullname.split('|').pop()
+            # print('storagename -- ', storageName)
             
         if event == 'cbxPrepType':
             collobj.setPrepTypeFields(window[event].widget.current())
@@ -472,7 +497,7 @@ def taxonomic_autosuggest_gui(partialName):
 
     window.close()
 
-# init(13)
+init(13)
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
     Accomplished by removing last character input if not a valid character
