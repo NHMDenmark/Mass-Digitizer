@@ -18,72 +18,64 @@ either express or implied. See the License for the specific language governing p
 """
 
 import os
-import sqlite3
 import sys
 import pathlib
-from datetime import datetime
 import PySimpleGUI as sg
-import tkinter as tk
 
 # internal dependencies
 import util
 import data_access as db
 import global_settings as gs
-import home_screen as hs
+import data_exporter as dx
+import autoSuggest_popup
+
+from models import specimen
 
 # TODO controller functions 
 import kick_off_sql_searches as koss
-from saveOrInsert_functionGUI import saving_to_db
-# TODO model functions 
-from models import specimen
-import data_exporter as dx
-import autoSuggest_popup
-# import saveOrInsert_functionGUI as saver
 
-# Make sure that current folder is registrered to be able to access other app files
+# Makes sure that current folder is registrered to be able to access other app files
 sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer')))
 currentpath = os.path.join(pathlib.Path(__file__).parent, '')
 
-collectionId = -1
-selectionIndex = 0
-global indexer
-indexer = []
-onecrementor = 0
-
+# Global variables 
+collectionId = 0   
 window = None
-
-# Specimen record 
-collobj = None #specimen.specimen()
+collobj = None # Specimen record 
 
 # Functional data
-clearingList = ['txtStorage', 'cbxPrepType', 'cbxHigherTaxon', 'cbxTypeStatus', 'txtNotes', 'chkMultiSpecimen', 'cbxGeoRegion', 'txtTaxonName', 'txtCatalogNumber'] #, 'cbxTaxonName']
+clearingList = ['txtStorage','txtStorageFullname', 'cbxPrepType', 'cbxHigherTaxon', 'cbxTypeStatus', 'txtNotes', 'chkMultiSpecimen', 'cbxGeoRegion', 'txtTaxonName', 'txtCatalogNumber'] #, 'cbxTaxonName']
 
 def init(collection_id):
-    # TODO function contract
+    # Initialize data entry form on basis of collection id 
     
+    # Create blank specimen record instance 
     collobj = specimen.specimen(collection_id)
-    print(len(collobj.storageLocations))
-
+    
     # Define UI areas
     sg.theme('SystemDefault')
     greenArea = '#E8F4EA'  # Stable fields
     blueArea = '#99ccff'  # Variable fields
     greyArea = '#BFD1DF'  # Session & Settings
 
+    # Set standard element dimensions 
     defaultSize = (21, 1)  # Ensure element labels are the same size so that they line up
     element_size = (25, 1)  # Default width of all fields in the 'green area'
     green_size = (20, 1)  # Default width of all fields in the 'green area'
     blue_size = (35, 1)  # Default width of all fields in the 'blue area'
 
+    # Set text fonts
     font = ('Bahnschrift', 13)
     labelHeadlineMeta = ('Bahnschrift', 12)
     titleFont = ('Bahnschrift', 18)
     smallLabelFont = ('Arial', 11, 'italic')
 
-    # TODO placeholder until higher taxonomic groups become available in SQLite
+    # TODO placeholder For when higher taxonomic groups are added as filter  
     taxonomicGroups = ['placeholder...']
 
-    # Store elements in variables to make it easier to include and position in the frames
+    # NOTE Elements are stored  in variables to make it easier to include and position in the frames
+
+    # Green Area elements 
     storage = [
         sg.Text("Storage location:", size=defaultSize, background_color=greenArea, font=font),
         sg.InputText('', key='txtStorage', size=green_size, text_color='black',
@@ -106,10 +98,12 @@ def init(collection_id):
         sg.Text('Notes', size=defaultSize, background_color=greenArea, font=font),
         sg.InputText(size=(80, 5), key='txtNotes', background_color='white', text_color='black', enable_events=False)]
 
-    layout_greenarea = [
-        storage, preparation, taxonomy, type_status, notes,
-        [sg.Checkbox('Multispecimen sheet', key='chkMultiSpecimen', background_color=greenArea,font=(11))], ] 
+    multispecimen = [sg.Checkbox('Multispecimen sheet', key='chkMultiSpecimen', background_color=greenArea,font=(11))]
 
+    layout_greenarea = [
+        storage, preparation, taxonomy, type_status, notes, multispecimen, ] 
+
+    # Blue Area elements 
     broadGeo = [
         sg.Text('Broad geographic region:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
         sg.Combo(util.convert_dbrow_list(collobj.geoRegions), size=blue_size, key='cbxGeoRegion', text_color='black',
@@ -118,16 +112,20 @@ def init(collection_id):
         sg.Text('Taxonomic name:     ', size=(21, 1), background_color=blueArea, text_color='black', font=font),
         sg.Input('', size=blue_size, key='txtTaxonName', text_color='black', background_color='white',
                  font=('Arial', 12), enable_events=True, pad=((5, 0), (0, 0))),
-    sg.Text('Beginning of the name list reached. No more Go-back!', key='lblWarning', visible=False, background_color="#ff5588", border_width=3)]
+    sg.Text('No further record to go back to!', key='lblRecordEnd', visible=False, background_color="#ff5588", border_width=3)]
+    
     # taxonomicPicklist = [
     #     sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
     #     sg.Listbox('', key='cbxTaxonName', select_mode=sg.LISTBOX_SELECT_MODE_BROWSE, size=(28, 6),
     #                text_color='black', background_color='white', font=('Arial', 12),
     #                bind_return_key=True, enable_events=True, pad=((5, 0), (0, 0))),]
+    
     barcode = [
         sg.Text('Barcode:', size=defaultSize, background_color=blueArea, enable_events=True, text_color='black', font=font),
         sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white', font=('Arial', 12), enable_events=True),]
+    
     # statusLabel = [sg.Text('Specimen record has been saved', font=('Arial',20),size=(20,10),justification='center',background_color='#4f280a',text_color = 'yellow',key='texto')]
+    
     lblExport = [sg.Text('', key='lblExport', visible=False, size=(100,2)), ]
 
     layout_bluearea = [broadGeo, taxonInput, barcode, [ # taxonomicPicklist,
@@ -143,6 +141,7 @@ def init(collection_id):
         #sg.Button('Dismiss', key='btnDismiss', button_color='white on black'), # Notifications not needed says Pip
         ], lblExport ]
 
+    # Grey Area (Header) elements
     loggedIn = [
         sg.Text('Logged in as:', size=(14,1), background_color=greyArea, font=labelHeadlineMeta),
         sg.Text(gs.spUserName, key='txtUserName', size=(25,1), background_color=greyArea, text_color='black', font=smallLabelFont),]
@@ -173,8 +172,8 @@ def init(collection_id):
         [sg.Frame('', [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(250, 175), background_color=greenArea, expand_x=True, ),],#expand_y=True, 
         [sg.Frame('', [[sg.Column(layout_bluearea, background_color=blueArea)]], title_location=sg.TITLE_LOCATION_TOP, background_color=blueArea, expand_x=True, expand_y=True, )], ]#
     
+    # Launch window 
     window = sg.Window("Mass Annotated Digitization Desk  (MADD)", layout, margins=(2, 2), size=(960, 480), resizable=True, return_keyboard_events=True, finalize=True, background_color=greyArea)
-    
     window.TKroot.focus_force()
 
     # Set session fields
@@ -186,27 +185,28 @@ def init(collection_id):
         window.Element('txtInstitution').Update(value=institution[2])
     window.Element('txtWorkStation').Update(value='TRS-80')
 
-    # Set control events 
+    # Set control events
+     
     # Header area
     window.Element('btnSettings').Widget.config(takefocus=0)
     window.Element('btnLogOut').Widget.config(takefocus=0)
     window.Element('txtUserName').Widget.config(takefocus=0)
+   
     # Green area 
-
-    #cbxPrepType 
-    #cbxTypeStatus 
+    #cbxPrepType   # Combobox therefore already triggered 
+    #cbxTypeStatus # Combobox therefore already triggered 
     window['txtNotes'].bind('<Tab>', '+TAB')
     window['txtNotes'].bind('<Leave>', '_Edit')
     window['chkMultiSpecimen'].bind("<Leave>", "_Edit")
     window['chkMultiSpecimen'].bind("<Return>", "_Enter")
+    
     # Blue area     
-    #cbxGeoRegion    
+    #cbxGeoRegion  # Combobox therefore already triggered   
     #window['cbxTaxonName'].bind("<Return>", "_Enter")
     window['txtCatalogNumber'].bind('<Leave>', '_Edit')    
-    entry_barcode = window['txtCatalogNumber']
-    entry_barcode.bind("<Return>", "_RETURN")
-    recordDict = {}
+    window['txtCatalogNumber'].bind("<Return>", "_RETURN")
     storageName = ''
+
     # Loop through GUI events
     while True:
         event, values = window.read()
@@ -215,41 +215,16 @@ def init(collection_id):
         if event is None: break # Empty event indicates user closing window  
 
         if event == 'txtStorage':
-            autoStorage = autoSuggest_popup.AutoSuggest_popup('storage')
-            if len(values['txtStorage']) >= 3:
-                print(' more than 3 three {}'.format(values['txtStorage']))
-                partialName = values['txtStorage']
-                selected_storage = autoStorage.autosuggest_gui(partialName)
-                storageID = selected_storage[0]
-                storageFullName = selected_storage[1]
-                print('SS :', selected_storage)
-                collobj.setStorageFields(storageID)
-                window['txtStorageFullname'].update(collobj.storageFullname)
-            # print('in txtSTORAGE // ', values['txtStorage'])
-            # if len(values['txtStorage']) >= 3:
-            #     partialName = values['txtStorage']
-            #     print('partialname ## ', partialName)
-            #     location = collobj.autoSuggest('storage', partialName)
-            #     print('Storage location is s s :: ', location)
-            #     window['txtStorageFullname'].update(location)
-            #     collobj.storageFullName = location
-            #     splitLoc = location.split(' ')
-            #     last2Tokens = splitLoc[-2:]o
-            #     endPoint = ' '.join(last2Tokens)
-            #     collobj.storageName = endPoint
-            #     window['txtStorage'].update(endPoint)
-            #     window['cbxPrepType'].set_focus()
-            #     window['lgoPrep'].update(visible=True)
-            # suggester = autoSuggest_popup.AutoSuggest_popup()
-            # partialName = values['txtStorage']
-            # if len(values[event]) >= 3:
-            #     print('more than three', partialName)
-            #     # res =
-            # collobj.setStorageFields(window[event].widget.current())
-            # window['txtStorageFullname'].update(collobj.storageFullname)
-            # print('collobj.storageFullname', collobj.storageFullname)
-            # storageName = collobj.storageFullname.split('|').pop()
-            # print('storagename -- ', storageName)
+            suggester = autoSuggest_popup.AutoSuggest_popup()
+            partialName = values['txtStorage']
+            if len(values[event]) >= 3:
+                print('more than three', partialName)
+                # res =
+            collobj.setStorageFields(window[event].widget.current())
+            window['txtStorageFullname'].update(collobj.storageFullname)
+            print('collobj.storageFullname', collobj.storageFullname)
+            storageName = collobj.storageFullname.split('|').pop()
+            print('storagename -- ', storageName)
             
         if event == 'cbxPrepType':
             collobj.setPrepTypeFields(window[event].widget.current())
@@ -258,9 +233,8 @@ def init(collection_id):
         #    pass
         
         if event == 'cbxTypeStatus':
-            # collobj.setTypeStatusFields(window[event].widget.current())
+            collobj.setTypeStatusFields(window[event].widget.current())
             collobj.typeStatusName = window['cbxTypeStatus'].get()
-            print('typeStatsu :: ', window['cbxTypeStatus'].get())
         
         if event == 'txtNotes_Edit':
             collobj.notes = values['txtNotes']
@@ -273,16 +247,6 @@ def init(collection_id):
             collobj.multiSpecimen = values[event]
             window['chkMultiSpecimen'].update(True)
             window['cbxGeoRegion'].set_focus()
-
-        if event == 'txtCatalogNumber':
-            collobj.catalogNumber = values[event]
-
-        if event == 'txtCatalogNumber_Edit':
-            collobj.catalogNumber = values['txtCatalogNumber']
-
-        if event == "txtCatalogNumber_RETURN":
-            collobj.catalogNumber = values['txtCatalogNumber']
-            window['btnSave'].set_focus()
         
         if event == 'chkMultiSpecimen_Edit': 
             collobj.multiSpecimen = values['chkMultiSpecimen']
@@ -298,8 +262,6 @@ def init(collection_id):
                 response = koss.auto_suggest_taxonomy(values[event])
                 if response is not None:
                     print('Suggested taxa based on input:) -- ', response)
-                    # TODO OUTCOMMENTED THIS BECAUSE IT STARTED TO GIVE ERRORS AND
-                    #      IT WILL BE WIRED THROUGH THE GENERIC AUTOSUGGEST ANYWAY
                     res = taxonomic_autosuggest_gui(partialName)
                     window['txtTaxonName'].update(res)
                     collobj.taxonName = res
@@ -311,60 +273,36 @@ def init(collection_id):
         #     print(f"InputTax: {values['cbxTaxonName'][0]}")
         #     window['cbxTaxonName'].update([])
 
+        if event == 'txtCatalogNumber':
+            collobj.catalogNumber = values[event]
+
+        if event == 'txtCatalogNumber_Edit':
+            collobj.catalogNumber = values['txtCatalogNumber']
+
+        if event == "txtCatalogNumber_RETURN":
+            collobj.catalogNumber = values['txtCatalogNumber']
+            window['btnSave'].set_focus()
+
         if event == 'btnClear':
             clear_all_of(window)
             window['txtRecordID'].update('')
 
         if event == 'btnBack':
-            # TODO handle in specimen class
+            # Fetch previous specimen record data on basis of current record ID, if any 
+            record = collobj.loadPrevious(collobj.id)
 
-            print('Pressed go-back /')
-            global  onecrementor
-            # Functionality for going back through the session records to make changes, or do checkups.
-            currentRecordID = collobj.obtainTrack(incrementor=onecrementor)
-            onecrementor += 1
-            print('oneicrementor at -- ', onecrementor)
-            print('current recordID :  ', currentRecordID)
-            if not currentRecordID:
-                print('in NOT current rec ID !!!!!')
-                window['lblWarning'].update("Beginning of taxon names reached.", visible=True)
-                window['btnBack'].update(disabled=True)
-            else:
-                rows = db.getRowOnId('specimen', currentRecordID)
-                #print('RAW row::::', rows[0])
-                recordIDbacktrack = rows[0]
-                dasRecordID = recordIDbacktrack
-                print('record past ID : ', recordIDbacktrack)
-                rowRecord = db.getRowOnId('specimen', currentRecordID)
-                record = rowRecord
-                recordDict = dict(zip(record.keys(), record))
-                print('RD, ', recordDict)
-
-            print('the backtrack counter is now at: ', recordIDbacktrack)
-            print('the ID of interest is= ', recordIDbacktrack)
-            print('row dict =', type(recordDict), recordDict)
-
-            window['txtRecordID'].update('{}'.format(recordIDbacktrack), visible=True)
-            # Updating elements from previous record
-            window['txtStorage'].update(record['storagename'])
-            window['cbxPrepType'].update(record['preptypename'])
-            window['cbxHigherTaxon'].update('')
-            window['cbxTypeStatus'].update('')
-            window['txtNotes'].update(record['notes'])
-            # multiSpecimen??
-            window['cbxGeoRegion'].update(record['georegionname'])
-            window['txtTaxonName'].update(record['taxonname'])
-            #window['cbxTaxonName'].update([])
-            window['txtCatalogNumber'].update(record['catalognumber'])
-
-            if currentRecordID:
-                print(recordIDbacktrack, ' row should be UPDATED')
+            if record:
+                # If not empty, set form fields 
+                setFormFields(record)
+            else: 
+                # Indicate no further records
+                window['lblRecordEnd'].update(visible=False)
 
         if event == 'btnClear':
             clear_all_of(window)
             window['txtRecordID'].update('')
             window['lblExport'].update(visible=False)
-            window['lblWarning'].update(visible=False)
+            window['lblRecordEnd'].update(visible=False)
 
         if event == 'btnExport':
             export_result = dx.exportSpecimens('xlsx')
@@ -372,7 +310,7 @@ def init(collection_id):
 
         if event == 'btnDismiss':
             window['lblExport'].update(visible=False)
-            window['lblWarning'].update(visible=False)
+            window['lblRecordEnd'].update(visible=False)
 
         if event == sg.WINDOW_CLOSED:
             break
@@ -382,27 +320,44 @@ def init(collection_id):
             pass
 
         if event == 'btnSave':
-            recordID = window['txtRecordID'].get()
-            if recordID:
-                collobj.id = int(recordID)
-            recordFromCollobj = collobj.getFieldsAsDict()
+            # recordID = window['txtRecordID'].get()
+            # if recordID:
+            #     collobj.id = int(recordID)
+            # recordFromCollobj = collobj.getFieldsAsDict()
 
-            print('collobj,, ', collobj.getFieldsAsDict())
             # TODO explain code 
             if collobj.id >= 0:
                 clear_all_of(window)
                 window['txtRecordID'].update('')
 
+            #recordFromCollobj['storageFullName'] = window['txtStorageFullname'].get()
+            #recordFromCollobj['storagename'] = storageName
+            #print('recordDICT ===', recordFromCollobj)
+            #collobj.setFields(recordFromCollobj)
 
-            recordFromCollobj['storageFullName'] = window['txtStorageFullname'].get()
-            recordFromCollobj['storagename'] = storageName
-
-            print('recordDICT ===', recordFromCollobj)
-            collobj.setFields(recordFromCollobj)
+            # save specimen and get its id 
             previousId = collobj.save()
+
+            # Create new specimen instance and add previous id to it 
+            collobj = specimen.specimen(collection_id)
             collobj.previousId = previousId
 
     window.close()
+
+def setFormFields(record):
+    # Function for setting form fields from specimen data record 
+    #
+    window['txtRecordID'].update('{}'.format(record['id']), visible=True)
+    window['txtStorage'].update(record['storagename'])
+    window['txtStorageFullname'].update(record['storagefullname'])
+    window['cbxPrepType'].update(record['preptypename'])
+    #window['cbxHigherTaxon'].update('')
+    window['cbxTypeStatus'].update(record['typestatus']) 
+    window['txtNotes'].update(record['notes'])
+    window['chkMultiSpecimen'].update(record['multispecimen']) 
+    window['cbxGeoRegion'].update(record['georegionname'])
+    window['txtTaxonName'].update(record['taxonname'])
+    window['txtCatalogNumber'].update(record['catalognumber'])
 
 # TODO explain the function of below lines 
 def clear_all_of(win):
@@ -497,7 +452,7 @@ def taxonomic_autosuggest_gui(partialName):
 
     window.close()
 
-init(13)
+#init(13)
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
     Accomplished by removing last character input if not a valid character

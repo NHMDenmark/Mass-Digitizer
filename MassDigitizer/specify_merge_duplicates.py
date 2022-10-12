@@ -31,22 +31,15 @@ def merge(source_target_tuple_list, spusername, sppassword, collection_id):
         target_taxon_id = duplicate[1]
         print('merging %s with %s ...'%(source_taxon_id, target_taxon_id))
         print(sp.mergeTaxa(source_taxon_id, target_taxon_id, token))
-        
-
 
 def testcode():
-    duplicate1 = ()#(1,2)
-    duplicate2 = ()#(3,4)
+    # duplicate1 = (8888888,8888888)
+    # duplicate2 = (9999999,9999999)
 
-    duplicate_list = [duplicate1, duplicate2]
+    # duplicate_list = [duplicate1, duplicate2]
 
-    merge(duplicate_list,'fedor.steeman','*********', 688130)
+    # merge(duplicate_list,'fedor.steeman',input('password:'), 688130)
 
-    
-
-
-"""
-def testcode():
     max_tries = 10
     while max_tries > 0:
         token = sp.specifyLogin(input('Enter username: '), getpass('Enter password: '), 688130)
@@ -64,6 +57,6 @@ def testcode():
         sp.mergeTaxa(source_taxon_id, target_taxon_id, token)
 
     print('exiting...')
-"""
+
 
 testcode()
