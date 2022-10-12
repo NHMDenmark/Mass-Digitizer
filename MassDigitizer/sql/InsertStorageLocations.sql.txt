@@ -2141,7 +2141,6 @@ INSERT INTO storage (name, fullname, collectionid) VALUES
 ("Box 2127","Natural History Museum of Denmark | Priorparken | Herbarium C: Danish Vascular Plant Collection | Box 2127",29),
 ("Box 2128","Natural History Museum of Denmark | Priorparken | Herbarium C: Danish Vascular Plant Collection | Box 2128",29),
 ("Box 2129","Natural History Museum of Denmark | Priorparken | Herbarium C: Danish Vascular Plant Collection | Box 2129",29),
-("Box 2129","Natural History Museum of Denmark | Priorparken | Herbarium C: Danish Vascular Plant Collection | Box 2129",29),
 ("Box 2130","Natural History Museum of Denmark | Priorparken | Herbarium C: Danish Vascular Plant Collection | Box 2130",29),
 ("Box 2131","Natural History Museum of Denmark | Priorparken | Herbarium C: Danish Vascular Plant Collection | Box 2131",29),
 ("Box 2132","Natural History Museum of Denmark | Priorparken | Herbarium C: Danish Vascular Plant Collection | Box 2132",29),

@@ -36,6 +36,7 @@ dbAltFilePath = os.path.expanduser('~\OneDrive - University of Copenhagen\Docume
 
 # Reset cursor pointer 
 currentCursor = None
+connection = None
 
 # Point to database file 
 def __init__(self,databaseName='db', do_in_memory=False):
@@ -78,7 +79,6 @@ def getConnection():
     connection = sqlite3.connect(dbFilePath)
     return connection
 
-connection = None
 def getDbCursor():#do_in_memory=False):
     # Generic function needed for database access 
     # CONTRACT
@@ -118,7 +118,6 @@ def getDbCursor():#do_in_memory=False):
     connection.row_factory = sqlite3.Row
     cursor = connection.cursor()
     return cursor
-
 
 def getRows(tableName, limit=100):
     # Getting all records from the table specified by name
@@ -328,3 +327,4 @@ def getFieldMap(cursor):
         column = column + 1
     
     return results
+
