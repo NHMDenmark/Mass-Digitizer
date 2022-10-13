@@ -18,7 +18,7 @@ either express or implied. See the License for the specific language governing p
 """
 
 import os
-import sqlite3
+from pprint import pprint
 import sys
 import pathlib
 from datetime import datetime
@@ -53,7 +53,7 @@ onecrementor = 0
 window = None
 
 # Specimen record 
-collobj = None #specimen.specimen()
+# collobj = None #specimen.specimen()
 
 # Functional data
 clearingList = ['txtStorage', 'cbxPrepType', 'cbxHigherTaxon', 'cbxTypeStatus', 'txtNotes', 'chkMultiSpecimen', 'cbxGeoRegion', 'txtTaxonName', 'txtCatalogNumber'] #, 'cbxTaxonName']
@@ -217,14 +217,35 @@ def init(collection_id):
         if event == 'txtStorage':
             autoStorage = autoSuggest_popup.AutoSuggest_popup('storage')
             if len(values['txtStorage']) >= 3:
-                print(' more than 3 three {}'.format(values['txtStorage']))
+
                 partialName = values['txtStorage']
                 selected_storage = autoStorage.autosuggest_gui(partialName)
-                storageID = selected_storage[0]
-                storageFullName = selected_storage[1]
+
+                storageFullName = selected_storage[2]
+                originalFormatFullName = selected_storage[2]
                 print('SS :', selected_storage)
-                collobj.setStorageFields(storageID)
+                collobj.storageFullname = originalFormatFullName
+                # Grab the single name at the end of the storageFullName string
+                # by splitting the string into a list and pop() which removes and returns last item.
+                storageFullList = storageFullName.split('|')
+                storageSingleName = storageFullList.pop()
+                collobj.storageName = storageSingleName
+                colobjectRecord = collobj.getFieldsAsDict()
+                print('origg.', originalFormatFullName)
+                collobj.storageFullname = originalFormatFullName
+                print('colobject record /')
+                pprint(colobjectRecord)
+                colobjectRecord['storageFullName'] = originalFormatFullName
+                colobjectRecord['storagename'] = storageSingleName
+                print('colobject record NOWW /')
+                pprint(colobjectRecord)
                 window['txtStorageFullname'].update(collobj.storageFullname)
+                window['txtStorage'].update(collobj.storageName)
+                window['cbxPrepType'].set_focus()
+                print('original S name:', collobj.storageFullName) #beware two vars same name exc camelcase
+                print("coll object storage r :", collobj.storageName)
+                fd = collobj.getFieldsAsDict()
+                pprint(fd)
             # print('in txtSTORAGE // ', values['txtStorage'])
             # if len(values['txtStorage']) >= 3:
             #     partialName = values['txtStorage']
@@ -382,25 +403,27 @@ def init(collection_id):
             pass
 
         if event == 'btnSave':
-            recordID = window['txtRecordID'].get()
-            if recordID:
-                collobj.id = int(recordID)
-            recordFromCollobj = collobj.getFieldsAsDict()
+            res = collobj.save()
+            print('Saved record ID  ,=', res)
+            # recordID = window['txtRecordID'].get()
+            # if recordID:
+            #     collobj.id = int(recordID)
+            # recordFromCollobj = collobj.getFieldsAsDict()
+            #
+            # print('collobj,, ', collobj.getFieldsAsDict())
+            # # TODO explain code
+            # if collobj.id >= 0:
+            #     clear_all_of(window)
+            #     window['txtRecordID'].update('')
 
-            print('collobj,, ', collobj.getFieldsAsDict())
-            # TODO explain code 
-            if collobj.id >= 0:
-                clear_all_of(window)
-                window['txtRecordID'].update('')
 
+            # recordFromCollobj['storageFullName'] = window['txtStorageFullname'].get()
+            # recordFromCollobj['storagename'] = storageName
 
-            recordFromCollobj['storageFullName'] = window['txtStorageFullname'].get()
-            recordFromCollobj['storagename'] = storageName
-
-            print('recordDICT ===', recordFromCollobj)
-            collobj.setFields(recordFromCollobj)
-            previousId = collobj.save()
-            collobj.previousId = previousId
+            # print('recordDICT ===', recordFromCollobj)
+            # collobj.setFields(recordFromCollobj)
+            # previousId = collobj.save()
+            # collobj.previousId = previousId
 
     window.close()
 
