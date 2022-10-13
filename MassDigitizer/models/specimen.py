@@ -104,7 +104,7 @@ class specimen:
         self.typeStatusName = record['typestatusname']
         self.typeStatusId = record['typestatusid']
         self.geoRegionName = record['georegionname']
-        self.geoRegionId = record['geoRegionId']
+        self.geoRegionId = record['georegionid']
         self.storageFullName = record['storagefullname']
         self.storageName = record['storagename']
         self.storageId = record['storageid']
@@ -129,16 +129,16 @@ class specimen:
         #   id: Primary key of current record; If 0 then latest record    
         #   RETURNS record or None, if none retrieved 
 
+        # Construct query for extracting the previous record 
         sql = "SELECT * FROM specimen s " 
-        
-        # If existing record then fetch the one that has a lower id than current which is also the highest 
+        # If existing record (id > 0) then fetch the one that has a lower id than current which is also the highest 
         if id > 0: 
             sql = sql + f"WHERE s.id < {id} " 
         # If blank record then fetch the one with the highest id 
-        sql = sql + " DESC LIMIT 1 ORDER BY s.id "        
+        sql = sql + " ORDER BY s.id DESC LIMIT 1 "        
         print(sql)
 
-        record = db.getRowOnId(id)
+        record = db.executeSqlStatement(sql)[0]
 
         # If record retrieved set fields then return 
         if record:

@@ -290,7 +290,6 @@ def init(collection_id):
         if event == 'btnBack':
             # Fetch previous specimen record data on basis of current record ID, if any 
             record = collobj.loadPrevious(collobj.id)
-
             if record:
                 # If not empty, set form fields 
                 setFormFields(record)
