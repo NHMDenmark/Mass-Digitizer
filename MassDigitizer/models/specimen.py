@@ -9,26 +9,26 @@
   http://www.apache.org/licenses/LICENSE-2.0
   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-  PURPOSE: TODO 
+  PURPOSE: Represent specimen data record as "Model" in the MVC pattern  
 """
-from attr import fields_dict
-import pytz
+
 from datetime import datetime
 
 # Internal dependencies
 import data_access as db
-import sqlite3
-import util
+import global_settings as gs
 
 class specimen:
-    # TODO description
+    # The specimen class is a representation of a specimen record to hold its data
+    # Any instance is either an existing record in the database or transient pending an insert
 
-    def __init__(self, collectionId):
+    def __init__(self, collection_id):
+        # Set up blank specimen for data entry on basis of collection id 
         self.id              = 0
         self.catalogNumber   = ''
         self.multiSpecimen   = 'False'
         self.taxonName       = ''
-        self.taxonNameid     = 0
+        self.taxonNameId     = 0
         #self.taxonspid 
         self.typeStatusName  = ''
         self.typeStatusId    = 0
@@ -40,66 +40,72 @@ class specimen:
         self.prepTypeName    = ''
         self.prepTypeId      = 0
         self.notes           = ''
-        self.institutionId   = 0
-        self.collectionId    = 0
-        self.userName        = ''
-        self.userId          = 0
+        self.institutionId   = gs.institutionId #db.getRowOnId('collection',collection_id)['institutionid']
+        self.collectionId    = collection_id
+        self.userName        = gs.spUserName
+        self.userId          = gs.spUserId
         self.workStation     = ''
         self.recordDateTime  = str(datetime.now())
         self.exported        = 0
         self.exportDateTime  = ''
         self.exportUserId    = ''
-        
-        # Predefined data
-        self.storageLocations = db.getRowsOnFilters('storage', {'collectionid =': '%s'%collectionId})
-        self.prepTypes = db.getRowsOnFilters('preptype', {'collectionid =': '%s'%collectionId})
-        self.typeStatuses = db.getRowsOnFilters('typestatus', {'collectionid =': '%s'%collectionId})
-        self.geoRegions = db.getRowsOnFilters('georegion', {'collectionid =': '%s'%collectionId}) 
-        self.geoRegionSources = db.getRowsOnFilters('georegionsource', {'collectionid =': '%s'%collectionId}) 
-        
-        # Navigation 
-        self.previousId = 0
-        self.nextId = 0
+
+        self.loadPredefinedData()
+    
+    def loadPredefinedData(self):
+        # Function for loading predefined data in order to get primary keys and other info to be pooled at selection in GUI 
+        self.storageLocations = db.getRowsOnFilters('storage', {'collectionid =': f'{self.collectionId}'})
+        self.prepTypes = db.getRowsOnFilters('preptype', {'collectionid =': f'{self.collectionId}'})
+        self.typeStatuses = db.getRowsOnFilters('typestatus', {'collectionid =': f'{self.collectionId}'})
+        self.geoRegions = db.getRowsOnFilters('georegion', {'collectionid =': f'{self.collectionId}'}) 
+        self.geoRegionSources = db.getRowsOnFilters('georegionsource', {'collectionid =': f'{self.collectionId}'}) 
     
     def save(self):
-        # TODO Function description & contract     
-        # fields must be a dictionary with the specimen table headers as 'keys' and the form field content as 'values'.
-        # insert is a switch to mark whether an INSERT or an UPDATE is called for.
-        # recordID is required for updates.
+        # Function telling instance to save its data either as a new record (INSERT) or updating an existing one (UPDATE)
+        # Data to be saved is retrieved from self as a dictionary with ->
+        #   the specimen table headers as 'keys' and the form field content as 'values'.        
+        # CONTRACT 
         #   RETURNS record id (primary key)
-        print('IN N obj.SAVE()')
+        
+        print('Saving specimen...')
+        
+        # Checking if Save is a novel record , or if it is updating existing record.
         if self.id > 0:
+            # Record Id is not 0 therefore existing record to be updated 
             print('Update specimen record with id: ', self.id)
-            print(self.getFieldsAsDict())
             record = db.updateRow('specimen', self.id, self.getFieldsAsDict())
         else:
-            # Checking if Save is a novel record , or if it is updating existing record.
+            # Record Id is not 0 therefore existing record to be updated 
             print('Insert new specimen record.')
             record = db.insertRow('specimen', self.getFieldsAsDict())
-            print("self.getFieldsAsDict", self.getFieldsAsDict())
             self.id = record['id']
 
         return self.id
 
     def load(self, id):
-        # TODO function description 
+        # Function for loading and populating instance from database record  
+        # CONTRACT 
+        #   id: Primary key of current record; If 0 then latest record   
+        
         record = db.getRowOnId(id)
         self.setFields(record)
 
     def setFields(self, record):
-        # TODO function description 
-        # self.id = record['id']
-        print('record.keys()',record.keys())
-        self.catalogNumber = record['catalogNumber']
-        self.multiSpecimen = record['multiSpecimen']
-        self.taxonName = record['taxonName']
-        self.taxonNameid = record['taxonNameid']
+        # Function for setting specimen data field from record
+        # CONTRACT
+        #   record: sqliterow object containing record data 
+        
+        self.id = record['id']
+        self.catalogNumber = record['catalognumber']
+        self.multiSpecimen = record['multispecimen']
+        self.taxonName = record['taxonname']
+        self.taxonNameId = record['taxonnameid']
         #self.taxonspid = record['taxonspid']
-        self.typeStatusName = record['typeStatusName']
-        self.typeStatusId = record['typeStatusId']
-        self.geoRegionName = record['geoRegionName']
-        self.geoRegionId = record['geoRegionId']
-        self.storageFullName = record['storageFullName']
+        self.typeStatusName = record['typestatusname']
+        self.typeStatusId = record['typestatusid']
+        self.geoRegionName = record['georegionname']
+        self.geoRegionId = record['georegionid']
+        self.storageFullName = record['storagefullname']
         self.storageName = record['storagename']
         self.storageId = record['storageid']
         self.prepTypeName = record['preptypename']
@@ -115,24 +121,44 @@ class specimen:
         self.exportDateTime = record['exportdatetime']
         self.exportUserId = record['exportuserid']
 
-        # TODO navigation?
-        #self.previousId = ? 
-        #self.nextId = ?         
+        self.loadPredefinedData()
 
-        # TODO predefinedData ? 
+    def loadPrevious(self, id):
+        # Function for loading previous specimen record data 
+        # CONTRACT
+        #   id: Primary key of current record; If 0 then latest record    
+        #   RETURNS record or None, if none retrieved 
+
+        # Construct query for extracting the previous record 
+        sql = "SELECT * FROM specimen s " 
+        # If existing record (id > 0) then fetch the one that has the highest lower id than current 
+        if id > 0: 
+            sql = sql + f"WHERE s.id < {id} " 
+        # If blank record then fetch the one with the highest id 
+        sql = sql + " ORDER BY s.id DESC LIMIT 1 "        
+        print(sql)
+
+        record = db.executeSqlStatement(sql)[0]
+
+        # If record retrieved set fields then return 
+        if record:
+            self.setFields(record)
+        
+        # NOTE: If not record retrieved None is returned 
+        return record 
 
     def getFieldsAsDict(self):
         # TODO function description 
         fieldsDict = {
-                'catalogNumber':'"%s"' % self.catalogNumber , # TODO "{}".format(var...)
-                'multiSpecimen':'"%s"' % self.multiSpecimen ,
-                'taxonName':'"%s"' % self.taxonName ,
-                'taxonNameid':'"%s"' % self.taxonNameid ,
-                'typeStatusName':'"%s"' % self.typeStatusName ,
-                'typeStatusId':'%s' % self.typeStatusId ,
-                'geoRegionName':'"%s"' % self.geoRegionName ,
-                'geoRegionId':'"%s"' % self.geoRegionId ,
-                'storageFullName':'"%s"' % self.storageFullName,
+                'catalognumber':'"%s"' % self.catalogNumber , # TODO "{}".format(var...)
+                'multispecimen':'"%s"' % self.multiSpecimen ,
+                'taxonname':'"%s"' % self.taxonName ,
+                'taxonnameid':'"%s"' % self.taxonNameId ,
+                'typestatusname':'"%s"' % self.typeStatusName ,
+                'typestatusid':'%s' % self.typeStatusId ,
+                'georegionname':'"%s"' % self.geoRegionName ,
+                'georegionid':'"%s"' % self.geoRegionId ,
+                'storagefullname':'"%s"' % self.storageFullName,
                 'storagename':'"%s"' % self.storageName ,
                 'storageid':'"%s"' % self.storageId ,
                 'preptypename':'"%s"' % self.prepTypeName ,
@@ -152,67 +178,75 @@ class specimen:
         return fieldsDict
     
     def setStorageFields(self, index):
+        # TODO Make obsolete 
+        # Get storage record on the basis of list index 
+        # and set respective fields
         self.storageId = self.storageLocations[index]['id']
-        self.storagename = self.storageLocations[index]['name']
-        self.storageFullname = self.storageLocations[index]['fullname']
+        self.storageName = self.storageLocations[index]['name']
+        self.storageFullName = self.storageLocations[index]['fullname']
     
     def setPrepTypeFields(self,index):
-        self.preptypeid = self.prepTypes[index]['id']
-        self.preptypename = self.prepTypes[index]['name']
+        # Get prep type record on the basis of list index 
+        #    and set respective fields 
+        self.prepTypeId = self.prepTypes[index]['id']
+        self.prepTypeName = self.prepTypes[index]['name']
 
     def setTypeStatusFields(self,index):
-        self.typestatusid = self.typeStatuses[index]['id']
-        self.typestatusname = self.typeStatuses[index]['name']
+        # Get type status record on the basis of list index 
+        #    and set respective fields 
+        self.typeStatusId = self.typeStatuses[index]['id']
+        self.typeStatusName = self.typeStatuses[index]['name']
 
     def setgeoRegionFields(self,index):
+        # Get type status record on the basis of list index 
+        #    and set respective fields 
         self.geoRegionId = self.geoRegions[index]['id']
         self.geoRegionName = self.geoRegions[index]['name']
+    
+    def setTaxonNameFields(self, taxonFullName):
+        # Get taxon name record on the basis of full name  
+        #    and set respective fields 
+        # RETURNS taxonNameId (int) : 
+        
+        # Get taxon name record on fullname
+        taxonNameRecord = db.getRowsOnFilters('taxonname', {'fullname =': f'"{taxonFullName}"'})
+        resultsRowCount = len(taxonNameRecord)
 
-    def obtainTrack(self, incrementor=0):
-        # TODO function contract
-        # Keeps track of record IDs in relation to the Go-back button functionality.
-        recordID = self.getRecordIDbyBacktracking(incrementor)
-        if recordID:
-            print(f'IN ID of obtainTrack() ;; {recordID}')
-            # recordID = self.getRecordIDbyBacktracking(incrementor)
-            return recordID
+        # if result not empty (or > 1) then set fields
+        if resultsRowCount == 1:
+            self.taxonNameId = taxonNameRecord[0]['id'] 
+            self.taxonName = taxonNameRecord[0]['name'] 
+            self.taxonName = taxonNameRecord[0]['fullname'] 
+        elif resultsRowCount == 0:
+            # Unknown taxon name, add verbatim 
+            self.taxonFullName = taxonFullName 
+            self.taxonNameId = 0
         else:
-            print(f'In ELSE obtainTrack() -- {recordID}')
-            # recordID = recordID - 1
-            return recordID
+            # Duplicate fullnames detected
+            self.taxonNameId = -1
 
-    def getRecordIDbyBacktracking(self, backtrackCounter):
-        # TODO function contract
-        # TODO must be reworked to use SQL statements rather than "counters" which rely on sequential IDs!
-        sql = "select * from specimen s order by s.id DESC LIMIT {},1;".format(backtrackCounter)
-        print(sql)
-        try:
-            rows = db.executeSqlStatement(sql)
-        except sqlite3.OperationalError:
-            #window['txtTaxonName'].update("Beginning of taxon names reached.")
-            print("Beginning of taxon names reached.")
+        return self.taxonNameId
 
-        if rows:
-            print('COUNTER row::::', rows[0])
-            recordIDcurrent = rows[0]['id']
-            return recordIDcurrent
+    def setStorageFields(self, storageFullName):
+        # Get storage record on the basis of full name  
+        #    and set respective fields 
+        # RETURNS storageId (int) : 
+        
+        # Get storage record on fullname
+        storageRecord = db.getRowsOnFilters('storage', {'fullname =': f'"{storageFullName}"'})
+        resultsRowCount = len(storageFullName)
+
+        # if result not empty (or > 1) then set fields
+        if resultsRowCount == 1:
+            self.storageId = storageRecord[0]['id'] 
+            self.storageName = storageRecord[0]['name'] 
+            self.storageFullName = storageRecord[0]['fullname'] 
+        elif resultsRowCount == 0:
+            # Unknown taxon name, add verbatim 
+            self.storageFullName = storageFullName 
+            self.storageId = 0
         else:
-            print('IN else clause due to no more GO_BACK !!')
-            #window['btnBack'].update(disabled=True)
-            #window['lblWarning'].update(visible=True)
+            # Duplicate fullnames detected
+            self.taxonNameId = -1
 
-            # backtrackCounter = backtrackCounter - 1
-            return False
-            # sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
-            # rows = db.executeSqlStatement(sql)
-
-        sql = "select * from specimen s  order by s.id DESC LIMIT {},1;".format(backtrackCounter)
-
-        rows = db.executeSqlStatement(sql)
-        if len(rows) > 0:
-            print('COUNTER row::::', rows[0])
-            recordIDcurrent = rows[0]['id']
-        else:
-            recordIDcurrent = 0
-
-        return recordIDcurrent
+        return self.taxonNameId
