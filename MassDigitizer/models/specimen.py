@@ -28,7 +28,7 @@ class specimen:
         self.catalogNumber   = ''
         self.multiSpecimen   = 'False'
         self.taxonName       = ''
-        self.taxonNameid     = 0
+        self.taxonNameId     = 0
         #self.taxonspid 
         self.typeStatusName  = ''
         self.typeStatusId    = 0
@@ -99,7 +99,7 @@ class specimen:
         self.catalogNumber = record['catalognumber']
         self.multiSpecimen = record['multispecimen']
         self.taxonName = record['taxonname']
-        self.taxonNameid = record['taxonnameid']
+        self.taxonNameId = record['taxonnameid']
         #self.taxonspid = record['taxonspid']
         self.typeStatusName = record['typestatusname']
         self.typeStatusId = record['typestatusid']
@@ -131,7 +131,7 @@ class specimen:
 
         # Construct query for extracting the previous record 
         sql = "SELECT * FROM specimen s " 
-        # If existing record (id > 0) then fetch the one that has a lower id than current which is also the highest 
+        # If existing record (id > 0) then fetch the one that has the highest lower id than current 
         if id > 0: 
             sql = sql + f"WHERE s.id < {id} " 
         # If blank record then fetch the one with the highest id 
@@ -153,7 +153,7 @@ class specimen:
                 'catalognumber':'"%s"' % self.catalogNumber , # TODO "{}".format(var...)
                 'multispecimen':'"%s"' % self.multiSpecimen ,
                 'taxonname':'"%s"' % self.taxonName ,
-                'taxonnameid':'"%s"' % self.taxonNameid ,
+                'taxonnameid':'"%s"' % self.taxonNameId ,
                 'typestatusname':'"%s"' % self.typeStatusName ,
                 'typestatusid':'%s' % self.typeStatusId ,
                 'georegionname':'"%s"' % self.geoRegionName ,
@@ -178,19 +178,75 @@ class specimen:
         return fieldsDict
     
     def setStorageFields(self, index):
+        # TODO Make obsolete 
+        # Get storage record on the basis of list index 
+        # and set respective fields
         self.storageId = self.storageLocations[index]['id']
         self.storageName = self.storageLocations[index]['name']
         self.storageFullName = self.storageLocations[index]['fullname']
     
     def setPrepTypeFields(self,index):
+        # Get prep type record on the basis of list index 
+        #    and set respective fields 
         self.prepTypeId = self.prepTypes[index]['id']
         self.prepTypeName = self.prepTypes[index]['name']
 
     def setTypeStatusFields(self,index):
         # Get type status record on the basis of list index 
+        #    and set respective fields 
         self.typeStatusId = self.typeStatuses[index]['id']
         self.typeStatusName = self.typeStatuses[index]['name']
 
     def setgeoRegionFields(self,index):
+        # Get type status record on the basis of list index 
+        #    and set respective fields 
         self.geoRegionId = self.geoRegions[index]['id']
         self.geoRegionName = self.geoRegions[index]['name']
+    
+    def setTaxonNameFields(self, taxonFullName):
+        # Get taxon name record on the basis of full name  
+        #    and set respective fields 
+        # RETURNS taxonNameId (int) : 
+        
+        # Get taxon name record on fullname
+        taxonNameRecord = db.getRowsOnFilters('taxonname', {'fullname =': f'"{taxonFullName}"'})
+        resultsRowCount = len(taxonNameRecord)
+
+        # if result not empty (or > 1) then set fields
+        if resultsRowCount == 1:
+            self.taxonNameId = taxonNameRecord[0]['id'] 
+            self.taxonName = taxonNameRecord[0]['name'] 
+            self.taxonName = taxonNameRecord[0]['fullname'] 
+        elif resultsRowCount == 0:
+            # Unknown taxon name, add verbatim 
+            self.taxonFullName = taxonFullName 
+            self.taxonNameId = 0
+        else:
+            # Duplicate fullnames detected
+            self.taxonNameId = -1
+
+        return self.taxonNameId
+
+    def setStorageFields(self, storageFullName):
+        # Get storage record on the basis of full name  
+        #    and set respective fields 
+        # RETURNS storageId (int) : 
+        
+        # Get storage record on fullname
+        storageRecord = db.getRowsOnFilters('storage', {'fullname =': f'"{storageFullName}"'})
+        resultsRowCount = len(storageFullName)
+
+        # if result not empty (or > 1) then set fields
+        if resultsRowCount == 1:
+            self.storageId = storageRecord[0]['id'] 
+            self.storageName = storageRecord[0]['name'] 
+            self.storageFullName = storageRecord[0]['fullname'] 
+        elif resultsRowCount == 0:
+            # Unknown taxon name, add verbatim 
+            self.storageFullName = storageFullName 
+            self.storageId = 0
+        else:
+            # Duplicate fullnames detected
+            self.taxonNameId = -1
+
+        return self.taxonNameId

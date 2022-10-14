@@ -232,6 +232,7 @@ def init(collection_id):
                 print('more than three', partialName)
                 # the var selectedStorage contains a tuple: (storageID, name, fullname)
                 #as per the 'storage' table.
+                # TODO does it though? It seems to return a single string now. 
                 selectedStorage = autoStorage.autosuggest_gui(partialName)
 
                 storageFullName = selectedStorage[2]
@@ -284,16 +285,15 @@ def init(collection_id):
                 response = koss.auto_suggest_taxonomy(values[event])
                 if response is not None:
                     print('Suggested taxa based on input:) -- ', response)
-                    res = taxonomic_autosuggest_gui(partialName)
-                    window['txtTaxonName'].update(res)
-                    collobj.taxonName = res
+                    selectedName = taxonomic_autosuggest_gui(partialName)
+
+                    window['txtTaxonName'].update(selectedName)
+
+                    collobj.setTaxonNameFields(selectedName)
+                    
+                    # All done: Skip further to barcode field  
                     window['txtCatalogNumber'].set_focus()
                     # window['cbxTaxonName'].update(set_to_index=[0], scroll_to_index=0)
-
-        # elif event == "cbxTaxonName" + "_Enter":  # For arrowing down to relevant taxon name and pressing Enter
-        #     window['txtTaxonName'].update(values['cbxTaxonName'][0])
-        #     print(f"InputTax: {values['cbxTaxonName'][0]}")
-        #     window['cbxTaxonName'].update([])
 
         if event == 'txtCatalogNumber':
             collobj.catalogNumber = values[event]
@@ -341,23 +341,13 @@ def init(collection_id):
             pass
 
         if event == 'btnSave':
-            # recordID = window['txtRecordID'].get()
-            # if recordID:
-            #     collobj.id = int(recordID)
-            # recordFromCollobj = collobj.getFieldsAsDict()
-
-            # TODO explain code
-            if collobj.id >= 0:
-                clear_all_of(window)
-                window['txtRecordID'].update('')
-
-            # recordFromCollobj['storageFullName'] = window['txtStorageFullname'].get()
-            # recordFromCollobj['storagename'] = storageName
-            # print('recordDICT ===', recordFromCollobj)
-            # collobj.setFields(recordFromCollobj)
-
             # save specimen and get its id
             previousId = collobj.save()
+            
+            # TODO explain below lines ; If saved successfully, reset form ???
+            if previousId >= 0:
+                clear_all_of(window)
+                window['txtRecordID'].update('')
 
             # Create new specimen instance and add previous id to it
             collobj = specimen.specimen(collection_id)
