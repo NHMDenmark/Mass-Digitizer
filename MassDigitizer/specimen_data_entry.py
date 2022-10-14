@@ -44,8 +44,9 @@ window = None
 collobj = None  # Specimen record
 
 # Functional data
-clearingList = ['txtStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxHigherTaxon', 'cbxTypeStatus', 'txtNotes',
-                'chkMultiSpecimen', 'cbxGeoRegion', 'txtTaxonName', 'txtCatalogNumber']  # , 'cbxTaxonName']
+clearingList = ['txtStorageFullname', 'cbxPrepType', 'cbxHigherTaxon', 'cbxTypeStatus', 'txtNotes',
+                'chkMultiSpecimen', 'cbxGeoRegion', 'txtTaxonName', 'txtCatalogNumber']
+
 
 
 def init(collection_id):
@@ -233,21 +234,22 @@ def init(collection_id):
                 # the var selectedStorage contains a tuple: (storageID, name, fullname)
                 #as per the 'storage' table.
                 # TODO does it though? It seems to return a single string now. 
-                selectedStorage = autoStorage.autosuggest_gui(partialName)
-
-                storageFullName = selectedStorage[2]
-                storageName = selectedStorage[1]
-                print('SS :', selectedStorage)
+                selectedStorageList = autoStorage.autosuggest_gui(partialName)
+                print(selectedStorageList)
+                storageDict = selectedStorageList[0]
+                storageFullName = storageDict['fullname']
+                storageName = storageDict['name']
+                storageID = storageDict['id']
+                print('SS :', storageID, storageFullName)
                 print('current ', window[event].get())
                 # collobj.setStorageFields(window[event].get())
-                collobj.storageName = storageName
-                collobj.storageFullName = storageFullName
-                window['txtStorageFullname'].update(collobj.storageFullName)
-                window[event].update(storageName)
+                collobj.setStorageFields(storageFullName)
+
+                window['txtStorageFullname'].update(storageFullName)
+                window['txtStorage'].update(storageName)
                 window['cbxPrepType'].set_focus()
-                print('collobj.storageFullname', collobj.storageFullName)
                 # storageName = collobj.storageFullname.split('|').pop()
-                print('storagename -- ', storageName)
+                print('storagename --for storageID ;; ', storageName, storageID)
 
         if event == 'cbxPrepType':
             collobj.setPrepTypeFields(window[event].widget.current())
@@ -278,18 +280,25 @@ def init(collection_id):
             collobj.setgeoRegionFields(window[event].widget.current())
 
         if event == 'txtTaxonName':
+
             suggester = autoSuggest_popup.AutoSuggest_popup('taxonname')
             partialName = values['txtTaxonName']
             if len(values[event]) >= 3:
                 # print('submitted string: ', values[event])
-                response = koss.auto_suggest_taxonomy(values[event])
-                if response is not None:
-                    print('Suggested taxa based on input:) -- ', response)
-                    selectedName = taxonomic_autosuggest_gui(partialName)
+                selectedTaxonList = suggester.autosuggest_gui(partialName)
+                print(selectedTaxonList)
+                selectedTaxonDict = selectedTaxonList[0]
 
+                # response = koss.auto_suggest_taxonomy(values[event])
+                if selectedTaxonDict is not None:
+
+                    selectedName = selectedTaxonDict['name']
+                    taxonFullName = selectedTaxonDict['fullname']
+                    taxonID = selectedTaxonDict['id']
+                    collobj.setTaxonNameFields(taxonFullName)
                     window['txtTaxonName'].update(selectedName)
-
-                    collobj.setTaxonNameFields(selectedName)
+                    #
+                    # collobj.setTaxonNameFields(selectedName)
                     
                     # All done: Skip further to barcode field  
                     window['txtCatalogNumber'].set_focus()
@@ -306,7 +315,10 @@ def init(collection_id):
             window['btnSave'].set_focus()
 
         if event == 'btnClear':
-            clear_all_of(window)
+            # clear_all_of()
+            for key in clearingList:
+                print('clearing: ', key)
+                window[key].update('')
             window['txtRecordID'].update('')
 
         if event == 'btnBack':
@@ -320,7 +332,9 @@ def init(collection_id):
                 window['lblRecordEnd'].update(visible=False)
 
         if event == 'btnClear':
-            clear_all_of(window)
+            for key in clearingList:
+                print('clearing: ', key)
+                window[key].update('')
             window['txtRecordID'].update('')
             window['lblExport'].update(visible=False)
             window['lblRecordEnd'].update(visible=False)
@@ -346,7 +360,7 @@ def init(collection_id):
             
             # TODO explain below lines ; If saved successfully, reset form ???
             if previousId >= 0:
-                clear_all_of(window)
+                # clear_all_of(window)
                 window['txtRecordID'].update('')
 
             # Create new specimen instance and add previous id to it
@@ -373,48 +387,51 @@ def setFormFields(record):
 
 
 # TODO explain the function of below lines
-def clear_all_of(win):
-    for key in clearingList:
-        print(key)
-        win[key].update('')
+# def clear_all_of():
+#     for key in clearingList_test:
+#         print('clearing: ', key)
+#         window[key].update('')
 
 
-def taxonomic_autosuggest_gui(partialName):
-    # TODO Function contract
-    # The list of choices that are going to be searched
-    # In this example, the PySimpleGUI Element names are used
-    choices = koss.auto_suggest_taxonomy(partialName)
-    print(type(choices))
-
-    print('len of choices is; ', len(choices), type(choices), '\n choices are;; ', choices)
-    # sorted([elem.__name__ for elem in sg.Element.__subclasses__()])
-    # choices =
-
-    input_width = 20
-    num_items_to_show = 4
-
-    layout = [
-        [sg.Text('Input Name:')],
-        [sg.Input(size=(input_width, 1), enable_events=True, key='-IN-')],
-        [sg.pin(
-            sg.Col([[sg.Listbox(values=[], size=(input_width, num_items_to_show), enable_events=True, key='-BOX-',
-                                select_mode=sg.LISTBOX_SELECT_MODE_SINGLE)]],
-                   key='-BOX-CONTAINER-', pad=(0, 0), visible=True))], ]
-
-    window = sg.Window('AutoComplete', layout, return_keyboard_events=True, finalize=True, modal=False,
-                       font=('Arial', 16))
-    # The parameter "modal" is explicitly set to False. If True the auto close behavior won't work.
-
-    list_element: sg.Listbox = window.Element(
-        '-BOX-')  # store listbox element for easier access and to get to docstrings
-    prediction_list, input_text, sel_item = choices, "", 0
-    window['-IN-'].update(partialName)
-    window.write_event_value('-IN-', partialName)
-    # global windowAutosuggest
-    # windowAutosuggest = window
+# def taxonomic_autosuggest_gui(partialName):
+#     # TODO Function contract
+#     # The list of choices that are going to be searched
+#     # In this example, the PySimpleGUI Element names are used
+#     print('in autøsuggest_gui')
+#     choices = koss.auto_suggest_taxonomy(partialName)
+#     print(type(choices))
+#
+#     print('len of choices is; ', len(choices), type(choices), '\n choices are;; ', choices)
+#     # sorted([elem.__name__ for elem in sg.Element.__subclasses__()])
+#     # choices =
+#
+#     input_width = 20
+#     num_items_to_show = 4
+#
+#     layout = [
+#         [sg.Text('Input Name:')],
+#         [sg.Input(size=(input_width, 1), enable_events=True, key='-IN-')],
+#         [sg.pin(
+#             sg.Col([[sg.Listbox(values=[], size=(input_width, num_items_to_show), enable_events=True, key='-BOX-',
+#                                 select_mode=sg.LISTBOX_SELECT_MODE_SINGLE)]],
+#                    key='-BOX-CONTAINER-', pad=(0, 0), visible=True))], ]
+#
+#     window = sg.Window('AutoComplete', layout, return_keyboard_events=True, finalize=True, modal=False,
+#                        font=('Arial', 16))
+#     # The parameter "modal" is explicitly set to False. If True the auto close behavior won't work.
+#
+    try:
+        list_element: sg.Listbox = window.Element('-BOX-')
+        # store listbox element for easier access and to get to docstrings
+#     prediction_list, input_text, sel_item = choices, "", 0
+#     window['-IN-'].update(partialName)
+#     window.write_event_value('-IN-', partialName)
+#     # global windowAutosuggest
+#     # windowAutosuggest = window
+    except AttributeError:
+        pass
 
     while True:  # Event Loop
-
         event, values = window.read()
         # print(win.close_destroys_window)
         if event is None:
@@ -464,13 +481,14 @@ def taxonomic_autosuggest_gui(partialName):
             else:
                 window['-BOX-CONTAINER-'].update(visible=False)
         elif event == '-BOX-':
+            print('values bøx __ ', values['-BOX-'])
             window['-IN-'].update(value=values['-BOX-'])
             window['-BOX-CONTAINER-'].update(visible=False)
 
     window.close()
 
 
-# init(13)
+init(13)
 """ TO DO:
     Restrict the characters allowed in an input element to digits and . or -
     Accomplished by removing last character input if not a valid character
