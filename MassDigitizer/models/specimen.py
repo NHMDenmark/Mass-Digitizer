@@ -27,6 +27,7 @@ class specimen:
         self.id              = 0
         self.catalogNumber   = ''
         self.multiSpecimen   = 'False'
+        self.taxonFullName   = ''
         self.taxonName       = ''
         self.taxonNameId     = 0
         #self.taxonspid 
@@ -65,22 +66,20 @@ class specimen:
         # Data to be saved is retrieved from self as a dictionary with ->
         #   the specimen table headers as 'keys' and the form field content as 'values'.        
         # CONTRACT 
-        #   RETURNS record id (primary key)
-        
-        print('Saving specimen...')
+        #   RETURNS database record 
         
         # Checking if Save is a novel record , or if it is updating existing record.
         if self.id > 0:
             # Record Id is not 0 therefore existing record to be updated 
-            print('Update specimen record with id: ', self.id)
+            print(' - Update specimen record with id: ', self.id)
             record = db.updateRow('specimen', self.id, self.getFieldsAsDict())
         else:
             # Record Id is not 0 therefore existing record to be updated 
-            print('Insert new specimen record.')
+            print(' - Insert new specimen record with id: ', self.id)
             record = db.insertRow('specimen', self.getFieldsAsDict())
             self.id = record['id']
 
-        return self.id
+        return record
 
     def load(self, id):
         # Function for loading and populating instance from database record  
@@ -91,8 +90,8 @@ class specimen:
         self.setFields(record)
 
     def setFields(self, record):
-        # Function for setting specimen data field from record
-        # CONTRACT
+        # Function for setting specimen data field from record 
+        # CONTRACT 
         #   record: sqliterow object containing record data 
         
         self.id = record['id']
@@ -138,9 +137,47 @@ class specimen:
         sql = sql + " ORDER BY s.id DESC LIMIT 1 "        
         print(sql)
 
-        record = db.executeSqlStatement(sql)[0]
+        # Fetch results from database
+        results = db.executeSqlStatement(sql)
 
-        # If record retrieved set fields then return 
+        # If results returned then pick first one, otherwise set record to nothing 
+        if len(results) > 0:
+            record = results[0]
+        else: 
+            record = None
+
+        # If record retrieved set fields 
+        if record:
+            self.setFields(record)
+        
+        # NOTE: If not record retrieved None is returned 
+        return record 
+
+    def loadNext(self, id):
+        # Function for loading next specimen record data, if any 
+        # CONTRACT
+        #   id: Primary key of current record; If 0 then latest record    
+        #   RETURNS record or None, if none retrieved 
+
+        # Construct query for extracting the previous record 
+        sql = "SELECT * FROM specimen s " 
+        # If existing record (id > 0) then fetch the one that has the lowest higher id than current 
+        if id > 0: 
+            sql = sql + f"WHERE s.id > {id} " 
+        # If blank record then fetch the one with the highest id 
+        sql = sql + " ORDER BY s.id LIMIT 1 "        
+        print(sql)
+
+        # Fetch results from database
+        results = db.executeSqlStatement(sql)
+
+        # If results returned then pick first one, otherwise set record to nothing 
+        if len(results) > 0:
+            record = results[0]
+        else: 
+            record = None
+
+        # If record retrieved set fields 
         if record:
             self.setFields(record)
         
@@ -148,10 +185,12 @@ class specimen:
         return record 
 
     def getFieldsAsDict(self):
-        # TODO function description 
+        # Generates a dictonary with database column names as keys and specimen records fields as values 
+        # RETURNS said dictionary for passing on to data access handler 
         fieldsDict = {
                 'catalognumber':'"%s"' % self.catalogNumber , # TODO "{}".format(var...)
                 'multispecimen':'"%s"' % self.multiSpecimen ,
+                'taxonfullname':'"%s"' % self.taxonFullName ,
                 'taxonname':'"%s"' % self.taxonName ,
                 'taxonnameid':'"%s"' % self.taxonNameId ,
                 'typestatusname':'"%s"' % self.typeStatusName ,
@@ -174,16 +213,25 @@ class specimen:
                 'exportdatetime':'"%s"' % self.exportDateTime ,
                 'exportuserid':'"%s"' % self.exportUserId ,
                 }
-        print(len(fieldsDict))
+        
         return fieldsDict
     
-    def setStorageFields(self, index):
-        # TODO Make obsolete 
-        # Get storage record on the basis of list index 
-        # and set respective fields
-        self.storageId = self.storageLocations[index]['id']
-        self.storageName = self.storageLocations[index]['name']
-        self.storageFullName = self.storageLocations[index]['fullname']
+    def setStickyFields(self, record):
+        # TODO uncertain about this one  
+
+        self.setStorageFields(record)
+        self.setPrepTypeFields(record) # TODO 
+        self.setTaxonNameFields(record)
+        
+    
+    def setListFields(self, fieldName, index):
+        # Generic function for setting the respective list fields 
+        if fieldName == 'cbxPrepType':
+            self.setPrepTypeFields(index)
+        elif fieldName == 'cbxTypeStatus':
+            self.setTypeStatusFields(index)
+        elif fieldName == 'cbxGeoRegion':
+            self.setgeoRegionFields(index) 
     
     def setPrepTypeFields(self,index):
         # Get prep type record on the basis of list index 
@@ -197,16 +245,41 @@ class specimen:
         self.typeStatusId = self.typeStatuses[index]['id']
         self.typeStatusName = self.typeStatuses[index]['name']
 
-    def setgeoRegionFields(self,index):
+    def setGeoRegionFields(self,index):
         # Get type status record on the basis of list index 
         #    and set respective fields 
         self.geoRegionId = self.geoRegions[index]['id']
-        self.geoRegionName = self.geoRegions[index]['name']
+        self.geoRegionName = self.geoRegions[index]['name']       
+
+    def setStorageFields(self, index):
+        # Get storage record on the basis of list index 
+        # and set respective fields
+        self.storageId = self.storageLocations[index]['id']
+        self.storageName = self.storageLocations[index]['name']
+        self.storageFullName = self.storageLocations[index]['fullname']
     
-    def setTaxonNameFields(self, taxonFullName):
+    def setTaxonNameFields(self, taxonNameRecord):
+        # Set taxon name fields from selected name record
+        # CONTRACT
+        #   taxonNameRecord (sqliterow) : SQLite Row holding taxon name record
+        # RETURNS taxonNameId (int) : 
+        
+        if taxonNameRecord is not None: 
+            self.taxonNameId = taxonNameRecord['id'] 
+            self.taxonName = taxonNameRecord['name'] 
+            self.taxonFullName = taxonNameRecord['fullname'] 
+        else:
+            # Empty record 
+            self.taxonNameId = 0
+
+        return self.taxonNameId
+    
+    def setTaxonNameFieldsUsingFullName(self, taxonFullName):
         # Get taxon name record on the basis of full name  
         #    and set respective fields 
-        # RETURNS taxonNameId (int) : 
+        # CONTRACT 
+        #   taxonFullName (string) : Fullname value of selected taxon 
+        # RETURNS taxonNameId (int) : Primary key of selected taxon record 
         
         # Get taxon name record on fullname
         taxonNameRecord = db.getRowsOnFilters('taxonname', {'fullname =': f'"{taxonFullName}"'})
@@ -216,7 +289,7 @@ class specimen:
         if resultsRowCount == 1:
             self.taxonNameId = taxonNameRecord[0]['id'] 
             self.taxonName = taxonNameRecord[0]['name'] 
-            self.taxonName = taxonNameRecord[0]['fullname'] 
+            self.taxonFullName = taxonNameRecord[0]['fullname'] 
         elif resultsRowCount == 0:
             # Unknown taxon name, add verbatim 
             self.taxonFullName = taxonFullName 
@@ -225,12 +298,30 @@ class specimen:
             # Duplicate fullnames detected
             self.taxonNameId = -1
 
-        return self.taxonNameId
+        return self.taxonNameId 
 
-    def setStorageFields(self, storageFullName):
+    def setStorageFields(self, storageRecord):
+        # Set storage fields from selected storage location record
+        # CONTRACT
+        #   storageRecord (sqliterow) : SQLite Row holding storage location record
+        # RETURNS taxonNameId (int) : 
+        
+        if storageRecord is not None: 
+            self.storageId = storageRecord['id'] 
+            self.storageName = storageRecord['name'] 
+            self.storageFullName = storageRecord['fullname'] 
+        else:
+            # Empty record 
+            self.storageId = 0
+
+        return self.storageId
+
+    def setStorageFieldsUsingFullName(self, storageFullName):
         # Get storage record on the basis of full name  
         #    and set respective fields 
-        # RETURNS storageId (int) : 
+        # CONTRACT 
+        #   storageFullName (string) : Fullname value of selected storage location 
+        # RETURNS storageId (int) : Primary key of selected storage location record 
         
         # Get storage record on fullname
         storageRecord = db.getRowsOnFilters('storage', {'fullname =': f'"{storageFullName}"'})
@@ -242,11 +333,11 @@ class specimen:
             self.storageName = storageRecord[0]['name'] 
             self.storageFullName = storageRecord[0]['fullname'] 
         elif resultsRowCount == 0:
-            # Unknown taxon name, add verbatim 
+            # Unknown storage full name, add verbatim 
             self.storageFullName = storageFullName 
             self.storageId = 0
         else:
             # Duplicate fullnames detected
-            self.taxonNameId = -1
+            self.storageId = -1
 
-        return self.taxonNameId
+        return self.storageId 
