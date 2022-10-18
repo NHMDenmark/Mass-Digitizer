@@ -9,7 +9,9 @@ import tkinter as tk
 
 
 class AutoSuggest_popup():
+
     startQueryLimit = 3
+    
     def __init__(self, table):
         # self.startQuery = startQueryLimit
         self.tableName = table
@@ -28,7 +30,6 @@ class AutoSuggest_popup():
         cur = db.getDbCursor()
         if self.tableName == 'taxonname':
             sql = f"SELECT fullname FROM {tableName} WHERE {columnName} LIKE lower('% {name}%') OR {columnName} LIKE lower('{name}%');"
-
         else:
             sql =f"SELECT fullname FROM storage WHERE name LIKE '{name}%'"
         print('In autosuggest & sql isz: ', sql)
@@ -173,20 +174,29 @@ class AutoSuggest_popup():
                 window['-BOX-CONTAINER-'].update(visible=False)
 
             elif event == 'btnReturn':
-                print('pressed Enter/Return|| len vlaues box= ', len(values['-BOX-']))
+                print('pressed Enter/Return || len values box= ', len(values['-BOX-']))
                 # window.Hide()
                 # A patch on the issue around the popup not being closed properly.
                 # Likely to be a PySimpleGUI bug.
                 if len(values['-BOX-']) > 0:
                     boxVal = values['-BOX-']
-                    sql = "SELECT id, fullname FROM {} WHERE fullname = '{}'".format(self.tableName, boxVal[0])
-                    print(sql)
-                    boxID = db.executeSqlStatement(sql)
-                    print([item for item in boxID])
-                    print('Selected boxvalue is -/ '
-                          , boxVal[0])
-                    return boxVal[0]
-                window.hide()
+
+                    #sql = "SELECT id, name, fullname FROM {} WHERE fullname = '{}'".format(self.tableName, boxVal[0])
+                    #print(sql)
+                    #boxID = db.executeSqlStatement(sql)
+
+                    #print([item for item in boxID])
+                    #print('Selected boxvalue is -/ '
+                    #      , boxVal[0])
+                    #return boxVal[0]
+
+                    records = db.getRowsOnFilters(f'{self.tableName}',{'fullname': f'="{boxVal[0]}"'})
+                    
+                    if len(records)==1:
+                        return records[0]
+                    else: 
+                        return None
+                window.Hide()
             #         window['-IN-'].update(value=boxVal[0])
             # event is None
                 # window['-BOX-CONTAINER-'].update(visible=False)
@@ -194,6 +204,7 @@ class AutoSuggest_popup():
 
 
                     # window.Hide()
+        
         window.Hide()
         window.close()
 # EXE section -- remember "taxonname"
