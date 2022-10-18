@@ -36,6 +36,7 @@ dbAltFilePath = os.path.expanduser('~\OneDrive - University of Copenhagen\Docume
 
 # Reset cursor pointer 
 currentCursor = None
+connection = None
 
 # Point to database file 
 def __init__(self,databaseName='db', do_in_memory=False):
@@ -78,7 +79,6 @@ def getConnection():
     connection = sqlite3.connect(dbFilePath)
     return connection
 
-connection = None
 def getDbCursor():#do_in_memory=False):
     # Generic function needed for database access 
     # CONTRACT
@@ -119,7 +119,6 @@ def getDbCursor():#do_in_memory=False):
     cursor = connection.cursor()
     return cursor
 
-
 def getRows(tableName, limit=100):
     # Getting all records from the table specified by name
     # CONTRACT 
@@ -149,8 +148,9 @@ def getRowsOnFilters(tableName, filters, limit=100):
     #             Numbers should be formatted as strings 
     #   RETURNS table rows as list
     currentCursor = getDbCursor()   
+    print(f'-> getRowsONFilter({tableName}, {filters}, {limit})')
     sqlString = 'SELECT * FROM %s ' % tableName
-    print('IN getRowsONFilter - the SQL is: ', sqlString, '//STOP//')
+    print('    - ', sqlString)
     if filters.items():
         sqlString += "WHERE "
         for key, value in filters.items():
@@ -233,21 +233,19 @@ def insertRow(tableName, fields):
     for key in fields:
         fieldsString += "%s, " % key
     fieldsString  = fieldsString[0:len(fieldsString)-2]
-    sqlString = "INSERT INTO {} ({}) VALUES (".format(tableName, fieldsString)
+    sqlString = f"INSERT INTO {tableName} ({fieldsString}) VALUES ("
     sqlValues = []
     for key in fields:
-        print('---', key, fields[key])
         addSql = fields[key].replace('""', '')
         sqlValues.append(addSql)
         sqlValues = [item.replace('"', '') for item in sqlValues]
-    print("sqlValues", sqlValues)
+    
     finSql = '","'.join(sqlValues)
-    print(finSql)
     finSql = '"'+finSql+'")'
     finSql = sqlString+finSql
-    print('finsql =', finSql)
+    print(' -> ', finSql)
 
-        # sqlString += str(formattedSql) + ','
+    # sqlString += str(formattedSql) + ','
     # sqlList = ['"' + item + '",' for item in sqlValues]
     # formattedSql = ''.join(sqlList)
     # print('The sqlVALS are: ', ''.join(sqlList))
@@ -328,3 +326,4 @@ def getFieldMap(cursor):
         column = column + 1
     
     return results
+

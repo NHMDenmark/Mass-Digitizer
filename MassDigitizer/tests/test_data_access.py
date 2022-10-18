@@ -19,6 +19,7 @@ import pytest
 # The following lines allow for finding code files to be tested in the app root folder  
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.joinpath('MassDigitizer')))
+TESTDATAPATH = Path(__file__).parent
 
 #Internal dependencies 
 import util 
@@ -27,15 +28,62 @@ import models
 # The module to be tested
 import data_access as db
 
-def test_data_access_getRows():
+def test_getRows():
     # Generic test of fetching records from the local database 
     # Institutions is a stable table with expected values 
 
-    institutions = util.convert_dbrow_list(db.getRows('institution'))
+    institutions = db.getRows('institution')
 
     # If no records fetched throw error 
     assert len(institutions) > 0 
 
+def test_getRowsOnFilters():
+    # Generic test of fetching records from the local db on a filter 
+
+    # Institution code is unique so should yield a single record 
+    institutions = db.getRowsOnFilters('institution', {'code' : '="NHMD"'})
+
+    # If single record fetched then test has passed
+    assert len(institutions) == 1 
+
+def test_getRowsOnFilters_Multiple():
+    # Generic test of fetching multiple records from the local db on a filter 
+
+    # A specific number of institutions have "Museum" in their name   
+    institutions = db.getRowsOnFilters('institution', {'name' : 'LIKE "%Museum%"'})
+
+    # Exactly 5 records fetched 
+    assert len(institutions) == 5
+    
+"""    # Check each record to be correct one
+    assert institutions[0]['code'] == 'NHMD'
+    assert institutions[1]['code'] == 'NHMA'
+    assert institutions[2]['code'] == 'MMG'
+    assert institutions[3]['code'] == 'MSJN'
+    assert institutions[4]['code'] == 'OESM' """
+
+def test_getRowsOnFilters_Multiple_Max():
+    # Generic test of fetching multiple records from the local db on a filter and a max entries 
+
+    # Five institutions have "Museum" in their name, but we only want the first 2 fetched
+    institutions = db.getRowsOnFilters('institution', {'name' : 'LIKE "%Museum%"'}, 2)
+
+    # Exactly 2 records fetched 
+    assert len(institutions) == 2
+
+def test_getRowOnId():
+    # Generic test of fetching specific records from the local db on primary key
+     
+    # The institution with pk=1 should be NHMD 
+    institution = db.getRowOnId('institution', 1)
+
+    # NHMD record fetched 
+    assert institution['code'] == 'NHMD'
+
+def test_getMaxRow():
+    # TODO Generic test of fetching specific records from the local db on primary key
+
+    pass 
 
 
 

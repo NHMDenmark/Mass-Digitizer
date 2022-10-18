@@ -15,6 +15,7 @@
 import sys
 import PySimpleGUI as sg
 
+# The following lines allow for finding code files to be tested in the app root folder  
 from pathlib import Path
 sys.path.append(str(Path(__file__).joinpath('MassDigitizer')))
 
@@ -22,7 +23,7 @@ import util
 import global_settings as gs
 import data_access as db
 import specify_interface as sp
-import specimen_data_entry as de
+import specimen_data_entry as sde
 
 def init():
     # TODO function contract 
@@ -106,7 +107,8 @@ def main(window):
                             gs.institutionId = institution_id
                             gs.institutionName = selected_institution 
                             window.close()
-                            de.init(collection_id)
+                            #de.init(collection_id)
+                            sde.SpecimenDataEntry(collection_id)
                         else:
                             window['autherror'].Update(visible=True)
                             #window['lstSelectCollection'].set_value([])
