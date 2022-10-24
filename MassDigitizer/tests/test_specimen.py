@@ -33,7 +33,6 @@ def rowObjectToList(rowObject):
         toEnumeratedList.append(itemList)
     # headers = ['id', 'spid', 'prep_type', 'collection_id']
     rowList = list(enumerate(toEnumeratedList))
-    print('orig rowLList ', list(rowList))
     return rowList
 
 def set_specimen_global():
@@ -90,6 +89,22 @@ def test_storage():
     print('FINAL TEST : ', storager[3880][1][2])
     assert (storager[3880][1][2] == 'Shelf 8')
 
+# def test_geosources():
+#     sourceList = []
+#     source = specimenObject.geoRegionSources
+#     for j in source:
+#         sourceList.append([k for k in j])
+#     sourceMaster = list(enumerate(sourceList))
+#     print('FINAL TEST : ', sourceMaster[1])
+# Cannot test geoRegion-sources because source_collectionID is never 29 in table georegionsource ##
 
+def test_getFieldsAsDictionary():
+    fieldDict = specimenObject.getFieldsAsDict()
+    lengthFieldDict= len(fieldDict)
+    assert (lengthFieldDict == 24)
+    return fieldDict
 
-
+def test_memberOfFildDict():
+    res = specimenObject.getFieldsAsDict()
+    dkeys = res.keys()
+    assert ("storagefullname" in dkeys) == True
