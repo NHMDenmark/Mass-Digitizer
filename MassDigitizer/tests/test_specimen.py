@@ -55,7 +55,7 @@ def test_specimen_prepTypes():
     assert typeStatus[5][1][2] == 'Hapantotype'
     # NOTE A lowercase assertion ('hapantotype') would fail 
 
-def test_predefined():
+def test_prepType():
     specimenObject.loadPredefinedData()
     # for r in obj.prepTypes:
     #     print([j for j in r])
@@ -69,7 +69,7 @@ def test_specimen_global():
 def test_georegions():
     geoList = []
     regions = specimenObject.geoRegions
-    list(enumerate(regions))
+
     for j in regions:
         geoList.append([k for  k in j])
         # print('GEOREGIONS:::', [k for  k in j])
@@ -82,5 +82,14 @@ def test_georegions():
 
 def test_storage():
     id = 3880
+    storageList = []
+    storageLoc = specimenObject.storageLocations
+    for j in storageLoc:
+        storageList.append([k for k in j])
+    storager = list(enumerate(storageList))
+    print('FINAL TEST : ', storager[3880][1][2])
+    assert (storager[3880][1][2] == 'Shelf 8')
+
+
 
 
