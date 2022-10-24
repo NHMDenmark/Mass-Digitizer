@@ -74,8 +74,8 @@ def test_georegions():
         # print('GEOREGIONS:::', [k for  k in j])
     enumGeo = list(enumerate(geoList))
     print(enumGeo)
-    for item in enumGeo:
-        print('GEOREGION:::', item )
+    # for item in enumGeo:
+    #     print('GEOREGION:::', item )
     print('FINAL TEST : ', enumGeo[9][1][1])
     assert (enumGeo[9][1][1] == 'Island')
 
@@ -108,3 +108,12 @@ def test_memberOfFieldDict():
     res = specimenObject.getFieldsAsDict()
     dkeys = res.keys()
     assert ("storagefullname" in dkeys) == True
+
+def test_load_previous():
+    res = specimenObject.loadPrevious(30)
+    print(len(res), res)
+    assert res
+
+def test_length_previous():
+    res = specimenObject.loadPrevious(30)
+    assert len(res) == 26
