@@ -31,468 +31,391 @@ import autoSuggest_popup
 
 from models import specimen
 
-# TODO controller functions
-import kick_off_sql_searches as koss
-
 # Makes sure that current folder is registrered to be able to access other app files
 sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer')))
 currentpath = os.path.join(pathlib.Path(__file__).parent, '')
 
-# Global variables
-collectionId = 0
-window = None
-collobj = None  # Specimen record
+class SpecimenDataEntry():
 
-# Functional data
-clearingList = ['txtStorageFullname', 'cbxPrepType', 'cbxHigherTaxon', 'cbxTypeStatus', 'txtNotes',
-                'chkMultiSpecimen', 'cbxGeoRegion', 'txtTaxonName', 'txtCatalogNumber']
+    def __init__(self, collection_id):
 
+        self.collectionId = collection_id
+        self.window = None
+        self.collobj = specimen.specimen(collection_id) # Create blank specimen record instance 
 
+        # Functional data
+        self.clearingList = ['txtStorageFullname', 'cbxPrepType', 'cbxHigherTaxon', 'cbxTypeStatus', 'txtNotes',
+                        'chkMultiSpecimen', 'cbxGeoRegion', 'txtTaxonName', 'txtCatalogNumber', 'txtRecordID']
+        self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxHigherTaxon'}, {'cbxTypeStatus'}, {'txtNotes'}, {'chkMultiSpecimen'}, {'cbxGeoRegion'}, {'txtTaxonName'}]
+        self.nonStickyFields = ['txtCatalogNumber', 'txtRecordID']
 
-def init(collection_id):
-    # Initialize data entry form on basis of collection id
+        self.setup(collection_id)
 
-    # Create blank specimen record instance
-    collobj = specimen.specimen(collection_id)
+    def setup(self, collection_id):
+        # Initialize data entry form on basis of collection id
 
-    # Define UI areas
-    sg.theme('SystemDefault')
-    greenArea = '#E8F4EA'  # Stable fields
-    blueArea = '#99ccff'  # Variable fields
-    greyArea = '#BFD1DF'  # Session & Settings
+        # Define UI areas
+        sg.theme('SystemDefault')
+        greenArea = '#E8F4EA'  # Stable fields
+        blueArea = '#99ccff'  # Variable fields
+        greyArea = '#BFD1DF'  # Session & Settings
 
-    # Set standard element dimensions
-    defaultSize = (21, 1)  # Ensure element labels are the same size so that they line up
-    element_size = (25, 1)  # Default width of all fields in the 'green area'
-    green_size = (20, 1)  # Default width of all fields in the 'green area'
-    blue_size = (35, 1)  # Default width of all fields in the 'blue area'
+        # Set standard element dimensions
+        defaultSize = (21, 1)  # Ensure element labels are the same size so that they line up
+        element_size = (25, 1)  # Default width of all fields in the 'green area'
+        green_size = (20, 1)  # Default width of all fields in the 'green area'
+        blue_size = (35, 1)  # Default width of all fields in the 'blue area'
 
-    # Set text fonts
-    font = ('Bahnschrift', 13)
-    labelHeadlineMeta = ('Bahnschrift', 12)
-    titleFont = ('Bahnschrift', 18)
-    smallLabelFont = ('Arial', 11, 'italic')
+        # Set text fonts
+        font = ('Bahnschrift', 13)
+        labelHeadlineMeta = ('Bahnschrift', 12)
+        titleFont = ('Bahnschrift', 18)
+        smallLabelFont = ('Arial', 11, 'italic')
 
-    # TODO placeholder For when higher taxonomic groups are added as filter
-    taxonomicGroups = ['placeholder...']
+        # TODO placeholder For when higher taxonomic groups are added as filter
+        taxonomicGroups = ['placeholder...']
 
-    # NOTE Elements are stored  in variables to make it easier to include and position in the frames
+        # NOTE Elements are stored  in variables to make it easier to include and position in the frames
 
-    # Green Area elements
-    storage = [
-        sg.Text("Storage location:", size=defaultSize, background_color=greenArea, font=font),
-        sg.InputText('', key='txtStorage', size=green_size, text_color='black',
-                     background_color='white', font=('Arial', 12), enable_events=True),
-        sg.Text("", key='txtStorageFullname', size=(50, 2), background_color=greenArea, font=smallLabelFont)]
+        # Green Area elements
+        storage = [
+            sg.Text("Storage location:", size=defaultSize, background_color=greenArea, font=font),
+            sg.InputText('', key='txtStorage', size=green_size, text_color='black',
+                        background_color='white', font=('Arial', 12), enable_events=True),
+            sg.Text("", key='txtStorageFullname', size=(50, 2), background_color=greenArea, font=smallLabelFont)]
 
-    preparation = [
-        sg.Text("Preparation type:", size=defaultSize, background_color=greenArea, font=font),
-        sg.Combo(util.convert_dbrow_list(collobj.prepTypes), key='cbxPrepType', size=green_size, text_color='black',
-                 background_color='white', font=('Arial', 12), readonly=True, enable_events=True), ]
-    taxonomy = [
-        sg.Text("Taxonomic group:", size=defaultSize, visible=False, background_color=greenArea, font=font),
-        sg.Combo(taxonomicGroups, key='cbxHigherTaxon', visible=False, size=green_size, text_color='black',
-                 background_color='white', font=('Arial', 12), readonly=True, enable_events=True), ]
-    type_status = [
-        sg.Text('Type status:', size=defaultSize, background_color=greenArea, font=font),
-        sg.Combo(util.convert_dbrow_list(collobj.typeStatuses), key='cbxTypeStatus', size=green_size,
-                 text_color='black',
-                 background_color='white', font=('Arial', 12), readonly=True, enable_events=True), ]
-    notes = [
-        sg.Text('Notes', size=defaultSize, background_color=greenArea, font=font),
-        sg.InputText(size=(80, 5), key='txtNotes', background_color='white', text_color='black', enable_events=False)]
+        preparation = [
+            sg.Text("Preparation type:", size=defaultSize, background_color=greenArea, font=font),
+            sg.Combo(util.convert_dbrow_list(self.collobj.prepTypes), key='cbxPrepType', size=green_size, text_color='black',
+                    background_color='white', font=('Arial', 12), readonly=True, enable_events=True), ]
+        taxonomy = [
+            sg.Text("Taxonomic group:", size=defaultSize, visible=False, background_color=greenArea, font=font),
+            sg.Combo(taxonomicGroups, key='cbxHigherTaxon', visible=False, size=green_size, text_color='black',
+                    background_color='white', font=('Arial', 12), readonly=True, enable_events=True), ]
+        type_status = [
+            sg.Text('Type status:', size=defaultSize, background_color=greenArea, font=font),
+            sg.Combo(util.convert_dbrow_list(self.collobj.typeStatuses), key='cbxTypeStatus', size=green_size,
+                    text_color='black',
+                    background_color='white', font=('Arial', 12), readonly=True, enable_events=True), ]
+        notes = [
+            sg.Text('Notes', size=defaultSize, background_color=greenArea, font=font),
+            sg.InputText(size=(80, 5), key='txtNotes', background_color='white', text_color='black', enable_events=False)]
 
-    multispecimen = [sg.Checkbox('Multispecimen sheet', key='chkMultiSpecimen', background_color=greenArea, font=(11))]
+        multispecimen = [sg.Checkbox('Multispecimen sheet', key='chkMultiSpecimen', background_color=greenArea, font=(11))]
 
-    layout_greenarea = [
-        storage, preparation, taxonomy, type_status, notes, multispecimen, ]
+        layout_greenarea = [
+            storage, preparation, taxonomy, type_status, notes, multispecimen, ]
 
-    # Blue Area elements
-    broadGeo = [
-        sg.Text('Broad geographic region:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
-        sg.Combo(util.convert_dbrow_list(collobj.geoRegions), size=blue_size, key='cbxGeoRegion', text_color='black',
-                 background_color='white', font=('Arial', 12), readonly=True, enable_events=True), ]
-    taxonInput = [
-        sg.Text('Taxonomic name:     ', size=(21, 1), background_color=blueArea, text_color='black', font=font),
-        sg.Input('', size=blue_size, key='txtTaxonName', text_color='black', background_color='white',
-                 font=('Arial', 12), enable_events=True, pad=((5, 0), (0, 0))),
-        sg.Text('No further record to go back to!', key='lblRecordEnd', visible=False, background_color="#ff5588",
-                border_width=3)]
+        # Blue Area elements
+        broadGeo = [
+            sg.Text('Broad geographic region:', size=defaultSize, background_color=blueArea, text_color='black', font=font),
+            sg.Combo(util.convert_dbrow_list(self.collobj.geoRegions), size=blue_size, key='cbxGeoRegion', text_color='black',
+                    background_color='white', font=('Arial', 12), readonly=True, enable_events=True), ]
+        taxonInput = [
+            sg.Text('Taxonomic name:     ', size=(21, 1), background_color=blueArea, text_color='black', font=font),
+            sg.Input('', size=blue_size, key='txtTaxonName', text_color='black', background_color='white',
+                    font=('Arial', 12), enable_events=True, pad=((5, 0), (0, 0))),
+            sg.Text('No further record to go back to!', key='lblRecordEnd', visible=False, background_color="#ff5588",
+                    border_width=3)]
 
-    # taxonomicPicklist = [
-    #     sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
-    #     sg.Listbox('', key='cbxTaxonName', select_mode=sg.LISTBOX_SELECT_MODE_BROWSE, size=(28, 6),
-    #                text_color='black', background_color='white', font=('Arial', 12),
-    #                bind_return_key=True, enable_events=True, pad=((5, 0), (0, 0))),]
+        # taxonomicPicklist = [
+        #     sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
+        #     sg.Listbox('', key='cbxTaxonName', select_mode=sg.LISTBOX_SELECT_MODE_BROWSE, size=(28, 6),
+        #                text_color='black', background_color='white', font=('Arial', 12),
+        #                bind_return_key=True, enable_events=True, pad=((5, 0), (0, 0))),]
 
-    barcode = [
-        sg.Text('Barcode:', size=defaultSize, background_color=blueArea, enable_events=True, text_color='black',
-                font=font),
-        sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white',
-                     font=('Arial', 12), enable_events=True), ]
+        barcode = [
+            sg.Text('Barcode:', size=defaultSize, background_color=blueArea, enable_events=True, text_color='black',
+                    font=font),
+            sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white',
+                        font=('Arial', 12), enable_events=True), ]
 
-    # statusLabel = [sg.Text('Specimen record has been saved', font=('Arial',20),size=(20,10),justification='center',background_color='#4f280a',text_color = 'yellow',key='texto')]
+        # statusLabel = [sg.Text('Specimen record has been saved', font=('Arial',20),size=(20,10),justification='center',background_color='#4f280a',text_color = 'yellow',key='texto')]
 
-    lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
+        lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
 
-    layout_bluearea = [broadGeo, taxonInput, barcode, [  # taxonomicPicklist,
-        sg.Text('Record ID: ', key='lblRecordID', background_color='#99dcff', visible=True, size=(9, 1)),
-        sg.Text('', key='txtRecordID', size=(4, 1), background_color=blueArea),
-        sg.StatusBar('', relief=None, size=(7, 1), background_color=blueArea),
-        sg.Button('SAVE', key="btnSave", button_color='seagreen', size=9, bind_return_key=True),
-        sg.StatusBar('', relief=None, size=(14, 1), background_color=blueArea),
-        sg.Button('GO BACK', key="btnBack", button_color='firebrick', pad=(13, 0)),
-        sg.Button('GO FORWARDS', key='btnGoForward', button_color=('black', 'LemonChiffon2')),
-        sg.Button('CLEAR FORM', key='btnClear', button_color='black on white'),
-        # sg.Button('Export data', key='btnExport', button_color='royal blue'),  # Export data should be a backend feature says Pip
-        # sg.Button('Dismiss', key='btnDismiss', button_color='white on black'), # Notifications not needed says Pip
-    ], lblExport]
+        layout_bluearea = [broadGeo, taxonInput, barcode, [  # taxonomicPicklist,
+            sg.Text('Record ID: ', key='lblRecordID', background_color='#99dcff', visible=True, size=(9, 1)),
+            sg.Text('', key='txtRecordID', size=(4, 1), background_color=blueArea),
+            sg.StatusBar('', relief=None, size=(7, 1), background_color=blueArea),
+            sg.Button('SAVE', key="btnSave", button_color='seagreen', size=9, bind_return_key=True),
+            sg.StatusBar('', relief=None, size=(14, 1), background_color=blueArea),
+            sg.Button('GO BACK', key="btnBack", button_color='firebrick', pad=(13, 0)),
+            sg.Button('GO FORWARDS', key='btnForward', button_color=('black', 'LemonChiffon2')),
+            sg.Button('CLEAR FORM', key='btnClear', button_color='black on white'),
+            # sg.Button('Export data', key='btnExport', button_color='royal blue'),  # Export data should be a backend feature says Pip
+            # sg.Button('Dismiss', key='btnDismiss', button_color='white on black'), # Notifications not needed says Pip
+        ], lblExport]
 
-    # Grey Area (Header) elements
-    loggedIn = [
-        sg.Text('Logged in as:', size=(14, 1), background_color=greyArea, font=labelHeadlineMeta),
-        sg.Text(gs.spUserName, key='txtUserName', size=(25, 1), background_color=greyArea, text_color='black',
-                font=smallLabelFont), ]
-    institution_ = [
-        sg.Text('Institution: ', size=(14, 1), background_color=greyArea, font=labelHeadlineMeta),
-        sg.Text(gs.institutionName, key='txtInstitution', size=(29, 1), background_color=greyArea, font=smallLabelFont)]
-    collection = [
-        sg.Text('Collection:', size=(14, 1), background_color=greyArea, text_color='black', font=labelHeadlineMeta),
-        sg.Text(gs.collectionName, key='txtCollection', size=(25, 1), background_color=greyArea, font=smallLabelFont)]
-    workStation = [
-        sg.Text('Workstation:', key="txtWorkStation", size=(14, 1), background_color=greyArea, font=labelHeadlineMeta),
-        sg.Text('', size=(20, 1), background_color=greyArea, text_color='black'), ]
-    # settings_ = [sg.Text('Settings ', size=defaultSize, justification='center', background_color=greyArea, font=14),
-    #             sg.Button('', image_filename='%soptions_gear.png' % currentpath, key='btnSettings', button_color=greyArea, border_width=0)]
+        # Grey Area (Header) elements
+        loggedIn = [
+            sg.Text('Logged in as:', size=(14, 1), background_color=greyArea, font=labelHeadlineMeta),
+            sg.Text(gs.spUserName, key='txtUserName', size=(25, 1), background_color=greyArea, text_color='black',
+                    font=smallLabelFont), ]
+        institution_ = [
+            sg.Text('Institution: ', size=(14, 1), background_color=greyArea, font=labelHeadlineMeta),
+            sg.Text(gs.institutionName, key='txtInstitution', size=(29, 1), background_color=greyArea, font=smallLabelFont)]
+        collection = [
+            sg.Text('Collection:', size=(14, 1), background_color=greyArea, text_color='black', font=labelHeadlineMeta),
+            sg.Text(gs.collectionName, key='txtCollection', size=(25, 1), background_color=greyArea, font=smallLabelFont)]
+        workStation = [
+            sg.Text('Workstation:', key="txtWorkStation", size=(14, 1), background_color=greyArea, font=labelHeadlineMeta),
+            sg.Text('', size=(20, 1), background_color=greyArea, text_color='black'), ]
+        # settings_ = [sg.Text('Settings ', size=defaultSize, justification='center', background_color=greyArea, font=14),
+        #             sg.Button('', image_filename='%soptions_gear.png' % currentpath, key='btnSettings', button_color=greyArea, border_width=0)]
 
-    # Header section
-    appTitle = sg.Text('Mass Annotation Digitization Desk (MADD)', size=(34, 3), background_color=greyArea,
-                       font=titleFont)
-    settingsButton = sg.Button('SETTINGS', key='btnSettings', button_color='grey30')
-    logoutButton = sg.Button('LOG OUT', key='btnLogOut', button_color='grey10')
-    layoutTitle = [[appTitle], ]
-    layoutSettingLogout = [sg.Push(background_color=greyArea), settingsButton, logoutButton]
-    layoutMeta = [loggedIn, institution_, collection, workStation, layoutSettingLogout]
+        # Header section
+        appTitle = sg.Text('Mass Annotation Digitization Desk (MADD)', size=(34, 3), background_color=greyArea,
+                        font=titleFont)
+        settingsButton = sg.Button('SETTINGS', key='btnSettings', button_color='grey30')
+        logoutButton = sg.Button('LOG OUT', key='btnLogOut', button_color='grey10')
+        layoutTitle = [[appTitle], ]
+        layoutSettingLogout = [sg.Push(background_color=greyArea), settingsButton, logoutButton]
+        layoutMeta = [loggedIn, institution_, collection, workStation, layoutSettingLogout]
 
-    # Combine elements into full layout - the first frame group is the grey metadata area.
-    layout = [[
-        sg.Frame('', layoutTitle, size=(550, 100), pad=(0, 0), background_color=greyArea, border_width=0),
-        sg.Frame('', layoutMeta, size=(500, 120), pad=(0, 0), border_width=0, background_color=greyArea)],
-        [sg.Frame('', [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(250, 175),
-                  background_color=greenArea, expand_x=True, ), ],  # expand_y=True,
-        [sg.Frame('', [[sg.Column(layout_bluearea, background_color=blueArea)]], title_location=sg.TITLE_LOCATION_TOP,
-                  background_color=blueArea, expand_x=True, expand_y=True, )], ]  #
+        # Combine elements into full layout - the first frame group is the grey metadata area.
+        layout = [[
+            sg.Frame('', layoutTitle, size=(550, 100), pad=(0, 0), background_color=greyArea, border_width=0),
+            sg.Frame('', layoutMeta, size=(500, 120), pad=(0, 0), border_width=0, background_color=greyArea)],
+            [sg.Frame('', [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(250, 175),
+                    background_color=greenArea, expand_x=True, ), ],  # expand_y=True,
+            [sg.Frame('', [[sg.Column(layout_bluearea, background_color=blueArea)]], title_location=sg.TITLE_LOCATION_TOP,
+                    background_color=blueArea, expand_x=True, expand_y=True, )], ]  #
 
-    # Launch window
-    window = sg.Window("Mass Annotated Digitization Desk  (MADD)", layout, margins=(2, 2), size=(960, 480),
-                       resizable=True, return_keyboard_events=True, finalize=True, background_color=greyArea)
-    window.TKroot.focus_force()
+        # Launch window
+        self.window = sg.Window("Mass Annotated Digitization Desk (MADD)", layout, margins=(2, 2), size=(960, 480),
+                        resizable=True, return_keyboard_events=True, finalize=True, background_color=greyArea)
+        self.window.TKroot.focus_force()
 
-    # Set session fields
-    window.Element('txtUserName').Update(value=gs.spUserName)
-    collection = db.getRowOnId('collection', collection_id)
-    if collection is not None:
-        window.Element('txtCollection').Update(value=collection[2])
-        institution = db.getRowOnId('institution', collection[3])
-        window.Element('txtInstitution').Update(value=institution[2])
-    window.Element('txtWorkStation').Update(value='TRS-80')
+        # Set session fields
+        self.window.Element('txtUserName').Update(value=gs.spUserName)
+        collection = db.getRowOnId('collection', collection_id)
+        if collection is not None:
+            self.window.Element('txtCollection').Update(value=collection[2])
+            institution = db.getRowOnId('institution', collection[3])
+            self.window.Element('txtInstitution').Update(value=institution[2])
+        self.window.Element('txtWorkStation').Update(value='') #TRS-80')
 
-    # Set control events
+        # Set triggers for the different controls on the UI form 
+        self.setControlEvents()
 
-    # Header area
-    window.Element('btnSettings').Widget.config(takefocus=0)
-    window.Element('btnLogOut').Widget.config(takefocus=0)
-    window.Element('txtUserName').Widget.config(takefocus=0)
+        # Loop through GUI events triggered 
+        while True:
+            event, values = self.window.read()
 
-    # Green area
-    # cbxPrepType   # Combobox therefore already triggered
-    # cbxTypeStatus # Combobox therefore already triggered
-    window['txtNotes'].bind('<Tab>', '+TAB')
-    window['txtNotes'].bind('<Leave>', '_Edit')
-    window['chkMultiSpecimen'].bind("<Leave>", "_Edit")
-    window['chkMultiSpecimen'].bind("<Return>", "_Enter")
+            # Checking field events as switch construct
+            if event is None: break  # Empty event indicates user closing window
 
-    # Blue area
-    # cbxGeoRegion  # Combobox therefore already triggered
-    # window['cbxTaxonName'].bind("<Return>", "_Enter")
-    window['txtCatalogNumber'].bind('<Leave>', '_Edit')
-    window['txtCatalogNumber'].bind("<Return>", "_RETURN")
+            if event == 'txtStorage':
+                # Create auto-suggest popup window for storage locations 
+                autoStorage = autoSuggest_popup.AutoSuggest_popup('storage')
 
-    # Loop through GUI events
-    while True:
-        event, values = window.read()
+                # If more than 3 characters entered: 
+                if len(values[event]) >= 3:
+                    # Get currently entered key strokes 
+                    keyStrokes = values['txtStorage']
 
-        # Checking field events as switch construct
-        if event is None: break  # Empty event indicates user closing window
-
-        if event == 'txtStorage':
-            autoStorage = autoSuggest_popup.AutoSuggest_popup('storage')
-
-            if len(values[event]) >= 3:
-                partialName = values['txtStorage']
-                print('more than three', partialName)
-                # the var selectedStorage contains a tuple: (storageID, name, fullname)
-                #as per the 'storage' table.
-                # TODO does it though? It seems to return a single string now. 
-                selectedStorageList = autoStorage.autosuggest_gui(partialName)
-                print(selectedStorageList)
-                storageDict = selectedStorageList[0]
-                storageFullName = storageDict['fullname']
-                storageName = storageDict['name']
-                storageID = storageDict['id']
-                print('SS :', storageID, storageFullName)
-                print('current ', window[event].get())
-                # collobj.setStorageFields(window[event].get())
-                collobj.setStorageFields(storageFullName)
-
-                window['txtStorageFullname'].update(storageFullName)
-                window['txtStorage'].update(storageName)
-                window['cbxPrepType'].set_focus()
-                # storageName = collobj.storageFullname.split('|').pop()
-                print('storagename --for storageID ;; ', storageName, storageID)
-
-        if event == 'cbxPrepType':
-            collobj.setPrepTypeFields(window[event].widget.current())
-
-        # if event == 'cbxHigherTaxon':
-        #    pass
-
-        if event == 'cbxTypeStatus':
-            collobj.setTypeStatusFields(window[event].widget.current())
-            collobj.typeStatusName = window['cbxTypeStatus'].get()
-
-        if event == 'txtNotes_Edit':
-            collobj.notes = values['txtNotes']
-
-        if event.endswith('+TAB'):
-            collobj.notes = values['txtNotes']
-            window['chkMultiSpecimen'].set_focus()
-
-        if event == 'chkMultiSpecimen_Enter':
-            collobj.multiSpecimen = values[event]
-            window['chkMultiSpecimen'].update(True)
-            window['cbxGeoRegion'].set_focus()
-
-        if event == 'chkMultiSpecimen_Edit':
-            collobj.multiSpecimen = values['chkMultiSpecimen']
-
-        if event == 'cbxGeoRegion':
-            collobj.setgeoRegionFields(window[event].widget.current())
-
-        if event == 'txtTaxonName':
-
-            suggester = autoSuggest_popup.AutoSuggest_popup('taxonname')
-            partialName = values['txtTaxonName']
-            if len(values[event]) >= 3:
-                # print('submitted string: ', values[event])
-                selectedTaxonList = suggester.autosuggest_gui(partialName)
-                print(selectedTaxonList)
-                selectedTaxonDict = selectedTaxonList[0]
-
-                # response = koss.auto_suggest_taxonomy(values[event])
-                if selectedTaxonDict is not None:
-
-                    selectedName = selectedTaxonDict['name']
-                    taxonFullName = selectedTaxonDict['fullname']
-                    taxonID = selectedTaxonDict['id']
-                    collobj.setTaxonNameFields(taxonFullName)
-                    window['txtTaxonName'].update(selectedName)
-                    #
-                    # collobj.setTaxonNameFields(selectedName)
+                    # Fetch storage location record from database based on user interactions with autosuggest popup window 
+                    selectedStorageRecord = autoStorage.autosuggest_gui(keyStrokes)
                     
-                    # All done: Skip further to barcode field  
-                    window['txtCatalogNumber'].set_focus()
-                    # window['cbxTaxonName'].update(set_to_index=[0], scroll_to_index=0)
+                    # Set storage fields using record retrieved
+                    if selectedStorageRecord is not None:
+                        # Set specimen record storage fields 
+                        self.collobj.setStorageFields(selectedStorageRecord)
 
-        if event == 'txtCatalogNumber':
-            collobj.catalogNumber = values[event]
+                        # Update UI to indicate selected storage record  
+                        self.window['txtStorageFullname'].update(selectedStorageRecord['fullname'])
+                        self.window['txtStorage'].update(selectedStorageRecord['name'])
+                        
+                        # Move focus to next field (PrepTypes list)
+                        self.window['cbxPrepType'].set_focus()
 
-        if event == 'txtCatalogNumber_Edit':
-            collobj.catalogNumber = values['txtCatalogNumber']
+            if event == 'cbxPrepType':
+                self.collobj.setPrepTypeFields(self.window[event].widget.current())
 
-        if event == "txtCatalogNumber_RETURN":
-            collobj.catalogNumber = values['txtCatalogNumber']
-            window['btnSave'].set_focus()
+            # if event == 'cbxHigherTaxon':
+            #    pass
 
-        if event == 'btnClear':
-            # clear_all_of()
-            for key in clearingList:
-                print('clearing: ', key)
-                window[key].update('')
-            window['txtRecordID'].update('')
+            if event == 'cbxTypeStatus':
+                self.collobj.setTypeStatusFields(self.window[event].widget.current())
+                self.collobj.typeStatusName = self.window['cbxTypeStatus'].get()
 
-        if event == 'btnBack':
-            # Fetch previous specimen record data on basis of current record ID, if any
-            record = collobj.loadPrevious(collobj.id)
-            if record:
-                # If not empty, set form fields
-                setFormFields(record)
-            else:
-                # Indicate no further records
-                window['lblRecordEnd'].update(visible=False)
+            if event == 'txtNotes_Edit':
+                self.collobj.notes = values['txtNotes']
 
-        if event == 'btnClear':
-            for key in clearingList:
-                print('clearing: ', key)
-                window[key].update('')
-            window['txtRecordID'].update('')
-            window['lblExport'].update(visible=False)
-            window['lblRecordEnd'].update(visible=False)
+            if event.endswith('_Tab'):
+                self.collobj.notes = values['txtNotes']
+                self.window['chkMultiSpecimen'].set_focus()
 
-        if event == 'btnExport':
-            export_result = dx.exportSpecimens('xlsx')
-            window['lblExport'].update(export_result, visible=True)
+            if event == 'chkMultiSpecimen_Enter':
+                self.collobj.multiSpecimen = values[event]
+                self.window['chkMultiSpecimen'].update(True)
+                self.window['cbxGeoRegion'].set_focus()
 
-        if event == 'btnDismiss':
-            window['lblExport'].update(visible=False)
-            window['lblRecordEnd'].update(visible=False)
+            if event == 'chkMultiSpecimen_Edit':
+                self.collobj.multiSpecimen = values['chkMultiSpecimen']
 
-        if event == sg.WINDOW_CLOSED:
-            break
+            if event == 'cbxGeoRegion':
+                self.collobj.setGeoRegionFields(self.window[event].widget.current())
 
-        # Save form
-        if values:
-            pass
+            if event == 'txtTaxonName':
+                # Create auto-suggest popup window for taxon names
+                autoTaxonName = autoSuggest_popup.AutoSuggest_popup('taxonname')
+                
+                # If more than 3 characters entered: 
+                if len(values[event]) >= 3:
+                    # Get currently entered key strokes 
+                    keyStrokes = values['txtTaxonName']
+                    
+                    # Fetch taxon name record from database based on user interactions with autosuggest popup window 
+                    selectedTaxonNameRecord = autoTaxonName.autosuggest_gui(keyStrokes)
 
-        if event == 'btnSave':
-            # save specimen and get its id
-            previousId = collobj.save()
+                    # Set taxon name fields using record retrieved 
+                    if selectedTaxonNameRecord is not None:
+                        # Set specimen record taxon name fields 
+                        self.collobj.setTaxonNameFields(selectedTaxonNameRecord)
+
+                        # Update UI to indicate selected taxon name record  
+                        self.window['txtTaxonName'].update(selectedTaxonNameRecord['fullname'])
+                        
+                        # Move focus further to next field (Barcode textbox)
+                        self.window['txtCatalogNumber'].set_focus()
+                        # window['cbxTaxonName'].update(set_to_index=[0], scroll_to_index=0)
+
+            if event == 'txtCatalogNumber':
+                self.collobj.catalogNumber = values[event]
+
+            if event == 'txtCatalogNumber_Edit':
+                self.collobj.catalogNumber = values['txtCatalogNumber']
+
+            if event == "txtCatalogNumber_Enter":
+                self.collobj.catalogNumber = values['txtCatalogNumber']
+                self.window['btnSave'].set_focus()
+
+            if event == 'btnClear':
+                # Clear all clearable fields as defined in list 'clearingFields'
+                self.clearForm()
+
+            if event == 'btnBack':
+                # Fetch previous specimen record data on basis of current record ID, if any
+                record = self.collobj.loadPrevious(self.collobj.id) 
+                if record:
+                    # If not empty, set form fields
+                    self.fillFormFields(record)
+                else:
+                    # Indicate no further records
+                    self.window['lblRecordEnd'].update(visible=False)
+
+            if event == 'btnForward':
+                # Fetch next specimen record data on basis of current record ID, if any
+                record = self.collobj.loadNext(self.collobj.id)  
+                if record:
+                    # If not empty, set form fields
+                    self.fillFormFields(record)
+                else:
+                    # Indicate no further records
+                    self.window['lblRecordEnd'].update(visible=False)
+
+            if event == 'btnClear':
+                for key in self.clearingList:
+                    print('clearing: ', key)
+                    self.window[key].update('')
+                
+                self.window['lblExport'].update(visible=False)
+                self.window['lblRecordEnd'].update(visible=False)
+
+            if event == 'btnExport':
+                export_result = dx.exportSpecimens('xlsx')
+                self.window['lblExport'].update(export_result, visible=True)
+
+            if event == 'btnDismiss':
+                self.window['lblExport'].update(visible=False)
+                self.window['lblRecordEnd'].update(visible=False)
+
+            if event == sg.WINDOW_CLOSED:
+                break
             
-            # TODO explain below lines ; If saved successfully, reset form ???
-            if previousId >= 0:
-                # clear_all_of(window)
-                window['txtRecordID'].update('')
+            # ? 
+            if values: 
+                pass 
 
-            # Create new specimen instance and add previous id to it
-            collobj = specimen.specimen(collection_id)
-            collobj.previousId = previousId
+            # Save form 
+            if event == 'btnSave': 
+                # save specimen and get its id 
+                specimenRecord = self.collobj.save()  
 
-    window.close()
+                self.clearNonStickyFields()
 
+                # Create a new specimen instance and add previous id to it 
+                self.collobj = specimen.specimen(collection_id) 
+                
+                # Transfer data in sticky fields to new record: 
+                self.setRecordFields(specimenRecord, True)
 
-def setFormFields(record):
-    # Function for setting form fields from specimen data record
-    #
-    window['txtRecordID'].update('{}'.format(record['id']), visible=True)
-    window['txtStorage'].update(record['storagename'])
-    window['txtStorageFullname'].update(record['storagefullname'])
-    window['cbxPrepType'].update(record['preptypename'])
-    # window['cbxHigherTaxon'].update('')
-    window['cbxTypeStatus'].update(record['typestatus'])
-    window['txtNotes'].update(record['notes'])
-    window['chkMultiSpecimen'].update(record['multispecimen'])
-    window['cbxGeoRegion'].update(record['georegionname'])
-    window['txtTaxonName'].update(record['taxonname'])
-    window['txtCatalogNumber'].update(record['catalognumber'])
+        self.window.close()
 
+    def setControlEvents(self):
+        # Set triggers for the different controls on the UI form 
 
-# TODO explain the function of below lines
-# def clear_all_of():
-#     for key in clearingList_test:
-#         print('clearing: ', key)
-#         window[key].update('')
+        # HEADER AREA
+        self.window.Element('btnSettings').Widget.config(takefocus=0)
+        self.window.Element('btnLogOut').Widget.config(takefocus=0)
+        self.window.Element('txtUserName').Widget.config(takefocus=0)
 
+        # GREEN AREA
+        # cbxPrepType   # Combobox therefore already triggered
+        # cbxTypeStatus # Combobox therefore already triggered
+        self.window['txtNotes'].bind('<Tab>', '_Tab')
+        self.window['txtNotes'].bind('<Leave>', '_Edit')
+        self.window['chkMultiSpecimen'].bind("<Leave>", "_Edit")
+        self.window['chkMultiSpecimen'].bind("<Return>", "_Enter")
 
-# def taxonomic_autosuggest_gui(partialName):
-#     # TODO Function contract
-#     # The list of choices that are going to be searched
-#     # In this example, the PySimpleGUI Element names are used
-#     print('in autøsuggest_gui')
-#     choices = koss.auto_suggest_taxonomy(partialName)
-#     print(type(choices))
-#
-#     print('len of choices is; ', len(choices), type(choices), '\n choices are;; ', choices)
-#     # sorted([elem.__name__ for elem in sg.Element.__subclasses__()])
-#     # choices =
-#
-#     input_width = 20
-#     num_items_to_show = 4
-#
-#     layout = [
-#         [sg.Text('Input Name:')],
-#         [sg.Input(size=(input_width, 1), enable_events=True, key='-IN-')],
-#         [sg.pin(
-#             sg.Col([[sg.Listbox(values=[], size=(input_width, num_items_to_show), enable_events=True, key='-BOX-',
-#                                 select_mode=sg.LISTBOX_SELECT_MODE_SINGLE)]],
-#                    key='-BOX-CONTAINER-', pad=(0, 0), visible=True))], ]
-#
-#     window = sg.Window('AutoComplete', layout, return_keyboard_events=True, finalize=True, modal=False,
-#                        font=('Arial', 16))
-#     # The parameter "modal" is explicitly set to False. If True the auto close behavior won't work.
-#
-    try:
-        list_element: sg.Listbox = window.Element('-BOX-')
-        # store listbox element for easier access and to get to docstrings
-#     prediction_list, input_text, sel_item = choices, "", 0
-#     window['-IN-'].update(partialName)
-#     window.write_event_value('-IN-', partialName)
-#     # global windowAutosuggest
-#     # windowAutosuggest = window
-    except AttributeError:
-        pass
+        # BLUE AREA
+        # cbxGeoRegion  # Combobox therefore already triggered
+        # self.window['cbxTaxonName'].bind("<Return>", "_Enter")
+        self.window['txtCatalogNumber'].bind('<Leave>', '_Edit')
+        self.window['txtCatalogNumber'].bind("<Return>", "_Enter")
 
-    while True:  # Event Loop
-        event, values = window.read()
-        # print(win.close_destroys_window)
-        if event is None:
-            print('EVENT  , NONE')
-            break
-        # pressing down arrow will trigger event -IN- then aftewards event Down:40
-        elif event.startswith('Escape'):
-            window['-IN-'].update('')
-            window['-BOX-CONTAINER-'].update(visible=False)
-        elif event.startswith('Down') and len(prediction_list):
-            sel_item = (sel_item + 1) % len(prediction_list)
-            list_element.update(set_to_index=sel_item, scroll_to_index=sel_item)
-        elif event.startswith('Up') and len(prediction_list):
-            sel_item = (sel_item + (len(prediction_list) - 1)) % len(prediction_list)
-            list_element.update(set_to_index=sel_item, scroll_to_index=sel_item)
-        elif event == '\r':
-            print('pressed Enter/Return')
-            window.Hide()
-            # A patch on the issue around the popup not being closed properly.
-            # Likely to be a PySimpleGUI bug.
-            if len(values['-BOX-']) > 0:
-                boxVal = values['-BOX-']
-                print('boxval ISS - ', boxVal[0])
-                window['-IN-'].update(value=boxVal[0])
-                window['-BOX-CONTAINER-'].update(visible=False)
-                return boxVal[0]
+    def setRecordFields(self, record, stickyFieldsOnly=False):
+        # TODO Function for transfering ...
 
-        elif event == '-IN-':
-            # this concerns all keystrokes except the above ones.
-            text = values['-IN-'].lower()
-            if text == input_text:
-                continue
-            else:
-                input_text = text
+        self.collobj.setStorageFields(db.getRowOnId('storage', record['storageid'])) 
+        self.collobj.setPrepTypeFields(self.window['cbxPrepType'].widget.current()) 
+        self.collobj.setTypeStatusFields(self.window['cbxTypeStatus'].widget.current())
+        self.collobj.notes = record['notes'] 
+        self.collobj.multiSpecimen = record['multiSpecimen'] 
+        self.collobj.setGeoRegionFields(self.window['cbxGeoRegion'].widget.current())
+        self.collobj.setTaxonNameFields(db.getRowOnId('taxonname', record['taxonnameid'])) 
 
-            prediction_list = []
-            if len(text) >= 3:
-                # condition for activating the autosuggest feature.
-                prediction_list = [item for item in choices if item.lower().find(text) != -1]
+        if not stickyFieldsOnly:
+            self.collobj.id = record['id'] 
+            self.collobj.catalogNumber = record['catalognumber'] 
 
-            list_element.update(values=prediction_list)
-            sel_item = 0
-            list_element.update(set_to_index=sel_item)
+    def fillFormFields(self, record):
+        # Function for setting form fields from specimen data record
+        self.window['txtRecordID'].update('{}'.format(record['id']), visible=True)
+        self.window['txtStorage'].update(record['storagename'])
+        self.window['txtStorageFullname'].update(record['storagefullname'])
+        self.window['cbxPrepType'].update(record['preptypename'])
+        # self.window['cbxHigherTaxon'].update('')
+        self.window['cbxTypeStatus'].update(record['typestatusname'])
+        self.window['txtNotes'].update(record['notes'])
+        if record['multispecimen'] == 'True': multiSpecimen = True 
+        else: multiSpecimen = False
+        self.window['chkMultiSpecimen'].update(multiSpecimen)
+        self.window['cbxGeoRegion'].update(record['georegionname'])
+        self.window['txtTaxonName'].update(record['taxonfullname'])
+        self.window['txtCatalogNumber'].update(record['catalognumber'])
 
-            if len(prediction_list) > 0:
-                window['-BOX-CONTAINER-'].update(visible=True)
-            else:
-                window['-BOX-CONTAINER-'].update(visible=False)
-        elif event == '-BOX-':
-            print('values bøx __ ', values['-BOX-'])
-            window['-IN-'].update(value=values['-BOX-'])
-            window['-BOX-CONTAINER-'].update(visible=False)
+    def clearNonStickyFields(self):
+        # TODO explain function
+        for key in self.nonStickyFields:
+            print('Clearing: ', key)
+            field = self.window[key]
+            field.update('')
 
-    window.close()
-
-
-init(13)
-""" TO DO:
-    Restrict the characters allowed in an input element to digits and . or -
-    Accomplished by removing last character input if not a valid character
-    This link provides some ideas for input sanitazion https://github.com/PySimpleGUI/PySimpleGUI/issues/1119
-    What if the taxon name is a new one (not in the taxon table)? Needs to be handled? 
-        - Covered by ticket #68 
-"""
+    def clearForm(self):
+        # Clears all fields listed 
+        for key in self.clearingList:
+            print('Clearing: ', key)
+            self.window[key].update('')
