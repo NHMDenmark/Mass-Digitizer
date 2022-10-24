@@ -136,7 +136,7 @@ def getRows(tableName, limit=100):
     
     return records
 
-def getRowsOnFilters(tableName, filters, limit=100):
+def getRowsOnFilters(tableName, filters, limit=10000):
     # Getting specific rows specified by filters from the table specified by name
     # CONTRACT 
     #   tableName (String): The name of the table to be queried
