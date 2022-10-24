@@ -47,13 +47,13 @@ def set_specimen_global():
     return specimenObject.catalogNumber
 
 
-
 def test_specimen_prepTypes():
     global predefData
     print(predefData)
     sObject = specimenObject.typeStatuses
     typeStatus = rowObjectToList(sObject)
     # print('--', typeStatus, '--')
+    print('typestatus : ',  typeStatus[5][1][2])
     assert typeStatus[5][1][2] == 'Hapantotype'
     # Knowing for a fact that typeStatus[5][1][2] is 'Hapantotype',
     #I expect a lowercase assertion to fail: 'hapantotype'
@@ -67,3 +67,24 @@ def test_predefined():
 def test_specimen_global():
     catalogNumber = set_specimen_global()
     assert (catalogNumber == 951754)
+
+def test_georegions():
+    geoList = []
+    regions = specimenObject.geoRegions
+    list(enumerate(regions))
+    for j in regions:
+        geoList.append([k for  k in j])
+        # print('GEOREGIONS:::', [k for  k in j])
+    enumGeo = list(enumerate(geoList))
+    print(enumGeo)
+    for item in enumGeo:
+        print('GEOREGION:::', item )
+    print('FINAL TEST : ', enumGeo[9][1][1])
+    assert (enumGeo[9][1][1] == 'Island')
+
+def test_storage():
+    id = 3880
+
+
+
+
