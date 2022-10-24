@@ -104,7 +104,7 @@ def test_getFieldsAsDictionary():
     assert (lengthFieldDict == 24)
     return fieldDict
 
-def test_memberOfFildDict():
+def test_memberOfFieldDict():
     res = specimenObject.getFieldsAsDict()
     dkeys = res.keys()
     assert ("storagefullname" in dkeys) == True
