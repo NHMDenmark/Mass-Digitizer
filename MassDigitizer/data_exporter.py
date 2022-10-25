@@ -74,6 +74,9 @@ def generateFilename(object_name, file_type, file_path):
   return tf.NamedTemporaryFile(prefix='%s-export_%s'%(object_name,dt.now().strftime("%Y%m%d%H%M_")), suffix='.%s'%file_type, dir=file_path).name
 
 def getPrimaryKeys(dict):
+  """
+  This can be replaced by dict.keys() which returns a list of all the dictionary keys.
+  """
   # Method for extracting primary keys from dict into concatened string separated by commas 
   # CONTRACT 
   #     dict (Dictionary): The dictionary containing the record rows 
