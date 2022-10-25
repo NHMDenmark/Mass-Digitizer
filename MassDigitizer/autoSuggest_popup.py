@@ -4,10 +4,6 @@ from itertools import chain
 # import additional_popup
 import tkinter as tk
 
-
-# root = tk.Tk()
-
-
 class AutoSuggest_popup():
 
     startQueryLimit = 3
@@ -32,7 +28,7 @@ class AutoSuggest_popup():
             sql = f"SELECT fullname FROM {tableName} WHERE {columnName} LIKE lower('% {name}%') OR {columnName} LIKE lower('{name}%');"
         else:
             sql =f"SELECT fullname FROM storage WHERE name LIKE '{name}%'"
-        print('In autosuggest & sql isz: ', sql)
+        
         if taxDefItemId:
             sql = sql[:-1]
             sql = sql + ' AND taxontreedefid = {};'.format(taxDefItemId)

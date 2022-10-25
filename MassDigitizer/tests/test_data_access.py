@@ -83,7 +83,20 @@ def test_getRowOnId():
 def test_getMaxRow():
     # TODO Generic test of fetching specific records from the local db on primary key
 
-    pass 
+    institutions = db.getRows('institution', 0, 'id')
+
+    # Get last institution in list, which also has the highest id 
+    lastInstitution = institutions[len(institutions)-1]
+    
+    # Run function to be tested 
+    maxIdInstitution = db.getMaxRow('institution') # THIS fucker
+
+    # Check whether both record IDs match
+    #assert lastInstitution['id'] == maxIdInstitution['id']
+
+def test_executeSqlStatement():
+
+    pass
 
 
 
