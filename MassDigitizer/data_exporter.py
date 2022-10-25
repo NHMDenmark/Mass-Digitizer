@@ -23,8 +23,8 @@ import global_settings as gs
 
 exportableTables = {'specimen'}
 
-filePath = os.path.expanduser('~\Documents\DaSSCO') # In order to debug / run, a copy of the db file should be moved into this folder on Windows machines 
-altFilePath = os.path.expanduser('~\OneDrive - University of Copenhagen\Documents\DaSSCO\db.sqlite3') # For OneDrive users this is the file location 
+filePath = os.path.expanduser(r'~\Documents\DaSSCO') # In order to debug / run, a copy of the db file should be moved into this folder on Windows machines
+altFilePath = os.path.expanduser(r'~\OneDrive - University of Copenhagen\Documents\DaSSCO\db.sqlite3') # For OneDrive users this is the file location
 
 def exportSpecimens(file_type):
   # Overloading of function exportTable specific for specimen data records 
