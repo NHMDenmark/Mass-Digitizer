@@ -1,4 +1,5 @@
 import data_exporter
+import pytest
 
 
 def test_exportSpecimens():
@@ -12,3 +13,5 @@ def test_generteFilename():
     print('%%%%%%%'+export_path)
     assert export_path
 
+test_exportSpecimens()
+test_generteFilename()
