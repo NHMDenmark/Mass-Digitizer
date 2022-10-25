@@ -12,4 +12,3 @@ def test_generteFilename():
     print('%%%%%%%'+export_path)
     assert export_path
 
-# test_exportSpecimens()
