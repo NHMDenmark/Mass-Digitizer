@@ -15,7 +15,7 @@ import specify_interface
 import global_settings as gs
 import pytest
 
-baseUrl = "https://specify-snm.science.ku.dk/"
+baseUrl = "https://specify-test.science.ku.dk/"
 
 gs.baseURL = baseUrl
 tokenGL = ''
@@ -32,7 +32,15 @@ def test_lengthCSRF_token():
     token = specify_interface.getCSRFToken()
     assert len(token) == 64
 
+
+def test_login():
+    tkCSFR = specify_interface.login(username='***', passwd='*******', collectionid=29, csrftoken=tokenGL)
+    print('In test_login() --- tok:', tkCSFR)
+    assert tkCSFR
+
 def test_verify_Session():
     valid = specify_interface.verifySession(tokenGL)
+
     if valid: print("token valid X:DDDDDDD")
+    assert valid
 
