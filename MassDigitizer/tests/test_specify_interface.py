@@ -34,7 +34,7 @@ def test_lengthCSRF_token():
 
 
 def test_login():
-    tkCSFR = specify_interface.login(username='***', passwd='*******', collectionid=29, csrftoken=tokenGL)
+    tkCSFR = specify_interface.login(username='test', passwd='testytest', collectionid=29, csrftoken=specify_interface.getCSRFToken())
     print('In test_login() --- tok:', tkCSFR)
     assert tkCSFR
 
@@ -44,3 +44,4 @@ def test_verify_Session():
     if valid: print("token valid X:DDDDDDD")
     assert valid
 
+test_login()
