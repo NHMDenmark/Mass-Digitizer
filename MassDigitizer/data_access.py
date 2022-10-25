@@ -27,9 +27,6 @@ import global_settings as gs
 #class DataAccess: 
 # TODO turn into class 
 
-#FILEPATH = Path(__file__).parent.joinpath('db')
-#str(FILEPATH.joinpath('db.sqlite3')) # Path(__file__).joinpath('db').resolve().with_name('db.sqlite3') #
-
 # Moved database file to user documents (Windows) otherwise it will be readonly 
 dbFilePath = os.path.expanduser('~\Documents\DaSSCO\db.sqlite3') # In order to debug / run, a copy of the db file should be moved into this folder on Windows machines 
 dbAltFilePath = os.path.expanduser('~\OneDrive - University of Copenhagen\Documents\DaSSCO\db.sqlite3') # For OneDrive users this is the file location 
@@ -68,7 +65,6 @@ def __init__(self,databaseName='db', do_in_memory=False):
     connection.row_factory = sqlite3.Row
     currentCursor = connection.cursor()
 
-
 def setDatabase(self, dbFileName='db'):
     # This optional function allows for setting a different database file like e.g. 'test' 
     # CONTRACT 
@@ -82,21 +78,18 @@ def getConnection():
 def getDbCursor():#do_in_memory=False):
     # Generic function needed for database access 
     # CONTRACT
-    #   do_in_memory (boolean): Whether the database file should be run in-memory 
+    #   TODO: do_in_memory (boolean): Whether the database file should be run in-memory 
     #   RETURNS database cursor object 
-    #     connection = sqlite3.connect(dbFilePath)
-    #     connection.row_factory = sqlite3.Row # Enable column access by name: row['column_name']
-    #     cursor = connection.cursor()
-    #     return cursor
-
-    # def get_inmemory_cursor(in_memory=True):
-    #     # TODO write function contract
     print('Connecting to db file: %s ...'%dbFilePath)
+
+    # Connect to database file. On error, try alternative location assuming OneDrive user
     try:
-        connection = sqlite3.connect(dbFilePath)
+        connection = sqlite3.connect(dbFilePath)    # Normal user 
     except:
-        connection = sqlite3.connect(dbAltFilePath)
+        connection = sqlite3.connect(dbAltFilePath) # Assumed OneDrive user
     
+    # Depending on in-memory flag, run database in memory 
+    # TODO Momentarily deactivated, perhaps redundant 
     #gs.db_in_memory = do_in_memory # apply in-memory flag to global  
     if gs.db_in_memory == True:
         print(' - running database in-memory')
@@ -115,23 +108,33 @@ def getDbCursor():#do_in_memory=False):
         #print(' - running database as file')
         pass
 
-    connection.row_factory = sqlite3.Row
+    connection.row_factory = sqlite3.Row # Enable column access by name: row['column_name']
     cursor = connection.cursor()
+    print('Connection established')
     return cursor
 
-def getRows(tableName, limit=100):
+def getRows(tableName, limit=100, sortColumn=None):
     # Getting all records from the table specified by name
     # CONTRACT 
     #   tableName (String): The name of the table to be queried
     #   limit (Integer) : The maximum number of records - 0 means all records 
+    #   sortColumn (String) : The column to sort the rows on, if any 
     #   RETURNS table rows (list)
     currentCursor = getDbCursor()        
-    print('Get all rows from table "%s" ...' % tableName)
-    sqlString = "SELECT * FROM " + tableName
+    print('Get all rows from table "{%s}" ...' % tableName)
+
+    sqlString = f'SELECT * FROM {tableName}' 
+    
     if limit > 0:
-        sqlString += ' LIMIT %s' %str(limit)
+        sqlString += f' LIMIT {limit}'
+    
+    if sortColumn is not None: 
+        sqlString += f' ORDER BY {sortColumn}'
+
     records = currentCursor.execute(sqlString).fetchall()
-    print('found %d records ' % len(records))
+    
+    print(f'Found {len(records)} records ')
+    
     currentCursor.connection.close()
     
     return records
@@ -154,10 +157,10 @@ def getRowsOnFilters(tableName, filters, limit=10000):
     if filters.items():
         sqlString += "WHERE "
         for key, value in filters.items():
-            sqlString += '%s %s AND ' % (key, str(value))
+            sqlString += f'{key} {value} AND '
     sqlString = sqlString[0:len(sqlString)-4] # Remove trailing " AND "
     if limit > 0:
-        sqlString += ' LIMIT %s' %str(limit)
+        sqlString += f' LIMIT {limit}'
     print(sqlString)
     try:
         records = currentCursor.execute(sqlString).fetchall()
@@ -184,24 +187,27 @@ def getRowOnId(tableName, id):
     return record
 
 def getMaxRow(tableName):
-    # TODO description 
-    #   maxID(Boolean) : is added functionality to get the latest record ID
-    #   RETURNS single table row
+    # Get the row from the specified table with the highest primary key (id) 
+    # CONTRACT 
+    #   tableName (String): The name of the table to be queried
+    #   RETURNS single table row (SQLITErow)
     currentCursor = getDbCursor()
-    sql = "SELECT MAX({}.id) FROM {};".format(tableName, tableName)
+    sql = f'SELECT MAX({tableName}.id) FROM {tableName};'
     record = currentCursor.execute(sql).fetchone()
     currentCursor.connection.close()
-
+    print(f'record: {record}')
     return record
 
 def executeSqlStatement(sql):
+    # Execute specified sql statement 
+    # CONTRACT 
+    #   sql (String) : 
+    #   RETURNS table rows as dictionary
     currentCursor = getDbCursor()
     rows_object = currentCursor.execute(sql).fetchall()
+
     records = [dict(row) for row in rows_object]
-    # print('in data-access: The row(s) = ', records)
-    # for j in records:
-    #     print(j)
-        # print([x for x in j])
+
     currentCursor.connection.commit()
     currentCursor.connection.close()
 

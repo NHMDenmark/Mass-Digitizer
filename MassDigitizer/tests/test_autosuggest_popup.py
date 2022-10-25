@@ -22,8 +22,7 @@ sys.path.append(str(Path(__file__).parent.parent.joinpath('MassDigitizer')))
 TESTDATAPATH = Path(__file__).parent
 
 # Internal dependencies 
-import util 
-import models
+# none
 
 # The module to be tested
 import autoSuggest_popup as asp
@@ -32,7 +31,7 @@ import autoSuggest_popup as asp
 aspTaxonNames = asp.AutoSuggest_popup('taxonname')
 
 # Instantiate storage autosuggest popup
-aspTaxonNames = asp.AutoSuggest_popup('taxonname')
+aspStorage = asp.AutoSuggest_popup('storage')
 
 def test_taxonname():
     # Determine, rather trivially, whether the correct tablename has been set ('taxonname')
@@ -40,7 +39,25 @@ def test_taxonname():
 
 def test_taxonname_auto_suggest():
 
-    pass
+    choices = aspTaxonNames.auto_suggest(aspTaxonNames.tableName, 'pra', 'fullname')
 
+    found = False 
+    for c in choices:
+      print(c)
+      if c == 'Poa pratensis': found = True 
+      break
 
+    assert found
 
+def test_taxonname_auto_suggest():
+
+    choices = aspStorage.auto_suggest(aspStorage.tableName, 'Box', 'fullname')
+
+    found = False 
+    for c in choices:
+      print(c)
+      if c == 'Natural History Museum of Denmark | Priorparken | Herbarium C: Danish Vascular Plant Collection | Box 1': 
+        found = True 
+        break
+
+    assert found

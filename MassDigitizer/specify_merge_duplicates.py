@@ -12,7 +12,7 @@
   PURPOSE: Automate merging duplicates through the Specify API 
 """
 
-#from getpass import getpass
+from getpass import getpass
 
 import specify_interface as sp
 import global_settings as gs 
