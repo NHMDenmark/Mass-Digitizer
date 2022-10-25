@@ -43,5 +43,3 @@ def test_verify_Session():
 
     if valid: print("token valid X:DDDDDDD")
     assert valid
-
-test_login()
