@@ -231,7 +231,7 @@ def updateSpecifyTaxonNames(taxonranks, taxontreedefid, csrftoken):
 #def syncLocalTaxonHierarchyWithSpecify
     # TODO Sync taxononomic hierarchy table  
 
-# TEST CODE
+""" # TEST CODE
 util.clear()
 print('------- Running specify_sync.py --------')
 #db = db()
@@ -268,4 +268,4 @@ else:
 
 sp.logout(token)
 
-print('----------- done --------------')
+print('----------- done --------------') """
