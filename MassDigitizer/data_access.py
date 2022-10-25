@@ -196,8 +196,9 @@ def getMaxRow(tableName):
 
 def executeSqlStatement(sql):
     currentCursor = getDbCursor()
-    rows_object = currentCursor.execute(sql).fetchall()
-    records = [dict(row) for row in rows_object]
+    rows = currentCursor.execute(sql).fetchall()
+
+    # records = [dict(row) for row in rows_object]
     # print('in data-access: The row(s) = ', records)
     # for j in records:
     #     print(j)
@@ -205,7 +206,7 @@ def executeSqlStatement(sql):
     currentCursor.connection.commit()
     currentCursor.connection.close()
 
-    return records
+    return rows
 
 
 def getRowOnSpecifyId(tableName, id):
