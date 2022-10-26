@@ -30,8 +30,8 @@ def test_getCSRFToken():
 
 def test_lengthCSRF_token():
     token = specify_interface.getCSRFToken()
+    # Be aware that CSRF tokens can be of different lengths, depending on implementation.
     assert len(token) == 64
-
 
 def test_login():
     tkCSFR = specify_interface.login(username='test', passwd='testytest', collectionid=29, csrftoken=specify_interface.getCSRFToken())
