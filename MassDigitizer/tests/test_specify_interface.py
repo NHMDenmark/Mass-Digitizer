@@ -13,12 +13,13 @@
 """
 import specify_interface
 import global_settings as gs
-import pytest
+# import pytest
 
 baseUrl = "https://specify-test.science.ku.dk/"
 
 gs.baseURL = baseUrl
 tokenGL = ''
+CSRF = ''
 
 def test_getCSRFToken():
     token = specify_interface.getCSRFToken()
@@ -36,10 +37,18 @@ def test_lengthCSRF_token():
 def test_login():
     tkCSFR = specify_interface.login(username='test', passwd='testytest', collectionid=29, csrftoken=specify_interface.getCSRFToken())
     print('In test_login() --- tok:', tkCSFR)
+    global CSRF
+    CSRF = tkCSFR
     assert tkCSFR
 
 def test_verify_Session():
     valid = specify_interface.verifySession(tokenGL)
-
     if valid: print("token valid X:DDDDDDD")
     assert valid
+
+def test_getCollObject():
+    if tokenGL: print("TOKENNNNN =====", tokenGL)
+    res = specify_interface.getCollObject(29, tokenGL)
+    print('qqqqqqqqqqqq', res)
+    assert res
+
