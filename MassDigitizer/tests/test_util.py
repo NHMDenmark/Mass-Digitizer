@@ -2,12 +2,11 @@ import util
 import data_access as db
 
 rows = db.getRows('taxonname', 1000)
+# Global rows fetchall() object for test use.
 
 def test_shrink_dict():
-    rows = db.getRows('taxonname', limit=1000)
-    # return rows
-
     fnameDict = {}
+
     # Loop populates dict with fullname as keys.
     for j in rows:
         fnameDict[j[3]] = ''
