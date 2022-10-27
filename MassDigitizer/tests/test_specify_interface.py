@@ -13,9 +13,9 @@
 """
 import specify_interface
 import global_settings as gs
-# import pytest
+from pprint import pprint
 
-baseUrl = "https://specify-test.science.ku.dk/"
+baseUrl = "https://specify-snm.science.ku.dk/"
 
 gs.baseURL = baseUrl
 tokenGL = ''
@@ -49,6 +49,19 @@ def test_verify_Session():
 def test_getCollObject():
     if tokenGL: print("TOKENNNNN =====", tokenGL)
     res = specify_interface.getCollObject(29, tokenGL)
-    print('qqqqqqqqqqqq', res)
+    print('qqqqqqqqqqqq')
+    pprint(res)
     assert res
 
+# def test_getSpecifyObject():
+#     res = specify_interface.getSpecifyObject('NHMD000864870', 411590, tokenGL)
+#     print("&&&&&&&&&&")
+#     pprint(res)
+#     assert res
+
+def test_getInitialCollection():
+    res = specify_interface.getInitialCollections()
+    print('/////',res)
+    pprint(res)
+    print(res[688130])
+    assert res[688130] == "NHMD Vascular Plants"
