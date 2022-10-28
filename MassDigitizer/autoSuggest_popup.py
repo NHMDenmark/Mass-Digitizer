@@ -18,12 +18,12 @@ class AutoSuggest_popup():
         print("\nInside __exit__")
 
     def auto_suggest(self, tableName, name, columnName='fullname', taxDefItemId=None, rowLimit=200):
-        # Purpose: for helping digitizer staff rapidly input names by returning suggestions based on the three or
-        #  more entered characters.
-        # trigger: means how many keystrokes it takes to trigger the auto-suggest functionality
-        # rowLimit: at or below this the auto-suggest fires of its names
-        # returns: a list of names
-        # TODO implement 'taxonTreeDefid' at convienient time.
+        """ Purpose: for helping digitizer staff rapidly input names by returning suggestions based on the three or
+          more entered characters. Function only concerns itself with database lookup.
+         rowLimit: at or below this the auto-suggest fires of its names
+         returns: a list of names
+         TODO implement 'taxonTreeDefid' at convienient time.
+        """
         cur = db.getDbCursor()
         if self.tableName == 'taxonname' and columnName == 'fullname':
             print('just name')
@@ -50,7 +50,7 @@ class AutoSuggest_popup():
         return rows
 
     def autosuggest_gui(self, partialName, startQuery=3, colName=None):
-        # TODO Function contract
+        # Builds the interface for taxon name lookup as well as for novel names.
         # Parameter partialName is the 'name' as it is being inputted, keystroke-by-keystroke
         # startQuery is an integer on how many key strokes it takes to start the auto-suggester.
         print('IN autosuggest_GUI :.: ', partialName, self.tableName)
@@ -67,7 +67,7 @@ class AutoSuggest_popup():
         # dimensions of the popup box
 
         layout = [
-            [sg.Text('Input Name:'), sg.Text('Taxon not found. Add higher taxonomy to create new taxon record please.', key='lblNewName', visible=False, background_color='Turquoise3')],
+            [sg.Text('Input Name:', key="lblInputName"), sg.Text('Taxon name does not exist. Add higher taxonomy to create new taxon record please.', key='lblNewName', visible=False, background_color='Turquoise3')],
             [sg.Input(size=(input_width, 1), enable_events=True, key='-IN-'),
              sg.Button('', key='btnReturn', visible=False, bind_return_key=True),
              sg.Button('Exit', visible=False)],
@@ -165,15 +165,15 @@ class AutoSuggest_popup():
 
                     window['-BOX-CONTAINER-'].update(visible=True)
                 else:
-                    # window['-BOX-CONTAINER-'].update(visible=False)
+                    window['lblInputName'].update('Input higher taxon name:')
                     print('IN taxon input hitax')
                     window['lblNewName'].update(visible=True)
                     print(prediction_list)
                     if len(prediction_list) == 0:
                         window[event].update(value ='')
-                        prediction_list.append('dummy value')
+                        prediction_list.append(' ')
                     textInput = values[event]
-                    prediction_list.append(textInput)
+                    # prediction_list.append(textInput)
                     # window['-IN-'].update(background_color='red') DISABLE below resets the background color - sorry
                     # window['-IN-'].update(disabled=True)
                     # window['lblHiTax'].update(visible=True)
@@ -212,34 +212,21 @@ class AutoSuggest_popup():
                 if len(values['-BOX-']) > 0:
                     boxVal = values['-BOX-']
 
+                    response = boxVal[0]
+                    print('===============Selected boxvalue is -/- ', response)
+                    return response
 
-                    #sql = "SELECT id, name, fullname FROM {} WHERE fullname = '{}'".format(self.tableName, boxVal[0])
-                    #print(sql)
-                    #boxID = db.executeSqlStatement(sql)
-
-                    #print([item for item in boxID])
-                    print('===============Selected boxvalue is -/ '
-                         , boxVal[0])
-                    #return boxVal[0]
-
-                    records = db.getRowsOnFilters(f'{self.tableName}',{'fullname': f'="{boxVal[0]}"'})
-                    
-                    if len(records)==1:
-
-                        return records[0]
-                    else: 
-                        return None
+                    # records = db.getRowsOnFilters(f'{self.tableName}',{'fullname': f'="{boxVal[0]}"'})
+                    #
+                    # if len(records)==1:
+                    #
+                    #     return records[0]
+                    # else:
+                    #     return None
                 window.Hide()
-            #         window['-IN-'].update(value=boxVal[0])
-            # event is None
-                # window['-BOX-CONTAINER-'].update(visible=False)
-                # tk.Tk.protocol("WM_DELETE_WINDOW", on_closing)
-
-
-                    # window.Hide()
         
         window.Hide()
         window.close()
 # EXE section -- remember "taxonname"
-ob = AutoSuggest_popup('taxonname')
-ob.autosuggest_gui('delt')
+# ob = AutoSuggest_popup('taxonname')
+# ob.autosuggest_gui('')
