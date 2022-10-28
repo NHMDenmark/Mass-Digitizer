@@ -38,7 +38,7 @@ class Test_specify_interface():
         # print(len(token))
         assert self.token
 
-    # The test below is superceded by the class variable 'token' which is defined by a the login function.
+    # The test below is superceded by the class variable 'token' which is defined by the login function.
     # def test_login(self):
     #     tkCSFR = self.spLogin()
     #     print('In test_login() --- tok:', tkCSFR)
