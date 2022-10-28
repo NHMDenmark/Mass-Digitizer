@@ -14,6 +14,9 @@
 import specify_interface
 import global_settings as gs
 from pprint import pprint
+from getpass import getpass
+
+from queue import Empty
 
 baseUrl = "https://specify-snm.science.ku.dk/"
 
@@ -53,11 +56,16 @@ def test_getCollObject():
     pprint(res)
     assert res
 
-# def test_getSpecifyObject():
-#     res = specify_interface.getSpecifyObject('NHMD000864870', 411590, tokenGL)
-#     print("&&&&&&&&&&")
-#     pprint(res)
-#     assert res
+
+def test_getSpecifyObject():
+    token = spLogin()
+    res = specify_interface.getSpecifyObject('collectionobject', 411590, token)
+    
+    if res is not Empty:
+        print(res['catalognumber'])
+    else:
+        print('empty')
+    assert res
 
 def test_getInitialCollection():
     res = specify_interface.getInitialCollections()
@@ -65,3 +73,8 @@ def test_getInitialCollection():
     pprint(res)
     print(res[688130])
     assert res[688130] == "NHMD Vascular Plants"
+
+def spLogin():
+    # 
+
+    return specify_interface.login(username=input('enter username:'), passwd=getpass('enter password:'), collectionid=29, csrftoken=specify_interface.getCSRFToken())
