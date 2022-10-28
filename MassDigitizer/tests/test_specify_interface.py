@@ -2,6 +2,7 @@
 """
   Created on October 14, 2022
   @author: Jan K. Legind, NHMD
+  @author: Fedor Steeman, NHMD
   Copyright 2022 Natural History Museum of Denmark (NHMD)
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -14,6 +15,9 @@
 import specify_interface
 import global_settings as gs
 from pprint import pprint
+from getpass import getpass
+
+from queue import Empty
 
 baseUrl = "https://specify-snm.science.ku.dk/"
 
@@ -21,30 +25,30 @@ gs.baseURL = baseUrl
 tokenGL = ''
 CSRF = ''
 
+
 def test_getCSRFToken():
     token = specify_interface.getCSRFToken()
     global tokenGL
     tokenGL = token
-    print('the token X:DDDDDDDD\n', token)
-    print(len(token))
     assert token
+
 
 def test_lengthCSRF_token():
     token = specify_interface.getCSRFToken()
     # Be aware that CSRF tokens can be of different lengths, depending on implementation.
     assert len(token) == 64
 
+
 def test_login():
-    tkCSFR = specify_interface.login(username='test', passwd='testytest', collectionid=29, csrftoken=specify_interface.getCSRFToken())
-    print('In test_login() --- tok:', tkCSFR)
-    global CSRF
-    CSRF = tkCSFR
-    assert tkCSFR
+    #
+    pass
+
 
 def test_verify_Session():
     valid = specify_interface.verifySession(tokenGL)
     if valid: print("token valid X:DDDDDDD")
     assert valid
+
 
 def test_getCollObject():
     if tokenGL: print("TOKENNNNN =====", tokenGL)
@@ -53,15 +57,27 @@ def test_getCollObject():
     pprint(res)
     assert res
 
-# def test_getSpecifyObject():
-#     res = specify_interface.getSpecifyObject('NHMD000864870', 411590, tokenGL)
-#     print("&&&&&&&&&&")
-#     pprint(res)
-#     assert res
+
+def test_getSpecifyObject():
+    token = spLogin()
+    res = specify_interface.getSpecifyObject('collectionobject', 411590, token)
+
+    if res is not Empty:
+        print(res['catalognumber'])
+    else:
+        print('empty')
+    assert res
+
 
 def test_getInitialCollection():
     res = specify_interface.getInitialCollections()
-    print('/////',res)
+    print('/////', res)
     pprint(res)
     print(res[688130])
     assert res[688130] == "NHMD Vascular Plants"
+
+
+def spLogin():
+    # Securing against accidental github commits of credentials.
+    return specify_interface.login(username=input('enter username:'), passwd=getpass('enter password:'),
+                                   collectionid=29, csrftoken=specify_interface.getCSRFToken())
