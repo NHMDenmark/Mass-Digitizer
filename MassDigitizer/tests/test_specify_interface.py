@@ -25,6 +25,21 @@ gs.baseURL = baseUrl
 tokenGL = ''
 CSRF = ''
 
+def test_getCSRFToken():
+    token = spLogin()
+    global tokenGL
+    tokenGL = token
+    print('the token X:DDDDDDDD\n', token)
+    print(len(token))
+    assert token
+
+def test_login():
+    tkCSFR = spLogin()
+    print('In test_login() --- tok:', tkCSFR)
+    global CSRF
+    CSRF = tkCSFR
+    print('CRF::', CSRF)
+    assert tkCSFR
 
 def test_getCSRFToken():
     token = specify_interface.getCSRFToken()
@@ -44,17 +59,10 @@ def test_login():
     pass
 
 
-def test_verify_Session():
-    valid = specify_interface.verifySession(tokenGL)
-    if valid: print("token valid X:DDDDDDD")
-    assert valid
-
-
 def test_getCollObject():
-    if tokenGL: print("TOKENNNNN =====", tokenGL)
-    res = specify_interface.getCollObject(29, tokenGL)
-    print('qqqqqqqqqqqq')
-    pprint(res)
+    if tokenGL: print("TOKENNNNN =====", CSRF)
+    res = specify_interface.getCollObject(29, CSRF)
+
     assert res
 
 
@@ -71,11 +79,13 @@ def test_getSpecifyObject():
 
 def test_getInitialCollection():
     res = specify_interface.getInitialCollections()
-    print('/////', res)
-    pprint(res)
-    print(res[688130])
+
     assert res[688130] == "NHMD Vascular Plants"
 
+def test_verify_Session():
+    valid = specify_interface.verifySession(tokenGL)
+
+    assert valid
 
 def spLogin():
     # Securing against accidental github commits of credentials.
