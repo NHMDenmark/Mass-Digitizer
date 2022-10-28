@@ -19,75 +19,69 @@ from getpass import getpass
 
 from queue import Empty
 
-baseUrl = "https://specify-snm.science.ku.dk/"
+class Test_specify_interface():
+#
 
-gs.baseURL = baseUrl
-tokenGL = ''
-CSRF = ''
+    collectionID = 29
+    gs.baseURL = "https://specify-snm.science.ku.dk/"
+    # The login function below will not work without the baseURL set.
+    token = specify_interface.login(username=input('enter username:'), passwd=getpass('enter password:'),
+                               collectionid=29, csrftoken=specify_interface.getCSRFToken())
+    baseUrl = "https://specify-snm.science.ku.dk/"
 
-def test_getCSRFToken():
-    token = spLogin()
-    global tokenGL
-    tokenGL = token
-    print('the token X:DDDDDDDD\n', token)
-    print(len(token))
-    assert token
+    gs.baseURL = baseUrl
 
-def test_login():
-    tkCSFR = spLogin()
-    print('In test_login() --- tok:', tkCSFR)
-    global CSRF
-    CSRF = tkCSFR
-    print('CRF::', CSRF)
-    assert tkCSFR
+    def test_getCSRFToken(self):
 
-def test_getCSRFToken():
-    token = specify_interface.getCSRFToken()
-    global tokenGL
-    tokenGL = token
-    assert token
+        # tokenGL = token
+        print('the token X:DDDDDDDD\n', self.token)
+        # print(len(token))
+        assert self.token
 
+    # The test below is superceded by the class variable 'token' which is defined by a the login function.
+    # def test_login(self):
+    #     tkCSFR = self.spLogin()
+    #     print('In test_login() --- tok:', tkCSFR)
+    #     global CSRF
+    #     CSRF = tkCSFR
+    #     print('CRF::', CSRF)
+    #     assert tkCSFR
 
-def test_lengthCSRF_token():
-    token = specify_interface.getCSRFToken()
-    # Be aware that CSRF tokens can be of different lengths, depending on implementation.
-    assert len(token) == 64
+    def test_getCSRFToken(self):
+        token = specify_interface.getCSRFToken()
 
-
-def test_login():
-    #
-    pass
+        assert token
 
 
-def test_getCollObject():
-    if tokenGL: print("TOKENNNNN =====", CSRF)
-    res = specify_interface.getCollObject(29, CSRF)
-
-    assert res
-
-
-def test_getSpecifyObject():
-    token = spLogin()
-    res = specify_interface.getSpecifyObject('collectionobject', 411590, token)
-
-    if res is not Empty:
-        print(res['catalognumber'])
-    else:
-        print('empty')
-    assert res
+    def test_lengthCSRF_token(self):
+        token = specify_interface.getCSRFToken()
+        # Be aware that CSRF tokens can be of different lengths, depending on implementation.
+        assert len(token) == 64
 
 
-def test_getInitialCollection():
-    res = specify_interface.getInitialCollections()
+    def test_getCollObject(self):
+        # Tests obtaining a collection object (JSON) from the specify API.
+        # Foreknowledge of a collectionID is required (in this case 411590).
+        res = specify_interface.getCollObject(411590, self.token)
+        assert res
 
-    assert res[688130] == "NHMD Vascular Plants"
 
-def test_verify_Session():
-    valid = specify_interface.verifySession(tokenGL)
+    def test_getSpecifyObject(self):
+        # Testing the more generic version of getCollObject().
+        # In this case collectionobject, but could be 'attachment', 'author' etc.
+        res = specify_interface.getSpecifyObject('collectionobject', 411590, self.token)
+        assert res
 
-    assert valid
 
-def spLogin():
-    # Securing against accidental github commits of credentials.
-    return specify_interface.login(username=input('enter username:'), passwd=getpass('enter password:'),
-                                   collectionid=29, csrftoken=specify_interface.getCSRFToken())
+    def test_getInitialCollection(self):
+        res = specify_interface.getInitialCollections()
+        assert res[688130] == "NHMD Vascular Plants"
+
+    def test_verify_Session(self):
+        valid = specify_interface.verifySession(self.token)
+        assert valid
+
+    def spLogin(self):
+        # Securing against accidental github commits of credentials.
+        return specify_interface.login(username=input('enter username:'), passwd=getpass('enter password:'),
+                                       collectionid=29, csrftoken=specify_interface.getCSRFToken())
