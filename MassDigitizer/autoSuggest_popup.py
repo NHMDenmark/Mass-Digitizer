@@ -12,6 +12,7 @@ class AutoSuggest_popup():
         # self.startQuery = startQueryLimit
         self.tableName = table
         self.popped = False
+        self.prediction_list = []
 
     def __exit__(self, exc_type, exc_value, traceback):
         print("\nInside __exit__")
@@ -24,8 +25,13 @@ class AutoSuggest_popup():
         # returns: a list of names
         # TODO implement 'taxonTreeDefid' at convienient time.
         cur = db.getDbCursor()
-        if self.tableName == 'taxonname':
+        if self.tableName == 'taxonname' and columnName == 'fullname':
+            print('just name')
             sql = f"SELECT fullname FROM {tableName} WHERE {columnName} LIKE lower('% {name}%') OR {columnName} LIKE lower('{name}%');"
+        elif self.tableName == 'taxonname' and columnName == 'parentfullname':
+            print("INNN PPPPPARRRRRRRRENTT")
+            sql = f"SELECT DISTINCT {columnName} FROM {tableName} WHERE {columnName} LIKE lower('{name}%')"
+            print('--------------',sql,'----')
         else:
             sql =f"SELECT fullname FROM storage WHERE name LIKE '{name}%'"
         
@@ -61,14 +67,14 @@ class AutoSuggest_popup():
         # dimensions of the popup box
 
         layout = [
-            [sg.Text('Input Name:'), sg.Text('Taxon not found. Please add higher taxonomy to create new taxon record?', key='lblNewName', visible=False, background_color='Turquoise3')],
+            [sg.Text('Input Name:'), sg.Text('Taxon not found. Add higher taxonomy to create new taxon record please.', key='lblNewName', visible=False, background_color='Turquoise3')],
             [sg.Input(size=(input_width, 1), enable_events=True, key='-IN-'),
              sg.Button('', key='btnReturn', visible=False, bind_return_key=True),
              sg.Button('Exit', visible=False)],
             [sg.Text('Input higher taxonomy:', key='lblHiTax', visible=False), sg.Input(size=(input_width, 1), enable_events=True, key='txtHiTax', visible=False)],
             # 'btnReturn' is for binding return to nothing in case of a new name and higher taxonomy lacking.
             [sg.pin(
-                sg.Col([[sg.Listbox(values=[], size=(input_width, lines_to_show), enable_events=True, key='-BOX-', select_mode=sg.LISTBOX_SELECT_MODE_SINGLE)]],
+                sg.Col([[sg.Listbox(values=[], size=(input_width, lines_to_show), enable_events=True, key='-BOX-', bind_return_key=True, select_mode=sg.LISTBOX_SELECT_MODE_SINGLE)]],
                        key='-BOX-CONTAINER-', pad=(0, 0), visible=True))],]
 
         window = sg.Window('Auto Complete', layout, return_keyboard_events=True, finalize=True, modal=False,
@@ -79,7 +85,6 @@ class AutoSuggest_popup():
         prediction_list, input_text, sel_item = choices, "", 0
         window['-IN-'].update(partialName)
         window.write_event_value('-IN-', partialName)
-
 
         while True:  # Event Loop
 
@@ -122,7 +127,7 @@ class AutoSuggest_popup():
                 if len(text) < len(partialName):
                     choices = self.auto_suggest(self.tableName, text)
                     print('in line 110 - 112')
-                prediction_list = []
+
                 print('pressed key', values['-IN-'])
                 if len(text) >= len(partialName):
                     # condition for activating the autosuggest feature.
@@ -160,14 +165,44 @@ class AutoSuggest_popup():
 
                     window['-BOX-CONTAINER-'].update(visible=True)
                 else:
-                    window['-BOX-CONTAINER-'].update(visible=False)
+                    # window['-BOX-CONTAINER-'].update(visible=False)
+                    print('IN taxon input hitax')
+                    window['lblNewName'].update(visible=True)
+                    print(prediction_list)
+                    if len(prediction_list) == 0:
+                        window[event].update(value ='')
+                        prediction_list.append('dummy value')
+                    textInput = values[event]
+                    prediction_list.append(textInput)
+                    # window['-IN-'].update(background_color='red') DISABLE below resets the background color - sorry
+                    # window['-IN-'].update(disabled=True)
+                    # window['lblHiTax'].update(visible=True)
+                    # window['txtHiTax'].update(visible=True)
+                    # window['txtHiTax'].set_focus()
 
-            elif event == 'txtHiTax':
-                # window.bind("<KeyPress>", "kPress")
-                print('1n hiTAX')
-            elif event == '-BOX-':
-                window['-IN-'].update(value=values['-BOX-'])
-                window['-BOX-CONTAINER-'].update(visible=False)
+            # elif event == 'txtHiTax':
+            #     # window['btnReturn'].BindReturnKey = True
+            #     textInput = values[event]
+            #     if len(textInput) >= 3:
+            #         choices = self.auto_suggest('taxonname', textInput, columnName='parentfullname')
+            #         # res = self.auto_suggest('taxonname', textInput, columnName='parentfullname')
+            #         print('In txtHiTax and candidate list length is:: ', len(choices))
+            #         prediction_list = []
+            #
+            #         if len(choices) <= 200:
+            #             window['btnReturn'].BindReturnKey = True
+            #             print("INNNNNNNNNNNNNN under 200 !!!")
+            #             # condition for activating the autosuggest feature.
+            #
+            #             prediction_list = [item for item in choices if item.lower().find(text) != -1]
+            #             sel_item = 0
+            #             list_element.update(set_to_index=sel_item)
+            #             # list_element.update(values=prediction_list, visible=True)
+            #             window['-BOX-'].update(values=choices, visible=True)
+            #     print(values[event])
+            # elif event == '-BOX-':
+            #     window['-IN-'].update(value=values['-BOX-'])
+            #     window['-BOX-CONTAINER-'].update(visible=False)
 
             elif event == 'btnReturn':
                 print('pressed Enter/Return || len values box= ', len(values['-BOX-']))
@@ -177,18 +212,20 @@ class AutoSuggest_popup():
                 if len(values['-BOX-']) > 0:
                     boxVal = values['-BOX-']
 
+
                     #sql = "SELECT id, name, fullname FROM {} WHERE fullname = '{}'".format(self.tableName, boxVal[0])
                     #print(sql)
                     #boxID = db.executeSqlStatement(sql)
 
                     #print([item for item in boxID])
-                    #print('Selected boxvalue is -/ '
-                    #      , boxVal[0])
+                    print('===============Selected boxvalue is -/ '
+                         , boxVal[0])
                     #return boxVal[0]
 
                     records = db.getRowsOnFilters(f'{self.tableName}',{'fullname': f'="{boxVal[0]}"'})
                     
                     if len(records)==1:
+
                         return records[0]
                     else: 
                         return None
@@ -204,4 +241,5 @@ class AutoSuggest_popup():
         window.Hide()
         window.close()
 # EXE section -- remember "taxonname"
-# ob = AutoSuggest_popup('storagreturn
+ob = AutoSuggest_popup('taxonname')
+ob.autosuggest_gui('delt')
