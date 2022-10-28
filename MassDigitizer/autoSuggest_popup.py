@@ -26,27 +26,31 @@ class AutoSuggest_popup():
         """
         cur = db.getDbCursor()
         if self.tableName == 'taxonname' and columnName == 'fullname':
-            print('just name')
+            print('just taxon name')
             sql = f"SELECT fullname FROM {tableName} WHERE {columnName} LIKE lower('% {name}%') OR {columnName} LIKE lower('{name}%');"
+
         elif self.tableName == 'taxonname' and columnName == 'parentfullname':
             print("INNN PPPPPARRRRRRRRENTT")
             sql = f"SELECT DISTINCT {columnName} FROM {tableName} WHERE {columnName} LIKE lower('{name}%')"
             print('--------------',sql,'----')
         else:
-            sql =f"SELECT fullname FROM storage WHERE name LIKE '{name}%'"
+            sql =f"SELECT * FROM storage WHERE name LIKE '{name}%'"
         
         if taxDefItemId:
             sql = sql[:-1]
             sql = sql + ' AND taxontreedefid = {};'.format(taxDefItemId)
             print(sql)
-        rows = cur.execute(sql).fetchall()
+        rows = cur.execute(sql).fetchall() , tableName
 
-        print('len rows = ', len(rows))
+        # print('len rows = ', len(rows))
         # if lengthOfRows <= rowLimit:
-        flatCandidates = list(chain.from_iterable(rows))
+
+        return rows
+
+    def flatten_rows(self, rowsObject):
+        flatCandidates = list(chain.from_iterable(rowsObject))
         rows = list(flatCandidates)
         print('length flattened rows ::: ', len(rows))
-
         return rows
 
     def autosuggest_gui(self, partialName, startQuery=3, colName=None):
@@ -54,11 +58,15 @@ class AutoSuggest_popup():
         # Parameter partialName is the 'name' as it is being inputted, keystroke-by-keystroke
         # startQuery is an integer on how many key strokes it takes to start the auto-suggester.
         print('IN autosuggest_GUI :.: ', partialName, self.tableName)
+        choices = [' ']
+        choices_list = []
         if colName:
             print('colName == ', colName)
             choices = self.auto_suggest(self.tableName, partialName, columnName=colName)
-        else:
-            print('No set colname! Normal function ...')
+            print('IN the tablename that is ;:', choices[1])
+            choices_list = self.flatten_rows(choices[0])
+        elif colName == 'storage':
+            print('! !STORAGE function ...')
             choices = self.auto_suggest(self.tableName, partialName)
         print(type(choices))
 
@@ -124,16 +132,29 @@ class AutoSuggest_popup():
                     continue
                 else:
                     input_text = text
-                if len(text) < len(partialName):
+                if len(text) >= 3:
                     choices = self.auto_suggest(self.tableName, text)
                     print('in line 110 - 112')
+                    print('auto trigger - - "text" longer than 3..& type choices == ', type(choices))
+                    #Test to see if choices is row or list
+                    if isinstance(choices[0], list):
+                        print("CHOICES 0 is list | ", choices[0][:5])
 
-                print('pressed key', values['-IN-'])
-                if len(text) >= len(partialName):
+                        for row in choices[0]:
+                            prediction_list.append(row[2])
+                        # prediction_list = [item[2] for item[2] in choices[0] if item.lower().find(text) != -1]
+                        prediction_list.pop(0)
+                        print('sample of pred list::: ', prediction_list[:5])
+                    else:
+                        print('choices is NOT a list||! but ', type(choices[0]))
+
+                print('pressed key;', values['-IN-'])
+                # if len(text) >= len(partialName):
                     # condition for activating the autosuggest feature.
-                    prediction_list = [item for item in choices if item.lower().find(text) != -1]
+                print('auto trigger - - "text" longer than partial name..')
+                candidate_list = [item for item in prediction_list if item.lower().find(text) != -1]
 
-                list_element.update(values=prediction_list)
+                list_element.update(values=candidate_list)
                 sel_item = 0
                 list_element.update(set_to_index=sel_item)
                 # if len(prediction_list) == 0:
@@ -228,5 +249,5 @@ class AutoSuggest_popup():
         window.Hide()
         window.close()
 # EXE section -- remember "taxonname"
-# ob = AutoSuggest_popup('taxonname')
-# ob.autosuggest_gui('')
+ob = AutoSuggest_popup('storage')
+ob.autosuggest_gui('')
