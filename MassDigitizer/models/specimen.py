@@ -15,15 +15,20 @@
 from datetime import datetime
 
 # Internal dependencies
+from models import model
 import data_access as db
 import global_settings as gs
 
-class specimen:
+class specimen(model.Model):
     # The specimen class is a representation of a specimen record to hold its data
     # Any instance is either an existing record in the database or transient pending an insert
 
     def __init__(self, collection_id):
-        # Set up blank specimen for data entry on basis of collection id 
+        """
+        Set up blank specimen record instance for data entry on basis of collection id 
+        """ 
+        self.table           = 'specimen'   
+        self.apiname         = 'collectionobject'
         self.id              = 0
         self.catalogNumber   = ''
         self.multiSpecimen   = 'False'
@@ -53,46 +58,12 @@ class specimen:
 
         self.loadPredefinedData()
     
-    def loadPredefinedData(self):
-        # Function for loading predefined data in order to get primary keys and other info to be pooled at selection in GUI 
-        self.storageLocations = db.getRowsOnFilters('storage', {'collectionid =': f'{self.collectionId}'})
-        self.prepTypes = db.getRowsOnFilters('preptype', {'collectionid =': f'{self.collectionId}'})
-        self.typeStatuses = db.getRowsOnFilters('typestatus', {'collectionid =': f'{self.collectionId}'})
-        self.geoRegions = db.getRowsOnFilters('georegion', {'collectionid =': f'{self.collectionId}'}) 
-        self.geoRegionSources = db.getRowsOnFilters('georegionsource', {'collectionid =': f'{self.collectionId}'}) 
-    
-    def save(self):
-        # Function telling instance to save its data either as a new record (INSERT) or updating an existing one (UPDATE)
-        # Data to be saved is retrieved from self as a dictionary with ->
-        #   the specimen table headers as 'keys' and the form field content as 'values'.        
-        # CONTRACT 
-        #   RETURNS database record 
-        
-        # Checking if Save is a novel record , or if it is updating existing record.
-        if self.id > 0:
-            # Record Id is not 0 therefore existing record to be updated 
-            print(' - Update specimen record with id: ', self.id)
-            record = db.updateRow('specimen', self.id, self.getFieldsAsDict())
-        else:
-            # Record Id is not 0 therefore existing record to be updated 
-            print(' - Insert new specimen record with id: ', self.id)
-            record = db.insertRow('specimen', self.getFieldsAsDict())
-            self.id = record['id']
-
-        return record
-
-    def load(self, id):
-        # Function for loading and populating instance from database record  
-        # CONTRACT 
-        #   id: Primary key of current record; If 0 then latest record   
-        
-        record = db.getRowOnId(id)
-        self.setFields(record)
-
     def setFields(self, record):
-        # Function for setting specimen data field from record 
-        # CONTRACT 
-        #   record: sqliterow object containing record data 
+        """
+        Function for setting base object data field from record 
+        CONTRACT 
+           record: sqliterow object containing record data 
+        """
         
         self.id = record['id']
         self.catalogNumber = record['catalognumber']
@@ -121,68 +92,6 @@ class specimen:
         self.exportUserId = record['exportuserid']
 
         self.loadPredefinedData()
-
-    def loadPrevious(self, id):
-        # Function for loading previous specimen record data 
-        # CONTRACT
-        #   id: Primary key of current record; If 0 then latest record    
-        #   RETURNS record or None, if none retrieved 
-
-        # Construct query for extracting the previous record 
-        sql = "SELECT * FROM specimen s " 
-        # If existing record (id > 0) then fetch the one that has the highest lower id than current 
-        if id > 0: 
-            sql = sql + f"WHERE s.id < {id} " 
-        # If blank record then fetch the one with the highest id 
-        sql = sql + " ORDER BY s.id DESC LIMIT 1 "        
-        print(sql)
-
-        # Fetch results from database
-        results = db.executeSqlStatement(sql)
-
-        # If results returned then pick first one, otherwise set record to nothing 
-        if len(results) > 0:
-            record = results[0]
-        else: 
-            record = None
-
-        # If record retrieved set fields 
-        if record:
-            self.setFields(record)
-        
-        # NOTE: If not record retrieved None is returned 
-        return record 
-
-    def loadNext(self, id):
-        # Function for loading next specimen record data, if any 
-        # CONTRACT
-        #   id: Primary key of current record; If 0 then latest record    
-        #   RETURNS record or None, if none retrieved 
-
-        # Construct query for extracting the previous record 
-        sql = "SELECT * FROM specimen s " 
-        # If existing record (id > 0) then fetch the one that has the lowest higher id than current 
-        if id > 0: 
-            sql = sql + f"WHERE s.id > {id} " 
-        # If blank record then fetch the one with the highest id 
-        sql = sql + " ORDER BY s.id LIMIT 1 "        
-        print(sql)
-
-        # Fetch results from database
-        results = db.executeSqlStatement(sql)
-
-        # If results returned then pick first one, otherwise set record to nothing 
-        if len(results) > 0:
-            record = results[0]
-        else: 
-            record = None
-
-        # If record retrieved set fields 
-        if record:
-            self.setFields(record)
-        
-        # NOTE: If not record retrieved None is returned 
-        return record 
 
     def getFieldsAsDict(self):
         # Generates a dictonary with database column names as keys and specimen records fields as values 
@@ -223,7 +132,6 @@ class specimen:
         self.setPrepTypeFields(record) # TODO 
         self.setTaxonNameFields(record)
         
-    
     def setListFields(self, fieldName, index):
         # Generic function for setting the respective list fields 
         if fieldName == 'cbxPrepType':
@@ -341,3 +249,11 @@ class specimen:
             self.storageId = -1
 
         return self.storageId 
+        
+    def loadPredefinedData(self):
+        # Function for loading predefined data in order to get primary keys and other info to be pooled at selection in GUI 
+        self.storageLocations = db.getRowsOnFilters('storage', {'collectionid =': f'{self.collectionId}'})
+        self.prepTypes = db.getRowsOnFilters('preptype', {'collectionid =': f'{self.collectionId}'})
+        self.typeStatuses = db.getRowsOnFilters('typestatus', {'collectionid =': f'{self.collectionId}'})
+        self.geoRegions = db.getRowsOnFilters('georegion', {'collectionid =': f'{self.collectionId}'}) 
+        self.geoRegionSources = db.getRowsOnFilters('georegionsource', {'collectionid =': f'{self.collectionId}'}) 

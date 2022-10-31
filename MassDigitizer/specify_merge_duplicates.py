@@ -13,9 +13,14 @@
 """
 
 from getpass import getpass
+from models.model import Model
 
 import specify_interface as sp
 import global_settings as gs 
+
+import models
+from models import taxon
+from models import collection as col
 
 gs.baseURL = 'https://specify-test.science.ku.dk/'
 
@@ -33,13 +38,6 @@ def merge(source_target_tuple_list, spusername, sppassword, collection_id):
         print(sp.mergeTaxa(source_taxon_id, target_taxon_id, token))
 
 def testcode():
-    # duplicate1 = (8888888,8888888)
-    # duplicate2 = (9999999,9999999)
-
-    # duplicate_list = [duplicate1, duplicate2]
-
-    # merge(duplicate_list,'fedor.steeman',input('password:'), 688130)
-
     max_tries = 10
     while max_tries > 0:
         token = sp.specifyLogin(input('Enter username: '), getpass('Enter password: '), 688130)
@@ -58,5 +56,94 @@ def testcode():
 
     print('exiting...')
 
+def main():
 
-testcode()
+    max_tries = 10
+
+    print('*** Specify Merge Duplicates ***')
+    collectionId = 0
+    token = sp.specifyLogin('test', 'testytest', collectionId) #input('Enter username: '), getpass('Enter password: '), collectionId)
+            
+    while max_tries > 0:
+        # 
+        print('Choose collection to scan: ')
+        print('1. Vascular Plants (688130)')
+        collIndex = "1" #input('?')
+        if collIndex == "1": 
+            collectionId = 688130
+        
+        collection = col.Collection(collectionId)
+        collection.fill(sp.getSpecifyObject('collection', collectionId, token), token)
+
+        print(f'Selection {collIndex}: {collection.spid}')
+        if collection.spid > 0:
+            if token != '': 
+                max_tries = 0
+                scan(collection, token)   
+            else:
+                print('Login failed...')
+                if input('Try again? (y/n)') == 'n' : break
+                max_tries = max_tries - 1
+        else: 
+            max_tries = max_tries - 1 
+            print('Attempts left: %i' % max_tries)
+    print('done')
+
+def scan(collection, token):
+    # 
+    print(f'Scanning {collection.spid} ...')
+
+    resultCount = -1    
+    offset = 0
+
+    # 
+    taxonranks = sp.getSpecifyObjects('taxontreedefitem', token, 100, 0,
+                                      {"treedef":str(collection.discipline.taxontreedefid)})
+
+    print(len(taxonranks))
+
+    # 
+    for rank in taxonranks:
+        
+        rankId = int(rank['rankid'])
+
+        # Only look at genera and below 
+        if rankId >= 180:
+            
+            resultCount = -1
+            while resultCount != 0:
+
+                print(f'RANK ID: {rankId}')
+
+                # Fetch batches from API
+                print(f'Fetching batch with offset: {offset}')
+                batch = sp.getSpecifyObjects('taxon', token, 100, offset, {'definition':'13', 'rankid':f'{rankId}'})
+                resultCount = len(batch)
+
+                print(f' - Fetched {resultCount} taxa')
+                for b in batch:             
+                    t = taxon.Taxon(collection.id)
+                    t.fill(b)
+                    #print(t)
+                    fullName = t.fullname.replace(' ','%20')
+                    taxonLookup = sp.getSpecifyObjects('taxon', token, 100000, 0, 
+                        {'definition':'13', 'rankid':f'{rankId}', 'fullname':f'{fullName}'})
+
+                    for tl in taxonLookup:
+                        if tl['id'] != t.id:
+                            print('Duplicate detected!')
+                            
+                            d = taxon.Taxon(collection.id)
+                            d.fill(tl)
+
+                            print(f' - original : "{t}"')
+                            print(f' - duplicate : "{d}"')
+
+
+                #if resultCount == 0: break
+                offset += 100
+                #if input('next batch (y/n)?') == 'n': resultCount = 0
+
+#testcode()
+
+main()
