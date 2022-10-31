@@ -3,16 +3,18 @@ import data_access as db
 from itertools import chain
 # import additional_popup
 import tkinter as tk
+import itertools
 
 class AutoSuggest_popup():
 
     startQueryLimit = 3
-    
+    lfList = []
+
     def __init__(self, table):
         # self.startQuery = startQueryLimit
         self.tableName = table
         self.popped = False
-        self.prediction_list = []
+        self.candidateNamesList = []
 
     def __exit__(self, exc_type, exc_value, traceback):
         print("\nInside __exit__")
@@ -24,17 +26,21 @@ class AutoSuggest_popup():
          returns: a list of names
          TODO implement 'taxonTreeDefid' at convienient time.
         """
+        responseType = ''
+
         cur = db.getDbCursor()
         if self.tableName == 'taxonname' and columnName == 'fullname':
             print('just taxon name')
-            sql = f"SELECT fullname FROM {tableName} WHERE {columnName} LIKE lower('% {name}%') OR {columnName} LIKE lower('{name}%');"
+            sql = f"SELECT * FROM {tableName} WHERE {columnName} LIKE lower('% {name}%') OR {columnName} LIKE lower('{name}%');"
 
         elif self.tableName == 'taxonname' and columnName == 'parentfullname':
             print("INNN PPPPPARRRRRRRRENTT")
-            sql = f"SELECT DISTINCT {columnName} FROM {tableName} WHERE {columnName} LIKE lower('{name}%')"
+            sql = f"SELECT DISTINCT {columnName} AS parentfullname FROM {tableName} WHERE {columnName} LIKE lower('{name}%')"
             print('--------------',sql,'----')
+            responseType = 'taxon'
         else:
             sql =f"SELECT * FROM storage WHERE name LIKE '{name}%'"
+            responseType = 'storage'
         
         if taxDefItemId:
             sql = sql[:-1]
@@ -45,7 +51,7 @@ class AutoSuggest_popup():
         # print('len rows = ', len(rows))
         # if lengthOfRows <= rowLimit:
 
-        return rows
+        return rows, responseType
 
     def flatten_rows(self, rowsObject):
         flatCandidates = list(chain.from_iterable(rowsObject))
@@ -91,6 +97,10 @@ class AutoSuggest_popup():
 
         list_element: sg.Listbox = window.Element('-BOX-')  # store listbox element for easier access and to get to docstrings
         prediction_list, input_text, sel_item = choices, "", 0
+        #cREATE A dict with name as key and the record as value
+        # header = choices[0].keys()
+        # pList =
+        print("choices øøøøø : ",choices, len(choices))
         window['-IN-'].update(partialName)
         window.write_event_value('-IN-', partialName)
 
@@ -98,6 +108,7 @@ class AutoSuggest_popup():
 
             window['txtHiTax'].bind('<FocusIn>', '+INPUT FOCUS+')
             event, values = window.read()
+
             if event is None:
                 break
             # window.bind('<Key>', 'keyPress')
@@ -111,11 +122,13 @@ class AutoSuggest_popup():
             elif event.startswith('Escape'):
                 window['-IN-'].update('')
                 window['-BOX-CONTAINER-'].update(visible=False)
-            elif event.startswith('Down') and len(prediction_list):
-                sel_item = (sel_item + 1) % len(prediction_list)
+
+            elif event.startswith('Down') or '16777235' and len(self.candidateNamesList):
+                print('pressed down &', len(self.candidateNamesList))
+                sel_item = (sel_item + 1) % len(self.candidateNamesList)
                 list_element.update(set_to_index=sel_item, scroll_to_index=sel_item)
-            elif event.startswith('Up') and len(prediction_list):
-                sel_item = (sel_item + (len(prediction_list) - 1)) % len(prediction_list)
+            elif event.startswith('Up') and len(self.candidateNamesList):
+                sel_item = (sel_item + (len(self.candidateNamesList) - 1)) % len(self.candidateNamesList)
                 list_element.update(set_to_index=sel_item, scroll_to_index=sel_item)
 
 
@@ -123,10 +136,11 @@ class AutoSuggest_popup():
                 print('pressed TAB')
                 break
                 window.close()
-
+##event IN #####################
             elif event == '-IN-':
                 # this concerns all keystrokes except the above ones.
                 text = values['-IN-'].lower()
+
 
                 if text == input_text:
                     continue
@@ -134,27 +148,46 @@ class AutoSuggest_popup():
                     input_text = text
                 if len(text) >= 3:
                     choices = self.auto_suggest(self.tableName, text)
+                    # print('len(choices) & type ::: ', choices[1], len(choices[0][0]), choices)
+                    candidates = choices[0][0]
+                    candidateType = choices[1]
+                    print(f"the candidate type is: {candidateType}")
                     print('in line 110 - 112')
                     print('auto trigger - - "text" longer than 3..& type choices == ', type(choices))
                     #Test to see if choices is row or list
-                    if isinstance(choices[0], list):
-                        print("CHOICES 0 is list | ", choices[0][:5])
-
+                    if candidateType == 'storage':
+                        print("CANDIDATES len | ", len(candidates))
+                        # nm = choices[0][0][2]
+                        header = candidates[0].keys()
+                        storageName = header[2]
+                        print(storageName)
+                        rowDict = {}
+                        for row in candidates:
+                            # print("row @ name ;;", len(row), row['name'])
+                            particularRow = dict(row)
+                            rowDict[row['name']] = particularRow
+                            # print(dict(row[0]))
+                        self.candidateNamesList = list(rowDict.keys())
+                        print("rowDict.keys())", rowDict.keys())
+                        # print("row shelf 7 :;:; ", rowDict['Shelf 7'])
+                        print('FIRST row = ', dict(itertools.islice(rowDict.items(), 3)))
                         for row in choices[0]:
                             prediction_list.append(row[2])
                         # prediction_list = [item[2] for item[2] in choices[0] if item.lower().find(text) != -1]
                         prediction_list.pop(0)
-                        print('sample of pred list::: ', prediction_list[:5])
+                        print('sample of candidate names list::: ', self.candidateNamesList)
                     else:
                         print('choices is NOT a list||! but ', type(choices[0]))
 
                 print('pressed key;', values['-IN-'])
                 # if len(text) >= len(partialName):
                     # condition for activating the autosuggest feature.
-                print('auto trigger - - "text" longer than partial name..')
-                candidate_list = [item for item in prediction_list if item.lower().find(text) != -1]
+                print('auto trigger - - "text" longer than partial name..\n',type(self.candidateNamesList), self.candidateNamesList[0:4])
+                print("input text ------------ ", text, input_text)
+                candidate_list = [item for item in self.candidateNamesList if item.find(text) != -1]
+                print('camdidate lust: ', self.candidateNamesList)
 
-                list_element.update(values=candidate_list)
+                list_element.update(values=self.candidateNamesList)
                 sel_item = 0
                 list_element.update(set_to_index=sel_item)
                 # if len(prediction_list) == 0:
@@ -194,6 +227,8 @@ class AutoSuggest_popup():
                         window[event].update(value ='')
                         prediction_list.append(' ')
                     textInput = values[event]
+
+##event IN #####################
                     # prediction_list.append(textInput)
                     # window['-IN-'].update(background_color='red') DISABLE below resets the background color - sorry
                     # window['-IN-'].update(disabled=True)
@@ -234,8 +269,10 @@ class AutoSuggest_popup():
                     boxVal = values['-BOX-']
 
                     response = boxVal[0]
+                    currentRecord = rowDict[response]
                     print('===============Selected boxvalue is -/- ', response)
-                    return response
+                    print('rrrrrrrrrrrrrrrrrretrurned record  ', currentRecord)
+                    return response, currentRecord
 
                     # records = db.getRowsOnFilters(f'{self.tableName}',{'fullname': f'="{boxVal[0]}"'})
                     #
