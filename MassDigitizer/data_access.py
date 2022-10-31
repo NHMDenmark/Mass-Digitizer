@@ -42,11 +42,11 @@ def __init__(self,databaseName='db', do_in_memory=False):
     #   do_in_memory (boolean): Whether the database file should be run in-memory 
 
     self.set_database(databaseName)
-    print('Initializing with db file: %s ...'%self.dbFilePath)
+    #print('Initializing with db file: %s ...'%self.dbFilePath)
     connection = sqlite3.connect(self.dbFilePath)
     
     if gs.db_in_memory == True or do_in_memory == True:
-        print(' - running database in-memory')
+        #print(' - running database in-memory')
         # Read database to tempfile
         tempfile = StringIO()
         for line in connection.iterdump():
@@ -80,7 +80,7 @@ def getDbCursor():#do_in_memory=False):
     # CONTRACT
     #   TODO: do_in_memory (boolean): Whether the database file should be run in-memory 
     #   RETURNS database cursor object 
-    print('Connecting to db file: %s ...'%dbFilePath)
+    #print('Connecting to db file: %s ...'%dbFilePath)
 
     # Connect to database file. On error, try alternative location assuming OneDrive user
     try:
@@ -92,7 +92,7 @@ def getDbCursor():#do_in_memory=False):
     # TODO Momentarily deactivated, perhaps redundant 
     #gs.db_in_memory = do_in_memory # apply in-memory flag to global  
     if gs.db_in_memory == True:
-        print(' - running database in-memory')
+        #print(' - running database in-memory')
         # Read database to tempfile
         tempfile = StringIO()
         for line in connection.iterdump():
@@ -110,7 +110,7 @@ def getDbCursor():#do_in_memory=False):
 
     connection.row_factory = sqlite3.Row # Enable column access by name: row['column_name']
     cursor = connection.cursor()
-    print('Connection established')
+    #print('Connection established')
     return cursor
 
 def getRows(tableName, limit=100, sortColumn=None):
@@ -121,7 +121,7 @@ def getRows(tableName, limit=100, sortColumn=None):
     #   sortColumn (String) : The column to sort the rows on, if any 
     #   RETURNS table rows (list)
     currentCursor = getDbCursor()        
-    print('Get all rows from table "{%s}" ...' % tableName)
+    #print('Get all rows from table "{%s}" ...' % tableName)
 
     sqlString = f'SELECT * FROM {tableName}' 
     
@@ -133,7 +133,7 @@ def getRows(tableName, limit=100, sortColumn=None):
 
     records = currentCursor.execute(sqlString).fetchall()
     
-    print(f'Found {len(records)} records ')
+    #print(f'Found {len(records)} records ')
     
     currentCursor.connection.close()
     
@@ -151,9 +151,9 @@ def getRowsOnFilters(tableName, filters, limit=10000):
     #             Numbers should be formatted as strings 
     #   RETURNS table rows as list
     currentCursor = getDbCursor()   
-    print(f'-> getRowsONFilter({tableName}, {filters}, {limit})')
+    #print(f'-> getRowsONFilter({tableName}, {filters}, {limit})')
     sqlString = 'SELECT * FROM %s ' % tableName
-    print('    - ', sqlString)
+    #print('    - ', sqlString)
     if filters.items():
         sqlString += "WHERE "
         for key, value in filters.items():
@@ -161,7 +161,7 @@ def getRowsOnFilters(tableName, filters, limit=10000):
     sqlString = sqlString[0:len(sqlString)-4] # Remove trailing " AND "
     if limit > 0:
         sqlString += f' LIMIT {limit}'
-    print(sqlString)
+    #print(sqlString)
     try:
         records = currentCursor.execute(sqlString).fetchall()
     # If no records in results, insert an empty dummy row to prevent errors
@@ -175,7 +175,7 @@ def getRowsOnFilters(tableName, filters, limit=10000):
     return records
 
 def getRowOnId(tableName, id):
-    # Getting specific row from the table specified by name using its primary key (id)  
+    # Getting specific row from the table specified by its primary key (id)  
     # CONTRACT 
     #   tableName (String): The name of the table to be queried
     #   id (Integer) : The primary key of the row to be returned
@@ -186,6 +186,19 @@ def getRowOnId(tableName, id):
 
     return record
 
+def deleteRowOnId(tableName, id):
+    """
+    Deleting specific row from the table specified by its primary key (id)  
+    CONTRACT 
+       tableName (String): The name of the table to be queried
+       id (Integer) : The primary key of the row to be returned
+    """
+    currentCursor = getDbCursor()
+    print(f'DELETE FROM {tableName} WHERE id = {id};')   
+    currentCursor.execute(f'DELETE FROM {tableName} WHERE id = {id};')
+    currentCursor.connection.commit()
+    currentCursor.connection.close()
+
 def getMaxRow(tableName):
     # Get the row from the specified table with the highest primary key (id) 
     # CONTRACT 
@@ -195,7 +208,7 @@ def getMaxRow(tableName):
     sql = f'SELECT MAX({tableName}.id) FROM {tableName};'
     record = currentCursor.execute(sql).fetchone()
     currentCursor.connection.close()
-    print(f'record: {record}')
+    #print(f'record: {record}')
     return record
 
 def executeSqlStatement(sql):
@@ -254,7 +267,7 @@ def insertRow(tableName, fields):
     finSql = '","'.join(sqlValues)
     finSql = '"'+finSql+'")'
     finSql = sqlString+finSql
-    print(' -> ', finSql)
+    #print(' -> ', finSql)
 
     # sqlString += str(formattedSql) + ','
     # sqlList = ['"' + item + '",' for item in sqlValues]
@@ -292,14 +305,14 @@ def updateRow(tableName, recordID, values, where='', sqlString=None):
             try:
                 val = values[key]
                 val = val.replace('"', '')
-                print(val)
+                #print(val)
                 val = '"'+val+'"'
-                print('new val:', val)
+                #print('new val:', val)
                 sqlString = f"{key} = {val}, "
                 sqlStringAppend.append(sqlString)
 
             except AttributeError:
-                print('ATTRIBUTE ERRRORRRRRR')
+                #print('ATTRIBUTE ERRRORRRRRR')
                 sqlStringAppend.append(values[key])
         sqlStringLastPart = " WHERE id = {}".format(recordID)
         try:
@@ -309,12 +322,12 @@ def updateRow(tableName, recordID, values, where='', sqlString=None):
             sqlAdd = sqlAdd[:-2]
 
             sqlStringFinal = sqlStringPrepend+' '+sqlAdd+sqlStringLastPart
-            print('FINAL SQL is : ', sqlStringFinal)
+            #print('FINAL SQL is : ', sqlStringFinal)
         except TypeError:
-            print('IN sql build except typeError!')
+            #print('IN sql build except typeError!')
             sqlStringFinal = ','.join(map(str, sqlStringAppend))
 
-        print('SQL going into execute: ', sqlStringFinal)
+        #print('SQL going into execute: ', sqlStringFinal)
 
     currentCursor.execute(sqlStringFinal)
     currentCursor.connection.commit()

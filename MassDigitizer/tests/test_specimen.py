@@ -23,6 +23,7 @@ TESTDATAPATH = Path(__file__).parent
 
 import models.specimen as collobj
 
+# Create blank specimen record instance 
 specimenObject = collobj.specimen(29)
 predefData = None
 
@@ -63,7 +64,6 @@ def test_prepType():
 def test_specimen_global():
     catalogNumber = set_specimen_global()
     assert (catalogNumber == 951754)
-
 
 def test_georegions():
     geoList = []
@@ -117,3 +117,57 @@ def test_load_previous():
 def test_length_previous():
     res = specimenObject.loadPrevious(30)
     assert len(res) == 26
+
+def test_save_load_delete():
+
+    specimenSaved = False
+    specimenLoaded = False 
+    specimenIdLoaded = False
+    specimenUpdated = False
+
+    # 
+    initialCatalogNumber = '12345678'
+    specimenObject.catalogNumber = initialCatalogNumber
+    specimenObject.save()
+    savedSpecimenId = specimenObject.id
+    if savedSpecimenId > 0: 
+        specimenSaved = True
+    else: assert False 
+
+    # Test whether initial catalog number was saved and is re-loaded
+    specimenObject.catalogNumber = ''
+    specimenObject.load(savedSpecimenId)
+    if specimenObject.catalogNumber == initialCatalogNumber:
+        specimenLoaded = True
+    else: assert False
+
+    # Test whether Id is loaded 
+    if specimenObject.id == savedSpecimenId & specimenObject.id > 0: 
+        specimenIdLoaded = True
+    else: assert False 
+
+    # Test whether changes are updated 
+    newCatalogNumber = '87654321'
+    specimenObject.catalogNumber = newCatalogNumber
+    specimenObject.save()
+    specimenObject.catalogNumber = ''
+    specimenObject.load(savedSpecimenId)
+    if specimenObject.catalogNumber == newCatalogNumber:
+        specimenUpdated = True
+    else: assert False
+
+    # Clean up record 
+    specimenObject.delete()
+    newSpecimenObject = collobj.specimen(29)
+    # 
+    newSpecimenObject.load(savedSpecimenId)
+    if newSpecimenObject.catalogNumber == '':
+        specimenDeleted = True
+    else: assert False
+
+    assert specimenSaved and specimenLoaded and specimenIdLoaded and specimenUpdated and specimenDeleted
+
+
+
+
+

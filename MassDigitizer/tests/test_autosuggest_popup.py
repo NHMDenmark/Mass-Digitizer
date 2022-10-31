@@ -50,7 +50,7 @@ def test_taxonname_auto_suggest():
     assert found
 
 def test_taxonname_auto_suggest():
-
+    # TODO 
     choices = aspStorage.auto_suggest(aspStorage.tableName, 'Box', 'fullname')
 
     found = False 
