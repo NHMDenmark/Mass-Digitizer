@@ -68,11 +68,11 @@ class specimen(model.Model):
     
     def setFields(self, record):
         """
-        Function for setting object data field from record 
+        Function for setting specimen data field from record 
         CONTRACT 
-           record: sqliterow object containing record data 
+           record: sqliterow object containing specimen record data 
         """
-        
+        #model.Model.setFields(self, record)
         self.id = record['id']
         self.catalogNumber = record['catalognumber']
         self.multiSpecimen = record['multispecimen']
@@ -102,8 +102,11 @@ class specimen(model.Model):
         self.loadPredefinedData()
 
     def getFieldsAsDict(self):
-        # Generates a dictonary with database column names as keys and specimen records fields as values 
-        # RETURNS said dictionary for passing on to data access handler 
+        """
+        Generates a dictonary with database column names as keys and specimen records fields as values 
+        RETURNS said dictionary for passing on to data access handler 
+        """
+        
         fieldsDict = {
                 'catalognumber':'"%s"' % self.catalogNumber , # TODO "{}".format(var...)
                 'multispecimen':'"%s"' % self.multiSpecimen ,
