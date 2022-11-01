@@ -31,32 +31,58 @@ class Taxon(model.Model):
         model.Model.__init__(self, collection_id)
         self.table     = 'taxon'
         self.sptype    = 'taxon'
-        self.rankid    = 0
         self.author    = ''
+        self.rankid    = 0
         self.parentid  = 0
 
         self.institutionId   = gs.institutionId #db.getRowOnId('collection',collection_id)['institutionid']
         self.collectionId    = collection_id
 
-    # Base functions covered in [Model] parent class 
-    #def save(self): pass
-    #def load(self, id): pass
-    #def loadPrevious(self, id): pass
-    #def loadNext(self, id): pass
-    
-    def setFields(self, record):
-        pass
-
     def getFieldsAsDict(self):
-        pass
-    
+        """
+        Generates a dictonary with database column names as keys and specimen records fields as values 
+        RETURNS said dictionary for passing on to data access handler 
+        """
+        
+        fieldsDict = {
+                'spid':f'"{self.spid}"', 
+                'guid':f'"{self.guid}"',
+                'name':f'"{self.name}"',
+                'fullname':f'"{self.fullname}"',
+                'author':f'"{self.author}"',
+                'remarks':f'"{self.remarks}"',
+                'rankid':f'"{self.rankid}"',
+                'parentid':f'"{self.parentid}"',
+                }
+        
+        return fieldsDict
+     
+    def setFields(self, record):
+        """
+        Function for setting specimen data field from record 
+        CONTRACT 
+           record: sqliterow object containing specimen record data 
+        """
+        #model.Model.setFields(self, record)
+        self.id = record['id']
+        self.spid = record['spid']
+        self.guid = record['guid']
+        self.name = record['name']
+        self.fullname = record['fullname']
+        self.author = record['author']
+        self.remarks = record['remarks']
+        self.rankid = record['rankid']        
+        self.parentid = record['parentid']
+        self.parent = None
+   
     def fill(self, specifyObject):
-        self.id = specifyObject['id']
+        self.spid = specifyObject['id'] # NOTE The 'id' of the Specify Object corresponds to the 'spid' field in the local app db
+        self.guid = specifyObject['guid']
         self.name = specifyObject['name']
         self.fullname = specifyObject['fullname']
-        self.rankid = specifyObject['rankid']
         self.author = specifyObject['author']
-        
+        self.remarks = specifyObject['remarks']
+        self.rankid = specifyObject['rankid']        
         self.parentid = specifyObject['parent'].split('/')[4]
         self.parent = None
 
@@ -69,7 +95,7 @@ class Taxon(model.Model):
         return self.parent 
 
     def getParentage(self, token):
-        # 
+        # Recursive function for constructing the entire parent sequence down to "Life"
         done = False 
         current = self 
         while done != True: 

@@ -43,7 +43,7 @@ def test_taxonname_auto_suggest():
 
     found = False 
     for c in choices:
-      print(c)
+      #print(c)
       if c == 'Poa pratensis': found = True 
       break
 
@@ -55,7 +55,7 @@ def test_taxonname_auto_suggest():
 
     found = False 
     for c in choices:
-      print(c)
+      #print(c)
       if c == 'Natural History Museum of Denmark | Priorparken | Herbarium C: Danish Vascular Plant Collection | Box 1': 
         found = True 
         break

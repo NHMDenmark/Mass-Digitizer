@@ -261,8 +261,3 @@ def mergeTaxa(source_id, target_id, csrftoken):
   else: 
     object = Empty
   return object  
-
-
-
-#util.clear()
-#getInitialCollections()

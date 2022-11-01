@@ -12,49 +12,16 @@
   PURPOSE: Automate merging duplicates through the Specify API 
 """
 
+import time 
 from getpass import getpass
-from models.model import Model
 
 import specify_interface as sp
 import global_settings as gs 
-
-import models
+from models.model import Model
 from models import taxon
 from models import collection as col
 
 gs.baseURL = 'https://specify-test.science.ku.dk/'
-
-def merge(source_target_tuple_list, spusername, sppassword, collection_id):
-    # TODO function contract   
-    # 
-
-    token = sp.specifyLogin(spusername, sppassword, collection_id)
-    if token == '': return 'Authentication error!'
-    
-    for duplicate in source_target_tuple_list: 
-        source_taxon_id = duplicate[0]
-        target_taxon_id = duplicate[1]
-        print('merging %s with %s ...'%(source_taxon_id, target_taxon_id))
-        print(sp.mergeTaxa(source_taxon_id, target_taxon_id, token))
-
-def testcode():
-    max_tries = 10
-    while max_tries > 0:
-        token = sp.specifyLogin(input('Enter username: '), getpass('Enter password: '), 688130)
-        if token != '': break
-        else:
-            print('Login failed...')
-            if input('Try again? (y/n)') == 'n': break
-        max_tries = max_tries - 1
-        print('Attempts left: %i' % max_tries)
-
-    if token != '':
-        source_taxon_id = input('enter source taxon id:')
-        target_taxon_id = input('enter target taxon id:')
-
-        sp.mergeTaxa(source_taxon_id, target_taxon_id, token)
-
-    print('exiting...')
 
 def main():
 
@@ -67,7 +34,7 @@ def main():
         print('1. Vascular Plants (688130)')
         
         collectionId = 0
-        collIndex = input('?')
+        collIndex = "1" #input('?')
         if collIndex == "1": 
             collectionId = 688130
         else: break 
@@ -98,6 +65,8 @@ def scan(collection, token):
 
     resultCount = -1    
     offset = 0
+    limit = 100
+    ambivalentCases = {}
 
     # 
     taxonranks = sp.getSpecifyObjects('taxontreedefitem', token, 100, 0,
@@ -112,45 +81,108 @@ def scan(collection, token):
         print(f'RANK ID: {rankId}')
                 
         # Only look at genera and below 
-        if rankId >= 180:
-            
+        if rankId >= 220:
+            offset = 0
             resultCount = -1
             while resultCount != 0:
 
                 # Fetch batches from API
                 print(f'Fetching batch with offset: {offset}')
-                batch = sp.getSpecifyObjects('taxon', token, 100, offset, {'definition':'13', 'rankid':f'{rankId}'})
+                batch = sp.getSpecifyObjects('taxon', token, limit, offset, {'definition':'13', 'rankid':f'{rankId}'})
                 resultCount = len(batch)
 
                 print(f' - Fetched {resultCount} taxa')
-                for b in batch:             
-                    t = taxon.Taxon(collection.id)
-                    t.fill(b)
-                    #print(t)
-                    fullName = t.fullname.replace(' ','%20')
+                for b in batch:
+                    print('.', end='')             
+                    original = taxon.Taxon(collection.id)
+                    original.fill(b)
+                    #print(original)
+                    fullName = original.fullname.replace(' ','%20')
+
+                    # Look up taxa with matching fullname & rank
                     taxonLookup = sp.getSpecifyObjects('taxon', token, 100000, 0, 
-                        {'definition':'13', 'rankid':f'{rankId}', 'fullname':f'{fullName}'})
+                        {'definition':'13', 'rankid':f'{rankId}', 'fullname':f'{fullName}'}) #, 'parent':f'{original.parentid}'})
 
                     for tl in taxonLookup:
-                        if tl['id'] != t.id:
-                            print('Duplicate detected!')
-                            
-                            d = taxon.Taxon(collection.id)
-                            d.fill(tl)
+                        # Iterate taxon with 
+                        lookup = taxon.Taxon(collection.id)
+                        lookup.fill(tl)
 
-                            print(f' - original : "{t}"')
-                            print(f' - duplicate : "{d}"')
+                        # If the looked up taxon isn't the same record (as per 'id') then treat as potential duplicate 
+                        if lookup.id != original.id:
+
+                            # If the parents match then treat as duplicate 
+                            if lookup.parentid == original.parentid:
+                                print('Duplicate detected!')
+                                print(f' - original : "{original}"')
+                                print(f' - duplicate : "{lookup}"')
+                                
+                                # Reset variables for weighting the two candidates for merging 
+                                originalWeight  = 0
+                                duplicateWeight = 0
+
+                                # If original author is empty, but lookup author isn't, then weight lookup higher
+                                if original.author == None and lookup.author is not None: 
+                                    duplicateWeight += 1
+                                # TODO more weighting rules ? 
+                                
+                                # If both original and lookup contain author data: Add to ambivalent cases 
+                                if original.author is not None and lookup.author is not None: 
+                                    # TODO double check 
+                                    original.remarks += ' | Ambivalent duplicate | '
+                                    ambivalentCases.append(original)
+                                    lookup.remarks += ' | Ambivalent duplicate | '
+                                    ambivalentCases.append(lookup)
+                                else: 
+                                    # Prepare for merging by resetting target & source before evaluation 
+                                    target = None
+                                    source = None
+                                    # Determine target and source taxon record as based on weighting 
+                                    if duplicateWeight > originalWeight: 
+                                        # Prefer looked up duplicate over original 
+                                        target = lookup
+                                        source = original 
+                                    else: 
+                                        # Prefer original 
+                                        target = original
+                                        source = lookup 
+
+                                    # Merge taxa 
+                                    if target is not None and source is not None: 
+                                        # Stop latch for user interaction 
+                                        if input(f'Do you want to merge {source.id} with {target.id} (y/n)?') == 'y':
+                                            # Do the actual merging 
+                                            start = time.time()
+                                            sp.mergeTaxa(source.id, target.id, token)
+                                            end = time.time()
+                                            timeElapsed = end - start
+                                            print(f'Merged {source.id} with {target.id}; Time elapsed: {timeElapsed} ')
+                            else:
+                                # Found taxa with matching names, but different parents: Add to ambivalent cases 
+                                # TODO double check 
+                                original.remarks += ' | Ambivalent duplicate | '
+                                ambivalentCases.append(original)
+                                lookup.remarks += ' | Ambivalent duplicate | '
+                                ambivalentCases.append(lookup)
 
                 # Escape hatch
-                if input('next batch (y/n)?') == 'n': 
-                    resultCount = 0
-                    break
+                # if input('next batch (y/n)?') == 'n': 
+                #     resultCount = 0
+                #     break
+                print()
 
-                offset += 100
+                offset += limit
     
             # Escape hatch
+            print()
             if input('next rank (y/n)?') == 'n': break
+    
+    # Handle Ambivalent cases 
+    print('Handle ambivalent cases...')
+    for case in ambivalentCases: 
+        print(' - ', case)
+        #case.save()
 
-#testcode()
+
 
 main()
