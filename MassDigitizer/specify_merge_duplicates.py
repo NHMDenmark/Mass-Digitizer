@@ -25,7 +25,7 @@ from models import collection as col
 gs.baseURL = 'https://specify-test.science.ku.dk/'
 
 def merge(source_target_tuple_list, spusername, sppassword, collection_id):
-    #TODO function contract   
+    # TODO function contract   
     # 
 
     token = sp.specifyLogin(spusername, sppassword, collection_id)
@@ -61,17 +61,20 @@ def main():
     max_tries = 10
 
     print('*** Specify Merge Duplicates ***')
-    collectionId = 0
-    token = sp.specifyLogin('test', 'testytest', collectionId) #input('Enter username: '), getpass('Enter password: '), collectionId)
-            
+    
     while max_tries > 0:
-        # 
         print('Choose collection to scan: ')
         print('1. Vascular Plants (688130)')
-        collIndex = "1" #input('?')
+        
+        collectionId = 0
+        collIndex = input('?')
         if collIndex == "1": 
             collectionId = 688130
-        
+        else: break 
+
+        token = sp.specifyLogin(input('Enter username: '), getpass('Enter password: '), collectionId)
+
+        # 
         collection = col.Collection(collectionId)
         collection.fill(sp.getSpecifyObject('collection', collectionId, token), token)
 
@@ -106,14 +109,13 @@ def scan(collection, token):
     for rank in taxonranks:
         
         rankId = int(rank['rankid'])
-
+        print(f'RANK ID: {rankId}')
+                
         # Only look at genera and below 
         if rankId >= 180:
             
             resultCount = -1
             while resultCount != 0:
-
-                print(f'RANK ID: {rankId}')
 
                 # Fetch batches from API
                 print(f'Fetching batch with offset: {offset}')
@@ -139,10 +141,15 @@ def scan(collection, token):
                             print(f' - original : "{t}"')
                             print(f' - duplicate : "{d}"')
 
+                # Escape hatch
+                if input('next batch (y/n)?') == 'n': 
+                    resultCount = 0
+                    break
 
-                #if resultCount == 0: break
                 offset += 100
-                #if input('next batch (y/n)?') == 'n': resultCount = 0
+    
+            # Escape hatch
+            if input('next rank (y/n)?') == 'n': break
 
 #testcode()
 

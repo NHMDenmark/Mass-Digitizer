@@ -27,6 +27,7 @@ class specimen(model.Model):
         """
         Set up blank specimen record instance for data entry on basis of collection id 
         """ 
+        model.Model.__init__(self, collection_id)
         self.table           = 'specimen'   
         self.apiname         = 'collectionobject'
         self.id              = 0
@@ -56,11 +57,18 @@ class specimen(model.Model):
         self.exportDateTime  = ''
         self.exportUserId    = ''
 
+        # Predefined data fields
+        self.storageLocations = None 
+        self.prepTypes = None 
+        self.typeStatuses = None 
+        self.geoRegions = None 
+        self.geoRegionSources = None 
+
         self.loadPredefinedData()
     
     def setFields(self, record):
         """
-        Function for setting base object data field from record 
+        Function for setting object data field from record 
         CONTRACT 
            record: sqliterow object containing record data 
         """

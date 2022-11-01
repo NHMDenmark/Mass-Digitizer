@@ -32,6 +32,8 @@ class Model:
         self.sptype   = 'model' # NOTE not represented in Specify API
         self.id       = 0
         self.spid     = 0 
+        self.guid     = ''
+        self.code     = ''
         self.name     = ''
         self.fullname = ''
     
@@ -167,7 +169,7 @@ class Model:
         """
         pass
     
-    def get(self, token, id=0):
+    def fetch(self, token, id=0):
         """
         Generic function for fetching a data record from Specify API and passing it to the fill(...)-function
         CONTRACT 
@@ -204,6 +206,13 @@ class Model:
         Generic function for recursively fetching the entire parentage tree for current instance 
         NOTE Implemented in inheriting classes 
         """        
+        pass
+
+    def loadPredefinedData(self):
+        """
+        Function for loading predefined data in order to get primary keys and other info to be pooled at selection in GUI 
+        NOTE Implemented in inheriting classes 
+        """
         pass
 
     def __str__ (self):

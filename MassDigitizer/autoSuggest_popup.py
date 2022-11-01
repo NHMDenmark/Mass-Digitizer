@@ -32,7 +32,7 @@ class AutoSuggest_popup():
         if self.tableName == 'taxonname' and columnName == 'fullname':
             print('just taxon name')
             sql = f"SELECT * FROM {tableName} WHERE {columnName} LIKE lower('% {name}%') OR {columnName} LIKE lower('{name}%');"
-
+        # SELECT * FROM {tableName} WHERE {columnName} LIKE lower('%{name}%')
         elif self.tableName == 'taxonname' and columnName == 'parentfullname':
             print("INNN PPPPPARRRRRRRRENTT")
             sql = f"SELECT DISTINCT {columnName} AS parentfullname FROM {tableName} WHERE {columnName} LIKE lower('{name}%')"
