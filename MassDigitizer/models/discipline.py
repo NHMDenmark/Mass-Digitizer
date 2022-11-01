@@ -23,14 +23,11 @@ import specify_interface as sp
 class Discipline(model.Model):
     "Class representing ... "
 
-    def __init__(self, collectionId) -> None:
+    def __init__(self, collection_id) -> None:
         # Set up blank record 
+        model.Model.__init__(self, collection_id)
         self.table   = 'discipline'
         self.sptype  = 'discipline'
-        self.spid = 0
-        self.id = 0
-        self.name = ''
-        self.fullname = ''
         self.taxontreedefid = 0
 
     def fill(self, specifyObject):

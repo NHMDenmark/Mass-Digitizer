@@ -27,13 +27,10 @@ class Taxon(model.Model):
     """
 
     def __init__(self, collection_id):
-        """Set up blank taxon""" 
-        
+        """Set up blank taxon"""         
+        model.Model.__init__(self, collection_id)
         self.table     = 'taxon'
         self.sptype    = 'taxon'
-        self.id        = 0
-        self.name      = ''
-        self.fullname  = ''
         self.rankid    = 0
         self.author    = ''
         self.parentid  = 0
