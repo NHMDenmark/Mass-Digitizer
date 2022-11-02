@@ -33,26 +33,6 @@ class AutoSuggest_popup():
     def __exit__(self, exc_type, exc_value, traceback):
         print("\nInside __exit__")
 
-    # def responsePacker(self, nameList):
-    #     # if candidateType == 'storage':
-    #     print("CANDIDATES len | ", len(nameList))
-    #     # nm = choices[0][0][2]
-    #     header = nameList.keys()
-    #     storageName = header[2]
-    #     print(storageName)
-    #
-    #     for row in nameList:
-    #         print("row @ name ;;", len(row), row['name'])
-    #         particularRow = dict(row)
-    #         self.rowDict[row['name']] = particularRow
-    #         # print(dict(row[0]))
-    #     self.candidateNamesList = list(self.rowDict.keys())
-    #     print("rowDict.keys())", self.rowDict.keys())
-    #     print("candidateNamesList - - - ", self.candidateNamesList[-5:])
-    #     # print("row shelf 7 :;:; ", rowDict['Shelf 7'])
-    #     print('FIRST row = ', dict(itertools.islice(self.rowDict.items(), 3)))
-    #     return self.candidateNamesList
-
     def auto_suggest(self, name, columnName='name', taxDefItemId=None, rowLimit=200):
         """ Purpose: for helping digitizer staff rapidly input names using return suggestions based on three or
           more entered characters. Function only concerns itself with database lookup.
@@ -65,7 +45,7 @@ class AutoSuggest_popup():
         # Local variable to determine the auto-suggest type: 'storage', taxon-name, or 'parent taxon-name'.
         # It is included in the return statement.
         cur = db.getDbCursor()
-        print(f'query on {self.tableName}')
+
         sql = f"SELECT * FROM {self.tableName} WHERE {columnName} LIKE lower('{name}%');"
 
         if taxDefItemId:
@@ -74,10 +54,6 @@ class AutoSuggest_popup():
 
         print('the SQL going into cursor :;;', sql)
         rows = cur.execute(sql).fetchall()
-
-        if len(rows) < 20:
-            for j in rows:
-                print(j)
 
         return rows, responseType
 
@@ -121,9 +97,6 @@ class AutoSuggest_popup():
         list_element: sg.Listbox = window.Element(
             '-BOX-')  # store listbox element for easier access and to get to docstrings
         prediction_list, input_text, sel_item = choices, "", 0
-        # cREATE A dict with name as key and the record as value
-        # header = choices[0].keys()
-        # pList =
 
         window['-IN-'].update(partialName)
         window.write_event_value('-IN-', partialName)
@@ -139,9 +112,8 @@ class AutoSuggest_popup():
             if event == sg.WIN_CLOSED or event == 'Exit':
                 break
             if event is None:
-                print('EVENT  , NONE')
                 break
-            # pressing down arrow will trigger event -IN- then aftewards event Down:40
+
             elif event.startswith('Escape'):
                 window['-IN-'].update('')
                 window['-BOX-CONTAINER-'].update(visible=False)
@@ -162,7 +134,6 @@ class AutoSuggest_popup():
             elif event == '-IN-':
                 # this concerns all keystrokes except the above ones.
                 text = values['-IN-'].lower()
-                res = ''
 
                 if text == input_text:
                     continue
@@ -172,6 +143,7 @@ class AutoSuggest_popup():
                     # Kicking off auto-suggest
                     choices = self.auto_suggest(text)
                     candidates = choices[0]
+
                     self.candidateNamesList = [row['fullname'] for row in candidates]
 
                     if len(self.candidateNamesList) == 0:
@@ -187,7 +159,6 @@ class AutoSuggest_popup():
 
                 ###CALL AUTOsUGGEST_POPUP.py to get the higher taxonomy which is "parentfullname" column
 
-                # if len()
                 if len(prediction_list) > 0:
                     print('pred list more than NONE """')
                     window['lblNewName'].update(visible=False)
@@ -204,7 +175,6 @@ class AutoSuggest_popup():
                     if len(prediction_list) == 0:
                         window[event].update(value='')
                         prediction_list.append(' ')
-                    textInput = values[event]
 
             ##event IN #####################
 
@@ -215,10 +185,18 @@ class AutoSuggest_popup():
                 # Likely to be a PySimpleGUI bug.
                 if len(values['-BOX-']) > 0:
                     boxVal = values['-BOX-']
-
-                    response = boxVal[0]
-                    print('response to ENTER is;;; ', response)
-                    return response
+                    if self.tableName == 'storage':
+                        column = 'name'
+                    else:
+                        column = 'fullname'
+                    atomicNames = boxVal[0].split('|')
+                    atomic = atomicNames.pop()
+                    atomic = atomic.strip()
+                    print(f"Atomic-{atomic}-", atomic)
+                    selected_row = next(row for row in candidates if row[column]==atomic)
+                    selected_row = dict(selected_row)
+                    print('response to ENTER is;;; ', dict(selected_row))
+                    return selected_row
 
                 window.Hide()
 
