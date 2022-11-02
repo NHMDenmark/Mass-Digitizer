@@ -55,7 +55,7 @@ class AutoSuggest_popup():
         print('the SQL going into cursor :;;', sql)
         rows = cur.execute(sql).fetchall()
 
-        return rows, responseType
+        return rows
 
     def flatten_rows(self, rowsObject):
         flatCandidates = list(chain.from_iterable(rowsObject))
@@ -142,7 +142,7 @@ class AutoSuggest_popup():
                 if len(text) >= startQuery:
                     # Kicking off auto-suggest
                     choices = self.auto_suggest(text)
-                    candidates = choices[0]
+                    candidates = choices
 
                     self.candidateNamesList = [row['fullname'] for row in candidates]
 
@@ -205,5 +205,5 @@ class AutoSuggest_popup():
 
 
 # EXE section -- remember "taxonname" or "storage"
-# ob = AutoSuggest_popup('storage')
+# ob = AutoSuggest_popup('taxonname')
 # ob.autosuggest_gui('')
