@@ -17,7 +17,6 @@ either express or implied. See the License for the specific language governing p
 import PySimpleGUI as sg
 import data_access as db
 from itertools import chain
-# import additional_popup
 
 
 
@@ -28,7 +27,6 @@ class AutoSuggest_popup():
     rowCandidates = []
 
     def __init__(self, table):
-        # self.startQuery = startQueryLimit
         self.tableName = table
 
 
@@ -56,7 +54,7 @@ class AutoSuggest_popup():
     #     return self.candidateNamesList
 
     def auto_suggest(self, name, columnName='name', taxDefItemId=None, rowLimit=200):
-        """ Purpose: for helping digitizer staff rapidly input names by returning suggestions based on the three or
+        """ Purpose: for helping digitizer staff rapidly input names using return suggestions based on three or
           more entered characters. Function only concerns itself with database lookup.
          name: This parameter is the supplied name from the user.
          rowLimit: at or below this the auto-suggest fires of its names
@@ -66,25 +64,20 @@ class AutoSuggest_popup():
         responseType = ''
         # Local variable to determine the auto-suggest type: 'storage', taxon-name, or 'parent taxon-name'.
         # It is included in the return statement.
-        print('ååååååå IN auto /// supplied partial name is ::', name)
         cur = db.getDbCursor()
-        # if self.tableName == 'taxonname' and columnName == 'fullname':
         print(f'query on {self.tableName}')
         sql = f"SELECT * FROM {self.tableName} WHERE {columnName} LIKE lower('{name}%');"
 
         if taxDefItemId:
             sql = sql[:-1]
             sql = sql + ' AND taxontreedefid = {};'.format(taxDefItemId)
-            print(sql)
+
         print('the SQL going into cursor :;;', sql)
         rows = cur.execute(sql).fetchall()
 
-        print('&&\n len rows = ', len(rows), '\n¤¤¤')
-        # rows[0][0][2]
         if len(rows) < 20:
             for j in rows:
                 print(j)
-        # if lengthOfRows <= rowLimit:
 
         return rows, responseType
 
@@ -98,17 +91,9 @@ class AutoSuggest_popup():
         # Builds the interface for taxon name lookup as well as for novel names.
         # Parameter partialName is the 'name' as it is being inputted, keystroke-by-keystroke
         # startQuery is an integer on how many key strokes it takes to start the auto-suggester.
+        # Can return a novel name if such is inputted.
 
         choices = [' ']
-
-        if colName:
-            print('colName == ', colName)
-            choices = self.auto_suggest(self.tableName, partialName, columnName=colName)
-            print('IN the tablename that is ;:', choices[1])
-            # choices_list = self.flatten_rows(choices[0])
-        elif colName == 'storage':
-            print('! !STORAGE function ...')
-            choices = self.auto_suggest(partialName)
 
         input_width = 95
         lines_to_show = 7
@@ -184,21 +169,21 @@ class AutoSuggest_popup():
                 else:
                     input_text = text
                 if len(text) >= startQuery:
+                    # Kicking off auto-suggest
                     choices = self.auto_suggest(text)
-                    print('len(choices) & type ::: ', len(choices[0]), type(choices[0]))
                     candidates = choices[0]
-                    print('####&&&&&&&&&&&&&', [dict(row) for row in candidates])
-                    print('auto trigger - - "text" longer than 3..& type choices == ', type(candidates))
                     self.candidateNamesList = [row['fullname'] for row in candidates]
-                    print("pressed recs -- -- ", self.candidateNamesList)
+
+                    if len(self.candidateNamesList) == 0:
+                        # A new name is assumed and user is asked to input it.
+                        novelName = sg.popup_get_text('It seems you are entering a name outside the taxonomy.\nPlease check for spelling errors. After finishing the name entry, press OK: ',
+                                                      default_text=text)
+                        print("The NEW NAME is : ", novelName)
+                        return novelName
 
                     list_element.update(values=self.candidateNamesList, set_to_index=[0])
 
-
-                    # acquire row belonging to the name
-
                 sel_item = 0
-                # list_element.update(set_to_index=sel_item)
 
                 ###CALL AUTOsUGGEST_POPUP.py to get the higher taxonomy which is "parentfullname" column
 
@@ -225,8 +210,8 @@ class AutoSuggest_popup():
 
             elif event == 'btnReturn':
                 print('pressed Enter/Return || values box= ', values['-BOX-'])
-                # window.Hide()
-                # A patch on the issue around the popup not being closed properly.
+
+                # Be aware about issues around the popup not being closed properly.
                 # Likely to be a PySimpleGUI bug.
                 if len(values['-BOX-']) > 0:
                     boxVal = values['-BOX-']
@@ -242,5 +227,5 @@ class AutoSuggest_popup():
 
 
 # EXE section -- remember "taxonname" or "storage"
-# ob = AutoSuggest_popup('taxonname')
+# ob = AutoSuggest_popup('storage')
 # ob.autosuggest_gui('')
