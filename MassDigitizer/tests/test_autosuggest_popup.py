@@ -39,24 +39,24 @@ def test_taxonname():
 
 def test_taxonname_auto_suggest():
 
-    choices = aspTaxonNames.auto_suggest(aspTaxonNames.tableName, 'pra', 'fullname')
-
+    choices = aspTaxonNames.auto_suggest('pra', 'fullname')
+    print(f'Got {len(choices)} taxon suggestions. ')
     found = False 
     for c in choices:
-      #print(c)
-      if c == 'Poa pratensis': found = True 
-      break
+      #print(c['fullname'])
+      if c['fullname'] == 'Poa pratensis': 
+        found = True 
+        break
 
     assert found
 
-def test_taxonname_auto_suggest():
+def test_storage_auto_suggest():
     # TODO 
-    choices = aspStorage.auto_suggest(aspStorage.tableName, 'Box', 'fullname')
-
+    choices = aspStorage.auto_suggest('Box', 'fullname')
+    print(f'Got {len(choices)} storage suggestions. ')
     found = False 
     for c in choices:
-      #print(c)
-      if c == 'Natural History Museum of Denmark | Priorparken | Herbarium C: Danish Vascular Plant Collection | Box 1': 
+      if c['fullname'] == 'Natural History Museum of Denmark | Priorparken | Herbarium C: Danish Vascular Plant Collection | Box 1': 
         found = True 
         break
 

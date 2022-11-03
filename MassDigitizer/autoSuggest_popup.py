@@ -46,7 +46,7 @@ class AutoSuggest_popup():
         # It is included in the return statement.
         cur = db.getDbCursor()
 
-        sql = f"SELECT * FROM {self.tableName} WHERE {columnName} LIKE lower('{name}%');"
+        sql = f"SELECT * FROM {self.tableName} WHERE {columnName} LIKE lower('%{name}%');"
 
         if taxDefItemId:
             sql = sql[:-1]

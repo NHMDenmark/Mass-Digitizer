@@ -13,6 +13,7 @@
 """
 
 from datetime import datetime
+import logging
 
 # Internal dependencies
 from models import model
@@ -29,11 +30,12 @@ class Taxon(model.Model):
     def __init__(self, collection_id):
         """Set up blank taxon"""         
         model.Model.__init__(self, collection_id)
-        self.table     = 'taxon'
-        self.sptype    = 'taxon'
-        self.author    = ''
-        self.rankid    = 0
-        self.parentid  = 0
+        self.table         = 'taxon'
+        self.sptype        = 'taxon'
+        self.author        = ''
+        self.rankid        = 0
+        self.parentid      = 0
+        self.duplicatespid = 0
 
         self.institutionId   = gs.institutionId #db.getRowOnId('collection',collection_id)['institutionid']
         self.collectionId    = collection_id
@@ -51,8 +53,9 @@ class Taxon(model.Model):
                 'fullname':f'"{self.fullname}"',
                 'author':f'"{self.author}"',
                 'remarks':f'"{self.remarks}"',
-                'rankid':f'"{self.rankid}"',
-                'parentid':f'"{self.parentid}"',
+                'rankid':f'{self.rankid}',
+                'parentid':f'{self.parentid}',
+                'duplicatespid':f'{self.duplicatespid}',
                 }
         
         return fieldsDict
@@ -72,7 +75,8 @@ class Taxon(model.Model):
         self.author = record['author']
         self.remarks = record['remarks']
         self.rankid = record['rankid']        
-        self.parentid = record['parentid']
+        self.parentid = record['parentid']       
+        self.duplicatespid = record['duplicatespid']
         self.parent = None
    
     def fill(self, specifyObject):
@@ -99,11 +103,11 @@ class Taxon(model.Model):
         done = False 
         current = self 
         while done != True: 
-            temporary = current.getParent() 
+            temporary = current.getParent(token) 
             if (temporary.name == 'Life'): 
                 done = True
             else: 
                 current = temporary
 
     def __str__ (self):
-        return f'id:{self.id}, name:{self.name}, fullname:{self.fullname}, author:{self.author}, rankid:{self.rankid}, parentid: {self.parentid} '
+        return f'id:{self.id}, spid:{self.spid}, name:{self.name}, fullname:{self.fullname}, author:{self.author}, rankid:{self.rankid}, parentid: {self.parentid} '
