@@ -22,7 +22,7 @@ from itertools import chain
 
 class AutoSuggest_popup():
     startQueryLimit = 3
-    # rowDict = {}
+    
     candidateNamesList = []
     rowCandidates = []
 
