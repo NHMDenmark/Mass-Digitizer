@@ -88,7 +88,7 @@ class SpecimenDataEntry():
             sg.Text("Preparation type:", size=defaultSize, background_color=greenArea, font=font),
             sg.Combo(util.convert_dbrow_list(self.collobj.prepTypes), key='cbxPrepType', size=green_size, text_color='black',
                     background_color='white', font=('Arial', 12), readonly=True, enable_events=True), ]
-        taxonomy = [
+        taxonomy = [ #Currently not used
             sg.Text("Taxonomic group:", size=defaultSize, visible=False, background_color=greenArea, font=font),
             sg.Combo(taxonomicGroups, key='cbxHigherTaxon', visible=False, size=green_size, text_color='black',
                     background_color='white', font=('Arial', 12), readonly=True, enable_events=True), ]
@@ -104,7 +104,7 @@ class SpecimenDataEntry():
         multispecimen = [sg.Checkbox('Multispecimen sheet', key='chkMultiSpecimen', background_color=greenArea, font=(11))]
 
         layout_greenarea = [
-            storage, preparation, taxonomy, type_status, notes, multispecimen, ]
+            storage, preparation, type_status, notes, multispecimen, ]
 
         # Blue Area elements
         broadGeo = [
@@ -261,7 +261,8 @@ class SpecimenDataEntry():
             if event == 'txtTaxonName':
                 # Create auto-suggest popup window for taxon names
                 autoTaxonName = autoSuggest_popup.AutoSuggest_popup('taxonname')
-                
+                # autoTaxonName is a dictionary similar to the 'fieldsDict' in specimen.py
+
                 # If more than 3 characters entered: 
                 if len(values[event]) >= 3:
                     # Get currently entered key strokes 
@@ -419,3 +420,5 @@ class SpecimenDataEntry():
         for key in self.clearingList:
             print('Clearing: ', key)
             self.window[key].update('')
+
+# g = SpecimenDataEntry(29)
