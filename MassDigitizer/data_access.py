@@ -264,20 +264,10 @@ def insertRow(tableName, fields):
         sqlValues.append(addSql)
         sqlValues = [item.replace('"', '') for item in sqlValues]
     
-    finSql = '","'.join(sqlValues)
-    finSql = '"'+finSql+'")'
-    finSql = sqlString+finSql
-    #print(' -> ', finSql)
-
-    # sqlString += str(formattedSql) + ','
-    # sqlList = ['"' + item + '",' for item in sqlValues]
-    # formattedSql = ''.join(sqlList)
-    # print('The sqlVALS are: ', ''.join(sqlList))
-    # sqlString = sqlString+formattedSql
-    # sqlString = sqlString[0:len(sqlString)-1] + ");" # Remove trailing ", " and close Sql
-    # print('final sql', sqlString)
-
-    currentCursor.execute(finSql)
+    valuesSql = '","'.join(sqlValues)
+    valuesSql = f'"{valuesSql}")'
+    sqlString = sqlString + valuesSql
+    currentCursor.execute(sqlString)
     currentCursor.connection.commit()
     recordID = currentCursor.lastrowid
     record = currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(recordID)).fetchone()

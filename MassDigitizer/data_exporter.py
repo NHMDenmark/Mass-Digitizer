@@ -21,7 +21,7 @@ from datetime import datetime as dt
 import data_access as db
 import global_settings as gs
 
-exportableTables = {'specimen'}
+exportableTables = {'specimen', 'taxon'}
 
 filePath = os.path.expanduser(r'~\Documents\DaSSCO') # In order to debug / run, a copy of the db file should be moved into this folder on Windows machines
 altFilePath = os.path.expanduser(r'~\OneDrive - University of Copenhagen\Documents\DaSSCO\db.sqlite3') # For OneDrive users this is the file location
@@ -42,8 +42,8 @@ def exportTable(table_name, file_type):
   #        NOTE Only "xlsx" is currently supported 
   #    RETURNS Text string showing results of the export. In case of success, the path and filename. 
   if table_name in exportableTables:
-    sql_query = "SELECT * FROM %s WHERE exported IS NULL;"%table_name
-    print(sql_query)
+    sql_query = f'SELECT * FROM {table_name} WHERE exported = 0;'
+    
     data_frame = pd.read_sql_query(sql_query, db.getConnection())
 
     if data_frame.__len__() < 1: return 'No %s records to export.'%table_name
@@ -56,7 +56,7 @@ def exportTable(table_name, file_type):
 
     pk_list = getPrimaryKeys(data_frame.to_dict())
     
-    sql_statement = 'UPDATE %s SET exported = 1, exportdatetime = "%s", exportusername = "%s" WHERE id IN (%s);'%(table_name,dt.now(),gs.spUserName, pk_list)
+    sql_statement = f'UPDATE {table_name} SET exported = 1, exportdatetime = "{dt.now()}", exportuserid = "{gs.spUserName}" WHERE id IN ({pk_list});'
     print(sql_statement)
     db.executeSqlStatement(sql_statement)
             
