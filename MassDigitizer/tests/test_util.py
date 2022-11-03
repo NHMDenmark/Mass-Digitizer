@@ -24,11 +24,11 @@ def test_shrink_dict():
     for j in rows:
         fnameDict[j[3]] = ''
 
-    print(len(fnameDict))
+    #print(len(fnameDict))
     resShrink = util.shrink_dict(fnameDict, 'Pot')
     assert len(resShrink) == 19
 
 def test_convert_dbrow_list():
     res = util.convert_dbrow_list(rows)
-    print(res)
+    #print(res)
     assert res

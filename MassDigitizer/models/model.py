@@ -36,6 +36,9 @@ class Model:
         self.code     = ''
         self.name     = ''
         self.fullname = ''
+        self.remarks  = ' '
+        self.collectionId = collection_id
+        self.status   = 0
     
     def save(self):
         """

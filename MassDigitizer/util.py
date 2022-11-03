@@ -12,8 +12,10 @@
   PURPOSE: Assemblage of generic utility functions used across the application. 
 """
 
-from hashlib import new
 from os import system, name
+from hashlib import new
+import logging
+from re import L
 
 import data_access as db
 
@@ -69,3 +71,20 @@ def pretty_print_POST(req):
 def getPrimaryKey(tableName, name, field='name'): 
    # Function for fetching id (primary key) on name value
    return db.getRowsOnFilters(tableName, {' %s = ' % field: '"%s"' % name})[0]['id']
+
+def logLine(line, level='info'):
+   
+   logging.basicConfig(filename='example.log', encoding='utf-8', level=logging.DEBUG)
+
+   if(level == 'info'):
+      logging.info(line)
+   elif(level == 'debug'):
+      logging.debug(line)
+   elif(level == 'warning'):
+      logging.warning(line)
+   elif(level == 'error'):
+      logging.error(line)
+   else:
+      logging.info(line)
+
+   return line

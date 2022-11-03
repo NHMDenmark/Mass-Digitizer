@@ -46,7 +46,7 @@ def set_specimen_global():
 
 def test_specimen_prepTypes():
     global predefData
-    print(predefData)
+    #print(predefData)
     sObject = specimenObject.typeStatuses
     typeStatus = rowObjectToList(sObject)
 
@@ -73,7 +73,7 @@ def test_georegions():
         geoList.append([k for  k in j])
         # print('GEOREGIONS:::', [k for  k in j])
     enumGeo = list(enumerate(geoList))
-    print(enumGeo)
+    #print(enumGeo)
     # for item in enumGeo:
     #     print('GEOREGION:::', item )
     print('FINAL TEST : ', enumGeo[9][1][1])

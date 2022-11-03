@@ -117,6 +117,32 @@ def getCollObject(collectionObjectId, csrftoken):
   #print('------------------------------')
   return object 
 
+def getSpecifyObjects(objectName, csrftoken, limit=100, offset=0, filters={}):
+  # Generic method for fetching object sets from the Specify API based on object name 
+  # CONTRACT 
+  #   objectName (String): The API's name for the objects to be queried  
+  #   csrftoken (String): The CSRF token is required for security reasons
+  #   limit (Integer): Maximum amount of records to be retrieve at a time. Default value: 100 
+  #   offset (Integer): Offset of the records to be retrieved for enabling paging. Default value: 0 
+  #   filters (Dictionary) : Optional filters as a key, value pair of strings 
+  #   RETURNS fetched object set 
+  #print('Fetching "%s" with limit %d and offset %d ' %(objectName, limit, offset))
+  objectSet = {}
+  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL}
+  filterString = ""
+  for key in filters:
+    filterString += '&' + key + '=' + filters[key]
+  apiCallString = f'{gs.baseURL}api/specify/{objectName}/?limit={limit}&offset={offset}{filterString}'
+  #print("   -> " + apiCallString)
+
+  response = spSession.get(apiCallString, headers=headers)
+  #print(' - Response: %s %s' %(str(response.status_code), response.reason))
+  if response.status_code < 299:
+    objectSet = json.loads(response.text)['objects'] # get collections from json string and convert into dictionary
+    #print(' - Received %d object(s)' % len(objectSet))
+  
+  return objectSet 
+
 def getSpecifyObject(objectName, objectId, csrftoken):
   # Generic method for fetching objects from the Specify API using their primary key
   # CONTRACT 
@@ -125,8 +151,8 @@ def getSpecifyObject(objectName, objectId, csrftoken):
   #   csrftoken (String): The CSRF token is required for security reasons  
   #   RETURNS fetched object 
   #print('Fetching ' + objectName + ' object on id: ' + str(objectId))
-  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL, 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0'}
-  apiCallString = "%sapi/specify/%s/%d/" %(gs.baseURL, objectName, objectId)
+  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL}
+  apiCallString = f'{gs.baseURL}api/specify/{objectName}/{objectId}/' 
   #print(apiCallString)
   response = spSession.get(apiCallString, headers=headers)
   #print(' - Response: %s %s' %(str(response.status_code), response.reason))
@@ -146,7 +172,7 @@ def postSpecifyObject(objectName, objectId, specifyObject, csrftoken):
   print(apiCallString)
   # TODO API PUT command throws 403 Error ("Forbidden")
   response = spSession.post(apiCallString, headers=headers, data=specifyObject)
-  print(' - Response: %s %s' %(str(response.status_code), response.reason))
+  #print(' - Response: %s %s' %(str(response.status_code), response.reason))
   if response.status_code < 299:
     object = response.json()
   else: 
@@ -167,32 +193,6 @@ def putSpecifyObject(objectName, objectId, specifyObject, csrftoken):
   else: 
     object = Empty
   return object 
-
-def getSpecifyObjects(objectName, csrftoken, limit=100, offset=0, filters={}):
-  # Generic method for fetching object sets from the Specify API based on object name 
-  # CONTRACT 
-  #   objectName (String): The API's name for the objects to be queried  
-  #   csrftoken (String): The CSRF token is required for security reasons
-  #   limit (Integer): Maximum amount of records to be retrieve at a time. Default value: 100 
-  #   offset (Integer): Offset of the records to be retrieved for enabling paging. Default value: 0 
-  #   filters (Dictionary) : Optional filters as a key, value pair of strings 
-  #   RETURNS fetched object set 
-  #print('Fetching "%s" with limit %d and offset %d ' %(objectName, limit, offset))
-  objectSet = {}
-  headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL}
-  filterString = ""
-  for key in filters:
-    filterString += '&' + key + '=' + filters[key]
-  apiCallString = "%sapi/specify/%s/?limit=%d&offset=%d%s" %(gs.baseURL, objectName, limit, offset, filterString)
-  #print("   -> " + apiCallString)
-
-  response = spSession.get(apiCallString, headers=headers)
-  #print(' - Response: %s %s' %(str(response.status_code), response.reason))
-  if response.status_code < 299:
-    objectSet = json.loads(response.text)['objects'] # get collections from json string and convert into dictionary
-    #print(' - Received %d object(s)' % len(objectSet))
-  
-  return objectSet 
 
 def directAPIcall(callString, csrftoken):
   # Generic method for allowing a direct call to the API using a call string that is appended to the baseURL
@@ -239,30 +239,22 @@ def mergeTaxa(source_id, target_id, csrftoken):
   #     POST URL:   https://specify-test.science.ku.dk/api/specify_tree/taxon/367622/merge/ 
   #     POST DATA:  target: "432192"  
   #   RETURNS response object 
-  headers = {#'content-type': 'Content-Type: application/multipart/form-data', #x-www-form-urlencoded #multipart/form-data; boundary=--someboundary', 
-             'X-CSRFToken': csrftoken, 
-             'referer': gs.baseURL, } 
-  #apiCallString = "%sapi/specify_tree/taxon/%s/merge/?target=%s"%(gs.baseURL, source_id, target_id)
+  headers = {'X-CSRFToken': csrftoken, 'referer': gs.baseURL, } 
   apiCallString = "%sapi/specify_tree/taxon/%s/merge/"%(gs.baseURL, source_id)
   print(" - API call: %s"%apiCallString)
 
-  #print(spSession.cookies)
-
   #input('ready?')
-  response = spSession.post(apiCallString, headers=headers, data={'target' : target_id }, timeout=60) 
+  response = spSession.post(apiCallString, headers=headers, data={'target' : target_id }, timeout=480) 
 
   #print(response.request.body)
-  util.pretty_print_POST(response.request)
+  #util.pretty_print_POST(response.request)
   #print('---------------------------')
-  print(' - Response: %s %s %s.' %(str(response.status_code), response.reason, response.text))
+  #print(' - Response: %s %s %s.' %(str(response.status_code), response.reason, response.text))
 
-  if response.status_code < 299:
-    object = response.json()
-  else: 
-    object = Empty
-  return object  
+  # if response.status_code < 299:
+  #   object = response.json()
+  # else: 
+  #   object = Empty
+  # return object  
 
-
-
-#util.clear()
-#getInitialCollections()
+  return response
