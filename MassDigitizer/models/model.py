@@ -51,13 +51,13 @@ class Model:
         # Checking if Save is a novel record , or if it is updating existing record.
         if self.id > 0:
             # Record Id is not 0 therefore existing record to be updated 
-            print(f' - Update {self.table} record with id: ', self.id)
             record = db.updateRow(self.table, self.id, self.getFieldsAsDict())
+            print(f' - Updated {self.table} record with id: {self.id} and specify id: {self.spid} ')
         else:
             # Record Id is not 0 therefore existing record to be updated 
-            print(f' - Insert new {self.table} record with id: ', self.id)
             record = db.insertRow(self.table, self.getFieldsAsDict())
             self.id = record['id']
+            print(f' - Inserted new {self.table} record with id: {self.id} and specify id: {self.spid} ')
 
         return record
 

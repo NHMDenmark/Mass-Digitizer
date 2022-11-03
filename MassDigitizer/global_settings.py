@@ -12,6 +12,9 @@
   PURPOSE: Assemblage of global settings used across the application. 
 """
 
+import os
+import logging
+
 # Specify 
 baseURL = ''
 
@@ -26,6 +29,10 @@ collectionName = '-not set-'
 spUserName = '-not set-'
 spUserId = -1
 csrfToken = ''
+
+# logging
+filePath = os.path.expanduser(r'~\Documents\DaSSCO') # In order to debug / run, a copy of the db file should be moved into this folder on Windows machines
+logging.basicConfig()
 
 def clearSession():
   institutionId = 0

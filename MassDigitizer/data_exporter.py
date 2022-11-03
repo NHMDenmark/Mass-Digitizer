@@ -42,11 +42,12 @@ def exportTable(table_name, file_type):
   #        NOTE Only "xlsx" is currently supported 
   #    RETURNS Text string showing results of the export. In case of success, the path and filename. 
   if table_name in exportableTables:
-    sql_query = f'SELECT * FROM {table_name} WHERE exported = 0;'
+    sqlString = f'SELECT * FROM {table_name} WHERE exported = 0 OR exported IS NULL;'
     
-    data_frame = pd.read_sql_query(sql_query, db.getConnection())
+    data_frame = pd.read_sql_query(sqlString, db.getConnection())
 
-    if data_frame.__len__() < 1: return 'No %s records to export.'%table_name
+    if data_frame.__len__() < 1: 
+      return 'No %s records to export.'%table_name
 
     try:
       file_name = generateFilename(table_name,file_type, filePath)
@@ -57,7 +58,7 @@ def exportTable(table_name, file_type):
     pk_list = getPrimaryKeys(data_frame.to_dict())
     
     sql_statement = f'UPDATE {table_name} SET exported = 1, exportdatetime = "{dt.now()}", exportuserid = "{gs.spUserName}" WHERE id IN ({pk_list});'
-    print(sql_statement)
+    #print(sql_statement)
     db.executeSqlStatement(sql_statement)
             
     return 'Exported file to %s'%file_name
