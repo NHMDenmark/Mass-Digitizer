@@ -199,7 +199,6 @@ class SpecimenDataEntry():
         # Set triggers for the different controls on the UI form 
         self.setControlEvents()
 
-        # Loop through GUI events triggered 
         while True:
             event, values = self.window.read()
 
