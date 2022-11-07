@@ -80,10 +80,10 @@ def scan(collection, token):
         # Extract rank id & display 
         rankId = int(rank['rankid'])
         rankName = str(rank['name'])
-        print(f'RANK I: {rankId}')
+        print(f'RANK "{rankName}" ({rankId})')
                 
         # Only look at rank genera and below 
-        if rankId >= 220:
+        if rankId >= 180:
             offset = 0
             resultCount = -1
             while resultCount != 0:
@@ -200,7 +200,7 @@ def scan(collection, token):
     for case in ambivalentCases: 
         print(' - ', case)
         case.save()
-    dx.exportTable('taxon', 'xlsx')
+    print(dx.exportTable('taxon', 'xlsx'))
 
 def recordAmbivalentCase(original, lookup, ambivalence):
     print(ambivalence)
