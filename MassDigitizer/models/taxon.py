@@ -34,6 +34,7 @@ class Taxon(model.Model):
         self.sptype        = 'taxon'
         self.author        = ''
         self.rankid        = 0
+        self.parentfullname = ''
         self.parentid      = 0
         self.duplicatespid = 0
 
