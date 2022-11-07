@@ -36,6 +36,10 @@ class Storage(model.Model):
         self.sptype = 'storage'
         self.discipline = None
         self.collectionid = collection_id
+        self.name = ''
+        self.fullName = ''
+        self.spid = 0
+
 
 
         # self.loadPredefinedData() # TODO Turned off for now until needed
@@ -48,6 +52,7 @@ class Storage(model.Model):
         """
 
         fieldsDict = {
+            'id': f'"{self.id}"',
             'spid': f'"{self.spid}"',
             'guid': f'"{self.guid}"',
             'name': f'"{self.name}"',
@@ -69,6 +74,7 @@ class Storage(model.Model):
         self.guid = record['guid']
         self.name = record['name']
         self.fullname = record['fullname']
+        self.collectionId = record['collectionid']
 
     def loadPredefinedData(self):
         pass
@@ -92,7 +98,7 @@ class Storage(model.Model):
         self.typeStatuses = db.getRowsOnFilters('typestatus', {'collectionid =': f'{self.collectionId}'})
         self.geoRegions = db.getRowsOnFilters('georegion', {'collectionid =': f'{self.collectionId}'})
         self.geoRegionSources = db.getRowsOnFilters('georegionsource', {'collectionid =': f'{self.collectionId}'})
-        
+
     def getParent(self, token):
         pass
 
