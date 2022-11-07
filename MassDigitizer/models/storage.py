@@ -24,7 +24,10 @@ import specify_interface as sp
 
 
 class Storage(model.Model):
-    "Class representing ... "
+    """
+     The storage class is a representation of a storage record to hold its data
+     Any instance is either an existing record in the database or transient pending an insert
+"""
 
     def __init__(self, collection_id) -> None:
         # Set up blank record
@@ -32,12 +35,43 @@ class Storage(model.Model):
         self.table = 'storage'
         self.sptype = 'storage'
         self.discipline = None
+        self.collectionid = collection_id
 
-
-        # Predefined data fields
-        self.storageLocations = None
 
         # self.loadPredefinedData() # TODO Turned off for now until needed
+
+
+    def getFieldsAsDict(self):
+        """
+        Generates a dictonary with database column names as keys and specimen records fields as values
+        RETURNS said dictionary for passing on to data access handler
+        """
+
+        fieldsDict = {
+            'spid': f'"{self.spid}"',
+            'guid': f'"{self.guid}"',
+            'name': f'"{self.name}"',
+            'fullname': f'"{self.fullname}"',
+            'collectionid': f'"{self.collectionid}"'
+        }
+
+        return fieldsDict
+
+    def setFields(self, record):
+        """
+        Function for setting specimen data field from record
+        CONTRACT
+           record: sqliterow object containing specimen record data
+        """
+        # model.Model.setFields(self, record)
+        self.id = record['id']
+        self.spid = record['spid']
+        self.guid = record['guid']
+        self.name = record['name']
+        self.fullname = record['fullname']
+
+    def loadPredefinedData(self):
+        pass
 
     def fill(self, specifyObject, token):
         self.spid = specifyObject['id']
@@ -48,13 +82,6 @@ class Storage(model.Model):
         # disciplineId = int(specifyObject['discipline'].split('/')[4])
         # self.fetchDiscipline(disciplineId, token)
 
-    def fetchDiscipline(self, disciplineId, token):
-        """
-
-        """
-        self.discipline = discipline.Discipline(self.id)
-        disciplineObj = sp.getSpecifyObject('discipline', disciplineId, token)
-        self.discipline.fill(disciplineObj)
 
     def loadPredefinedData(self):
         """
@@ -65,4 +92,13 @@ class Storage(model.Model):
         self.typeStatuses = db.getRowsOnFilters('typestatus', {'collectionid =': f'{self.collectionId}'})
         self.geoRegions = db.getRowsOnFilters('georegion', {'collectionid =': f'{self.collectionId}'})
         self.geoRegionSources = db.getRowsOnFilters('georegionsource', {'collectionid =': f'{self.collectionId}'})
+        
+    def getParent(self, token):
+        pass
 
+    def getParentage(self, token):
+        # Recursive function for constructing the entire parent sequence down to "Life"
+        pass
+
+    def __str__ (self):
+        return f'id:{self.id}, spid:{self.spid}, name:{self.name}, fullname:{self.fullname}'
