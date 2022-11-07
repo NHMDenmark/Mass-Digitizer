@@ -37,6 +37,7 @@ class specimen(model.Model):
         self.taxonName       = ''
         self.taxonNameId     = 0
         #self.taxonspid 
+        self.higherTaxonName = ''
         self.typeStatusName  = ''
         self.typeStatusId    = 0
         self.geoRegionName   = ''
@@ -79,6 +80,7 @@ class specimen(model.Model):
         self.taxonName = record['taxonname']
         self.taxonNameId = record['taxonnameid']
         #self.taxonspid = record['taxonspid']
+        self.higherTaxonName = record['highertaxonname']
         self.typeStatusName = record['typestatusname']
         self.typeStatusId = record['typestatusid']
         self.geoRegionName = record['georegionname']
@@ -115,6 +117,7 @@ class specimen(model.Model):
                 'taxonnameid':'"%s"' % self.taxonNameId ,
                 'typestatusname':'"%s"' % self.typeStatusName ,
                 'typestatusid':'%s' % self.typeStatusId ,
+                'highertaxonname':'"%s"' % self.higherTaxonName ,
                 'georegionname':'"%s"' % self.geoRegionName ,
                 'georegionid':'"%s"' % self.geoRegionId ,
                 'storagefullname':'"%s"' % self.storageFullName,
@@ -187,6 +190,7 @@ class specimen(model.Model):
             self.taxonNameId = taxonNameRecord['id'] 
             self.taxonName = taxonNameRecord['name'] 
             self.taxonFullName = taxonNameRecord['fullname'] 
+            self.higherTaxonName = taxonNameRecord['highertaxonname'] 
         else:
             # Empty record 
             self.taxonNameId = 0
@@ -209,6 +213,7 @@ class specimen(model.Model):
             self.taxonNameId = taxonNameRecord[0]['id'] 
             self.taxonName = taxonNameRecord[0]['name'] 
             self.taxonFullName = taxonNameRecord[0]['fullname'] 
+            self.higherTaxonName = taxonNameRecord[0]['highertaxonname'] 
         elif resultsRowCount == 0:
             # Unknown taxon name, add verbatim 
             self.taxonFullName = taxonFullName 
