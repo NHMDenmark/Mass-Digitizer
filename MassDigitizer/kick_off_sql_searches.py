@@ -17,8 +17,12 @@ software distributed under the License is distributed on an "AS IS" BASIS, WITHO
 either express or implied. See the License for the specific language governing permissions and limitations under the License.
 """
 
-import data_access
 from itertools import chain
+
+import data_access
+import global_settings as gs
+
+db = data_access.DataAccess(gs.databaseName)
 
 def small_list_lookup(tableName, inputKey, indicesForColumn=2):
     ###For retreiving values stored in the minor tables ('institution' and 'collection')

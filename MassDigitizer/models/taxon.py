@@ -17,9 +17,12 @@ import logging
 
 # Internal dependencies
 from models import model
-import data_access as db
+import data_access
 import global_settings as gs
-import specify_interface as sp
+import specify_interface
+
+db = data_access.DataAccess(gs.databaseName)
+sp = specify_interface.SpecifyInterface()
 
 class Taxon(model.Model):
     """
@@ -60,7 +63,7 @@ class Taxon(model.Model):
                 }
         
         return fieldsDict
-     
+
     def setFields(self, record):
         """
         Function for setting specimen data field from record 

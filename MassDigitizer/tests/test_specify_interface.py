@@ -12,76 +12,57 @@
 
   PURPOSE: Unit testing the specify_interface module.
 """
+
 import specify_interface
 import global_settings as gs
 from pprint import pprint
 from getpass import getpass
 
-from queue import Empty
+sp = specify_interface.SpecifyInterface()
 
 class Test_specify_interface():
-#
+    """ 
+        
+    """
 
     collectionID = 29
     gs.baseURL = "https://specify-snm.science.ku.dk/"
     # The login function below will not work without the baseURL set.
-    token = specify_interface.login(username=input('enter username:'), passwd=getpass('enter password:'),
-                               collectionid=29, csrftoken=specify_interface.getCSRFToken())
+    token = sp.login(username=input('enter username:'), passwd=getpass('enter password:'),
+                               collectionid=29, csrftoken=sp.getCSRFToken())
     baseUrl = "https://specify-snm.science.ku.dk/"
 
     gs.baseURL = baseUrl
 
     def test_getCSRFToken(self):
-
-        # tokenGL = token
-        print('the token X:DDDDDDDD\n', self.token)
-        # print(len(token))
         assert self.token
 
-    # The test below is superceded by the class variable 'token' which is defined by the login function.
-    # def test_login(self):
-    #     tkCSFR = self.spLogin()
-    #     print('In test_login() --- tok:', tkCSFR)
-    #     global CSRF
-    #     CSRF = tkCSFR
-    #     print('CRF::', CSRF)
-    #     assert tkCSFR
-
-    def test_getCSRFToken(self):
-        token = specify_interface.getCSRFToken()
-
-        assert token
-
-
     def test_lengthCSRF_token(self):
-        token = specify_interface.getCSRFToken()
-        # Be aware that CSRF tokens can be of different lengths, depending on implementation.
+        token = sp.getCSRFToken()
+        # NOTE Be aware that CSRF tokens can be of different lengths, depending on implementation.
         assert len(token) == 64
-
 
     def test_getCollObject(self):
         # Tests obtaining a collection object (JSON) from the specify API.
         # Foreknowledge of a collectionID is required (in this case 411590).
-        res = specify_interface.getCollObject(411590, self.token)
+        res = sp.getCollObject(411590, self.token)
         assert res
-
 
     def test_getSpecifyObject(self):
         # Testing the more generic version of getCollObject().
         # In this case collectionobject, but could be 'attachment', 'author' etc.
-        res = specify_interface.getSpecifyObject('collectionobject', 411590, self.token)
+        res = sp.getSpecifyObject('collectionobject', 411590, self.token)
         assert res
 
-
     def test_getInitialCollection(self):
-        res = specify_interface.getInitialCollections()
+        res = sp.getInitialCollections()
         assert res[688130] == "NHMD Vascular Plants"
 
     def test_verify_Session(self):
-        valid = specify_interface.verifySession(self.token)
+        valid = sp.verifySession(self.token)
         assert valid
 
     def spLogin(self):
         # Securing against accidental github commits of credentials.
-        return specify_interface.login(username=input('enter username:'), passwd=getpass('enter password:'),
-                                       collectionid=29, csrftoken=specify_interface.getCSRFToken())
+        return sp.login(username=input('enter username:'), passwd=getpass('enter password:'),
+                                       collectionid=29, csrftoken=sp.getCSRFToken())

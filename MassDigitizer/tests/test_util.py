@@ -12,7 +12,10 @@
   PURPOSE: Unit testing the util module
 """
 import util
-import data_access as db
+import data_access
+import global_settings as gs
+
+db = data_access.DataAccess(gs.databaseName)
 
 rows = db.getRows('taxonname', 1000)
 # Global rows fetchall() object for test use.

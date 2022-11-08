@@ -101,8 +101,7 @@ def test_storage():
 def test_getFieldsAsDictionary():
     fieldDict = specimenObject.getFieldsAsDict()
     lengthFieldDict= len(fieldDict)
-    assert (lengthFieldDict == 24)
-    return fieldDict
+    assert (lengthFieldDict == 25)
 
 def test_memberOfFieldDict():
     res = specimenObject.getFieldsAsDict()
@@ -111,12 +110,11 @@ def test_memberOfFieldDict():
 
 def test_load_previous():
     res = specimenObject.loadPrevious(30)
-    print(len(res), res)
-    assert res
-
-def test_length_previous():
-    res = specimenObject.loadPrevious(30)
-    assert len(res) == 26
+    
+    if res is  None: 
+        assert False
+    else: 
+        assert len(res) == 27
 
 def test_save_load_delete():
 

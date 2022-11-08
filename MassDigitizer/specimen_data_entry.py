@@ -22,18 +22,19 @@ import sys
 import pathlib
 import PySimpleGUI as sg
 
-# internal dependencies
+# Internal dependencies
 import util
-import data_access as db
+import data_access
 import global_settings as gs
 import data_exporter as dx
 import autoSuggest_popup
-
 from models import specimen
 
 # Makes sure that current folder is registrered to be able to access other app files
 sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer')))
 currentpath = os.path.join(pathlib.Path(__file__).parent, '')
+
+db = data_access.DataAccess(gs.databaseName)
 
 class SpecimenDataEntry():
 

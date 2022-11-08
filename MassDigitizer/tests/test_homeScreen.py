@@ -12,11 +12,15 @@
   PURPOSE: Unit testing the home_screen module
 """
 
+import pytest
+
+# Internal dependencies 
 import home_screen
 import util
-import data_access as db
+import data_access
+import global_settings as gs
 
-import pytest
+db = data_access.DataAccess(gs.databaseName)
 
 def test_institutions():
     #In def init() there is an important institutions list var.

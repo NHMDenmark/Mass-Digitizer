@@ -16,9 +16,10 @@ from datetime import datetime
 
 # Internal dependencies
 from models import model
-import data_access as db
+import data_access
 import global_settings as gs
-import specify_interface as sp
+
+db = data_access.DataAccess(gs.databaseName)
 
 class Discipline(model.Model):
     "Class representing ... "

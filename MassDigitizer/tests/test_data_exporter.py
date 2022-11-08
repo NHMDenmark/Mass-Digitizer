@@ -19,8 +19,9 @@ from models import specimen as co
 
 import data_exporter
 
-filePath = os.path.expanduser(r'~\Documents\DaSSCO')
+dex = data_exporter.DataExporter()
 
+filePath = os.path.expanduser(r'~\Documents\DaSSCO')
 
 def test_exportSpecimens():
 
@@ -28,16 +29,16 @@ def test_exportSpecimens():
     testSpecimen.catalogNumber = '1234567890'
     testSpecimen.save()
 
-    export_file = data_exporter.exportSpecimens('xlsx')
+    export_file = dex.exportSpecimens('xlsx')
     print(export_file)
     assert export_file != 'No specimen records to export.'
     
-    export_file = data_exporter.exportSpecimens('xlsx')
+    export_file = dex.exportSpecimens('xlsx')
     print(export_file)
     assert export_file == 'No specimen records to export.'
 
 
 def test_generateFilename():
-    export_path = data_exporter.generateFilename('specimen', 'xlsx', filePath)
+    export_path = dex.generateFilename('specimen', 'xlsx', filePath)
     print(export_path)
     assert export_path

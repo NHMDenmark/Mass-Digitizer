@@ -16,8 +16,10 @@ from datetime import datetime
 
 # Internal dependencies
 from models import model
-import data_access as db
+import data_access
 import global_settings as gs
+
+db = data_access.DataAccess(gs.databaseName)
 
 class specimen(model.Model):
     # The specimen class is a representation of a specimen record to hold its data
@@ -190,7 +192,7 @@ class specimen(model.Model):
             self.taxonNameId = taxonNameRecord['id'] 
             self.taxonName = taxonNameRecord['name'] 
             self.taxonFullName = taxonNameRecord['fullname'] 
-            self.higherTaxonName = taxonNameRecord['highertaxonname'] 
+            self.higherTaxonName = taxonNameRecord['parentfullname'] 
         else:
             # Empty record 
             self.taxonNameId = 0
@@ -225,11 +227,13 @@ class specimen(model.Model):
         return self.taxonNameId 
 
     def setStorageFields(self, storageRecord):
-        # Set storage fields from selected storage location record
-        # CONTRACT
-        #   storageRecord (sqliterow) : SQLite Row holding storage location record
-        # RETURNS taxonNameId (int) : 
-        
+        """
+        Set storage fields from selected storage location record
+            CONTRACT
+                storageRecord (sqliterow) : SQLite Row holding storage location record
+            RETURNS taxonNameId (int) : Primary key of taxon name record 
+        """
+
         if storageRecord is not None: 
             self.storageId = storageRecord['id'] 
             self.storageName = storageRecord['name'] 
@@ -241,11 +245,12 @@ class specimen(model.Model):
         return self.storageId
 
     def setStorageFieldsUsingFullName(self, storageFullName):
-        # Get storage record on the basis of full name  
-        #    and set respective fields 
-        # CONTRACT 
-        #   storageFullName (string) : Fullname value of selected storage location 
-        # RETURNS storageId (int) : Primary key of selected storage location record 
+        """
+        Get storage record on the basis of full name and set respective fields 
+        CONTRACT 
+            storageFullName (string) : Fullname value of selected storage location 
+            RETURNS storageId (int) : Primary key of selected storage location record
+        """ 
         
         # Get storage record on fullname
         storageRecord = db.getRowsOnFilters('storage', {'fullname =': f'"{storageFullName}"'})
@@ -267,7 +272,10 @@ class specimen(model.Model):
         return self.storageId 
         
     def loadPredefinedData(self):
-        # Function for loading predefined data in order to get primary keys and other info to be pooled at selection in GUI 
+        """
+        Function for loading predefined data in order to get primary keys and other info to be pooled from at selection in GUI.
+        """
+        
         self.storageLocations = db.getRowsOnFilters('storage', {'collectionid =': f'{self.collectionId}'})
         self.prepTypes = db.getRowsOnFilters('preptype', {'collectionid =': f'{self.collectionId}'})
         self.typeStatuses = db.getRowsOnFilters('typestatus', {'collectionid =': f'{self.collectionId}'})

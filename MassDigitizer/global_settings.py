@@ -19,6 +19,7 @@ import logging
 baseURL = ''
 
 # database 
+databaseName = 'db'
 db_in_memory = False
 
 # session 

@@ -12,9 +12,11 @@
   PURPOSE: Unit testing the data access layer 
 """
 
-# Basal dependencies
 import sys 
 import pytest
+
+# Internal dependencies 
+import global_settings as gs
 
 # The following lines allow for finding code files to be tested in the app root folder  
 from pathlib import Path
@@ -26,7 +28,9 @@ import util
 import models
 
 # The module to be tested
-import data_access as db
+import data_access
+
+db = data_access.DataAccess('test')
 
 def test_getRows():
     # Generic test of fetching records from the local database 

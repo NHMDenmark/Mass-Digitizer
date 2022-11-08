@@ -15,14 +15,17 @@ either express or implied. See the License for the specific language governing p
 
 
 import PySimpleGUI as sg
-import data_access as db
 from itertools import chain
 
+# Internal Dependencies
+import data_access
+import global_settings as gs
 
+db = data_access.DataAccess(gs.databaseName)
 
 class AutoSuggest_popup():
     startQueryLimit = 3
-    
+    # rowDict = {}
     candidateNamesList = []
     rowCandidates = []
 

@@ -17,7 +17,11 @@ from hashlib import new
 import logging
 from re import L
 
-import data_access as db
+# Internal dependencies
+import data_access
+import global_settings as gs
+
+db = data_access.DataAccess(gs.databaseName)
 
 def clear():
    # Clear CLI screen 
