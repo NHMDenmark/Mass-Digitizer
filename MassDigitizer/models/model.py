@@ -15,9 +15,12 @@
 from datetime import datetime
 
 # Internal dependencies
-import data_access as db
+import data_access
 import global_settings as gs
-import specify_interface as sp
+import specify_interface
+
+db = data_access.DataAccess(gs.databaseName)
+sp = specify_interface.SpecifyInterface()
 
 class Model:
     """
