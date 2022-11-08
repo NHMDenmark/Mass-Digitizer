@@ -237,6 +237,15 @@ class AutoSuggest_popup():
                     selected_row = next(row for row in candidates if row[column]==atomic)
                     selected_row = dict(selected_row)
                     print('response to ENTER is;;; ', dict(selected_row))
+                    ## IF section: if db query is on table STORAGE then populate and return model.
+                    if self.tableName == 'storage':
+                        print("RETURNING STORAGE OBJECT")
+                        autoSuggestObject.table = 'storage'
+                        autoSuggestObject.spid = selected_row['spid']
+                        autoSuggestObject.name = selected_row['name']
+                        autoSuggestObject.fullname = selected_row['fullname']
+                        autoSuggestObject.collectionId  = selected_row['collectionid']
+                        return autoSuggestObject
                     novelName = selected_row['name']
                     print(f'DOOOOOOONE !{novelName}? ', self.done)
                     autoSuggestObject.id = selected_row['id']
