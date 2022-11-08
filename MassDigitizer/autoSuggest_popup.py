@@ -157,7 +157,7 @@ class AutoSuggest_popup():
                     input_text = text
                 print('len text = ', len(text))
                 if len(text) >= startQuery:
-                    # Kicking off auto-suggest
+                    # Kicking off auto-suggest. Startquery is hardcoded to 3.
                     choices = self.auto_suggest(text)
                     candidates = choices
 
@@ -174,13 +174,13 @@ class AutoSuggest_popup():
                             print("The NEW NAME is : ", novelName)
                             autoSuggestObject.name = novelName
                             window['lblInputName'].metadata = 'higherTaxon-name'
+                            window['lblInputName'].update('Please input higher taxonomy:')
                             # Setting the metadata label so that ELSE: can be reached.
 
                         else:
                             autoSuggestObject.parentFullName = novelName
                             hiTaxName = window['-IN-'].get()
-                            # window['-IN-'].update(hiTaxName)
-                            # self.defaultBoxText = hiTaxName
+
                             newHigherTaxonName = sg.popup_get_text('Please finish typing the higher taxon name:',
                                                                    default_text=hiTaxName)
                             autoSuggestObject.parentFullName = newHigherTaxonName
@@ -189,12 +189,9 @@ class AutoSuggest_popup():
                             return autoSuggestObject
                             break
                         # novelNameModel = model.Model(self.collectionID)
-                        print('CUSTOM sql ll: ', len(customSQL))
 
                         #     window.close()
                         # window.hide()
-                        # window['-IN-'].update(novelName)
-                        # print('returned collobject items :-.', autoSuggestObject.name, autoSuggestObject.parentFullName)
 
                     list_element.update(values=self.candidateNamesList, set_to_index=[0])
                     # Adjusts the listbox behavior to what is expected.
@@ -211,7 +208,7 @@ class AutoSuggest_popup():
                     window['btnReturn'].BindReturnKey = True
                     window['-BOX-CONTAINER-'].update(visible=True)
                 elif len(text) >= startQuery and len(prediction_list) == 0:
-                    print('l predlist: ', len(prediction_list))
+                    print('lLLLLLLLLLLLLLLLLLLL predlist: ', len(prediction_list))
                     window['lblInputName'].update('Input higher taxon name:')
                     window['lblNewName'].update('!'+labelText, visible=True)
 
@@ -269,7 +266,7 @@ class AutoSuggest_popup():
         window.close()
 
 
-# EXE section -- remember "taxonname" or "storage"
+# EXE section -- remember "taxonname" or "storage"#
 # ob = AutoSuggest_popup('taxonname', model.Model)
 # ob.autosuggest_gui('')
 
