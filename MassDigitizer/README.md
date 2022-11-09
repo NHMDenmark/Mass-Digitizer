@@ -1,7 +1,7 @@
 # DaSSCo Mass Digitization App 
 
 
-## Purpose of app
+## Purpose of the application
 The DaSSCo project is tasked with digitizing millions of specimens and to speed this process along, there needs to be a way to rapidly fill in data on 'storage', 'taxonomy', etc.  
 
 ![This is an image](https://github.com/NHMDenmark/DaSSCo/blob/main/docs/MADD_screencap.png)  
