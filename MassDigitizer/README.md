@@ -1,22 +1,6 @@
 # DaSSCo Mass Digitization App 
 
 
-Install packages:
-
-On Linux / MacOS:
-```shell
-source venv/bin/activate
-pip install --upgrade pip
-pip install -r requirements.txt
-```
-
-On Windows:
-```shell
-venv\Scripts\activate
-pip install --upgrade pip
-pip install -r requirements.txt
-```
-
 ## Purpose of app
 The DaSSCo project is tasked with digitizing millions of specimens and to speed this process along, there needs to be a way to rapidly fill in data on 'storage', 'taxonomy', etc.  
 
@@ -34,7 +18,8 @@ python -m nuitka --windows-disable-console --follow-imports --onefile .\DaSSCo.p
 
 Remember to activate venv and run pip install -r requirements.txt first
 
-For Inno Setup use the definition file in the repo root called DaSSCO.iss
+For Inno Setup use the definition file in the repo root called DaSSCO.iss : https://github.com/NHMDenmark/DaSSCo/blob/main/MassDigitizer/DaSSCo.iss
+To put it briefly: Nuitka creates the exe file, while Inno-setup makes the setup file.
 
 ### Structure
 The app interfaces with a local SQLite database with tables for taxonomy (millions of names that are accessed according to the relevant discipline, say 'botany' for instance.) 
