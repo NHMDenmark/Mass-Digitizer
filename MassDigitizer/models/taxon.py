@@ -54,7 +54,7 @@ class Taxon(model.Model):
                 'spid':f'"{self.spid}"', 
                 'guid':f'"{self.guid}"',
                 'name':f'"{self.name}"',
-                'fullname':f'"{self.fullname}"',
+                'fullname':f'"{self.fullName}"',
                 'author':f'"{self.author}"',
                 'remarks':f'"{self.remarks}"',
                 'rankid':f'{self.rankid}',
@@ -75,7 +75,7 @@ class Taxon(model.Model):
         self.spid = record['spid']
         self.guid = record['guid']
         self.name = record['name']
-        self.fullname = record['fullname']
+        self.fullName = record['fullname']
         self.author = record['author']
         self.remarks = record['remarks']
         self.rankid = record['rankid']        
@@ -87,7 +87,7 @@ class Taxon(model.Model):
         self.spid = specifyObject['id'] # NOTE The 'id' of the Specify Object corresponds to the 'spid' field in the local app db
         self.guid = specifyObject['guid']
         self.name = specifyObject['name']
-        self.fullname = specifyObject['fullname']
+        self.fullName = specifyObject['fullname']
         self.author = specifyObject['author']
         self.remarks = specifyObject['remarks']
         self.rankid = specifyObject['rankid']        
@@ -114,4 +114,4 @@ class Taxon(model.Model):
                 current = temporary
 
     def __str__ (self):
-        return f'id:{self.id}, spid:{self.spid}, name:{self.name}, fullname:{self.fullname}, author:{self.author}, rankid:{self.rankid}, parentid: {self.parentid} '
+        return f'id:{self.id}, spid:{self.spid}, name:{self.name}, fullname:{self.fullName}, author:{self.author}, rankid:{self.rankid}, parentid: {self.parentid} '

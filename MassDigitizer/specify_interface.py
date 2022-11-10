@@ -56,7 +56,7 @@ class SpecifyInterface():
       #   passwd (String) : Specify account password  
       #   RETURNS (String) : The CSRF token necessary for further interactions in the session 
       print('Connecting to Specify7 API at: ' + gs.baseURL)
-      csrftoken = login(username, passwd, collection_id, getCSRFToken())
+      csrftoken = self.login(username, passwd, collection_id, self.getCSRFToken())
       #print(' - Log in CSRF Token: %s' % csrftoken)
       if self.verifySession(csrftoken):
           return csrftoken

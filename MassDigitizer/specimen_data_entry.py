@@ -46,11 +46,19 @@ class SpecimenDataEntry():
 
         # Functional data
         self.clearingList = ['txtStorageFullname', 'cbxPrepType', 'cbxHigherTaxon', 'cbxTypeStatus', 'txtNotes',
-                        'chkMultiSpecimen', 'cbxGeoRegion', 'txtTaxonName', 'txtCatalogNumber', 'txtRecordID']
-        self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxHigherTaxon'}, {'cbxTypeStatus'}, {'txtNotes'}, {'chkMultiSpecimen'}, {'cbxGeoRegion'}, {'txtTaxonName'}]
+                        'chkMultiSpecimen', 'cbxGeoRegion', 'inpTaxonName', 'txtCatalogNumber', 'txtRecordID']
+        self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxHigherTaxon'}, {'cbxTypeStatus'}, {'txtNotes'}, {'chkMultiSpecimen'}, {'cbxGeoRegion'}, {'inpTaxonName'}]
         self.nonStickyFields = ['txtCatalogNumber', 'txtRecordID']
 
         self.setup(collection_id)
+
+        # Create auto-suggest popup window for storage locations 
+        self.autoStorage = autoSuggest_popup.AutoSuggest_popup('storage', collection_id)
+
+        # Create auto-suggest popup window for taxon names
+        self.autoTaxonName = autoSuggest_popup.AutoSuggest_popup('taxonname', collection_id)
+
+        self.main()
 
     def setup(self, collection_id):
         # Initialize data entry form on basis of collection id
@@ -114,7 +122,7 @@ class SpecimenDataEntry():
                     background_color='white', font=('Arial', 12), readonly=True, enable_events=True), ]
         taxonInput = [
             sg.Text('Taxonomic name:     ', size=(21, 1), background_color=blueArea, text_color='black', font=font),
-            sg.Input('', size=blue_size, key='txtTaxonName', text_color='black', background_color='white',
+            sg.Input('', size=blue_size, key='inpTaxonName', text_color='black', background_color='white',
                     font=('Arial', 12), enable_events=True, pad=((5, 0), (0, 0))),
             sg.Text('No further record to go back to!', key='lblRecordEnd', visible=False, background_color="#ff5588",
                     border_width=3)]
@@ -200,6 +208,8 @@ class SpecimenDataEntry():
         # Set triggers for the different controls on the UI form 
         self.setControlEvents()
 
+    def main(self):
+
         while True:
             event, values = self.window.read()
 
@@ -207,25 +217,25 @@ class SpecimenDataEntry():
             if event is None: break  # Empty event indicates user closing window
 
             if event == 'txtStorage':
-                # Create auto-suggest popup window for storage locations 
-                autoStorage = autoSuggest_popup.AutoSuggest_popup('storage')
-
+                
                 # If more than 3 characters entered: 
                 if len(values[event]) >= 3:
                     # Get currently entered key strokes 
                     keyStrokes = values['txtStorage']
 
+                    self.autoStorage.Show()
+
                     # Fetch storage location record from database based on user interactions with autosuggest popup window 
-                    selectedStorageRecord = autoStorage.autosuggest_gui(keyStrokes)
+                    selectedStorage = self.autoStorage.captureSuggestion(keyStrokes)
                     
                     # Set storage fields using record retrieved
-                    if selectedStorageRecord is not None:
+                    if selectedStorage is not None:
                         # Set specimen record storage fields 
-                        self.collobj.setStorageFields(selectedStorageRecord)
+                        self.collobj.setStorageFieldsFromModel(selectedStorage)
 
                         # Update UI to indicate selected storage record  
-                        self.window['txtStorageFullname'].update(selectedStorageRecord['fullname'])
-                        self.window['txtStorage'].update(selectedStorageRecord['name'])
+                        self.window['txtStorageFullname'].update(selectedStorage.fullName)
+                        self.window['txtStorage'].update(selectedStorage.name)
                         
                         # Move focus to next field (PrepTypes list)
                         self.window['cbxPrepType'].set_focus()
@@ -258,26 +268,25 @@ class SpecimenDataEntry():
             if event == 'cbxGeoRegion':
                 self.collobj.setGeoRegionFields(self.window[event].widget.current())
 
-            if event == 'txtTaxonName':
-                # Create auto-suggest popup window for taxon names
-                autoTaxonName = autoSuggest_popup.AutoSuggest_popup('taxonname')
-                # autoTaxonName is a dictionary similar to the 'fieldsDict' in specimen.py
-
+            if event == 'inpTaxonName':
+                
                 # If more than 3 characters entered: 
                 if len(values[event]) >= 3:
                     # Get currently entered key strokes 
-                    keyStrokes = values['txtTaxonName']
+                    keyStrokes = values['inpTaxonName']
                     
+                    self.autoTaxonName.Show()
+
                     # Fetch taxon name record from database based on user interactions with autosuggest popup window 
-                    selectedTaxonNameRecord = autoTaxonName.autosuggest_gui(keyStrokes)
+                    selectedTaxonName = self.autoTaxonName.captureSuggestion(keyStrokes)
 
                     # Set taxon name fields using record retrieved 
-                    if selectedTaxonNameRecord is not None:
+                    if selectedTaxonName is not None:
                         # Set specimen record taxon name fields 
-                        self.collobj.setTaxonNameFields(selectedTaxonNameRecord)
+                        self.collobj.setTaxonNameFieldsFromModel(selectedTaxonName)
 
                         # Update UI to indicate selected taxon name record  
-                        self.window['txtTaxonName'].update(selectedTaxonNameRecord['fullname'])
+                        self.window['inpTaxonName'].update(selectedTaxonName.fullName)
                         
                         # Move focus further to next field (Barcode textbox)
                         self.window['txtCatalogNumber'].set_focus()
@@ -348,7 +357,7 @@ class SpecimenDataEntry():
                 self.clearNonStickyFields()
 
                 # Create a new specimen instance and add previous id to it 
-                self.collobj = specimen.specimen(collection_id) 
+                self.collobj = specimen.specimen(self.collectionId) 
                 
                 # Transfer data in sticky fields to new record: 
                 self.setRecordFields(specimenRecord, True)
@@ -405,7 +414,7 @@ class SpecimenDataEntry():
         else: multiSpecimen = False
         self.window['chkMultiSpecimen'].update(multiSpecimen)
         self.window['cbxGeoRegion'].update(record['georegionname'])
-        self.window['txtTaxonName'].update(record['taxonfullname'])
+        self.window['inpTaxonName'].update(record['taxonfullname'])
         self.window['txtCatalogNumber'].update(record['catalognumber'])
 
     def clearNonStickyFields(self):

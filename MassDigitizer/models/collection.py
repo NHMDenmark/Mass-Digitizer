@@ -30,9 +30,11 @@ class Collection(model.Model):
     def __init__(self, collection_id) -> None:
         # Set up blank record 
         model.Model.__init__(self, collection_id)
-        self.table   = 'collection'
-        self.sptype  = 'collection'
-        self.discipline = None 
+        self.table          = 'collection'
+        self.sptype         = 'collection'
+        self.institutionId  = 0
+        self.taxonTreeDefId = 0
+        self.discipline     = None 
 
         # Predefined data fields
         self.storageLocations = None 
@@ -41,7 +43,41 @@ class Collection(model.Model):
         self.geoRegions = None 
         self.geoRegionSources = None 
 
+        self.load(collection_id)
+
         #self.loadPredefinedData() # TODO Turned off for now until needed 
+
+
+    def getFieldsAsDict(self):
+        """
+        Generates a dictonary with database column names as keys and specimen records fields as values 
+        RETURNS said dictionary for passing on to data access handler 
+        """
+        
+        fieldsDict = {
+                'id':               f'{self.id}', 
+                'spid':             f'{self.spid}', 
+                'name':             f'"{self.name}"', 
+                'institutionid':    f'{self.institutionId}', 
+                'taxontreedefid':   f'{self.taxonTreeDefId}', 
+                'visible':          f'{self.visible}', 
+                }
+        
+        return fieldsDict
+
+    def setFields(self, record):
+        """
+        Function for setting base object data field from record 
+        CONTRACT 
+           record: sqliterow object containing record data 
+        """
+
+        self.id             = record['id']
+        self.spid           = record['spid']
+        self.name           = record['name']
+        self.institutionId  = record['institutionid']
+        self.taxonTreeDefId = record['taxontreedefid']
+        self.visible        = record['visible']      
 
     def fill(self, specifyObject, token):
         self.spid = specifyObject['id']
@@ -69,5 +105,6 @@ class Collection(model.Model):
         self.typeStatuses = db.getRowsOnFilters('typestatus', {'collectionid =': f'{self.collectionId}'})
         self.geoRegions = db.getRowsOnFilters('georegion', {'collectionid =': f'{self.collectionId}'}) 
         self.geoRegionSources = db.getRowsOnFilters('georegionsource', {'collectionid =': f'{self.collectionId}'}) 
-
-        
+    
+    def __str__ (self):
+        return f'[{self.table}] id:{self.id}, spid:{self.spid}, name:{self.name}, taxontreedefid = {self.taxonTreeDefId}'        

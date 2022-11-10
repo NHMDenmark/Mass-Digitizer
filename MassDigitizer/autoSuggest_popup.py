@@ -14,7 +14,6 @@ either express or implied. See the License for the specific language governing p
 - Be mindful that the autoSuggestObject gets populated as we progress through the code.
 """
 
-
 import PySimpleGUI as sg
 from itertools import chain
 
@@ -22,6 +21,7 @@ from itertools import chain
 import data_access
 import global_settings as gs
 from models import model
+from models import collection as coll
 
 db = data_access.DataAccess(gs.databaseName)
 
@@ -34,59 +34,28 @@ class AutoSuggest_popup():
     done = False
     defaultBoxText = ''
 
-    def __init__(self, table, collectionID):
-        self.tableName = table
-        self.collectionID = collectionID
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        print("\nInside __exit__")
-
-    def auto_suggest(self, name, columnName='fullname', customSQL='', taxDefItemId=None, rowLimit=200):
-        """ Purpose: for helping digitizer staff rapidly input names using return suggestions based on three or
-          more entered characters. Function only concerns itself with database lookup.
-         name: This parameter is the supplied name from the user.
-         rowLimit: at or below this the auto-suggest fires of its names
-         returns: a list of names
-         TODO implement 'taxonTreeDefid' at convienient time.
+    def __init__(self, table_name, collection_id):
         """
-        responseType = ''
-        # Local variable to determine the auto-suggest type: 'storage', taxon-name, or 'parent taxon-name'.
-        # It is included in the return statement.
-        cur = db.getDbCursor()
+        Initialize
+        """
 
-        sql = f"SELECT * FROM {self.tableName} WHERE {columnName} LIKE lower('%{name}%');"
+        self.tableName = table_name
+        self.collectionID = collection_id
+        self.collection = coll.Collection(collection_id) #db.getRowOnId('collection', collection_id)
+        print(self.collection)
 
-        if taxDefItemId:
-            sql = sql[:-1]
-            sql = sql + ' AND taxontreedefid = {};'.format(taxDefItemId)
-        elif customSQL:
-            sql = customSQL
-        print('the SQL going into cursor :;;', sql)
-        rows = cur.execute(sql).fetchall()
+        self.window = self.buildGui()
 
-        return rows
+    def buildGui(self): #, customSQL='', colName=None, alternativeInputTitle= None):
+        """ 
+        Builds the interface for taxon name lookup as well as for novel names.
+        """
 
-    def flatten_rows(self, rowsObject):
-        flatCandidates = list(chain.from_iterable(rowsObject))
-        rows = list(flatCandidates)
-        print('length flattened rows ::: ', len(rows))
-        return rows
-
-
-    def autosuggest_gui(self, partialName, startQuery=3, customSQL='', colName=None, alternativeInputTitle= None):
-        # Builds the interface for taxon name lookup as well as for novel names.
-        # Parameter partialName is the 'name' as it is being inputted, keystroke-by-keystroke
-        # startQuery is an integer on how many key strokes it takes to start the auto-suggester.
-        # Can return a novel name if such is inputted.
-
-        choices = [' ']
-        #Model object goes here below - create good name for model.
-        autoSuggestObject = model.Model(self.collectionID)
+        # dimensions of the popup list-box
         input_width = 95
         lines_to_show = 7
-        # dimensions of the popup list-box
         titleText = ''
-        highTaxText = 'Taxon name does not exist. Add higher taxonomy to create new taxon record please.'
+        highTaxText = 'Unknown taxon name. Specify parent.'
         # if alternativeInputTitle:
         #     titleText = alternativeInputTitle
         # defText = self.defaultBoxText
@@ -96,124 +65,125 @@ class AutoSuggest_popup():
              # sg.Text(labelText,
              #         key='lblNewName', visible=False, background_color='Turquoise3', metadata='invisible')],
 
-            [sg.Input(default_text=self.defaultBoxText,  size=(input_width, 1), enable_events=True, key='-IN-'),
-             sg.Button('', key='btnReturn', visible=False, bind_return_key=True),
-             sg.Button('Exit', visible=False)],
+            [sg.Input(default_text=self.defaultBoxText,  size=(input_width, 1), enable_events=True, key='txtInput'),
+             sg.Button('OK', key='btnReturn', visible=False, bind_return_key=True),
+             sg.Button('Exit', visible=False)
+             # 'btnReturn' is for binding return to nothing in case of a new name and higher taxonomy lacking.
+            ],
             [sg.Text('Input higher taxonomy:', key='lblHiTax', visible=False),
              sg.Input(size=(input_width, 1), enable_events=True, key='txtHiTax', visible=False)],
-            # 'btnReturn' is for binding return to nothing in case of a new name and higher taxonomy lacking.
             [sg.pin(
-                sg.Col([[sg.Listbox(values=[], size=(input_width, lines_to_show), enable_events=True, key='-BOX-',
+                sg.Col([[sg.Listbox(values=[], size=(input_width, lines_to_show), enable_events=True, key='lstSuggestions',
                                     bind_return_key=True, select_mode='extended')]],
-                       key='-BOX-CONTAINER-', pad=(0, 0), visible=True))], ]
+                       key='lstSuggestionsContainer', pad=(0, 0), visible=True))], ]
 
         window = sg.Window('Auto Complete', layout, return_keyboard_events=True, finalize=True, modal=False,
                            font=('Arial', 12), size=(810, 200))
         # The parameter "modal" is explicitly set to False. If True the auto close behavior won't work.
 
-        list_element: sg.Listbox = window.Element('-BOX-')  # store listbox element for easier access and to get to docstrings
+        self.lstSuggestionsElement: sg.Listbox = window.Element('lstSuggestions')  # store listbox element for easier access and to get to docstrings
+        self.txtInput: sg.Text = window.Element('txtInput')
+        
+        window['txtHiTax'].bind('<FocusIn>', '+INPUT FOCUS+')
+        window.Finalize = True # Needed for being able to reactivate window, otherwise PySimpleGUI will throw an error 
+        window.hide()
+
+        return window
+
+    def captureSuggestion(self, keyStrokes, minimumCharacters=3):
+        """
+        TODO Explain function  
+        Parameter keyStrokes is the 'name' as it is being inputted, keystroke-by-keystroke
+        minimumCharacters is an integer on how many key strokes it takes to start the auto-suggester.
+        """ 
+
+        # Resetting base variables (TODO Explain variables)
+        choices = [' ']
         prediction_list, input_text, sel_item = choices, "", 0
+       
+        # Using 'Model' base object (superclass) to encompass both derived models be it Storage or TaxonName
+        autoSuggestObject = model.Model(self.collectionID)
+        autoSuggestObject.table = self.tableName
 
-        # window['-IN-'].update(partialName)
-        # window.write_event_value('-IN-', partialName)
+        # Get GUI input events 
+        window = self.window
+        window['txtInput'].update(keyStrokes)
+        window.write_event_value('txtInput', keyStrokes) # Adds event trigger for key strokes
 
-        while True:  # Event Loop
-
-            window['txtHiTax'].bind('<FocusIn>', '+INPUT FOCUS+')
+        # GUI Event Loop
+        while True:  
+            # As long as the loop isn't exited somehow, continue checking events 
             event, values = window.read()
-            if self.done:
-                break
-            if event is None:
-                break
-
-            if event == sg.WIN_CLOSED or event == 'Exit':
-                break
-            if event is None:
-                break
-
-            elif event.startswith('Escape'):
-                window['-IN-'].update('')
-                window['-BOX-CONTAINER-'].update(visible=False)
-
-            # elif event.startswith('Down') or '16777235' and len(self.candidateNamesList):
+            print(event, values)
+            
+            # Escape loop & close window when exiting or otherwise done 
+            if self.done: break
+            if event is None: break
+            if event == sg.WIN_CLOSED or event == 'Exit': break
+            if event.startswith('Escape'): break
+            
+            # TODO comment 
             elif event.startswith('Down') and len(self.candidateNamesList):
+                # TODO comment 
                 sel_item = (sel_item + 1) % len(self.candidateNamesList)
-                list_element.update(set_to_index=sel_item, scroll_to_index=sel_item)
+                self.lstSuggestionsElement.update(set_to_index=sel_item, scroll_to_index=sel_item)
+
             elif event.startswith('Up') and len(self.candidateNamesList):
+                # TODO comment 
                 sel_item = (sel_item + (len(self.candidateNamesList) - 1)) % len(self.candidateNamesList)
-                list_element.update(set_to_index=sel_item, scroll_to_index=sel_item)
+                self.lstSuggestionsElement.update(set_to_index=sel_item, scroll_to_index=sel_item)
 
             if event.endswith('+TAB'):
-                print('pressed TAB')
-                break
-                window.close()
-            ##event IN #####################
-            elif event == '-IN-':
+                # TODO comment 
+                #break
+                pass
+            
+            if event == 'txtInput':
                 # this concerns all keystrokes except the above ones.
 
                 novelName = ''
-                if self.done == True:
-                    break
-                text = values['-IN-'].lower()
 
-                if text == input_text:
-                    continue
-                else:
-                    input_text = text
-                print('len text = ', len(text))
-                if len(text) >= startQuery:
-                    # Kicking off auto-suggest. Startquery is hardcoded to 3.
-                    choices = self.auto_suggest(text)
-                    candidates = choices
+                # When capture of suggestion has been marked as done, escape loop which will hide window
+                if self.done == True: break
+                
+                # Get text input as keystrokes converted to lower case 
+                keystrokes = values['txtInput'].lower()
+                # TODO unclear what the following line are supposed to accomplish 
+                #if keystrokes == input_text: continue
+                #else: input_text = keystrokes
+                
+                # Minimum number of keystroke characters (default: 3) should be met in order to proceed 
+                if len(keystrokes) >= minimumCharacters:
+                    # Fetch suggestions from database based on keystrokes 
+                    suggestions = self.lookupSuggestions(keystrokes)
+                    #fields = {'fullname' : f'LIKE lower("%{keyStrokes}%")', 'collectionid' : f'= {self.collection.id}'}
+                    #suggestions = db.getRowsOnFilters(self.tableName, fields, 1000)
 
-                    self.candidateNamesList = [row['fullname'] for row in candidates]
-                    # Creates a list of full-names
+                    # Convert records to list of fullnames 
+                    self.candidateNamesList = [row['fullname'] for row in suggestions]
+
                     if len(self.candidateNamesList) == 0:
-                        # A new name is assumed and user is asked to input it.
+                        pass
+                        
 
-                        if window['lblInputName'].metadata != 'higherTaxon-name':
-                            # The metadata label is used as a check on whether this loop is a new taxon name,
-                            # or if it is a new parent taxon name. This applies to the entire IF ELSE block.
-                            novelName = sg.popup_get_text('It seems you are entering a name outside the taxonomy.\nPlease check for spelling errors. After finishing the name entry, press OK: ',
-                                                          default_text=text, modal=True)
-                            print("The NEW NAME is : ", novelName)
-                            autoSuggestObject.name = novelName
-                            window['lblInputName'].metadata = 'higherTaxon-name'
-                            window['lblInputName'].update('Please input higher taxonomy:')
-                            # Setting the metadata label so that ELSE: can be reached.
-
-                        else:
-                            autoSuggestObject.parentFullName = novelName
-                            hiTaxName = window['-IN-'].get()
-
-                            newHigherTaxonName = sg.popup_get_text('Please finish typing the higher taxon name:',
-                                                                   default_text=hiTaxName)
-                            autoSuggestObject.parentFullName = newHigherTaxonName
-                            print(f"model parentfullname={autoSuggestObject.parentFullName}, "
-                                  f"name={autoSuggestObject.name}")
-                            return autoSuggestObject
-                            break
-                        # novelNameModel = model.Model(self.collectionID)
-
-                        #     window.close()
-                        # window.hide()
-
-                    list_element.update(values=self.candidateNamesList, set_to_index=[0])
                     # Adjusts the listbox behavior to what is expected.
+                    self.lstSuggestionsElement.update(values=self.candidateNamesList, set_to_index=[0])
 
-                sel_item = 0
+                    # Focus back to text input field, to enable user to continue typing 
+                    self.window['txtInput'].set_focus()
 
-                ###CALL AUTOsUGGEST_POPUP.py to get the higher taxonomy which is "parentfullname" column
+                # TODO comment
+                #sel_item = 0
 
                 if len(prediction_list) > 1:
-                    print('pred list more than NONE """', prediction_list, len(prediction_list[0]))
+                    #print('pred list more than NONE """', prediction_list, len(prediction_list[0]))
                     window['lblNewName'].update(visible=False)
                     window['lblHiTax'].update(visible=False)
                     window['txtHiTax'].update(visible=False)
                     window['btnReturn'].BindReturnKey = True
-                    window['-BOX-CONTAINER-'].update(visible=True)
-                elif len(text) >= startQuery and len(prediction_list) == 0:
-                    print('lLLLLLLLLLLLLLLLLLLL predlist: ', len(prediction_list))
+                    window['lstSuggestionsContainer'].update(visible=True)
+                elif len(keystrokes) >= minimumCharacters and len(prediction_list) == 0:
+                    #print('Prediction list: ', len(prediction_list))
                     window['lblInputName'].update('Input higher taxon name:')
                     window['lblNewName'].update('!'+labelText, visible=True)
 
@@ -221,63 +191,150 @@ class AutoSuggest_popup():
                         window[event].update(value='')
                         # prediction_list.append(' ')
 
-            ##event IN #####################
+            # TODO commment
+            if event == 'lstSuggestions' or event == 'btnReturn':
+                print('Selected suggestion : ', values['lstSuggestions'][0])
+                print('Selected parent     : ', values['txtHiTax'])
 
-            elif event == 'btnReturn':
-                print('pressed Enter/Return || values box= ', values['-BOX-'][0])
-                print('pressed Enter/Return || values input= ', values['txtHiTax'])
-
-                # Be aware about issues around the popup not being closed properly.
-                # Likely to be a PySimpleGUI bug.
-                if len(values['-BOX-']) > 0:
-                    boxVal = values['-BOX-']
+                if len(values['lstSuggestions']) > 0:
+                    # A known name is selected (?)
+                    boxVal = values['lstSuggestions']
                     if self.tableName == 'storage':
                         column = 'name'
                     else:
                         column = 'fullname'
+
                     atomicNames = boxVal[0].split('|')
                     atomic = atomicNames.pop()
                     atomic = atomic.strip()
-                    print(f"Atomic-{atomic}-", atomic)
-                    selected_row = next(row for row in candidates if row[column]==atomic)
-                    selected_row = dict(selected_row)
-                    print('response to ENTER is;;; ', dict(selected_row))
-                    ## IF section: if db query is on table STORAGE then populate and return model.
-                    if self.tableName == 'storage':
-                        print("RETURNING STORAGE OBJECT")
-                        autoSuggestObject.table = 'storage'
-                        autoSuggestObject.spid = selected_row['spid']
-                        autoSuggestObject.name = selected_row['name']
-                        autoSuggestObject.fullname = selected_row['fullname']
-                        autoSuggestObject.collectionId  = selected_row['collectionid']
-                        return autoSuggestObject
-                    novelName = selected_row['name']
-                    print(f'DOOOOOOONE !{novelName}? ', self.done)
-                    autoSuggestObject.id = selected_row['id']
-                    if window['lblInputName'].metadata == 'higherTaxon-name':
-                        #check to see if we are in the 'Add higher taxonomy section'
-                        autoSuggestObject.parentFullName = selected_row['name']
-                        #parent name is set to the taxon name selected.
-                        print('IN meta higherTaxon-name ---')
-                    # #This section populated the model variables
-                    else:
-                        autoSuggestObject.name = selected_row['name']
-                        autoSuggestObject.parentFullName = selected_row['parentfullname']
 
-                    print(f"FROM MODEL /// fullname: {autoSuggestObject.fullname}, id: {autoSuggestObject.id},"
-                          f"name: {autoSuggestObject.name}, parentfullname = {autoSuggestObject.parentFullName}")
-                    ##/end section
-                    # autoSuggestObject.setFields(selected_row)
-                    return autoSuggestObject
+                    selected_row = next(row for row in suggestions if row[column]==atomic)
+                    selected_row = dict(selected_row)
+                    
+                    # TODO comment 
+                    autoSuggestObject.table = self.tableName
+                    autoSuggestObject.id = selected_row['id']
+                    autoSuggestObject.spid = selected_row['spid']
+                    autoSuggestObject.name = selected_row['name']
+                    autoSuggestObject.fullName = selected_row['fullname']
+                    autoSuggestObject.collectionId  = selected_row['collectionid']
+                    autoSuggestObject.parentFullName = selected_row['parentfullname']
+                    
+                    # TODO comment
+                    novelName = selected_row['name']
+                                        
+                    if window['lblInputName'].metadata == 'higherTaxon-name':
+                        # TODO Check to see if we are in the 'Add higher taxonomy section'
+                        # Parent name is set to the taxon name selected.
+                        autoSuggestObject.parentFullName = selected_row['name']
+
+                    # TODO done ? 
+                    break
                 else:
-                    print('NEW higher taxon name ========', values['txtHiTax'])
+                    
+                    # A new name is assumed and user is asked to input higher taxon name 
+
+                    #if window['lblInputName'].metadata != 'higherTaxon-name':
+                    if self.tableName == 'taxonname':
+
+                        # TODO comment 
+                        autoSuggestObject.table = self.tableName
+                        autoSuggestObject.name = window['txtInput'].split(' ').pop()
+                        autoSuggestObject.fullName = window['txtInput']
+                        autoSuggestObject.collectionId  = self.collectionID
+                        autoSuggestObject.parentFullName = '' 
+
+                        #novelName = sg.popup_get_text('Unknown taxon name. Press OK when finished.', default_text=keystrokes, modal=True)
+                        #print("The NEW NAME is : ", novelName)
+                        autoSuggestObject.name = window
+                        window['lblInputName'].metadata = 'higherTaxon-name'
+                        window['lblInputName'].update('Please input higher taxonomy:')
+                        # Setting the metadata label so that ELSE: can be reached.
+
+                    else:
+                        autoSuggestObject.parentFullName = novelName
+                        hiTaxName = window['txtInput'].get()
+
+                        newHigherTaxonName = sg.popup_get_text('Please finish typing the higher taxon name:',
+                                                                default_text=hiTaxName)
+                        autoSuggestObject.parentFullName = newHigherTaxonName
+                        print(f"model parentfullname={autoSuggestObject.parentFullName}, "
+                                f"name={autoSuggestObject.name}")
+                        #return autoSuggestObject
+                        break
+                            
+                        # novelNameModel = model.Model(self.collectionID)
+
+
+                    print('NEW higher taxon name ', values['txtHiTax'])
                     return values['txtHiTax']
 
+        # TODO If new taxon name then save ! 
+
+        if window is not None: 
+            try:
                 window.Hide()
+            except: 
+                print('Window may have been closed manually')
 
+        print(autoSuggestObject)
 
-        window.Hide()
-        window.close()
+        return autoSuggestObject
+
+    def lookupSuggestions(self, keyStrokes, columnName='fullname', customSQL='', taxDefItemId=None, rowLimit=200):
+        """ 
+        Database lookup of suggestions based on three or more entered characters. 
+         keyStrokes: This parameter is the supplied keyStrokes from the user.
+         rowLimit: at or below this the auto-suggest fires of its names
+         returns: a list of names
+         TODO implement 'taxonTreeDefid' at convienient time.
+        """
+        responseType = ''
+        # Local variable to determine the auto-suggest type: 'storage', taxon-keyStrokes, or 'parent taxon-name'.
+        # It is included in the return statement.
+
+        # TODO Question: Why not use the db.getRows method ???
+        cur = db.getDbCursor()
+        sql = f"SELECT * FROM {self.tableName} WHERE {columnName} LIKE lower('%{keyStrokes}%');"
+
+        # TODO Explain function of below lines 
+        if taxDefItemId:
+            sql = sql[:-1]
+            sql = sql + ' AND taxontreedefid = {};'.format(taxDefItemId)
+        elif customSQL:
+            sql = customSQL
+        
+        rows = cur.execute(sql).fetchall()
+
+        return rows
+
+    def Show(self):
+        """Make auto-suggest popup window visible""" 
+
+        # If window has been forcefully closed rebuild
+        if self.window is None: self.window = self.buildGui
+
+        # Make window visible 
+        self.window.UnHide()
+
+    def Hide(self):
+        """Make auto-suggest popup window invvisible""" 
+        
+        # If window has been forcefully closed rebuild 
+        if self.window is None: self.window = self.buildGui
+        
+        # Make window visible 
+        self.window.Hide()
+
+    def flatten_rows(self, rowsObject):
+        flatCandidates = list(chain.from_iterable(rowsObject))
+        rows = list(flatCandidates)
+        print('length flattened rows ::: ', len(rows))
+        return rows
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        print("\nInside __exit__")
+
 
 
 # EXE section -- remember "taxonname" or "storage"#

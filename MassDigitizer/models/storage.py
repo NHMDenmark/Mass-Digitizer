@@ -58,7 +58,7 @@ class Storage(model.Model):
             'spid': f'"{self.spid}"',
             'guid': f'"{self.guid}"',
             'name': f'"{self.name}"',
-            'fullname': f'"{self.fullname}"',
+            'fullname': f'"{self.fullName}"',
             'collectionid': f'"{self.collectionid}"'
         }
 
@@ -75,7 +75,7 @@ class Storage(model.Model):
         self.spid = record['spid']
         self.guid = record['guid']
         self.name = record['name']
-        self.fullname = record['fullname']
+        self.fullName = record['fullname']
         self.collectionId = record['collectionid']
 
     def loadPredefinedData(self):
@@ -86,7 +86,7 @@ class Storage(model.Model):
         self.id = 0
         self.guid = specifyObject['guid']
         self.name = specifyObject['name']
-        self.fullname = specifyObject['fullname']
+        self.fullName = specifyObject['fullname']
         # disciplineId = int(specifyObject['discipline'].split('/')[4])
         # self.fetchDiscipline(disciplineId, token)
 
@@ -109,4 +109,4 @@ class Storage(model.Model):
         pass
 
     def __str__ (self):
-        return f'id:{self.id}, spid:{self.spid}, name:{self.name}, fullname:{self.fullname}'
+        return f'id:{self.id}, spid:{self.spid}, name:{self.name}, fullname:{self.fullName}'
