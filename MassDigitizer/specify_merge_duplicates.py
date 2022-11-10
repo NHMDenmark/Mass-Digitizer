@@ -109,7 +109,7 @@ class MergeDuplicates():
                         original = taxon.Taxon(collection.id)
                         original.fill(specifyTaxon)
                         original.getParent(token)
-                        fullName = original.fullname.replace(' ','%20')
+                        fullName = original.fullName.replace(' ','%20')
 
                         # Look up taxa with matching fullname & rank
                         taxonLookup = sp.getSpecifyObjects('taxon', token, 100000, 0, 
@@ -184,7 +184,7 @@ class MergeDuplicates():
                                                     print(f'Merged {source.spid} with {target.spid}; Time elapsed: {timeElapsed} ')
                                     else:
                                         # Found taxa with matching names, but different parents: Add to ambivalent cases 
-                                        ambivalence = f'Ambivalence on parent taxa: {original.parent.fullname} vs {lookup.parent.fullname} '
+                                        ambivalence = f'Ambivalence on parent taxa: {original.parent.fullName} vs {lookup.parent.fullName} '
 
 
                     # Escape hatch

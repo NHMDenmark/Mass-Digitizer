@@ -31,17 +31,19 @@ class Model:
         """
         Set up blank record instance for data entry on basis of collection id 
         """ 
-        self.table    = 'model'
-        self.sptype   = 'model' # NOTE not represented in Specify API
-        self.id       = 0
-        self.spid     = 0 
-        self.guid     = ''
-        self.code     = ''
-        self.name     = ''
-        self.fullname = ''
-        self.remarks  = ' '
-        self.collectionId = collection_id
-        self.status   = 0
+        self.table          = 'model'
+        self.sptype         = 'model' # NOTE not represented in Specify API
+        self.id             = 0
+        self.spid           = 0 
+        self.guid           = ''
+        self.code           = ''
+        self.name           = ''
+        self.fullName       = ''
+        self.parentFullName = ''
+        self.remarks        = ' '
+        self.collectionId   = collection_id
+        self.status         = 0
+        self.visible        = 0
     
     def save(self):
         """
@@ -93,8 +95,9 @@ class Model:
 
         self.id = record['id']
         self.name = record['name']
-        self.fullname = record['fullname']
-        
+        self.fullName = record['fullname']
+        #self.parentfullname = record['parentfullname']
+
     def loadPrevious(self, id):
         """
         Function for loading previous object record data 
@@ -166,7 +169,15 @@ class Model:
         Generic function that generates and returns a dictonary with database column names as keys and the instance's fields as values for passing on to data access handler
         NOTE Implemented in inheriting classes 
         """
-        pass
+        
+        fieldsDict = {
+                'name':f'"{self.name}"',
+                'fullname':f'"{self.fullName}"',
+                'parentfullname':f'"{self.parentFullName}"',
+                'collectionid':f'{self.collectionId}',
+                }
+        
+        return fieldsDict
     
     def loadPredefinedData(self):
         """
@@ -198,7 +209,7 @@ class Model:
         """
         self.spid = specifyObject['id']
         self.name = specifyObject['name']
-        self.fullname = specifyObject['fullname']
+        self.fullName = specifyObject['fullname']
 
     def getParent(self):
         """
@@ -222,4 +233,4 @@ class Model:
         pass
 
     def __str__ (self):
-        return f'[{self.table}] id:{self.id}, name:{self.name}, fullname = {self.fullname}'
+        return f'[{self.table}] id:{self.id}, name:{self.name}, fullname = {self.fullName}'

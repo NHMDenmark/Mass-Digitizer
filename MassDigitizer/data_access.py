@@ -42,7 +42,7 @@ class DataAccess():
         self.dbFilePath = str(Path(filePath).joinpath(f'{databaseName}.sqlite3'))
         self.dbAltFilePath = str(Path(altFilePath).joinpath(f'{databaseName}.sqlite3'))
         #self.setDatabase(databaseName)
-        print('Initializing with db file: %s ...'%self.dbFilePath)
+        #print('Initializing with db file: %s ...'%self.dbFilePath)
         self.connection = sqlite3.connect(self.dbFilePath)
         
         if gs.db_in_memory == True or do_in_memory == True:
@@ -97,7 +97,7 @@ class DataAccess():
             #print(' - running database in-memory')
             # Read database to tempfile
             tempfile = StringIO()
-            for line in connection.iterdump():
+            for line in self.connection.iterdump():
                 tempfile.write('%s\n' % line)
             self.connection.close()
             tempfile.seek(0)
@@ -155,7 +155,7 @@ class DataAccess():
         currentCursor = self.getDbCursor()   
         #print(f'-> getRowsONFilter({tableName}, {filters}, {limit})')
         sqlString = 'SELECT * FROM %s ' % tableName
-        #print('    - ', sqlString)
+
         if filters.items():
             sqlString += "WHERE "
             for key, value in filters.items():
@@ -163,10 +163,12 @@ class DataAccess():
         sqlString = sqlString[0:len(sqlString)-4] # Remove trailing " AND "
         if limit > 0:
             sqlString += f' LIMIT {limit}'
-        #print(sqlString)
+        
+        print(sqlString)
+        
         try:
             records = currentCursor.execute(sqlString).fetchall()
-        # If no records in results, insert an empty dummy row to prevent errors
+            # If no records in results, insert an empty dummy row to prevent errors
             if len(records) < 1:
                 records = currentCursor.execute("SELECT * FROM dummyrecord LIMIT 1").fetchall()
                 currentCursor.connection.close()
@@ -184,6 +186,18 @@ class DataAccess():
         #   RETURNS single table row
         currentCursor = self.getDbCursor()   
         record = currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(id)).fetchone()
+        currentCursor.connection.close()
+
+        return record
+
+    def getRowOnSpId(self, tableName, spid):
+        # Getting specific row from the table specified by its Specify primary key (spid)  
+        # CONTRACT 
+        #   tableName (String): The name of the table to be queried
+        #   spid (Integer) : The Specify primary key of the row to be returned
+        #   RETURNS single table row
+        currentCursor = self.getDbCursor()   
+        record = currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(spid)).fetchone()
         currentCursor.connection.close()
 
         return record
