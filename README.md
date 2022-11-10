@@ -35,3 +35,9 @@ Should a taxon name be inputted that is *not* contained in the taxonomic spine -
 
 ### Data export  
 As the app is designed to work "off line" all entries are stored locally. Once the workstation comes online a call to the server is initiated and the database instance is uploaded for further processing.
+
+### Licence and authorship
+The application comes under the licence [licence] which aligns with the Open Source and Open Science frameworks. The [licence] was specifically selected because of [text by Pip> _ _ _ _ <end text].  
+The authors of the application are :  
+Fedor A. Steeman, NHMD
+Jan K. Legind, NHMD  
