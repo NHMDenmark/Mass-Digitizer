@@ -180,7 +180,14 @@ class specimen(model.Model):
         # and set respective fields
         self.storageId = self.storageLocations[index]['id']
         self.storageName = self.storageLocations[index]['name']
-        self.storageFullName = self.storageLocations[index]['fullname']
+        self.storageFullName = self.storageLocations[index]['fullname']     
+
+    def setStorageFieldsFromModel(self, object):
+        # Get storage record on the basis of list index 
+        # and set respective fields
+        self.storageId = object.id
+        self.storageName = object.name
+        self.storageFullName = object.fullName
     
     def setTaxonNameFields(self, taxonNameRecord):
         # Set taxon name fields from selected name record
@@ -193,6 +200,23 @@ class specimen(model.Model):
             self.taxonName = taxonNameRecord['name'] 
             self.taxonFullName = taxonNameRecord['fullname'] 
             self.higherTaxonName = taxonNameRecord['parentfullname'] 
+        else:
+            # Empty record 
+            self.taxonNameId = 0
+
+        return self.taxonNameId
+    
+    def setTaxonNameFieldsFromModel(self, object):
+        # Set taxon name fields from selected name record
+        # CONTRACT
+        #   taxonNameRecord (sqliterow) : SQLite Row holding taxon name record
+        # RETURNS taxonNameId (int) : 
+        
+        if object is not None: 
+            self.taxonNameId = object.id
+            self.taxonName = object.name
+            self.taxonFullName = object.fullName
+            self.higherTaxonName = object.parentFullName
         else:
             # Empty record 
             self.taxonNameId = 0
