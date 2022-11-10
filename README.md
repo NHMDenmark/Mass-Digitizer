@@ -38,6 +38,7 @@ As the app is designed to work "off line" all entries are stored locally. Once t
 
 ### Licence and authorship
 The application comes under the licence [licence] which aligns with the Open Source and Open Science frameworks. The [licence] was specifically selected because of [text by Pip> _ _ _ _ <end text].  
+  
 The authors of the application are :  
-Fedor A. Steeman, NHMD
+Fedor A. Steeman, NHMD  
 Jan K. Legind, NHMD  
