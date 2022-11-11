@@ -19,10 +19,10 @@ from models import model
 import data_access
 import global_settings as gs
 
-db = data_access.DataAccess(gs.databaseName)
-
 class Discipline(model.Model):
-    "Class representing ... "
+    """
+    Class representing a discipline data record  
+    """
 
     def __init__(self, collection_id) -> None:
         # Set up blank record 
@@ -32,13 +32,17 @@ class Discipline(model.Model):
         self.taxontreedefid = 0
 
     def fill(self, specifyObject):
+        """
+        Specific function for filling discipline instance's fields with data record fetched from Specify API 
+        CONTRACT 
+            specifyObject (json)  : Specify data record fetched from Specify API 
+        """
         self.spid = specifyObject['id']
         self.name = specifyObject['name']
         #self.fullname = specifyObject['collectionname']
         self.taxontreedefid = specifyObject['taxontreedef'].split('/')[4]
-        print(f'Taxon tree def ID: {self.taxontreedefid}')
 
-        #self.
+# Generic functions
     
     def __str__ (self):
         return f'[{self.table}] id:{self.id}, spid:{self.spid}, name:{self.name}'
