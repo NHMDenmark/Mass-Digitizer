@@ -33,13 +33,14 @@ class Taxon(model.Model):
     def __init__(self, collection_id):
         """Set up blank taxon"""         
         model.Model.__init__(self, collection_id)
-        self.table         = 'taxon'
-        self.sptype        = 'taxon'
-        self.author        = ''
-        self.rankid        = 0
+        self.table          = 'taxon'
+        self.sptype         = 'taxon'
+        self.author         = ''
+        self.rankid         = 0
         self.parentfullname = ''
-        self.parentid      = 0
-        self.duplicatespid = 0
+        self.parentid       = 0
+        self.duplicatespid  = 0
+        self.gbifKey        = 0
 
         self.institutionId   = gs.institutionId #db.getRowOnId('collection',collection_id)['institutionid']
         self.collectionId    = collection_id
