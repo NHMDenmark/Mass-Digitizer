@@ -21,11 +21,10 @@ import data_access
 import global_settings as gs
 import specify_interface
 
-db = data_access.DataAccess(gs.databaseName)
-sp = specify_interface.SpecifyInterface()
-
 class Collection(model.Model):
-    "Class representing ... "
+    """
+    Class representing a collection data record  
+    """
 
     def __init__(self, collection_id) -> None:
         # Set up blank record 
@@ -46,8 +45,20 @@ class Collection(model.Model):
         self.load(collection_id)
 
         #self.loadPredefinedData() # TODO Turned off for now until needed 
+        pass
 
+# Overriding inherited functions
 
+    def loadPredefinedData(self):
+        """
+        Function for loading predefined data in order to get primary keys and other info to be pooled at selection in GUI 
+        """
+        self.storageLocations = self.db.getRowsOnFilters('storage', {'collectionid =': f'{self.collectionId}'})
+        self.prepTypes = self.db.getRowsOnFilters('preptype', {'collectionid =': f'{self.collectionId}'})
+        self.typeStatuses = self.db.getRowsOnFilters('typestatus', {'collectionid =': f'{self.collectionId}'})
+        self.geoRegions = self.db.getRowsOnFilters('georegion', {'collectionid =': f'{self.collectionId}'}) 
+        self.geoRegionSources = self.db.getRowsOnFilters('georegionsource', {'collectionid =': f'{self.collectionId}'}) 
+   
     def getFieldsAsDict(self):
         """
         Generates a dictonary with database column names as keys and specimen records fields as values 
@@ -67,7 +78,7 @@ class Collection(model.Model):
 
     def setFields(self, record):
         """
-        Function for setting base object data field from record 
+        Function for setting collection object data field from record 
         CONTRACT 
            record: sqliterow object containing record data 
         """
@@ -87,24 +98,18 @@ class Collection(model.Model):
         #self.fullname = specifyObject['collectionname'] 
         disciplineId = int(specifyObject['discipline'].split('/')[4])
         self.fetchDiscipline(disciplineId, token)
-    
+
+# Collection class specific functions 
+
     def fetchDiscipline(self, disciplineId, token):
         """
         
         """
         self.discipline = discipline.Discipline(self.id)
-        disciplineObj = sp.getSpecifyObject('discipline', disciplineId, token)
+        disciplineObj = self.sp.getSpecifyObject('discipline', disciplineId, token)
         self.discipline.fill(disciplineObj)
 
-    def loadPredefinedData(self):
-        """
-        Function for loading predefined data in order to get primary keys and other info to be pooled at selection in GUI 
-        """
-        self.storageLocations = db.getRowsOnFilters('storage', {'collectionid =': f'{self.collectionId}'})
-        self.prepTypes = db.getRowsOnFilters('preptype', {'collectionid =': f'{self.collectionId}'})
-        self.typeStatuses = db.getRowsOnFilters('typestatus', {'collectionid =': f'{self.collectionId}'})
-        self.geoRegions = db.getRowsOnFilters('georegion', {'collectionid =': f'{self.collectionId}'}) 
-        self.geoRegionSources = db.getRowsOnFilters('georegionsource', {'collectionid =': f'{self.collectionId}'}) 
-    
+# Generic functions
+
     def __str__ (self):
         return f'[{self.table}] id:{self.id}, spid:{self.spid}, name:{self.name}, taxontreedefid = {self.taxonTreeDefId}'        

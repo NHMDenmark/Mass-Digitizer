@@ -19,11 +19,11 @@ from models import model
 import data_access
 import global_settings as gs
 
-db = data_access.DataAccess(gs.databaseName)
-
 class specimen(model.Model):
-    # The specimen class is a representation of a specimen record to hold its data
-    # Any instance is either an existing record in the database or transient pending an insert
+    """
+    The specimen class is a representation of a specimen record to hold its data
+    Any instance is either an existing record in the database or transient pending an insert
+    """
 
     def __init__(self, collection_id):
         """
@@ -50,7 +50,7 @@ class specimen(model.Model):
         self.prepTypeName    = ''
         self.prepTypeId      = 0
         self.notes           = ''
-        self.institutionId   = gs.institutionId #db.getRowOnId('collection',collection_id)['institutionid']
+        self.institutionId   = gs.institutionId #self.db.getRowOnId('collection',collection_id)['institutionid']
         self.collectionId    = collection_id
         self.userName        = gs.spUserName
         self.userId          = gs.spUserId
@@ -68,42 +68,19 @@ class specimen(model.Model):
         self.geoRegionSources = None 
 
         self.loadPredefinedData()
-    
-    def setFields(self, record):
-        """
-        Function for setting specimen data field from record 
-        CONTRACT 
-           record: sqliterow object containing specimen record data 
-        """
-        #model.Model.setFields(self, record)
-        self.id = record['id']
-        self.catalogNumber = record['catalognumber']
-        self.multiSpecimen = record['multispecimen']
-        self.taxonName = record['taxonname']
-        self.taxonNameId = record['taxonnameid']
-        #self.taxonspid = record['taxonspid']
-        self.higherTaxonName = record['highertaxonname']
-        self.typeStatusName = record['typestatusname']
-        self.typeStatusId = record['typestatusid']
-        self.geoRegionName = record['georegionname']
-        self.geoRegionId = record['georegionid']
-        self.storageFullName = record['storagefullname']
-        self.storageName = record['storagename']
-        self.storageId = record['storageid']
-        self.prepTypeName = record['preptypename']
-        self.prepTypeId = record['preptypeid']
-        self.notes = record['notes'] 
-        self.institutionId = record['institutionid']
-        self.collectionId = record['collectionid']
-        self.userName = record['username']
-        self.userId = record['userid']
-        self.workStation = record['workstation']
-        self.recordDateTime = record['recorddatetime']
-        self.exported = record['exported']
-        self.exportDateTime = record['exportdatetime']
-        self.exportUserId = record['exportuserid']
 
-        self.loadPredefinedData()
+# Overriding inherited functions
+
+    def loadPredefinedData(self):
+        """
+        Function for loading predefined data in order to get primary keys and other info to be pooled from at selection in GUI.
+        """
+        
+        self.storageLocations = self.db.getRowsOnFilters('storage', {'collectionid =': f'{self.collectionId}'})
+        self.prepTypes = self.db.getRowsOnFilters('preptype', {'collectionid =': f'{self.collectionId}'})
+        self.typeStatuses = self.db.getRowsOnFilters('typestatus', {'collectionid =': f'{self.collectionId}'})
+        self.geoRegions = self.db.getRowsOnFilters('georegion', {'collectionid =': f'{self.collectionId}'}) 
+        self.geoRegionSources = self.db.getRowsOnFilters('georegionsource', {'collectionid =': f'{self.collectionId}'}) 
 
     def getFieldsAsDict(self):
         """
@@ -140,14 +117,52 @@ class specimen(model.Model):
                 }
         
         return fieldsDict
+
+    def setFields(self, record):
+        """
+        Function for setting specimen data field from record 
+        CONTRACT 
+           record: sqliterow object containing specimen record data 
+        """
+        #model.Model.setFields(self, record)
+        self.id = record['id']
+        self.catalogNumber = record['catalognumber']
+        self.multiSpecimen = record['multispecimen']
+        self.taxonName = record['taxonname']
+        self.taxonNameId = record['taxonnameid']
+        #self.taxonspid = record['taxonspid']
+        self.higherTaxonName = record['highertaxonname']
+        self.typeStatusName = record['typestatusname']
+        self.typeStatusId = record['typestatusid']
+        self.geoRegionName = record['georegionname']
+        self.geoRegionId = record['georegionid']
+        self.storageFullName = record['storagefullname']
+        self.storageName = record['storagename']
+        self.storageId = record['storageid']
+        self.prepTypeName = record['preptypename']
+        self.prepTypeId = record['preptypeid']
+        self.notes = record['notes'] 
+        self.institutionId = record['institutionid']
+        self.collectionId = record['collectionid']
+        self.userName = record['username']
+        self.userId = record['userid']
+        self.workStation = record['workstation']
+        self.recordDateTime = record['recorddatetime']
+        self.exported = record['exported']
+        self.exportDateTime = record['exportdatetime']
+        self.exportUserId = record['exportuserid']
+
+        self.loadPredefinedData()
     
+# Specimen class specific functions 
+
     def setStickyFields(self, record):
         # TODO uncertain about this one  
 
         self.setStorageFields(record)
         self.setPrepTypeFields(record) # TODO 
         self.setTaxonNameFields(record)
-        
+
     def setListFields(self, fieldName, index):
         # Generic function for setting the respective list fields 
         if fieldName == 'cbxPrepType':
@@ -231,7 +246,7 @@ class specimen(model.Model):
         # RETURNS taxonNameId (int) : Primary key of selected taxon record 
         
         # Get taxon name record on fullname
-        taxonNameRecord = db.getRowsOnFilters('taxonname', {'fullname =': f'"{taxonFullName}"'})
+        taxonNameRecord = self.db.getRowsOnFilters('taxonname', {'fullname =': f'"{taxonFullName}"'})
         resultsRowCount = len(taxonNameRecord)
 
         # if result not empty (or > 1) then set fields
@@ -277,7 +292,7 @@ class specimen(model.Model):
         """ 
         
         # Get storage record on fullname
-        storageRecord = db.getRowsOnFilters('storage', {'fullname =': f'"{storageFullName}"'})
+        storageRecord = self.db.getRowsOnFilters('storage', {'fullname =': f'"{storageFullName}"'})
         resultsRowCount = len(storageFullName)
 
         # if result not empty (or > 1) then set fields
@@ -294,14 +309,3 @@ class specimen(model.Model):
             self.storageId = -1
 
         return self.storageId 
-        
-    def loadPredefinedData(self):
-        """
-        Function for loading predefined data in order to get primary keys and other info to be pooled from at selection in GUI.
-        """
-        
-        self.storageLocations = db.getRowsOnFilters('storage', {'collectionid =': f'{self.collectionId}'})
-        self.prepTypes = db.getRowsOnFilters('preptype', {'collectionid =': f'{self.collectionId}'})
-        self.typeStatuses = db.getRowsOnFilters('typestatus', {'collectionid =': f'{self.collectionId}'})
-        self.geoRegions = db.getRowsOnFilters('georegion', {'collectionid =': f'{self.collectionId}'}) 
-        self.geoRegionSources = db.getRowsOnFilters('georegionsource', {'collectionid =': f'{self.collectionId}'}) 
