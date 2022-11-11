@@ -19,9 +19,6 @@ import data_access
 import global_settings as gs
 import specify_interface
 
-db = data_access.DataAccess(gs.databaseName)
-sp = specify_interface.SpecifyInterface()
-
 class Model:
     """
     The model class is a base class for data models inheriting & re-using a suite of shared functions
@@ -44,7 +41,13 @@ class Model:
         self.collectionId   = collection_id
         self.status         = 0
         self.visible        = 0
+
+        # 
+        self.db = data_access.DataAccess(gs.databaseName)
+        self.sp = specify_interface.SpecifyInterface()
     
+# Generic local database interfacing functions 
+
     def save(self):
         """
         Function telling instance to save its data either as a new record (INSERT) or updating an existing one (UPDATE)
@@ -56,11 +59,11 @@ class Model:
         # Checking if Save is a novel record , or if it is updating existing record.
         if self.id > 0:
             # Record Id is not 0 therefore existing record to be updated 
-            record = db.updateRow(self.table, self.id, self.getFieldsAsDict())
+            record = self.db.updateRow(self.table, self.id, self.getFieldsAsDict())
             print(f' - Updated {self.table} record with id: {self.id} and specify id: {self.spid} ')
         else:
             # Record Id is not 0 therefore existing record to be updated 
-            record = db.insertRow(self.table, self.getFieldsAsDict())
+            record = self.db.insertRow(self.table, self.getFieldsAsDict())
             self.id = record['id']
             print(f' - Inserted new {self.table} record with id: {self.id} and specify id: {self.spid} ')
 
@@ -73,7 +76,7 @@ class Model:
            id: Primary key of current record   
         """
         #print(f' - loading record with id: {id}')
-        record = db.getRowOnId(self.table , id)
+        record = self.db.getRowOnId(self.table , id)
         if record is not None: 
             self.setFields(record)
 
@@ -84,19 +87,7 @@ class Model:
            id: Primary key of current record   
         """
         print(f' - deleting record with id: {self.id}')
-        record = db.deleteRowOnId(self.table, self.id)
-    
-    def setFields(self, record):
-        """
-        Function for setting base object data field from record 
-        CONTRACT 
-           record: sqliterow object containing record data 
-        """
-
-        self.id = record['id']
-        self.name = record['name']
-        self.fullName = record['fullname']
-        #self.parentfullname = record['parentfullname']
+        record = self.db.deleteRowOnId(self.table, self.id)
 
     def loadPrevious(self, id):
         """
@@ -116,7 +107,7 @@ class Model:
         print(sql)
 
         # Fetch results from database
-        results = db.executeSqlStatement(sql)
+        results = self.db.executeSqlStatement(sql)
 
         # If results returned then pick first one, otherwise set record to nothing 
         if len(results) > 0:
@@ -149,7 +140,7 @@ class Model:
         print(sql)
 
         # Fetch results from database
-        results = db.executeSqlStatement(sql)
+        results = self.db.executeSqlStatement(sql)
 
         # If results returned then pick first one, otherwise set record to nothing 
         if len(results) > 0:
@@ -164,10 +155,19 @@ class Model:
         # NOTE: If not record retrieved None is returned 
         return record 
 
+# Functions fully implemented in inheriting classes 
+
+    def loadPredefinedData(self):
+        """
+        Generic function for loading predefined data in order to get primary keys and other info to be pooled at selection in GUI 
+        NOTE Implemented in inheriting classes. 
+        """
+        pass
+
     def getFieldsAsDict(self):
         """
         Generic function that generates and returns a dictonary with database column names as keys and the instance's fields as values for passing on to data access handler
-        NOTE Implemented in inheriting classes 
+        NOTE Fully implemented in inheriting classes 
         """
         
         fieldsDict = {
@@ -178,15 +178,24 @@ class Model:
                 }
         
         return fieldsDict
-    
-    def loadPredefinedData(self):
+
+    def setFields(self, record):
         """
-        Generic function for loading predefined data in order to get primary keys and other info to be pooled at selection in GUI 
-        NOTE Implemented in inheriting classes. 
+        Function for setting base object data field from record 
+        CONTRACT 
+           record: sqliterow object containing record data 
+        NOTE Fully implemented in inheriting classes 
         """
+
+        self.id = record['id']
+        self.name = record['name']
+        self.fullName = record['fullname']
+        #self.parentfullname = record['parentfullname']
         pass
-    
-    def fetch(self, token, id=0):
+
+# Specify Interfacing functions 
+
+    def fetch(self, token, spid=0):
         """
         Generic function for fetching a data record from Specify API and passing it to the fill(...)-function
         CONTRACT 
@@ -194,9 +203,9 @@ class Model:
             id (Integer)    : Primary key of the object in question 
         NOTE Implemented in inheriting classes. 
         """
-        if id == 0: id = self.id
+        if spid == 0: spid = self.spid
         #
-        specifyObject = sp.getSpecifyObject(self.sptype, id, token)
+        specifyObject = self.sp.getSpecifyObject(self.sptype, spid, token)
         #
         self.fill(specifyObject)
 
@@ -225,12 +234,7 @@ class Model:
         """        
         pass
 
-    def loadPredefinedData(self):
-        """
-        Function for loading predefined data in order to get primary keys and other info to be pooled at selection in GUI 
-        NOTE Implemented in inheriting classes 
-        """
-        pass
+# Generic functions
 
     def __str__ (self):
         return f'[{self.table}] id:{self.id}, name:{self.name}, fullname = {self.fullName}'
