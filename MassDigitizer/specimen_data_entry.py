@@ -251,7 +251,7 @@ class SpecimenDataEntry():
                 self.window['chkMultiSpecimen'].set_focus()
 
             if event == 'chkMultiSpecimen_Enter':
-                self.collobj.multiSpecimen = values[event]
+                self.collobj.multiSpecimen = values['chkMultiSpecimen']
                 self.window['chkMultiSpecimen'].update(True)
                 self.window['cbxGeoRegion'].set_focus()
 
@@ -389,6 +389,8 @@ class SpecimenDataEntry():
         self.collobj.multiSpecimen = record['multiSpecimen'] 
         self.collobj.setGeoRegionFields(self.window['cbxGeoRegion'].widget.current())
         self.collobj.setTaxonNameFields(db.getRowOnId('taxonname', record['taxonnameid'])) 
+        if record['taxonnameid'] == 0: 
+            print('New taxon name') 
 
         if not stickyFieldsOnly:
             self.collobj.id = record['id'] 
