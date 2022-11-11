@@ -45,8 +45,8 @@ class SpecimenDataEntry():
         self.collobj = specimen.specimen(collection_id) # Create blank specimen record instance 
 
         # Functional data
-        self.clearingList = ['txtStorageFullname', 'cbxPrepType', 'cbxHigherTaxon', 'cbxTypeStatus', 'txtNotes', 'chkMultiSpecimen', 'cbxGeoRegion', 'inpTaxonName', 'txtCatalogNumber', 'txtRecordID']
-        self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxHigherTaxon'}, {'cbxTypeStatus'}, {'txtNotes'}, {'chkMultiSpecimen'}, {'cbxGeoRegion'}, {'inpTaxonName'}]
+        self.clearingList = ['txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'txtNotes', 'chkMultiSpecimen', 'cbxGeoRegion', 'inpTaxonName', 'txtCatalogNumber', 'txtRecordID']
+        self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'txtNotes'}, {'chkMultiSpecimen'}, {'cbxGeoRegion'}, {'inpTaxonName'}]
         self.nonStickyFields = ['txtCatalogNumber', 'txtRecordID']
 
         self.setup(collection_id)
@@ -96,10 +96,10 @@ class SpecimenDataEntry():
             sg.Text("Preparation type:", size=defaultSize, background_color=greenArea, font=font),
             sg.Combo(util.convert_dbrow_list(self.collobj.prepTypes), key='cbxPrepType', size=green_size, text_color='black',
                     background_color='white', font=('Arial', 12), readonly=True, enable_events=True), ]
-        taxonomy = [ #Currently not used
-            sg.Text("Taxonomic group:", size=defaultSize, visible=False, background_color=greenArea, font=font),
-            sg.Combo(taxonomicGroups, key='cbxHigherTaxon', visible=False, size=green_size, text_color='black',
-                    background_color='white', font=('Arial', 12), readonly=True, enable_events=True), ]
+        # taxonomy = [ #Currently not used
+        #     sg.Text("Taxonomic group:", size=defaultSize, visible=False, background_color=greenArea, font=font),
+        #     sg.Combo(taxonomicGroups, key='cbxHigherTaxon', visible=False, size=green_size, text_color='black',
+        #             background_color='white', font=('Arial', 12), readonly=True, enable_events=True), ]
         type_status = [
             sg.Text('Type status:', size=defaultSize, background_color=greenArea, font=font),
             sg.Combo(util.convert_dbrow_list(self.collobj.typeStatuses), key='cbxTypeStatus', size=green_size,

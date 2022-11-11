@@ -190,6 +190,7 @@ class AutoSuggest_popup():
                         autoSuggestObject.fullName = selected_row['fullname']
                         autoSuggestObject.collectionId  = self.collectionID
                         autoSuggestObject.parentFullName = selected_row['parentfullname']
+                        
                     else: 
                         # Higher taxon being entered: Set new taxon name fields accordingly
                         autoSuggestObject.table = self.tableName
@@ -202,12 +203,9 @@ class AutoSuggest_popup():
                         window['lblHiTax'].update(visible=False)
                         window['txtHiTax'].update(visible=False)
                         window['txtInput'].SetFocus()                        
-
+                        # TODO Convert to taxon name subclass so we can set taxontreedefid !!! 
                         autoSuggestObject.save()
-
-                        # TODO Do not escape if no higher taxon selected! 
-                    
-                    
+                   
                     break
                 else:                    
                     # Since the listbox is empty a new name is assumed 
