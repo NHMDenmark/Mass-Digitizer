@@ -45,8 +45,7 @@ class SpecimenDataEntry():
         self.collobj = specimen.specimen(collection_id) # Create blank specimen record instance 
 
         # Functional data
-        self.clearingList = ['txtStorageFullname', 'cbxPrepType', 'cbxHigherTaxon', 'cbxTypeStatus', 'txtNotes',
-                        'chkMultiSpecimen', 'cbxGeoRegion', 'inpTaxonName', 'txtCatalogNumber', 'txtRecordID']
+        self.clearingList = ['txtStorageFullname', 'cbxPrepType', 'cbxHigherTaxon', 'cbxTypeStatus', 'txtNotes', 'chkMultiSpecimen', 'cbxGeoRegion', 'inpTaxonName', 'txtCatalogNumber', 'txtRecordID']
         self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxHigherTaxon'}, {'cbxTypeStatus'}, {'txtNotes'}, {'chkMultiSpecimen'}, {'cbxGeoRegion'}, {'inpTaxonName'}]
         self.nonStickyFields = ['txtCatalogNumber', 'txtRecordID']
 
@@ -126,12 +125,6 @@ class SpecimenDataEntry():
                     font=('Arial', 12), enable_events=True, pad=((5, 0), (0, 0))),
             sg.Text('No further record to go back to!', key='lblRecordEnd', visible=False, background_color="#ff5588",
                     border_width=3)]
-
-        # taxonomicPicklist = [
-        #     sg.Text('', size=defaultSize, background_color=blueArea, text_color='black', font=font),
-        #     sg.Listbox('', key='cbxTaxonName', select_mode=sg.LISTBOX_SELECT_MODE_BROWSE, size=(28, 6),
-        #                text_color='black', background_color='white', font=('Arial', 12),
-        #                bind_return_key=True, enable_events=True, pad=((5, 0), (0, 0))),]
 
         barcode = [
             sg.Text('Barcode:', size=defaultSize, background_color=blueArea, enable_events=True, text_color='black',
