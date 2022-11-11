@@ -141,7 +141,7 @@ class DataAccess():
         
         return records
 
-    def getRowsOnFilters(self, tableName, filters, limit=10000):
+    def getRowsOnFilters(self, tableName, filters, limit=10000, sort=None):
         # Getting specific rows specified by filters from the table specified by name
         # CONTRACT 
         #   tableName (String): The name of the table to be queried
@@ -161,20 +161,24 @@ class DataAccess():
             for key, value in filters.items():
                 sqlString += f'{key} {value} AND '
         sqlString = sqlString[0:len(sqlString)-4] # Remove trailing " AND "
+        
+        if sort is not None: 
+            sqlString += f' ORDER BY {sort}'
+        
         if limit > 0:
             sqlString += f' LIMIT {limit}'
-        
+
         print(sqlString)
         
         try:
             records = currentCursor.execute(sqlString).fetchall()
-            # If no records in results, insert an empty dummy row to prevent errors
+            # If no records in results, fetch an empty dummy row to prevent errors
             if len(records) < 1:
                 records = currentCursor.execute("SELECT * FROM dummyrecord LIMIT 1").fetchall()
-                currentCursor.connection.close()
         except sqlite3.OperationalError:
             records = currentCursor.execute("SELECT * FROM dummyrecord LIMIT 1").fetchall()
-            currentCursor.connection.close()
+
+        currentCursor.connection.close()
 
         return records
 
