@@ -144,28 +144,28 @@ class AutoSuggest_popup():
                 novelName = ''
 
                 # When capture of suggestion has been marked as done, escape loop which will hide window
-                if self.done == True: break
+
                 
                 # Get text input as keystrokes converted to lower case 
                 keystrokes = values['txtInput'].lower()
+                print(f"KEYSTROKKKKES: {keystrokes}")
                 # TODO unclear what the following line are supposed to accomplish 
                 #if keystrokes == input_text: continue
                 #else: input_text = keystrokes
+                if values['txtInput']:
+                    print(f"getting hit with {values['txtInput']}")
                 
                 # Minimum number of keystroke characters (default: 3) should be met in order to proceed 
                 if len(keystrokes) >= minimumCharacters:
                     # Fetch suggestions from database based on keystrokes 
                     suggestions = self.lookupSuggestions(keystrokes)
                     #fields = {'fullname' : f'LIKE lower("%{keyStrokes}%")', 'collectionid' : f'= {self.collection.id}'}
-                    #suggestions = db.getRowsOnFilters(self.tableName, fields, 1000)
 
                     # Convert records to list of fullnames 
                     self.candidateNamesList = [row['fullname'] for row in suggestions]
 
                     if len(self.candidateNamesList) == 0:
                         pass
-                        
-
                     # Adjusts the listbox behavior to what is expected.
                     self.lstSuggestionsElement.update(values=self.candidateNamesList, set_to_index=[0])
 
@@ -174,27 +174,31 @@ class AutoSuggest_popup():
 
                 # TODO comment
                 #sel_item = 0
-
-                if len(prediction_list) > 1:
-                    #print('pred list more than NONE """', prediction_list, len(prediction_list[0]))
-                    window['lblNewName'].update(visible=False)
+                print('LENGTH candidatename list ==: ', len(self.candidateNamesList))
+                if len(self.candidateNamesList) > 1:
+                    print('pred list more than NONE """', len(self.candidateNamesList))
+                    # window['lblNewName'].update(visible=False)
                     window['lblHiTax'].update(visible=False)
                     window['txtHiTax'].update(visible=False)
                     window['btnReturn'].BindReturnKey = True
                     window['lstSuggestionsContainer'].update(visible=True)
-                elif len(keystrokes) >= minimumCharacters and len(prediction_list) == 0:
-                    #print('Prediction list: ', len(prediction_list))
-                    window['lblInputName'].update('Input higher taxon name:')
-                    window['lblNewName'].update('!'+labelText, visible=True)
+                elif len(keystrokes) >= minimumCharacters and len(self.candidateNamesList) == 0:
+                    print('Ccandidate list: ', len(self.candidateNamesList), " this is going to be a new name!!!")
+                    window['lblInputName'].update('Please finish typing the new taxon name:')
+                    # window['lblNewName'].update('!', visible=True)
+                    window['lblInputName'].metadata = 'higherTaxon_name'
+                    print(f"New taxon name string: {values['txtInput']}")
 
-                    if len(prediction_list) == 0:
-                        window[event].update(value='')
-                        # prediction_list.append(' ')
+                    # if len(self.candidateNamesList) == 0:
+                    #     window[event].update(value='')
+                    #     # prediction_list.append(' ')
 
             # TODO commment
             if event == 'lstSuggestions' or event == 'btnReturn':
-                print('Selected suggestion : ', values['lstSuggestions'][0])
-                print('Selected parent     : ', values['txtHiTax'])
+                print('Selected suggestion : ', type(values['lstSuggestions']), values['lstSuggestions'])
+                print('Selected parent     : ', values['txtInput'])
+                ##Trigger txtInput !!!!!!!
+
 
                 if len(values['lstSuggestions']) > 0:
                     # A known name is selected (?)
@@ -210,6 +214,7 @@ class AutoSuggest_popup():
 
                     selected_row = next(row for row in suggestions if row[column]==atomic)
                     selected_row = dict(selected_row)
+                    print("selected_row ", selected_row)
                     
                     # TODO comment 
                     autoSuggestObject.table = self.tableName
@@ -217,15 +222,17 @@ class AutoSuggest_popup():
                     autoSuggestObject.spid = selected_row['spid']
                     autoSuggestObject.name = selected_row['name']
                     autoSuggestObject.fullName = selected_row['fullname']
-                    autoSuggestObject.collectionId  = selected_row['collectionid']
+                    autoSuggestObject.collectionId  = self.collectionID
                     autoSuggestObject.parentFullName = selected_row['parentfullname']
                     
                     # TODO comment
                     novelName = selected_row['name']
                                         
-                    if window['lblInputName'].metadata == 'higherTaxon-name':
+                    if window['lblInputName'].metadata == 'higherTaxon_name':
                         # TODO Check to see if we are in the 'Add higher taxonomy section'
                         # Parent name is set to the taxon name selected.
+                        window['lblInputName'].update('Please finish typing the HIGHER TAXON name:')
+                        window['txtInput'].update('')
                         autoSuggestObject.parentFullName = selected_row['name']
 
                     # TODO done ? 
@@ -237,7 +244,7 @@ class AutoSuggest_popup():
                     #if window['lblInputName'].metadata != 'higherTaxon-name':
                     if self.tableName == 'taxonname':
 
-                        # TODO comment 
+                        # TODO comment : Make autosuggest for higher taxonomy available again.
                         autoSuggestObject.table = self.tableName
                         autoSuggestObject.name = window['txtInput'].split(' ').pop()
                         autoSuggestObject.fullName = window['txtInput']
@@ -338,6 +345,8 @@ class AutoSuggest_popup():
 
 
 # EXE section -- remember "taxonname" or "storage"#
-# ob = AutoSuggest_popup('taxonname', model.Model)
+# ob = AutoSuggest_popup('taxonname', 29)
+# autoTaxonName = ob.Show()
 # ob.autosuggest_gui('')
+# ob.autoSuggest_popup.AutoSuggest_popup('taxonname', 29)
 
