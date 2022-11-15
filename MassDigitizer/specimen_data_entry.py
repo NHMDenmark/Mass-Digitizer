@@ -237,6 +237,7 @@ class SpecimenDataEntry():
 
             if event == 'cbxPrepType':
                 self.collobj.setPrepTypeFields(self.window[event].widget.current())
+                self.window['cbxTypeStatus'].set_focus()
 
             # if event == 'cbxHigherTaxon':
             #    pass
@@ -245,9 +246,11 @@ class SpecimenDataEntry():
                 # TypeStatus is preloaded in the Class
                 self.collobj.setTypeStatusFields(self.window[event].widget.current())
                 self.collobj.typeStatusName = self.window['cbxTypeStatus'].get()
+                self.window['txtNotes'].set_focus()
 
             if event == 'txtNotes_Edit':
                 self.collobj.notes = values['txtNotes']
+                self.window['chkMultiSpecimen'].set_focus()
 
             if event.endswith('_Tab'):
                 self.collobj.notes = values['txtNotes']
@@ -256,13 +259,14 @@ class SpecimenDataEntry():
             if event == 'chkMultiSpecimen_Enter':
                 # This event is only triggered by being in the checkbox element
                 # and pressing Enter.
-                if self.window.FindElement('chkMultiSpecimen').Get():
-                    print('multi-specimen value on Enter : ', self.window.FindElement('chkMultiSpecimen').Get())
+                check = self.window['chkMultiSpecimen'].Get()
+                if check:
+                    print('multi-specimen value on Enter : ', check)
 
                 else:
                     print('multi-specimen status ... : ', False)
                 self.collobj.multiSpecimen = values['chkMultiSpecimen']
-                # self.window['cbxGeoRegion'].set_focus()
+                self.window['cbxGeoRegion'].set_focus()
 
             if event == 'chkMultiSpecimen_Edit':
                 print('multi-speci EDIT : ', values['chkMultiSpecimen'])
@@ -270,6 +274,7 @@ class SpecimenDataEntry():
 
             if event == 'cbxGeoRegion':
                 self.collobj.setGeoRegionFields(self.window[event].widget.current())
+                self.window['inpTaxonName'].set_focus()
 
             if event == 'inpTaxonName':
                 
@@ -364,6 +369,8 @@ class SpecimenDataEntry():
                 
                 # Transfer data in sticky fields to new record: 
                 self.setRecordFields(specimenRecord, True)
+
+                self.window['txtCatalogNumber'].set_focus()
 
         self.window.close()
 

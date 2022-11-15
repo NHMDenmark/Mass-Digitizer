@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "DaSSCo MADD"
-#define MyAppVersion "0.1"
+#define MyAppVersion "0.2.2"
 #define MyAppPublisher "NHMD"
 #define MyAppExeName "DaSSCo.exe"
 
@@ -31,9 +31,10 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\bxq762\Documents\workspace\Mass digitizer\DaSSCo\MassDigitizer\DaSSCo.dist\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\bxq762\Documents\workspace\Mass digitizer\DaSSCo\MassDigitizer\DaSSCo.dist\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\bxq762\Documents\workspace\Mass digitizer\DaSSCo\MassDigitizer\db\db.sqlite3"; DestDir: "{userdocs}\DaSSCo"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "DaSSCo.dist\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "DaSSCo.dist\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "db\db.sqlite3"; DestDir: "{userdocs}\DaSSCo"; Flags: ignoreversion recursesubdirs createallsubdirs
+
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

@@ -58,3 +58,12 @@ MassDigitizer/libpasteurize/*
 *OLD
 MassDigitizer/pefile*
 MassDigitizer/kick_off_sql_searches.py
+DaSSCo.onefile-build
+*spec
+PyInstaller
+build
+dist
+pefile*
+pyinstaller*
+pywin*
+setuptools*

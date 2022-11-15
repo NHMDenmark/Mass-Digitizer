@@ -19,9 +19,9 @@ import pytest
 import global_settings as gs
 
 # The following lines allow for finding code files to be tested in the app root folder  
-from pathlib import Path
+""" from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.joinpath('MassDigitizer')))
-TESTDATAPATH = Path(__file__).parent
+TESTDATAPATH = Path(__file__).parent """
 
 #Internal dependencies 
 import util 

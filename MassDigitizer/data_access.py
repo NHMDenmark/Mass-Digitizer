@@ -82,7 +82,7 @@ class DataAccess():
         # CONTRACT
         #   TODO: do_in_memory (boolean): Whether the database file should be run in-memory 
         #   RETURNS database cursor object 
-        #print('Connecting to db file: %s ...'%dbFilePath)
+        print(f'Connecting to db file: {self.dbFilePath} ...')
 
         # Connect to database file. On error, try alternative location assuming OneDrive user
         try:
@@ -132,7 +132,7 @@ class DataAccess():
         
         if sortColumn is not None: 
             sqlString += f' ORDER BY {sortColumn}'
-
+        print(sqlString)
         records = currentCursor.execute(sqlString).fetchall()
         
         #print(f'Found {len(records)} records ')

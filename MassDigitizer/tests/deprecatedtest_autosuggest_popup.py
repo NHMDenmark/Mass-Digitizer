@@ -16,13 +16,8 @@
 import sys 
 import pytest
 
-# The following lines allow for finding code files to be tested in the app root folder  
-from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent.joinpath('MassDigitizer')))
-TESTDATAPATH = Path(__file__).parent
-
 # Internal dependencies 
-# none
+import global_settings as gs
 
 # The module to be tested
 import autoSuggest_popup as asp
@@ -33,13 +28,17 @@ aspTaxonNames = asp.AutoSuggest_popup('taxonname', 29)
 # Instantiate storage autosuggest popup
 aspStorage = asp.AutoSuggest_popup('storage', 29)
 
+gs.databaseName = 'test'
+
+
 def test_taxonname():
     # Determine, rather trivially, whether the correct tablename has been set ('taxonname')
     assert aspTaxonNames.tableName == 'taxonname'
 
 def test_taxonname_auto_suggest():
 
-    choices = aspTaxonNames.captureSuggestion('pra', 'fullname')
+    choices = aspTaxonNames.captureSuggestion('pra')
+
     print(f'Got {len(choices)} taxon suggestions. ')
     found = False 
     for c in choices:
@@ -52,7 +51,9 @@ def test_taxonname_auto_suggest():
 
 def test_storage_auto_suggest():
     # TODO 
-    choices = aspStorage.captureSuggestion('Box', 'fullname')
+
+    choices = aspStorage.captureSuggestion('Box')
+
     print(f'Got {len(choices)} storage suggestions. ')
     found = False 
     for c in choices:

@@ -78,8 +78,7 @@ class MergeDuplicates():
         print(f'Scanning {collection.spid} ...')
 
         # Fetch taxon ranks from selected collection's discipline taxon tree 
-        taxonranks = sp.getSpecifyObjects('taxontreedefitem', token, 100, 0,
-                                        {"treedef":str(collection.discipline.taxontreedefid)})
+        taxonranks = sp.getSpecifyObjects('taxontreedefitem', token, 100, 0, {"treedef":str(collection.discipline.taxontreedefid)})
 
         # Iterate taxon ranks for analysis
         for rank in taxonranks:
@@ -211,9 +210,9 @@ class MergeDuplicates():
     def recordAmbivalentCase(self, original, lookup, ambivalence):
         print(ambivalence)
         original.remarks = str(original.remarks) + f' | {ambivalence}'
-        ambivalentCases.append(original)
+        self.ambivalentCases.append(original)
         lookup.remarks = str(lookup.remarks) + f' | {ambivalence}'
-        ambivalentCases.append(lookup)
+        self.ambivalentCases.append(lookup)
 
 md = MergeDuplicates()
 md.main()
