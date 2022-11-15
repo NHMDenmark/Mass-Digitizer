@@ -27,8 +27,8 @@ db = data_access.DataAccess(gs.databaseName)
 
 class AutoSuggest_popup():
     startQueryLimit = 3
-    # rowDict = {}
     # No. of keystrokes before auto suggest function is triggered.
+
     candidateNamesList = []
     rowCandidates = []
     done = False
@@ -56,26 +56,22 @@ class AutoSuggest_popup():
         # dimensions of the popup list-box
         input_width = 95
         lines_to_show = 7
-        titleText = ''
-        highTaxText = 'Unknown taxon name. Specify parent.'
-        # if alternativeInputTitle:
-        #     titleText = alternativeInputTitle
-        # defText = self.defaultBoxText
+
 
         layout = [
             [sg.Text('Input name:', key="lblInputName", metadata='initial-name')],
              # sg.Text(labelText,
              #         key='lblNewName', visible=False, background_color='Turquoise3', metadata='invisible')],
 
-            [sg.Input(default_text=self.defaultBoxText,  size=(input_width, 1), enable_events=True, key='txtInput'),
+            [sg.Input(default_text=self.defaultBoxText, key='txtInput', size=(input_width, 1), enable_events=True),
              sg.Button('OK', key='btnReturn', visible=False, bind_return_key=True),
              sg.Button('Exit', visible=False)
              # 'btnReturn' is for binding return to nothing in case of a new name and higher taxonomy lacking.
             ],
             [sg.Text('Input higher taxonomy:', key='lblHiTax', visible=False),
-             sg.Input(size=(input_width, 1), enable_events=True, key='txtHiTax', visible=False)],
+             sg.Input(size=(input_width, 1), key='txtHiTax', enable_events=True, visible=False)],
             [sg.pin(
-                sg.Col([[sg.Listbox(values=[], size=(input_width, lines_to_show), enable_events=True, key='lstSuggestions',
+                sg.Col([[sg.Listbox(values=[], key='lstSuggestions', size=(input_width, lines_to_show), enable_events=True,
                                     bind_return_key=True, select_mode='extended')]],
                        key='lstSuggestionsContainer', pad=(0, 0), visible=True))], ]
 
@@ -126,12 +122,12 @@ class AutoSuggest_popup():
             
             # TODO comment 
             elif event.startswith('Down') and len(self.candidateNamesList):
-                # TODO comment 
+                # Listbox element is not born with up/down arrow capability.
                 sel_item = (sel_item + 1) % len(self.candidateNamesList)
                 self.lstSuggestionsElement.update(set_to_index=sel_item, scroll_to_index=sel_item)
 
             elif event.startswith('Up') and len(self.candidateNamesList):
-                # TODO comment 
+                # Listbox element is not born with up/down arrow capability.
                 sel_item = (sel_item + (len(self.candidateNamesList) - 1)) % len(self.candidateNamesList)
                 self.lstSuggestionsElement.update(set_to_index=sel_item, scroll_to_index=sel_item)
 
@@ -145,11 +141,9 @@ class AutoSuggest_popup():
                 # Get text input as keystrokes converted to lower case 
                 keystrokes = values['txtInput'].lower()
                 print(f"KEYSTROKKKKES: {keystrokes}")
-                # TODO unclear what the following line are supposed to accomplish 
-                #if keystrokes == input_text: continue
-                #else: input_text = keystrokes
-                if values['txtInput']:
-                    print(f"getting hit with {values['txtInput']}")
+
+                # if values['txtInput']:
+                #     print(f"getting hit with {values['txtInput']}")
                 
                 # Minimum number of keystroke characters (default: 3) should be met in order to proceed 
                 if len(keystrokes) >= minimumCharacters:
@@ -169,6 +163,8 @@ class AutoSuggest_popup():
                     boxVal = values['lstSuggestions']
                     if self.tableName == 'storage':
                         column = 'name'
+                        # It makes no sense to search on storage fullname since the distinctive value
+                        # is at the end of a long string.
                     else:
                         column = 'fullname'
 
@@ -213,7 +209,7 @@ class AutoSuggest_popup():
                     # Only valid in case of taxon name and not storage 
                     if self.tableName == 'taxonname':
                         # New taxon name is assumed and higher taxon input field is made available 
-                        print('poa taxon name ', values['txtHiTax'])
+                        print('Relevant taxon name ', values['txtHiTax'])
                         window['lblHiTax'].update(visible=True)
                         window['txtHiTax'].update(visible=True)
                         window['txtHiTax'].SetFocus()
@@ -221,9 +217,10 @@ class AutoSuggest_popup():
             if values['txtHiTax']:
                 # Higher taxon is being entered: Update suggestions 
                 higherTaxonName = values['txtHiTax']
-                print(f'We are in text box HIgher taxon name .{higherTaxonName}.')
+                # print(f'We are in text box Higher taxon name .{higherTaxonName}.')
                 if len(higherTaxonName) >= minimumCharacters:
                     self.handleSuggestions(values['txtHiTax'].lower(), 140)
+                    # Rank Family is assumed (id: 140)
 
         if window is not None: 
             try:
@@ -294,6 +291,7 @@ class AutoSuggest_popup():
         self.window.Hide()
 
     def flatten_rows(self, rowsObject):
+        # The SQLite rowsObject is slightly odd in that it is a "list of dicts", but not really.
         flatCandidates = list(chain.from_iterable(rowsObject))
         rows = list(flatCandidates)
         print('length flattened rows ::: ', len(rows))
