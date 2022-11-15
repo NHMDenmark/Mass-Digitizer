@@ -32,14 +32,17 @@ class Model:
         self.sptype         = 'model' # NOTE not represented in Specify API
         self.id             = 0
         self.spid           = 0 
+        self.gbifKey        = 0
         self.guid           = ''
         self.code           = ''
         self.name           = ''
         self.fullName       = ''
         self.parentFullName = ''
+        self.parentId       = 0
         self.remarks        = ' '
         self.collectionId   = collection_id
         self.status         = 0
+        self.source         = 'Unspecified'
         self.visible        = 0
 
         # 
