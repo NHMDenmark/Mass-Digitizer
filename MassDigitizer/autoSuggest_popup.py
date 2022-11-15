@@ -144,7 +144,6 @@ class AutoSuggest_popup():
             if event == 'txtInput':
                 # Get text input as keystrokes converted to lower case 
                 keystrokes = values['txtInput'].lower()
-                print(f"KEYSTROKKKKES: {keystrokes}")
                 # TODO unclear what the following line are supposed to accomplish 
                 #if keystrokes == input_text: continue
                 #else: input_text = keystrokes
@@ -152,7 +151,7 @@ class AutoSuggest_popup():
                     print(f"getting hit with {values['txtInput']}")
                 
                 # Minimum number of keystroke characters (default: 3) should be met in order to proceed 
-                if len(keystrokes) >= minimumCharacters:
+                if int(len(keystrokes)) >= int(minimumCharacters):
                     self.handleSuggestions(keystrokes)
 
                     # Focus back to text input field, to enable user to continue typing 
@@ -235,10 +234,15 @@ class AutoSuggest_popup():
 
         return autoSuggestObject
 
-    def handleSuggestions(self, keystrokes='', minimumRank=270):
+    def handleSuggestions(self, keyStrokes='', minimumRank=270):
         # Fetch suggestions from database based on keystrokes 
-        self.suggestions = self.lookupSuggestions(keystrokes, 'fullname', minimumRank)
-        #fields = {'fullname' : f'LIKE lower("%{keyStrokes}%")', 'collectionid' : f'= {self.collection.id}'}
+        #self.suggestions = self.lookupSuggestions(keystrokes, 'fullname', minimumRank)
+        fields = {}
+        if self.tableName == 'taxonname': 
+            fields = {'fullname' : f'LIKE lower("%{keyStrokes}%")', 'taxontreedefid' : f'= {self.collection.taxonTreeDefId}', 'rankid' : '<=270'}
+        else: 
+            fields = {'name' : f'LIKE lower("%{keyStrokes}%")'}
+        self.suggestions  = db.getRowsOnFilters(self.tableName, fields)
 
         # Convert records to list of fullnames 
         self.candidateNamesList = [row['fullname'] for row in self.suggestions]

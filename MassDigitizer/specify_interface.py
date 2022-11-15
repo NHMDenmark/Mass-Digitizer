@@ -57,9 +57,9 @@ class SpecifyInterface():
       """ 
       Function for logging in to the Specify7 API and getting the CSRF token necessary for further interactions in the session 
       CONTRACT
-        username (String): Specify account user name  
-        passwd (String) : Specify account password  
-        RETURNS (String) : The CSRF token necessary for further interactions in the session 
+        username (String) : Specify account user name  
+        passwd   (String) : Specify account password  
+        RETURNS  (String) : The CSRF token necessary for further interactions in the session 
       """
       print('Connecting to Specify7 API at: ' + gs.baseURL)
       csrftoken = self.login(username, passwd, collection_id, self.getCSRFToken())
@@ -74,9 +74,9 @@ class SpecifyInterface():
     Username and password should be passed to the login function along with CSRF token 
     After successful login a new CSRF token is issued that should be used for the continuing session 
     CONTRACT 
-      username (String): The Specify account's username 
-      passwd (String): The password for the Specify account
-      csrftoken (String): The CSRF token is required for security reasons  
+      username  (String) : The Specify account's username 
+      passwd    (String) : The password for the Specify account
+      csrftoken (String) : The CSRF token is required for security reasons  
     """
     print('Log in using CSRF token & username/password')
     headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL}
@@ -91,7 +91,7 @@ class SpecifyInterface():
     """ 
     Attempt to fetch data on the current user being logged in as a way to verify the session  
     CONTRACT 
-      csrftoken (String): The CSRF token is required for security reasons
+      csrftoken (String) : The CSRF token is required for security reasons
       RETURNS boolean to indicate session validity
     """  
     print('Verify session')
@@ -122,8 +122,8 @@ class SpecifyInterface():
     """ 
     Fetches collection objects from the Specify API using their primary key 
     CONTRACT 
-      collectionObjectId (Integer): The primary key of the collectionObject, which is not the same as catalog number  
-      csrftoken (String): The CSRF token is required for security reasons 
+      collectionObjectId (Integer) : The primary key of the collectionObject, which is not the same as catalog number  
+      csrftoken          (String)  : The CSRF token is required for security reasons 
       RETURNS fetched object 
     """   
     print('Query collection object')
@@ -142,11 +142,11 @@ class SpecifyInterface():
     """ 
     Generic method for fetching object sets from the Specify API based on object name 
     CONTRACT 
-      objectName (String): The API's name for the objects to be queried  
-      csrftoken (String): The CSRF token is required for security reasons
-      limit (Integer): Maximum amount of records to be retrieve at a time. Default value: 100 
-      offset (Integer): Offset of the records to be retrieved for enabling paging. Default value: 0 
-      filters (Dictionary) : Optional filters as a key, value pair of strings 
+      objectName (String)     : The API's name for the objects to be queried  
+      csrftoken  (String)     : The CSRF token is required for security reasons
+      limit      (Integer)    : Maximum amount of records to be retrieve at a time. Default value: 100 
+      offset     (Integer)    : Offset of the records to be retrieved for enabling paging. Default value: 0 
+      filters    (Dictionary) : Optional filters as a key, value pair of strings 
       RETURNS fetched object set 
     """ 
     #print('Fetching "%s" with limit %d and offset %d ' %(objectName, limit, offset))
@@ -170,9 +170,9 @@ class SpecifyInterface():
     """ 
     Generic method for fetching objects from the Specify API using their primary key
     CONTRACT 
-      objectName (String): The API's name for the object to be fetched  
-      objectId (Integer): The primary key of the object
-      csrftoken (String): The CSRF token is required for security reasons  
+      objectName (String)  : The API's name for the object to be fetched  
+      objectId   (Integer) : The primary key of the object
+      csrftoken  (String)  : The CSRF token is required for security reasons  
       RETURNS fetched object 
     """ 
     #print('Fetching ' + objectName + ' object on id: ' + str(objectId))
@@ -189,24 +189,16 @@ class SpecifyInterface():
     #print('------------------------------')
     return object 
 
-  def postSpecifyObject(self, objectName, objectId, specifyObject, csrftoken):
-    # TODO not yet working 
-    #   RETURNS posted object 
-    headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'referer': gs.baseURL}
-    apiCallString = "%sapi/specify/%s/%d/" %(gs.baseURL, objectName, objectId)
-    print(apiCallString)
-    # TODO API PUT command throws 403 Error ("Forbidden")
-    response = self.spSession.post(apiCallString, headers=headers, data=specifyObject)
-    #print(' - Response: %s %s' %(str(response.status_code), response.reason))
-    if response.status_code < 299:
-      object = response.json()
-    else: 
-      object = None
-    return object 
-
   def putSpecifyObject(self, objectName, objectId, specifyObject, csrftoken):
-    # TODO not yet working 
-    #   RETURNS put object 
+    """ 
+    Generic method for putting changes to an existing object to the Specify API using their primary key 
+    CONTRACT 
+      objectName    (String)  : The API's name for the object to be fetched  
+      objectId      (Integer) : The primary key of the object 
+      specifyObject (JSON)    : The (possibly altered) state of the object 
+      csrftoken     (String)  : The CSRF token is required for security reasons  
+      RETURNS response  
+    """
     headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'referer': gs.baseURL}
     apiCallString = "%sapi/specify/%s/%d/" %(gs.baseURL, objectName, objectId)
     print(apiCallString)
@@ -219,12 +211,33 @@ class SpecifyInterface():
       object = None
     return object 
 
+  def postSpecifyObject(self, objectName, specifyObject, csrftoken):
+    """ 
+    Generic method for posting a new object to the Specify API including a primary key
+    CONTRACT 
+      objectName    (String)  : The API's name for the object to be fetched  
+      specifyObject (JSON)    : The state of the object to be created 
+      csrftoken     (String)  : The CSRF token is required for security reasons  
+      RETURNS response  
+    """ 
+    headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'referer': gs.baseURL}
+    apiCallString = "%sapi/specify/%s/%d/" %(gs.baseURL, objectName)
+    print(apiCallString)
+    # TODO API PUT command throws 403 Error ("Forbidden")
+    response = self.spSession.post(apiCallString, headers=headers, data=specifyObject)
+    #print(' - Response: %s %s' %(str(response.status_code), response.reason))
+    if response.status_code < 299:
+      object = response.json()
+    else: 
+      object = None
+    return object 
+
   def directAPIcall(self, callString, csrftoken):
     """ 
     Generic method for allowing a direct call to the API using a call string that is appended to the baseURL
     CONTRACT
-      callString (String): The string to the appended to the base URL of the API
-      csrftoken (String): The CSRF token is required for security reasons  
+      callString (String) : The string to the appended to the base URL of the API
+      csrftoken  (String) : The CSRF token is required for security reasons  
       RETURNS response object  
     """ 
     apiCallString = "%s%s" %(gs.baseURL, callString)
@@ -241,7 +254,7 @@ class SpecifyInterface():
     """ 
     Logging out closes the session on both ends 
     CONTRACT 
-      csrftoken (String): The CSRF token is required for security reasons
+      csrftoken (String) : The CSRF token is required for security reasons
     """ 
     print('Log out')
     headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL}
@@ -270,9 +283,9 @@ class SpecifyInterface():
     Merging is done from the source taxon to the target taxon. 
     The source taxon will be deleted and the target taxon and its Specify id will prevail. 
     CONTRACT 
-      source_id (int) : Specify ID of the taxon to be merged into the target taxon 
-      target_id (int) : Specify ID of the taxon to be merged with (the target taxon)
-      csrftoken (String): The CSRF token is required for security reasons
+      source_id (int)    : Specify ID of the taxon to be merged into the target taxon 
+      target_id (int)    : Specify ID of the taxon to be merged with (the target taxon)
+      csrftoken (String) : The CSRF token is required for security reasons
       RETURNS response object 
     """   
     headers = {'X-CSRFToken': csrftoken, 'referer': gs.baseURL, } 
