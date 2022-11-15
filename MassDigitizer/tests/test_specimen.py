@@ -46,20 +46,20 @@ def set_specimen_global():
 
 def test_specimen_prepTypes():
     global predefData
-    #print(predefData)
+    print(predefData)
     sObject = specimenObject.typeStatuses
     typeStatus = rowObjectToList(sObject)
 
     print('typestatus : ',  typeStatus[5][1][2])
 
-    assert typeStatus[5][1][2] == 'Hapantotype'
+    assert typeStatus[5][1][2] == 'Epitype'
     # NOTE A lowercase assertion ('hapantotype') would fail 
 
 def test_prepType():
     specimenObject.loadPredefinedData()
     # for r in obj.prepTypes:
     #     print([j for j in r])
-    assert specimenObject.prepTypes[0][2] == 'sheet'
+    assert specimenObject.prepTypes[1][2] == 'sheet'
 
 def test_specimen_global():
     catalogNumber = set_specimen_global()
@@ -114,7 +114,7 @@ def test_load_previous():
     if res is  None: 
         assert False
     else: 
-        assert len(res) == 27
+        assert res
 
 def test_save_load_delete():
 
