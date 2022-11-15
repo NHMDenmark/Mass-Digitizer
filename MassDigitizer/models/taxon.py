@@ -36,14 +36,22 @@ class Taxon(model.Model):
         self.table          = 'taxon'
         self.sptype         = 'taxon'
         self.author         = ''
-        self.rankid         = 0
-        self.parentfullname = ''
-        self.parentid       = 0
-        self.duplicatespid  = 0
+        self.rankId         = 0
+        self.duplicateSpid  = 0
         self.gbifKey        = 0
 
         self.institutionId   = gs.institutionId #db.getRowOnId('collection',collection_id)['institutionid']
         self.collectionId    = collection_id
+
+        self.taxonRanks = {
+                    'PHYLUM':'30',
+                    'CLASS':'60',
+                    'ORDER':'100',
+                    'FAMILY':'140',
+                    'GENUS':'180',
+                    'SPECIES':'220',
+                    'SUBSPECIES':'230',
+                    }
 
     def getFieldsAsDict(self):
         """
@@ -58,9 +66,10 @@ class Taxon(model.Model):
                 'fullname':f'"{self.fullName}"',
                 'author':f'"{self.author}"',
                 'remarks':f'"{self.remarks}"',
-                'rankid':f'{self.rankid}',
-                'parentid':f'{self.parentid}',
-                'duplicatespid':f'{self.duplicatespid}',
+                'rankid':f'{self.rankId}',
+                'parentid':f'{self.parentId}',
+                'parentfullname':f'{self.parentFullName}',
+                'duplicatespid':f'{self.duplicateSpid}',
                 }
         
         return fieldsDict
@@ -79,28 +88,47 @@ class Taxon(model.Model):
         self.fullName = record['fullname']
         self.author = record['author']
         self.remarks = record['remarks']
-        self.rankid = record['rankid']        
-        self.parentid = record['parentid']       
-        self.duplicatespid = record['duplicatespid']
+        self.rankId = record['rankid']        
+        self.parentId = record['parentid']            
+        self.parentFullName = record['parentfullname']  
+        self.duplicateSpid = record['duplicatespid']
         self.parent = None
    
-    def fill(self, specifyObject):
-        self.spid = specifyObject['id'] # NOTE The 'id' of the Specify Object corresponds to the 'spid' field in the local app db
-        self.guid = specifyObject['guid']
-        self.name = specifyObject['name']
-        self.fullName = specifyObject['fullname']
-        self.author = specifyObject['author']
-        self.remarks = specifyObject['remarks']
-        self.rankid = specifyObject['rankid']        
-        self.parentid = specifyObject['parent'].split('/')[4]
-        self.parent = None
+    def fill(self, jsonObject, source="Specify"):
+        """
+        ...
+        """
+        self.source = source
+        if source=="Specify":
+            self.spid = jsonObject['id'] # NOTE The 'id' of the Specify Object corresponds to the 'spid' field in the local app db
+            self.guid = jsonObject['guid']
+            self.name = jsonObject['name']
+            self.fullName = jsonObject['fullname']
+            self.author = jsonObject['author']
+            self.remarks = jsonObject['remarks']
+            self.rankId = jsonObject['rankid']        
+            self.parentId = jsonObject['parent'].split('/')[4]
+            self.parentFullName = '' # TODO Fetch parent full name 
+            self.parent = None
+        elif source == "GBIF":
+            self.gbifKey = jsonObject['key']
+            self.guid = jsonObject['constituentKey']
+            self.name = jsonObject['canonicalName'].split(' ').pop()
+            self.fullName = jsonObject['canonicalName']
+            self.author = jsonObject['authorship']
+            self.remarks = jsonObject['remarks']
+            self.rankId =  int(self.taxonRanks[jsonObject['rank']])
+            self.parentFullName = jsonObject['parent']
+            self.parent = None
+        else:
+            self.remarks(f'Could not fill from unsupported source: "{source}"...')
 
     def loadPredefinedData(self):
         pass
 
     def getParent(self, token):
         self.parent = Taxon(self.collectionId)
-        self.parent.fill(sp.getSpecifyObject(self.sptype, self.parentid, token))
+        self.parent.fill(sp.getSpecifyObject(self.sptype, self.parentId, token))
         return self.parent 
 
     def getParentage(self, token):
@@ -115,4 +143,4 @@ class Taxon(model.Model):
                 current = temporary
 
     def __str__ (self):
-        return f'id:{self.id}, spid:{self.spid}, name:{self.name}, fullname:{self.fullName}, author:{self.author}, rankid:{self.rankid}, parentid: {self.parentid} '
+        return f'id:{self.id}, spid:{self.spid}, name:"{self.name}", fullname:"{self.fullName}", author:"{self.author}", rankid:{self.rankId}, parentid: {self.parentId} '
