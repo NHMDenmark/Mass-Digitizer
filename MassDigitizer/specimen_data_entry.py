@@ -109,7 +109,7 @@ class SpecimenDataEntry():
             sg.Text('Notes', size=defaultSize, background_color=greenArea, font=font),
             sg.InputText(size=(80, 5), key='txtNotes', background_color='white', text_color='black', enable_events=False)]
 
-        multispecimen = [sg.Checkbox('Multispecimen sheet', key='chkMultiSpecimen', background_color=greenArea, font=(11))]
+        multispecimen = [sg.Checkbox('Multispecimen sheet', key='chkMultiSpecimen', enable_events=True, background_color=greenArea, font=(11))]
 
         layout_greenarea = [
             storage, preparation, type_status, notes, multispecimen, ]
@@ -188,6 +188,7 @@ class SpecimenDataEntry():
         self.window = sg.Window("Mass Annotated Digitization Desk (MADD)", layout, margins=(2, 2), size=(960, 480),
                         resizable=True, return_keyboard_events=True, finalize=True, background_color=greyArea)
         self.window.TKroot.focus_force()
+        # Forces the app to be in focus.
 
         # Set session fields
         self.window.Element('txtUserName').Update(value=gs.spUserName)
@@ -230,7 +231,8 @@ class SpecimenDataEntry():
                         self.window['txtStorageFullname'].update(selectedStorage.fullName)
                         self.window['txtStorage'].update(selectedStorage.name)
                         
-                        # Move focus to next field (PrepTypes list)
+                        # Move focus to next field (PrepTypes list). This is necessary due to all keys being captured
+                        # for the autoSuggest/capture_suggestion function.
                         self.window['cbxPrepType'].set_focus()
 
             if event == 'cbxPrepType':
@@ -240,6 +242,7 @@ class SpecimenDataEntry():
             #    pass
 
             if event == 'cbxTypeStatus':
+                # TypeStatus is preloaded in the Class
                 self.collobj.setTypeStatusFields(self.window[event].widget.current())
                 self.collobj.typeStatusName = self.window['cbxTypeStatus'].get()
 
@@ -251,11 +254,18 @@ class SpecimenDataEntry():
                 self.window['chkMultiSpecimen'].set_focus()
 
             if event == 'chkMultiSpecimen_Enter':
+                # This event is only triggered by being in the checkbox element
+                # and pressing Enter.
+                if self.window.FindElement('chkMultiSpecimen').Get():
+                    print('multi-specimen value on Enter : ', self.window.FindElement('chkMultiSpecimen').Get())
+
+                else:
+                    print('multi-specimen status ... : ', False)
                 self.collobj.multiSpecimen = values['chkMultiSpecimen']
-                self.window['chkMultiSpecimen'].update(True)
-                self.window['cbxGeoRegion'].set_focus()
+                # self.window['cbxGeoRegion'].set_focus()
 
             if event == 'chkMultiSpecimen_Edit':
+                print('multi-speci EDIT : ', values['chkMultiSpecimen'])
                 self.collobj.multiSpecimen = values['chkMultiSpecimen']
 
             if event == 'cbxGeoRegion':
@@ -372,6 +382,7 @@ class SpecimenDataEntry():
         self.window['txtNotes'].bind('<Leave>', '_Edit')
         self.window['chkMultiSpecimen'].bind("<Leave>", "_Edit")
         self.window['chkMultiSpecimen'].bind("<Return>", "_Enter")
+        self.window['chkMultiSpecimen'].bind("<space>", '_space')
 
         # BLUE AREA
         # cbxGeoRegion  # Combobox therefore already triggered
@@ -407,7 +418,7 @@ class SpecimenDataEntry():
         self.window['txtNotes'].update(record['notes'])
         if record['multispecimen'] == 'True': multiSpecimen = True 
         else: multiSpecimen = False
-        self.window['chkMultiSpecimen'].update(multiSpecimen)
+        # self.window['chkMultiSpecimen'].update(multiSpecimen)
         self.window['cbxGeoRegion'].update(record['georegionname'])
         self.window['inpTaxonName'].update(record['taxonfullname'])
         self.window['txtCatalogNumber'].update(record['catalognumber'])
