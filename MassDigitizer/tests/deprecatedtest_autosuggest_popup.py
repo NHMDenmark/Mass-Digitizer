@@ -28,10 +28,10 @@ TESTDATAPATH = Path(__file__).parent
 import autoSuggest_popup as asp
 
 # Instantiate taxonname autosuggest popup
-aspTaxonNames = asp.AutoSuggest_popup('taxonname')
+aspTaxonNames = asp.AutoSuggest_popup('taxonname', 29)
 
 # Instantiate storage autosuggest popup
-aspStorage = asp.AutoSuggest_popup('storage')
+aspStorage = asp.AutoSuggest_popup('storage', 29)
 
 def test_taxonname():
     # Determine, rather trivially, whether the correct tablename has been set ('taxonname')
@@ -39,7 +39,7 @@ def test_taxonname():
 
 def test_taxonname_auto_suggest():
 
-    choices = aspTaxonNames.auto_suggest('pra', 'fullname')
+    choices = aspTaxonNames.captureSuggestion('pra', 'fullname')
     print(f'Got {len(choices)} taxon suggestions. ')
     found = False 
     for c in choices:
@@ -52,7 +52,7 @@ def test_taxonname_auto_suggest():
 
 def test_storage_auto_suggest():
     # TODO 
-    choices = aspStorage.auto_suggest('Box', 'fullname')
+    choices = aspStorage.captureSuggestion('Box', 'fullname')
     print(f'Got {len(choices)} storage suggestions. ')
     found = False 
     for c in choices:
