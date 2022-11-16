@@ -132,7 +132,8 @@ class SpecifyInterface():
     print(' - Response: %s %s' %(str(response.status_code), response.reason))
     if response.status_code < 299:
       object = response.json()
-      print(' - Catalog number: %s' % response.json()['catalognumber'])
+      catalogNr = response.json()['catalognumber']
+      print(f' - Catalog number: {catalogNr}')
     else:
       object = {}
     #print('------------------------------')

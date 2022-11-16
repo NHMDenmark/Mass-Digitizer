@@ -90,7 +90,12 @@ class Collection(model.Model):
         self.taxonTreeDefId = record['taxontreedefid']
         self.visible        = record['visible']      
 
+# Specify Interfacing functions 
+
     def fill(self, specifyObject, token):
+        """
+        TODO ...
+        """
         self.spid = specifyObject['id']
         self.id = 0
         self.guid = specifyObject['guid']
@@ -99,11 +104,11 @@ class Collection(model.Model):
         disciplineId = int(specifyObject['discipline'].split('/')[4])
         self.fetchDiscipline(disciplineId, token)
 
-# Collection class specific functions 
+    # Collection class specific functions 
 
     def fetchDiscipline(self, disciplineId, token):
         """
-        
+        TODO ...
         """
         self.discipline = discipline.Discipline(self.id)
         disciplineObj = self.sp.getSpecifyObject('discipline', disciplineId, token)
