@@ -212,27 +212,32 @@ class Model:
         #
         self.fill(specifyObject)
 
-    def fill(self, specifyObject):
+    def fill(self, specifyObject, token):
         """
         Generic function for filling model's fields with data record fetched from Specify API 
         CONTRACT 
             specifyObject (json)  : Specify data record fetched from Specify API 
+            token TODO
         NOTE Implemented fully in inheriting classes.         
         """
         self.spid = specifyObject['id']
         self.name = specifyObject['name']
         self.fullName = specifyObject['fullname']
 
-    def getParent(self):
+    def getParent(self, token):
         """
         Generic function for fetching current instance's parent record 
+        CONTRACT 
+            token TODO
         NOTE Implemented in inheriting classes 
         """        
         pass
 
-    def getParentage(self):
+    def getParentage(self, token):
         """
         Generic function for recursively fetching the entire parentage tree for current instance 
+        CONTRACT 
+            token TODO
         NOTE Implemented in inheriting classes 
         """        
         pass
