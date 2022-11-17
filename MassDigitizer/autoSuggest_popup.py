@@ -41,8 +41,7 @@ class AutoSuggest_popup():
 
         self.tableName = table_name
         self.collectionID = collection_id
-        self.collection = coll.Collection(collection_id) #db.getRowOnId('collection', collection_id)
-        print(self.collection)
+        self.collection = coll.Collection(collection_id) 
 
         self.suggestions = []
 
@@ -112,7 +111,7 @@ class AutoSuggest_popup():
         while True:  
             # As long as the loop isn't exited somehow, continue checking events 
             event, values = window.read()
-            print(event, values)
+            #print(event, values)
             
             # Escape loop & close window when exiting or otherwise done 
             if self.done: break
@@ -140,18 +139,6 @@ class AutoSuggest_popup():
             if event == 'txtInput':
                 # Get text input as keystrokes converted to lower case 
                 keystrokes = values['txtInput'].lower()
-
-                print(f"KEYSTROKKKKES: {keystrokes}")
-
-                # if values['txtInput']:
-                #     print(f"getting hit with {values['txtInput']}")
-
-                # TODO unclear what the following line are supposed to accomplish
-                #if keystrokes == input_text: continue
-                #else: input_text = keystrokes
-                if values['txtInput']:
-                    print(f"getting hit with {values['txtInput']}")
-
                 
                 # Minimum number of keystroke characters (default: 3) should be met in order to proceed 
                 if int(len(keystrokes)) >= int(minimumCharacters):
@@ -217,7 +204,6 @@ class AutoSuggest_popup():
                     # Only valid in case of taxon name and not storage 
                     if self.tableName == 'taxonname':
                         # New taxon name is assumed and higher taxon input field is made available 
-                        print('Relevant taxon name ', values['txtHiTax'])
                         window['lblHiTax'].update(visible=True)
                         window['txtHiTax'].update(visible=True)
                         window['txtHiTax'].SetFocus()
@@ -225,7 +211,6 @@ class AutoSuggest_popup():
             if values['txtHiTax']:
                 # Higher taxon is being entered: Update suggestions 
                 higherTaxonName = values['txtHiTax']
-                # print(f'We are in text box Higher taxon name .{higherTaxonName}.')
                 if len(higherTaxonName) >= minimumCharacters:
                     self.handleSuggestions(values['txtHiTax'].lower(), 140)
                     # Rank Family is assumed (id: 140)
@@ -236,19 +221,17 @@ class AutoSuggest_popup():
             except: 
                 print('Window may have been closed manually')
 
-        print(autoSuggestObject)
-
         return autoSuggestObject
 
     def handleSuggestions(self, keyStrokes='', minimumRank=270):
         # Fetch suggestions from database based on keystrokes 
         #self.suggestions = self.lookupSuggestions(keystrokes, 'fullname', minimumRank)
         fields = {}
-        if self.tableName == 'taxonname':
-            fields = {'fullname' : f'LIKE lower("%{keyStrokes}%")', 'taxontreedefid' : f'= {self.collection.taxonTreeDefId}', 'rankid' : '<=270'}
-        else:
+        if self.tableName == 'taxonname': 
+            fields = {'fullname' : f'LIKE lower("%{keyStrokes}%")', 'taxontreedefid' : f'= {self.collection.taxonTreeDefId}', 'rankid' : f'<={minimumRank}'}
+        else: 
             fields = {'name' : f'LIKE lower("%{keyStrokes}%")'}
-        self.suggestions  = db.getRowsOnFilters(self.tableName, fields)
+        self.suggestions  = db.getRowsOnFilters(self.tableName, fields, 200)
 
         # Convert records to list of fullnames 
         self.candidateNamesList = [row['fullname'] for row in self.suggestions]
@@ -278,6 +261,8 @@ class AutoSuggest_popup():
                     
             sql = sql + f' AND rankid <= {minimumRank}'
         
+        sql = sql + f' LIMIT {rowLimit}'
+
         print(sql)
 
         rows = cur.execute(sql).fetchall()
@@ -307,11 +292,10 @@ class AutoSuggest_popup():
         # The SQLite rowsObject is slightly odd in that it is a "list of dicts", but not really.
         flatCandidates = list(chain.from_iterable(rowsObject))
         rows = list(flatCandidates)
-        print('length flattened rows ::: ', len(rows))
         return rows
 
     def __exit__(self, exc_type, exc_value, traceback):
-        print("\nInside __exit__")
+        pass
 
 
 

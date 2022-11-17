@@ -82,7 +82,7 @@ class DataAccess():
         # CONTRACT
         #   TODO: do_in_memory (boolean): Whether the database file should be run in-memory 
         #   RETURNS database cursor object 
-        print(f'Connecting to db file: {self.dbFilePath} ...')
+        #print(f'Connecting to db file: {self.dbFilePath} ...')
 
         # Connect to database file. On error, try alternative location assuming OneDrive user
         try:
@@ -170,14 +170,8 @@ class DataAccess():
 
         print(sqlString)
         
-        try:
-            records = currentCursor.execute(sqlString).fetchall()
-            # If no records in results, fetch an empty dummy row to prevent errors
-            if len(records) < 1:
-                records = currentCursor.execute("SELECT * FROM dummyrecord LIMIT 1").fetchall()
-        except sqlite3.OperationalError:
-            records = currentCursor.execute("SELECT * FROM dummyrecord LIMIT 1").fetchall()
-
+        records = currentCursor.execute(sqlString).fetchall()
+        
         currentCursor.connection.close()
 
         return records
