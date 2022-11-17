@@ -23,13 +23,12 @@ from getpass import getpass
 
 sp = specify_interface.SpecifyInterface()
 col = collection.Collection(29)
+#The Botany collection ID is 29
 global_settings.baseURL = "https://specify-snm.science.ku.dk/"
-# The login function below will not work without the baseURL set.
+# The login function below will not work without the baseURL stated.
 token = sp.login(username=input('enter username:'), passwd=getpass('enter password:'),
                  collectionid=29, csrftoken=sp.getCSRFToken())
 baseUrl = "https://specify-snm.science.ku.dk/"
-
-global_settings.baseURL = baseUrl
 
 col.loadPredefinedData()
 
