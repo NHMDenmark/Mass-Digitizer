@@ -79,7 +79,7 @@ class HomeScreen():
             
             if event == 'institution':
                 selected_institution = values['institution']
-                institution = db.getRowsOnFilters('institution', {' name = ':'"%s"'%selected_institution})
+                institution = db.getRowsOnFilters('institution', {' name = ':'"%s"'%selected_institution},1)
                 institution_id = institution[0]['id']
                 institution_url = institution[0]['url']
                 collections = util.convert_dbrow_list(db.getRowsOnFilters('collection', {' institutionid = ':'%s'%institution_id, 'visible = ': '1'}), True)
