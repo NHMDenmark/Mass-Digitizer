@@ -260,16 +260,10 @@ class SpecimenDataEntry():
                 # This event is only triggered by being in the checkbox element
                 # and pressing Enter.
                 check = self.window['chkMultiSpecimen'].Get()
-                if check:
-                    print('multi-specimen value on Enter : ', check)
-
-                else:
-                    print('multi-specimen status ... : ', False)
                 self.collobj.multiSpecimen = values['chkMultiSpecimen']
                 self.window['cbxGeoRegion'].set_focus()
 
             if event == 'chkMultiSpecimen_Edit':
-                print('multi-speci EDIT : ', values['chkMultiSpecimen'])
                 self.collobj.multiSpecimen = values['chkMultiSpecimen']
 
             if event == 'cbxGeoRegion':
@@ -336,7 +330,6 @@ class SpecimenDataEntry():
 
             if event == 'btnClear':
                 for key in self.clearingList:
-                    print('clearing: ', key)
                     self.window[key].update('')
                 
                 self.window['lblExport'].update(visible=False)
@@ -407,8 +400,6 @@ class SpecimenDataEntry():
         self.collobj.multiSpecimen = record['multiSpecimen'] 
         self.collobj.setGeoRegionFields(self.window['cbxGeoRegion'].widget.current())
         self.collobj.setTaxonNameFields(db.getRowOnId('taxonname', record['taxonnameid'])) 
-        if record['taxonnameid'] == 0: 
-            print('New taxon name') 
 
         if not stickyFieldsOnly:
             self.collobj.id = record['id'] 
@@ -423,8 +414,12 @@ class SpecimenDataEntry():
         # self.window['cbxHigherTaxon'].update('')
         self.window['cbxTypeStatus'].update(record['typestatusname'])
         self.window['txtNotes'].update(record['notes'])
-        if record['multispecimen'] == 'True': multiSpecimen = True 
-        else: multiSpecimen = False
+        if record['multispecimen'] == 'True': 
+            self.multiSpecimen = True 
+            self.window['chkMultiSpecimen'].update(True)
+        else: 
+            self.multiSpecimen = False
+            self.window['chkMultiSpecimen'].update(False)
         # self.window['chkMultiSpecimen'].update(multiSpecimen)
         self.window['cbxGeoRegion'].update(record['georegionname'])
         self.window['inpTaxonName'].update(record['taxonfullname'])
@@ -433,14 +428,12 @@ class SpecimenDataEntry():
     def clearNonStickyFields(self):
         # TODO explain function
         for key in self.nonStickyFields:
-            print('Clearing: ', key)
             field = self.window[key]
             field.update('')
 
     def clearForm(self):
         # Clears all fields listed 
         for key in self.clearingList:
-            print('Clearing: ', key)
             self.window[key].update('')
 
 # g = SpecimenDataEntry(29)
