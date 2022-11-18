@@ -67,8 +67,11 @@ class AutoSuggest_popup():
              sg.Button('Exit', visible=False)
              # 'btnReturn' is for binding return to nothing in case of a new name and higher taxonomy lacking.
             ],
-            [sg.Text('Input higher taxonomy:', key='lblHiTax', visible=False),
-             sg.Input(size=(input_width, 1), key='txtHiTax', enable_events=True, visible=False)],
+            [sg.Frame('New taxon name detected...', [
+            [sg.Text('Input higher taxonomy:', key='lblHiTax'),
+             sg.Input(size=(24, 1), key='txtHiTax', enable_events=True), 
+             sg.Button('Cancel', key='btnCancel')]], 
+             key='frmHiTax', expand_x=True, visible=False)],
             [sg.pin(
                 sg.Col([[sg.Listbox(values=[], key='lstSuggestions', size=(input_width, lines_to_show), enable_events=True,
                                     bind_return_key=True, select_mode='extended')]],
@@ -172,7 +175,7 @@ class AutoSuggest_popup():
                     print("selected_row ", selected_row)
                     
                     # If text input box for higher taxon is not available then a known taxon is selected 
-                    if window['txtHiTax'].visible == False: 
+                    if window['frmHiTax'].visible == False: 
                         # Set taxon name fields for return 
                         autoSuggestObject.table = self.tableName
                         autoSuggestObject.id = selected_row['id']
@@ -191,8 +194,7 @@ class AutoSuggest_popup():
                         autoSuggestObject.fullName = values['txtInput']
                         autoSuggestObject.collectionId  = self.collectionID
                         autoSuggestObject.parentFullName = values['lstSuggestions'][0] #selected_row['parentfullname']                        
-                        window['lblHiTax'].update(visible=False)
-                        window['txtHiTax'].update(visible=False)
+                        window['frmHiTax'].update(visible=False)
                         window['txtInput'].SetFocus()                        
                         # TODO Convert to taxon name subclass so we can set taxontreedefid !!! 
                         autoSuggestObject.save()
@@ -204,16 +206,29 @@ class AutoSuggest_popup():
                     # Only valid in case of taxon name and not storage 
                     if self.tableName == 'taxonname':
                         # New taxon name is assumed and higher taxon input field is made available 
-                        window['lblHiTax'].update(visible=True)
-                        window['txtHiTax'].update(visible=True)
+                        window['frmHiTax'].update(visible=True)
                         window['txtHiTax'].SetFocus()
-                                                
+                                               
             if values['txtHiTax']:
                 # Higher taxon is being entered: Update suggestions 
                 higherTaxonName = values['txtHiTax']
                 if len(higherTaxonName) >= minimumCharacters:
                     self.handleSuggestions(values['txtHiTax'].lower(), 140)
                     # Rank Family is assumed (id: 140)
+
+            if event == 'btnCancel':
+                # Cancel button pressed during new taxon entry
+                                    
+                # Return taxon name as-is without saving 
+                autoSuggestObject.table = self.tableName
+                autoSuggestObject.id   = 0
+                autoSuggestObject.spid = 0
+                autoSuggestObject.name = values['txtInput'].split(' ').pop()
+                autoSuggestObject.fullName = values['txtInput']
+                autoSuggestObject.collectionId  = self.collectionID
+                autoSuggestObject.parentFullName = ''                        
+                window['frmHiTax'].update(visible=False)
+                break
 
         if window is not None: 
             try:
