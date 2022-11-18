@@ -32,13 +32,11 @@ def test_exportSpecimens():
     export_file = dex.exportSpecimens('xlsx')
     print(export_file)
     assert export_file != 'No specimen records to export.'
-    
-    export_file = dex.exportSpecimens('xlsx')
-    print(export_file)
-    assert export_file == 'No specimen records to export.'
+
 
 
 def test_generateFilename():
     export_path = dex.generateFilename('specimen', 'xlsx', filePath)
     print(export_path)
     assert export_path
+
