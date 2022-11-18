@@ -1,6 +1,8 @@
 import sys
 from pathlib import Path
-sys.path.append(str(Path(__file__).parent.joinpath('')))
+
+# Below line is needed for accessing internal dependencies 
+sys.path.append(str(Path(__file__).parent.parent.joinpath('')))
 
 import home_screen
 import data_access
