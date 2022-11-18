@@ -33,8 +33,11 @@ class SpecifyInterface():
   The initial CSRF token kan be used to subsequently log in using a Specify username/password combination (specifyLogin). 
   """
 
-  def __init__(self) -> None:
-    """ Create a session for storing cookies  """
+  def __init__(self, token=None) -> None:
+    """ 
+    CONSTRUCTOR
+    Creates a session for storing cookies  
+    """      
     self.spSession = requests.Session() 
     self.csrfToken = ''
 
@@ -179,10 +182,10 @@ class SpecifyInterface():
     #print('Fetching ' + objectName + ' object on id: ' + str(objectId))
     headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL}
     apiCallString = f'{gs.baseURL}api/specify/{objectName}/{objectId}/' 
-    #print(apiCallString)
-    response = self.spSession.get(apiCallString, headers=headers)
-    #print(' - Response: %s %s' %(str(response.status_code), response.reason))
-    #print(' - Referer: %s' % response.request.headers['referer'])
+    print(apiCallString)
+    response = self.spSession.get(apiCallString, headers=headers, verify=False)
+    print(' - Response: %s %s' %(str(response.status_code), response.reason))
+    print(' - Referer: %s' % response.request.headers['referer'])
     if response.status_code < 299:
       object = response.json()
     else: 

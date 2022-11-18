@@ -18,51 +18,57 @@ import global_settings as gs
 from pprint import pprint
 from getpass import getpass
 
-sp = specify_interface.SpecifyInterface()
-
 class Test_specify_interface():
     """ 
         
     """
 
-    collectionID = 29
-    gs.baseURL = "https://specify-snm.science.ku.dk/"
-    # The login function below will not work without the baseURL set.
-    token = sp.login(username=input('enter username:'), passwd=getpass('enter password:'),
-                               collectionid=29, csrftoken=sp.getCSRFToken())
-    baseUrl = "https://specify-snm.science.ku.dk/"
+    def __init__(self) -> None:
 
-    gs.baseURL = baseUrl
+        gs.baseURL = "https://specify-test.science.ku.dk/"
+
+        self.collectionID = 29
+        
+        self.sp = specify_interface.SpecifyInterface()    
+        self.token = self.sp.getCSRFToken()        
 
     def test_getCSRFToken(self):
         assert self.token
 
+    def test_spLogin(self):
+
+        userName = input('enter username:')
+        passWord = getpass('enter password:')
+
+        self.token = self.sp.login(userName, passWord, self.collectionID, self.token)
+
     def test_lengthCSRF_token(self):
-        token = sp.getCSRFToken()
+        token = self.sp.getCSRFToken()
         # NOTE Be aware that CSRF tokens can be of different lengths, depending on implementation.
         assert len(token) == 64
 
     def test_getCollObject(self):
         # Tests obtaining a collection object (JSON) from the specify API.
         # Foreknowledge of a collectionID is required (in this case 411590).
-        res = sp.getCollObject(411590, self.token)
+        res = self.sp.getCollObject(411590, self.token)
         assert res
 
     def test_getSpecifyObject(self):
         # Testing the more generic version of getCollObject().
         # In this case collectionobject, but could be 'attachment', 'author' etc.
-        res = sp.getSpecifyObject('collectionobject', 411590, self.token)
+        res = self.sp.getSpecifyObject('collectionobject', 411590, self.token)
         assert res
 
     def test_getInitialCollection(self):
-        res = sp.getInitialCollections()
+        res = self.sp.getInitialCollections()
         assert res[688130] == "NHMD Vascular Plants"
 
     def test_verify_Session(self):
-        valid = sp.verifySession(self.token)
+        valid = self.sp.verifySession(self.token)
         assert valid
 
-    def spLogin(self):
-        # Securing against accidental github commits of credentials.
-        return sp.login(username=input('enter username:'), passwd=getpass('enter password:'),
-                                       collectionid=29, csrftoken=sp.getCSRFToken())
+    def test_getDiscipline(self):
+        disciplineId = 688129
+        disciplineObj = self.sp.getSpecifyObject('discipline', disciplineId, self.token)
+
+        assert disciplineObj
