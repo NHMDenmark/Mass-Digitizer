@@ -8,4 +8,4 @@ LEFT JOIN
 ON t1.taxon_full_name = t2.taxon_full_name; 
 ```
 This query does not extract all data, since we won't get the full taxon rank 'tree', yet there is enough data to be able to join on another table containing the full taxonomic hierarchy we desire.  
-Note that the 'LEFT JOIN' signifies that the table (and by extension the source) is primary in this query.
+Note that the 'LEFT JOIN' signifies that the table POWO (and by extension the source) is primary in this query.
