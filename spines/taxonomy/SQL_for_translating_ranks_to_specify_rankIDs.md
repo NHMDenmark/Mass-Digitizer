@@ -16,3 +16,4 @@ WHEN lower(a."Rank") LIKE 'form%' THEN '260'
 ELSE NULL END AS "rank", ...
 FROM aarhus a
 ```
+The 'form' or 'forma' rank has the LIKE operator because this rank has spelling variations.
