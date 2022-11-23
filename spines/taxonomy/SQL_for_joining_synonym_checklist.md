@@ -7,4 +7,5 @@ LEFT JOIN
 (SELECT s.taxon_full_name , s.rank_ , s.author AS authors, s.status, 'syno' AS source_right FROM syno_prod s)t2
 ON t1.taxon_full_name = t2.taxon_full_name; 
 ```
-This query does not extract all data, since we won't get the full taxon rank 'tree', yet there is enough data to be able to join on another table containing the full taxonomic hierarchy we desire.
+This query does not extract all data, since we won't get the full taxon rank 'tree', yet there is enough data to be able to join on another table containing the full taxonomic hierarchy we desire.  
+Note that the 'LEFT JOIN' signifies that the table (and by extension the source) is primary in this query.
