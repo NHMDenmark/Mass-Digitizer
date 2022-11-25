@@ -1,3 +1,5 @@
+This particular taxonomy did not have discrete Species names, so it had to be lifted from the binomial. (Column shortname contains the binomial)
+
 ```
 SELECT a.shortname AS taxonfullname, reverse(split_part(reverse(a.shortname),' ',1)) AS name, 
 CASE 
