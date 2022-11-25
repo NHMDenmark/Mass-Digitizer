@@ -30,7 +30,8 @@ Getting the last word in a string:
 ```
 SELECT reverse(split_part(reverse('Pyrola minor x P. ro	tundifolia subsp. maritima'),' ',1)) AS name;
 ```
-Changing the position integer above to 7, will yield _minor_ .
+Changing the position integer above to 7, will yield _minor_ .  
+
 
 --DELETE example :
 ```
