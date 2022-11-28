@@ -18,14 +18,24 @@ from getpass import getpass
 import util
 import specify_interface
 import global_settings as gs 
-import data_exporter as dx
+import data_exporter
+import GBIF_interface
+import data_access
+
 from models.model import Model
 from models import taxon
 from models import collection as col
+from models import discipline as dsc
 
 gs.baseURL = 'https://specify-test.science.ku.dk/'
 
 sp = specify_interface.SpecifyInterface()
+
+gbif = GBIF_interface.GBIFInterface()
+
+dx = data_exporter.DataExporter()
+
+#db = data_access.DataAccess('db')
 
 class MergeDuplicates():
 
@@ -36,6 +46,8 @@ class MergeDuplicates():
         self.offset = 0
         self.batchSize = 1000
         self.ambivalentCases = []
+
+        self.collection = None
 
     def main(self):
 
@@ -55,30 +67,38 @@ class MergeDuplicates():
 
             token = sp.specifyLogin(input('Enter username: '), getpass('Enter password: '), collectionId)
 
-            # 
-            collection = col.Collection(collectionId)
-            collection.fill(sp.getSpecifyObject('collection', collectionId, token), token)
+            if token != '': 
 
-            print(f'Selection {collIndex}: {collection.spid}')
-            if collection.spid > 0:
-                if token != '': 
+                self.collection = col.Collection(collectionId)
+                self.collection.fill(sp.getSpecifyObject('collection', collectionId)) #, token))
+                self.collection.discipline = dsc.Discipline(self.collection.collectionId)
+                self.collection.discipline.fill(sp.getSpecifyObject('discipline', self.collection.disciplineId)) #, token))
+                
+                print(f'Selection {collIndex}: {self.collection.spid}')
+                
+                if self.collection.spid > 0:
+                    # 
                     max_tries = 0
-                    self.scan(collection, token)   
-                else:
+                    #self.handleQualifiedTaxa()
+                    self.scan() #token)
+                else:                    
                     print('Login failed...')
-                    if input('Try again? (y/n)') == 'n' : break
                     max_tries = max_tries - 1
-            else: 
-                max_tries = max_tries - 1 
+                    print('Attempts left: %i' % max_tries)
+                    if input('Try again? (y/n)') == 'n' : break
+            else:
+                print('Login failed...')
+                max_tries = max_tries - 1
                 print('Attempts left: %i' % max_tries)
+                if input('Try again? (y/n)') == 'n' : break
         print('done')
 
-    def scan(self, collection, token):
+    def scan(self): #, token):
         # function for scanning and iterating taxa retrieved from the Specify API in batches per taxon rank 
-        print(f'Scanning {collection.spid} ...')
+        print(f'Scanning {self.collection.spid} ...')
 
         # Fetch taxon ranks from selected collection's discipline taxon tree 
-        taxonranks = sp.getSpecifyObjects('taxontreedefitem', token, 100, 0, {"treedef":str(collection.discipline.taxontreedefid)})
+        taxonranks = sp.getSpecifyObjects('taxontreedefitem', 100, 0, {"treedef":str(self.collection.discipline.taxontreedefid)})
 
         # Iterate taxon ranks for analysis
         for rank in taxonranks:
@@ -95,7 +115,7 @@ class MergeDuplicates():
 
                     # Fetch batches from API
                     print(f'Fetching batch with offset: {offset}')
-                    batch = sp.getSpecifyObjects('taxon', token, self.batchSize, offset, {'definition':'13', 'rankid':f'{rankId}'})
+                    batch = sp.getSpecifyObjects('taxon', self.batchSize, offset, {'definition':'13', 'rankid':f'{rankId}'})
                     resultCount = len(batch)
 
                     print(f' - Fetched {resultCount} taxa')
@@ -105,13 +125,14 @@ class MergeDuplicates():
                         print('.', end='')  
 
                         # Create local taxon instance from original Specify taxon data 
-                        original = taxon.Taxon(collection.id)
+                        original = taxon.Taxon(self.collection.id)
                         original.fill(specifyTaxon)
-                        original.getParent(token)
+                        #original.parent.fill(sp.getSpecifyObject(original.sptype, original.parentId))
+                        original.getParent(sp)
                         fullName = original.fullName.replace(' ','%20')
 
                         # Look up taxa with matching fullname & rank
-                        taxonLookup = sp.getSpecifyObjects('taxon', token, 100000, 0, 
+                        taxonLookup = sp.getSpecifyObjects('taxon', 100000, 0, 
                             {'definition':'13', 'rankid':f'{rankId}', 'fullname':f'{fullName}'}) #, 'parent':f'{original.parentid}'})
                         
                         # If more than one result is returned, there will be duplicates 
@@ -120,16 +141,17 @@ class MergeDuplicates():
                             # Iterate taxa with identical names to original                             
                             for tl in taxonLookup:
                                 # Create local taxon instance from looked up Specify taxon data 
-                                lookup = taxon.Taxon(collection.id)
+                                lookup = taxon.Taxon(self.collection.id)
                                 lookup.fill(tl)
-                                lookup.getParent(token)
+                                #lookup.parent.fill(sp.getSpecifyObject(lookup.sptype, lookup.parentId))
+                                lookup.getParent(sp)
 
                                 # If the looked up taxon isn't the same record (as per 'spid') then treat as potential duplicate 
                                 # NOTE We need to compare the Specify id ('spid') and not the local id, which is always 0 until saved
                                 if lookup.spid != original.spid:
 
                                     # If the parents match then treat as duplicate 
-                                    if lookup.parentid == original.parentid:
+                                    if lookup.parentId == original.parentId:
                                         print()
                                         print('Duplicate detected!')
                                         print(f' - original : "{original}"')
@@ -144,16 +166,46 @@ class MergeDuplicates():
                                             duplicateWeight += 1
                                         # TODO more weighting rules ? 
                                         
-                                        # If both original and lookup contain author data: Add to ambivalent cases 
-                                        #   except when the author is identical 
-                                        if (original.author is not None and lookup.author is not None) and (original.author != lookup.author): 
+                                        # If both original and lookup contain author data and the author is not identical, 
+                                        #   retrieve authorship from GBIF 
+                                        unResolved = True 
+                                        if (original.author != lookup.author) and (original.author is not None or lookup.author is not None) and (original.author != '' or lookup.author != ''): # and (original.author is not None and lookup.author is not None): 
+                                            #print('Both original and lookup contain author data and the author is not identical! ')
+                                            print('Original author and lookup author are not identical and neither is empty!')
+                                            print('Retrieving authorship from GBIF...')
+                                            
+                                            acceptedNameMatches = gbif.matchName('species', original.fullName, self.collection.spid)
+                                            
+                                            nrOfMatches = len(acceptedNameMatches)
+                                            if nrOfMatches == 1:
+                                                print('Retrieved unambiguous accepted name from GBIF...')
+                                                # Update the authorname at Specify 
+                                                res1 = self.updateSpecifyTaxonAuthor(original, acceptedNameMatches[0]['authorship'])
+                                                res2 = self.updateSpecifyTaxonAuthor(lookup, acceptedNameMatches[0]['authorship'])
+                                                if res1 != '500' and res2 != '500':
+                                                    unResolved = False
+                                                else:
+                                                    unResolved = True 
+                                            else:
+                                                print(f'Could not retrieve unambiguous accepted name from GBIF... ({nrOfMatches} matches)')
+                                                unResolved = True
+                                        else:
+                                            if (original.author is None and lookup.author is None):
+                                                print('Author info is missing...')
+                                                # TODO Update authorname at Specify also ? 
+                                            else:
+                                                print('Original and lookup have no author data or the author is identical. ')
+                                            unResolved = False        
+
+                                        # If authorship could not be resolved, add to ambivalent cases 
+                                        if unResolved:
                                             ambivalence = f'Ambivalence on authors: {original.author} vs {lookup.author} '
                                             print(ambivalence)
                                             original.remarks = str(original.remarks) + f' | {ambivalence}'
-                                            original.duplicatespid = lookup.spid
+                                            original.duplicateSpid = lookup.spid
                                             self.ambivalentCases.append(original)
                                             lookup.remarks = str(lookup.remarks) + f' | {ambivalence}'
-                                            lookup.duplicatespid = original.spid
+                                            lookup.duplicateSpid = original.spid
                                             self.ambivalentCases.append(lookup)
                                         else: 
                                             # Prepare for merging by resetting target & source before evaluation 
@@ -175,9 +227,11 @@ class MergeDuplicates():
                                                 if True: #input(f'Do you want to merge {source.spid} with {target.spid} (y/n)?') == 'y':
                                                     # Do the actual merging 
                                                     start = time.time()
-                                                    response = sp.mergeTaxa(source.spid, target.spid, token)
+                                                    response = sp.mergeTaxa(source.spid, target.spid)#, token)
                                                     if response.status_code == "404":
                                                         print(' - 404: Taxon already merged.')
+                                                    elif response.status_code == "500":
+                                                        print(' - 500: Internal Server Error.')
                                                     end = time.time()
                                                     timeElapsed = end - start
                                                     print(f'Merged {source.spid} with {target.spid}; Time elapsed: {timeElapsed} ')
@@ -207,12 +261,39 @@ class MergeDuplicates():
             case.save()
         print(dx.exportTable('taxon', 'xlsx'))
 
+    def updateSpecifyTaxonAuthor(self, taxonInstance, acceptedAuthor):
+        """
+        TODO ... 
+        """
+        # Update the authorname at Specify 
+        print(f'Updating author name at Specify for: [{taxonInstance}] to: "{acceptedAuthor}"')
+        spobjOriginal = sp.getSpecifyObject('taxon',taxonInstance.spid)
+        if spobjOriginal: 
+            spobjOriginal['author'] = acceptedAuthor
+            return sp.putSpecifyObject('taxon', taxonInstance.spid, spobjOriginal)
+        else: 
+            return 500 
+
     def recordAmbivalentCase(self, original, lookup, ambivalence):
+        """
+        TODO ... 
+        """
+        # 
         print(ambivalence)
         original.remarks = str(original.remarks) + f' | {ambivalence}'
         self.ambivalentCases.append(original)
         lookup.remarks = str(lookup.remarks) + f' | {ambivalence}'
         self.ambivalentCases.append(lookup)
+
+    def handleQualifiedTaxa(self):
+        """
+        TODO ... 
+        """
+        qTaxa = sp.getSpecifyObjects('taxon', 1000, 0, {'fullname':'cf'})
+
+        print(f'Fetched {len(qTaxa)} qualified taxa...')
+
+        pass
 
 md = MergeDuplicates()
 md.main()

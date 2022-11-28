@@ -16,7 +16,7 @@ from datetime import datetime
 
 # Internal dependencies
 from models import model
-import data_access
+#import data_access
 import global_settings as gs
 
 class Discipline(model.Model):
@@ -31,16 +31,21 @@ class Discipline(model.Model):
         self.sptype  = 'discipline'
         self.taxontreedefid = 0
 
-    def fill(self, specifyObject):
+    def fill(self, jsonObject, source="Specify"):
         """
         Specific function for filling discipline instance's fields with data record fetched from Specify API 
         CONTRACT 
-            specifyObject (json)  : Specify data record fetched from Specify API 
+            jsonObject (json)  : Specify data record fetched from Specify API 
         """
-        self.spid = specifyObject['id']
-        self.name = specifyObject['name']
-        #self.fullname = specifyObject['collectionname']
-        self.taxontreedefid = specifyObject['taxontreedef'].split('/')[4]
+        self.source = source
+        if jsonObject:
+            if source=="Specify":
+                self.spid = jsonObject['id']
+                self.name = jsonObject['name']
+                #self.fullname = jsonObject['collectionname']
+                self.taxontreedefid = jsonObject['taxontreedef'].split('/')[4]
+        else:
+            self.remarks = 'Could not set values, because empty object was passed. '
 
 # Generic functions
     
