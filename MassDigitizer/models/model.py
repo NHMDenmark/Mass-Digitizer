@@ -213,36 +213,36 @@ class Model:
         """
         if spid == 0: spid = self.spid
         #
-        specifyObject = self.sp.getSpecifyObject(self.sptype, spid, token)
+        jsonObject = self.sp.getSpecifyObject(self.sptype, spid, token)
         #
-        self.fill(specifyObject)
+        self.fill(jsonObject)
 
-    def fill(self, specifyObject, token):
+    def fill(self, jsonObject, source="Specify"):
         """
         Generic function for filling model's fields with data record fetched from Specify API 
         CONTRACT 
-            specifyObject (json)  : Specify data record fetched from Specify API 
-            token TODO
+            jsonObject (json)  : Specify data record fetched from Specify API 
+            source TODO
         NOTE Implemented fully in inheriting classes.         
         """
-        self.spid = specifyObject['id']
-        self.name = specifyObject['name']
-        self.fullName = specifyObject['fullname']
+        self.spid = jsonObject['id']
+        self.name = jsonObject['name']
+        self.fullName = jsonObject['fullname']
 
-    def getParent(self, token):
+    def getParent(self, specify_interface):
         """
         Generic function for fetching current instance's parent record 
         CONTRACT 
-            token TODO
+            specify_interface TODO
         NOTE Implemented in inheriting classes 
         """        
         pass
 
-    def getParentage(self, token):
+    def getParentage(self, specify_interface):
         """
         Generic function for recursively fetching the entire parentage tree for current instance 
         CONTRACT 
-            token TODO
+            specify_interface TODO
         NOTE Implemented in inheriting classes 
         """        
         pass

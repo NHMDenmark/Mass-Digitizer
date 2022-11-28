@@ -101,10 +101,10 @@ class Storage(model.Model):
         self.geoRegions = db.getRowsOnFilters('georegion', {'collectionid =': f'{self.collectionId}'})
         self.geoRegionSources = db.getRowsOnFilters('georegionsource', {'collectionid =': f'{self.collectionId}'})
 
-    def getParent(self, token):
+    def getParent(self, specify_interface):
         pass
 
-    def getParentage(self, token):
+    def getParentage(self, specify_interface):
         # Recursive function for constructing the entire parent sequence down to "Life"
         pass
 
