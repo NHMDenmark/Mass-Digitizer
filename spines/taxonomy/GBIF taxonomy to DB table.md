@@ -1,4 +1,4 @@
-### This staatement prepares the table to be imported into. The fields are generally large in order to accomodate the largest strings in the GBIF taxonomy. The 'namepublishedin' column can on occation be very large.
+### This statement prepares the table to be imported into. The fields are generally large (varchar 512) in order to accomodate the largest strings in the GBIF taxonomy. The 'namepublishedin' column can on occation be very large.
 
 ```
 
@@ -29,5 +29,6 @@ CREATE TABLE public.gbif2022 (
 	taxonomic_source varchar(128) NULL
 );
 ``` 
-Having this table at hand is useful for fast GBIF lookups. Of course you lose the wonderful ElasticSearch functionality which GBIF supplies.
-This table ought to be a cornerstone of the taxonomic spine about to be created.
+Having this table at hand is useful for fast GBIF lookups. Of course you lose the wonderful ElasticSearch functionality which the GBIF API supplies.
+This table ought to be a cornerstone of the taxonomic spine about to be created.  
+Depending on the discipline, this table (1.000.000 records) should be filtered on Kingdom to reduce the size of the final DB product.
