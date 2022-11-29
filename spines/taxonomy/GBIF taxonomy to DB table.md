@@ -30,3 +30,4 @@ CREATE TABLE public.gbif2022 (
 );
 ``` 
 Having this table at hand is useful for fast GBIF lookups. Of course you lose the wonderful ElasticSearch functionality which GBIF supplies.
+This table ought to be a cornerstone of the taxonomic spine about to be created.
