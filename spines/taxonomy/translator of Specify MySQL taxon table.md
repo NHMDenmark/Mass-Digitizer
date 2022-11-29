@@ -57,3 +57,4 @@ SELECT t1.taxonfullname , t1.rankid FROM
 	GROUP BY TaxonFullName)t1 ORDER BY rankid; 
 
 ```
+The field TaxonTreeDefID is set to 13 which is the discipline "Botany".
