@@ -27,7 +27,7 @@ from models import taxon
 from models import collection as col
 from models import discipline as dsc
 
-gs.baseURL = 'https://specify-test.science.ku.dk/'
+gs.baseURL = 'https://specify-snm.science.ku.dk/'
 
 sp = specify_interface.SpecifyInterface()
 
