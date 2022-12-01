@@ -280,6 +280,7 @@ class DataAccess():
         valuesSql = '","'.join(sqlValues)
         valuesSql = f'"{valuesSql}")'
         sqlString = sqlString + valuesSql
+        # TODO table taxon has no column named parentfullname
         self.currentCursor.execute(sqlString)
         self.currentCursor.connection.commit()
         recordID = self.currentCursor.lastrowid
