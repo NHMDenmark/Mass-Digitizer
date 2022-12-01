@@ -13,7 +13,7 @@
 """
 
 import os
-#import sys 
+# import sys
 import sqlite3
 from io import StringIO
 from pathlib import Path
@@ -21,12 +21,13 @@ from pathlib import Path
 # Local imports
 import global_settings as gs
 
-# Set os path to local files: 
-#sys.path.append(str(Path(__file__).parent.parent.joinpath('MassDigitizer')))
 
-class DataAccess(): 
+# Set os path to local files:
+# sys.path.append(str(Path(__file__).parent.parent.joinpath('MassDigitizer')))
 
-    def __init__(self,databaseName='db', do_in_memory=False):
+class DataAccess():
+
+    def __init__(self, databaseName='db', do_in_memory=False):
         """
         Initialize for database access 
             CONTRACT
@@ -34,19 +35,20 @@ class DataAccess():
         NOTE Database file is installed into user documents folder otherwise it would be readonly on a Windows PC in any case 
         """
 
-        self.currentCursor = None   # Reset cursor pointer 
-        
+        self.currentCursor = None  # Reset cursor pointer
+
         # Point to database file provided and connect
-        filePath = os.path.expanduser('~\Documents\DaSSCO') # In order to debug / run, a copy of the db file should be moved into this folder on Windows machines 
-        altFilePath = os.path.expanduser('~\OneDrive - University of Copenhagen\Documents\DaSSCO') # For OneDrive users this is the file location 
+        filePath = os.path.expanduser(
+            '~\Documents\DaSSCO')  # In order to debug / run, a copy of the db file should be moved into this folder on Windows machines
+        altFilePath = os.path.expanduser(
+            '~\OneDrive - University of Copenhagen\Documents\DaSSCO')  # For OneDrive users this is the file location
         self.dbFilePath = str(Path(filePath).joinpath(f'{databaseName}.sqlite3'))
         self.dbAltFilePath = str(Path(altFilePath).joinpath(f'{databaseName}.sqlite3'))
-        #self.setDatabase(databaseName)
-        #print('Initializing with db file: %s ...'%self.dbFilePath)
+        # self.setDatabase(databaseName)
+        # print('Initializing with db file: %s ...'%self.dbFilePath)
         self.connection = sqlite3.connect(self.dbFilePath)
-        
+
         if gs.db_in_memory == True or do_in_memory == True:
-            #print(' - running database in-memory')
             # Read database to tempfile
             tempfile = StringIO()
             for line in self.connection.iterdump():
@@ -59,16 +61,16 @@ class DataAccess():
             self.connection.cursor().executescript(tempfile.read())
             self.connection.commit()
         else:
-            #print(' - running database as file')
+            # print(' - running database as file')
             pass
 
         self.connection.row_factory = sqlite3.Row
         self.currentCursor = self.connection.cursor()
 
     def setDatabase(self, dbFileName='db'):
-        # This optional function allows for setting a different database file like e.g. 'test' 
-        # CONTRACT 
-        #   dbFileName (String): the name of the file excluding the extension '.sqlite3' 
+        # This optional function allows for setting a different database file like e.g. 'test'
+        # CONTRACT
+        #   dbFileName (String): the name of the file excluding the extension '.sqlite3'
         self.dbFilePath = str(Path(self.dbFilePath).joinpath(f'{dbFileName}.sqlite3'))
         self.dbAltFilePath = str(Path(self.dbAltFilePath).joinpath(f'{dbFileName}.sqlite3'))
         print(self.dbFilePath)
@@ -77,24 +79,24 @@ class DataAccess():
         self.connection = sqlite3.connect(self.dbFilePath)
         return self.connection
 
-    def getDbCursor(self):#do_in_memory=False):
-        # Generic function needed for database access 
+    def getDbCursor(self):  # do_in_memory=False):
+        # Generic function needed for database access
         # CONTRACT
-        #   TODO: do_in_memory (boolean): Whether the database file should be run in-memory 
-        #   RETURNS database cursor object 
-        #print(f'Connecting to db file: {self.dbFilePath} ...')
+        #   TODO: do_in_memory (boolean): Whether the database file should be run in-memory
+        #   RETURNS database cursor object
+        # print(f'Connecting to db file: {self.dbFilePath} ...')
 
         # Connect to database file. On error, try alternative location assuming OneDrive user
         try:
-            self.connection = sqlite3.connect(self.dbFilePath)    # Normal user 
+            self.connection = sqlite3.connect(self.dbFilePath)  # Normal user
         except:
-            self.connection = sqlite3.connect(self.dbAltFilePath) # Assumed OneDrive user
-        
-        # Depending on in-memory flag, run database in memory 
-        # TODO Momentarily deactivated, perhaps redundant 
-        #gs.db_in_memory = do_in_memory # apply in-memory flag to global  
+            self.connection = sqlite3.connect(self.dbAltFilePath)  # Assumed OneDrive user
+
+        # Depending on in-memory flag, run database in memory
+        # TODO Momentarily deactivated, perhaps redundant
+        # gs.db_in_memory = do_in_memory # apply in-memory flag to global
         if gs.db_in_memory == True:
-            #print(' - running database in-memory')
+            # print(' - running database in-memory')
             # Read database to tempfile
             tempfile = StringIO()
             for line in self.connection.iterdump():
@@ -107,94 +109,91 @@ class DataAccess():
             self.connection.cursor().executescript(tempfile.read())
             self.connection.commit()
         else:
-            #print(' - running database as file')
+            # print(' - running database as file')
             pass
 
-        self.connection.row_factory = sqlite3.Row # Enable column access by name: row['column_name']
+        self.connection.row_factory = sqlite3.Row  # Enable column access by name: row['column_name']
         cursor = self.connection.cursor()
-        #print('Connection established')
+        # print('Connection established')
         return cursor
 
     def getRows(self, tableName, limit=100, sortColumn=None):
         # Getting all records from the table specified by name
-        # CONTRACT 
+        # CONTRACT
         #   tableName (String): The name of the table to be queried
-        #   limit (Integer) : The maximum number of records - 0 means all records 
-        #   sortColumn (String) : The column to sort the rows on, if any 
+        #   limit (Integer) : The maximum number of records - 0 means all records
+        #   sortColumn (String) : The column to sort the rows on, if any
         #   RETURNS table rows (list)
-        currentCursor = self.getDbCursor()        
-        #print('Get all rows from table "{%s}" ...' % tableName)
+        currentCursor = self.getDbCursor()
 
-        sqlString = f'SELECT * FROM {tableName}' 
-        
+        sqlString = f'SELECT * FROM {tableName}'
+
         if limit > 0:
             sqlString += f' LIMIT {limit}'
-        
-        if sortColumn is not None: 
+
+        if sortColumn is not None:
             sqlString += f' ORDER BY {sortColumn}'
         print(sqlString)
         records = currentCursor.execute(sqlString).fetchall()
-        
-        #print(f'Found {len(records)} records ')
-        
+
         self.currentCursor.connection.close()
-        
+
         return records
 
     def getRowsOnFilters(self, tableName, filters, limit=10000, sort=None):
         # Getting specific rows specified by filters from the table specified by name
-        # CONTRACT 
+        # CONTRACT
         #   tableName (String): The name of the table to be queried
         #   filters (Dictionary) :  A dictionary where the key is the field name and the value is the field filter *including operand*!
-        #                           The operand should be included with the field and any string values should be enclosed in "" 
-        #                           Example: {'rankid': '=180', 'taxonname': '="Felis"', 'taxonid' : 'IS NOT NULL'}  
-        #   limit (Integer) : The maximum number of rows - 0 means all rows 
-        #       NOTE: Strings should be formatted with enclosing double quotation marks (") 
-        #             Numbers should be formatted as strings 
+        #                           The operand should be included with the field and any string values should be enclosed in ""
+        #                           Example: {'rankid': '=180', 'taxonname': '="Felis"', 'taxonid' : 'IS NOT NULL'}
+        #   limit (Integer) : The maximum number of rows - 0 means all rows
+        #       NOTE: Strings should be formatted with enclosing double quotation marks (")
+        #             Numbers should be formatted as strings
         #   RETURNS table rows as list
-        currentCursor = self.getDbCursor()   
-        #print(f'-> getRowsONFilter({tableName}, {filters}, {limit})')
+        currentCursor = self.getDbCursor()
+        # print(f'-> getRowsONFilter({tableName}, {filters}, {limit})')
         sqlString = 'SELECT * FROM %s ' % tableName
 
         if filters.items():
             sqlString += "WHERE "
             for key, value in filters.items():
                 sqlString += f'{key} {value} AND '
-        sqlString = sqlString[0:len(sqlString)-4] # Remove trailing " AND "
-        
-        if sort is not None: 
+        sqlString = sqlString[0:len(sqlString) - 4]  # Remove trailing " AND "
+
+        if sort is not None:
             sqlString += f' ORDER BY {sort}'
-        
+
         if limit > 0:
             sqlString += f' LIMIT {limit}'
 
         print(sqlString)
-        
+
         records = currentCursor.execute(sqlString).fetchall()
-        
+
         currentCursor.connection.close()
 
         return records
 
     def getRowOnId(self, tableName, id):
-        # Getting specific row from the table specified by its primary key (id)  
-        # CONTRACT 
+        # Getting specific row from the table specified by its primary key (id)
+        # CONTRACT
         #   tableName (String): The name of the table to be queried
         #   id (Integer) : The primary key of the row to be returned
         #   RETURNS single table row
-        currentCursor = self.getDbCursor()   
+        currentCursor = self.getDbCursor()
         record = currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(id)).fetchone()
         currentCursor.connection.close()
 
         return record
 
     def getRowOnSpId(self, tableName, spid):
-        # Getting specific row from the table specified by its Specify primary key (spid)  
-        # CONTRACT 
+        # Getting specific row from the table specified by its Specify primary key (spid)
+        # CONTRACT
         #   tableName (String): The name of the table to be queried
         #   spid (Integer) : The Specify primary key of the row to be returned
         #   RETURNS single table row
-        currentCursor = self.getDbCursor()   
+        currentCursor = self.getDbCursor()
         record = currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(spid)).fetchone()
         currentCursor.connection.close()
 
@@ -202,41 +201,41 @@ class DataAccess():
 
     def deleteRowOnId(self, tableName, id):
         """
-        Deleting specific row from the table specified by its primary key (id)  
-        CONTRACT 
+        Deleting specific row from the table specified by its primary key (id)
+        CONTRACT
         tableName (String): The name of the table to be queried
         id (Integer) : The primary key of the row to be returned
         """
         currentCursor = self.getDbCursor()
-        print(f'DELETE FROM {tableName} WHERE id = {id};')   
+        print(f'DELETE FROM {tableName} WHERE id = {id};')
         currentCursor.execute(f'DELETE FROM {tableName} WHERE id = {id};')
         currentCursor.connection.commit()
         currentCursor.connection.close()
 
     def getMaxRow(self, tableName):
-        # Get the row from the specified table with the highest primary key (id) 
-        # CONTRACT 
+        # Get the row from the specified table with the highest primary key (id)
+        # CONTRACT
         #   tableName (String): The name of the table to be queried
         #   RETURNS single table row (SQLITErow)
         currentCursor = self.getDbCursor()
         sql = f'SELECT MAX({tableName}.id) FROM {tableName};'
         record = currentCursor.execute(sql).fetchone()
         currentCursor.connection.close()
-        #print(f'record: {record}')
+        # print(f'record: {record}')
         return record
 
     def executeSqlStatement(self, sql):
-        # Execute specified sql statement 
-        # CONTRACT 
-        #   sql (String) : 
+        # Execute specified sql statement
+        # CONTRACT
+        #   sql (String) :
         #   RETURNS table rows as dictionary
         self.currentCursor = self.getDbCursor()
-        
+
         # records = [dict(row) for row in rows_object]
         # print('in data-access: The row(s) = ', records)
         # for j in records:
         #     print(j)
-            # print([x for x in j])
+        # print([x for x in j])
 
         rows = self.currentCursor.execute(sql).fetchall()
 
@@ -247,40 +246,43 @@ class DataAccess():
 
     def getRowOnSpecifyId(self, tableName, id):
         # Getting specific row from the table specified by name using the primary key of the corresponding table in Specify
-        # CONTRACT 
+        # CONTRACT
         #   tableName (String): The name of the table to be queried
-        #   id (Integer) : The primary key of the row to be returned 
-        #   RETURNS single table row 
-        self.currentCursor = self.getDbCursor()   
+        #   id (Integer) : The primary key of the row to be returned
+        #   RETURNS single table row
+        self.currentCursor = self.getDbCursor()
         record = self.currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(id)).fetchone()
         self.currentCursor.connection.close()
-        
+
         return record
 
     def insertRow(self, tableName, fields):
         # Inserting a row of field values into a table specified by name
-        # CONTRACT 
+        # CONTRACT
         #   tableName (String): The name of the table to be queried
-        #   fields (Dictionary) : A dictionary where the key is the field name and the value is the field value 
-        #       NOTE: Strings should be formatted with enclosing double quotation marks (") 
-        #             Numbers should be formatted as strings 
+        #   fields (Dictionary) : A dictionary where the key is the field name and the value is the field value
+        #       NOTE: Strings should be formatted with enclosing double quotation marks (")
+        #             Numbers should be formatted as strings
         #   RETURNS inserted record row
-        self.currentCursor = self.getDbCursor()   
-        fieldsString = ""
+        self.currentCursor = self.getDbCursor()
+        fieldsString = []
         for key in fields:
-            fieldsString += "%s, " % key
-        fieldsString  = fieldsString[0:len(fieldsString)-2]
+            fieldsString.append(key)
+        # fieldsString  = fieldsString[0:len(fieldsString)-2]
+        # Jan thinks that two char or less values should be allowed. Up for discussion though.
+        fieldsString = ','.join(fieldsString)
         sqlString = f"INSERT INTO {tableName} ({fieldsString}) VALUES ("
+        print(f"fieldsString string = {fieldsString}||")
         sqlValues = []
         for key in fields:
             addSql = fields[key].replace('""', '')
             sqlValues.append(addSql)
             sqlValues = [item.replace('"', '') for item in sqlValues]
-        
+
         valuesSql = '","'.join(sqlValues)
         valuesSql = f'"{valuesSql}")'
         sqlString = sqlString + valuesSql
-        # TODO table taxon has no column named parentfullname
+        print(f"Inserting record with SQL:- ", sqlString)
         self.currentCursor.execute(sqlString)
         self.currentCursor.connection.commit()
         recordID = self.currentCursor.lastrowid
@@ -290,7 +292,7 @@ class DataAccess():
         return record
 
     def updateRow(self, tableName, recordID, values, where='', sqlString=None):
-        # TODO Function contract 
+        # TODO Function contract
         #   RETURNS updated record row
         self.currentCursor = self.getDbCursor()
         fieldsString = ""
@@ -309,14 +311,11 @@ class DataAccess():
                 try:
                     val = values[key]
                     val = val.replace('"', '')
-                    #print(val)
-                    val = '"'+val+'"'
-                    #print('new val:', val)
+                    val = '"' + val + '"'
                     sqlString = f"{key} = {val}, "
                     sqlStringAppend.append(sqlString)
 
                 except AttributeError:
-                    #print('ATTRIBUTE ERRRORRRRRR')
                     sqlStringAppend.append(values[key])
             sqlStringLastPart = " WHERE id = {}".format(recordID)
             try:
@@ -325,33 +324,31 @@ class DataAccess():
 
                 sqlAdd = sqlAdd[:-2]
 
-                sqlStringFinal = sqlStringPrepend+' '+sqlAdd+sqlStringLastPart
-                #print('FINAL SQL is : ', sqlStringFinal)
+                sqlStringFinal = sqlStringPrepend + ' ' + sqlAdd + sqlStringLastPart
+                # print('FINAL SQL is : ', sqlStringFinal)
             except TypeError:
-                #print('IN sql build except typeError!')
+                # print('IN sql build except typeError!')
                 sqlStringFinal = ','.join(map(str, sqlStringAppend))
-
-            #print('SQL going into execute: ', sqlStringFinal)
 
         self.currentCursor.execute(sqlStringFinal)
         self.currentCursor.connection.commit()
         record = self.currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(recordID)).fetchone()
         self.currentCursor.connection.close()
 
-        return record 
+        return record
 
     def getFieldMap(self):
         # Get fields for a given DB API 2.0 cursor object that has been executed
-        # CONTRACT 
-        #   cursor (Cursor) : Cursor object to be field mapped 
+        # CONTRACT
+        #   cursor (Cursor) : Cursor object to be field mapped
         #   RETURNS a dictionary that maps each field name to a column index; 0 and up.
-        currentCursor = self.getDbCursor()   
+        currentCursor = self.getDbCursor()
         results = {}
         column = 0
         for d in currentCursor.description:
             results[d[0]] = column
             column = column + 1
-        
+
         return results
 
-db = DataAccess('test')
+# db = DataAccess('test')
