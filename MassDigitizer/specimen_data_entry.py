@@ -445,4 +445,4 @@ class SpecimenDataEntry():
         for key in self.clearingList:
             self.window[key].update('')
 
-g = SpecimenDataEntry(29)
+# g = SpecimenDataEntry(29)
