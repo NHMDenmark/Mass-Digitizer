@@ -140,7 +140,7 @@ class SpecimenDataEntry():
             sg.Text('Record ID: ', key='lblRecordID', background_color='#99dcff', visible=True, size=(9, 1)),
             sg.Text('', key='txtRecordID', size=(4, 1), background_color=blueArea),
             sg.StatusBar('', relief=None, size=(7, 1), background_color=blueArea),
-            sg.Button('SAVE', key="btnSave", button_color='seagreen', size=9, bind_return_key=True),
+            sg.Button('SAVE', key="btnSave", button_color='seagreen', size=9),
             sg.StatusBar('', relief=None, size=(14, 1), background_color=blueArea),
             sg.Button('GO BACK', key="btnBack", button_color='firebrick', pad=(13, 0)),
             sg.Button('GO FORWARDS', key='btnForward', button_color=('black', 'LemonChiffon2')),
@@ -201,6 +201,7 @@ class SpecimenDataEntry():
 
         # Set triggers for the different controls on the UI form 
         self.setControlEvents()
+        self.searchString = []
 
     def main(self):
 
@@ -209,13 +210,17 @@ class SpecimenDataEntry():
 
             # Checking field events as switch construct
             if event is None: break  # Empty event indicates user closing window
+            print("-event-", event)
 
             if event == 'txtStorage':
-                
+                self.searchString.append(values[event])
+                print("search string is:::-", self.searchString)
                 # If more than 3 characters entered: 
-                if len(values[event]) >= 3:
-                    # Get currently entered key strokes 
-                    keyStrokes = values['txtStorage']
+                if len(self.searchString) >= 3:
+                    # Get currently entered key strokes
+
+                    keyStrokes = self.searchString.pop()
+                    print("Ks's", keyStrokes)
 
                     self.autoStorage.Show()
 
@@ -249,22 +254,25 @@ class SpecimenDataEntry():
                 self.window['txtNotes'].set_focus()
 
             if event == 'txtNotes_Edit':
+                # print(self.window. ['txtNotes'].)
                 self.collobj.notes = values['txtNotes']
                 self.window['chkMultiSpecimen'].set_focus()
 
-            if event.endswith('_Tab'):
+            if event == '_Tab':
                 self.collobj.notes = values['txtNotes']
-                self.window['chkMultiSpecimen'].set_focus()
+                # self.window['chkMultiSpecimen'].set_focus()
 
             if event == 'chkMultiSpecimen_Enter':
                 # This event is only triggered by being in the checkbox element
                 # and pressing Enter.
                 check = self.window['chkMultiSpecimen'].Get()
                 self.collobj.multiSpecimen = values['chkMultiSpecimen']
+                print('self.collobj.multiSpecimen - ', self.collobj.multiSpecimen)
                 self.window['cbxGeoRegion'].set_focus()
 
             if event == 'chkMultiSpecimen_Edit':
                 self.collobj.multiSpecimen = values['chkMultiSpecimen']
+                print('EDIT // self.collobj.multiSpecimen - ', self.collobj.multiSpecimen)
 
             if event == 'cbxGeoRegion':
                 self.collobj.setGeoRegionFields(self.window[event].widget.current())
@@ -345,17 +353,13 @@ class SpecimenDataEntry():
 
             if event == sg.WINDOW_CLOSED:
                 break
-            
-            # ? 
-            if values: 
-                pass 
 
             # Save form 
-            if event == 'btnSave': 
+            if event == 'btnSave' or event == 'btnSave_Enter':
                 # save specimen and get its id 
                 specimenRecord = self.collobj.save()  
-
-                self.clearNonStickyFields()
+                print(f"-SAVING from button Save-\n {specimenRecord}")
+                self.clearNonStickyFields(values)
 
                 # Create a new specimen instance and add previous id to it 
                 self.collobj = specimen.specimen(self.collectionId) 
@@ -364,6 +368,8 @@ class SpecimenDataEntry():
                 self.setRecordFields(specimenRecord, True)
 
                 self.window['txtCatalogNumber'].set_focus()
+                recid = self.window['txtRecordID'].Get()
+                print(f'the record ID is {recid}')
 
         self.window.close()
 
@@ -386,9 +392,10 @@ class SpecimenDataEntry():
 
         # BLUE AREA
         # cbxGeoRegion  # Combobox therefore already triggered
-        # self.window['cbxTaxonName'].bind("<Return>", "_Enter")
+        self.window['inpTaxonName'].bind("<Tab>", "_Tab")
         self.window['txtCatalogNumber'].bind('<Leave>', '_Edit')
         self.window['txtCatalogNumber'].bind("<Return>", "_Enter")
+        self.window['btnSave'].bind("<Return>", "_Enter")
 
     def setRecordFields(self, record, stickyFieldsOnly=False):
         # TODO Function for transfering ...
@@ -425,15 +432,17 @@ class SpecimenDataEntry():
         self.window['inpTaxonName'].update(record['taxonfullname'])
         self.window['txtCatalogNumber'].update(record['catalognumber'])
 
-    def clearNonStickyFields(self):
+    def clearNonStickyFields(self, values):
         # TODO explain function
         for key in self.nonStickyFields:
             field = self.window[key]
             field.update('')
+        # recID =
+        print(f'record ID is  -{values}-')
 
     def clearForm(self):
         # Clears all fields listed 
         for key in self.clearingList:
             self.window[key].update('')
 
-# g = SpecimenDataEntry(29)
+g = SpecimenDataEntry(29)
