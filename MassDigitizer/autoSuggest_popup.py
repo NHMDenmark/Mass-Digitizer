@@ -30,6 +30,7 @@ class AutoSuggest_popup():
     # No. of keystrokes before auto suggest function is triggered.
 
     candidateNamesList = []
+    select_item_index = None
     rowCandidates = []
     done = False
     defaultBoxText = ''
@@ -99,7 +100,7 @@ class AutoSuggest_popup():
 
         # Resetting base variables (TODO Explain variables)
         choices = [' ']
-        prediction_list, input_text, sel_item = choices, "", 0
+        prediction_list, input_text, select_item = choices, "", 0
        
         # Using 'Model' base object (superclass) to encompass both derived models be it Storage or TaxonName
         autoSuggestObject = model.Model(self.collectionID)
@@ -125,15 +126,21 @@ class AutoSuggest_popup():
             # TODO comment 
             elif event.startswith('Down') and len(self.candidateNamesList):
                 # Listbox element is not born with up/down arrow capability.
-                sel_item = (sel_item + 1) % len(self.candidateNamesList)
-                self.lstSuggestionsElement.update(set_to_index=sel_item, scroll_to_index=sel_item)
+                select_item = (select_item + 1) % len(self.candidateNamesList)
+                # select_item is merely the position in the listbox
+                print(f"DOWN and len candidate list -{len(self.candidateNamesList)}-\n set_to_index:-{select_item}-")
+                self.select_item_index = select_item
+                print(f"the chosen global select index is ==", self.select_item_index)
+                self.lstSuggestionsElement.update(set_to_index=select_item, scroll_to_index=select_item)
+                print(type(self.lstSuggestionsElement))
+                self.setToIndex(select_item)
 
             elif event.startswith('Up') and len(self.candidateNamesList):
                 # Listbox element is not born with up/down arrow capability.
-                sel_item = (sel_item + (len(self.candidateNamesList) - 1)) % len(self.candidateNamesList)
-                self.lstSuggestionsElement.update(set_to_index=sel_item, scroll_to_index=sel_item)
+                select_item = (select_item + (len(self.candidateNamesList) - 1)) % len(self.candidateNamesList)
+                self.lstSuggestionsElement.update(set_to_index=select_item, scroll_to_index=select_item)
 
-            if event.endswith('+TAB'):
+            elif event.endswith('+TAB'):
                 # TODO comment 
                 #break
                 pass
@@ -238,7 +245,7 @@ class AutoSuggest_popup():
 
         return autoSuggestObject
 
-    def handleSuggestions(self, keyStrokes='', minimumRank=270):
+    def handleSuggestions(self, keyStrokes, minimumRank=270):
         # Fetch suggestions from database based on keystrokes 
         #self.suggestions = self.lookupSuggestions(keystrokes, 'fullname', minimumRank)
         fields = {}
@@ -250,9 +257,15 @@ class AutoSuggest_popup():
 
         # Convert records to list of fullnames 
         self.candidateNamesList = [row['fullname'] for row in self.suggestions]
-        
+        if self.select_item_index:
+            self.setToIndex(self.select_item_index)
+        else:
+            self.setToIndex(0)
         # Adjusts the listbox behavior to what is expected.
-        self.lstSuggestionsElement.update(values=self.candidateNamesList, set_to_index=[0])
+        # self.lstSuggestionsElement.update(values=self.candidateNamesList, set_to_index=[0])
+
+    def setToIndex(self, listIndex):
+        self.lstSuggestionsElement.update(values=self.candidateNamesList, set_to_index=[listIndex], scroll_to_index=listIndex)
 
     def lookupSuggestions(self, keyStrokes, columnName='fullname', minimumRank=270, rowLimit=200):
         """ 
