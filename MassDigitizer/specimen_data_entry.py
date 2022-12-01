@@ -45,7 +45,8 @@ class SpecimenDataEntry():
         self.collobj = specimen.specimen(collection_id) # Create blank specimen record instance 
 
         # Functional data
-        self.clearingList = ['txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'txtNotes', 'chkMultiSpecimen', 'cbxGeoRegion', 'inpTaxonName', 'txtCatalogNumber', 'txtRecordID']
+        self.clearingList = ['txtStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'txtNotes', 'chkMultiSpecimen', 'cbxGeoRegion', 'inpTaxonName', 'txtCatalogNumber', 'txtRecordID']
+        #List of boxes that should be cleared by using that function.
         self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'txtNotes'}, {'chkMultiSpecimen'}, {'cbxGeoRegion'}, {'inpTaxonName'}]
         self.nonStickyFields = ['txtCatalogNumber', 'txtRecordID']
 
@@ -210,8 +211,7 @@ class SpecimenDataEntry():
 
             # Checking field events as switch construct
             if event is None: break  # Empty event indicates user closing window
-            print("-event-", event)
-
+            # print("-event-", event)
             if event == 'txtStorage':
                 self.searchString.append(values[event])
                 print("search string is:::-", self.searchString)
@@ -254,7 +254,7 @@ class SpecimenDataEntry():
                 self.window['txtNotes'].set_focus()
 
             if event == 'txtNotes_Edit':
-                # print(self.window. ['txtNotes'].)
+                print('IN Notes field!!!', self.window['txtNotes'])
                 self.collobj.notes = values['txtNotes']
                 self.window['chkMultiSpecimen'].set_focus()
 
