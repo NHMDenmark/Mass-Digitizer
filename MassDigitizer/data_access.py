@@ -269,7 +269,7 @@ class DataAccess():
         for key in fields:
             fieldsString.append(key)
         # fieldsString  = fieldsString[0:len(fieldsString)-2]
-        # Jan thinks that two char or less values should be allowed. Up for discussion though.
+        # Jan thinks that joining the fieldString list is a cleaner solution.
         fieldsString = ','.join(fieldsString)
         sqlString = f"INSERT INTO {tableName} ({fieldsString}) VALUES ("
         print(f"fieldsString string = {fieldsString}||")
