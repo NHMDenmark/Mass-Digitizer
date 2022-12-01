@@ -46,7 +46,10 @@ class DataAccess():
         self.dbAltFilePath = str(Path(altFilePath).joinpath(f'{databaseName}.sqlite3'))
         # self.setDatabase(databaseName)
         # print('Initializing with db file: %s ...'%self.dbFilePath)
-        self.connection = sqlite3.connect(self.dbFilePath)
+        try:
+            self.connection = sqlite3.connect(self.dbFilePath)
+        except Exception as e:
+            print(f"SQLite connection failed. Error: {e}")
 
         if gs.db_in_memory == True or do_in_memory == True:
             # Read database to tempfile
@@ -65,7 +68,10 @@ class DataAccess():
             pass
 
         self.connection.row_factory = sqlite3.Row
-        self.currentCursor = self.connection.cursor()
+        try:
+            self.currentCursor = self.connection.cursor()
+        except Exception as e:
+            print(f"Get the DB cursor error: {e}")
 
     def setDatabase(self, dbFileName='db'):
         # This optional function allows for setting a different database file like e.g. 'test'
@@ -134,8 +140,10 @@ class DataAccess():
         if sortColumn is not None:
             sqlString += f' ORDER BY {sortColumn}'
         print(sqlString)
-        records = currentCursor.execute(sqlString).fetchall()
-
+        try:
+            records = currentCursor.execute(sqlString).fetchall()
+        except Exception as e:
+            print(f"Error executing SQL : {e}\n Check the SQL = {sqlString}")
         self.currentCursor.connection.close()
 
         return records
