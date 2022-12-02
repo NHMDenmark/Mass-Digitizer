@@ -23,7 +23,7 @@ from models.model import Model
 from models import taxon
 from models import collection as col
 
-gs.baseURL = 'https://specify-test.science.ku.dk/'
+gs.baseURL = 'https://specify-snm.science.ku.dk/'
 
 sp = specify_interface.SpecifyInterface()
 
@@ -178,13 +178,16 @@ class MergeDuplicates():
                                                     response = sp.mergeTaxa(source.spid, target.spid, token)
                                                     if response.status_code == "404":
                                                         print(' - 404: Taxon already merged.')
+                                                    if response.status_code == "408":
+                                                        print(' - 408: Server timeout.')
+                                                    elif response.status_code == "500":
+                                                        print(' - 500: Internal Server Error.')
                                                     end = time.time()
                                                     timeElapsed = end - start
                                                     print(f'Merged {source.spid} with {target.spid}; Time elapsed: {timeElapsed} ')
                                     else:
                                         # Found taxa with matching names, but different parents: Add to ambivalent cases 
                                         ambivalence = f'Ambivalence on parent taxa: {original.parent.fullName} vs {lookup.parent.fullName} '
-
 
                     # Escape hatch
                     #print()
