@@ -99,7 +99,12 @@ class SpecifyInterface():
     """  
     print('Verify session')
     validity = None
+
+    headers = {'content-type': 'application/json', 'X-CSRFToken': self.csrfToken, 'Referer': gs.baseURL}
+    print(gs.baseURL + "context/user.json", headers)
+
     headers = {'content-type': 'application/json', 'X-CSRFToken': token, 'Referer': gs.baseURL}
+
     response = self.spSession.get(gs.baseURL + "context/user.json", headers=headers)
     print(' - Response: %s %s' %(str(response.status_code), response.reason))
     if response.status_code > 299:
@@ -318,3 +323,9 @@ class SpecifyInterface():
     # return object  
 
     return response
+
+si = SpecifyInterface()
+gs.baseURL = "https://specify-test.science.ku.dk/"
+tok = si.getCSRFToken()
+print(tok)
+si.verifySession(tok)

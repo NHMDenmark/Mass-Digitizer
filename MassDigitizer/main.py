@@ -22,8 +22,4 @@ class Main():
     """
 
     def __init__(self, collection_id) -> None:
-
-        
-
-
         pass

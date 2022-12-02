@@ -64,7 +64,7 @@ class Model:
            RETURNS database record 
         """
 
-        # Checking if Save is a novel record , or if it is updating existing record.
+        # Checking if Save is a novel record, or if it is updating existing record.
         if self.id > 0:
             # Record Id is not 0 therefore existing record to be updated 
             record = self.db.updateRow(self.table, self.id, self.getFieldsAsDict())
@@ -115,8 +115,10 @@ class Model:
         print(sql)
 
         # Fetch results from database
-        results = self.db.executeSqlStatement(sql)
-
+        try:
+            results = self.db.executeSqlStatement(sql)
+        except Exception as e:
+            print(f"The SQL could not be executed - {e}\n Please check the Statement: \n{sql}")
         # If results returned then pick first one, otherwise set record to nothing 
         if len(results) > 0:
             record = results[0]
@@ -148,8 +150,10 @@ class Model:
         print(sql)
 
         # Fetch results from database
-        results = self.db.executeSqlStatement(sql)
-
+        try:
+            results = self.db.executeSqlStatement(sql)
+        except Exception as e:
+            print(f"The SQL could not be executed - {e}\n Please check the Statement: \n{sql}")
         # If results returned then pick first one, otherwise set record to nothing 
         if len(results) > 0:
             record = results[0]

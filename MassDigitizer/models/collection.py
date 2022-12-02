@@ -17,9 +17,9 @@ from datetime import datetime
 # Internal dependencies
 from models import model
 from models import discipline
-#import data_access
+import data_access
 import global_settings as gs
-#import specify_interface
+import specify_interface
 
 class Collection(model.Model):
     """
@@ -33,7 +33,6 @@ class Collection(model.Model):
         self.sptype         = 'collection'
         self.institutionId  = 0
         self.taxonTreeDefId = 0
-        self.disciplineId   = 0
         self.discipline     = None 
 
         # Predefined data fields
@@ -93,33 +92,27 @@ class Collection(model.Model):
 
 # Specify Interfacing functions 
 
-    def fill(self, jsonObject, source="Specify"):
+    def fill(self, specifyObject, token):
         """
         TODO ...
         """
-        self.source = source
-        if jsonObject:
-            if source=="Specify":
-                self.spid = jsonObject['id']
-                self.id = 0
-                self.guid = jsonObject['guid']
-                self.name = jsonObject['collectionname']
-                #self.fullname = jsonObject['collectionname'] 
-                self.disciplineId = int(jsonObject['discipline'].split('/')[4])
-                #self.fetchDiscipline(disciplineId, token)
-        else:
-            self.remarks = 'Could not set values, because empty object was passed. '
-            print('jsonObject EMPTY!!!')
+        self.spid = specifyObject['id']
+        self.id = 0
+        self.guid = specifyObject['guid']
+        self.name = specifyObject['collectionname']
+        #self.fullname = specifyObject['collectionname'] 
+        disciplineId = int(specifyObject['discipline'].split('/')[4])
+        self.fetchDiscipline(disciplineId, token)
 
     # Collection class specific functions 
 
-    # def fetchDiscipline(self, disciplineId, token):
-    #     """
-    #     TODO ...
-    #     """
-    #     self.discipline = discipline.Discipline(self.id)
-    #     disciplineObj = self.sp.getSpecifyObject('discipline', disciplineId, token)
-    #     self.discipline.fill(disciplineObj)
+    def fetchDiscipline(self, disciplineId, token):
+        """
+        TODO ...
+        """
+        self.discipline = discipline.Discipline(self.id)
+        disciplineObj = self.sp.getSpecifyObject('discipline', disciplineId, token)
+        self.discipline.fill(disciplineObj)
 
 # Generic functions
 

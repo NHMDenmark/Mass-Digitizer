@@ -23,7 +23,16 @@ class Test_specify_interface():
         
     """
 
+
+    collectionID = 29
+    gs.baseURL = "https://specify-snm.science.ku.dk/"
+    # The login function below will not work without the baseURL set.
+    token = sp.login(username='test', passwd='testytest',
+                               collectionid=29, csrftoken=sp.getCSRFToken())
+    baseUrl = "https://specify-snm.science.ku.dk/"
+
     def __init__(self) -> None:
+
 
         gs.baseURL = "https://specify-test.science.ku.dk/"
 
@@ -56,7 +65,12 @@ class Test_specify_interface():
     def test_getSpecifyObject(self):
         # Testing the more generic version of getCollObject().
         # In this case collectionobject, but could be 'attachment', 'author' etc.
+
+        res = sp.getSpecifyObject('collectionobject', 411590, self.token)
+        print('--------------', res, '--------------')
+
         res = self.sp.getSpecifyObject('collectionobject', 411590, self.token)
+
         assert res
 
     def test_getInitialCollection(self):
