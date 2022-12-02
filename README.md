@@ -35,9 +35,7 @@ Jan K. Legind, NHMD
 
 ### Structure
 The app interfaces with a local SQLite database with tables for taxonomy (millions of names that are accessed according to the relevant discipline, say 'botany' for instance.) Storage while smaller also has its own table, as do Collection, Georegion and Institution. The table that is populated by the app is mainly 'specimen'.
-Eventually, the local DB instances will be uploaded to a server where the data will be processed into Specify. The application also interfaces directly with Specify through the Specify7 API (more information further below).  
-PySimpleGUI: When setting up GUI elements please be wary of adding the parameter `bind_return_key=True` because this will trigger the event on any Enter key-press regardless of whether it is appropriate or not.  
-It is safer to catch the event in the 'while' loop with `if event == "element_key": ` because that is specific to that particular event. 
+Eventually, the local DB instances will be uploaded to a server where the data will be processed into Specify. The application also interfaces directly with Specify through the Specify7 API (more information further below). 
 
 ### Compilation  
 For creating the executable, we used the Nuitka python compiler (https://nuitka.net/) using this command in the CLI:
