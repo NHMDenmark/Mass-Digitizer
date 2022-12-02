@@ -17,6 +17,7 @@ import json
 import urllib3
 
 # Internal Dependencies
+import util
 import data_access
 import global_settings as gs
 
@@ -99,7 +100,12 @@ class SpecifyInterface():
     """  
     print('Verify session')
     validity = None
+
+    headers = {'content-type': 'application/json', 'X-CSRFToken': self.csrfToken, 'Referer': gs.baseURL}
+    print(gs.baseURL + "context/user.json", headers)
+
     headers = {'content-type': 'application/json', 'X-CSRFToken': token, 'Referer': gs.baseURL}
+
     response = self.spSession.get(gs.baseURL + "context/user.json", headers=headers)
     print(' - Response: %s %s' %(str(response.status_code), response.reason))
     if response.status_code > 299:
@@ -304,8 +310,11 @@ class SpecifyInterface():
     print(" - API call: %s"%apiCallString)
 
     #input('ready?')
-    response = self.spSession.post(apiCallString, headers=headers, data={'target' : target_id }, timeout=480) 
-
+    
+    try:
+      response = self.spSession.post(apiCallString, headers=headers, data={'target' : target_id }, timeout=960) 
+    except:
+      response = util.Struct(status_code='408')
     #print(response.request.body)
     #util.pretty_print_POST(response.request)
     #print('---------------------------')
@@ -318,3 +327,9 @@ class SpecifyInterface():
     # return object  
 
     return response
+
+#si = SpecifyInterface()
+#gs.baseURL = "https://specify-test.science.ku.dk/"
+#tok = si.getCSRFToken()
+#print(tok)
+#si.verifySession(tok)
