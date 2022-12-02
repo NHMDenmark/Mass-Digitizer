@@ -34,7 +34,6 @@ from models import specimen
 sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer')))
 currentpath = os.path.join(pathlib.Path(__file__).parent, '')
 
-db = data_access.DataAccess(gs.databaseName)
 
 class SpecimenDataEntry():
 
@@ -43,7 +42,7 @@ class SpecimenDataEntry():
         self.collectionId = collection_id
         self.window = None
         self.collobj = specimen.specimen(collection_id) # Create blank specimen record instance 
-
+        self.db = data_access.DataAccess(gs.databaseName)
         # Functional data
         self.clearingList = ['txtStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'txtNotes', 'chkMultiSpecimen', 'cbxGeoRegion', 'inpTaxonName', 'txtCatalogNumber', 'txtRecordID']
         #List of boxes that should be cleared by using that function.
@@ -193,10 +192,10 @@ class SpecimenDataEntry():
 
         # Set session fields
         self.window.Element('txtUserName').Update(value=gs.spUserName)
-        collection = db.getRowOnId('collection', collection_id)
+        collection = self.db.getRowOnId('collection', collection_id)
         if collection is not None:
             self.window.Element('txtCollection').Update(value=collection[2])
-            institution = db.getRowOnId('institution', collection[3])
+            institution = self.db.getRowOnId('institution', collection[3])
             self.window.Element('txtInstitution').Update(value=institution[2])
         self.window.Element('txtWorkStation').Update(value='') #TRS-80')
 
@@ -213,14 +212,14 @@ class SpecimenDataEntry():
             if event is None: break  # Empty event indicates user closing window
             # print("-event-", event)
             if event == 'txtStorage':
+                print('vals storage: ', values[event])
                 self.searchString.append(values[event])
-                print("search string is:::-", self.searchString)
+                print("search string is:::-", self.searchString, 'len::', len(self.searchString))
                 # If more than 3 characters entered: 
                 if len(self.searchString) >= 3:
                     # Get currently entered key strokes
 
                     keyStrokes = self.searchString.pop()
-                    print("Ks's", keyStrokes)
 
                     self.autoStorage.Show()
 
@@ -267,7 +266,6 @@ class SpecimenDataEntry():
                 # and pressing Enter.
                 check = self.window['chkMultiSpecimen'].Get()
                 self.collobj.multiSpecimen = values['chkMultiSpecimen']
-                print('self.collobj.multiSpecimen - ', self.collobj.multiSpecimen)
                 self.window['cbxGeoRegion'].set_focus()
 
             if event == 'chkMultiSpecimen_Edit':
@@ -336,12 +334,12 @@ class SpecimenDataEntry():
                     # Indicate no further records
                     self.window['lblRecordEnd'].update(visible=False)
 
-            if event == 'btnClear':
-                for key in self.clearingList:
-                    self.window[key].update('')
-                
-                self.window['lblExport'].update(visible=False)
-                self.window['lblRecordEnd'].update(visible=False)
+            # if event == 'btnClear':
+            #     for key in self.clearingList:
+            #         self.window[key].update('')
+            #
+            #     self.window['lblExport'].update(visible=False)
+            #     self.window['lblRecordEnd'].update(visible=False)
 
             if event == 'btnExport':
                 export_result = dx.exportSpecimens('xlsx')
@@ -369,7 +367,7 @@ class SpecimenDataEntry():
 
                 self.window['txtCatalogNumber'].set_focus()
                 recid = self.window['txtRecordID'].Get()
-                print(f'the record ID is {recid}')
+                print(f'In [Save] and the record ID is {recid}')
 
         self.window.close()
 
@@ -400,13 +398,13 @@ class SpecimenDataEntry():
     def setRecordFields(self, record, stickyFieldsOnly=False):
         # TODO Function for transfering ...
 
-        self.collobj.setStorageFields(db.getRowOnId('storage', record['storageid'])) 
+        self.collobj.setStorageFields(self.db.getRowOnId('storage', record['storageid']))
         self.collobj.setPrepTypeFields(self.window['cbxPrepType'].widget.current()) 
         self.collobj.setTypeStatusFields(self.window['cbxTypeStatus'].widget.current())
         self.collobj.notes = record['notes'] 
         self.collobj.multiSpecimen = record['multiSpecimen'] 
         self.collobj.setGeoRegionFields(self.window['cbxGeoRegion'].widget.current())
-        self.collobj.setTaxonNameFields(db.getRowOnId('taxonname', record['taxonnameid'])) 
+        self.collobj.setTaxonNameFields(self.db.getRowOnId('taxonname', record['taxonnameid']))
 
         if not stickyFieldsOnly:
             self.collobj.id = record['id'] 
@@ -438,11 +436,14 @@ class SpecimenDataEntry():
             field = self.window[key]
             field.update('')
         # recID =
-        print(f'record ID is  -{values}-')
+        print(f'record values are=  -{values}-')
 
     def clearForm(self):
         # Clears all fields listed 
         for key in self.clearingList:
             self.window[key].update('')
+        self.window['lblExport'].update(visible=False)
+        self.window['lblRecordEnd'].update(visible=False)
+        self.searchString = []
 
-# g = SpecimenDataEntry(29)
+g = SpecimenDataEntry(29)
