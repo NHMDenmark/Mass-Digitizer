@@ -104,9 +104,7 @@ def obtainVersionNumber(filepath, keyWord):
             # find() method returns -1 if the value is not found,
             # if found it returns index of the first occurrence of the substring
             if line.find(keyWord) != -1:
-
                 versionSplit = line.split(' ')
-                print(versionSplit)
                 versionPop = versionSplit.pop()
                 print(versionPop.replace('"', ''))
                 return versionPop.replace('"', '')
