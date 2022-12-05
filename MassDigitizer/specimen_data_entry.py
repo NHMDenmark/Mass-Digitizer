@@ -354,15 +354,17 @@ class SpecimenDataEntry():
 
             # Save form 
             if event == 'btnSave' or event == 'btnSave_Enter':
-                # save specimen and get its id 
-                specimenRecord = self.collobj.save()  
-                print(f"-SAVING from button Save-\n {specimenRecord}")
+                # save specimen and get its id
+                self.collobj.notes = self.window['txtNotes'].Get()
+                print(f'#######Specimen collobj notes:_:{self.collobj.notes}')
+                specimenRecord = self.collobj.save()
+                # print(f"-SAVING from button Save-\n {specimenRecord}")
                 self.clearNonStickyFields(values)
 
                 # Create a new specimen instance and add previous id to it 
                 self.collobj = specimen.specimen(self.collectionId) 
                 
-                # Transfer data in sticky fields to new record: 
+                # Transfer data in sticky fields to new record:
                 self.setRecordFields(specimenRecord, True)
 
                 self.window['txtCatalogNumber'].set_focus()
@@ -401,7 +403,10 @@ class SpecimenDataEntry():
         self.collobj.setStorageFields(self.db.getRowOnId('storage', record['storageid']))
         self.collobj.setPrepTypeFields(self.window['cbxPrepType'].widget.current()) 
         self.collobj.setTypeStatusFields(self.window['cbxTypeStatus'].widget.current())
-        self.collobj.notes = record['notes'] 
+        self.collobj.notes = record['notes']
+        print("record[notes] ;; ", self.collobj.notes)
+        self.collobj.notes = self.window['txtNotes'].get()
+        print("From get() notes-- ", self.collobj.notes)
         self.collobj.multiSpecimen = record['multiSpecimen'] 
         self.collobj.setGeoRegionFields(self.window['cbxGeoRegion'].widget.current())
         self.collobj.setTaxonNameFields(self.db.getRowOnId('taxonname', record['taxonnameid']))
@@ -446,4 +451,4 @@ class SpecimenDataEntry():
         self.window['lblRecordEnd'].update(visible=False)
         self.searchString = []
 
-g = SpecimenDataEntry(29)
+# g = SpecimenDataEntry(29)
