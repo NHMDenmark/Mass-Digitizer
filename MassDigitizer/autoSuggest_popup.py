@@ -105,6 +105,7 @@ class AutoSuggest_popup():
         # Using 'Model' base object (superclass) to encompass both derived models be it Storage or TaxonName
         autoSuggestObject = model.Model(self.collectionID)
         autoSuggestObject.table = self.tableName
+        # TODO Enforce subclass type 
 
         # Get GUI input events 
         window = self.window
