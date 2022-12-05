@@ -29,12 +29,16 @@ db = data_access.DataAccess(gs.databaseName)
 sp = specify_interface.SpecifyInterface()
 
 class HomeScreen():
-
+    fPath = Path('DaSSCo.iss')
+    version = util.obtainVersionNumber(fPath, '')
+    """ The second arg is an arrangement for if the .iss file changes structure and a new 
+    MyAppVersion placeholder is needed. """
     def __init__(self):
         # TODO function contract 
 
         header_font = ("Corbel, 18")
-        header = [sg.Text("DaSSCo Mass Digitizer App", size=(32,1), font=header_font, justification='center')]
+        header = [sg.Text(f"DaSSCo Mass Digitizer App - Version {self.version}", size=(34,1), font=header_font, justification='center')]
+
         separator_line = [sg.Text('_'  * 80)]
 
         btn_exit = [sg.Button("Exit", key='exit')]
@@ -61,11 +65,11 @@ class HomeScreen():
 
         col_side = [btn_exit]
 
-        layout = [[[sg.Column(col_main, key='colMain', size=(480,128))]],
-                [[sg.Column(col_next, key='colNext', size=(480,200), visible=False)],
-                [sg.Column(col_side, key='colSide', size=(480,64))]], ]
+        layout = [[[sg.Column(col_main, key='colMain', size=(512,128))]],
+                [[sg.Column(col_next, key='colNext', size=(512,200), visible=False)],
+                [sg.Column(col_side, key='colSide', size=(512,64))]], ]
 
-        self.window = sg.Window('Start', layout, size=(480, 400))
+        self.window = sg.Window('Start', layout, size=(512, 400))
 
         self.main()
 
