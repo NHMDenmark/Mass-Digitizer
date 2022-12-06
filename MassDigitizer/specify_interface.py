@@ -177,13 +177,12 @@ class SpecifyInterface():
     
     return objectSet 
 
-  def getSpecifyObject(self, objectName, objectId):#, csrftoken):
+  def getSpecifyObject(self, objectName, objectId):
     """ 
     Generic method for fetching objects from the Specify API using their primary key
     CONTRACT 
       objectName (String)  : The API's name for the object to be fetched  
       objectId   (Integer) : The primary key of the object
-      NOTE DEPRECATED: csrftoken  (String)  : The CSRF token is required for security reasons  
       RETURNS fetched object 
     """ 
     #print('Fetching ' + objectName + ' object on id: ' + str(objectId))
@@ -192,13 +191,11 @@ class SpecifyInterface():
     #print(apiCallString)
     response = self.spSession.get(apiCallString, headers=headers, verify=False)
     #print(' - Response: %s %s' %(str(response.status_code), response.reason))
-    #print(' - Referer: %s' % response.request.headers['referer'])
+    #print(f' - Session cookies: {self.spSession.cookies.get_dict()}')
     if response.status_code < 299:
       object = response.json()
     else: 
       object = None
-    #print()
-    #util.pretty_print_POST(response.request)
     #print()
     return object 
 
