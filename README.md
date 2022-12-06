@@ -38,6 +38,10 @@ The app interfaces with a local SQLite database with tables for taxonomy (millio
 Eventually, the local DB instances will be uploaded to a server where the data will be processed into Specify. The application also interfaces directly with Specify through the Specify7 API (more information further below). 
 
 ### Compilation  
+Begin with activating the virtual environment in console. [WINDOWS] CD to your project directory and `cd venv\Scripts\` and then type `.\activate`. This should switch the environment to venv. You can see the command line changes to `(venv) PS C:\Users\myUser\Documents`  
+**Warning** If you get a security exception, you need to first start Powershell in admin mode and then put in :  
+`Set-ExecutionPolicy Unrestricted -Force`  
+
 For creating the executable, we used the Nuitka python compiler (https://nuitka.net/) using this command in the CLI:
 ```
 nuitka --follow-imports --standalone .\DaSSCo.py --enable-plugin=tk-inter --enable-plugin=numpy
