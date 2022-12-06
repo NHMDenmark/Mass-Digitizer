@@ -23,14 +23,14 @@ import global_settings as gs
 from models import model
 from models import collection as coll
 
-
+db = data_access.DataAccess(gs.databaseName)
 
 class AutoSuggest_popup():
     startQueryLimit = 3
     # No. of keystrokes before auto suggest function is triggered.
 
     candidateNamesList = []
-    select_item_index = 0
+    select_item_index = None
     rowCandidates = []
     done = False
     defaultBoxText = ''
@@ -39,7 +39,7 @@ class AutoSuggest_popup():
         """
         Initialize
         """
-        self.db = data_access.DataAccess(gs.databaseName)
+
         self.tableName = table_name
         self.collectionID = collection_id
         self.collection = coll.Collection(collection_id) 
@@ -105,7 +105,6 @@ class AutoSuggest_popup():
         # Using 'Model' base object (superclass) to encompass both derived models be it Storage or TaxonName
         autoSuggestObject = model.Model(self.collectionID)
         autoSuggestObject.table = self.tableName
-        # TODO Enforce subclass type 
 
         # Get GUI input events 
         window = self.window
@@ -133,14 +132,13 @@ class AutoSuggest_popup():
                 self.select_item_index = select_item
                 print(f"the chosen global select index is ==", self.select_item_index)
                 self.lstSuggestionsElement.update(set_to_index=select_item, scroll_to_index=select_item)
+                print(type(self.lstSuggestionsElement))
                 self.setToIndex(select_item)
 
             elif event.startswith('Up') and len(self.candidateNamesList):
                 # Listbox element is not born with up/down arrow capability.
                 select_item = (select_item + (len(self.candidateNamesList) - 1)) % len(self.candidateNamesList)
-                self.select_item_index = select_item
                 self.lstSuggestionsElement.update(set_to_index=select_item, scroll_to_index=select_item)
-                self.setToIndex(select_item)
 
             elif event.endswith('+TAB'):
                 # TODO comment 
@@ -155,6 +153,7 @@ class AutoSuggest_popup():
                 # Minimum number of keystroke characters (default: 3) should be met in order to proceed 
                 if int(len(keystrokes)) >= int(minimumCharacters):
                     self.handleSuggestions(keystrokes)
+
                     # Focus back to text input field, to enable user to continue typing 
                     self.window['txtInput'].set_focus()
 
@@ -180,7 +179,7 @@ class AutoSuggest_popup():
 
                     selected_row = next(row for row in self.suggestions if row[column]==atomic)
                     selected_row = dict(selected_row)
-                    print("selected_row storage:", selected_row)
+                    print("selected_row ", selected_row)
                     
                     # If text input box for higher taxon is not available then a known taxon is selected 
                     if window['frmHiTax'].visible == False: 
@@ -249,20 +248,16 @@ class AutoSuggest_popup():
     def handleSuggestions(self, keyStrokes, minimumRank=270):
         # Fetch suggestions from database based on keystrokes 
         #self.suggestions = self.lookupSuggestions(keystrokes, 'fullname', minimumRank)
-        print('in handleSuggestions -----------')
+        fields = {}
         if self.tableName == 'taxonname': 
             fields = {'fullname' : f'LIKE lower("%{keyStrokes}%")', 'taxontreedefid' : f'= {self.collection.taxonTreeDefId}', 'rankid' : f'<={minimumRank}'}
         else: 
             fields = {'name' : f'LIKE lower("%{keyStrokes}%")'}
-        self.suggestions  = data_access.DataAccess(gs.databaseName).getRowsOnFilters(self.tableName, fields, 200)
+        self.suggestions  = db.getRowsOnFilters(self.tableName, fields, 200)
 
         # Convert records to list of fullnames 
         self.candidateNamesList = [row['fullname'] for row in self.suggestions]
-        print('self.select_item_index', self.select_item_index)
-        if self.select_item_index >= 0:
-
-            print(self.select_item_index)
-            print(self.candidateNamesList)
+        if self.select_item_index:
             self.setToIndex(self.select_item_index)
         else:
             self.setToIndex(0)
@@ -285,7 +280,7 @@ class AutoSuggest_popup():
         # It is included in the return statement.
 
         # TODO Question: Why not use the db.getRows method ???
-        cur = self.db.getDbCursor()
+        cur = db.getDbCursor()
         sql = f"SELECT * FROM {self.tableName} WHERE {columnName} LIKE lower('%{keyStrokes}%')"
 
         if self.tableName == 'taxonname':
