@@ -35,11 +35,13 @@ Jan K. Legind, NHMD
 
 ### Structure
 The app interfaces with a local SQLite database with tables for taxonomy (millions of names that are accessed according to the relevant discipline, say 'botany' for instance.) Storage while smaller also has its own table, as do Collection, Georegion and Institution. The table that is populated by the app is mainly 'specimen'.
-Eventually, the local DB instances will be uploaded to a server where the data will be processed into Specify. The application also interfaces directly with Specify through the Specify7 API (more information further below).  
-PySimpleGUI: When setting up GUI elements please be wary of adding the parameter `bind_return_key=True` because this will trigger the event on any Enter key-press regardless of whether it is appropriate or not.  
-It is safer to catch the event in the 'while' loop with `if event == "element_key": ` because that is specific to that particular event. 
+Eventually, the local DB instances will be uploaded to a server where the data will be processed into Specify. The application also interfaces directly with Specify through the Specify7 API (more information further below). 
 
 ### Compilation  
+Begin with activating the virtual environment in console. [WINDOWS] CD to your project directory and `cd venv\Scripts\` and then type `.\activate`. This should switch the environment to venv. You can see the command line changes to `(venv) PS C:\Users\myUser\Documents`  
+**Warning** If you get a security exception, you need to first start Powershell in admin mode and then put in :  
+`Set-ExecutionPolicy Unrestricted -Force`  
+
 For creating the executable, we used the Nuitka python compiler (https://nuitka.net/) using this command in the CLI:
 ```
 nuitka --follow-imports --standalone .\DaSSCo.py --enable-plugin=tk-inter --enable-plugin=numpy
