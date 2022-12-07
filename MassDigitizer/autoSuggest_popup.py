@@ -57,7 +57,6 @@ class AutoSuggest_popup():
         input_width = 95
         lines_to_show = 7
 
-
         layout = [
             [sg.Text('Input name:', key="lblInputName", metadata='initial-name')],
              # sg.Text(labelText,
@@ -161,6 +160,9 @@ class AutoSuggest_popup():
             if event == 'lstSuggestions' or event == 'btnReturn':
                 print('Selected suggestion : ', type(values['lstSuggestions']), values['lstSuggestions'])
                 print('Selected parent     : ', values['txtInput'])
+                #Fix for novel parent name
+                if not values['lstSuggestions']:
+                    print('NEW PARENT TAXON REQUIRED', values['txtHiTax'])
                 
                 # If there still are entries in the list box then this is a known name and the one selected is handled 
                 if len(values['lstSuggestions']) > 0:
@@ -225,16 +227,32 @@ class AutoSuggest_popup():
 
             if event == 'btnCancel':
                 # Cancel button pressed during new taxon entry
-                                    
-                # Return taxon name as-is without saving 
+                print('In buttonCancel // ASpopup|| table name is:-', self.tableName)
+
                 autoSuggestObject.table = self.tableName
                 autoSuggestObject.id   = 0
                 autoSuggestObject.spid = 0
-                autoSuggestObject.name = values['txtInput'].split(' ').pop()
-                autoSuggestObject.fullName = values['txtInput']
+                # autoSuggestObject.name = values['txtInput'].split(' ').pop()
+                autoSuggestObject.name = values['txtInput']
+                print("autoSuggestObject.name = values['txtInput'] ==", values['txtInput'])
+                autoSuggestObject.fullName = f"{values['txtHiTax']} {autoSuggestObject.name}".strip(' ')
+                #Remove leading whitespace if txtHiTax is empty.
                 autoSuggestObject.collectionId  = self.collectionID
-                autoSuggestObject.parentFullName = ''                        
+                taxonomic_comment = f" Verbatim_notes:{autoSuggestObject.fullName}"
+                print(f'iiiinitial NOTES ={autoSuggestObject.notes}=', taxonomic_comment)
+                autoSuggestObject.notes = f" Verbatim_notes:{autoSuggestObject.fullName}"
+                autoSuggestObject.parentFullName = values['txtHiTax']
+                print(f'ASpopup|| name: {autoSuggestObject.name},'
+                      f'fullname: {autoSuggestObject.fullName},'
+                      f'parentFName: {autoSuggestObject.parentFullName}')
+                autoSuggestObject.save()
                 window['frmHiTax'].update(visible=False)
+                if not values['txtHiTax']:
+                    autoSuggestObject.notes = autoSuggestObject.notes+f" Verbatim_notes:{autoSuggestObject.fullName}"
+                    print("Verbatim_TAXOOOOON:", autoSuggestObject.notes)
+                    # return autoSuggestObject.notes
+                else:
+                    print("HITAX is true!!")
                 break
 
         if window is not None: 
@@ -242,7 +260,7 @@ class AutoSuggest_popup():
                 window.Hide()
             except: 
                 print('Window may have been closed manually')
-
+        print('IN ASugg. - autoSuggestObject ==', autoSuggestObject)
         return autoSuggestObject
 
     def handleSuggestions(self, keyStrokes, minimumRank=270):
@@ -257,7 +275,7 @@ class AutoSuggest_popup():
 
         # Convert records to list of fullnames 
         self.candidateNamesList = [row['fullname'] for row in self.suggestions]
-        print('self.select_item_index', self.select_item_index)
+        print('self.select_item_index=', self.select_item_index)
         if self.select_item_index >= 0:
 
             print(self.select_item_index)
