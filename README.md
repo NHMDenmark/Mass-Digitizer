@@ -25,11 +25,12 @@ Should a taxon name be inputted that is *not* contained in the taxonomic spine -
 As the app is designed to work "off line" all entries are stored locally. The entries thus registered can be exported to an Excel spreadsheet that can be imported into Specify. A smarter pipeline for getting the local data directly into Specify is currently being planned. 
 
 ### Licence and authorship
-The application comes under the licence [licence] which aligns with the Open Source and Open Science frameworks. The [licence] was specifically selected because of [text by Pip> _ _ _ _ <end text].  
+The application comes under the Apache-2.0 license which aligns with the Open Source and Open Science frameworks. 
   
 The authors of the application are :  
 Fedor A. Steeman, NHMD  
 Jan K. Legind, NHMD  
+Pip Brewer, NHMD
 
 ## For Developers 
 
