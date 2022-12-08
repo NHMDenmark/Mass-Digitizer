@@ -24,13 +24,12 @@ from models import model
 from models import collection as coll
 
 
-
 class AutoSuggest_popup():
     startQueryLimit = 3
     # No. of keystrokes before auto suggest function is triggered.
 
     candidateNamesList = []
-    select_item_index = 0
+    select_item_index = None
     rowCandidates = []
     done = False
     defaultBoxText = ''
@@ -252,7 +251,7 @@ class AutoSuggest_popup():
                     print("Verbatim_TAXOOOOON:", autoSuggestObject.notes)
                     # return autoSuggestObject.notes
                 else:
-                    print("HITAX is true!!")
+                    print("HITAX is true!!", values['txtHiTax'])
                 break
 
         if window is not None: 
@@ -275,12 +274,13 @@ class AutoSuggest_popup():
 
         # Convert records to list of fullnames 
         self.candidateNamesList = [row['fullname'] for row in self.suggestions]
-        print('self.select_item_index=', self.select_item_index)
-        if self.select_item_index >= 0:
 
-            print(self.select_item_index)
-            print(self.candidateNamesList)
-            self.setToIndex(self.select_item_index)
+        print('self.select_item_index=', self.select_item_index)
+        if self.select_item_index:
+            if self.select_item_index >= 0:
+                print(self.select_item_index)
+                print(self.candidateNamesList)
+                self.setToIndex(self.select_item_index)
         else:
             self.setToIndex(0)
         # Adjusts the listbox behavior to what is expected.

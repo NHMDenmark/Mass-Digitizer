@@ -57,3 +57,5 @@ MassDigitizer/libpasteurize/*
 *OLD
 MassDigitizer/pefile*
 MassDigitizer/kick_off_sql_searches.py
+/MassDigitizer/*.log
+MassDigitizer/log/*
