@@ -17,7 +17,7 @@ software distributed under the License is distributed on an "AS IS" BASIS, WITHO
 either express or implied. See the License for the specific language governing permissions and limitations under the License.
 """
 #Central place to manage version numbers
-versionNumber = "0.2.6t"
+versionNumber = "0.2.6"
 #Before compiling exe, please set the version number above
 
 def getVersionNumber():
