@@ -29,8 +29,6 @@ from models import taxon
 from models import collection as col
 from models import discipline as dsc
 
-gs.baseURL = 'https://specify-snm.science.ku.dk/'
-
 class MergeDuplicates():
 
     def __init__(self) -> None:
@@ -49,16 +47,16 @@ class MergeDuplicates():
         # Set up logging
         self.logger = logging.getLogger('MergeDuplicates')
         self.logger.setLevel(logging.DEBUG)
-        logStreamFormatter = logging.Formatter(fmt=f"%(message)s", datefmt="%Y-%m-%d %H:%M:%S")
-        consoleHandler = logging.StreamHandler(stream=sys.stdout)
-        consoleHandler.setFormatter(logStreamFormatter)
-        consoleHandler.setLevel(level=logging.DEBUG)
+        #logStreamFormatter = logging.Formatter(fmt=f"%(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+        #consoleHandler = logging.StreamHandler(stream=sys.stdout)
+        #consoleHandler.setFormatter(logStreamFormatter)
+        #consoleHandler.setLevel(level=logging.DEBUG)
+        #self.logger.addHandler(consoleHandler)
         logFileFormatter = logging.Formatter(fmt=f"%(message)s", datefmt="%Y-%m-%d %H:%M:%S")
         fileHandler = logging.FileHandler(filename=f'log/MergeDuplicates_{time.time()}.log')
         fileHandler.setFormatter(logFileFormatter)
         fileHandler.setLevel(level=logging.INFO)
         self.logger.addHandler(fileHandler)
-        self.logger.addHandler(consoleHandler)
 
     def main(self):
 
@@ -104,6 +102,7 @@ class MergeDuplicates():
                 max_tries = max_tries - 1
                 self.logger.info('Attempts left: %i' % max_tries)
                 if input('Try again? (y/n)') == 'n' : break
+                
         self.logger.info('done')
 
     def scan(self):
@@ -121,7 +120,7 @@ class MergeDuplicates():
             self.logger.info(f'RANK "{rankName}" ({rankId})')
                     
             # Only look at rank genera and below 
-            if rankId >= 180:
+            if rankId >= 181:
                 offset = 0
                 resultCount = -1
                 while resultCount != 0:
@@ -237,7 +236,7 @@ class MergeDuplicates():
                                             # Merge taxa 
                                             if target is not None and source is not None: 
                                                 # Stop latch for user interaction 
-                                                if input(f'Do you want to merge {source.spid} with {target.spid} (y/n)?') == 'y':
+                                                if True: # input(f'Do you want to merge {source.spid} with {target.spid} (y/n)?') == 'y':
                                                     # Do the actual merging 
                                                     start = time.time()
                                                     response = self.sp.mergeTaxa(source.spid, target.spid)
@@ -308,5 +307,6 @@ class MergeDuplicates():
 
         pass
 
+gs.baseURL = 'https://specify-snm.science.ku.dk/'
 md = MergeDuplicates()
 md.main()
