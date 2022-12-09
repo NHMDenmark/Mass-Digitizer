@@ -167,7 +167,7 @@ class SpecifyInterface():
     for key in filters:
       filterString += '&' + key + '=' + filters[key]
     apiCallString = f'{gs.baseURL}api/specify/{objectName}/?limit={limit}&offset={offset}{filterString}'
-    #print("   -> " + apiCallString)
+    #if limit == 1000: print("" + apiCallString)
 
     response = self.spSession.get(apiCallString, headers=headers)
     #print(' - Response: %s %s' %(str(response.status_code), response.reason))

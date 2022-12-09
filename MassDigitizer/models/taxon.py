@@ -128,7 +128,12 @@ class Taxon(model.Model):
 
     def getParent(self, specify_interface):
         self.parent = Taxon(self.collectionId)
-        self.parent.fill(specify_interface.getSpecifyObject(self.sptype, self.parentId))
+        try:
+            parentTaxonObj = specify_interface.getSpecifyObject(self.sptype, self.parentId)
+            self.parent.fill(parentTaxonObj)
+        except:
+            print("ERROR: Failed to retrieve parent taxon.")
+            pass
         return self.parent 
 
     def getParentage(self, specify_interface):
