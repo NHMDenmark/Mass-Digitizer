@@ -91,7 +91,7 @@ class specimen(model.Model):
         fieldsDict = {
                 'catalognumber':'"%s"' % self.catalogNumber , # TODO "{}".format(var...)
                 'multispecimen':'"%s"' % self.multiSpecimen ,
-                'taxonfullname':'"%s"' % self.taxonFullName ,
+                'taxonfullname':f'"{self.higherTaxonName} {self.taxonName}"',
                 'taxonname':'"%s"' % self.taxonName ,
                 'taxonnameid':'"%s"' % self.taxonNameId ,
                 'typestatusname':'"%s"' % self.typeStatusName ,
