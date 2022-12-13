@@ -41,7 +41,7 @@ class HomeScreen():
 
         separator_line = [sg.Text('_'  * 80)]
 
-        btn_exit = [sg.Button("Exit", key='exit')]
+        btn_exit = [sg.Button("Exit", key='btnExit')]
 
         institutions = util.convert_dbrow_list(db.getRows('institution'))
 
@@ -128,5 +128,8 @@ class HomeScreen():
                     self.window['incomplete'].Update(visible=True)
                     #self.window['lstSelectCollection'].set_value([])
                     pass
+
+            if event == 'btnExit':
+                break
             
         self.window.close()
