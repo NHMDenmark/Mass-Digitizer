@@ -50,6 +50,8 @@ class SpecimenDataEntry():
         self.nonStickyFields = ['txtCatalogNumber', 'txtRecordID']
 
         self.setup(collection_id)
+        self.notes = ''
+        #Global for setting notes auto-generates in autoSuggest_popup.
 
         # Create auto-suggest popup window for storage locations 
         self.autoStorage = autoSuggest_popup.AutoSuggest_popup('storage', collection_id)
@@ -292,7 +294,11 @@ class SpecimenDataEntry():
                     if selectedTaxonName is not None:
                         # Set specimen record taxon name fields 
                         self.collobj.setTaxonNameFieldsFromModel(selectedTaxonName)
-
+                        print("self.autoTaxonName.captureSuggestion(keyStrokes) ::", selectedTaxonName)
+                        temp = str(selectedTaxonName).split(' ')
+                        prenote = temp[-2:]
+                        self.notes = ' '.join(prenote)
+                        print(f"Post notes = {self.notes}")
                         # Update UI to indicate selected taxon name record  
                         self.window['inpTaxonName'].update(selectedTaxonName.fullName)
                         
@@ -355,8 +361,8 @@ class SpecimenDataEntry():
             # Save form 
             if event == 'btnSave' or event == 'btnSave_Enter':
                 # save specimen and get its id
-                self.collobj.notes = self.window['txtNotes'].Get()
-                print(f'#######Specimen collobj notes:_:{self.collobj.notes}')
+                self.collobj.notes = self.window['txtNotes'].Get()+' | '+self.notes
+                print(f'#######Specimen collobj notes:_:{self.collobj.notes} - ')
                 specimenRecord = self.collobj.save()
                 # print(f"-SAVING from button Save-\n {specimenRecord}")
                 self.clearNonStickyFields(values)
@@ -451,4 +457,4 @@ class SpecimenDataEntry():
         self.window['lblRecordEnd'].update(visible=False)
         self.searchString = []
 
-# g = SpecimenDataEntry(29)
+g = SpecimenDataEntry(29)
