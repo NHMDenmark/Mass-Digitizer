@@ -45,6 +45,7 @@ class Model:
         self.parentFullName = ''
         self.parentId       = 0
         self.remarks        = ' '
+        self.notes          = ''
         self.collectionId   = collection_id
         self.status         = 0
         self.source         = 'Unspecified'
@@ -254,4 +255,4 @@ class Model:
 # Generic functions
 
     def __str__ (self):
-        return f'[{self.table}] id:{self.id}, name:{self.name}, fullname = {self.fullName}'
+        return f'[{self.table}] id:{self.id}, name:{self.name}, fullname = {self.fullName}, notes = {self.notes}'
