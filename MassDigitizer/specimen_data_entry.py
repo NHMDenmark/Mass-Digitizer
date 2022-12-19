@@ -24,7 +24,7 @@ import PySimpleGUI as sg
 
 # Internal dependencies
 import util
-import data_access
+from data_access import DataAccess
 import global_settings as gs
 import data_exporter as dx
 import autoSuggest_popup
@@ -38,31 +38,46 @@ currentpath = os.path.join(pathlib.Path(__file__).parent, '')
 class SpecimenDataEntry():
 
     def __init__(self, collection_id):
+        """
+        Constructor that initializes class variables and dependent class instances 
+        """
 
-        self.collectionId = collection_id
-        self.window = None
+        self.collectionId = collection_id # Set collection Id 
+        self.window = None # Create class level instance of window object 
         self.collobj = specimen.specimen(collection_id) # Create blank specimen record instance 
-        self.db = data_access.DataAccess(gs.databaseName)
-        # Functional data
+        self.db = DataAccess(gs.databaseName) # Instantiate database access module
+
+        # Various lists of fields to be cleared on command 
         self.clearingList = ['txtStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'txtNotes', 'chkMultiSpecimen', 'cbxGeoRegion', 'inpTaxonName', 'txtCatalogNumber', 'txtRecordID']
-        #List of boxes that should be cleared by using that function.
         self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'txtNotes'}, {'chkMultiSpecimen'}, {'cbxGeoRegion'}, {'inpTaxonName'}]
         self.nonStickyFields = ['txtCatalogNumber', 'txtRecordID']
 
+        # Set up user interface 
         self.setup(collection_id)
-        self.notes = ''
-        #Global for setting notes auto-generates in autoSuggest_popup.
 
+        # Create class level notes for access in autoSuggest_popup (TODO ?)
+        self.notes = ''
+
+        # Gets the newest row by highest ID
+        self.currentRecordId = self.window['txtRecordID'].get()
+        if self.currentRecordId:
+            print(f"record IDDDD: %{self.currentRecordId}%")
+        else:
+            print("NOOOOOO REC ID yet %%%%%%%")
+        self.maxRow = self.db.getMaxRow('specimen')[0]
         # Create auto-suggest popup window for storage locations 
         self.autoStorage = autoSuggest_popup.AutoSuggest_popup('storage', collection_id)
 
         # Create auto-suggest popup window for taxon names
         self.autoTaxonName = autoSuggest_popup.AutoSuggest_popup('taxonname', collection_id)
 
+        # Run 
         self.main()
 
     def setup(self, collection_id):
-        # Initialize data entry form on basis of collection id
+        """
+        Initialize data entry form on basis of collection id
+        """
 
         # Define UI areas
         sg.theme('SystemDefault')
@@ -135,8 +150,14 @@ class SpecimenDataEntry():
                         font=('Arial', 12), enable_events=True), ]
 
         # statusLabel = [sg.Text('Specimen record has been saved', font=('Arial',20),size=(20,10),justification='center',background_color='#4f280a',text_color = 'yellow',key='texto')]
-
+        rows = self.db.getRows('storage', limit=3, sortColumn='id DESC')
+        self.previousRecords = [[row for row in line] for line in rows]
+        self.headers = ['id', 'spid', 'catalognumber', 'multispecimen', 'taxonfullname','taxonname', 'taxonnameid', 'taxonspid', 'highertaxonname', 'preptypename','typestatusname', 'typestatusid', 'georegionname', 'georegionid','storagefullname', 'storagename']
+        self.operationalHeads = ['id', 'catalognumber', 'taxonfullname', 'highertaxonname', 'typestatusname',
+                                 'georegionname', 'storagefullname', 'storagename']
         lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
+        previousRecordsTable = [sg.Table(values=self.previousRecords, key = 'tblPrevious', enable_events=True, headings=self.operationalHeads, max_col_width=35)]
+
 
         layout_bluearea = [broadGeo, taxonInput, barcode, [  # taxonomicPicklist,
             sg.Text('Record ID: ', key='lblRecordID', background_color='#99dcff', visible=True, size=(9, 1)),
@@ -149,7 +170,7 @@ class SpecimenDataEntry():
             sg.Button('CLEAR FORM', key='btnClear', button_color='black on white'),
             # sg.Button('Export data', key='btnExport', button_color='royal blue'),  # Export data should be a backend feature says Pip
             # sg.Button('Dismiss', key='btnDismiss', button_color='white on black'), # Notifications not needed says Pip
-        ], lblExport]
+        ], lblExport, previousRecordsTable]
 
         # Grey Area (Header) elements
         loggedIn = [
@@ -187,7 +208,7 @@ class SpecimenDataEntry():
                     background_color=blueArea, expand_x=True, expand_y=True, )], ]  #
 
         # Launch window
-        self.window = sg.Window("Mass Annotated Digitization Desk (MADD)", layout, margins=(2, 2), size=(960, 480),
+        self.window = sg.Window("Mass Annotated Digitization Desk (MADD)", layout, margins=(2, 2), size=(960, 530),
                         resizable=True, return_keyboard_events=True, finalize=True, background_color=greyArea)
         self.window.TKroot.focus_force()
         # Forces the app to be in focus.
@@ -205,18 +226,48 @@ class SpecimenDataEntry():
         self.setControlEvents()
         self.searchString = []
 
+
+    def extractRows(self, rowId):
+        """Returns 3 rows prior to rowId"""
+        print('current rowID - ', rowId, type(rowId))
+        rows = self.db.getRows(f'specimen WHERE id <= {rowId} ', limit=3, sortColumn='id DESC')
+        headers = ['id', 'spid', 'catalognumber', 'multispecimen', 'taxonfullname', 'taxonname', 'taxonnameid',
+                   'taxonspid',
+                   'highertaxonname', 'typestatusname', 'typestatusid', 'georegionname', 'georegionid',
+                   'storagefullname',
+                   'storagename', 'storageid', 'preptypename', 'preptypeid', 'notes', 'institutionid', 'collectionid',
+                   'username', 'userid', 'workstation', 'recorddatetime', 'exported', 'exportdatetime', 'exportuserid']
+        specimenList = [[row for row in line] for line in rows]
+
+        operationalRows = []
+        for row in specimenList:
+            tempDicts = []
+            tempRow = []
+
+            specimenDict = dict(zip(headers, row))
+            # tempDicts.append(specimenDict)
+            for k in self.operationalHeads:
+                res = specimenDict[k]
+                tempRow.append(res)
+            operationalRows.append(tempRow)
+        print('OP ROWS: ', operationalRows)
+        return operationalRows
+
     def main(self):
+        if self.currentRecordId:
+            overviewRows = self.extractRows(self.currentRecordId)
+        else:
+            overviewRows = self.extractRows(self.maxRow)
+        self.window['tblPrevious'].update(values = overviewRows)
 
         while True:
-            event, values = self.window.read()
+            event, values = self.window.Read(timeout=200, timeout_key='_timeout')
 
             # Checking field events as switch construct
             if event is None: break  # Empty event indicates user closing window
             # print("-event-", event)
             if event == 'txtStorage':
-                print('vals storage: ', values[event])
                 self.searchString.append(values[event])
-                print("search string is:::-", self.searchString, 'len::', len(self.searchString))
                 # If more than 3 characters entered: 
                 if len(self.searchString) >= 3:
                     # Get currently entered key strokes
@@ -255,7 +306,6 @@ class SpecimenDataEntry():
                 self.window['txtNotes'].set_focus()
 
             if event == 'txtNotes_Edit':
-                print('IN Notes field!!!', self.window['txtNotes'])
                 self.collobj.notes = values['txtNotes']
                 self.window['chkMultiSpecimen'].set_focus()
 
@@ -272,7 +322,6 @@ class SpecimenDataEntry():
 
             if event == 'chkMultiSpecimen_Edit':
                 self.collobj.multiSpecimen = values['chkMultiSpecimen']
-                print('EDIT // self.collobj.multiSpecimen - ', self.collobj.multiSpecimen)
 
             if event == 'cbxGeoRegion':
                 self.collobj.setGeoRegionFields(self.window[event].widget.current())
@@ -294,9 +343,12 @@ class SpecimenDataEntry():
                     if selectedTaxonName is not None:
                         # Set specimen record taxon name fields 
                         self.collobj.setTaxonNameFieldsFromModel(selectedTaxonName)
-                        print("self.autoTaxonName.captureSuggestion(keyStrokes) ::", selectedTaxonName)
                         temp = str(selectedTaxonName).split(' ')
                         prenote = temp[-2:]
+                        # prenote = str(prenote).replace('=', '')
+                        print('PREnote ==', f"#{prenote}#", type(prenote))
+                        if prenote[0] == '=':
+                            prenote.pop(0)
                         self.notes = ' '.join(prenote)
                         print(f"Post notes = {self.notes}")
                         # Update UI to indicate selected taxon name record  
@@ -361,8 +413,10 @@ class SpecimenDataEntry():
             # Save form 
             if event == 'btnSave' or event == 'btnSave_Enter':
                 # save specimen and get its id
-                self.collobj.notes = self.window['txtNotes'].Get()+' | '+self.notes
-                print(f'#######Specimen collobj notes:_:{self.collobj.notes} - ')
+                if len(self.notes) > 5: # test to see if remark (verbatim note) was passed from autosuggest.
+                    self.collobj.notes = self.window['txtNotes'].Get()+' | '+self.notes
+                else:
+                    self.collobj.notes = self.window['txtNotes'].Get()
                 specimenRecord = self.collobj.save()
                 # print(f"-SAVING from button Save-\n {specimenRecord}")
                 self.clearNonStickyFields(values)
@@ -375,7 +429,18 @@ class SpecimenDataEntry():
 
                 self.window['txtCatalogNumber'].set_focus()
                 recid = self.window['txtRecordID'].Get()
-                print(f'In [Save] and the record ID is {recid}')
+
+            if event == 'tblPrevious':
+                if self.window['txtRecordID'].get():
+                    currentRecordId = self.window['txtRecordID'].get()
+                else:
+                    currentRecordId = self.maxRow
+                self.previousRecords = self.extractRows(currentRecordId)
+                selected_index = values['tblPrevious'][0]
+                selected_row = self.previousRecords[selected_index]
+                rowDict = dict(zip(self.headers, selected_row))
+                print('THE rowdict::', rowDict)
+                self.fillFormFields(rowDict)
 
         self.window.close()
 
@@ -404,15 +469,17 @@ class SpecimenDataEntry():
         self.window['btnSave'].bind("<Return>", "_Enter")
 
     def setRecordFields(self, record, stickyFieldsOnly=False):
-        # TODO Function for transfering ...
-
+        """
+        Function for transferring information to fields of newly created record. 
+        CONTRACT: 
+            record : New record that should have its fields set
+            stickyFieldsOnly : Flag for indicating whether only sticky fields should be set 
+        """
         self.collobj.setStorageFields(self.db.getRowOnId('storage', record['storageid']))
         self.collobj.setPrepTypeFields(self.window['cbxPrepType'].widget.current()) 
         self.collobj.setTypeStatusFields(self.window['cbxTypeStatus'].widget.current())
         self.collobj.notes = record['notes']
-        print("record[notes] ;; ", self.collobj.notes)
         self.collobj.notes = self.window['txtNotes'].get()
-        print("From get() notes-- ", self.collobj.notes)
         self.collobj.multiSpecimen = record['multiSpecimen'] 
         self.collobj.setGeoRegionFields(self.window['cbxGeoRegion'].widget.current())
         self.collobj.setTaxonNameFields(self.db.getRowOnId('taxonname', record['taxonnameid']))
@@ -422,7 +489,9 @@ class SpecimenDataEntry():
             self.collobj.catalogNumber = record['catalognumber'] 
 
     def fillFormFields(self, record):
-        # Function for setting form fields from specimen data record
+        """
+        Function for setting form fields from specimen data record
+        """
         self.window['txtRecordID'].update('{}'.format(record['id']), visible=True)
         self.window['txtStorage'].update(record['storagename'])
         self.window['txtStorageFullname'].update(record['storagefullname'])
@@ -442,15 +511,17 @@ class SpecimenDataEntry():
         self.window['txtCatalogNumber'].update(record['catalognumber'])
 
     def clearNonStickyFields(self, values):
-        # TODO explain function
+        """
+        Function for clearing all fields that are non-sticky 
+        """
         for key in self.nonStickyFields:
             field = self.window[key]
             field.update('')
-        # recID =
-        print(f'record values are=  -{values}-')
 
     def clearForm(self):
-        # Clears all fields listed 
+        """
+        Function for clearing all fields listed in clearing list 
+        """ 
         for key in self.clearingList:
             self.window[key].update('')
         self.window['lblExport'].update(visible=False)
