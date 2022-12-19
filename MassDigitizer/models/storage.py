@@ -82,6 +82,14 @@ class Storage(model.Model):
         pass
 
     def fill(self, specifyObject, token):
+        """
+        Function for filling storage model's fields with data from record fetched from external source
+        CONTRACT 
+            jsonObject (json)  : Data record fetched from external source
+            source (String)    : String describing external source. 
+                                 Options:
+                                     "Specify = "Specify API 
+        """
         self.spid = specifyObject['id']
         self.id = 0
         self.guid = specifyObject['guid']
@@ -101,10 +109,10 @@ class Storage(model.Model):
         self.geoRegions = db.getRowsOnFilters('georegion', {'collectionid =': f'{self.collectionId}'})
         self.geoRegionSources = db.getRowsOnFilters('georegionsource', {'collectionid =': f'{self.collectionId}'})
 
-    def getParent(self, specify_interface):
+    def getParent(self, token):
         pass
 
-    def getParentage(self, specify_interface):
+    def getParentage(self, token):
         # Recursive function for constructing the entire parent sequence down to "Life"
         pass
 

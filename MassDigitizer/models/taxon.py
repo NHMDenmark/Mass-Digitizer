@@ -95,7 +95,12 @@ class Taxon(model.Model):
    
     def fill(self, jsonObject, source="Specify"):
         """
-        ...
+        Function for filling taxon model's fields with data from record fetched from external source
+        CONTRACT 
+            jsonObject (json)  : Data record fetched from external source
+            source (String)    : String describing external source. 
+                                 Options:
+                                     "Specify = "Specify API 
         """
         self.source = source
         if jsonObject:

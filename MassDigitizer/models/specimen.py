@@ -89,31 +89,31 @@ class specimen(model.Model):
         """
         
         fieldsDict = {
-                'catalognumber':'"%s"' % self.catalogNumber , # TODO "{}".format(var...)
-                'multispecimen':'"%s"' % self.multiSpecimen ,
-                'taxonfullname':f'"{self.higherTaxonName} {self.taxonName}"',
-                'taxonname':'"%s"' % self.taxonName ,
-                'taxonnameid':'"%s"' % self.taxonNameId ,
-                'typestatusname':'"%s"' % self.typeStatusName ,
-                'typestatusid':'%s' % self.typeStatusId ,
-                'highertaxonname':'"%s"' % self.higherTaxonName ,
-                'georegionname':'"%s"' % self.geoRegionName ,
-                'georegionid':'"%s"' % self.geoRegionId ,
-                'storagefullname':'"%s"' % self.storageFullName,
-                'storagename':'"%s"' % self.storageName ,
-                'storageid':'"%s"' % self.storageId ,
-                'preptypename':'"%s"' % self.prepTypeName ,
-                'preptypeid':'"%s"' % self.prepTypeId ,
-                'notes':'"%s"' % self.notes ,
-                'institutionid':'"%s"' % self.institutionId ,
-                'collectionid':'"%s"' % self.collectionId ,
-                'username':'"%s"' % self.userName ,
-                'userid':'"%s"' % self.userId ,
-                'workstation':'"%s"' % self.workStation ,
-                'recorddatetime':'"%s"' % self.recordDateTime ,
-                'exported':'"%s"' % self.exported ,
-                'exportdatetime':'"%s"' % self.exportDateTime ,
-                'exportuserid':'"%s"' % self.exportUserId ,
+                'catalognumber':   f'"{self.catalogNumber}"', 
+                'multispecimen':   f'"{self.multiSpecimen}"',
+                'taxonfullname':   f'"{self.taxonFullName}"', 
+                'taxonname':       f'"{self.taxonName}"',
+                'taxonnameid':     f'"{self.taxonNameId}"',
+                'typestatusname':  f'"{self.typeStatusName}"',
+                'typestatusid':    f'"{self.typeStatusId}"',
+                'highertaxonname': f'"{self.higherTaxonName}"',
+                'georegionname':   f'"{self.geoRegionName}"',
+                'georegionid':     f'"{self.geoRegionId}"',
+                'storagefullname': f'"{self.storageFullName}"',
+                'storagename':     f'"{self.storageName}"',
+                'storageid':       f'"{self.storageId}"',
+                'preptypename':    f'"{self.prepTypeName}"',
+                'preptypeid':      f'"{self.prepTypeId}"',
+                'notes':           f'"{self.notes}"',
+                'institutionid':   f'"{self.institutionId}"',
+                'collectionid':    f'"{self.collectionId}"',
+                'username':        f'"{self.userName}"',
+                'userid':          f'"{self.userId}"',
+                'workstation':     f'"{self.workStation}"',
+                'recorddatetime':  f'"{self.recordDateTime}"',
+                'exported':        f'"{self.exported}"',
+                'exportdatetime':  f'"{self.exportDateTime}"',
+                'exportuserid':    f'"{self.exportUserId}"',
                 }
         
         return fieldsDict
@@ -157,14 +157,22 @@ class specimen(model.Model):
 # Specimen class specific functions 
 
     def setStickyFields(self, record):
-        # TODO uncertain about this one  
+        """
+        Set all sticky fields for a given record 
+        """
 
         self.setStorageFields(record)
-        self.setPrepTypeFields(record) # TODO 
+        self.setPrepTypeFields(record)
         self.setTaxonNameFields(record)
 
     def setListFields(self, fieldName, index):
-        # Generic function for setting the respective list fields 
+        """
+        Generic function for setting the respective list fields. 
+        Listboxes and combos in PySimpleGui can't hold key/value pairs, so the index is needed to find the corresponding record. 
+        CONTRACT
+            fieldName (String) : Name of the input field to be set 
+            index (Integer)    : Index of the 
+        """
         if fieldName == 'cbxPrepType':
             self.setPrepTypeFields(index)
         elif fieldName == 'cbxTypeStatus':
@@ -173,43 +181,54 @@ class specimen(model.Model):
             self.setgeoRegionFields(index) 
     
     def setPrepTypeFields(self,index):
-        # Get prep type record on the basis of list index 
-        #    and set respective fields 
+        """
+        Get prep type record on the basis of list index 
+            and set respective fields 
+        """
         self.prepTypeId = self.prepTypes[index]['id']
         self.prepTypeName = self.prepTypes[index]['name']
 
     def setTypeStatusFields(self,index):
-        # Get type status record on the basis of list index 
-        #    and set respective fields 
+        """
+        Get type status record on the basis of list index 
+            and set respective fields 
+        """
         self.typeStatusId = self.typeStatuses[index]['id']
         self.typeStatusName = self.typeStatuses[index]['name']
 
     def setGeoRegionFields(self,index):
-        # Get type status record on the basis of list index 
-        #    and set respective fields 
+        """
+        Get type status record on the basis of list index 
+            and set respective fields 
+        """
         self.geoRegionId = self.geoRegions[index]['id']
         self.geoRegionName = self.geoRegions[index]['name']       
 
     def setStorageFields(self, index):
-        # Get storage record on the basis of list index 
-        # and set respective fields
+        """
+        Get storage record on the basis of list index 
+            and set respective fields
+        """
         self.storageId = self.storageLocations[index]['id']
         self.storageName = self.storageLocations[index]['name']
         self.storageFullName = self.storageLocations[index]['fullname']     
 
     def setStorageFieldsFromModel(self, object):
-        # Get storage record on the basis of list index 
-        # and set respective fields
+        """
+        Get storage record on the basis of list index 
+            and set respective fields
+        """
         self.storageId = object.id
         self.storageName = object.name
         self.storageFullName = object.fullName
     
     def setTaxonNameFields(self, taxonNameRecord):
-        # Set taxon name fields from selected name record
-        # CONTRACT
-        #   taxonNameRecord (sqliterow) : SQLite Row holding taxon name record
-        # RETURNS taxonNameId (int) : 
-        
+        """
+        Set taxon name fields from selected name record
+        CONTRACT
+          taxonNameRecord (sqliterow) : SQLite Row holding taxon name record
+        RETURNS taxonNameId (int) : 
+        """
         if taxonNameRecord is not None: 
             self.taxonNameId = taxonNameRecord['id'] 
             self.taxonName = taxonNameRecord['name'] 
@@ -222,11 +241,12 @@ class specimen(model.Model):
         return self.taxonNameId
     
     def setTaxonNameFieldsFromModel(self, object):
-        # Set taxon name fields from selected name record
-        # CONTRACT
-        #   taxonNameRecord (sqliterow) : SQLite Row holding taxon name record
-        # RETURNS taxonNameId (int) : 
-        
+        """
+        Set taxon name fields from selected name record
+        CONTRACT
+          taxonNameRecord (sqliterow) : SQLite Row holding taxon name record
+        RETURNS taxonNameId (int) : 
+        """
         if object is not None: 
             self.taxonNameId = object.id
             self.taxonName = object.name
@@ -239,12 +259,13 @@ class specimen(model.Model):
         return self.taxonNameId
     
     def setTaxonNameFieldsUsingFullName(self, taxonFullName):
-        # Get taxon name record on the basis of full name  
-        #    and set respective fields 
-        # CONTRACT 
-        #   taxonFullName (string) : Fullname value of selected taxon 
-        # RETURNS taxonNameId (int) : Primary key of selected taxon record 
-        
+        """
+        Get taxon name record on the basis of full name  
+           and set respective fields 
+        CONTRACT 
+          taxonFullName (string) : Fullname value of selected taxon 
+        RETURNS taxonNameId (int) : Primary key of selected taxon record 
+        """
         # Get taxon name record on fullname
         taxonNameRecord = self.db.getRowsOnFilters('taxonname', {'fullname =': f'"{taxonFullName}"'})
         resultsRowCount = len(taxonNameRecord)

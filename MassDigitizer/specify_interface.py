@@ -213,7 +213,6 @@ class SpecifyInterface():
     apiCallString = "%sapi/specify/%s/%d/" %(gs.baseURL, objectName, objectId)
     #print(apiCallString)
     #print(specifyObject)
-    # TODO API PUT command throws 500 Error ("Internal Server Error")
     response = self.spSession.put(apiCallString, data=json.dumps(specifyObject), headers=headers)
     #response = requests.put(apiCallString, data=specifyObject, json=specifyObject, headers=headers)
     #print(' - Response: %s %s' %(str(response.status_code), response.reason))
@@ -236,7 +235,6 @@ class SpecifyInterface():
     headers = {'content-type': 'application/json', 'X-CSRFToken': self.csrfToken, 'referer': gs.baseURL}
     apiCallString = "%sapi/specify/%s/%d/" %(gs.baseURL, objectName)
     print(apiCallString)
-    # TODO API PUT command throws 403 Error ("Forbidden")
     response = self.spSession.post(apiCallString, headers=headers, data=specifyObject)
     #print(' - Response: %s %s' %(str(response.status_code), response.reason))
     # if response.status_code < 299:
