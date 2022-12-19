@@ -140,14 +140,15 @@ class DataAccess():
         """
         currentCursor = self.getDbCursor()
 
-        sqlString = f'SELECT * FROM {tableName}'
-
-        if limit > 0:
-            sqlString += f' LIMIT {limit}'
+        sqlString = f'SELECT * FROM {tableName}'        
 
         if sortColumn is not None:
             sqlString += f' ORDER BY {sortColumn}'
         print(sqlString)
+        
+        if limit > 0:
+            sqlString += f' LIMIT {limit}'
+        
         try:
             records = currentCursor.execute(sqlString).fetchall()
         except Exception as e:
