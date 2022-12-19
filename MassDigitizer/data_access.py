@@ -171,7 +171,7 @@ class DataAccess():
           RETURNS table rows as list
         """
         currentCursor = self.getDbCursor()
-        # print(f'-> getRowsONFilter({tableName}, {filters}, {limit})')
+        print(f'-> getRowsONFilter({tableName}, {filters}, {limit})')
         sqlString = 'SELECT * FROM %s ' % tableName
 
         if filters.items():
@@ -191,7 +191,7 @@ class DataAccess():
         records = currentCursor.execute(sqlString).fetchall()
 
         currentCursor.connection.close()
-
+        print(len(records))
         return records
 
     def getRowOnId(self, tableName, id):
