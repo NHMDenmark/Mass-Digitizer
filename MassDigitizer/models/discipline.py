@@ -33,9 +33,9 @@ class Discipline(model.Model):
 
     def fill(self, jsonObject, source="Specify"):
         """
-        Specific function for filling discipline instance's fields with data record fetched from Specify API 
+        Specific function for filling discipline instance's fields with data from record fetched from external source 
         CONTRACT 
-            jsonObject (json)  : Specify data record fetched from Specify API 
+            jsonObject (json)  : Specify data record fetched from external source 
         """
         self.source = source
         if jsonObject:

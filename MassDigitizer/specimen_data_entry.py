@@ -38,20 +38,25 @@ currentpath = os.path.join(pathlib.Path(__file__).parent, '')
 class SpecimenDataEntry():
 
     def __init__(self, collection_id):
+        """
+        Constructor that initializes class variables and dependent class instances 
+        """
 
-        self.collectionId = collection_id
-        self.window = None
+        self.collectionId = collection_id # Set collection Id 
+        self.window = None # Create class level instance of window object 
         self.collobj = specimen.specimen(collection_id) # Create blank specimen record instance 
-        self.db = data_access.DataAccess(gs.databaseName)
-        # Functional data
+        self.db = data_access.DataAccess(gs.databaseName) # Instantiate database access module 
+
+        # Various lists of fields to be cleared on command 
         self.clearingList = ['txtStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'txtNotes', 'chkMultiSpecimen', 'cbxGeoRegion', 'inpTaxonName', 'txtCatalogNumber', 'txtRecordID']
-        #List of boxes that should be cleared by using that function.
         self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'txtNotes'}, {'chkMultiSpecimen'}, {'cbxGeoRegion'}, {'inpTaxonName'}]
         self.nonStickyFields = ['txtCatalogNumber', 'txtRecordID']
 
+        # Set up user interface 
         self.setup(collection_id)
-        self.notes = ''
-        #Global for setting notes auto-generates in autoSuggest_popup.
+
+        # Create class level notes for access in autoSuggest_popup (TODO ?)
+        self.notes = '' 
 
         # Create auto-suggest popup window for storage locations 
         self.autoStorage = autoSuggest_popup.AutoSuggest_popup('storage', collection_id)
@@ -59,10 +64,13 @@ class SpecimenDataEntry():
         # Create auto-suggest popup window for taxon names
         self.autoTaxonName = autoSuggest_popup.AutoSuggest_popup('taxonname', collection_id)
 
+        # Run 
         self.main()
 
     def setup(self, collection_id):
-        # Initialize data entry form on basis of collection id
+        """
+        Initialize data entry form on basis of collection id
+        """
 
         # Define UI areas
         sg.theme('SystemDefault')
@@ -404,8 +412,12 @@ class SpecimenDataEntry():
         self.window['btnSave'].bind("<Return>", "_Enter")
 
     def setRecordFields(self, record, stickyFieldsOnly=False):
-        # TODO Function for transfering ...
-
+        """
+        Function for transferring information to fields of newly created record. 
+        CONTRACT: 
+            record : New record that should have its fields set
+            stickyFieldsOnly : Flag for indicating whether only sticky fields should be set 
+        """
         self.collobj.setStorageFields(self.db.getRowOnId('storage', record['storageid']))
         self.collobj.setPrepTypeFields(self.window['cbxPrepType'].widget.current()) 
         self.collobj.setTypeStatusFields(self.window['cbxTypeStatus'].widget.current())
@@ -422,7 +434,9 @@ class SpecimenDataEntry():
             self.collobj.catalogNumber = record['catalognumber'] 
 
     def fillFormFields(self, record):
-        # Function for setting form fields from specimen data record
+        """
+        Function for setting form fields from specimen data record
+        """
         self.window['txtRecordID'].update('{}'.format(record['id']), visible=True)
         self.window['txtStorage'].update(record['storagename'])
         self.window['txtStorageFullname'].update(record['storagefullname'])
@@ -442,7 +456,9 @@ class SpecimenDataEntry():
         self.window['txtCatalogNumber'].update(record['catalognumber'])
 
     def clearNonStickyFields(self, values):
-        # TODO explain function
+        """
+        Function for clearing all fields that are non-sticky 
+        """
         for key in self.nonStickyFields:
             field = self.window[key]
             field.update('')
@@ -450,11 +466,11 @@ class SpecimenDataEntry():
         print(f'record values are=  -{values}-')
 
     def clearForm(self):
-        # Clears all fields listed 
+        """
+        Function for clearing all fields listed in clearing list 
+        """ 
         for key in self.clearingList:
             self.window[key].update('')
         self.window['lblExport'].update(visible=False)
         self.window['lblRecordEnd'].update(visible=False)
         self.searchString = []
-
-g = SpecimenDataEntry(29)

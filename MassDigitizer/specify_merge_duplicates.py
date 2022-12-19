@@ -246,25 +246,14 @@ class MergeDuplicates():
                             self.logger.info('Original author and lookup author are not identical and neither is empty!')
                             self.logger.info('Retrieving authorship from GBIF...')
                             
-                            acceptedNameMatches = self.gbif.matchName('species', original.fullName, self.collection.spid)
-                            
-                            nrOfMatches = len(acceptedNameMatches)
-                            if nrOfMatches == 1:
-                                self.logger.info('Retrieved unambiguous accepted name from GBIF...')
-                                # Update the authorname at Specify 
-                                res1 = self.updateSpecifyTaxonAuthor(original, acceptedNameMatches[0]['authorship'])
-                                res2 = self.updateSpecifyTaxonAuthor(lookup, acceptedNameMatches[0]['authorship'])
-                                if res1 != '500' and res2 != '500':
-                                    unResolved = False
-                                else:
-                                    unResolved = True 
-                            else:
-                                self.logger.info(f'Could not retrieve unambiguous accepted name from GBIF... ({nrOfMatches} matches)')
-                                unResolved = True
+                            self.resolveAuthorName(original)
+                            self.resolveAuthorName(lookup)
                         else:
                             if (original.author is None and lookup.author is None):
                                 self.logger.info('Author info is missing...')
-                                # TODO Update authorname at Specify also ? 
+                                # Update authorname at Specify also 
+                                self.resolveAuthorName(original)
+                                self.resolveAuthorName(lookup)
                             else:
                                 self.logger.info('Original and lookup have no author data or the author is identical. ')
                             unResolved = False        
@@ -313,6 +302,28 @@ class MergeDuplicates():
                         ambivalence = f'Ambivalence on parent taxa: {original.parent.fullName} vs {lookup.parent.fullName} '
         else:
             print('No duplicates found...')
+
+    def resolveAuthorName(self, taxonInstance):
+        """
+        
+        CONTRACT 
+        """
+
+        acceptedNameMatches = self.gbif.matchName('species', taxonInstance.fullName, self.collection.spid)
+                            
+        nrOfMatches = len(acceptedNameMatches)
+        if nrOfMatches == 1:
+            self.logger.info('Retrieved unambiguous accepted name from GBIF...')
+            # Update the authorname at Specify 
+            res = self.updateSpecifyTaxonAuthor(taxonInstance, acceptedNameMatches[0]['authorship'])
+            if res != '500':
+                unResolved = False
+            else:
+                unResolved = True
+        else:
+            self.logger.info(f'Could not retrieve unambiguous accepted name from GBIF... ({nrOfMatches} matches)')
+            unResolved = True
+        return unResolved
 
     def updateSpecifyTaxonAuthor(self, taxonInstance, acceptedAuthor):
         """
