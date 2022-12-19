@@ -25,20 +25,17 @@ from models import collection as coll
 
 
 class AutoSuggest_popup():
-    startQueryLimit = 3
-    # No. of keystrokes before auto suggest function is triggered.
-
-    candidateNamesList = []
-    select_item_index = None
-    rowCandidates = []
-    done = False
-    defaultBoxText = ''
 
     def __init__(self, table_name, collection_id):
         """
         Initialize
         """
-        self.db = data_access.DataAccess(gs.databaseName)
+
+        #self.startQueryLimit = 3 # No. of keystrokes before auto suggest function is triggered
+        self.candidateNamesList = [] # list/array of candidate names 
+        self.select_item_index = 0   # index of selected item i.e. position in list box
+    
+        self.db = data_access.DataAccess(gs.databaseName) 
         self.tableName = table_name
         self.collectionID = collection_id
         self.collection = coll.Collection(collection_id) 
@@ -61,7 +58,7 @@ class AutoSuggest_popup():
              # sg.Text(labelText,
              #         key='lblNewName', visible=False, background_color='Turquoise3', metadata='invisible')],
 
-            [sg.Input(default_text=self.defaultBoxText, key='txtInput', size=(input_width, 1), enable_events=True),
+            [sg.Input(default_text='', key='txtInput', size=(input_width, 1), enable_events=True),
              sg.Button('OK', key='btnReturn', visible=False, bind_return_key=True),
              sg.Button('Exit', visible=False)
              # 'btnReturn' is for binding return to nothing in case of a new name and higher taxonomy lacking.
@@ -91,14 +88,12 @@ class AutoSuggest_popup():
 
     def captureSuggestion(self, keyStrokes, minimumCharacters=3):
         """
-        TODO Explain function  
         Parameter keyStrokes is the 'name' as it is being inputted, keystroke-by-keystroke
         minimumCharacters is an integer on how many key strokes it takes to start the auto-suggester.
         """ 
 
-        # Resetting base variables (TODO Explain variables)
-        choices = [' ']
-        prediction_list, input_text, select_item = choices, "", 0
+        # Resetting base variables 
+        select_item = 0 # index of selected item i.e. the position in the listbox 
        
         # Using 'Model' base object (superclass) to encompass both derived models be it Storage or TaxonName
         autoSuggestObject = model.Model(self.collectionID)
@@ -116,36 +111,25 @@ class AutoSuggest_popup():
             #print(event, values)
             
             # Escape loop & close window when exiting or otherwise done 
-            if self.done: break
             if event is None: break
             if event == sg.WIN_CLOSED or event == 'Exit': break
-            if event.startswith('Escape'): break
+            if event.startswith('Escape'): break           
             
-            # TODO comment 
-            elif event.startswith('Down') and len(self.candidateNamesList):
-                # Listbox element is not born with up/down arrow capability.
-                select_item = (select_item + 1) % len(self.candidateNamesList)
-                # select_item is merely the position in the listbox
-                print(f"DOWN and len candidate list -{len(self.candidateNamesList)}-\n set_to_index:-{select_item}-")
-                self.select_item_index = select_item
-                print(f"the chosen global select index is ==", self.select_item_index)
-                self.lstSuggestionsElement.update(set_to_index=select_item, scroll_to_index=select_item)
-                self.setToIndex(select_item)
+            # Listbox element is not born with up/down arrow capability.
+            if event.startswith('Down') and len(self.candidateNamesList) > 0:
+                # When you arrow down and there are candidate names in the list, set new selected item: 
+                select_item = (select_item + 1) % len(self.candidateNamesList) # Increase selected item index within length of candidate name list 
+                self.select_item_index = select_item # Set class variable value of the selected item index 
+                self.lstSuggestionsElement.update(values=self.candidateNamesList, set_to_index=select_item, scroll_to_index=select_item) # select item in listbox and focus on it 
 
             elif event.startswith('Up') and len(self.candidateNamesList):
                 # Listbox element is not born with up/down arrow capability.
-                select_item = (select_item + (len(self.candidateNamesList) - 1)) % len(self.candidateNamesList)
-                self.select_item_index = select_item
-                self.lstSuggestionsElement.update(set_to_index=select_item, scroll_to_index=select_item)
-                self.setToIndex(select_item)
-
-            elif event.endswith('+TAB'):
-                # TODO comment 
-                #break
-                pass
+                select_item = (select_item + (len(self.candidateNamesList) - 1)) % len(self.candidateNamesList) # Decrease selected item index within length of candidate name list 
+                self.select_item_index = select_item # Set class variable value of the selected item index 
+                self.lstSuggestionsElement.update(values=self.candidateNamesList, set_to_index=select_item, scroll_to_index=select_item)
             
             # If keystrokes are entered in the taxon name input box 
-            if event == 'txtInput':
+            elif event == 'txtInput':
                 # Get text input as keystrokes converted to lower case 
                 keystrokes = values['txtInput'].lower()
                 
@@ -233,22 +217,16 @@ class AutoSuggest_popup():
                 autoSuggestObject.spid = 0
                 # autoSuggestObject.name = values['txtInput'].split(' ').pop()
                 autoSuggestObject.name = values['txtInput']
-                print("autoSuggestObject.name = values['txtInput'] ==", values['txtInput'])
                 autoSuggestObject.fullName = f"{values['txtHiTax']} {autoSuggestObject.name}".strip(' ')
                 #Remove leading whitespace if txtHiTax is empty.
                 autoSuggestObject.collectionId  = self.collectionID
                 taxonomic_comment = f" Verbatim_notes:{autoSuggestObject.fullName}"
-                print(f'iiiinitial NOTES ={autoSuggestObject.notes}=', taxonomic_comment)
                 autoSuggestObject.notes = f" Verbatim_notes:{autoSuggestObject.fullName}"
                 autoSuggestObject.parentFullName = values['txtHiTax']
-                print(f'ASpopup|| name: {autoSuggestObject.name},'
-                      f'fullname: {autoSuggestObject.fullName},'
-                      f'parentFName: {autoSuggestObject.parentFullName}')
                 autoSuggestObject.save()
                 window['frmHiTax'].update(visible=False)
                 if not values['txtHiTax']:
                     autoSuggestObject.notes = autoSuggestObject.notes+f" Verbatim_notes:{autoSuggestObject.fullName}"
-                    print("Verbatim_TAXOOOOON:", autoSuggestObject.notes)
                     # return autoSuggestObject.notes
                 else:
                     print("HITAX is true!!", values['txtHiTax'])
@@ -265,7 +243,6 @@ class AutoSuggest_popup():
     def handleSuggestions(self, keyStrokes, minimumRank=270):
         # Fetch suggestions from database based on keystrokes 
         #self.suggestions = self.lookupSuggestions(keystrokes, 'fullname', minimumRank)
-        print('in handleSuggestions -----------')
         if self.tableName == 'taxonname': 
             fields = {'fullname' : f'LIKE lower("%{keyStrokes}%")', 'taxontreedefid' : f'= {self.collection.taxonTreeDefId}', 'rankid' : f'<={minimumRank}'}
         else: 
@@ -275,19 +252,13 @@ class AutoSuggest_popup():
         # Convert records to list of fullnames 
         self.candidateNamesList = [row['fullname'] for row in self.suggestions]
 
-        print('self.select_item_index=', self.select_item_index)
         if self.select_item_index:
             if self.select_item_index >= 0:
-                print(self.select_item_index)
-                print(self.candidateNamesList)
-                self.setToIndex(self.select_item_index)
+                self.lstSuggestionsElement.update(values=self.candidateNamesList, set_to_index=self.select_item_index, scroll_to_index=self.select_item_index) # select item in listbox and focus on it 
         else:
-            self.setToIndex(0)
+            self.lstSuggestionsElement.update(values=self.candidateNamesList, set_to_index=0, scroll_to_index=0)
         # Adjusts the listbox behavior to what is expected.
         # self.lstSuggestionsElement.update(values=self.candidateNamesList, set_to_index=[0])
-
-    def setToIndex(self, listIndex):
-        self.lstSuggestionsElement.update(values=self.candidateNamesList, set_to_index=[listIndex], scroll_to_index=listIndex)
 
     def lookupSuggestions(self, keyStrokes, columnName='fullname', minimumRank=270, rowLimit=200):
         """ 
@@ -301,21 +272,12 @@ class AutoSuggest_popup():
         # Local variable to determine the auto-suggest type: 'storage', taxon-keyStrokes, or 'parent taxon-name'.
         # It is included in the return statement.
 
-        # TODO Question: Why not use the db.getRows method ???
-        cur = self.db.getDbCursor()
-        sql = f"SELECT * FROM {self.tableName} WHERE {columnName} LIKE lower('%{keyStrokes}%')"
-
-        if self.tableName == 'taxonname':
-            # TODO Explain function of below lines 
-            sql = sql + ' AND taxontreedefid = {}'.format(self.collection.taxonTreeDefId)
-                    
-            sql = sql + f' AND rankid <= {minimumRank}'
-        
-        sql = sql + f' LIMIT {rowLimit}'
-
-        print(sql)
-
-        rows = cur.execute(sql).fetchall()
+        # Get candidate name list from db based on keystrokes, rank and taxon tree 
+        filters = {columnName       : f"LIKE lower('%{keyStrokes}%')", 
+                   'taxontreedefid' : f"{self.collection.taxonTreeDefId}", 
+                   'rankid'         : f"rankid <= {minimumRank}"
+                   }
+        rows = self.db.getRowsOnFilters(self.tableName, filters, rowLimit)
 
         return rows
 

@@ -305,7 +305,7 @@ class MergeDuplicates():
 
     def resolveAuthorName(self, taxonInstance):
         """
-        
+        TODO
         CONTRACT 
         """
 
@@ -355,3 +355,4 @@ gs.baseURL = 'https://specify-snm.science.ku.dk/' # Set target URL for Specify7 
 md = MergeDuplicates() # Instantiate class 
 
 md.main() # Run code 
+
