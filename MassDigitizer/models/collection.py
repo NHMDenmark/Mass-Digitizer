@@ -95,7 +95,12 @@ class Collection(model.Model):
 
     def fill(self, jsonObject, source="Specify"):
         """
-        TODO ...
+        Function for filling collection model's fields with data record fetched from external source
+        CONTRACT 
+            jsonObject (json)  : Data record fetched from external source
+            source (String)    : String describing external source. 
+                                 Options:
+                                     "Specify = "Specify API 
         """
         self.source = source
         if jsonObject:
@@ -115,7 +120,7 @@ class Collection(model.Model):
 
     # def fetchDiscipline(self, disciplineId, token):
     #     """
-    #     TODO ...
+    #     
     #     """
     #     self.discipline = discipline.Discipline(self.id)
     #     disciplineObj = self.sp.getSpecifyObject('discipline', disciplineId, token)
