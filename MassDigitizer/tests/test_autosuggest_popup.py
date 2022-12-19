@@ -28,37 +28,41 @@ aspTaxonNames = asp.AutoSuggest_popup('taxonname', 29)
 # Instantiate storage autosuggest popup
 aspStorage = asp.AutoSuggest_popup('storage', 29)
 
-gs.databaseName = 'test'
+gs.databaseName = 'db'
 
-
-def test_taxonname():
+#def test_taxonname():
     # Determine, rather trivially, whether the correct tablename has been set ('taxonname')
-    assert aspTaxonNames.tableName == 'taxonname'
+#    assert aspTaxonNames.tableName == 'taxonname'
 
 def test_taxonname_auto_suggest():
-
-    choices = aspTaxonNames.captureSuggestion('pra')
-
-    print(f'Got {len(choices)} taxon suggestions. ')
+    print('test_taxonname_auto_suggest()')
     found = False 
-    for c in choices:
-      #print(c['fullname'])
-      if c['fullname'] == 'Poa pratensis': 
-        found = True 
-        break
+    
+    choices = aspTaxonNames.handleSuggestions('pra')
+    print(len(choices))
+    if(choices):
+      print(f'Got {len(choices)} taxon suggestions. ')
+      for c in choices:
+        if c['fullname'] == 'Poa pratensis': 
+          found = True 
+          break
 
     assert found
 
-def test_storage_auto_suggest():
-    # TODO 
-
-    choices = aspStorage.captureSuggestion('Box')
-
-    print(f'Got {len(choices)} storage suggestions. ')
+""" def test_storage_auto_suggest():
+    print('test_storage_auto_suggest()')
     found = False 
-    for c in choices:
-      if c['fullname'] == 'Natural History Museum of Denmark | Priorparken | Herbarium C: Danish Vascular Plant Collection | Box 1': 
-        found = True 
-        break
+    
+    choices = aspStorage.handleSuggestions('Box')
 
-    assert found
+    if choices:
+      print(f'Got {len(choices)} storage suggestions. ')
+      for c in choices:
+        if c['fullname'] == 'Natural History Museum of Denmark | Priorparken | Herbarium C: Danish Vascular Plant Collection | Box 1': 
+          found = True 
+          break
+
+    assert found """
+
+
+#test_taxonname_auto_suggest()

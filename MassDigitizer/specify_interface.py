@@ -324,6 +324,7 @@ class SpecifyInterface():
 
     return response
 
+""" 
 si = SpecifyInterface()
 gs.baseURL = "https://specify-test.science.ku.dk/"
 tok = si.getCSRFToken()
@@ -333,7 +334,8 @@ token = si.login('fedor.steeman', 'XmgrNuitCrowd', 688130, tok)
 si.verifySession(token)
 
 start = time.time()
-si.mergeTaxa(4051548, 364503)
+#si.mergeTaxa(4051548, 364503)
 end = time.time()
 timeElapsed = end - start
 print(f'Time elapsed: {timeElapsed} ')
+"""

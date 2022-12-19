@@ -300,6 +300,13 @@ class MergeDuplicates():
                     else:
                         # Found taxa with matching names, but different parents: Add to ambivalent cases 
                         ambivalence = f'Ambivalence on parent taxa: {original.parent.fullName} vs {lookup.parent.fullName} '
+                        self.logger.info(ambivalence)
+                        original.remarks = str(original.remarks) + f' | {ambivalence}'
+                        original.duplicateSpid = lookup.spid
+                        self.ambivalentCases.append(original)
+                        lookup.remarks = str(lookup.remarks) + f' | {ambivalence}'
+                        lookup.duplicateSpid = original.spid
+                        self.ambivalentCases.append(lookup)
         else:
             print('No duplicates found...')
 
@@ -308,7 +315,7 @@ class MergeDuplicates():
         TODO
         CONTRACT 
         """
-
+        self.logger.info('Resolving author name...')
         acceptedNameMatches = self.gbif.matchName('species', taxonInstance.fullName, self.collection.spid)
                             
         nrOfMatches = len(acceptedNameMatches)
