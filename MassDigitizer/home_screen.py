@@ -19,6 +19,7 @@ import PySimpleGUI as sg
 from pathlib import Path
 sys.path.append(str(Path(__file__).joinpath('MassDigitizer')))
 
+import version_number
 import util
 import global_settings as gs
 import data_access
@@ -29,8 +30,8 @@ db = data_access.DataAccess(gs.databaseName)
 sp = specify_interface.SpecifyInterface()
 
 class HomeScreen():
-    fPath = Path('DaSSCo.iss')
-    version = util.obtainVersionNumber(fPath, '')
+    # Get version number to set into the homeScreen welcome menu.
+    version = version_number.getVersionNumber()
     """ The second arg is an arrangement for if the .iss file changes structure and a new 
     MyAppVersion placeholder is needed. """
     def __init__(self):
