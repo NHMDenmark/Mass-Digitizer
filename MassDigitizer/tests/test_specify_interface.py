@@ -23,7 +23,7 @@ class Test_specify_interface():
         
     """
 
-
+    sp = specify_interface.SpecifyInterface()
     collectionID = 29
     gs.baseURL = "https://specify-snm.science.ku.dk/"
     # The login function below will not work without the baseURL set.
