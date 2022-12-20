@@ -1,5 +1,0 @@
-[
-    {"id" : "0", "code" : "TEST", "name" : "Test Institution", "URL" : "https://specify-test.science.ku.dk/"},
-    {"id" : "1", "code" : "NHMD", "name" : "Natural History Museum of Denmark", "URL" : "https://specify-snm.science.ku.dk/"},
-    {"id" : "2", "code" : "NHMA", "name" : "Natural History Museum Aarhus", "URL" : "https://specify-nhma.science.ku.dk/"}
-]

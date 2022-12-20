@@ -224,11 +224,12 @@ class Model:
 
     def fill(self, jsonObject, source="Specify"):
         """
-        Generic function for filling model's fields with data record fetched from Specify API 
+        Function for filling model's fields with data from record fetched from external source
         CONTRACT 
-            jsonObject (json)  : Specify data record fetched from Specify API 
-            source TODO
-        NOTE Implemented fully in inheriting classes.         
+            jsonObject (json)  : Data record fetched from external source
+            source (String)    : String describing external source. 
+                                 Options:
+                                     "Specify = "Specify API 
         """
         self.spid = jsonObject['id']
         self.name = jsonObject['name']

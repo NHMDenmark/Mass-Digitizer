@@ -20,7 +20,6 @@ from pathlib import Path
 # Local imports
 import global_settings as gs
 
-
 # Set os path to local files:
 # sys.path.append(str(Path(__file__).parent.parent.joinpath('MassDigitizer')))
 
@@ -73,23 +72,30 @@ class DataAccess():
             print(f"Get the DB cursor error: {e}")
 
     def setDatabase(self, dbFileName='db'):
-        # This optional function allows for setting a different database file like e.g. 'test'
-        # CONTRACT
-        #   dbFileName (String): the name of the file excluding the extension '.sqlite3'
+        """
+        This optional function allows for setting a different database file like e.g. 'test'
+          CONTRACT
+            dbFileName (String): the name of the file excluding the extension '.sqlite3'
+        """
         self.dbFilePath = str(Path(self.dbFilePath).joinpath(f'{dbFileName}.sqlite3'))
         self.dbAltFilePath = str(Path(self.dbAltFilePath).joinpath(f'{dbFileName}.sqlite3'))
         print(self.dbFilePath)
 
     def getConnection(self):
+        """
+        Returns the database connection initiated, if any
+        """
         self.connection = sqlite3.connect(self.dbFilePath)
         return self.connection
 
     def getDbCursor(self):  # do_in_memory=False):
-        # Generic function needed for database access
-        # CONTRACT
-        #   TODO: do_in_memory (boolean): Whether the database file should be run in-memory
-        #   RETURNS database cursor object
-        # print(f'Connecting to db file: {self.dbFilePath} ...')
+        """
+        Generic function needed for database access
+        CONTRACT
+          TODO: do_in_memory (boolean): Whether the database file should be run in-memory
+          RETURNS database cursor object
+        """
+        print(f'Connecting to db file: {self.dbFilePath} ...')
 
         # Connect to database file. On error, try alternative location assuming OneDrive user
         try:
@@ -123,22 +129,25 @@ class DataAccess():
         return cursor
 
     def getRows(self, tableName, limit=100, sortColumn=None):
-        # Getting all records from the table specified by name
-        # CONTRACT
-        #   tableName (String): The name of the table to be queried
-        #   limit (Integer) : The maximum number of records - 0 means all records
-        #   sortColumn (String) : The column to sort the rows on, if any
-        #   RETURNS table rows (list)
+        """
+        Getting all records from the table specified by name
+        CONTRACT
+          tableName (String): The name of the table to be queried
+          limit (Integer) : The maximum number of records - 0 means all records
+          sortColumn (String) : The column to sort the rows on, if any
+          RETURNS table rows (list)
+        """
         currentCursor = self.getDbCursor()
 
-        sqlString = f'SELECT * FROM {tableName}'
-
-        if limit > 0:
-            sqlString += f' LIMIT {limit}'
+        sqlString = f'SELECT * FROM {tableName}'        
 
         if sortColumn is not None:
             sqlString += f' ORDER BY {sortColumn}'
         print(sqlString)
+        
+        if limit > 0:
+            sqlString += f' LIMIT {limit}'
+        
         try:
             records = currentCursor.execute(sqlString).fetchall()
         except Exception as e:
@@ -148,18 +157,20 @@ class DataAccess():
         return records
 
     def getRowsOnFilters(self, tableName, filters, limit=10000, sort=None):
-        # Getting specific rows specified by filters from the table specified by name
-        # CONTRACT
-        #   tableName (String): The name of the table to be queried
-        #   filters (Dictionary) :  A dictionary where the key is the field name and the value is the field filter *including operand*!
-        #                           The operand should be included with the field and any string values should be enclosed in ""
-        #                           Example: {'rankid': '=180', 'taxonname': '="Felis"', 'taxonid' : 'IS NOT NULL'}
-        #   limit (Integer) : The maximum number of rows - 0 means all rows
-        #       NOTE: Strings should be formatted with enclosing double quotation marks (")
-        #             Numbers should be formatted as strings
-        #   RETURNS table rows as list
+        """
+        Getting specific rows specified by filters from the table specified by name
+        CONTRACT
+          tableName (String): The name of the table to be queried
+          filters (Dictionary) :  A dictionary where the key is the field name and the value is the field filter *including operand*!
+                                  The operand should be included with the field and any string values should be enclosed in ""
+                                  Example: {'rankid': '=180', 'taxonname': '="Felis"', 'taxonid' : 'IS NOT NULL'}
+          limit (Integer) : The maximum number of rows - 0 means all rows
+              NOTE: Strings should be formatted with enclosing double quotation marks (")
+                    Numbers should be formatted as strings
+          RETURNS table rows as list
+        """
         currentCursor = self.getDbCursor()
-        # print(f'-> getRowsONFilter({tableName}, {filters}, {limit})')
+        print(f'-> getRowsONFilter({tableName}, {filters}, {limit})')
         sqlString = 'SELECT * FROM %s ' % tableName
 
         if filters.items():
@@ -179,15 +190,17 @@ class DataAccess():
         records = currentCursor.execute(sqlString).fetchall()
 
         currentCursor.connection.close()
-
+        print(len(records))
         return records
 
     def getRowOnId(self, tableName, id):
-        # Getting specific row from the table specified by its primary key (id)
-        # CONTRACT
-        #   tableName (String): The name of the table to be queried
-        #   id (Integer) : The primary key of the row to be returned
-        #   RETURNS single table row
+        """
+        Getting specific row from the table specified by its primary key (id)
+        CONTRACT
+          tableName (String): The name of the table to be queried
+          id (Integer) : The primary key of the row to be returned
+          RETURNS single table row
+        """
         currentCursor = self.getDbCursor()
         record = currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(id)).fetchone()
         currentCursor.connection.close()
@@ -195,11 +208,13 @@ class DataAccess():
         return record
 
     def getRowOnSpId(self, tableName, spid):
-        # Getting specific row from the table specified by its Specify primary key (spid)
-        # CONTRACT
-        #   tableName (String): The name of the table to be queried
-        #   spid (Integer) : The Specify primary key of the row to be returned
-        #   RETURNS single table row
+        """
+        Getting specific row from the table specified by its Specify primary key (spid)
+        CONTRACT
+          tableName (String): The name of the table to be queried
+          spid (Integer) : The Specify primary key of the row to be returned
+          RETURNS single table row
+        """
         currentCursor = self.getDbCursor()
         record = currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(spid)).fetchone()
         currentCursor.connection.close()
@@ -220,10 +235,12 @@ class DataAccess():
         currentCursor.connection.close()
 
     def getMaxRow(self, tableName):
-        # Get the row from the specified table with the highest primary key (id)
-        # CONTRACT
-        #   tableName (String): The name of the table to be queried
-        #   RETURNS single table row (SQLITErow)
+        """
+        Get the row from the specified table with the highest primary key (id)
+        CONTRACT
+          tableName (String): The name of the table to be queried
+          RETURNS single table row (SQLITErow)
+        """
         currentCursor = self.getDbCursor()
         sql = f'SELECT MAX({tableName}.id) FROM {tableName};'
         record = currentCursor.execute(sql).fetchone()
@@ -232,10 +249,12 @@ class DataAccess():
         return record
 
     def executeSqlStatement(self, sql):
-        # Execute specified sql statement
-        # CONTRACT
-        #   sql (String) :
-        #   RETURNS table rows as dictionary
+        """
+        Execute specified sql statement
+        CONTRACT
+          sql (String) :
+          RETURNS table rows as dictionary
+        """
         self.currentCursor = self.getDbCursor()
 
         # records = [dict(row) for row in rows_object]
@@ -252,11 +271,13 @@ class DataAccess():
         return rows
 
     def getRowOnSpecifyId(self, tableName, id):
-        # Getting specific row from the table specified by name using the primary key of the corresponding table in Specify
-        # CONTRACT
-        #   tableName (String): The name of the table to be queried
-        #   id (Integer) : The primary key of the row to be returned
-        #   RETURNS single table row
+        """
+        Getting specific row from the table specified by name using the primary key of the corresponding table in Specify
+        CONTRACT
+          tableName (String): The name of the table to be queried
+          id (Integer) : The primary key of the row to be returned
+          RETURNS single table row
+        """
         self.currentCursor = self.getDbCursor()
         record = self.currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(id)).fetchone()
         self.currentCursor.connection.close()
@@ -264,13 +285,15 @@ class DataAccess():
         return record
 
     def insertRow(self, tableName, fields):
-        # Inserting a row of field values into a table specified by name
-        # CONTRACT
-        #   tableName (String): The name of the table to be queried
-        #   fields (Dictionary) : A dictionary where the key is the field name and the value is the field value
-        #       NOTE: Strings should be formatted with enclosing double quotation marks (")
-        #             Numbers should be formatted as strings
-        #   RETURNS inserted record row
+        """
+        Inserting a row made of field values into th table specified by name
+        CONTRACT
+            tableName (String): The name of the table to be queried
+            fields (Dictionary) : A dictionary where the key is the field name and the value is the field value
+                NOTE: Strings should be formatted with enclosing double quotation marks (")
+                    Numbers should be formatted as strings
+            RETURNS inserted record row
+        """
         self.currentCursor = self.getDbCursor()
         fieldsString = []
         for key in fields:
@@ -299,8 +322,16 @@ class DataAccess():
         return record
 
     def updateRow(self, tableName, recordID, values, where='', sqlString=None):
-        # TODO Function contract
-        #   RETURNS updated record row
+        """
+        Updates a row made of field values in the table specified by name 
+        CONTRACT
+          tableName (String)  : The name of the table to be queried
+          recordID (int)      : The primary key of the record to be updated
+          fields (Dictionary) : A dictionary where the key is the field name and the value is the field value
+              NOTE: Strings should be formatted with enclosing double quotation marks (")
+                    Numbers should be formatted as strings
+          RETURNS updated record row
+        """
         self.currentCursor = self.getDbCursor()
         fieldsString = ""
 
@@ -345,10 +376,12 @@ class DataAccess():
         return record
 
     def getFieldMap(self):
-        # Get fields for a given DB API 2.0 cursor object that has been executed
-        # CONTRACT
-        #   cursor (Cursor) : Cursor object to be field mapped
-        #   RETURNS a dictionary that maps each field name to a column index; 0 and up.
+        """
+        Get fields for a given DB API 2.0 cursor object that has been executed
+        CONTRACT
+          cursor (Cursor) : Cursor object to be field mapped
+          RETURNS a dictionary that maps each field name to a column index; 0 and up.
+        """
         currentCursor = self.getDbCursor()
         results = {}
         column = 0
@@ -357,5 +390,3 @@ class DataAccess():
             column = column + 1
 
         return results
-
-# db = DataAccess('test')
