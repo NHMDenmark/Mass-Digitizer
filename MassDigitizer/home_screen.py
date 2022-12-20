@@ -35,16 +35,18 @@ class HomeScreen():
     """ The second arg is an arrangement for if the .iss file changes structure and a new 
     MyAppVersion placeholder is needed. """
     def __init__(self):
-        # TODO function contract 
+        """
+        Constructor initializing GUI elements after fetching available institutions 
+        """
 
+        institutions = util.convert_dbrow_list(db.getRows('institution'))
+        
         header_font = ("Corbel, 18")
         header = [sg.Text(f"DaSSCo Mass Digitizer App - Version {self.version}", size=(34,1), font=header_font, justification='center')]
 
         separator_line = [sg.Text('_'  * 80)]
 
         btn_exit = [sg.Button("Exit", key='btnExit')]
-
-        institutions = util.convert_dbrow_list(db.getRows('institution'))
 
         lblSelectInstitution = [sg.Text('Please choose your institution to proceed:')]
         lstSelectInstitution = [sg.Combo(list(institutions), readonly=True, enable_events=True, key='institution')]
@@ -75,7 +77,10 @@ class HomeScreen():
         self.main()
 
     def main(self):
-        # Run main loop waiting for input 
+        """
+        Main loop of execution responding to user input 
+        """        
+
         while True:
             event, values = self.window.read()
             

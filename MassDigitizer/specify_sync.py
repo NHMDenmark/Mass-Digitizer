@@ -53,14 +53,16 @@ class SpecifySync():
         return True
 
     def syncTaxonomy(self, taxontreedefid, csrftoken):
-        # Function for synchronizing collections between the Specify7 API and the local database 
-        # CONTRACT
-        #   taxontreedefid (Integer) : The primary key of the taxon tree definition for the collection in question 
-        #   csrftoken (String) : The CSRF token required during logging in for the session 
-        #   limit (Integer) :   The maximum depth of taxon ranks during this sweep; 
-        #                       This depth depends on the number of ranks defined for the taxon tree in question 
-        #                       Default value: 10 
-        #   RETURNS (Boolean) : True to indicate the jobs was successfully finished
+        """
+        Function for synchronizing collections between the Specify7 API and the local database 
+        CONTRACT
+          taxontreedefid (Integer) : The primary key of the taxon tree definition for the collection in question 
+          csrftoken (String) : The CSRF token required during logging in for the session 
+          limit (Integer) :   The maximum depth of taxon ranks during this sweep; 
+                              This depth depends on the number of ranks defined for the taxon tree in question 
+                              Default value: 10 
+          RETURNS (Boolean) : True to indicate the jobs was successfully finished
+        """
         print('Syncing taxonomy with Specify7 API at: ' + gs.baseURL)
         
         # First get available ranks for taxon tree in question from Sp7API 
