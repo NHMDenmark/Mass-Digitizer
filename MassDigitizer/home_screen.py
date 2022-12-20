@@ -19,6 +19,7 @@ import PySimpleGUI as sg
 from pathlib import Path
 sys.path.append(str(Path(__file__).joinpath('MassDigitizer')))
 
+import version_number
 import util
 import global_settings as gs
 import data_access
@@ -29,21 +30,34 @@ db = data_access.DataAccess(gs.databaseName)
 sp = specify_interface.SpecifyInterface()
 
 class HomeScreen():
-    fPath = Path('DaSSCo.iss')
-    version = util.obtainVersionNumber(fPath, '')
+    # Get version number to set into the homeScreen welcome menu.
+    version = version_number.getVersionNumber()
     """ The second arg is an arrangement for if the .iss file changes structure and a new 
     MyAppVersion placeholder is needed. """
     def __init__(self):
         """
         Constructor initializing GUI elements after fetching available institutions 
         """
-
-        institutions = util.convert_dbrow_list(db.getRows('institution'))
+        try:
+            self.institutions = util.convert_dbrow_list(db.getRows('institution'))
+        except Exception as e:
+            self.errorMessage = e
+            errorString = str(e)+".\n Check to see if DB is placed correctly"
+            sg.popup_cancel(errorString, title='Error', )
+            sys.exit(1)
         
         header_font = ("Corbel, 18")
         header = [sg.Text(f"DaSSCo Mass Digitizer App - Version {self.version}", size=(34,1), font=header_font, justification='center')]
 
         separator_line = [sg.Text('_'  * 80)]
+
+        try: #Testing to see if the Documents/DaSSCo directory exists
+            self.db = data_access.DataAccess(gs.databaseName)
+            institutions = util.convert_dbrow_list(self.db.getRows('institution'))
+        except Exception as e:
+            self.errorMessage = e
+            sg.popup_cancel(e, title='Error', )
+            sys.exit(1)
 
         btn_exit = [sg.Button("Exit", key='btnExit')]
 
