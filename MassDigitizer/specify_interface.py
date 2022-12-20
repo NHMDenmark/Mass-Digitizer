@@ -12,6 +12,7 @@
   PURPOSE: Interface to the Specify API 
 """
 
+import time 
 import requests
 import json 
 import urllib3
@@ -213,7 +214,6 @@ class SpecifyInterface():
     apiCallString = "%sapi/specify/%s/%d/" %(gs.baseURL, objectName, objectId)
     #print(apiCallString)
     #print(specifyObject)
-    # TODO API PUT command throws 500 Error ("Internal Server Error")
     response = self.spSession.put(apiCallString, data=json.dumps(specifyObject), headers=headers)
     #response = requests.put(apiCallString, data=specifyObject, json=specifyObject, headers=headers)
     #print(' - Response: %s %s' %(str(response.status_code), response.reason))
@@ -236,7 +236,6 @@ class SpecifyInterface():
     headers = {'content-type': 'application/json', 'X-CSRFToken': self.csrfToken, 'referer': gs.baseURL}
     apiCallString = "%sapi/specify/%s/%d/" %(gs.baseURL, objectName)
     print(apiCallString)
-    # TODO API PUT command throws 403 Error ("Forbidden")
     response = self.spSession.post(apiCallString, headers=headers, data=specifyObject)
     #print(' - Response: %s %s' %(str(response.status_code), response.reason))
     # if response.status_code < 299:
@@ -325,8 +324,18 @@ class SpecifyInterface():
 
     return response
 
-#si = SpecifyInterface()
-#gs.baseURL = "https://specify-test.science.ku.dk/"
-#tok = si.getCSRFToken()
-#print(tok)
-#si.verifySession(tok)
+""" 
+si = SpecifyInterface()
+gs.baseURL = "https://specify-test.science.ku.dk/"
+tok = si.getCSRFToken()
+print(tok)
+
+token = si.login('fedor.steeman', 'XmgrNuitCrowd', 688130, tok)
+si.verifySession(token)
+
+start = time.time()
+#si.mergeTaxa(4051548, 364503)
+end = time.time()
+timeElapsed = end - start
+print(f'Time elapsed: {timeElapsed} ')
+"""

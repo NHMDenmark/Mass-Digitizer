@@ -32,7 +32,6 @@ baseUrl = "https://specify-snm.science.ku.dk/"
 
 col.loadPredefinedData()
 
-
 def test_prepTypes():
     prepTypes = [[i for i in j] for j in col.prepTypes]
     assert prepTypes[1][2] == 'sheet'
@@ -56,6 +55,5 @@ def test_getFields():
 def test_getSpecifyObject():
     # Testing the more generic version of getCollObject().
     # In this case collectionobject, but could be 'attachment', 'author' etc.
-    res = sp.getSpecifyObject('collectionobject', 411590, token)
+    res = sp.getSpecifyObject('collectionobject', 411590)
     assert res['catalognumber'] == '000864870'
-

@@ -24,7 +24,9 @@ import global_settings as gs
 db = data_access.DataAccess(gs.databaseName)
 
 def clear():
-   # Clear CLI screen 
+   """
+   Clear Command Line Interface screen 
+   """
    # for windows
    if name == 'nt':
       _ = system('cls')
@@ -34,9 +36,9 @@ def clear():
     _ = system('clear')
 
 def shrink_dict(original_dict, input_string):
-   # TODO Complete function contract
-   # Filter entries in dictionary based on initial string (starts with)
-
+   """
+   Filter entries in dictionary based on initial string (starts with)
+   """   
    shrunken_dict = {}
    print('Dictionary length = ', len(original_dict))
    for j in original_dict:
@@ -45,8 +47,9 @@ def shrink_dict(original_dict, input_string):
    return shrunken_dict
 
 def convert_dbrow_list(list, addEmptyRow=False):
-   # TODO complete function contract
-   # Converts datarow list to name array 
+   """
+   Converts datarow list to name array 
+   """
    new_list = []
    if addEmptyRow: new_list.append('-please select-')
    for item in list:
@@ -55,14 +58,8 @@ def convert_dbrow_list(list, addEmptyRow=False):
    return new_list
 
 def pretty_print_POST(req):
-   # TODO description  
     """
-    At this point it is completely built and ready
-    to be fired; it is "prepared".
-
-    However pay attention at the formatting used in 
-    this function because it is programmed to be pretty 
-    printed and may differ from the actual request.
+    Format HTTP request header and body into easily legible output
     """
     print('{}\n{}\r\n{}\r\n\r\n{}'.format(
         '-----------START-----------',
@@ -73,11 +70,15 @@ def pretty_print_POST(req):
     print('------------END------------')
 
 def getPrimaryKey(tableName, name, field='name'): 
-   # Function for fetching id (primary key) on name value
+   """
+   Function for fetching id (primary key) on name value
+   """
    return db.getRowsOnFilters(tableName, {' %s = ' % field: '"%s"' % name})[0]['id']
 
 def logLine(line, level='info'):
-   
+   """
+   Log line 
+   """
    logging.basicConfig(filename='example.log', encoding='utf-8', level=logging.DEBUG)
 
    if(level == 'info'):
@@ -94,7 +95,11 @@ def logLine(line, level='info'):
    return line
 
 def obtainVersionNumber(filepath, keyWord):
-    with open(filepath, mode='r') as f:
+   """
+   Obtain application version number
+   """
+
+   with open(filepath, mode='r') as f:
         text = f.readlines()
         version = ''
         for line in text:
@@ -110,5 +115,5 @@ def obtainVersionNumber(filepath, keyWord):
                 return versionPop.replace('"', '')
 
 class Struct:
-    "A structure that can have any fields defined."
+    """A structure that can have any fields defined."""
     def __init__(self, **entries): self.__dict__.update(entries)
