@@ -13,7 +13,6 @@
 """
 
 import os
-# import sys
 import sqlite3
 from io import StringIO
 from pathlib import Path
