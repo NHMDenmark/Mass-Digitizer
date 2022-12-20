@@ -46,6 +46,14 @@ class HomeScreen():
 
         separator_line = [sg.Text('_'  * 80)]
 
+        try: #Testing to see if the Documents/DaSSCo directory exists
+            self.db = data_access.DataAccess(gs.databaseName)
+            institutions = util.convert_dbrow_list(self.db.getRows('institution'))
+        except Exception as e:
+            self.errorMessage = e
+            sg.popup_cancel(e, title='Error', )
+            sys.exit(1)
+
         btn_exit = [sg.Button("Exit", key='btnExit')]
 
         lblSelectInstitution = [sg.Text('Please choose your institution to proceed:')]
