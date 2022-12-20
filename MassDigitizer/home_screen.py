@@ -38,8 +38,13 @@ class HomeScreen():
         """
         Constructor initializing GUI elements after fetching available institutions 
         """
-
-        institutions = util.convert_dbrow_list(db.getRows('institution'))
+        try:
+            self.institutions = util.convert_dbrow_list(db.getRows('institution'))
+        except Exception as e:
+            self.errorMessage = e
+            errorString = str(e)+".\n Check to see if DB is placed correctly"
+            sg.popup_cancel(errorString, title='Error', )
+            sys.exit(1)
         
         header_font = ("Corbel, 18")
         header = [sg.Text(f"DaSSCo Mass Digitizer App - Version {self.version}", size=(34,1), font=header_font, justification='center')]
