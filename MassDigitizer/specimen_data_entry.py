@@ -28,6 +28,7 @@ from data_access import DataAccess
 import global_settings as gs
 import data_exporter as dx
 import autoSuggest_popup
+import version_number
 from models import specimen
 
 # Makes sure that current folder is registrered to be able to access other app files
@@ -41,7 +42,7 @@ class SpecimenDataEntry():
         """
         Constructor that initializes class variables and dependent class instances 
         """
-
+        self.verionNumber = version_number.getVersionNumber()
         self.collectionId = collection_id # Set collection Id 
         self.window = None # Create class level instance of window object 
         self.collobj = specimen.specimen(collection_id) # Create blank specimen record instance 
@@ -150,8 +151,9 @@ class SpecimenDataEntry():
                         font=('Arial', 12), enable_events=True), ]
 
         # statusLabel = [sg.Text('Specimen record has been saved', font=('Arial',20),size=(20,10),justification='center',background_color='#4f280a',text_color = 'yellow',key='texto')]
-        rows = self.db.getRows('storage', limit=3, sortColumn='id DESC')
+        rows = self.db.getRows('specimen', limit=3, sortColumn='id DESC')
         self.previousRecords = [[row for row in line] for line in rows]
+        print(f'PREV RECS ::::::', self.previousRecords)
         self.headers = ['id', 'spid', 'catalognumber', 'multispecimen', 'taxonfullname','taxonname', 'taxonnameid', 'taxonspid', 'highertaxonname', 'preptypename','typestatusname', 'typestatusid', 'georegionname', 'georegionid','storagefullname', 'storagename']
         self.operationalHeads = ['id', 'catalognumber', 'taxonfullname', 'highertaxonname', 'typestatusname',
                                  'georegionname', 'storagefullname', 'storagename']
@@ -183,6 +185,9 @@ class SpecimenDataEntry():
         collection = [
             sg.Text('Collection:', size=(14, 1), background_color=greyArea, text_color='black', font=labelHeadlineMeta),
             sg.Text(gs.collectionName, key='txtCollection', size=(25, 1), background_color=greyArea, font=smallLabelFont)]
+        version = [
+            sg.Text(f"Version number: ", size=(14,1), background_color=greyArea, text_color='black', font=labelHeadlineMeta),
+            sg.Text(self.verionNumber, size=(20,1), background_color=greyArea, font=smallLabelFont, text_color='black')]
         workStation = [
             sg.Text('Workstation:', key="txtWorkStation", size=(14, 1), background_color=greyArea, font=labelHeadlineMeta),
             sg.Text('', size=(20, 1), background_color=greyArea, text_color='black'), ]
@@ -196,7 +201,7 @@ class SpecimenDataEntry():
         logoutButton = sg.Button('LOG OUT', key='btnLogOut', button_color='grey10')
         layoutTitle = [[appTitle], ]
         layoutSettingLogout = [sg.Push(background_color=greyArea), settingsButton, logoutButton]
-        layoutMeta = [loggedIn, institution_, collection, workStation, layoutSettingLogout]
+        layoutMeta = [loggedIn, institution_, collection, version, workStation, layoutSettingLogout]
 
         # Combine elements into full layout - the first frame group is the grey metadata area.
         layout = [[
@@ -245,23 +250,27 @@ class SpecimenDataEntry():
             tempRow = []
 
             specimenDict = dict(zip(headers, row))
+            print('full row:-', specimenDict)
             # tempDicts.append(specimenDict)
             for k in self.operationalHeads:
                 res = specimenDict[k]
                 tempRow.append(res)
             operationalRows.append(tempRow)
-        print('OP ROWS: ', operationalRows)
-        return operationalRows
+        print('reduced ROWS: ', operationalRows)
+        rowsExtracted = {'fullrows': specimenDict, 'adjacentrows': operationalRows}
+        return rowsExtracted
 
     def main(self):
         if self.currentRecordId:
             overviewRows = self.extractRows(self.currentRecordId)
         else:
             overviewRows = self.extractRows(self.maxRow)
-        self.window['tblPrevious'].update(values = overviewRows)
+        tblRows = list(overviewRows['adjacentrows'])
+        self.window['tblPrevious'].update(values = tblRows)
 
         while True:
-            event, values = self.window.Read(timeout=200, timeout_key='_timeout')
+            event, values = self.window.Read()
+                # (timeout=400, timeout_key='_timeout')
 
             # Checking field events as switch construct
             if event is None: break  # Empty event indicates user closing window
@@ -407,6 +416,13 @@ class SpecimenDataEntry():
                 self.window['lblExport'].update(visible=False)
                 self.window['lblRecordEnd'].update(visible=False)
 
+            if event == '_timeout':
+                recordIDnow = self.window['txtRecordID'].get()
+                if recordIDnow:
+                    newAdjacents = self.extractRows(recordIDnow)
+                    self.window['tblPrevious'].update(values=newAdjacents)
+
+
             if event == sg.WINDOW_CLOSED:
                 break
 
@@ -425,22 +441,29 @@ class SpecimenDataEntry():
                 self.collobj = specimen.specimen(self.collectionId) 
                 
                 # Transfer data in sticky fields to new record:
-                self.setRecordFields(specimenRecord, True)
+                self.setRecordFields('specimen', specimenRecord, True)
 
                 self.window['txtCatalogNumber'].set_focus()
                 recid = self.window['txtRecordID'].Get()
 
             if event == 'tblPrevious':
-                if self.window['txtRecordID'].get():
-                    currentRecordId = self.window['txtRecordID'].get()
-                else:
-                    currentRecordId = self.maxRow
-                self.previousRecords = self.extractRows(currentRecordId)
                 selected_index = values['tblPrevious'][0]
-                selected_row = self.previousRecords[selected_index]
-                rowDict = dict(zip(self.headers, selected_row))
-                print('THE rowdict::', rowDict)
-                self.fillFormFields(rowDict)
+                print('selected indexxxxx: ', selected_index)
+            #     if self.window['txtRecordID'].get():
+            #         currentRecordId = self.window['txtRecordID'].get()
+            #         print(f'THE currend REC ID IS .{currentRecordId}.')
+            #     else:
+            #         currentRecordId = self.maxRow
+            #     self.previousRecords = self.extractRows(currentRecordId)
+            #     #Extracting the full rows from the returned dictionary {fullrows: , adjacentrows: }
+            #     fullRows = self.previousRecords['fullrows']
+            #
+            #     selected_index = values['tblPrevious'][0]
+            #     selected_row = self.previousRecords[selected_index]
+            #     print(self.headers,'\n',selected_row)
+            #     rowDict = dict(zip(self.operationalHeads, selected_row))
+            #     print('THE adjacent rowdict::', rowDict)
+            #     self.fillFormFields(rowDict)
 
         self.window.close()
 
@@ -468,14 +491,14 @@ class SpecimenDataEntry():
         self.window['txtCatalogNumber'].bind("<Return>", "_Enter")
         self.window['btnSave'].bind("<Return>", "_Enter")
 
-    def setRecordFields(self, record, stickyFieldsOnly=False):
+    def setRecordFields(self, tableName, record, stickyFieldsOnly=False):
         """
         Function for transferring information to fields of newly created record. 
         CONTRACT: 
             record : New record that should have its fields set
             stickyFieldsOnly : Flag for indicating whether only sticky fields should be set 
         """
-        self.collobj.setStorageFields(self.db.getRowOnId('storage', record['storageid']))
+        self.collobj.setStorageFields(self.db.getRowOnId(tableName, record['storageid']))
         self.collobj.setPrepTypeFields(self.window['cbxPrepType'].widget.current()) 
         self.collobj.setTypeStatusFields(self.window['cbxTypeStatus'].widget.current())
         self.collobj.notes = record['notes']
@@ -492,6 +515,7 @@ class SpecimenDataEntry():
         """
         Function for setting form fields from specimen data record
         """
+        print('fillform record::_', record)
         self.window['txtRecordID'].update('{}'.format(record['id']), visible=True)
         self.window['txtStorage'].update(record['storagename'])
         self.window['txtStorageFullname'].update(record['storagefullname'])
@@ -528,4 +552,4 @@ class SpecimenDataEntry():
         self.window['lblRecordEnd'].update(visible=False)
         self.searchString = []
 
-g = SpecimenDataEntry(29)
+# g = SpecimenDataEntry(29)
