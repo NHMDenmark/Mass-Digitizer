@@ -43,7 +43,7 @@ def test_taxonname_auto_suggest():
     if(choices):
       print(f'Got {len(choices)} taxon suggestions. ')
       for c in choices:
-        if c['fullname'] == 'Poa pratensis': 
+        if c == 'Poa pratensis': 
           found = True 
           break
 
