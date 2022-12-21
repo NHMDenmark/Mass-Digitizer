@@ -18,6 +18,8 @@ from io import StringIO
 from pathlib import Path
 
 # Local imports
+import PySimpleGUI as sg
+
 import global_settings as gs
 
 # Set os path to local files:
@@ -48,6 +50,7 @@ class DataAccess():
             self.connection = sqlite3.connect(self.dbFilePath)
         except Exception as e:
             print(f"SQLite connection failed. Error: {e}")
+            sg.popup_cancel(f"SQLite connection failed. Error: {e}")
 
         if gs.db_in_memory == True or do_in_memory == True:
             # Read database to tempfile
@@ -69,7 +72,7 @@ class DataAccess():
         try:
             self.currentCursor = self.connection.cursor()
         except Exception as e:
-            print(f"Get the DB cursor error: {e}")
+            sg.popup_cancel(f"Get the DB cursor error: {e}")
 
     def setDatabase(self, dbFileName='db'):
         """
@@ -79,7 +82,7 @@ class DataAccess():
         """
         self.dbFilePath = str(Path(self.dbFilePath).joinpath(f'{dbFileName}.sqlite3'))
         self.dbAltFilePath = str(Path(self.dbAltFilePath).joinpath(f'{dbFileName}.sqlite3'))
-        print(self.dbFilePath)
+        # print(self.dbFilePath)
 
     def getConnection(self):
         """
@@ -95,7 +98,7 @@ class DataAccess():
           TODO: do_in_memory (boolean): Whether the database file should be run in-memory
           RETURNS database cursor object
         """
-        print(f'Connecting to db file: {self.dbFilePath} ...')
+        # print(f'Connecting to db file: {self.dbFilePath} ...')
 
         # Connect to database file. On error, try alternative location assuming OneDrive user
         try:
@@ -143,7 +146,7 @@ class DataAccess():
 
         if sortColumn is not None:
             sqlString += f' ORDER BY {sortColumn}'
-        print(sqlString)
+        # print(sqlString)
         
         if limit > 0:
             sqlString += f' LIMIT {limit}'
@@ -170,7 +173,7 @@ class DataAccess():
           RETURNS table rows as list
         """
         currentCursor = self.getDbCursor()
-        print(f'-> getRowsONFilter({tableName}, {filters}, {limit})')
+        # print(f'-> getRowsONFilter({tableName}, {filters}, {limit})')
         sqlString = 'SELECT * FROM %s ' % tableName
 
         if filters.items():
@@ -185,12 +188,12 @@ class DataAccess():
         if limit > 0:
             sqlString += f' LIMIT {limit}'
 
-        print(sqlString)
+        # print(sqlString)
 
         records = currentCursor.execute(sqlString).fetchall()
 
         currentCursor.connection.close()
-        print(len(records))
+        # print(len(records))
         return records
 
     def getRowOnId(self, tableName, id):
