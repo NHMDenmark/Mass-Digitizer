@@ -9,7 +9,7 @@
   http://www.apache.org/licenses/LICENSE-2.0
   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-  PURPOSE: Generic Data Access Object for reading/writing local database file 
+  PURPOSE: Generic Data Access Object for reading/writing local database file
 """
 
 import os
@@ -29,10 +29,10 @@ class DataAccess():
 
     def __init__(self, databaseName='db', do_in_memory=False):
         """
-        Initialize for database access 
+        Initialize for database access
             CONTRACT
-               do_in_memory (boolean): Whether the database file should be run in-memory 
-        NOTE Database file is installed into user documents folder otherwise it would be readonly on a Windows PC in any case 
+               do_in_memory (boolean): Whether the database file should be run in-memory
+        NOTE Database file is installed into user documents folder otherwise it would be readonly on a Windows PC in any case
         """
 
         self.currentCursor = None  # Reset cursor pointer
@@ -142,15 +142,15 @@ class DataAccess():
         """
         currentCursor = self.getDbCursor()
 
-        sqlString = f'SELECT * FROM {tableName}'        
+        sqlString = f'SELECT * FROM {tableName}'
 
         if sortColumn is not None:
             sqlString += f' ORDER BY {sortColumn}'
         # print(sqlString)
-        
+
         if limit > 0:
             sqlString += f' LIMIT {limit}'
-        
+
         try:
             records = currentCursor.execute(sqlString).fetchall()
         except Exception as e:
@@ -326,7 +326,7 @@ class DataAccess():
 
     def updateRow(self, tableName, recordID, values, where='', sqlString=None):
         """
-        Updates a row made of field values in the table specified by name 
+        Updates a row made of field values in the table specified by name
         CONTRACT
           tableName (String)  : The name of the table to be queried
           recordID (int)      : The primary key of the record to be updated
