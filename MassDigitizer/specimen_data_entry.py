@@ -465,6 +465,7 @@ class SpecimenDataEntry():
                 print("chosenRows: ", len(chosenRows), chosenRows)
                 selectedRow = chosenRows[selected_index]
                 print("selectedRow:", selectedRow)
+                self.fillFormFields(selectedRow)
             #     if self.window['txtRecordID'].get():
             #         currentRecordId = self.window['txtRecordID'].get()
             #         print(f'THE currend REC ID IS .{currentRecordId}.')
