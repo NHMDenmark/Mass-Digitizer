@@ -66,7 +66,8 @@ class SpecimenDataEntry():
         else:
             print("NOOOOOO REC ID yet %%%%%%%")
         self.maxRow = self.db.getMaxRow('specimen')[0]
-        # Create auto-suggest popup window for storage locations 
+
+        # Create auto-suggest popup window for storage locations
         self.autoStorage = autoSuggest_popup.AutoSuggest_popup('storage', collection_id)
 
         # Create auto-suggest popup window for taxon names
@@ -151,14 +152,15 @@ class SpecimenDataEntry():
                         font=('Arial', 12), enable_events=True), ]
 
         # statusLabel = [sg.Text('Specimen record has been saved', font=('Arial',20),size=(20,10),justification='center',background_color='#4f280a',text_color = 'yellow',key='texto')]
-        rows = self.db.getRows('specimen', limit=3, sortColumn='id DESC')
-        self.previousRecords = [[row for row in line] for line in rows]
-        print(f'PREV RECS ::::::', self.previousRecords)
+
         self.headers = ['id', 'spid', 'catalognumber', 'multispecimen', 'taxonfullname','taxonname', 'taxonnameid', 'taxonspid', 'highertaxonname', 'preptypename','typestatusname', 'typestatusid', 'georegionname', 'georegionid','storagefullname', 'storagename']
-        self.operationalHeads = ['id', 'catalognumber', 'taxonfullname', 'highertaxonname', 'typestatusname',
-                                 'georegionname', 'storagefullname', 'storagename']
+        self.operationalHeads = ['catalognumber', 'taxonfullname', 'multispecimen',
+                                 'georegionname', 'storagename', 'notes']
+        self.prev3Records = self.previousRows3()
+        print(type(self.prev3Records), self.prev3Records)
+        # self.tableRecords = self.prev3Records['adjacentrows']
         lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
-        previousRecordsTable = [sg.Table(values=self.previousRecords, key = 'tblPrevious', enable_events=True, headings=self.operationalHeads, max_col_width=35)]
+        previousRecordsTable = [sg.Table(values=self.prev3Records, key = 'tblPrevious', enable_events=True, headings=self.operationalHeads, max_col_width=32)]
 
 
         layout_bluearea = [broadGeo, taxonInput, barcode, [  # taxonomicPicklist,
@@ -213,7 +215,7 @@ class SpecimenDataEntry():
                     background_color=blueArea, expand_x=True, expand_y=True, )], ]  #
 
         # Launch window
-        self.window = sg.Window("Mass Annotated Digitization Desk (MADD)", layout, margins=(2, 2), size=(960, 530),
+        self.window = sg.Window("Mass Annotated Digitization Desk (MADD)", layout, margins=(2, 2), size=(1024, 530),
                         resizable=True, return_keyboard_events=True, finalize=True, background_color=greyArea)
         self.window.TKroot.focus_force()
         # Forces the app to be in focus.
@@ -243,28 +245,37 @@ class SpecimenDataEntry():
                    'storagename', 'storageid', 'preptypename', 'preptypeid', 'notes', 'institutionid', 'collectionid',
                    'username', 'userid', 'workstation', 'recorddatetime', 'exported', 'exportdatetime', 'exportuserid']
         specimenList = [[row for row in line] for line in rows]
-
-        operationalRows = []
+        # print('init rows :', rows)
+        # Code block below takes the rows returned and
+        # operationalRows = []
+        tempDicts = [] #full rows needed to populate the form
+        adjecentRows = [] #the curated rows needed to populate the table
         for row in specimenList:
-            tempDicts = []
-            tempRow = []
-
             specimenDict = dict(zip(headers, row))
             print('full row:-', specimenDict)
-            # tempDicts.append(specimenDict)
+            tempDicts.append(specimenDict)
+            tempAdjecent = []
             for k in self.operationalHeads:
                 res = specimenDict[k]
-                tempRow.append(res)
-            operationalRows.append(tempRow)
-        print('reduced ROWS: ', operationalRows)
-        rowsExtracted = {'fullrows': specimenDict, 'adjacentrows': operationalRows}
+                print('Adjecent rows item: ', res)
+                tempAdjecent.append(res)
+            adjecentRows.append(tempAdjecent)
+        print('reduced ROWS: ', adjecentRows)
+        rowsExtracted = {'fullrows': tempDicts, 'adjacentrows': adjecentRows}
         return rowsExtracted
+
+    def previousRows3(self):
+        rows = self.db.getRows('specimen', limit=3, sortColumn='id DESC')
+        self.previousRecords = [[row for row in line] for line in rows]
+        print(f'PREV RECS ::::::', self.previousRecords)
+        return self.previousRecords
 
     def main(self):
         if self.currentRecordId:
             overviewRows = self.extractRows(self.currentRecordId)
         else:
             overviewRows = self.extractRows(self.maxRow)
+        print("overv rows ;;;", overviewRows)
         tblRows = list(overviewRows['adjacentrows'])
         self.window['tblPrevious'].update(values = tblRows)
 
@@ -449,6 +460,12 @@ class SpecimenDataEntry():
             if event == 'tblPrevious':
                 selected_index = values['tblPrevious'][0]
                 print('selected indexxxxx: ', selected_index)
+                print("overview:; ", overviewRows)
+                chosenRows= overviewRows['fullrows']
+                print("chosenRows: ", len(chosenRows), chosenRows)
+                selectedRow = chosenRows[selected_index]
+                print("selectedRow:", selectedRow)
+                self.fillFormFields(selectedRow)
             #     if self.window['txtRecordID'].get():
             #         currentRecordId = self.window['txtRecordID'].get()
             #         print(f'THE currend REC ID IS .{currentRecordId}.')
@@ -552,4 +569,4 @@ class SpecimenDataEntry():
         self.window['lblRecordEnd'].update(visible=False)
         self.searchString = []
 
-# g = SpecimenDataEntry(29)
+g = SpecimenDataEntry(29)
