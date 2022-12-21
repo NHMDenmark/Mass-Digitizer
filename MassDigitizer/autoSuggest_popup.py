@@ -259,6 +259,7 @@ class AutoSuggest_popup():
             self.lstSuggestionsElement.update(values=self.candidateNamesList, set_to_index=0, scroll_to_index=0)
         # Adjusts the listbox behavior to what is expected.
         # self.lstSuggestionsElement.update(values=self.candidateNamesList, set_to_index=[0])
+        return self.candidateNamesList
 
     def lookupSuggestions(self, keyStrokes, columnName='fullname', minimumRank=270, rowLimit=200):
         """ 
