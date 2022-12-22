@@ -189,11 +189,6 @@ class SpecimenDataEntry():
         version = [
             sg.Text(f"Version number: ", size=(14,1), background_color=greyArea, text_color='black', font=labelHeadlineMeta),
             sg.Text(self.verionNumber, size=(20,1), background_color=greyArea, font=smallLabelFont, text_color='black')]
-        # workStation = [
-        #     sg.Text('Workstation:', key="txtWorkStation", size=(14, 1), background_color=greyArea, font=labelHeadlineMeta),
-        #     sg.Text('', size=(20, 1), background_color=greyArea, text_color='black'), ]
-        # settings_ = [sg.Text('Settings ', size=defaultSize, justification='center', background_color=greyArea, font=14),
-        #             sg.Button('', image_filename='%soptions_gear.png' % currentpath, key='btnSettings', button_color=greyArea, border_width=0)]
 
         # Header section
         appTitle = sg.Text('Mass Annotation Digitization Desk (MADD)', size=(34, 3), background_color=greyArea,
@@ -226,7 +221,7 @@ class SpecimenDataEntry():
             self.window.Element('txtCollection').Update(value=collection[2])
             institution = self.db.getRowOnId('institution', collection[3])
             self.window.Element('txtInstitution').Update(value=institution[2])
-        # self.window.Element('txtWorkStation').Update(value='') #TRS-80')
+       
 
         # Set triggers for the different controls on the UI form 
         self.setControlEvents()
