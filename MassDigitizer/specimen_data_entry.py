@@ -202,7 +202,7 @@ class SpecimenDataEntry():
         logoutButton = sg.Button('LOG OUT', key='btnLogOut', button_color='grey10')
         layoutTitle = [[appTitle], ]
         layoutSettingLogout = [sg.Push(background_color=greyArea), settingsButton, logoutButton]
-        layoutMeta = [loggedIn, institution_, collection, version, workStation, layoutSettingLogout]
+        layoutMeta = [loggedIn, institution_, collection, version, layoutSettingLogout]
 
         # Combine elements into full layout - the first frame group is the grey metadata area.
         layout = [[
@@ -243,7 +243,7 @@ class SpecimenDataEntry():
                    'highertaxonname', 'typestatusname', 'typestatusid', 'georegionname', 'georegionid',
                    'storagefullname',
                    'storagename', 'storageid', 'preptypename', 'preptypeid', 'notes', 'institutionid', 'collectionid',
-                   'username', 'userid', 'workstation', 'recorddatetime', 'exported', 'exportdatetime', 'exportuserid']
+                   'username', 'userid', 'recorddatetime', 'exported', 'exportdatetime', 'exportuserid']
         specimenList = [[row for row in line] for line in rows]
         # print('init rows :', rows)
         # Code block below takes the rows returned and
