@@ -246,17 +246,19 @@ class MergeDuplicates():
                             self.logger.info('Original author and lookup author are not identical and neither is empty!')
                             self.logger.info('Retrieving authorship from GBIF...')
                             
-                            self.resolveAuthorName(original)
-                            self.resolveAuthorName(lookup)
+                            criterium1 = self.resolveAuthorName(original)
+                            criterium2 = self.resolveAuthorName(lookup)
+                            unResolved = criterium1 and criterium2 
                         else:
                             if (original.author is None and lookup.author is None):
                                 self.logger.info('Author info is missing...')
                                 # Update authorname at Specify also 
-                                self.resolveAuthorName(original)
-                                self.resolveAuthorName(lookup)
+                                criterium1 = self.resolveAuthorName(original)
+                                criterium2 = self.resolveAuthorName(lookup)
+                                unResolved = criterium1 and criterium2
                             else:
                                 self.logger.info('Original and lookup have no author data or the author is identical. ')
-                            unResolved = False        
+                                unResolved = False  
 
                         if unResolved:
                         # If authorship could not be resolved, add to ambivalent cases 
@@ -308,12 +310,14 @@ class MergeDuplicates():
                         lookup.duplicateSpid = original.spid
                         self.ambivalentCases.append(lookup)
         else:
-            print('No duplicates found...')
+            print('x', end='')
 
     def resolveAuthorName(self, taxonInstance):
         """
-        TODO
+        Method for resolve the author name of a given taxon class instance by consulting the GBIF API 
         CONTRACT 
+            taxonInstance (taxon.Taxon) : Taxon class instance for which the author should be resolved
+        RETURNS boolean : Flag to indicate whether the resolution was succesful 
         """
         self.logger.info('Resolving author name...')
         acceptedNameMatches = self.gbif.matchName('species', taxonInstance.fullName, self.collection.spid)

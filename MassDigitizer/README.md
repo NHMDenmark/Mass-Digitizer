@@ -13,7 +13,7 @@ Current release:
 #### Installation instructions  
 For creating this executable the Nuitka python compiler works fine (https://nuitka.net/). We used this command in the CLI:
 ```
-python -m nuitka --windows-disable-console --follow-imports --onefile .\DaSSCo.py --plugin-enable=tk-inter
+python -m nuitka --windows-disable-console --follow-imports --onefile .\DaSSCo.py --plugin-enable=tk-inter --enable-plugin=numpy
 ```  
 
 Remember to activate venv and run pip install -r requirements.txt first
