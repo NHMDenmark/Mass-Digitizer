@@ -11,7 +11,7 @@
 
   PURPOSE: Generic Data Access Object for reading/writing local database file
 """
-
+import logging
 import os
 import sqlite3
 from io import StringIO
@@ -36,7 +36,7 @@ class DataAccess():
         """
 
         self.currentCursor = None  # Reset cursor pointer
-
+        # logging.info("In ---data_access---")
         # Point to database file provided and connect
         filePath = os.path.expanduser(
             '~\Documents\DaSSCO')  # In order to debug / run, a copy of the db file should be moved into this folder on Windows machines
@@ -49,7 +49,6 @@ class DataAccess():
         try:
             self.connection = sqlite3.connect(self.dbFilePath)
         except Exception as e:
-            print(f"SQLite connection failed. Error: {e}")
             sg.popup_cancel(f"SQLite connection failed. Error: {e}")
 
         if gs.db_in_memory == True or do_in_memory == True:
@@ -82,7 +81,8 @@ class DataAccess():
         """
         self.dbFilePath = str(Path(self.dbFilePath).joinpath(f'{dbFileName}.sqlite3'))
         self.dbAltFilePath = str(Path(self.dbAltFilePath).joinpath(f'{dbFileName}.sqlite3'))
-        # print(self.dbFilePath)
+        fps = self.dbFilePath, self.dbAltFilePath
+        logging.info("The filepaths are: %s", fps)
 
     def getConnection(self):
         """
@@ -150,11 +150,11 @@ class DataAccess():
 
         if limit > 0:
             sqlString += f' LIMIT {limit}'
-
+        logging.info('SQLLLLLL : %s', sqlString)
         try:
             records = currentCursor.execute(sqlString).fetchall()
         except Exception as e:
-            print(f"Error executing SQL : {e}\n Check the SQL = {sqlString}")
+            pass
         self.currentCursor.connection.close()
 
         return records
@@ -173,7 +173,8 @@ class DataAccess():
           RETURNS table rows as list
         """
         currentCursor = self.getDbCursor()
-        # print(f'-> getRowsONFilter({tableName}, {filters}, {limit})')
+        rowsOnFilterCall = f'-> getRowsONFilter({tableName}, {filters}, {limit})'
+        logging.info("get rows on filter call= %s", rowsOnFilterCall)
         sqlString = 'SELECT * FROM %s ' % tableName
 
         if filters.items():
@@ -188,7 +189,7 @@ class DataAccess():
         if limit > 0:
             sqlString += f' LIMIT {limit}'
 
-        # print(sqlString)
+        logging.info("getRowsOnFilters SQL string : %s", sqlString)
 
         records = currentCursor.execute(sqlString).fetchall()
 
@@ -232,7 +233,6 @@ class DataAccess():
         id (Integer) : The primary key of the row to be returned
         """
         currentCursor = self.getDbCursor()
-        print(f'DELETE FROM {tableName} WHERE id = {id};')
         currentCursor.execute(f'DELETE FROM {tableName} WHERE id = {id};')
         currentCursor.connection.commit()
         currentCursor.connection.close()
@@ -305,7 +305,6 @@ class DataAccess():
         # Jan thinks that joining the fieldString list is a cleaner solution.
         fieldsString = ','.join(fieldsString)
         sqlString = f"INSERT INTO {tableName} ({fieldsString}) VALUES ("
-        print(f"fieldsString string = {fieldsString}||")
         sqlValues = []
         for key in fields:
             addSql = fields[key].replace('""', '')
@@ -315,7 +314,6 @@ class DataAccess():
         valuesSql = '","'.join(sqlValues)
         valuesSql = f'"{valuesSql}")'
         sqlString = sqlString + valuesSql
-        print(f"Inserting record with SQL:- ", sqlString)
         self.currentCursor.execute(sqlString)
         self.currentCursor.connection.commit()
         recordID = self.currentCursor.lastrowid
@@ -342,7 +340,7 @@ class DataAccess():
             fieldsString += "%s, " % key
 
         if len(where) > 1:
-            print('adding ', where, ' to sql')
+            pass
         else:
             # Building the SQL query string below
             sqlStringPrepend = f"UPDATE {tableName} SET "
