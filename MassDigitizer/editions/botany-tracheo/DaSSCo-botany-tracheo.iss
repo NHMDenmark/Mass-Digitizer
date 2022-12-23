@@ -39,9 +39,9 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "{src}..\..\DaSSCo.dist\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{src}..\..\DaSSCo.dist\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "{src}..\..\temp\db.sqlite3"; DestDir: "{userdocs}\DaSSCo"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "DaSSCo.dist\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "DaSSCo.dist\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "temp\db.sqlite3"; DestDir: "{userdocs}\DaSSCo"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
