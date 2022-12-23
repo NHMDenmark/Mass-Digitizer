@@ -1,9 +1,4 @@
-PRAGMA journal_mode = OFF;
-PRAGMA synchronous = 0;
-PRAGMA cache_size = 1000000;
-PRAGMA locking_mode = EXCLUSIVE;
-PRAGMA temp_store = MEMORY;
-BEGIN TRANSACTION;
+INSERT INTO taxonname ("spid","name","fullname","rankid","taxontreedefid","parentfullname") VALUES 
  (4052349,"nigrescens","Achillea millefolium f. nigrescens",260,13,"Achillea millefolium")
 ,(4052348,"nigrescens","Achillea millefolium var. nigrescens",240,13,"Achillea millefolium")
 ,(365961,"atanensis","Agropyrum latiglume var. atanensis",240,13,"Agropyrum latiglume")
