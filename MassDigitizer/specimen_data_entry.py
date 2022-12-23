@@ -21,7 +21,8 @@ import os
 import sys
 import pathlib
 import PySimpleGUI as sg
-
+import logging
+import time
 # Internal dependencies
 import util
 from data_access import DataAccess
@@ -34,7 +35,17 @@ from models import specimen
 # Makes sure that current folder is registrered to be able to access other app files
 sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer')))
 currentpath = os.path.join(pathlib.Path(__file__).parent, '')
+sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}","")
+print('current Time =)=', sTime, type(sTime))
+logName = f"aSDE_log{sTime}"
 
+logging.basicConfig(filename=logName, encoding='utf-8', level=logging.DEBUG, force=True)
+# LOG_FILENAME="SDE.log"
+#Define handler to write to standard output
+# handler = logging.FileHandler(LOG_FILENAME)
+#Adding handler to logger
+# logger.addHandler(handler)
+# logger.propagate=False
 
 class SpecimenDataEntry():
 
@@ -55,10 +66,19 @@ class SpecimenDataEntry():
 
         # Set up user interface 
         self.setup(collection_id)
+        logging.debug('This message should go to the log file')
+        # Set up logging
+        # self.logger = logging.getLogger('SpecimenDataEntry')
+        # self.logger.setLevel(logging.DEBUG)
+        # logFileFormatter = logging.Formatter(fmt=f"%(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+        # fileHandler = logging.FileHandler(filename=f'log/specimenDataEntry_{time.time()}.log')
+        # fileHandler.setFormatter(logFileFormatter)
+        # fileHandler.setLevel(logging.INFO)
+        # self.logger.addHandler(fileHandler)
 
         # Create class level notes for access in autoSuggest_popup (TODO ?)
         self.notes = ''
-
+        # logger.debug("rolling out __init__")
         # Gets the newest row by highest ID
         self.currentRecordId = self.window['txtRecordID'].get()
         if self.currentRecordId:
@@ -80,6 +100,7 @@ class SpecimenDataEntry():
         """
         Initialize data entry form on basis of collection id
         """
+        logging.info('*** Specimen data entry ***')
 
         # Define UI areas
         sg.theme('SystemDefault')
@@ -221,7 +242,7 @@ class SpecimenDataEntry():
             self.window.Element('txtCollection').Update(value=collection[2])
             institution = self.db.getRowOnId('institution', collection[3])
             self.window.Element('txtInstitution').Update(value=institution[2])
-       
+
 
         # Set triggers for the different controls on the UI form 
         self.setControlEvents()
@@ -232,6 +253,7 @@ class SpecimenDataEntry():
         """Returns 3 rows prior to rowId (see self.db.getRows... statement)
         Return: A dict with two keys containing the complete rows ('fullrows':)
         and the rows for the preview table ('adjecentrows':)"""
+        logging.debug('<<<In extract rows func.>>>')
         rows = self.db.getRows(f'specimen WHERE id <= {rowId} ', limit=3, sortColumn='id DESC')
         headers = ['id', 'spid', 'catalognumber', 'multispecimen', 'taxonfullname', 'taxonname', 'taxonnameid',
                    'taxonspid',
@@ -247,7 +269,7 @@ class SpecimenDataEntry():
         adjecentRows = [] #the curated rows needed to populate the table
         for row in specimenList:
             specimenDict = dict(zip(headers, row))
-            # print('full row:-', specimenDict)
+            logging.debug(f'the specimen dict in for loop is: {specimenDict}')
             tempDicts.append(specimenDict)
             tempAdjecent = []
             for k in self.operationalHeads:
@@ -255,6 +277,7 @@ class SpecimenDataEntry():
                 # print('Adjecent rows item: ', res)
                 tempAdjecent.append(res)
             adjecentRows.append(tempAdjecent)
+        logging.info(f"AdjecentRows == {adjecentRows}")
         rowsExtracted = {'fullrows': tempDicts, 'adjecentrows': adjecentRows}
         return rowsExtracted
 
@@ -328,7 +351,7 @@ class SpecimenDataEntry():
                 self.collobj.notes = values['txtNotes']
                 self.window['chkMultiSpecimen'].set_focus()
 
-            if event == '_Tab':
+            if event == '_Tab': #This ensures that the notes field id written to the collection object.
                 self.collobj.notes = values['txtNotes']
                 # self.window['chkMultiSpecimen'].set_focus()
 
@@ -363,8 +386,10 @@ class SpecimenDataEntry():
                         # Set specimen record taxon name fields 
                         self.collobj.setTaxonNameFieldsFromModel(selectedTaxonName)
                         temp = str(selectedTaxonName).split(' ')
+                        logging.info("The prepreNote is: ", temp)
                         prenote = temp[-2:]
-                        if prenote[0] == '=':
+                        logging.info("The real preNote is [-2:]: ", prenote)
+                        if prenote[0] == '=': #Removes superfluous equal sign.
                             prenote.pop(0)
                         self.notes = ' '.join(prenote)
                         # Update UI to indicate selected taxon name record  
@@ -374,7 +399,7 @@ class SpecimenDataEntry():
                         self.window['txtCatalogNumber'].set_focus()
                         # window['cbxTaxonName'].update(set_to_index=[0], scroll_to_index=0)
 
-            if event == 'txtCatalogNumber':
+            if event == 'txtCatalogNumber': # In production this will come from a barcode reader.
                 self.collobj.catalogNumber = values[event]
 
             if event == 'txtCatalogNumber_Edit':
@@ -574,3 +599,5 @@ class SpecimenDataEntry():
         self.window['lblExport'].update(visible=False)
         self.window['lblRecordEnd'].update(visible=False)
         self.searchString = []
+
+g = SpecimenDataEntry(29)
