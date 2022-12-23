@@ -6,6 +6,14 @@
 #define MyAppPublisher "NHMD"
 #define MyAppExeName "DaSSCo.exe"
 
+[Code]
+function InitializeSetup(): boolean;
+var 
+    ResultCode: integer;
+begin
+    Exec(ExpandConstant('botany-tracheophyta-taxonnames.bat'), '', '', SW_SHOW, ewWaitUntilTerminated, ResultCode)
+end;
+
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
@@ -31,9 +39,9 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "DaSSCo.dist\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "DaSSCo.dist\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "temp\db.sqlite3"; DestDir: "{userdocs}\DaSSCo"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{src}..\..\DaSSCo.dist\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{src}..\..\DaSSCo.dist\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{src}..\..\temp\db.sqlite3"; DestDir: "{userdocs}\DaSSCo"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 

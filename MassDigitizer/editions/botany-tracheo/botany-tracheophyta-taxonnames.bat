@@ -4,10 +4,10 @@ Rem Then add to PATH environment variables
 
 echo Preparing db edition... 
 
-copy /y ..\db\db.sqlite3 ..\temp\db.sqlite3
+copy /y ..\..\db\db.sqlite3 ..\..\temp\db.sqlite3
 echo Copied db base file to temporary folder 
 
-cd ..\temp\
+cd ..\..\temp\
 echo switched to temporary folder 
 
 copy ..\sql\editions\botany\tracheophyta\Tracheophyta-Highertaxa.sql Tracheophyta-Highertaxa.sql
@@ -44,3 +44,6 @@ copy ..\sql\editions\botany\tracheophyta\Tracheophyta-VarForma.sql Tracheophyta-
 sqlite3 db.sqlite3 ".read Tracheophyta-VarForma.sql"
 del /f Tracheophyta-VarForma.sql
 echo Added infraspecific taxa other than subspecies...
+
+xcopy ..\DaSSCo.dist\* DaSSCo.dist\*
+copy /y ..\temp\db.sqlite3 temp\db.sqlite3
