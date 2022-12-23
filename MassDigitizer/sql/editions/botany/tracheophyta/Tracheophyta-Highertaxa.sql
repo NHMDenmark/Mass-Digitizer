@@ -1,9 +1,3 @@
-PRAGMA journal_mode = OFF;
-PRAGMA synchronous = 0;
-PRAGMA cache_size = 1000000;
-PRAGMA locking_mode = EXCLUSIVE;
-PRAGMA temp_store = MEMORY;
-BEGIN TRANSACTION;
 INSERT INTO taxonname ("spid","name","fullname","rankid","taxontreedefid","parentfullname") VALUES 
  (317960,"Plantae","Plantae",10,13,"Life")
 ,(4051033,"Fungi","Fungi",10,13,"Life")
