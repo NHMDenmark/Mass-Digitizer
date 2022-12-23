@@ -52,11 +52,6 @@ class MergeDuplicates():
         # Set up logging
         self.logger = logging.getLogger('MergeDuplicates')
         self.logger.setLevel(logging.DEBUG)
-        #logStreamFormatter = logging.Formatter(fmt=f"%(message)s", datefmt="%Y-%m-%d %H:%M:%S")
-        #consoleHandler = logging.StreamHandler(stream=sys.stdout)
-        #consoleHandler.setFormatter(logStreamFormatter)
-        #consoleHandler.setLevel(level=logging.DEBUG)
-        #self.logger.addHandler(consoleHandler)
         logFileFormatter = logging.Formatter(fmt=f"%(message)s", datefmt="%Y-%m-%d %H:%M:%S")
         fileHandler = logging.FileHandler(filename=f'log/MergeDuplicates_{time.time()}.log')
         fileHandler.setFormatter(logFileFormatter)
