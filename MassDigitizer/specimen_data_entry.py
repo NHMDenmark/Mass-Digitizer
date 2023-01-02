@@ -37,7 +37,7 @@ sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer
 currentpath = os.path.join(pathlib.Path(__file__).parent, '')
 sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}","")
 print('current Time =)=', sTime, type(sTime))
-logName = f"aSDE_log{sTime}"
+logName = f"aSDE_log{sTime}.log"
 
 logging.basicConfig(filename=logName, encoding='utf-8', level=logging.DEBUG, force=True)
 # LOG_FILENAME="SDE.log"
@@ -175,12 +175,12 @@ class SpecimenDataEntry():
         # statusLabel = [sg.Text('Specimen record has been saved', font=('Arial',20),size=(20,10),justification='center',background_color='#4f280a',text_color = 'yellow',key='texto')]
 
         self.headers = ['id', 'spid', 'catalognumber', 'multispecimen', 'taxonfullname','taxonname', 'taxonnameid', 'taxonspid', 'highertaxonname', 'preptypename','typestatusname', 'typestatusid', 'georegionname', 'georegionid','storagefullname', 'storagename']
-        self.operationalHeads = ['catalognumber', 'taxonfullname', 'multispecimen',
+        self.operationalHeads = ['id', 'catalognumber', 'taxonfullname', 'multispecimen',
                                  'georegionname', 'storagename', 'notes']
         self.prev3Records = self.previousRows3()
         # self.tableRecords = self.prev3Records['adjacentrows']
         lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
-        previousRecordsTable = [sg.Table(values=self.prev3Records, key = 'tblPrevious',enable_click_events=True, enable_events=True, headings=self.operationalHeads, max_col_width=32)]
+        previousRecordsTable = [sg.Table(values=self.prev3Records, key = 'tblPrevious',enable_events=True, headings=self.operationalHeads, max_col_width=32)]
 
 
         layout_bluearea = [broadGeo, taxonInput, barcode, [  # taxonomicPicklist,
@@ -251,8 +251,9 @@ class SpecimenDataEntry():
 
     def extractRows(self, rowId):
         """Returns 3 rows prior to rowId (see self.db.getRows... statement)
-        Return: A dict with two keys containing the complete rows ('fullrows':)
-        and the rows for the preview table ('adjecentrows':)"""
+        Return: A dict with two keys containing the complete rows:
+        ('fullrows':) is a DICT
+        and the rows for the preview table ('adjecentrows':) which is a LIST"""
         logging.debug('<<<In extract rows func.>>>')
         rows = self.db.getRows(f'specimen WHERE id <= {rowId} ', limit=3, sortColumn='id DESC')
         headers = ['id', 'spid', 'catalognumber', 'multispecimen', 'taxonfullname', 'taxonname', 'taxonnameid',
@@ -279,6 +280,7 @@ class SpecimenDataEntry():
             adjecentRows.append(tempAdjecent)
         logging.info(f"AdjecentRows == {adjecentRows}")
         rowsExtracted = {'fullrows': tempDicts, 'adjecentrows': adjecentRows}
+        print("FULLLLL rows: ", rowsExtracted['fullrows'])
         return rowsExtracted
 
     def previousRows3(self, **kwargs):
@@ -291,19 +293,24 @@ class SpecimenDataEntry():
         self.previousRecords = [[row for row in line] for line in rows]
         return self.previousRecords
 
+    def recreateRecord(row, recordHeader):
+        # returns one dict record from the header list and the row 2D list
+        logging.info('recreated Record row: %s', str(row))
+        recreatedRecord = dict(zip(recordHeader, row[0]))
+        return recreatedRecord
+
     def main(self):
-        if self.currentRecordId:
+        if self.currentRecordId: # if txtRecordId is set then...
             overviewRows = self.extractRows(self.currentRecordId)
-        elif self.maxRow:
+        elif self.maxRow: # when not 'stepped back' but specimen records do exist:
             overviewRows = self.extractRows(self.maxRow)
-        else:
+        else: # Default state - an empty specimen table:
             overviewRows = {'adjecentrows': [[],[],[]]}
         tblRows = list(overviewRows['adjecentrows'])
         self.window['tblPrevious'].update(values = tblRows)
 
         while True:
             event, values = self.window.Read()
-                # timeout=700, timeout_key='_timeout')
 
             # Checking field events as switch construct
             if event is None: break  # Empty event indicates user closing window
@@ -383,15 +390,19 @@ class SpecimenDataEntry():
 
                     # Set taxon name fields using record retrieved 
                     if selectedTaxonName is not None:
-                        # Set specimen record taxon name fields 
+                        ''' Set specimen record taxon name fields
+                            The selectedTaxonName manipulation is for the case when 
+                            there is a novel family name and the object.notes come back with artifacts.'''
                         self.collobj.setTaxonNameFieldsFromModel(selectedTaxonName)
+                        print("selectedTaxonName & notes", selectedTaxonName, '|', self.notes, '|', self.collobj.notes)
                         temp = str(selectedTaxonName).split(' ')
-                        logging.info("The prepreNote is: ", temp)
+                        logging.info("The prepreNote is: %s",temp)
                         prenote = temp[-2:]
-                        logging.info("The real preNote is [-2:]: ", prenote)
+                        logging.info("The real preNote is [-2:]: %s", prenote)
                         if prenote[0] == '=': #Removes superfluous equal sign.
                             prenote.pop(0)
                         self.notes = ' '.join(prenote)
+                        logging.info("Notes to collObject is: %s", self.notes)
                         # Update UI to indicate selected taxon name record  
                         self.window['inpTaxonName'].update(selectedTaxonName.fullName)
                         
@@ -448,13 +459,13 @@ class SpecimenDataEntry():
                 self.window['lblExport'].update(visible=False)
                 self.window['lblRecordEnd'].update(visible=False)
 
-            if event == '_timeout':
-                #DEprecated
-                recordIDnow = self.window['txtRecordID'].get()
-                if recordIDnow:
-                    newAdjecents = self.extractRows(recordIDnow)
-                    self.window['tblPrevious'].update(values=newAdjecents['adjecentrows'])
-
+            # if event == '_timeout':
+            #     #DEprecated
+            #     recordIDnow = self.window['txtRecordID'].get()
+            #     if recordIDnow:
+            #         newAdjecents = self.extractRows(recordIDnow)
+            #         self.window[].update(values=newAdjecents['adjecentrows'])
+            #
 
             if event == sg.WINDOW_CLOSED:
                 break
@@ -466,6 +477,7 @@ class SpecimenDataEntry():
                     self.collobj.notes = self.window['txtNotes'].Get()+' | '+self.notes
                 else:
                     self.collobj.notes = self.window['txtNotes'].Get()
+                print('coll mobj, ', self.collobj)
                 specimenRecord = self.collobj.save()
                 # print(f"-SAVING from button Save-\n {specimenRecord}")
                 self.clearNonStickyFields(values)
@@ -480,24 +492,70 @@ class SpecimenDataEntry():
                 recid = self.window['txtRecordID'].Get()
 
             if event == 'tblPrevious':
-                tblVals = values['tblPrevious']
-                # data_selected = [tblVals[row] for row in values[event]]
-                # print("################# data selected = ", data_selected)
-                currentRowId = self.window['txtRecordID'].get()
-                if currentRowId:
-                    rowsDict = self.extractRows(currentRowId)
-                    self.window['tblPrevious'].update(rowsDict['adjecentrows'])
-                else:
-                    selected_index = values['tblPrevious'][0]
-                chosenRows= overviewRows['fullrows']
-                selectedRow = chosenRows[selected_index]
-                self.fillFormFields(selectedRow)
-                newAdjecents = self.extractRows(selectedRow['id'])
-                newAdjecents = newAdjecents['adjecentrows']
-                self.window['tblPrevious'].update(values=newAdjecents)
-                # import time
-                # print('sleeeeping for 3')
-                # time.sleep(3)
+                if values[event]:
+                    # The table element has been activated
+                    existingRecordId = self.window['txtRecordID'].get()
+                    if self.window['txtRecordID'].get():
+                        print('there is existing record ID|', existingRecordId)
+                        recordsAll = self.extractRows(existingRecordId)
+                        records = recordsAll['adjecentrows']
+                    else:
+                        records = overviewRows['adjecentrows']
+                    print('ADJECENTO ::', records)
+                    print("values", values)
+                    print("[event] val ==", values[event])
+                    data_selected = [records[row] for row in values[event]]
+                    print("data_selected", data_selected)
+                    print("newINDEX", values[event], type(values[event]))
+                    newIndex = values[event]
+                    print('len list NI:', len(newIndex))
+
+                    recordAtSelectedIndex = records[newIndex[0]]
+                    # [0]
+                    print('recordSelectedIndex', recordAtSelectedIndex)
+                    #works so far -- now MAKE NEW THREE ROWS!!!
+                    chosenRecordId = recordAtSelectedIndex[0]
+                    new3Rows = self.extractRows(chosenRecordId)
+                    print("new3rowsss", new3Rows)
+                    self.window['tblPrevious'].update(new3Rows['adjecentrows'])
+                    self.window['txtStorage'].update(new3Rows['adjecentrows'][0])
+                    self.fillFormFields(new3Rows['fullrows'][0])
+                    # import time
+                    # time.sleep(7)
+
+                # try:
+                #     tblVals = values['tblPrevious'].pop()
+                # except Exception:
+                #     continue
+                # # data_selected = [tblVals[row] for row in values[event]]
+                # selected_row_id = 0
+                #
+                # if isinstance(tblVals, int):
+                #     print("################# index selected = ", tblVals, type(tblVals))
+                #     print(self.window['tblPrevious'].get())
+                #     # tblRows = self.
+                #     selected_row_id = tblRows[tblVals][0]
+                #     print(f"Row clicked has id: {tblRows[tblVals]}, ID:{selected_row_id}")
+                #     currentRowId = selected_row_id
+                # else :
+                #     print('tblVals is not an integer')
+                #     currentRowId = self.window['txtRecordID'].get()
+                # if currentRowId:
+                #     print('Current row id is: ', currentRowId)
+                #     rowsDict = self.extractRows(currentRowId)
+                #     print('ADJECENT!! ', rowsDict['adjecentrows'])
+                #     self.window['tblPrevious'].update(rowsDict['adjecentrows'])
+                # else:
+                #     selected_index = values['tblPrevious']
+                #     print("selected_index = values['tblPrevious'][0]")
+                # tblVals = values['tblPrevious'].pop()
+                # chosenRows= overviewRows['fullrows']
+                # selectedRow = chosenRows[tblVals]
+                # self.fillFormFields(selectedRow)
+                # newAdjecents = self.extractRows(selectedRow['id'])
+                # newAdjecents = newAdjecents['adjecentrows']
+                # self.window['tblPrevious'].update(values=newAdjecents)
+
             #     if self.window['txtRecordID'].get():
             #         currentRecordId = self.window['txtRecordID'].get()
             #         print(f'THE currend REC ID IS .{currentRecordId}.')
@@ -564,6 +622,7 @@ class SpecimenDataEntry():
         """
         Function for setting form fields from specimen data record
         """
+        print('Record submitted:-', record)
         self.window['txtRecordID'].update('{}'.format(record['id']), visible=True)
         self.window['txtStorage'].update(record['storagename'])
         self.window['txtStorageFullname'].update(record['storagefullname'])
