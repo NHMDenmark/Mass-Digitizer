@@ -60,3 +60,4 @@ MassDigitizer/kick_off_sql_searches.py
 /MassDigitizer/*.log
 MassDigitizer/log/*
 MassDigitizer/temp/db.sqlite3
+MassDigitizer/DaSSCo.dist - Copy/_asyncio.pyd
