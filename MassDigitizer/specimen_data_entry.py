@@ -58,6 +58,7 @@ class SpecimenDataEntry():
         self.window = None # Create class level instance of window object 
         self.collobj = specimen.specimen(collection_id) # Create blank specimen record instance 
         self.db = DataAccess(gs.databaseName) # Instantiate database access module
+        self.retroRow = None # Global to be used in step-back and other retrospective actions for saving.
 
         # Various lists of fields to be cleared on command 
         self.clearingList = ['txtStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'txtNotes', 'chkMultiSpecimen', 'cbxGeoRegion', 'inpTaxonName', 'txtCatalogNumber', 'txtRecordID']
@@ -67,14 +68,6 @@ class SpecimenDataEntry():
         # Set up user interface 
         self.setup(collection_id)
         logging.debug('This message should go to the log file')
-        # Set up logging
-        # self.logger = logging.getLogger('SpecimenDataEntry')
-        # self.logger.setLevel(logging.DEBUG)
-        # logFileFormatter = logging.Formatter(fmt=f"%(message)s", datefmt="%Y-%m-%d %H:%M:%S")
-        # fileHandler = logging.FileHandler(filename=f'log/specimenDataEntry_{time.time()}.log')
-        # fileHandler.setFormatter(logFileFormatter)
-        # fileHandler.setLevel(logging.INFO)
-        # self.logger.addHandler(fileHandler)
 
         # Create class level notes for access in autoSuggest_popup (TODO ?)
         self.notes = ''
@@ -293,11 +286,52 @@ class SpecimenDataEntry():
         self.previousRecords = [[row for row in line] for line in rows]
         return self.previousRecords
 
-    def recreateRecord(row, recordHeader):
+    def recreateRecord(self, row, recordHeader):
         # returns one dict record from the header list and the row 2D list
         logging.info('recreated Record row: %s', str(row))
         recreatedRecord = dict(zip(recordHeader, row[0]))
         return recreatedRecord
+
+    def fillMissingFields(self, retroRow, formFields=('storagename', 'preptypename', 'typestatusname',
+        storageID =                                               'notes', 'georegionname', 'taxonname', 'catalognumber')):
+        fdict = {
+            'catalognumber': 'txtCatalogNumber',
+
+            'taxonname': "inpTaxonName",
+            # 'taxonnameid': "taxonNameId",
+            'typestatusname': "cbxTypeStatus",
+            # 'typestatusid': "typeStatusId",
+            # 'highertaxonname': "higherTaxonName",
+            'georegionname': "cbxGeoRegion",
+            # 'georegionid': "geoRegionId",
+            # 'storagefullname': "storageFullName",
+            'storagename': "txtStorage",
+            'storageid': "storageId",
+            'preptypename': "cbxPrepType",
+            # 'preptypeid': "prepTypeId",
+            'notes': "txtNotes",
+            # 'institutionid': "institutionId",
+            # 'collectionid': "collectionId",
+            'username': "txtUserName",
+            # 'userid': "userId",
+            #'recorddatetime': "recordDateTime",
+            # 'exported': "exported",
+            # 'exportdatetime': "exportDateTime",
+            # 'exportuserid': "exportUserId",
+        }
+        d_items = fdict.items()
+        complete_record = {}
+        for item in d_items:
+            complete_record[item[0]] = self.window[item[1]].get()
+            print(f"{item[0]} has value: {item[1]} -- {self.window[item[1]].get()}")
+        print('CCCCCCCCCCCCCCCCCC omplete:_:', complete_record)
+        keys = retroRow.keys()
+        for j in keys:
+            if retroRow[j]:
+                continue
+            else:
+                retroRow[j] = self.window['txtStorage']
+
 
     def main(self):
         if self.currentRecordId: # if txtRecordId is set then...
@@ -478,6 +512,11 @@ class SpecimenDataEntry():
                 else:
                     self.collobj.notes = self.window['txtNotes'].Get()
                 print('coll mobj, ', self.collobj)
+                self.fillMissingFields(self.retroRow)
+                if self.retroRow:
+                    print('the ROWWWW; ', self.retroRow)
+                    self.collobj.setFields(self.retroRow)
+                    print('after retro ==', self.collobj.getFieldsAsDict())
                 specimenRecord = self.collobj.save()
                 # print(f"-SAVING from button Save-\n {specimenRecord}")
                 self.clearNonStickyFields(values)
@@ -519,7 +558,8 @@ class SpecimenDataEntry():
                     print("new3rowsss", new3Rows)
                     self.window['tblPrevious'].update(new3Rows['adjecentrows'])
                     self.window['txtStorage'].update(new3Rows['adjecentrows'][0])
-                    self.fillFormFields(new3Rows['fullrows'][0])
+                    self.retroRow = new3Rows['fullrows'][0]
+                    self.fillFormFields(self.retroRow)
                     # import time
                     # time.sleep(7)
 
