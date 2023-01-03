@@ -146,7 +146,7 @@ class specimen(model.Model):
         self.collectionId = record['collectionid']
         self.userName = record['username']
         self.userId = record['userid']
-        self.workStation = record['workstation']
+
         self.recordDateTime = record['recorddatetime']
         self.exported = record['exported']
         self.exportDateTime = record['exportdatetime']
