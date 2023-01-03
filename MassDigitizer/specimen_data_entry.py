@@ -183,6 +183,7 @@ class SpecimenDataEntry():
         self.operationalHeads = ['id', 'catalognumber', 'taxonfullname', 'multispecimen',
                                  'georegionname', 'storagename', 'notes']
 
+<<<<<<< HEAD
         # Display adjacent records
         self.previousRecords = self.previousRows()
         # self.tableRecords = self.previousRecords['adjacentrows']
@@ -190,6 +191,13 @@ class SpecimenDataEntry():
         previousRecordsTable = [
             sg.Table(values=self.previousRecords, key='tblPrevious', enable_events=True, headings=self.operationalHeads,
                      max_col_width=32)]
+=======
+        # Display adjacent records 
+        self.previousRecords = self.previousRows()
+        # self.tableRecords = self.previousRecords['adjacentrows']
+        lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
+        previousRecordsTable = [sg.Table(values=self.previousRecords, key = 'tblPrevious',enable_events=True, headings=self.operationalHeads, max_col_width=32)]
+>>>>>>> 9746210c47a2cdbb02758e99f6f0b0023e6fd0fd
 
         layout_bluearea = [broadGeo, taxonInput, barcode, [  # taxonomicPicklist,
             sg.Text('Record ID: ', key='lblRecordID', background_color='#99dcff', visible=True, size=(9, 1)),
@@ -260,7 +268,11 @@ class SpecimenDataEntry():
         self.setControlEvents()
         self.searchString = []
 
+<<<<<<< HEAD
     def extractRowsInTwoFormats(self, rowId):
+=======
+    def extractRows(self, rowId):
+>>>>>>> 9746210c47a2cdbb02758e99f6f0b0023e6fd0fd
         """Returns 3 rows prior to rowId (see self.db.getRows... statement)
         Return: A dict with two keys containing the complete rows:
         ('fullrows':) is a DICT
@@ -505,6 +517,7 @@ class SpecimenDataEntry():
                 if values[event]:
                     # The table element has been activated
                     # Fetch previous records (again)
+<<<<<<< HEAD
                     # self.previousRecords ???
                     print('indexa', values[event][0], self.previousRecords[values[event][0]], type(self.previousRecords))
                     recordAcute = self.previousRecords[values[event][0]]
@@ -524,10 +537,24 @@ class SpecimenDataEntry():
                     newIndex = values[event][0]
                     print(f"reocrds at preINDEX {newIndex}:", records)
                     recordAtSelectedIndex = records[0]
+=======
+                    #self.previousRecords ??? 
+                    if self.window['txtRecordID'].get():
+                        print('there is existing record ID|', self.collobj.id)
+                        recordsAll = self.extractRows(self.collobj.id)
+                        records = recordsAll['adjecentrows']
+                    else:
+                        records = overviewRows['adjecentrows']
+                    
+                    newIndex = values[event]
+                    
+                    recordAtSelectedIndex = records[newIndex[0]]
+>>>>>>> 9746210c47a2cdbb02758e99f6f0b0023e6fd0fd
                     # [0]
                     print('recordSelectedIndex', recordAtSelectedIndex)
                     # works so far -- now MAKE NEW THREE ROWS!!!
                     chosenRecordId = recordAtSelectedIndex[0]
+<<<<<<< HEAD
                     newRows = self.extractRowsInTwoFormats(chosenRecordId)
                     print("new3rowsss", newRows)
                     self.window['tblPrevious'].update(newRows['adjecentrows'])
@@ -535,6 +562,14 @@ class SpecimenDataEntry():
                     retroRow = newRows['fullrows'][0]
                     print('retrooo:', retroRow)
                     self.fillFormFields(retroRow)
+=======
+                    new3Rows = self.extractRows(chosenRecordId)
+                    print("new3rowsss", new3Rows)
+                    self.window['tblPrevious'].update(new3Rows['adjecentrows'])
+                    self.window['txtStorage'].update(new3Rows['adjecentrows'][0])
+                    self.retroRow = new3Rows['fullrows'][0]
+                    self.fillFormFields(self.retroRow)
+>>>>>>> 9746210c47a2cdbb02758e99f6f0b0023e6fd0fd
 
         self.window.close()
 
@@ -605,7 +640,11 @@ class SpecimenDataEntry():
         self.window['inpTaxonName'].update(record['taxonfullname'])
         self.window['txtCatalogNumber'].update(record['catalognumber'])
 
+<<<<<<< HEAD
         # self.previousRecords(record['id'])
+=======
+        self.previousRecords(record['id'])
+>>>>>>> 9746210c47a2cdbb02758e99f6f0b0023e6fd0fd
 
     def clearNonStickyFields(self, values):
         """
@@ -625,4 +664,4 @@ class SpecimenDataEntry():
         self.window['lblRecordEnd'].update(visible=False)
         self.searchString = []
 
-g = SpecimenDataEntry(29)
+#g = SpecimenDataEntry(29)
