@@ -170,11 +170,12 @@ class SpecimenDataEntry():
         self.headers = ['id', 'spid', 'catalognumber', 'multispecimen', 'taxonfullname','taxonname', 'taxonnameid', 'taxonspid', 'highertaxonname', 'preptypename','typestatusname', 'typestatusid', 'georegionname', 'georegionid','storagefullname', 'storagename']
         self.operationalHeads = ['id', 'catalognumber', 'taxonfullname', 'multispecimen',
                                  'georegionname', 'storagename', 'notes']
-        self.prev3Records = self.previousRows3()
-        # self.tableRecords = self.prev3Records['adjacentrows']
-        lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
-        previousRecordsTable = [sg.Table(values=self.prev3Records, key = 'tblPrevious',enable_events=True, headings=self.operationalHeads, max_col_width=32)]
 
+        # Display adjacent records 
+        self.previousRecords = self.previousRows()
+        # self.tableRecords = self.previousRecords['adjacentrows']
+        lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
+        previousRecordsTable = [sg.Table(values=self.previousRecords, key = 'tblPrevious',enable_events=True, headings=self.operationalHeads, max_col_width=32)]
 
         layout_bluearea = [broadGeo, taxonInput, barcode, [  # taxonomicPicklist,
             sg.Text('Record ID: ', key='lblRecordID', background_color='#99dcff', visible=True, size=(9, 1)),
@@ -241,7 +242,6 @@ class SpecimenDataEntry():
         self.setControlEvents()
         self.searchString = []
 
-
     def extractRows(self, rowId):
         """Returns 3 rows prior to rowId (see self.db.getRows... statement)
         Return: A dict with two keys containing the complete rows:
@@ -276,13 +276,13 @@ class SpecimenDataEntry():
         print("FULLLLL rows: ", rowsExtracted['fullrows'])
         return rowsExtracted
 
-    def previousRows3(self, **kwargs):
-        #Get previous three records. Kwargs expects an Id number (id=[integer]) or no keyword arg.
-        if kwargs:
-            filter = f"specimen WHERE id <= {kwargs['id']}"
-            rows = self.db.getRows(filter, limit=3, sortColumn='id DESC')
+    def previousRows(self, id=0, number=3):
+        # Get previous three records. Kwargs expects an Id number (id=[integer]) or no keyword arg.
+        if id > 0:
+            filter = f"specimen WHERE id <= {id}"
+            rows = self.db.getRows(filter, limit=number, sortColumn='id DESC')
         else:
-            rows = self.db.getRows('specimen', limit=3, sortColumn='id DESC')
+            rows = self.db.getRows('specimen', limit=number, sortColumn='id DESC')
         self.previousRecords = [[row for row in line] for line in rows]
         return self.previousRecords
 
@@ -291,47 +291,6 @@ class SpecimenDataEntry():
         logging.info('recreated Record row: %s', str(row))
         recreatedRecord = dict(zip(recordHeader, row[0]))
         return recreatedRecord
-
-    def fillMissingFields(self, retroRow, formFields=('storagename', 'preptypename', 'typestatusname',
-        storageID =                                               'notes', 'georegionname', 'taxonname', 'catalognumber')):
-        fdict = {
-            'catalognumber': 'txtCatalogNumber',
-
-            'taxonname': "inpTaxonName",
-            # 'taxonnameid': "taxonNameId",
-            'typestatusname': "cbxTypeStatus",
-            # 'typestatusid': "typeStatusId",
-            # 'highertaxonname': "higherTaxonName",
-            'georegionname': "cbxGeoRegion",
-            # 'georegionid': "geoRegionId",
-            # 'storagefullname': "storageFullName",
-            'storagename': "txtStorage",
-            'storageid': "storageId",
-            'preptypename': "cbxPrepType",
-            # 'preptypeid': "prepTypeId",
-            'notes': "txtNotes",
-            # 'institutionid': "institutionId",
-            # 'collectionid': "collectionId",
-            'username': "txtUserName",
-            # 'userid': "userId",
-            #'recorddatetime': "recordDateTime",
-            # 'exported': "exported",
-            # 'exportdatetime': "exportDateTime",
-            # 'exportuserid': "exportUserId",
-        }
-        d_items = fdict.items()
-        complete_record = {}
-        for item in d_items:
-            complete_record[item[0]] = self.window[item[1]].get()
-            print(f"{item[0]} has value: {item[1]} -- {self.window[item[1]].get()}")
-        print('CCCCCCCCCCCCCCCCCC omplete:_:', complete_record)
-        keys = retroRow.keys()
-        for j in keys:
-            if retroRow[j]:
-                continue
-            else:
-                retroRow[j] = self.window['txtStorage']
-
 
     def main(self):
         if self.currentRecordId: # if txtRecordId is set then...
@@ -533,22 +492,17 @@ class SpecimenDataEntry():
             if event == 'tblPrevious':
                 if values[event]:
                     # The table element has been activated
-                    existingRecordId = self.window['txtRecordID'].get()
+                    # Fetch previous records (again)
+                    #self.previousRecords ??? 
                     if self.window['txtRecordID'].get():
-                        print('there is existing record ID|', existingRecordId)
-                        recordsAll = self.extractRows(existingRecordId)
+                        print('there is existing record ID|', self.collobj.id)
+                        recordsAll = self.extractRows(self.collobj.id)
                         records = recordsAll['adjecentrows']
                     else:
                         records = overviewRows['adjecentrows']
-                    print('ADJECENTO ::', records)
-                    print("values", values)
-                    print("[event] val ==", values[event])
-                    data_selected = [records[row] for row in values[event]]
-                    print("data_selected", data_selected)
-                    print("newINDEX", values[event], type(values[event]))
+                    
                     newIndex = values[event]
-                    print('len list NI:', len(newIndex))
-
+                    
                     recordAtSelectedIndex = records[newIndex[0]]
                     # [0]
                     print('recordSelectedIndex', recordAtSelectedIndex)
@@ -560,57 +514,6 @@ class SpecimenDataEntry():
                     self.window['txtStorage'].update(new3Rows['adjecentrows'][0])
                     self.retroRow = new3Rows['fullrows'][0]
                     self.fillFormFields(self.retroRow)
-                    # import time
-                    # time.sleep(7)
-
-                # try:
-                #     tblVals = values['tblPrevious'].pop()
-                # except Exception:
-                #     continue
-                # # data_selected = [tblVals[row] for row in values[event]]
-                # selected_row_id = 0
-                #
-                # if isinstance(tblVals, int):
-                #     print("################# index selected = ", tblVals, type(tblVals))
-                #     print(self.window['tblPrevious'].get())
-                #     # tblRows = self.
-                #     selected_row_id = tblRows[tblVals][0]
-                #     print(f"Row clicked has id: {tblRows[tblVals]}, ID:{selected_row_id}")
-                #     currentRowId = selected_row_id
-                # else :
-                #     print('tblVals is not an integer')
-                #     currentRowId = self.window['txtRecordID'].get()
-                # if currentRowId:
-                #     print('Current row id is: ', currentRowId)
-                #     rowsDict = self.extractRows(currentRowId)
-                #     print('ADJECENT!! ', rowsDict['adjecentrows'])
-                #     self.window['tblPrevious'].update(rowsDict['adjecentrows'])
-                # else:
-                #     selected_index = values['tblPrevious']
-                #     print("selected_index = values['tblPrevious'][0]")
-                # tblVals = values['tblPrevious'].pop()
-                # chosenRows= overviewRows['fullrows']
-                # selectedRow = chosenRows[tblVals]
-                # self.fillFormFields(selectedRow)
-                # newAdjecents = self.extractRows(selectedRow['id'])
-                # newAdjecents = newAdjecents['adjecentrows']
-                # self.window['tblPrevious'].update(values=newAdjecents)
-
-            #     if self.window['txtRecordID'].get():
-            #         currentRecordId = self.window['txtRecordID'].get()
-            #         print(f'THE currend REC ID IS .{currentRecordId}.')
-            #     else:
-            #         currentRecordId = self.maxRow
-            #     self.previousRecords = self.extractRows(currentRecordId)
-            #     #Extracting the full rows from the returned dictionary {fullrows: , adjacentrows: }
-            #     fullRows = self.previousRecords['fullrows']
-            #
-            #     selected_index = values['tblPrevious'][0]
-            #     selected_row = self.previousRecords[selected_index]
-            #     print(self.headers,'\n',selected_row)
-            #     rowDict = dict(zip(self.operationalHeads, selected_row))
-            #     print('THE adjacent rowdict::', rowDict)
-            #     self.fillFormFields(rowDict)
 
         self.window.close()
 
@@ -681,6 +584,8 @@ class SpecimenDataEntry():
         self.window['inpTaxonName'].update(record['taxonfullname'])
         self.window['txtCatalogNumber'].update(record['catalognumber'])
 
+        self.previousRecords(record['id'])
+
     def clearNonStickyFields(self, values):
         """
         Function for clearing all fields that are non-sticky 
@@ -699,4 +604,4 @@ class SpecimenDataEntry():
         self.window['lblRecordEnd'].update(visible=False)
         self.searchString = []
 
-g = SpecimenDataEntry(29)
+#g = SpecimenDataEntry(29)
