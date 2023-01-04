@@ -50,7 +50,19 @@ nuitka --follow-imports --standalone .\DaSSCo.py --enable-plugin=tk-inter --enab
 
 Remember to activate venv and run pip install -r requirements.txt first
 
-For creating the installer, we used Inno Setup and a definition file is located in the repo root as DaSSCO.iss
+For creating the installer, we use Inno Setup and a definition file for a generic edition is located in the repo root [DaSSCO.iss](https://github.com/NHMDenmark/Mass-Digitizer/DaSSCO.iss). The Inno Setup scripts bundles the database with the executable into an installer file. Before running the Inno Setup script, it is necessary to fill the database file with the taxonomic spine and other predefined data specific for the edition you would like to generate an installer for (see below).
+
+#### Compiling App Editions 
+
+Due to the size of the taxonomic spine, it is necessary to generate seperate editions for respective collections with differents of the database file that is bundled with the app. Under [MassDigitizer/editions](https://github.com/NHMDenmark/Mass-Digitizer/MassDigitizer/editions) there are folders for each edition containing a batch file that needs to be run in order to do so. The batch file will place the updated db.sqlite3 file in the [MassDigitizer/temp](https://github.com/NHMDenmark/Mass-Digitizer/MassDigitizer/temp) folder from where it will be picked up by Inno Setup. 
+
+So the process for compilation are as follows: 
+1. Create the executable using nuitka
+2. Run the batch file to generate the db edition of choice 
+3. Run the Inno Setup script to create the installer for this edition 
+4. Repeat for the different editions giving each a distinct name
+
+The different editions will be published alongside each other on the [Releases page](https://github.com/NHMDenmark/Mass-Digitizer/releases) 
 
 ### Specify Interface 
 
