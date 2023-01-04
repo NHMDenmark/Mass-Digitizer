@@ -8,8 +8,8 @@ The DaSSCo project is tasked with digitizing millions of specimens and to speed 
 ### Installation
 Installation is done using a setup file that will ensure Python and all dependencies are put in place. The installer will also add a clean local database for registering entries in a "DaSSCo" folder under the user's documents folder. Be mindful to backup the database file upon reinstallation, so it is not overwritten and and data in it erased. 
 
-Current release: 
-(https://github.com/NHMDenmark/DaSSCo/releases/download/v0.1.0/DaSSCoSetup.v0.1.0.exe)
+Downloads: 
+(https://github.com/NHMDenmark/DaSSCo/releases/)
 
 ### Usage
 There is a path to follow that requires only little training. A user must have credentials in order to employ the app. One could say that a specimen record is being created bit by bit and submitted to local DB at the end. 
@@ -54,7 +54,7 @@ For creating the installer, we use Inno Setup and a definition file for a generi
 
 #### Compiling App Editions 
 
-Due to the size of the taxonomic spine, it is necessary to generate seperate editions for respective collections with differents of the database file that is bundled with the app. Under [MassDigitizer/editions](https://github.com/NHMDenmark/Mass-Digitizer/MassDigitizer/editions) there are folders for each edition containing a batch file that needs to be run in order to do so. The batch file will place the updated db.sqlite3 file in the [MassDigitizer/temp](https://github.com/NHMDenmark/Mass-Digitizer/MassDigitizer/temp) folder from where it will be picked up by Inno Setup. 
+Due to the size of the taxonomic spine, it is necessary to generate seperate editions for respective collections with differents of the database file that is bundled with the app. Under [MassDigitizer/editions](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/MassDigitizer/editions/) there are folders for each edition containing a batch file that needs to be run in order to do so. The batch file will place the updated db.sqlite3 file in the [MassDigitizer/temp](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/MassDigitizer/temp/) folder from where it will be picked up by Inno Setup. 
 
 So the process for compilation are as follows: 
 1. Create the executable using nuitka
