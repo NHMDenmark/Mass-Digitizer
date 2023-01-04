@@ -33,10 +33,10 @@ import version_number
 from models import specimen
 
 # Makes sure that current folder is registrered to be able to access other app files
-sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer')))
+sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer/log')))
 currentpath = os.path.join(pathlib.Path(__file__).parent, '')
 sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}", "")
-print('current Time =)=', sTime, type(sTime))
+
 logName = f"aSDE_log{sTime}.log"
 
 logging.basicConfig(filename=logName, encoding='utf-8', level=logging.DEBUG, force=True)
@@ -182,9 +182,10 @@ class SpecimenDataEntry():
                         'georegionname', 'georegionid', 'storagefullname', 'storagename']
         self.operationalHeads = ['id', 'catalognumber', 'taxonfullname', 'multispecimen',
                                  'georegionname', 'storagename', 'notes']
+        # self.operationalHeads are headings for generating rows going into the previousRecordsTable
 
 
-        # Records to be processed for display in the "adjacent rows table".
+        # Records to be processed for display in the previousRecordsTable.
         self.previousRecords = self.previousRows()
 
         lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
@@ -274,6 +275,7 @@ class SpecimenDataEntry():
         ('fullrows':) is a DICT
         and the rows for the 'adjacent' table:
          ('adjecentrows':) which is a LIST"""
+        # Considering moving this function to util.py or to a model class.
         logging.debug('<<<In extract rows in two formats function.>>>')
         # rows = self.db.getRows(f'specimen WHERE id <= {rowId} ', limit=3, sortColumn='id DESC')
         rows = self.previousRows(rowId)
@@ -285,10 +287,9 @@ class SpecimenDataEntry():
                    'username', 'userid', 'recorddatetime', 'exported', 'exportdatetime', 'exportuserid']
         specimenList = [[row for row in line] for line in rows]
 
-        # Code block below takes the rows returned and turns them into the complete row records and the adjacent row record.
-        # operationalRows = []
-        completeRowDicts = []  # full rows needed to populate the form
-        adjecentRows = []  # the curated rows needed to populate the table
+        # Code block below takes the rows returned and turns them into the complete row records and the previous row records.
+        completeRowDicts = [] # full rows needed to populate the form
+        previousRows = []  # the curated rows needed to populate the table
         for row in specimenList:
             specimenDict = dict(zip(headers, row)) # creates the complete row dict to be appended.
             logging.debug(f'the specimen dict in for loop is: {specimenDict}')
@@ -296,16 +297,17 @@ class SpecimenDataEntry():
             tempAdjecent = []
             for k in self.operationalHeads:
                 res = specimenDict[k]
-                # print('Adjecent rows item: ', res)
                 tempAdjecent.append(res)
-            adjecentRows.append(tempAdjecent)
-        logging.info(f"AdjecentRows == {adjecentRows}")
-        rowsExtracted = {'fullrows': completeRowDicts, 'adjecentrows': adjecentRows}
+            previousRows.append(tempAdjecent)
+        logging.info(f"AdjecentRows == {previousRows}")
+        rowsExtracted = {'fullrows': completeRowDicts, 'adjecentrows': previousRows}
 
         return rowsExtracted
 
     def previousRows(self, id=0, number=3):
-        # Get previous three records. Kwargs expects an Id number (id=[integer]) or no keyword arg.
+        """ Get previous three records. Kwargs expects an Id number (id=[integer]) or no keyword arg.
+            Also feeds into the extractRowsInTwoFormats() function which is crucial.
+        """
         if id > 0:
             filter = f"specimen WHERE id <= {id}"
             rows = self.db.getRows(filter, limit=number, sortColumn='id DESC')
@@ -314,11 +316,6 @@ class SpecimenDataEntry():
         self.previousRecords = [[row for row in line] for line in rows]
         return self.previousRecords
 
-    def recreateRecord(self, row, recordHeader):
-        # returns one dict record from the header list and the row 2D list
-        logging.info('recreated Record row: %s', str(row))
-        recreatedRecord = dict(zip(recordHeader, row[0]))
-        return recreatedRecord
 
     def main(self):
         # Checks to see where in the process the app state is in.
@@ -336,7 +333,7 @@ class SpecimenDataEntry():
 
             # Checking field events as switch construct
             if event is None: break  # Empty event indicates user closing window
-            # print("-event-", event)
+
             if event == 'txtStorage':
                 self.searchString.append(values[event])
                 # If more than 3 characters entered:
@@ -416,7 +413,7 @@ class SpecimenDataEntry():
                             The selectedTaxonName manipulation is for the case when 
                             there is a novel family name and the object.notes come back with artifacts.'''
                         self.collobj.setTaxonNameFieldsFromModel(selectedTaxonName)
-                        print("selectedTaxonName & notes", selectedTaxonName, '|', self.notes, '|', self.collobj.notes)
+
                         temp = str(selectedTaxonName).split(' ')
                         logging.info("The prepreNote is: %s", temp)
                         prenote = temp[-2:]
@@ -452,10 +449,8 @@ class SpecimenDataEntry():
                 if record:
                     # If not empty, set form fields
                     self.fillFormFields(record)
-                    # print(record['id'])
                     rowForTable = self.extractRowsInTwoFormats(record['id'])
                     rowsAdjacent = rowForTable['adjecentrows']
-                    print(rowsAdjacent)
                     self.window['tblPrevious'].update(rowsAdjacent)
                 else:
                     # Indicate no further records
@@ -497,26 +492,29 @@ class SpecimenDataEntry():
             # Save form
             if event == 'btnSave' or event == 'btnSave_Enter':
                 # needs to loadCurrent from model.py to populate the collection object.
-                recordForSaving = self.collobj.loadCurrent(self.collobj.id)
-                self.collobj.setFields(recordForSaving)
+                # recordForSaving = self.collobj.loadCurrent(self.collobj.id)
+                # self.collobj.setFields(recordForSaving)
                 # save specimen and get its id
                 if len(self.notes) > 5:  # test to see if remark (verbatim note) was passed from autosuggest.
                     self.collobj.notes = self.window['txtNotes'].Get() + ' | ' + self.notes
                 else:
                     self.collobj.notes = self.window['txtNotes'].Get()
-                
+
                 specimenRecord = self.collobj.save()
-                # print(f"-SAVING from button Save-\n {specimenRecord}")
                 self.clearNonStickyFields(values)
 
                 # Create a new specimen instance and add previous id to it
                 self.collobj = specimen.specimen(self.collectionId)
+                updatedRecordId = specimenRecord['id'] # Id to be used for refreshing the previous rows table.
 
+                # Refresh records for tblPrevious after save.
+                refreshedRecords = self.extractRowsInTwoFormats(updatedRecordId)
+                previousRefreshedRows = refreshedRecords['adjecentrows']
+                self.window['tblPrevious'].update(previousRefreshedRows)
                 # Transfer data in sticky fields to new record:
                 self.setRecordFields('specimen', specimenRecord, True)
 
                 self.window['txtCatalogNumber'].set_focus()
-                recid = self.window['txtRecordID'].Get()
 
             if event == 'tblPrevious':
                 if values[event]:
@@ -527,49 +525,33 @@ class SpecimenDataEntry():
                     acuteID = recordAcute[0] # Pure integer exracted.
                     recordNow = self.collobj.loadCurrent(acuteID)
                     self.collobj.setFields(recordNow)
-                    print('current rec IIDD, ', recordNow['id'], 'from collobj: ', self.collobj.id)
-                    # if self.window['txtRecordID'].get() or self.window['txtRecordID'].get() != '0':
+
                     if self.collobj.id:
-                        print('there is existing record ID|', self.collobj.id)
+                        # print('there is existing record ID|', self.collobj.id)
                         recordsAll = self.extractRowsInTwoFormats(self.collobj.id)
-                        print("recordsAll", recordsAll)
                         records = recordsAll['adjecentrows']
                     else:
-                        records = overviewRows['adjecentrows']
+                        records = overviewRows['adjecentrows'] # overviewRows comes from a check on the app state
 
-                    newIndex = values[event][0]
-                    print(f"reocrds at preINDEX {newIndex}:", records)
+                    # print(f"reocrds at preINDEX {newIndex}:", records)
                     recordAtSelectedIndex = records[0]
 
-                    #self.previousRecords ??? 
-                    if self.window['txtRecordID'].get():
-                        print('there is existing record ID|', self.collobj.id)
-                        recordsAll = self.extractRowsInTwoFormats(self.collobj.id)
-                        records = recordsAll['adjecentrows']
-                    else:
-                        records = overviewRows['adjecentrows']
-                    
-                    newIndex = values[event]
-                    
-                    # recordAtSelectedIndex = records[newIndex[0]]
-
-                    print(f'at newIndex:{newIndex} and at [0]:{newIndex[0]} recordSelectedIndex', recordAtSelectedIndex)
-                    # works so far -- now MAKE NEW THREE ROWS!!!
+                    # Making three new records.
                     chosenRecordId = recordAtSelectedIndex[0]
-                    print(f'at newIndex:{newIndex} and at [0]:{newIndex[0]} + chosenID:{chosenRecordId} - recordSelectedIndex', recordAtSelectedIndex)
+                    # print(f'at newIndex:{newIndex} and at [0]:{newIndex[0]} + chosenID:{chosenRecordId} - recordSelectedIndex', recordAtSelectedIndex)
                     newRows = self.extractRowsInTwoFormats(chosenRecordId)
-                    print("new3rowsss", newRows)
+
                     self.window['tblPrevious'].update(newRows['adjecentrows'])
                     self.window['txtStorage'].update(newRows['adjecentrows'][0])
                     retroRow = newRows['fullrows'][0]
-                    print('retrooo:', retroRow)
+                    # print('retrooo:', retroRow)
                     self.fillFormFields(retroRow)
 
-                    new3Rows = self.extractRowsInTwoFormats(chosenRecordId)
-                    print("new3rowsss", new3Rows)
-                    self.window['tblPrevious'].update(new3Rows['adjecentrows'])
-                    self.window['txtStorage'].update(new3Rows['adjecentrows'][0])
-                    self.retroRow = new3Rows['fullrows'][0]
+                    newRows = self.extractRowsInTwoFormats(chosenRecordId)
+
+                    self.window['tblPrevious'].update(newRows['adjecentrows'])
+                    self.window['txtStorage'].update(newRows['adjecentrows'][0])
+                    self.retroRow = newRows['fullrows'][0]
                     self.fillFormFields(self.retroRow)
                 else:
                     print("NO more table events!!!")
@@ -624,7 +606,7 @@ class SpecimenDataEntry():
         """
         Function for setting form fields from specimen data record
         """
-        print('Record submitted:-', record)
+        # print('Record submitted:-', record)
         self.window['txtRecordID'].update('{}'.format(record['id']), visible=True)
         self.window['txtStorage'].update(record['storagename'])
         self.window['txtStorageFullname'].update(record['storagefullname'])
@@ -638,7 +620,7 @@ class SpecimenDataEntry():
         else:
             self.multiSpecimen = False
             self.window['chkMultiSpecimen'].update(False)
-        # self.window['chkMultiSpecimen'].update(multiSpecimen)
+        # self.window[''].update(multiSpecimen)
         self.window['cbxGeoRegion'].update(record['georegionname'])
         self.window['inpTaxonName'].update(record['taxonfullname'])
         self.window['txtCatalogNumber'].update(record['catalognumber'])
@@ -664,5 +646,3 @@ class SpecimenDataEntry():
         self.window['lblExport'].update(visible=False)
         self.window['lblRecordEnd'].update(visible=False)
         self.searchString = []
-
-g = SpecimenDataEntry(29)
