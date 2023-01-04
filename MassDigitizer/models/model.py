@@ -168,18 +168,6 @@ class Model:
         # NOTE: If not record retrieved None is returned 
         return record
 
-    def loadCurrent(self, id):
-        """
-               Function for loading current record data, if any
-               CONTRACT
-                  id: Primary key of current record;
-                  RETURNS record or None, if none retrieved
-               """
-        sql = f"SELECT * FROM {self.table} WHERE id = {id}"
-        print(sql)
-        try:
-            result = self.db.executeSqlStatement(sql)
-
 # Functions fully implemented in inheriting classes 
 
     def loadPredefinedData(self):
