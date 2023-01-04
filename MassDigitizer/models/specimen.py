@@ -128,6 +128,7 @@ class specimen(model.Model):
         self.id = record['id']
         self.catalogNumber = record['catalognumber']
         self.multiSpecimen = record['multispecimen']
+        self.taxonFullName = record['taxonfullname']
         self.taxonName = record['taxonname']
         self.taxonNameId = record['taxonnameid']
         #self.taxonspid = record['taxonspid']
