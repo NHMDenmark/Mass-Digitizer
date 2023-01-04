@@ -499,7 +499,7 @@ class SpecimenDataEntry():
                     self.collobj.notes = self.window['txtNotes'].Get() + ' | ' + self.notes
                 else:
                     self.collobj.notes = self.window['txtNotes'].Get()
-
+                # print('COLL fields:::', self.collobj.getFieldsAsDict())
                 specimenRecord = self.collobj.save()
                 self.clearNonStickyFields(values)
 
@@ -523,8 +523,12 @@ class SpecimenDataEntry():
 
                     recordAcute = self.previousRecords[values[event][0]] #The index of the chosen record from the table
                     acuteID = recordAcute[0] # Pure integer exracted.
-                    recordNow = self.collobj.loadCurrent(acuteID)
-                    self.collobj.setFields(recordNow)
+                    # recordNow = self.collobj.loadCurrent(acuteID)
+                    recordNow = self.extractRowsInTwoFormats(acuteID)
+                    # print("recordNow : ", recordNow['fullrows'][0])
+                    toSetRecord = recordNow['fullrows'][0]
+                    self.collobj.setFields(toSetRecord)
+                    # print('getfilds as dict=', self.collobj.getFieldsAsDict())
 
                     if self.collobj.id:
                         # print('there is existing record ID|', self.collobj.id)
@@ -554,7 +558,8 @@ class SpecimenDataEntry():
                     self.retroRow = newRows['fullrows'][0]
                     self.fillFormFields(self.retroRow)
                 else:
-                    print("NO more table events!!!")
+                    # print("NO more table events!!!")
+                    pass
 
         self.window.close()
 
@@ -606,7 +611,6 @@ class SpecimenDataEntry():
         """
         Function for setting form fields from specimen data record
         """
-        # print('Record submitted:-', record)
         self.window['txtRecordID'].update('{}'.format(record['id']), visible=True)
         self.window['txtStorage'].update(record['storagename'])
         self.window['txtStorageFullname'].update(record['storagefullname'])
