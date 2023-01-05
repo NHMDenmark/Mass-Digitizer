@@ -15,8 +15,9 @@ For creating this executable the Nuitka python compiler works fine (https://nuit
 ```
 python -m nuitka --windows-disable-console --follow-imports --onefile .\DaSSCo.py --plugin-enable=tk-inter --enable-plugin=numpy
 ```  
-On PC Windows I prefer to use PowerShell but YMMV.
 Remember to activate venv and run pip install -r requirements.txt first
+
+On PC Windows I prefer to use PowerShell but YMMV.
 
 For Inno Setup use the definition file in the repo root called DaSSCO.iss : https://github.com/NHMDenmark/DaSSCo/blob/main/MassDigitizer/DaSSCo.iss
 To put it briefly: Nuitka creates the exe file, while Inno-setup makes the setup file.
