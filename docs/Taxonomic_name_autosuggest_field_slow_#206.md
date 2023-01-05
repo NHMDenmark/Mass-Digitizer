@@ -26,9 +26,9 @@ The first test is using a simple SELECT query with two conditions:
 
 The table taxonname contains 1181252 records with nine columns.
 
-The results are as follows:
-Table with indexed search column: 3 milliseconds (1 MS fetch)
-Table WITHOUT indexed search column: 13 milliseconds (4 MS fetch)
+The results are as follows:  
+Table with indexed search column: 3 milliseconds (1 MS fetch)  
+Table WITHOUT indexed search column: 13 milliseconds (4 MS fetch)  
 
 Indexed search is faster than non-indexed search by a considerable margin.
 Now searching with aggregate yields an even more pronounced difference.
