@@ -41,7 +41,7 @@ Table with indexed search column: 34 milliseconds (27 MS fetch)
 Table WITHOUT indexed search column: 436 milliseconds (15 MS fetch)  
 
 To give these results a bit of context; In competitive gaming a latency of 20MS is considered excellent. Sub 100MS is considered acceptable for gaming. Above 150MS is going to be noticeable and frustrating.  
-I chose to look at the competitive gaming community because these are very demanding of responsiveness and thus latency.
+I chose to look at the competitive gaming community because these users are very demanding of responsiveness and thus latency.
 
 ### Conclusion
 Even with indexed tables I doubt the user can spot any difference. Nevertheless I added the index because it was an easy improvement to make.
