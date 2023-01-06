@@ -6,7 +6,7 @@ The DaSSCo project is tasked with digitizing millions of specimens and to speed 
 ![This is an image](https://github.com/NHMDenmark/DaSSCo/blob/main/docs/MADD_screencap.png)  
 
 ### Installation
-Installation is done using a setup file that will ensure Python and all dependencies are put in place. The installer will also add a clean local database for registering entries in a "DaSSCo" folder under the user's documents folder. Be mindful to backup the database file upon reinstallation, so it is not overwritten and and data in it erased. 
+Installation is done using a setup file that will ensure all dependencies are in place. The installer will also add a clean local database for registering entries in a "DaSSCo" folder under the user's documents folder. Be mindful to backup the database file upon reinstallation, so it is not overwritten and and data in it erased. 
 
 Downloads: 
 (https://github.com/NHMDenmark/DaSSCo/releases/)
@@ -31,6 +31,12 @@ The authors of the application are :
 Fedor A. Steeman, NHMD  
 Jan K. Legind, NHMD  
 Pip Brewer, NHMD
+
+## Systems Architecture 
+
+The app is written in python and consists of frontend components for easy user interfacing and backend component capable of both local storage and accessing external systems. The app is bundled with a local database file that is placed in a "DaSSCo" folder on the system it's installed on. In order to log on, and perform other functions, it needs to be connected to the internet. With the current state of the app, there are certain backend functions that have to be run by the developers in the development environment. 
+
+More information on the Systems Architecture including a visual representation, see here: [Systems Architecture](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/documentation/SystemsArchitecture.md)
 
 ## For Developers 
 
