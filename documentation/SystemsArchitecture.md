@@ -23,8 +23,9 @@ For now this code can only be run in the development environment by a Developer.
 The developer also has to run the Edition Script that prepares the local app database before compilation into an installer.
 This is to fill the database with the taxonomic spine and other predefined data specific for the edition to be created. 
 For the taxonomic spine, a snapshot of the current taxonomy is pulled from Specify database as SQL run by the edition script.  
-
-<img width="1240" alt="MassDigitizationApp v0_2_6" src="https://user-images.githubusercontent.com/10909008/210967529-f7e75a32-1c72-4900-9fcd-b0647109ff29.png">
-
-Not shown in this diagram is the process for exporting specimen data from the local app database in a format that then can be imported into Specify 
+For now, the final process is exporting specimen data from the local app database into a format that then can be imported into Specify 
 via the "Workbench" interface. 
+
+![MassDigitizationApp+WB v0_2_6](https://user-images.githubusercontent.com/10909008/211326407-0e1a635c-2cbc-4fc4-8c3d-d1f9340e0cc8.png)
+
+
