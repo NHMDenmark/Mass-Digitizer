@@ -51,7 +51,7 @@ Begin with activating the virtual environment in console. [WINDOWS] CD to your p
 
 For creating the executable, we used the Nuitka python compiler (https://nuitka.net/) using this command in the CLI:
 ```
-nuitka --follow-imports --standalone .\DaSSCo.py --enable-plugin=tk-inter --enable-plugin=numpy
+python -m nuitka --windows-disable-console --follow-imports --onefile .\DaSSCo.py --plugin-enable=tk-inter --enable-plugin=numpy
 ```  
 
 Remember to activate venv and run pip install -r requirements.txt first
