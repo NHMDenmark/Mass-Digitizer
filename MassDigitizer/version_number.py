@@ -16,13 +16,17 @@ Unless required by applicable law or agreed to in writing,
 software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 either express or implied. See the License for the specific language governing permissions and limitations under the License.
 """
+
+
 #Central place to manage version numbers
-versionNumber = "0.2.6"
-#Before compiling exe, please set the version number above
+versionNumber = "0.2.7"
+# Before compiling exe, please set the version number above
+
 
 def getVersionNumber():
     return versionNumber
 
-'''This code can be modified to replace the version number in the 
-DaSSCo.issfile which has this format:/ #define MyAppVersion "0.2.5" /
-(Please ignore the forward slashes above)'''
+
+# """This code can be modified to replace the version number in the
+# DaSSCo.issfile which has this format:/ #define MyAppVersion "0.2.5" /
+# (Please ignore the forward slashes above)"""
