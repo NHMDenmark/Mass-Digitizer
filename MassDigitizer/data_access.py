@@ -13,17 +13,29 @@
 """
 import logging
 import os
+import sys
 import sqlite3
-from io import StringIO
+# from io import StringIO
 from pathlib import Path
+import time
 
 # Local imports
 import PySimpleGUI as sg
 
-import global_settings as gs
 
-# Set os path to local files:
-# sys.path.append(str(Path(__file__).parent.parent.joinpath('MassDigitizer')))
+import util
+# import global_settings as gs
+
+
+# sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}", "")
+#
+# filePath = "~\Documents\DaSSCo\logs" # util.getLogsPath throws a 'circular imports error'.
+# sys.path.append(str(Path(__file__).parent.parent.joinpath(filePath)))
+# logName = f"Data_access-{sTime}.log"
+# logFilePath = str(Path(filePath).joinpath(f'{logName}'))
+# logging.debug("# Beginning data_access for DaSSCo #")
+l = util.buildLogger('data_access')
+logging.debug("IN data_access.py ---")
 
 class DataAccess():
 
@@ -40,32 +52,33 @@ class DataAccess():
         # Point to database file provided and connect
         filePath = os.path.expanduser(
             '~\Documents\DaSSCO')  # In order to debug / run, a copy of the db file should be moved into this folder on Windows machines
-        altFilePath = os.path.expanduser(
-            '~\OneDrive - University of Copenhagen\Documents\DaSSCO')  # For OneDrive users this is the file location
+        # altFilePath = os.path.expanduser(
+        #     '~\OneDrive - University of Copenhagen\Documents\DaSSCO')  # For OneDrive users this is the file location
         self.dbFilePath = str(Path(filePath).joinpath(f'{databaseName}.sqlite3'))
-        self.dbAltFilePath = str(Path(altFilePath).joinpath(f'{databaseName}.sqlite3'))
-        # self.setDatabase(databaseName)
+        # self.dbAltFilePath = str(Path(altFilePath).joinpath(f'{databaseName}.sqlite3'))
+        # # self.setDatabase(databaseName)
         # print('Initializing with db file: %s ...'%self.dbFilePath)
+        logging.debug(('Initializing with db file: %s ...'%self.dbFilePath))
         try:
             self.connection = sqlite3.connect(self.dbFilePath)
         except Exception as e:
-            sg.popup_cancel(f"SQLite connection failed. Error: {e}")
-
-        if gs.db_in_memory == True or do_in_memory == True:
-            # Read database to tempfile
-            tempfile = StringIO()
-            for line in self.connection.iterdump():
-                tempfile.write('%s\n' % line)
-            self.connection.close()
-            tempfile.seek(0)
-
-            # Create a database in memory and import from tempfile
-            self.connection = sqlite3.connect(":memory:")
-            self.connection.cursor().executescript(tempfile.read())
-            self.connection.commit()
-        else:
-            # print(' - running database as file')
-            pass
+            # sg.popup_cancel(f"SQLite connection failed. Error: {e}")
+            logging.debug("SQLite connection failed. Error:", e)
+        # if gs.db_in_memory == True or do_in_memory == True:
+        #     # Read database to tempfile
+        #     tempfile = StringIO()
+        #     for line in self.connection.iterdump():
+        #         tempfile.write('%s\n' % line)
+        #     self.connection.close()
+        #     tempfile.seek(0)
+        #
+        #     # Create a database in memory and import from tempfile
+        #     self.connection = sqlite3.connect(":memory:")
+        #     self.connection.cursor().executescript(tempfile.read())
+        #     self.connection.commit()
+        # else:
+        #     # print(' - running database as file')
+        #     pass
 
         self.connection.row_factory = sqlite3.Row
         try:
@@ -82,7 +95,8 @@ class DataAccess():
         self.dbFilePath = str(Path(self.dbFilePath).joinpath(f'{dbFileName}.sqlite3'))
         self.dbAltFilePath = str(Path(self.dbAltFilePath).joinpath(f'{dbFileName}.sqlite3'))
         fps = self.dbFilePath, self.dbAltFilePath
-        logging.info("The filepaths are: %s", fps)
+        logging.info("The database filepaths are: %s", fps)
+
 
     def getConnection(self):
         """
@@ -109,22 +123,22 @@ class DataAccess():
         # Depending on in-memory flag, run database in memory
         # TODO Momentarily deactivated, perhaps redundant
         # gs.db_in_memory = do_in_memory # apply in-memory flag to global
-        if gs.db_in_memory == True:
-            # print(' - running database in-memory')
-            # Read database to tempfile
-            tempfile = StringIO()
-            for line in self.connection.iterdump():
-                tempfile.write('%s\n' % line)
-            self.connection.close()
-            tempfile.seek(0)
-
-            # Create a database in memory and import from tempfile
-            self.connection = sqlite3.connect(":memory:")
-            self.connection.cursor().executescript(tempfile.read())
-            self.connection.commit()
-        else:
-            # print(' - running database as file')
-            pass
+        # if gs.db_in_memory == True:
+        #     # print(' - running database in-memory')
+        #     # Read database to tempfile
+        #     tempfile = StringIO()
+        #     for line in self.connection.iterdump():
+        #         tempfile.write('%s\n' % line)
+        #     self.connection.close()
+        #     tempfile.seek(0)
+        #
+        #     # Create a database in memory and import from tempfile
+        #     self.connection = sqlite3.connect(":memory:")
+        #     self.connection.cursor().executescript(tempfile.read())
+        #     self.connection.commit()
+        # else:
+        #     # print(' - running database as file')
+        #     pass
 
         self.connection.row_factory = sqlite3.Row  # Enable column access by name: row['column_name']
         cursor = self.connection.cursor()
@@ -150,7 +164,7 @@ class DataAccess():
 
         if limit > 0:
             sqlString += f' LIMIT {limit}'
-        logging.info('SQLLLLLL : %s', sqlString)
+        logging.info('getRows() SQL : %s', sqlString)
         try:
             records = currentCursor.execute(sqlString).fetchall()
         except Exception as e:
@@ -260,12 +274,6 @@ class DataAccess():
         """
         self.currentCursor = self.getDbCursor()
 
-        # records = [dict(row) for row in rows_object]
-        # print('in data-access: The row(s) = ', records)
-        # for j in records:
-        #     print(j)
-        # print([x for x in j])
-
         rows = self.currentCursor.execute(sql).fetchall()
 
         self.currentCursor.connection.commit()
@@ -285,6 +293,17 @@ class DataAccess():
         record = self.currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(id)).fetchone()
         self.currentCursor.connection.close()
 
+        return record
+
+    def getPrimaryKey(self, tableName, name, field='name'):
+        """
+        Function for fetching id (primary key) on name value
+        """
+        # (tableName, {' %s = ' % field: '"%s"' % name})[0]['id']
+        currentCursor = self.getDbCursor()
+        sql = f'SELECT id FROM {tableName} WHERE name = {name};'
+        record = currentCursor.execute(sql).fetchone()
+        currentCursor.connection.close()
         return record
 
     def insertRow(self, tableName, fields):
@@ -391,3 +410,4 @@ class DataAccess():
             column = column + 1
 
         return results
+
