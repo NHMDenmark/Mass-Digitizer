@@ -6,10 +6,10 @@ The DaSSCo project is tasked with digitizing millions of specimens and to speed 
 ![This is an image](https://github.com/NHMDenmark/DaSSCo/blob/main/docs/MADD_screencap.png)  
 
 ### Installation
-Installation is done using a setup file that will ensure Python and all dependencies are put in place. The installer will also add a clean local database for registering entries in a "DaSSCo" folder under the user's documents folder. Be mindful to backup the database file upon reinstallation, so it is not overwritten and and data in it erased. 
+Installation is done using a setup file that will ensure all dependencies are in place. The installer will also add a clean local database for registering entries in a "DaSSCo" folder under the user's documents folder. Be mindful to backup the database file upon reinstallation, so it is not overwritten and and data in it erased. 
 
-Current release: 
-(https://github.com/NHMDenmark/DaSSCo/releases/download/v0.1.0/DaSSCoSetup.v0.1.0.exe)
+Downloads: 
+(https://github.com/NHMDenmark/DaSSCo/releases/)
 
 ### Usage
 There is a path to follow that requires only little training. A user must have credentials in order to employ the app. One could say that a specimen record is being created bit by bit and submitted to local DB at the end. 
@@ -32,6 +32,12 @@ Fedor A. Steeman, NHMD
 Jan K. Legind, NHMD  
 Pip Brewer, NHMD
 
+## Systems Architecture 
+
+The app is written in python and consists of frontend components for easy user interfacing and backend component capable of both local storage and accessing external systems. The app is bundled with a local database file that is placed in a "DaSSCo" folder on the system it's installed on. In order to log on, and perform other functions, it needs to be connected to the internet. With the current state of the app, there are certain backend functions that have to be run by the developers in the development environment. 
+
+More information on the Systems Architecture including a visual representation, see here: [Systems Architecture](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/documentation/SystemsArchitecture.md)
+
 ## For Developers 
 
 ### Structure
@@ -45,12 +51,24 @@ Begin with activating the virtual environment in console. [WINDOWS] CD to your p
 
 For creating the executable, we used the Nuitka python compiler (https://nuitka.net/) using this command in the CLI:
 ```
-nuitka --follow-imports --standalone .\DaSSCo.py --enable-plugin=tk-inter --enable-plugin=numpy
+python -m nuitka --windows-disable-console --follow-imports --onefile .\DaSSCo.py --plugin-enable=tk-inter --enable-plugin=numpy
 ```  
 
 Remember to activate venv and run pip install -r requirements.txt first
 
-For creating the installer, we used Inno Setup and a definition file is located in the repo root as DaSSCO.iss
+For creating the installer, we use Inno Setup and a definition file for a generic edition is located in the repo root [DaSSCO.iss](https://github.com/NHMDenmark/Mass-Digitizer/DaSSCO.iss). The Inno Setup scripts bundles the database with the executable into an installer file. Before running the Inno Setup script, it is necessary to fill the database file with the taxonomic spine and other predefined data specific for the edition you would like to generate an installer for (see below).
+
+#### Compiling App Editions 
+
+Due to the size of the taxonomic spine, it is necessary to generate seperate editions for respective collections with differents of the database file that is bundled with the app. Under [MassDigitizer/editions](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/MassDigitizer/editions/) there are folders for each edition containing a batch file that needs to be run in order to do so. The batch file will place the updated db.sqlite3 file in the [MassDigitizer/temp](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/MassDigitizer/temp/) folder from where it will be picked up by Inno Setup. 
+
+So the process for compilation are as follows: 
+1. Create the executable using nuitka
+2. Run the batch file to generate the db edition of choice 
+3. Run the Inno Setup script to create the installer for this edition 
+4. Repeat for the different editions giving each a distinct name
+
+The different editions will be published alongside each other on the [Releases page](https://github.com/NHMDenmark/Mass-Digitizer/releases) 
 
 ### Specify Interface 
 

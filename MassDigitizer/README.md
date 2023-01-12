@@ -11,12 +11,19 @@ The goal is to have the user download an executable file, so that each workstati
 Current release:  
 (https://github.com/NHMDenmark/DaSSCo/releases/download/v0.1.0/DaSSCoSetup.v0.1.0.exe)
 #### Installation instructions  
+##### Prior code cleanup  
+To make the compilation work, it is a requirement to remove/out-comment all print() statements. In PowerShell this command is useful:  
+`Select-String -Path .\*.py -Pattern 'print'`
+It returns all file names:line number: and the line itself in the directory. Like so:  
+`collection.py:117:            print('jsonObject EMPTY!!!')`  
+
 For creating this executable the Nuitka python compiler works fine (https://nuitka.net/). We used this command in the CLI:
 ```
 python -m nuitka --windows-disable-console --follow-imports --onefile .\DaSSCo.py --plugin-enable=tk-inter --enable-plugin=numpy
 ```  
-
 Remember to activate venv and run pip install -r requirements.txt first
+
+On PC Windows I prefer to use PowerShell but YMMV.
 
 For Inno Setup use the definition file in the repo root called DaSSCO.iss : https://github.com/NHMDenmark/DaSSCo/blob/main/MassDigitizer/DaSSCo.iss
 To put it briefly: Nuitka creates the exe file, while Inno-setup makes the setup file.
