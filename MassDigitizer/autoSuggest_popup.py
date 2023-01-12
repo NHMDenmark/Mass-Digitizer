@@ -68,7 +68,7 @@ class AutoSuggest_popup():
             [sg.Frame('New taxon name detected...', [
             [sg.Text('Input higher taxonomy:', key='lblHiTax'),
              sg.Input(size=(24, 1), key='txtHiTax', enable_events=True), 
-             sg.Button('Cancel', key='btnCancel')]], 
+             sg.Button('Cancel', key='btnCancel')]], #button Cancel is used to submit the novel name.
              key='frmHiTax', expand_x=True, visible=False)],
             [sg.pin(
                 sg.Col([[sg.Listbox(values=[], key='lstSuggestions', size=(input_width, lines_to_show), enable_events=True,
@@ -108,16 +108,15 @@ class AutoSuggest_popup():
 
         # GUI Event Loop
         while True:  
-            # As long as the loop isn't exited somehow, continue checking events 
+            # As long as the loop isn't somehow exited , then continue checking events
             event, values = window.read()
-            #print(event, values)
-            
+
             # Escape loop & close window when exiting or otherwise done 
             if event is None: break
             if event == sg.WIN_CLOSED or event == 'Exit': break
             if event.startswith('Escape'): break           
             
-            # Listbox element is not born with up/down arrow capability.
+            # Listbox element is unfortunately not born with up/down arrow capability.
             if event.startswith('Down') and len(self.candidateNamesList) > 0:
                 # When you arrow down and there are candidate names in the list, set new selected item: 
                 select_item = (select_item + 1) % len(self.candidateNamesList) # Increase selected item index within length of candidate name list 
@@ -209,7 +208,7 @@ class AutoSuggest_popup():
                 higherTaxonName = values['txtHiTax']
                 if len(higherTaxonName) >= minimumCharacters:
                     self.handleSuggestions(values['txtHiTax'].lower(), 140)
-                    # Rank Family is assumed (id: 140)
+                    # Rank Family is assumed (rank id: 140)
 
             if event == 'btnCancel':
                 # Cancel button pressed during new taxon entry
@@ -245,7 +244,7 @@ class AutoSuggest_popup():
         # print('IN ASugg. - autoSuggestObject ==', autoSuggestObject)
         return autoSuggestObject
 
-    def handleSuggestions(self, keyStrokes, minimumRank=270):
+    def handleSuggestions(self, keyStrokes, minimumRank=270):  # rank id 270 == 'subforma'
         # Fetch suggestions from database based on keystrokes 
         #self.suggestions = self.lookupSuggestions(keystrokes, 'fullname', minimumRank)
         if self.tableName == 'taxonname': 
