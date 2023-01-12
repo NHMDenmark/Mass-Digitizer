@@ -13,15 +13,14 @@
 """
 
 from os import system, name
-from hashlib import new
+# from hashlib import new
+import os
+import sys
+from pathlib import Path
+import time
 import logging
-from re import L
+# from re import L
 
-# Internal dependencies
-import data_access
-import global_settings as gs
-
-db = data_access.DataAccess(gs.databaseName)
 
 def clear():
    """
@@ -35,12 +34,23 @@ def clear():
    else:
     _ = system('clear')
 
+def buildLogger(moduleName):
+    sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}", "")
+
+    filePath = getLogsPath()  # util.getLogsPath throws a 'circular imports error'.
+    sys.path.append(str(Path(__file__).parent.parent.joinpath(filePath)))
+    logName = f"{moduleName}-{sTime}.log"
+    logFilePath = str(Path(filePath).joinpath(f'{logName}'))
+    # print(logFilePath)
+    logging.basicConfig(filename=logFilePath, encoding='utf-8', level=logging.DEBUG)
+
+
 def shrink_dict(original_dict, input_string):
    """
    Filter entries in dictionary based on initial string (starts with)
    """   
    shrunken_dict = {}
-   print('Dictionary length = ', len(original_dict))
+   # print('Dictionary length = ', len(original_dict))
    for j in original_dict:
       if j[0:len(input_string)] == input_string:
          shrunken_dict[j] = original_dict[j]
@@ -61,19 +71,17 @@ def pretty_print_POST(req):
     """
     Format HTTP request header and body into easily legible output
     """
-    print('{}\n{}\r\n{}\r\n\r\n{}'.format(
-        '-----------START-----------',
-        req.method + ' ' + req.url,
-        '\r\n'.join('{}: {}'.format(k, v) for k, v in req.headers.items()),
-        req.body,
-    ))
-    print('------------END------------')
+    # print('{}\n{}\r\n{}\r\n\r\n{}'.format(
+    #     '-----------START-----------',
+    #     req.method + ' ' + req.url,
+    #     '\r\n'.join('{}: {}'.format(k, v) for k, v in req.headers.items()),
+    #     req.body,
+    # ))
+    # print('------------END------------')
 
-def getPrimaryKey(tableName, name, field='name'): 
-   """
-   Function for fetching id (primary key) on name value
-   """
-   return db.getRowsOnFilters(tableName, {' %s = ' % field: '"%s"' % name})[0]['id']
+def getLogsPath():
+    logsFilePath = os.path.expanduser(f'logs')
+    return logsFilePath
 
 def logLine(line, level='info'):
    """
@@ -94,26 +102,27 @@ def logLine(line, level='info'):
 
    return line
 
-def obtainVersionNumber(filepath, keyWord):
-   """
-   Obtain application version number
-   """
-
-   with open(filepath, mode='r') as f:
-        text = f.readlines()
-        version = ''
-        for line in text:
-            # check if string present on a current line
-            keyWord = '#define MyAppVersion'
-            # print(row.find(word))
-            # find() method returns -1 if the value is not found,
-            # if found it returns index of the first occurrence of the substring
-            if line.find(keyWord) != -1:
-                versionSplit = line.split(' ')
-                versionPop = versionSplit.pop()
-                print(versionPop.replace('"', ''))
-                return versionPop.replace('"', '')
+# def obtainVersionNumber(filepath, keyWord):
+#    """
+#    Obtain application version number
+#    """
+#
+#    with open(filepath, mode='r') as f:
+#         text = f.readlines()
+#         version = ''
+#         for line in text:
+#             # check if string present on a current line
+#             keyWord = '#define MyAppVersion'
+#             # print(row.find(word))
+#             # find() method returns -1 if the value is not found,
+#             # if found it returns index of the first occurrence of the substring
+#             if line.find(keyWord) != -1:
+#                 versionSplit = line.split(' ')
+#                 versionPop = versionSplit.pop()
+#                 # print(versionPop.replace('"', ''))
+#                 return versionPop.replace('"', '')
 
 class Struct:
     """A structure that can have any fields defined."""
     def __init__(self, **entries): self.__dict__.update(entries)
+
