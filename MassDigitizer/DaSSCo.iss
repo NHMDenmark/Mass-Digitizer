@@ -2,14 +2,15 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "DaSSCo MADD"
-#define MyAppVersion "0.2.6"
+#define MyAppVersion "0.2.7"
+; Remember to update the version in the version_number.py script
 #define MyAppPublisher "NHMD"
 #define MyAppExeName "DaSSCo.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{4365838A-D14C-4302-AC33-B7275805712D}
+AppId={{0A126F0C-56CB-4339-8720-45C7A17936EF}}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -17,12 +18,16 @@ AppPublisher={#MyAppPublisher}
 DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
-;PrivilegesRequired=lowest
+PrivilegesRequired=lowest
+;SetupLogging=yes
 PrivilegesRequiredOverridesAllowed=commandline
 OutputBaseFilename=DaSSCoSetup v{#MyAppVersion}
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
+
+[Dirs]
+Name: {app}\logs
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
