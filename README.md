@@ -3,7 +3,7 @@
 ## Purpose of the application
 The DaSSCo project is tasked with digitizing millions of specimens and to speed this process along, there needs to be a way to rapidly fill in data on 'storage', 'taxonomy', etc.  
 
-![This is an image](https://github.com/NHMDenmark/DaSSCo/blob/main/docs/MADD_screencap.png)  
+![This is an image](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/docs/appCAP.png?raw=true)  
 
 ### Installation
 Installation is done using a setup file that will ensure all dependencies are in place. The installer will also add a clean local database for registering entries in a "DaSSCo" folder under the user's documents folder. Be mindful to backup the database file upon reinstallation, so it is not overwritten and and data in it erased. 
