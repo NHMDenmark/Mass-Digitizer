@@ -19,7 +19,7 @@ either express or implied. See the License for the specific language governing p
 
 import os
 import sys
-import pathlib
+from pathlib import Path
 import PySimpleGUI as sg
 import logging
 import time
@@ -33,21 +33,21 @@ import version_number
 from models import specimen
 
 # Makes sure that current folder is registrered to be able to access other app files
-sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer/log')))
-currentpath = os.path.join(pathlib.Path(__file__).parent, '')
-sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}", "")
-
-logName = f"aSDE_log{sTime}.log"
-
-logging.basicConfig(filename=logName, encoding='utf-8', level=logging.DEBUG, force=True)
-
-
-# LOG_FILENAME="SDE.log"
-# Define handler to write to standard output
-# handler = logging.FileHandler(LOG_FILENAME)
-# Adding handler to logger
-# logger.addHandler(handler)
-# logger.propagate=False
+# sys.path.append(str(Path(__file__).parent.parent.joinpath('MassDigitizer/log')))
+# # currentpath = os.path.join(pathlib.Path(__file__).parent, '')
+# sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}", "")
+#
+# logName = f"aSDE_log{sTime}.log"
+#
+# logging.basicConfig(filename=logName, encoding='utf-8', level=logging.DEBUG, force=True)
+#
+# sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}", "")
+# pathString = util.getLogsPath()
+# filePath = os.path.expanduser(pathString)
+# sys.path.append(str(Path(__file__).parent.parent.joinpath(filePath)))
+# logName = f"specimen_data_access-py{sTime}.log"
+# logFilePath = str(Path(filePath).joinpath(f'{logName}'))
+l = util.buildLogger('specimen_daat_access')
 
 class SpecimenDataEntry():
 
@@ -71,7 +71,6 @@ class SpecimenDataEntry():
 
         # Set up user interface 
         self.setup(collection_id)
-        logging.debug('This message should go to the log file')
 
         # Create class level notes for access in autoSuggest_popup (TODO ?)
         self.notes = ''
@@ -97,7 +96,7 @@ class SpecimenDataEntry():
         """
         Initialize data entry form on basis of collection id
         """
-        logging.info('*** Specimen data entry ***')
+        logging.info('*** Specimen data entry setup ***')
 
         # Define UI areas
         sg.theme('SystemDefault')
@@ -205,7 +204,7 @@ class SpecimenDataEntry():
             sg.StatusBar('', relief=None, size=(7, 1), background_color=blueArea),
             sg.Button('SAVE', key="btnSave", button_color='seagreen', size=9),
             sg.StatusBar('', relief=None, size=(14, 1), background_color=blueArea),
-            sg.Button('GO BACK', key="btnBack", button_color='firebrick', pad=(13, 0)),
+            sg.Button('GO BACK', key="btnBack", button_color='VioletRed', pad=(13, 0)),
             sg.Button('GO FORWARDS', key='btnForward', button_color=('black', 'LemonChiffon2')),
             sg.Button('CLEAR FORM', key='btnClear', button_color='black on white'),
             # sg.Button('Export data', key='btnExport', button_color='royal blue'),  # Export data should be a backend feature says Pip
@@ -277,7 +276,7 @@ class SpecimenDataEntry():
          ('adjecentrows':) which is a LIST"""
         # Considering moving this function to util.py or to a model class.
         logging.debug('<<<In extract rows in two formats function.>>>')
-        # rows = self.db.getRows(f'specimen WHERE id <= {rowId} ', limit=3, sortColumn='id DESC')
+
         rows = self.previousRows(rowId)
         headers = ['id', 'spid', 'catalognumber', 'multispecimen', 'taxonfullname', 'taxonname', 'taxonnameid',
                    'taxonspid',
@@ -292,14 +291,14 @@ class SpecimenDataEntry():
         previousRows = []  # the curated rows needed to populate the table
         for row in specimenList:
             specimenDict = dict(zip(headers, row)) # creates the complete row dict to be appended.
-            logging.debug(f'the specimen dict in for loop is: {specimenDict}')
+            logging.debug('the specimen dict in for loop is:', specimenDict)
             completeRowDicts.append(specimenDict)
             tempAdjecent = []
             for k in self.operationalHeads:
                 res = specimenDict[k]
                 tempAdjecent.append(res)
             previousRows.append(tempAdjecent)
-        logging.info(f"AdjecentRows == {previousRows}")
+
         rowsExtracted = {'fullrows': completeRowDicts, 'adjecentrows': previousRows}
 
         return rowsExtracted
@@ -495,11 +494,13 @@ class SpecimenDataEntry():
                 # recordForSaving = self.collobj.loadCurrent(self.collobj.id)
                 # self.collobj.setFields(recordForSaving)
                 # save specimen and get its id
+
                 if len(self.notes) > 5:  # test to see if remark (verbatim note) was passed from autosuggest.
                     self.collobj.notes = self.window['txtNotes'].Get() + ' | ' + self.notes
                 else:
                     self.collobj.notes = self.window['txtNotes'].Get()
                 # print('COLL fields:::', self.collobj.getFieldsAsDict())
+
                 specimenRecord = self.collobj.save()
                 self.clearNonStickyFields(values)
 
@@ -594,7 +595,10 @@ class SpecimenDataEntry():
             record : New record that should have its fields set
             stickyFieldsOnly : Flag for indicating whether only sticky fields should be set
         """
+        tableName = 'storage' #Switching from 'specimen' to 'storage' since that is needed now
+        strow = self.db.getRowOnId(tableName, record['storageid'])
         self.collobj.setStorageFields(self.db.getRowOnId(tableName, record['storageid']))
+        strecord = self.collobj.setStorageFields(self.db.getRowOnId(tableName, record['storageid']))
         self.collobj.setPrepTypeFields(self.window['cbxPrepType'].widget.current())
         self.collobj.setTypeStatusFields(self.window['cbxTypeStatus'].widget.current())
         self.collobj.notes = record['notes']
@@ -650,3 +654,5 @@ class SpecimenDataEntry():
         self.window['lblExport'].update(visible=False)
         self.window['lblRecordEnd'].update(visible=False)
         self.searchString = []
+        #Update collection object so that the ID is removed (preventing overwriting of previous record)
+        self.collobj.id = 0
