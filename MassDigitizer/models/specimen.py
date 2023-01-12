@@ -54,7 +54,7 @@ class specimen(model.Model):
         self.collectionId    = collection_id
         self.userName        = gs.spUserName
         self.userId          = gs.spUserId
-        self.workStation     = ''
+        # self.workStation     = ''
         self.recordDateTime  = str(datetime.now())
         self.exported        = 0
         self.exportDateTime  = ''
@@ -109,7 +109,7 @@ class specimen(model.Model):
                 'collectionid':    f'"{self.collectionId}"',
                 'username':        f'"{self.userName}"',
                 'userid':          f'"{self.userId}"',
-                'workstation':     f'"{self.workStation}"',
+                # 'workstation':     f'"{self.workStation}"',
                 'recorddatetime':  f'"{self.recordDateTime}"',
                 'exported':        f'"{self.exported}"',
                 'exportdatetime':  f'"{self.exportDateTime}"',
@@ -297,7 +297,7 @@ class specimen(model.Model):
 
         if storageRecord is not None: 
             self.storageId = storageRecord['id'] 
-            self.storageName = storageRecord['name'] 
+            self.storageName = storageRecord['name']
             self.storageFullName = storageRecord['fullname'] 
         else:
             # Empty record 
