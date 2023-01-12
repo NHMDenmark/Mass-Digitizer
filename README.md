@@ -42,7 +42,15 @@ More information on the Systems Architecture including a visual representation, 
 
 ### Structure
 The app interfaces with a local SQLite database with tables for taxonomy (millions of names that are accessed according to the relevant discipline, say 'botany' for instance.) Storage while smaller also has its own table, as do Collection, Georegion and Institution. The table that is populated by the app is mainly 'specimen'.
-Eventually, the local DB instances will be uploaded to a server where the data will be processed into Specify. The application also interfaces directly with Specify through the Specify7 API (more information further below). 
+Eventually, the local DB instances will be uploaded to a server where the data will be processed into Specify. The application also interfaces directly with Specify through the Specify7 API (more information further below).  
+
+##### Prior code cleanup  
+To make the compilation work as expercted, and not pulling up a CLI window, it is a requirement to remove/out-comment all print() statements. In PowerShell this command is useful:  
+`Select-String -Path .\*.py -Pattern 'print'`
+It returns all file names:line number: and the line itself in the directory. Like so:  
+`collection.py:117:            print('jsonObject EMPTY!!!')`  
+
+On PC Windows I prefer to use PowerShell but YMMV.
 
 ### Compilation  
 Begin with activating the virtual environment in console. [WINDOWS] CD to your project directory and `cd venv\Scripts\` and then type `.\activate`. This should switch the environment to venv. You can see the command line changes to `(venv) PS C:\Users\myUser\Documents`  
