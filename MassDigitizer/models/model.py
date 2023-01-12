@@ -66,15 +66,15 @@ class Model:
         """
 
         # Checking if Save is a novel record, or if it is updating existing record.
+
+            # print(f' - Updated {self.table} record with id: {self.id} and specify id: {self.spid} ')
         if self.id > 0:
-            # Record Id is not 0 therefore existing record to be updated 
+            # Record Id is not 0 therefore existing record to be updated
             record = self.db.updateRow(self.table, self.id, self.getFieldsAsDict())
-            print(f' - Updated {self.table} record with id: {self.id} and specify id: {self.spid} ')
         else:
-            # Record Id is not 0 therefore existing record to be updated 
+            # Record Id is 0 therefore existing record to be created
             record = self.db.insertRow(self.table, self.getFieldsAsDict())
             self.id = record['id']
-            print(f' - Inserted new {self.table} record with id: {self.id} and specify id: {self.spid} ')
 
         return record
 
@@ -95,7 +95,7 @@ class Model:
         CONTRACT 
            id: Primary key of current record   
         """
-        print(f' - deleting record with id: {self.id}')
+        # print(f' - deleting record with id: {self.id}')
         record = self.db.deleteRowOnId(self.table, self.id)
 
     def loadPrevious(self, id):
@@ -113,13 +113,14 @@ class Model:
             sql = sql + f"WHERE s.id < {id} " 
         # If blank record then fetch the one with the highest id 
         sql = sql + " ORDER BY s.id DESC LIMIT 1 "        
-        print(sql)
+        # print(sql)
 
         # Fetch results from database
         try:
             results = self.db.executeSqlStatement(sql)
         except Exception as e:
-            print(f"The SQL could not be executed - {e}\n Please check the Statement: \n{sql}")
+            pass
+            # print(f"The SQL could not be executed - {e}\n Please check the Statement: \n{sql}")
         # If results returned then pick first one, otherwise set record to nothing 
         if len(results) > 0:
             record = results[0]
@@ -148,13 +149,14 @@ class Model:
             sql = sql + f"WHERE s.id > {id} " 
         # If blank record then fetch the one with the highest id 
         sql = sql + " ORDER BY s.id LIMIT 1 "        
-        print(sql)
+        # print(sql)
 
         # Fetch results from database
         try:
             results = self.db.executeSqlStatement(sql)
         except Exception as e:
-            print(f"The SQL could not be executed - {e}\n Please check the Statement: \n{sql}")
+            pass
+            # print(f"The SQL could not be executed - {e}\n Please check the Statement: \n{sql}")
         # If results returned then pick first one, otherwise set record to nothing 
         if len(results) > 0:
             record = results[0]
