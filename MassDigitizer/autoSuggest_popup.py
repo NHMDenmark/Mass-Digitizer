@@ -25,7 +25,9 @@ from models import collection as coll
 
 
 class AutoSuggest_popup():
-
+    '''
+    Generic Autosuggest class catering to taxon names, and storage for now.
+    '''
     def __init__(self, table_name, collection_id):
         """
         Initialize
@@ -44,7 +46,7 @@ class AutoSuggest_popup():
 
         self.window = self.buildGui()
 
-    def buildGui(self): #, customSQL='', colName=None, alternativeInputTitle= None):
+    def buildGui(self):
         """ 
         Builds the interface for taxon name lookup as well as for novel names.
         """
@@ -141,11 +143,12 @@ class AutoSuggest_popup():
 
             # If a suggestion is clicked in the listbox OR 'Enter' is pressed then handle suggested taxon name 
             if event == 'lstSuggestions' or event == 'btnReturn':
-                print('Selected suggestion : ', type(values['lstSuggestions']), values['lstSuggestions'])
-                print('Selected parent     : ', values['txtInput'])
+                # print('Selected suggestion : ', type(values['lstSuggestions']), values['lstSuggestions'])
+                # print('Selected parent     : ', values['txtInput'])
                 #Fix for novel parent name
                 if not values['lstSuggestions']:
-                    print('NEW PARENT TAXON REQUIRED', values['txtHiTax'])
+                    pass
+                    # print('NEW PARENT TAXON REQUIRED', values['txtHiTax'])
                 
                 # If there still are entries in the list box then this is a known name and the one selected is handled 
                 if len(values['lstSuggestions']) > 0:
@@ -164,7 +167,7 @@ class AutoSuggest_popup():
 
                     selected_row = next(row for row in self.suggestions if row[column]==atomic)
                     selected_row = dict(selected_row)
-                    print("selected_row storage:", selected_row)
+                    # print("selected_row storage:", selected_row)
                     
                     # If text input box for higher taxon is not available then a known taxon is selected 
                     if window['frmHiTax'].visible == False: 
@@ -210,7 +213,7 @@ class AutoSuggest_popup():
 
             if event == 'btnCancel':
                 # Cancel button pressed during new taxon entry
-                print('In buttonCancel // ASpopup|| table name is:-', self.tableName)
+                # print('In buttonCancel // ASpopup|| table name is:-', self.tableName)
 
                 autoSuggestObject.table = self.tableName
                 autoSuggestObject.id   = 0
@@ -229,15 +232,17 @@ class AutoSuggest_popup():
                     autoSuggestObject.notes = autoSuggestObject.notes+f" Verbatim_notes:{autoSuggestObject.fullName}"
                     # return autoSuggestObject.notes
                 else:
-                    print("HITAX is true!!", values['txtHiTax'])
+                    pass
+                    # print("HITAX is true!!", values['txtHiTax'])
                 break
 
         if window is not None: 
             try:
                 window.Hide()
-            except: 
-                print('Window may have been closed manually')
-        print('IN ASugg. - autoSuggestObject ==', autoSuggestObject)
+            except:
+                pass
+                # print('Window may have been closed manually')
+        # print('IN ASugg. - autoSuggestObject ==', autoSuggestObject)
         return autoSuggestObject
 
     def handleSuggestions(self, keyStrokes, minimumRank=270):
