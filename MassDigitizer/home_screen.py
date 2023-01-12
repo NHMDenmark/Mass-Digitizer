@@ -14,10 +14,20 @@
 
 import sys
 import PySimpleGUI as sg
+import logging
+import time
+import pathlib
+import os
 
 # The following lines allow for finding code files to be tested in the app root folder  
 from pathlib import Path
-sys.path.append(str(Path(__file__).joinpath('MassDigitizer')))
+# sys.path.append(str(Path(__file__).joinpath('MassDigitizer')))
+# sys.path.append(str(Path(__file__).parent.parent.joinpath('MassDigitizer/log')))
+# sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}", "")
+#
+# logName = f"HomeScreen_log{sTime}.log"
+#
+# logging.basicConfig(filename=logName, encoding='utf-8', level=logging.DEBUG, force=True)
 
 import version_number
 import util
@@ -26,14 +36,21 @@ import data_access
 import specify_interface
 import specimen_data_entry as sde
 
+# sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer/log')))
+# currentpath = os.path.join(pathlib.Path(__file__).parent, '')
+
+l = util.buildLogger('home_screen') # Just an initializer - the var is unused.
+
 db = data_access.DataAccess(gs.databaseName)
 sp = specify_interface.SpecifyInterface()
 
 class HomeScreen():
     # Get version number to set into the homeScreen welcome menu.
+
     version = version_number.getVersionNumber()
-    """ The second arg is an arrangement for if the .iss file changes structure and a new 
-    MyAppVersion placeholder is needed. """
+
+    logging.debug(f'///Starting HomeScreen/// app version {version}')
+
     def __init__(self):
         """
         Constructor initializing GUI elements after fetching available institutions 
@@ -44,6 +61,8 @@ class HomeScreen():
             self.errorMessage = e
             errorString = str(e)+".\n Check to see if DB is placed correctly"
             sg.popup_cancel(errorString, title='Error', )
+            logging.debug(str(e)+". Check to see if DB is placed correctly")
+
             sys.exit(1)
         
         header_font = ("Corbel, 18")
@@ -56,7 +75,8 @@ class HomeScreen():
             institutions = util.convert_dbrow_list(self.db.getRows('institution'))
         except Exception as e:
             self.errorMessage = e
-            sg.popup_cancel(e, title='Error', )
+            # sg.popup_cancel(e, title='Error', )
+            logging.debug(str(e))
             sys.exit(1)
 
         btn_exit = [sg.Button("Exit", key='btnExit')]
