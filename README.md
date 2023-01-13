@@ -45,6 +45,8 @@ More information on the Systems Architecture including a visual representation, 
 The app interfaces with a local SQLite database with tables for taxonomy (millions of names that are accessed according to the relevant discipline, say 'botany' for instance.) Storage while smaller also has its own table, as do Collection, Georegion and Institution. The table that is populated by the app is mainly 'specimen'.
 Eventually, the local DB instances will be uploaded to a server where the data will be processed into Specify. The application also interfaces directly with Specify through the Specify7 API (more information further below).  
 
+
+### Compilation  
 ##### Prior code cleanup  
 To make the compilation work as expercted, and not pulling up a CLI window, it is a requirement to remove/out-comment all print() statements. In PowerShell this command is useful:  
 `Select-String -Path .\*.py -Pattern 'print'`
@@ -52,15 +54,13 @@ It returns all file names:line number: and the line itself in the directory. Lik
 `collection.py:117:            print('jsonObject EMPTY!!!')`  
 
 On PC Windows I prefer to use PowerShell but YMMV.
-
-### Compilation  
 Begin with activating the virtual environment in console. [WINDOWS] CD to your project directory and `cd venv\Scripts\` and then type `.\activate`. This should switch the environment to venv. You can see the command line changes to `(venv) PS C:\Users\myUser\Documents`  
 **Warning** If you get a security exception, you need to first start Powershell in admin mode and then put in :  
 `Set-ExecutionPolicy Unrestricted -Force`  
 
 For creating the executable, we used the Nuitka python compiler (https://nuitka.net/) using this command in the CLI:
 ```
-python -m nuitka --windows-disable-console --follow-imports --onefile .\DaSSCo.py --plugin-enable=tk-inter --enable-plugin=numpy
+nuitka --windows-disable-console --follow-imports --onefile .\DaSSCo.py --plugin-enable=tk-inter --enable-plugin=numpy
 ```  
 
 Remember to activate venv and run pip install -r requirements.txt first
