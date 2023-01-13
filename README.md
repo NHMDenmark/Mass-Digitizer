@@ -19,7 +19,8 @@ After log in, the first section focuses on specimen storage location which has a
 The barcode is now ready for scanning. From there the record is ready to be 'saved'.  
 
 #### Novel taxon names
-Should a taxon name be inputted that is *not* contained in the taxonomic spine - a pop-up window appears in which the novel name can be inputted. There follows a similar event where the higher taxonomic name is asked for.  
+Should the case be that a taxon name is inputted which is *not* contained in the taxonomic spine - a pop-up window appears in which the novel name can be inputted. There follows a similar event where the higher taxonomic name is asked for. If a higher taxon name returns suggestions (must be family rank or higher) then arrow to the desired name and press enter.  
+If the higher taxon name is also novel, then finish typing it and tab into the Cancel button. Press the spacebar to commit and the record will be registered with a taxonomic comment in the record notes field.
 
 ### Data export  
 As the app is designed to work "off line" all entries are stored locally. The entries thus registered can be exported to an Excel spreadsheet that can be imported into Specify. A smarter pipeline for getting the local data directly into Specify is currently being planned. 
