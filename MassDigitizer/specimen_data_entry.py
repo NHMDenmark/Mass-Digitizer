@@ -204,7 +204,7 @@ class SpecimenDataEntry():
             sg.StatusBar('', relief=None, size=(7, 1), background_color=blueArea),
             sg.Button('SAVE', key="btnSave", button_color='seagreen', size=9),
             sg.StatusBar('', relief=None, size=(14, 1), background_color=blueArea),
-            sg.Button('GO BACK', key="btnBack", button_color='VioletRed', pad=(13, 0)),
+            sg.Button('GO BACK', key="btnBack", button_color='red4', pad=(13, 0), highlight_colors=('white', 'black')),
             sg.Button('GO FORWARDS', key='btnForward', button_color=('black', 'LemonChiffon2')),
             sg.Button('CLEAR FORM', key='btnClear', button_color='black on white'),
             # sg.Button('Export data', key='btnExport', button_color='royal blue'),  # Export data should be a backend feature says Pip
@@ -458,6 +458,7 @@ class SpecimenDataEntry():
             if event == 'btnForward':
                 # Fetch next specimen record data on basis of current record ID, if any
                 record = self.collobj.loadNext(self.collobj.id)
+
                 if record:
                     # If not empty, set form fields
                     self.fillFormFields(record)
@@ -507,6 +508,7 @@ class SpecimenDataEntry():
                 # Create a new specimen instance and add previous id to it
                 self.collobj = specimen.specimen(self.collectionId)
                 updatedRecordId = specimenRecord['id'] # Id to be used for refreshing the previous rows table.
+                self.collobj.setFields(specimenRecord) # Just updates object ID for other consumption.
 
                 # Refresh records for tblPrevious after save.
                 refreshedRecords = self.extractRowsInTwoFormats(updatedRecordId)
