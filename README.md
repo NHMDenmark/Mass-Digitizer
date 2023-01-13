@@ -65,7 +65,7 @@ nuitka --windows-disable-console --follow-imports --onefile .\DaSSCo.py --plugin
 
 Remember to activate venv and run pip install -r requirements.txt first
 
-For creating the installer, we use Inno Setup and a definition file for a generic edition is located in the repo root [DaSSCO.iss](https://github.com/NHMDenmark/Mass-Digitizer/DaSSCO.iss). The Inno Setup scripts bundles the database with the executable into an installer file. Before running the Inno Setup script, it is necessary to fill the database file with the taxonomic spine and other predefined data specific for the edition you would like to generate an installer for (see below).
+For creating the installer, we use Inno Setup and a definition file for a generic edition is located in the repo root [DaSSCO.iss](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/MassDigitizer/DaSSCo.iss). The Inno Setup scripts bundles the database with the executable into an installer file. Before running the Inno Setup script, it is necessary to fill the database file with the taxonomic spine and other predefined data specific for the edition you would like to generate an installer for (see below).
 
 #### Compiling App Editions 
 
