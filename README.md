@@ -6,8 +6,8 @@ The DaSSCo project is tasked with digitizing millions of specimens. To speed thi
 ![This is an image](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/docs/appCAP.png?raw=true)  
 
 ### Installation
-Installation is done using a setup file that will ensure all dependencies are in place. The installer will also add a clean local database for registering entries in a "DaSSCo" folder under the user's documents folder. Be mindful to backup the database file upon reinstallation, so it is not overwritten and and data in it erased. 
-**Please be aware that the App needs 'elevated access rights' to install properly**
+Installation is done using a setup file that will ensure all dependencies are in place. The installer will also add a clean local database for registering entries in a "DaSSCo" folder under the user's documents folder. Be mindful to backup the database file upon reinstallation, so it is not overwritten and and data in it erased.   
+FOR PC users: **Please be aware that the App needs 'elevated access rights' to install properly**. Simply type 'admin' into the lower left corner search field and the 'Administrator access' app will be at the top.
 
 Downloads: 
 (https://github.com/NHMDenmark/DaSSCo/releases/)
@@ -24,7 +24,7 @@ Should the case be that a taxon name is inputted which is *not* contained in the
 If the higher taxon name is also novel, then finish typing it and tab into the Cancel button. Press the spacebar to commit and the record will be registered with a taxonomic comment in the record notes field.  
 
 #### Navigation between records  
-The "Back" and the "Forward" buttons are for paging through already entered records. You can follow the progress in the "Previous records table" near the bottom of the app. Once you go all the way back to the beginning of the records, you can press the Back-button again and the table will shoot to the top. The form will be populated by the latest (top) record.
+The "Back" and the "Forward" buttons are for paging through already entered records. You can follow the progress in the "Previous records table" near the bottom of the app. Once you go all the way back to the beginning of the records, you can press the Back-button again and the table will shoot to the top. The form will be populated by the latest (top) record. The app has a cyclical behavior in this regard.
 
 ### Data export  
 As the app is designed to work "off line" all entries are stored locally. The entries thus registered can be exported to an Excel spreadsheet that can be imported into Specify. A smarter pipeline for getting the local data directly into Specify is currently being planned. 
