@@ -57,13 +57,12 @@ class DataAccess():
         self.dbFilePath = str(Path(filePath).joinpath(f'{databaseName}.sqlite3'))
         # self.dbAltFilePath = str(Path(altFilePath).joinpath(f'{databaseName}.sqlite3'))
         # # self.setDatabase(databaseName)
-        # print('Initializing with db file: %s ...'%self.dbFilePath)
-        logging.debug(('Initializing with db file: %s ...'%self.dbFilePath))
+        logging.debug(('Initializing with db file: %s ...' % self.dbFilePath))
         try:
             self.connection = sqlite3.connect(self.dbFilePath)
         except Exception as e:
             # sg.popup_cancel(f"SQLite connection failed. Error: {e}")
-            logging.debug("SQLite connection failed. Error:", e)
+            logging.debug("SQLite connection failed. Error: %s" % e)
         # if gs.db_in_memory == True or do_in_memory == True:
         #     # Read database to tempfile
         #     tempfile = StringIO()
@@ -85,6 +84,7 @@ class DataAccess():
             self.currentCursor = self.connection.cursor()
         except Exception as e:
             sg.popup_cancel(f"Get the DB cursor error: {e}")
+            logging.debug(e)
 
     def setDatabase(self, dbFileName='db'):
         """
@@ -95,7 +95,7 @@ class DataAccess():
         self.dbFilePath = str(Path(self.dbFilePath).joinpath(f'{dbFileName}.sqlite3'))
         self.dbAltFilePath = str(Path(self.dbAltFilePath).joinpath(f'{dbFileName}.sqlite3'))
         fps = self.dbFilePath, self.dbAltFilePath
-        logging.info("The database filepaths are: %s", fps)
+        logging.info("The database filepaths are: %s" % fps)
 
 
     def getConnection(self):
@@ -164,10 +164,11 @@ class DataAccess():
 
         if limit > 0:
             sqlString += f' LIMIT {limit}'
-        logging.info('getRows() SQL : %s', sqlString)
+        logging.info('getRows() SQL : %s' % sqlString)
         try:
             records = currentCursor.execute(sqlString).fetchall()
         except Exception as e:
+            logging.debug(e)
             pass
         self.currentCursor.connection.close()
 
@@ -188,7 +189,7 @@ class DataAccess():
         """
         currentCursor = self.getDbCursor()
         rowsOnFilterCall = f'-> getRowsONFilter({tableName}, {filters}, {limit})'
-        logging.info("get rows on filter call= %s", rowsOnFilterCall)
+        logging.info("get rows on filter call= %s" % rowsOnFilterCall)
         sqlString = 'SELECT * FROM %s ' % tableName
 
         if filters.items():
@@ -203,7 +204,7 @@ class DataAccess():
         if limit > 0:
             sqlString += f' LIMIT {limit}'
 
-        logging.info("getRowsOnFilters SQL string : %s", sqlString)
+        logging.info("getRowsOnFilters SQL string : %s" % sqlString)
 
         records = currentCursor.execute(sqlString).fetchall()
 
