@@ -51,7 +51,9 @@ class specimen(model.Model):
         self.prepTypeId      = 0
         self.notes           = ''
         self.institutionId   = gs.institutionId #self.db.getRowOnId('collection',collection_id)['institutionid']
+        self.institutionName = gs.institutionName
         self.collectionId    = collection_id
+        self.collectionName  = gs.collectionName
         self.userName        = gs.spUserName
         self.userId          = gs.spUserId
         # self.workStation     = ''
@@ -106,7 +108,9 @@ class specimen(model.Model):
                 'preptypeid':      f'"{self.prepTypeId}"',
                 'notes':           f'"{self.notes}"',
                 'institutionid':   f'"{self.institutionId}"',
+                'institutionname':  f'"{self.institutionName}"',
                 'collectionid':    f'"{self.collectionId}"',
+                'collectionname':  f'"{self.collectionName}"',
                 'username':        f'"{self.userName}"',
                 'userid':          f'"{self.userId}"',
                 # 'workstation':     f'"{self.workStation}"',
@@ -144,7 +148,9 @@ class specimen(model.Model):
         self.prepTypeId = record['preptypeid']
         self.notes = record['notes'] 
         self.institutionId = record['institutionid']
+        self.institutionName = record['institutionname']
         self.collectionId = record['collectionid']
+        self.collectionName = record['collectionname']
         self.userName = record['username']
         self.userId = record['userid']
 
