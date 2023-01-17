@@ -74,7 +74,8 @@ class SpecimenDataEntry():
 
         # Create class level notes for access in autoSuggest_popup (TODO ?)
         self.notes = ''
-        # logger.debug("rolling out __init__")
+
+        logging.debug("Institution name and collection name are: %s & %s" % (gs.institutionName, gs.collectionName))
         # Gets the newest row by highest ID
         self.currentRecordId = self.window['txtRecordID'].get() # A check to see if UI is being "navigated" (btnBack/forward)
         if self.currentRecordId:
@@ -505,7 +506,6 @@ class SpecimenDataEntry():
                     self.collobj.notes = self.window['txtNotes'].Get() + ' | ' + self.notes
                 else:
                     self.collobj.notes = self.window['txtNotes'].Get()
-                # print('COLL fields:::', self.collobj.getFieldsAsDict())
 
                 specimenRecord = self.collobj.save()
                 self.clearNonStickyFields(values)
