@@ -74,7 +74,8 @@ class SpecimenDataEntry():
 
         # Create class level notes for access in autoSuggest_popup (TODO ?)
         self.notes = ''
-        # logger.debug("rolling out __init__")
+
+        logging.debug("Institution name and collection name are: %s & %s" % (gs.institutionName, gs.collectionName))
         # Gets the newest row by highest ID
         self.currentRecordId = self.window['txtRecordID'].get() # A check to see if UI is being "navigated" (btnBack/forward)
         if self.currentRecordId:
@@ -450,10 +451,13 @@ class SpecimenDataEntry():
                     self.fillFormFields(record)
                     rowForTable = self.extractRowsInTwoFormats(record['id'])
                     rowsAdjacent = rowForTable['adjecentrows']
+
                     self.window['tblPrevious'].update(rowsAdjacent)
                 else:
                     # Indicate no further records
                     self.window['lblRecordEnd'].update(visible=False)
+                    self.collobj.id = 0 # resetting object ID allows for new record creation.
+
 
             if event == 'btnForward':
                 # Fetch next specimen record data on basis of current record ID, if any
@@ -469,6 +473,8 @@ class SpecimenDataEntry():
                 else:
                     # Indicate no further records
                     self.window['lblRecordEnd'].update(visible=False)
+                    self.collobj.id = 0
+
 
             # if event == 'btnClear':
             #     for key in self.clearingList:
@@ -500,7 +506,6 @@ class SpecimenDataEntry():
                     self.collobj.notes = self.window['txtNotes'].Get() + ' | ' + self.notes
                 else:
                     self.collobj.notes = self.window['txtNotes'].Get()
-                # print('COLL fields:::', self.collobj.getFieldsAsDict())
 
                 specimenRecord = self.collobj.save()
                 self.clearNonStickyFields(values)
@@ -516,6 +521,7 @@ class SpecimenDataEntry():
                 self.window['tblPrevious'].update(previousRefreshedRows)
                 # Transfer data in sticky fields to new record:
                 self.setRecordFields('specimen', specimenRecord, True)
+                self.collobj.id = 0  # resets the record ID which makes it possible for the collection object to create a new record rather than to update the current one.
 
                 self.window['txtCatalogNumber'].set_focus()
 
@@ -525,8 +531,7 @@ class SpecimenDataEntry():
                     # Fetch previous records (again)
 
                     recordAcute = self.previousRecords[values[event][0]] #The index of the chosen record from the table
-                    acuteID = recordAcute[0] # Pure integer exracted.
-                    # recordNow = self.collobj.loadCurrent(acuteID)
+                    acuteID = recordAcute[0] # Pure integer value extracted.
                     recordNow = self.extractRowsInTwoFormats(acuteID)
                     # print("recordNow : ", recordNow['fullrows'][0])
                     toSetRecord = recordNow['fullrows'][0]
