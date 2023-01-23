@@ -17,12 +17,10 @@ software distributed under the License is distributed on an "AS IS" BASIS, WITHO
 either express or implied. See the License for the specific language governing permissions and limitations under the License.
 """
 
-import os
-import sys
 from pathlib import Path
 import PySimpleGUI as sg
 import logging
-import time
+
 # Internal dependencies
 import util
 from data_access import DataAccess
@@ -106,16 +104,19 @@ class SpecimenDataEntry():
         greyArea = '#BFD1DF'  # Session & Settings
 
         # Set standard element dimensions
-        defaultSize = (21, 1)  # Ensure element labels are the same size so that they line up
+        defaultSize = (23, 1)  # Ensure element labels are the same size so that they line up
         element_size = (25, 1)  # Default width of all fields in the 'green area'
-        green_size = (20, 1)  # Default width of all fields in the 'green area'
+        green_size = (21, 1)  # Default width of all fields in the 'green area'
         blue_size = (35, 1)  # Default width of all fields in the 'blue area'
+        storage_size = (22, 1)
 
         # Set text fonts
         font = ('Bahnschrift', 13)
         labelHeadlineMeta = ('Bahnschrift', 12)
         titleFont = ('Bahnschrift', 18)
         smallLabelFont = ('Arial', 11, 'italic')
+        wingding = ('Wingding', 18)
+        indicator = '◀'
 
         # TODO placeholder For when higher taxonomic groups are added as filter
         taxonomicGroups = ['placeholder...']
@@ -124,16 +125,17 @@ class SpecimenDataEntry():
 
         # Green Area elements
         storage = [
-            sg.Text("Storage location:", size=defaultSize, background_color=greenArea, font=font),
-            sg.InputText('', key='txtStorage', size=green_size, text_color='black',
+            sg.Text("Storage location:", size=storage_size, background_color=greenArea, font=font),
+            sg.InputText('', key='txtStorage', size=green_size, text_color='black', pad=(10,0),
                          background_color='white', font=('Arial', 12), enable_events=True),
             sg.Text("", key='txtStorageFullname', size=(50, 2), background_color=greenArea, font=smallLabelFont)]
 
         preparation = [
-            sg.Text("Preparation type:", size=defaultSize, background_color=greenArea, font=font),
+            sg.Text("Preparation type:", size=defaultSize, justification='l', background_color=greenArea, font=font),
             sg.Combo(util.convert_dbrow_list(self.collobj.prepTypes), key='cbxPrepType', size=green_size,
                      text_color='black',
-                     background_color='white', font=('Arial', 12), readonly=True, enable_events=True), ]
+                     background_color='white', font=('Arial', 12), readonly=True, enable_events=True, pad=(0,0)),
+                sg.Text(indicator, key='iconPrep', background_color=greenArea, visible=False, font=wingding)]
         # taxonomy = [ #Currently not used
         #     sg.Text("Taxonomic group:", size=defaultSize, visible=False, background_color=greenArea, font=font),
         #     sg.Combo(taxonomicGroups, key='cbxHigherTaxon', visible=False, size=green_size, text_color='black',
@@ -142,14 +144,15 @@ class SpecimenDataEntry():
             sg.Text('Type status:', size=defaultSize, background_color=greenArea, font=font),
             sg.Combo(util.convert_dbrow_list(self.collobj.typeStatuses), key='cbxTypeStatus', size=green_size,
                      text_color='black',
-                     background_color='white', font=('Arial', 12), readonly=True, enable_events=True), ]
+                     background_color='white', font=('Arial', 12), readonly=True, enable_events=True, pad=(0,0)),
+        sg.Text(indicator, pad=(7,0), key='iconType', background_color=greenArea, visible=False, font=wingding ),]
         notes = [
             sg.Text('Notes', size=defaultSize, background_color=greenArea, font=font),
-            sg.InputText(size=(80, 5), key='txtNotes', background_color='white', text_color='black',
+            sg.InputText(size=(80, 5), key='txtNotes', background_color='white', text_color='black', pad=(0, 0),
                          enable_events=False)]
 
         multispecimen = [
-            sg.Checkbox('Multispecimen sheet', key='chkMultiSpecimen', enable_events=True, background_color=greenArea,
+            sg.Checkbox('Multispecimen object', key='chkMultiSpecimen', enable_events=True, background_color=greenArea,
                         font=(11))]
 
         layout_greenarea = [
@@ -163,7 +166,7 @@ class SpecimenDataEntry():
                      text_color='black',
                      background_color='white', font=('Arial', 12), readonly=True, enable_events=True), ]
         taxonInput = [
-            sg.Text('Taxonomic name:     ', size=(21, 1), background_color=blueArea, text_color='black', font=font),
+            sg.Text('Taxonomic name:     ', size=defaultSize, background_color=blueArea, text_color='black', font=font),
             sg.Input('', size=blue_size, key='inpTaxonName', text_color='black', background_color='white',
                      font=('Arial', 12), enable_events=True, pad=((5, 0), (0, 0))),
             sg.Text('No further record to go back to!', key='lblRecordEnd', visible=False, background_color="#ff5588",
@@ -205,7 +208,7 @@ class SpecimenDataEntry():
             sg.StatusBar('', relief=None, size=(7, 1), background_color=blueArea),
             sg.Button('SAVE', key="btnSave", button_color='seagreen', size=9),
             sg.StatusBar('', relief=None, size=(14, 1), background_color=blueArea),
-            sg.Button('GO BACK', key="btnBack", button_color='red4', pad=(13, 0), highlight_colors=('white', 'black')),
+            sg.Button('GO BACK', key="btnBack", button_color='deeppink'),
             sg.Button('GO FORWARDS', key='btnForward', button_color=('black', 'LemonChiffon2')),
             sg.Button('CLEAR FORM', key='btnClear', button_color='black on white'),
             # sg.Button('Export data', key='btnExport', button_color='royal blue'),  # Export data should be a backend feature says Pip
@@ -244,14 +247,14 @@ class SpecimenDataEntry():
         layout = [[
             sg.Frame('', layoutTitle, size=(550, 100), pad=(0, 0), background_color=greyArea, border_width=0),
             sg.Frame('', layoutMeta, size=(500, 120), pad=(0, 0), border_width=0, background_color=greyArea)],
-            [sg.Frame('', [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(250, 175),
+            [sg.Frame('', [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(250, 185),
                       background_color=greenArea, expand_x=True, ), ],  # expand_y=True,
             [sg.Frame('', [[sg.Column(layout_bluearea, background_color=blueArea)]],
                       title_location=sg.TITLE_LOCATION_TOP,
                       background_color=blueArea, expand_x=True, expand_y=True, )], ]  #
 
         # Launch window
-        self.window = sg.Window("Mass Annotated Digitization Desk (MADD)", layout, margins=(2, 2), size=(1024, 530),
+        self.window = sg.Window("Mass Annotated Digitization Desk (MADD)", layout, margins=(2, 2), size=(1024, 540),
                                 resizable=True, return_keyboard_events=True, finalize=True, background_color=greyArea)
         self.window.TKroot.focus_force()
         # Forces the app to be in focus.
@@ -276,15 +279,17 @@ class SpecimenDataEntry():
         and the rows for the 'adjacent' table:
          ('adjecentrows':) which is a LIST"""
         # Considering moving this function to util.py or to a model class.
-        logging.debug('<<<In extract rows in two formats function.>>>')
+        logging.debug('<<<In extract rows in two formats function.>>> %s' % rowId)
 
         rows = self.previousRows(rowId)
         headers = ['id', 'spid', 'catalognumber', 'multispecimen', 'taxonfullname', 'taxonname', 'taxonnameid',
                    'taxonspid',
                    'highertaxonname', 'typestatusname', 'typestatusid', 'georegionname', 'georegionid',
                    'storagefullname',
-                   'storagename', 'storageid', 'preptypename', 'preptypeid', 'notes', 'institutionid', 'collectionid',
+                   'storagename', 'storageid', 'preptypename', 'preptypeid', 'notes', 'institutionid', 'institutionname', 'collectionid', 'collectionname',
                    'username', 'userid', 'recorddatetime', 'exported', 'exportdatetime', 'exportuserid']
+        '''The order of the headers above is extremely important since there is a zip operation further down
+        that creates the dictionary record. The header list and the row values list have to align correctly'''
         specimenList = [[row for row in line] for line in rows]
 
         # Code block below takes the rows returned and turns them into the complete row records and the previous row records.
@@ -292,7 +297,7 @@ class SpecimenDataEntry():
         previousRows = []  # the curated rows needed to populate the table
         for row in specimenList:
             specimenDict = dict(zip(headers, row)) # creates the complete row dict to be appended.
-            logging.debug('the specimen dict in for loop is:', specimenDict)
+            logging.debug('the specimen dict in for loop is: %s' % specimenDict)
             completeRowDicts.append(specimenDict)
             tempAdjecent = []
             for k in self.operationalHeads:
@@ -314,6 +319,7 @@ class SpecimenDataEntry():
         else:
             rows = self.db.getRows('specimen', limit=number, sortColumn='id DESC')
         self.previousRecords = [[row for row in line] for line in rows]
+        print(self.previousRecords)
         return self.previousRecords
 
 
@@ -359,10 +365,16 @@ class SpecimenDataEntry():
                         # Move focus to next field (PrepTypes list). This is necessary due to all keys being captured
                         # for the autoSuggest/capture_suggestion function.
                         self.window['cbxPrepType'].set_focus()
+                        self.window['iconPrep'].update(visible=True)
 
             if event == 'cbxPrepType':
+
                 self.collobj.setPrepTypeFields(self.window[event].widget.current())
+                print('proc. prepType')
+                self.window['iconPrep'].update(visible=False)
+                self.window['iconType'].update(visible=True)
                 self.window['cbxTypeStatus'].set_focus()
+
 
             # if event == 'cbxHigherTaxon':
             #    pass
@@ -371,6 +383,7 @@ class SpecimenDataEntry():
                 # TypeStatus is preloaded in the Class
                 self.collobj.setTypeStatusFields(self.window[event].widget.current())
                 self.collobj.typeStatusName = self.window['cbxTypeStatus'].get()
+                self.window['iconType'].update(visible=False)
                 self.window['txtNotes'].set_focus()
 
             if event == 'txtNotes_Edit':
@@ -533,8 +546,9 @@ class SpecimenDataEntry():
                     recordAcute = self.previousRecords[values[event][0]] #The index of the chosen record from the table
                     acuteID = recordAcute[0] # Pure integer value extracted.
                     recordNow = self.extractRowsInTwoFormats(acuteID)
-                    # print("recordNow : ", recordNow['fullrows'][0])
+                    print("recordNow : ", recordNow['fullrows'][0])
                     toSetRecord = recordNow['fullrows'][0]
+
                     self.collobj.setFields(toSetRecord)
                     # print('getfilds as dict=', self.collobj.getFieldsAsDict())
 
@@ -663,3 +677,4 @@ class SpecimenDataEntry():
         self.searchString = []
         #Update collection object so that the ID is removed (preventing overwriting of previous record)
         self.collobj.id = 0
+
