@@ -2,8 +2,8 @@
   SELECT 	
 	-- t.TaxonID taxonid, -- t.Name name, t.FullName fullname, t.RankID rankid, t.TaxonTreeDefID taxontreedefid, p1.FullName parentfullname, 
 	CONCAT(
-	-- 'INSERT INTO taxonname ("taxonid","name","fullname","rankid","taxontreedefid","parentfullname") VALUES (',
-	',(', t.TaxonID, ',"', t.Name, '","', t.FullName, '",', t.RankID, ',', t.TaxonTreeDefID, ',"', p1.FullName,'")') 
+	-- 'INSERT INTO taxonname ("spid","name","fullname","rankid","taxontreedefid","parentfullname", "collectionid") VALUES (', 
+	',(', t.TaxonID, ',"', t.Name, '","', t.FullName, '",', t.RankID, ',', t.TaxonTreeDefID, ',"', p1.FullName,'", (SELECT id FROM collection WHERE spid = ', pt.CollectionID, '))') 
 	sqlstatement 
  FROM taxon t 
 	JOIN taxon p1 ON p1.TaxonID = t.ParentID
