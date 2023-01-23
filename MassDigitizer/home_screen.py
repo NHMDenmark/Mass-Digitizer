@@ -154,6 +154,13 @@ class HomeScreen():
                                 gs.collectionName = selected_collection
                                 gs.institutionId = institution_id
                                 gs.institutionName = selected_institution 
+
+                                # TODO Specify fetch user agent first name, middle, last name 
+                                # 1. Fetch SpecifyUser on username 
+                                # 2. Fetch Agent on prinmary key
+                                # 3. Store full name in global settings (as single, concatenated string of first, middle, last 
+                                # (In Specimen Data Entry add field for user full name)
+
                                 self.window.close()
                                 #de.init(collection_id)
                                 sde.SpecimenDataEntry(collection_id)
