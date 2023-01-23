@@ -13,7 +13,7 @@
 """
 
 import time 
-import requests
+import requests # Documentation: https://requests.readthedocs.io/en/latest/api/ 
 import json 
 import urllib3
 
