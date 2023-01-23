@@ -25,6 +25,7 @@ OutputBaseFilename=DaSSCoSetup v{#MyAppVersion}
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
+SetupLogging=yes
 
 [Dirs]
 Name: {app}\logs
@@ -46,6 +47,5 @@ Source: "temp\db.sqlite3"; DestDir: "{userdocs}\DaSSCo"; Flags: ignoreversion re
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"                                                     
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
-[Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-
+;[Run]
+;Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
