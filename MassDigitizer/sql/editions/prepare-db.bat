@@ -6,7 +6,7 @@ echo %1
 
 IF [%1] == [] GOTO :NoParameter
 
-copy ..\sql\editions\%1\test.txt test.txt
+copy %1\_test.txt _test.txt
 if %errorlevel% NEQ 0 GOTO :InvalidPath
 
 copy /y ..\..\db\db.sqlite3 ..\..\temp\db.sqlite3
