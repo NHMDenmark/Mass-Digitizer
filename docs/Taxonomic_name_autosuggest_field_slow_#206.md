@@ -19,7 +19,7 @@ Total Virtual Memory: 12,5 GB
 Available Virtual Memory: 4,65 GB  
 Page File Space: 4,75 GB  
 
-I consider this an average workstation that won't be considered a speed demon.
+I consider this an average workstation, not a speed demon.
 
 The first test is using a simple SELECT query with two conditions:
 `SELECT * FROM taxonname WHERE fullname LIKE lower("%car%") AND taxontreedefid = 13 AND rankid <=270  LIMIT 200;`
