@@ -1,7 +1,8 @@
   -- To be run on Specify database for each collection 
-  	SELECT    
-	CONCAT (',(', pt.PrepTypeID, ',"', pt.Name, '", (SELECT id FROM collection WHERE spid = ', pt.CollectionID, '))') sqlstatement 
- FROM preptype pt 
- 		WHERE pt.CollectionID = 0 
-		-- Adjust collection id : 
-		--    NHMD Tracheophyta - 688130 
+  	SELECT -- pli.* -- pli.Title  -- pli.PickListItemID, pli.Value, pli.Title    
+			 CONCAT (',(', pli.PickListItemID, ',"', pli.Title, '","', pli.Value , '", (SELECT id FROM collection WHERE spid = ', pl.CollectionID, '))') sqlstatement 
+ FROM picklist pl 
+ 	JOIN picklistitem pli ON pli.PickListID = pl.PickListID 
+ 		WHERE pl.Name = 'TypeStatus' AND pl.CollectionID = 0 -- Adjust collection id : 
+															 --    NHMD Tracheophyta - 688130 
+ 		ORDER BY pli.Ordinal;
