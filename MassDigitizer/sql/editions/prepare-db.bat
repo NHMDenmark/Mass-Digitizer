@@ -20,7 +20,7 @@ set list=PrepTypes TypeStatuses GeoRegions Storage Highertaxa Species-Batch1 Spe
     echo Reading %%t
     copy ..\sql\editions\%1\%%t.sql %%t.sql
     sqlite3 db.sqlite3 ".read %%t.sql"
-    echo Added %%t
+    rem echo Added %%t
     del /f %%t.sql
     echo *********************
 ))
