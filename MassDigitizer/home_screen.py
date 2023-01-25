@@ -109,6 +109,29 @@ class HomeScreen():
 
         self.main()
 
+    def getAgentFullname(self, agentName, userName, password, collectionId):
+        #AgentName is the Specify login name
+        sp = specify_interface
+        si = sp.SpecifyInterface()
+        usr = userName
+        pw = password
+        tok = si.getCSRFToken()
+        si.login(usr, pw, collectionId, tok)
+        specifyObject = si.getSpecifyObjects('specifyuser', filters={"name":f"{usr}"})[0]
+        agentID = specifyObject['id']
+
+        # Getting the full name based on user ID
+        userProfile = si.getSpecifyObjects('agent', filters={"specifyuser": agentID})[0]
+
+        if userProfile['middleinitial']:
+            fullname = f"{userProfile['firstname']} {userProfile['middleinitial']}. {userProfile['lastname']}"
+        else:
+            fullname = f"{userProfile['firstname']} {userProfile['lastname']}"
+
+        return fullname.strip()
+
+
+
     def main(self):
         """
         Main loop of execution responding to user input 
@@ -125,8 +148,8 @@ class HomeScreen():
                 institution = db.getRowsOnFilters('institution', {' name = ':'"%s"'%selected_institution},1)
                 institution_id = institution[0]['id']
                 institution_url = institution[0]['url']
+                gs.baseURL = institution_url #This is a kind of hack since baseURL is also set further down.
                 collections = util.convert_dbrow_list(db.getRowsOnFilters('collection', {' institutionid = ':'%s'%institution_id, 'visible = ': '1'}), True)
-
                 self.window['lstSelectCollection'].update(values=collections)
                 self.window['colNext'].update(visible=True)
 
@@ -140,8 +163,13 @@ class HomeScreen():
                     collection = db.getRowsOnFilters('collection', {
                                                     'name = ':'"%s"'%selected_collection, 
                                                     'institutionid = ':'%s'%institution_id,})
+
+
                     if len(collection) > 0:
                         collection_id = collection[0]['id']
+
+                        res = self.getAgentFullname(username, userName=username, password=password,
+                                              collectionId=collection_id)
 
                         if collection_id > 0:
                             gs.baseURL = institution_url
@@ -157,7 +185,7 @@ class HomeScreen():
 
                                 # TODO Specify fetch user agent first name, middle, last name 
                                 # 1. Fetch SpecifyUser on username 
-                                # 2. Fetch Agent on prinmary key
+                                # 2. Fetch Agent on primary key
                                 # 3. Store full name in global settings (as single, concatenated string of first, middle, last 
                                 # (In Specimen Data Entry add field for user full name)
 
