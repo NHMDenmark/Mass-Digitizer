@@ -153,7 +153,8 @@ class SpecimenDataEntry():
 
         multispecimen = [
             sg.Checkbox('Multispecimen object', key='chkMultiSpecimen', enable_events=True, background_color=greenArea,
-                        font=(11))]
+                        font=(11)), sg.InputText(size=(80, 5), key='txtMultiSpecimen', background_color='white', text_color='black', pad=(0, 0),
+                         enable_events=False, visible=False)]
 
         layout_greenarea = [
             storage, preparation, type_status, notes, multispecimen, ]
@@ -402,6 +403,7 @@ class SpecimenDataEntry():
             if event == 'chkMultiSpecimen_Enter':
                 # This event is only triggered by being in the checkbox element
                 # and pressing Enter.
+                self.window['txtMultiSpecimen'].update(visible=True)
                 check = self.window['chkMultiSpecimen'].Get()
                 self.collobj.multiSpecimen = values['chkMultiSpecimen']
                 self.window['cbxGeoRegion'].set_focus()
@@ -683,3 +685,4 @@ class SpecimenDataEntry():
         #Update collection object so that the ID is removed (preventing overwriting of previous record)
         self.collobj.id = 0
 
+g = SpecimenDataEntry(29)
