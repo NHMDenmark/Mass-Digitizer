@@ -259,6 +259,8 @@ class SpecimenDataEntry():
         self.window.TKroot.focus_force()
         # Forces the app to be in focus.
 
+        self.window['cbxTypeStatus'].bind('<Tab>', '+TAB')
+
         # Set session fields
         self.window.Element('txtUserName').Update(value=gs.spUserName)
         collection = self.db.getRowOnId('collection', collection_id)
@@ -319,7 +321,7 @@ class SpecimenDataEntry():
         else:
             rows = self.db.getRows('specimen', limit=number, sortColumn='id DESC')
         self.previousRecords = [[row for row in line] for line in rows]
-        print(self.previousRecords)
+        # print(self.previousRecords)
         return self.previousRecords
 
 
@@ -370,11 +372,14 @@ class SpecimenDataEntry():
             if event == 'cbxPrepType':
 
                 self.collobj.setPrepTypeFields(self.window[event].widget.current())
-                print('proc. prepType')
+
                 self.window['iconPrep'].update(visible=False)
                 self.window['iconType'].update(visible=True)
                 self.window['cbxTypeStatus'].set_focus()
 
+            if event.endswith('+TAB'):
+                self.window['cbxTypeStatus'].set_focus()
+                self.window['iconType'].update(visible=True)
 
             # if event == 'cbxHigherTaxon':
             #    pass
@@ -546,7 +551,7 @@ class SpecimenDataEntry():
                     recordAcute = self.previousRecords[values[event][0]] #The index of the chosen record from the table
                     acuteID = recordAcute[0] # Pure integer value extracted.
                     recordNow = self.extractRowsInTwoFormats(acuteID)
-                    print("recordNow : ", recordNow['fullrows'][0])
+                    # print("recordNow : ", recordNow['fullrows'][0])
                     toSetRecord = recordNow['fullrows'][0]
 
                     self.collobj.setFields(toSetRecord)
