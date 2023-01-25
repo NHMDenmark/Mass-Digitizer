@@ -184,13 +184,10 @@ class HomeScreen():
                                 gs.institutionName = selected_institution 
 
                                 # TODO Specify fetch user agent first name, middle, last name 
-<<<<<<< HEAD
-                                # 1. Fetch SpecifyUser on username 
-                                # 2. Fetch Agent on primary key
-=======
+
+
                                 # 1. Fetch SpecifyUser on username (/api/specify/specifyuser/?name=username)
                                 # 2. Fetch Agent on specifyuser prinmary key (/api/specify/agent/?specifyuser=n)
->>>>>>> 7d879468efe405990dc0f51f8d58793f27726b2b
                                 # 3. Store full name in global settings (as single, concatenated string of first, middle, last 
                                 # (In Specimen Data Entry add field for user full name)
 
