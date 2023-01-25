@@ -83,16 +83,16 @@ So the process for compilation are as follows:
 1. Create the executable using nuitka
 2. Run the batch file to generate the db edition of choice 
 3. Run the Inno Setup script to create the installer for this edition 
-4. Repeat for the different editions giving each a distinct name
+4. Repeat for the different editions giving each installer a distinct name by adding the **Edition Code** (see table below)
 
 The different editions will be published alongside each other on the [Releases page](https://github.com/NHMDenmark/Mass-Digitizer/releases) 
 
 Here follows a table for the different editions and their path, which is the parameter to be passed to the batch file: 
 
-| **Institution**   | **Collection**  | **Parameter**     |  **Remarks**  |
-|-------------------|-----------------|-------------------|---------------|
-| NHMD (Copenhagen) | Vascular Plants | NHMD\tracheophyta |               | 
-| NHMD (Copenhagen) | Entomology      | NHMD\entomology   | Taxon spine restricted to selected taxa under Coleoptera & Lepidoptera |
-| NHMA (Aarhus)     | Entomology      | NHMA\entomology   |               |
+| **Institution**   | **Collection**  | **Parameter**     | **Edition_Code** | **Remarks**                                                                  |
+|-------------------|-----------------|-------------------|------------------|------------------------------------------------------------------------------|
+| NHMD (Copenhagen) | Vascular Plants | NHMD\tracheophyta | NHMD-TRA         |                                                                              | 
+| NHMD (Copenhagen) | Entomology      | NHMD\entomology   | NHMD-ENT         |Taxon spine restricted to selected taxa under Coleoptera & Lepidoptera        |
+| NHMA (Aarhus)     | Entomology      | NHMA\entomology   | NHMA-ENT         |                                                                              |
 
 
