@@ -22,6 +22,7 @@ set list=PrepTypes TypeStatuses GeoRegions Storage Highertaxa Species-Batch1 Spe
     sqlite3 db.sqlite3 ".read %%t.sql"
     rem echo Added %%t
     del /f %%t.sql
+    echo Done.
     echo *********************
 ))
 
