@@ -30,21 +30,7 @@ import autoSuggest_popup
 import version_number
 from models import specimen
 
-# Makes sure that current folder is registrered to be able to access other app files
-# sys.path.append(str(Path(__file__).parent.parent.joinpath('MassDigitizer/log')))
-# # currentpath = os.path.join(pathlib.Path(__file__).parent, '')
-# sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}", "")
-#
-# logName = f"aSDE_log{sTime}.log"
-#
-# logging.basicConfig(filename=logName, encoding='utf-8', level=logging.DEBUG, force=True)
-#
-# sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}", "")
-# pathString = util.getLogsPath()
-# filePath = os.path.expanduser(pathString)
-# sys.path.append(str(Path(__file__).parent.parent.joinpath(filePath)))
-# logName = f"specimen_data_access-py{sTime}.log"
-# logFilePath = str(Path(filePath).joinpath(f'{logName}'))
+
 l = util.buildLogger('specimen_daat_access')
 
 class SpecimenDataEntry():
@@ -64,7 +50,7 @@ class SpecimenDataEntry():
         self.clearingList = ['txtStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'txtNotes',
                              'chkMultiSpecimen', 'cbxGeoRegion', 'inpTaxonName', 'txtCatalogNumber', 'txtRecordID']
         self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'txtNotes'},
-                             {'chkMultiSpecimen'}, {'cbxGeoRegion'}, {'inpTaxonName'}]
+                             {'chkMultiSpecimen'}, {'txtMultiSpecimen'}, {'cbxGeoRegion'}, {'inpTaxonName'}]
         self.nonStickyFields = ['txtCatalogNumber', 'txtRecordID']
 
         # Set up user interface 
@@ -109,6 +95,7 @@ class SpecimenDataEntry():
         green_size = (21, 1)  # Default width of all fields in the 'green area'
         blue_size = (35, 1)  # Default width of all fields in the 'blue area'
         storage_size = (22, 1)
+        checkText_size = (20, 1)
 
         # Set text fonts
         font = ('Bahnschrift', 13)
@@ -148,12 +135,12 @@ class SpecimenDataEntry():
         sg.Text(indicator, pad=(7,0), key='iconType', background_color=greenArea, visible=False, font=wingding ),]
         notes = [
             sg.Text('Notes', size=defaultSize, background_color=greenArea, font=font),
-            sg.InputText(size=(80, 5), key='txtNotes', background_color='white', text_color='black', pad=(0, 0),
+            sg.InputText(size=(80,5), key='txtNotes', background_color='white', text_color='black', pad=(0, 0),
                          enable_events=False)]
 
         multispecimen = [
-            sg.Checkbox('Multispecimen object', key='chkMultiSpecimen', enable_events=True, background_color=greenArea,
-                        font=(11)), sg.InputText(size=(80, 5), key='txtMultiSpecimen', background_color='white', text_color='black', pad=(0, 0),
+            sg.Checkbox('Multispecimen object', key='chkMultiSpecimen', size=checkText_size, enable_events=True, background_color=greenArea,
+                        font=(11) ), sg.InputText(size=(80,5), key='txtMultiSpecimen', background_color='white', text_color='black', pad=(3, 0),
                          enable_events=False, visible=False)]
 
         layout_greenarea = [
@@ -403,7 +390,10 @@ class SpecimenDataEntry():
             if event == 'chkMultiSpecimen_Enter':
                 # This event is only triggered by being in the checkbox element
                 # and pressing Enter.
-                self.window['txtMultiSpecimen'].update(visible=True)
+                self.window['txtMultiSpecimen'].update('', visible=True)
+                import uuid
+                uniqID = uuid.uuid4()
+                self.window['txtMultiSpecimen'].update(uniqID)
                 check = self.window['chkMultiSpecimen'].Get()
                 self.collobj.multiSpecimen = values['chkMultiSpecimen']
                 self.window['cbxGeoRegion'].set_focus()
@@ -684,5 +674,3 @@ class SpecimenDataEntry():
         self.searchString = []
         #Update collection object so that the ID is removed (preventing overwriting of previous record)
         self.collobj.id = 0
-
-g = SpecimenDataEntry(29)
