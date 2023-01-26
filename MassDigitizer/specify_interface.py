@@ -52,11 +52,11 @@ class SpecifyInterface():
     """   
     # print('Get CSRF token from ', gs.baseURL)
     response = self.spSession.get(gs.baseURL + 'context/login/', verify=False)
-    csrftoken = response.cookies.get('csrftoken')
-    #print(' - Response: %s %s' %(str(response.status_code), response.reason))
-    #print(' - CSRF Token: %s' % csrftoken)
-    #print('------------------------------')
-    return csrftoken
+    self.csrfToken = response.cookies.get('csrftoken')
+    # print(' - Response: %s %s' %(str(response.status_code), response.reason))
+    # print(' - CSRF Token: %s' % self.csrfToken)
+    # print('------------------------------')
+    return self.csrfToken
 
   def specifyLogin(self, username, passwd, collection_id):
       """ 
@@ -166,15 +166,14 @@ class SpecifyInterface():
     headers = {'content-type': 'application/json', 'X-CSRFToken': self.csrfToken, 'Referer': gs.baseURL}
     filterString = ""
     for key in filters:
-      filterString += '&' + key + '=' + filters[key]
+      filterString = f"&{key}={filters[key]}"
     apiCallString = f'{gs.baseURL}api/specify/{objectName}/?limit={limit}&offset={offset}{filterString}'
     #if limit == 1000: print("" + apiCallString)
-
     response = self.spSession.get(apiCallString, headers=headers)
-    #print(' - Response: %s %s' %(str(response.status_code), response.reason))
+    # print(' - Response: %s %s' %(str(response.status_code), response.reason))
     if response.status_code < 299:
       objectSet = json.loads(response.text)['objects'] # get collections from json string and convert into dictionary
-      #print(' - Received %d object(s)' % len(objectSet))
+      # print(' - Received %d object(s)' % len(objectSet))
     
     return objectSet 
 
