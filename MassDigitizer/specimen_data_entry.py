@@ -278,7 +278,7 @@ class SpecimenDataEntry():
                    'highertaxonname', 'typestatusname', 'typestatusid', 'georegionname', 'georegionid',
                    'storagefullname',
                    'storagename', 'storageid', 'preptypename', 'preptypeid', 'notes', 'institutionid', 'institutionname', 'collectionid', 'collectionname',
-                   'username', 'userid', 'recorddatetime', 'exported', 'exportdatetime', 'exportuserid']
+                   'username', 'userid', 'recorddatetime', 'exported', 'exportdatetime', 'exportuserid', 'agentfullname']
         '''The order of the headers above is extremely important since there is a zip operation further down
         that creates the dictionary record. The header list and the row values list have to align correctly'''
         specimenList = [[row for row in line] for line in rows]
