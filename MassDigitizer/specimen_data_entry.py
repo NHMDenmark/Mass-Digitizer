@@ -690,4 +690,3 @@ class SpecimenDataEntry():
         #Update collection object so that the ID is removed (preventing overwriting of previous record)
         self.collobj.id = 0
 
-g = SpecimenDataEntry(29)
