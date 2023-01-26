@@ -248,6 +248,7 @@ class SpecimenDataEntry():
         # Forces the app to be in focus.
 
         self.window['cbxTypeStatus'].bind('<Tab>', '+TAB')
+        self.window['chkMultiSpecimen'].bind('<ButtonPress-1>', '+BTN1')
 
         # Set session fields
         self.window.Element('txtUserName').Update(value=gs.spUserName)
@@ -387,9 +388,19 @@ class SpecimenDataEntry():
                 self.collobj.notes = values['txtNotes']
                 # self.window['chkMultiSpecimen'].set_focus()
 
-            if event == 'chkMultiSpecimen_Enter':
-                # This event is only triggered by being in the checkbox element
-                # and pressing Enter.
+            # if event == 'chkMultiSpecimen_Enter':
+            #     # This event is only triggered by being in the checkbox element
+            #     # and pressing Enter.
+            #     self.window['txtMultiSpecimen'].update('', visible=True)
+            #     import uuid
+            #     uniqID = uuid.uuid4()
+            #     self.window['txtMultiSpecimen'].update(uniqID)
+            #     check = self.window['chkMultiSpecimen'].Get()
+            #     self.collobj.multiSpecimen = values['chkMultiSpecimen']
+            #     self.window['cbxGeoRegion'].set_focus()
+
+            if event == 'chkMultiSpecimen':
+                # Launch text box for multi-specimen with UUID value.
                 self.window['txtMultiSpecimen'].update('', visible=True)
                 import uuid
                 uniqID = uuid.uuid4()
@@ -397,6 +408,10 @@ class SpecimenDataEntry():
                 check = self.window['chkMultiSpecimen'].Get()
                 self.collobj.multiSpecimen = values['chkMultiSpecimen']
                 self.window['cbxGeoRegion'].set_focus()
+
+            if values['chkMultiSpecimen']== False:
+                # Resets the multi-specimen box
+                self.window['txtMultiSpecimen'].update('')
 
             if event == 'chkMultiSpecimen_Edit':
                 self.collobj.multiSpecimen = values['chkMultiSpecimen']
@@ -674,3 +689,5 @@ class SpecimenDataEntry():
         self.searchString = []
         #Update collection object so that the ID is removed (preventing overwriting of previous record)
         self.collobj.id = 0
+
+g = SpecimenDataEntry(29)
