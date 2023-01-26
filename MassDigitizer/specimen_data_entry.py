@@ -388,17 +388,6 @@ class SpecimenDataEntry():
                 self.collobj.notes = values['txtNotes']
                 # self.window['chkMultiSpecimen'].set_focus()
 
-            # if event == 'chkMultiSpecimen_Enter':
-            #     # This event is only triggered by being in the checkbox element
-            #     # and pressing Enter.
-            #     self.window['txtMultiSpecimen'].update('', visible=True)
-            #     import uuid
-            #     uniqID = uuid.uuid4()
-            #     self.window['txtMultiSpecimen'].update(uniqID)
-            #     check = self.window['chkMultiSpecimen'].Get()
-            #     self.collobj.multiSpecimen = values['chkMultiSpecimen']
-            #     self.window['cbxGeoRegion'].set_focus()
-
             if event == 'chkMultiSpecimen':
                 # Launch text box for multi-specimen with UUID value.
                 self.window['txtMultiSpecimen'].update('', visible=True)
@@ -533,6 +522,7 @@ class SpecimenDataEntry():
                     self.collobj.notes = self.window['txtNotes'].Get()
 
                 specimenRecord = self.collobj.save()
+
                 self.clearNonStickyFields(values)
 
                 # Create a new specimen instance and add previous id to it
@@ -558,7 +548,6 @@ class SpecimenDataEntry():
                     recordAcute = self.previousRecords[values[event][0]] #The index of the chosen record from the table
                     acuteID = recordAcute[0] # Pure integer value extracted.
                     recordNow = self.extractRowsInTwoFormats(acuteID)
-                    # print("recordNow : ", recordNow['fullrows'][0])
                     toSetRecord = recordNow['fullrows'][0]
 
                     self.collobj.setFields(toSetRecord)
@@ -689,4 +678,3 @@ class SpecimenDataEntry():
         self.searchString = []
         #Update collection object so that the ID is removed (preventing overwriting of previous record)
         self.collobj.id = 0
-
