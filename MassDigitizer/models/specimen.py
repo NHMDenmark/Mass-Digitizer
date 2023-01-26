@@ -56,6 +56,7 @@ class specimen(model.Model):
         self.collectionName  = gs.collectionName
         self.userName        = gs.spUserName
         self.userId          = gs.spUserId
+        self.agentfullname   = gs.agentFullName
         # self.workStation     = ''
         self.recordDateTime  = str(datetime.now())
         self.exported        = 0
@@ -118,6 +119,7 @@ class specimen(model.Model):
                 'exported':        f'"{self.exported}"',
                 'exportdatetime':  f'"{self.exportDateTime}"',
                 'exportuserid':    f'"{self.exportUserId}"',
+                'agentfullname':   f'"{self.agentfullname}"'
                 }
         
         return fieldsDict
@@ -158,6 +160,7 @@ class specimen(model.Model):
         self.exported = record['exported']
         self.exportDateTime = record['exportdatetime']
         self.exportUserId = record['exportuserid']
+        self.agentfullname = record['agentfullname']
 
         self.loadPredefinedData()
     
