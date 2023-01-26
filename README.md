@@ -49,6 +49,9 @@ More information on the Systems Architecture including a visual representation, 
 The app interfaces with a local SQLite database with tables for taxonomy (millions of names that are accessed according to the relevant discipline, say 'botany' for instance.) Storage while smaller also has its own table, as do Collection, Georegion and Institution. The table that is populated by the app is mainly 'specimen'.
 Eventually, the local DB instances will be uploaded to a server where the data will be processed into Specify. The application also interfaces directly with Specify through the Specify7 API (more information further below).  
 
+### Specify Interface 
+
+In order to exchange information with Specify, the app has a module for interfacing with the Specify7 API. For now, this is mainly used for user authentication and basic info, but eventually this is planned to be built out into full synchronization in both directions. 
 
 ### Compilation  
 ##### Prior code cleanup  
@@ -71,10 +74,6 @@ Remember to activate venv and run pip install -r requirements.txt first
 
 For creating the installer, we use Inno Setup and a definition file for a generic edition is located in the repo root [DaSSCO.iss](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/MassDigitizer/DaSSCo.iss). The Inno Setup scripts bundles the database with the executable into an installer file. Before running the Inno Setup script, it is necessary to fill the database file with the taxonomic spine and other predefined data specific for the edition you would like to generate an installer for (see below).
 
-### Specify Interface 
-
-In order to exchange information with Specify, the app has a module for interfacing with the Specify7 API. For now, this is mainly used for user authentication and basic info, but eventually this is planned to be built out into full synchronization in both directions. 
-
 #### Compiling App Editions 
 
 Due to the size of the taxonomic spine, it is necessary to generate seperate editions for respective collections with differents of the database file that is bundled with the app. Under [MassDigitizer/sql/editions](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/MassDigitizer/sql/editions/) there are folders for each edition containing the sql statements needed to insert not only taxonomic names, but also other predefined data specific for that edition such as storage locations, preparation types and type statuses. In the root of this folder there is a batch file ([prepare-db.bat](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/MassDigitizer/sql/editions/prepare-db.bat)) that needs to be run in order to execute the sql statements. The path to the edition folder needs to be passed as a parameter when executing the batch file (see below). The resulting updated db.sqlite3 file is located in the [MassDigitizer/temp](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/MassDigitizer/temp/) folder from where it will be picked up by Inno Setup for being bundled with the installer.  
@@ -95,4 +94,4 @@ Here follows a table for the different editions and their path, which is the par
 | NHMD (Copenhagen) | Entomology      | NHMD\entomology   | NHMD-ENT         |Taxon spine restricted to selected taxa under Coleoptera & Lepidoptera        |
 | NHMA (Aarhus)     | Entomology      | NHMA\entomology   | NHMA-ENT         |                                                                              |
 
-
+NOTE: In order to run the batch file, it's necessary to install sqlite command tools first: https://sqlite.org/download.html 
