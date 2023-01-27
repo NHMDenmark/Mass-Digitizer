@@ -141,7 +141,7 @@ class SpecimenDataEntry():
         multispecimen = [
             sg.Checkbox('Multispecimen object', key='chkMultiSpecimen', size=checkText_size, enable_events=True, background_color=greenArea,
                         font=(11) ), sg.InputText(size=(80,5), key='txtMultiSpecimen', background_color='white', text_color='black', pad=(3, 0),
-                         enable_events=False, visible=False)]
+                         enable_events=True, visible=False)]
 
         layout_greenarea = [
             storage, preparation, type_status, notes, multispecimen, ]
@@ -358,7 +358,7 @@ class SpecimenDataEntry():
                         self.window['cbxPrepType'].set_focus()
                         self.window['iconPrep'].update(visible=True)
 
-            if event == 'cbxPrepType':
+            elif event == 'cbxPrepType':
 
                 self.collobj.setPrepTypeFields(self.window[event].widget.current())
 
@@ -366,29 +366,29 @@ class SpecimenDataEntry():
                 self.window['iconType'].update(visible=True)
                 self.window['cbxTypeStatus'].set_focus()
 
-            if event.endswith('+TAB'):
+            elif event.endswith('+TAB'):
                 self.window['cbxTypeStatus'].set_focus()
                 self.window['iconType'].update(visible=True)
 
             # if event == 'cbxHigherTaxon':
             #    pass
 
-            if event == 'cbxTypeStatus':
+            elif event == 'cbxTypeStatus':
                 # TypeStatus is preloaded in the Class
                 self.collobj.setTypeStatusFields(self.window[event].widget.current())
                 self.collobj.typeStatusName = self.window['cbxTypeStatus'].get()
                 self.window['iconType'].update(visible=False)
                 self.window['txtNotes'].set_focus()
 
-            if event == 'txtNotes_Edit':
+            elif event == 'txtNotes_Edit':
                 self.collobj.notes = values['txtNotes']
                 self.window['chkMultiSpecimen'].set_focus()
 
-            if event == '_Tab':  # This ensures that the notes field id written to the collection object.
+            elif event == '_Tab':  # This ensures that the notes field id written to the collection object.
                 self.collobj.notes = values['txtNotes']
                 # self.window['chkMultiSpecimen'].set_focus()
 
-            if event == 'chkMultiSpecimen':
+            elif event == 'chkMultiSpecimen':
                 # Launch text box for multi-specimen with UUID value.
                 self.window['txtMultiSpecimen'].update('', visible=True)
                 import uuid
@@ -398,11 +398,11 @@ class SpecimenDataEntry():
                 self.collobj.multiSpecimen = values['chkMultiSpecimen']
                 self.window['cbxGeoRegion'].set_focus()
 
-            if values['chkMultiSpecimen']== False:
+            elif values['chkMultiSpecimen'] == False :
                 # Resets the multi-specimen box
                 self.window['txtMultiSpecimen'].update('')
 
-            if event == 'chkMultiSpecimen_Edit':
+            elif event == 'chkMultiSpecimen_Edit':
                 self.collobj.multiSpecimen = values['chkMultiSpecimen']
 
             if event == 'cbxGeoRegion':
@@ -443,21 +443,21 @@ class SpecimenDataEntry():
                         self.window['txtCatalogNumber'].set_focus()
                         # window['cbxTaxonName'].update(set_to_index=[0], scroll_to_index=0)
 
-            if event == 'txtCatalogNumber':  # In production this will come from a barcode reader.
+            elif event == 'txtCatalogNumber':  # In production this will come from a barcode reader.
                 self.collobj.catalogNumber = values[event]
 
-            if event == 'txtCatalogNumber_Edit':
+            elif event == 'txtCatalogNumber_Edit':
                 self.collobj.catalogNumber = values['txtCatalogNumber']
 
-            if event == "txtCatalogNumber_Enter":
+            elif event == "txtCatalogNumber_Enter":
                 self.collobj.catalogNumber = values['txtCatalogNumber']
                 self.window['btnSave'].set_focus()
 
-            if event == 'btnClear':
+            elif event == 'btnClear':
                 # Clear all clearable fields as defined in list 'clearingFields'
                 self.clearForm()
 
-            if event == 'btnBack':
+            elif event == 'btnBack':
                 # Fetch previous specimen record data on basis of current record ID, if any
                 record = self.collobj.loadPrevious(self.collobj.id)
                 if record:
@@ -473,7 +473,7 @@ class SpecimenDataEntry():
                     self.collobj.id = 0 # resetting object ID allows for new record creation.
 
 
-            if event == 'btnForward':
+            elif event == 'btnForward':
                 # Fetch next specimen record data on basis of current record ID, if any
                 record = self.collobj.loadNext(self.collobj.id)
 
@@ -520,7 +520,7 @@ class SpecimenDataEntry():
                     self.collobj.notes = self.window['txtNotes'].Get() + ' | ' + self.notes
                 else:
                     self.collobj.notes = self.window['txtNotes'].Get()
-
+                self.collobj.multiSpecimen = self.window['txtMultiSpecimen'].get()
                 specimenRecord = self.collobj.save()
 
                 self.clearNonStickyFields(values)
@@ -544,24 +544,29 @@ class SpecimenDataEntry():
                 if values[event]:
                     # The table element has been activated
                     # Fetch previous records (again)
-
-                    recordAcute = self.previousRecords[values[event][0]] #The index of the chosen record from the table
-                    acuteID = recordAcute[0] # Pure integer value extracted.
+                    try:
+                        recordAcute = self.previousRecords[values[event][0]] #The index of the chosen record from the table
+                        acuteID = recordAcute[0] # Pure integer value extracted.
+                    except Exception as e:
+                        logging.debug(e)
+                        pass
                     recordNow = self.extractRowsInTwoFormats(acuteID)
                     toSetRecord = recordNow['fullrows'][0]
+
+                    self.window['txtMultiSpecimen'].update(visible=True)
 
                     self.collobj.setFields(toSetRecord)
                     # print('getfilds as dict=', self.collobj.getFieldsAsDict())
 
                     if self.collobj.id:
-                        # print('there is existing record ID|', self.collobj.id)
                         recordsAll = self.extractRowsInTwoFormats(self.collobj.id)
                         records = recordsAll['adjecentrows']
                     else:
                         records = overviewRows['adjecentrows'] # overviewRows comes from a check on the app state
+                    multispecimenID = records[0][3]
 
-                    # print(f"reocrds at preINDEX {newIndex}:", records)
                     recordAtSelectedIndex = records[0]
+
 
                     # Making three new records.
                     chosenRecordId = recordAtSelectedIndex[0]
@@ -580,8 +585,10 @@ class SpecimenDataEntry():
                     self.window['txtStorage'].update(newRows['adjecentrows'][0])
                     self.retroRow = newRows['fullrows'][0]
                     self.fillFormFields(self.retroRow)
+
                 else:
-                    # print("NO more table events!!!")
+                    self.window['chkMultiSpecimen'].update(True)
+                    self.window['txtMultiSpecimen'].update(multispecimenID)
                     pass
 
         self.window.close()
@@ -678,3 +685,4 @@ class SpecimenDataEntry():
         self.searchString = []
         #Update collection object so that the ID is removed (preventing overwriting of previous record)
         self.collobj.id = 0
+
