@@ -211,6 +211,7 @@ class specimen(model.Model):
         Get type status record on the basis of list index 
             and set respective fields 
         """
+
         self.geoRegionId = self.geoRegions[index]['id']
         self.geoRegionName = self.geoRegions[index]['name']       
 
