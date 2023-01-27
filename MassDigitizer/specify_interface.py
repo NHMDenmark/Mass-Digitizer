@@ -327,7 +327,7 @@ class SpecifyInterface():
 si = SpecifyInterface()
 gs.baseURL = "https://specify-test.science.ku.dk/"
 tok = si.getCSRFToken()
-print(tok)
+#print(tok)
 
 token = si.login('fedor.steeman', 'XmgrNuitCrowd', 688130, tok)
 si.verifySession(token)
