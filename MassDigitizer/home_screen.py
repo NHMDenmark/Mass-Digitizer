@@ -65,8 +65,8 @@ class HomeScreen():
 
             sys.exit(1)
         
-        header_font = ("Corbel, 18")
-        header = [sg.Text(f"DaSSCo Mass Digitizer App - Version {self.version}", size=(34,1), font=header_font, justification='center')]
+        header_font = ("Corbel, 17")
+        header = [sg.Text(f"DaSSCo Mass Digitizer App - Version {self.version}", size=(58,1), font=header_font, justification='left')]
 
         separator_line = [sg.Text('_'  * 80)]
 
@@ -101,11 +101,11 @@ class HomeScreen():
 
         col_side = [btn_exit]
 
-        layout = [[[sg.Column(col_main, key='colMain', size=(512,128))]],
+        layout = [[[sg.Column(col_main, key='colMain', size=(580,128))]],
                 [[sg.Column(col_next, key='colNext', size=(512,200), visible=False)],
                 [sg.Column(col_side, key='colSide', size=(512,64))]], ]
 
-        self.window = sg.Window('Start', layout, size=(512, 400))
+        self.window = sg.Window('Start', layout, size=(640, 400))
 
         self.main()
 
@@ -127,8 +127,10 @@ class HomeScreen():
             fullname = f"{userProfile['firstname']} {userProfile['middleinitial']}. {userProfile['lastname']}"
         else:
             fullname = f"{userProfile['firstname']} {userProfile['lastname']}"
+        fullname = fullname.strip()
+        gs.agentFullName = fullname
 
-        return fullname.strip()
+        return fullname
 
 
 
