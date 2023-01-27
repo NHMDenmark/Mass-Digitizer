@@ -247,7 +247,9 @@ class SpecimenDataEntry():
         self.window.TKroot.focus_force()
         # Forces the app to be in focus.
 
-        self.window['cbxTypeStatus'].bind('<Tab>', '+TAB')
+        self.window['cbxTypeStatus'].bind('<FocusIn>', '+focus in TS')
+        self.window['cbxPrepType'].bind('<FocusIn>', '+focus in PT')
+        self.window['cbxTypeStatus'].bind('<FocusOut>', '+focus out TS')
         self.window['chkMultiSpecimen'].bind('<ButtonPress-1>', '+BTN1')
 
         # Set session fields
@@ -358,6 +360,9 @@ class SpecimenDataEntry():
                         self.window['cbxPrepType'].set_focus()
                         self.window['iconPrep'].update(visible=True)
 
+            if event.endswith("focus in PT"):
+                self.window['iconPrep'].update(visible=True)
+
             elif event == 'cbxPrepType':
 
                 self.collobj.setPrepTypeFields(self.window[event].widget.current())
@@ -366,9 +371,16 @@ class SpecimenDataEntry():
                 self.window['iconType'].update(visible=True)
                 self.window['cbxTypeStatus'].set_focus()
 
+            if event.endswith("focus in TS"):
+                self.window['iconPrep'].update(visible=False)
+                self.window['iconType'].update(visible=True)
+
+            if event.endswith("focus out TS"):
+                self.window['iconType'].update(visible=False)
+
             elif event.endswith('+TAB'):
                 self.window['cbxTypeStatus'].set_focus()
-                self.window['iconType'].update(visible=True)
+                # self.window['iconType'].update(visible=True)
 
             # if event == 'cbxHigherTaxon':
             #    pass
@@ -686,3 +698,4 @@ class SpecimenDataEntry():
         #Update collection object so that the ID is removed (preventing overwriting of previous record)
         self.collobj.id = 0
 
+# g = SpecimenDataEntry(29)
