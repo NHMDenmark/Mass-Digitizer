@@ -50,8 +50,8 @@ class DataAccess():
         self.currentCursor = None  # Reset cursor pointer
         # logging.info("In ---data_access---")
         # Point to database file provided and connect
-        filePath = os.path.expanduser(
-            '~\Documents\DaSSCO')  # In order to debug / run, a copy of the db file should be moved into this folder on Windows machines
+        filePath = util.getUserPath()  
+            
         # altFilePath = os.path.expanduser(
         #     '~\OneDrive - University of Copenhagen\Documents\DaSSCO')  # For OneDrive users this is the file location
         self.dbFilePath = str(Path(filePath).joinpath(f'{databaseName}.sqlite3'))
