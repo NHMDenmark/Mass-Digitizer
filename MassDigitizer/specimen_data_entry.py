@@ -335,7 +335,7 @@ class SpecimenDataEntry():
         else:
             rows = self.db.getRows('specimen', limit=number, sortColumn='id DESC')
         self.previousRecords = [[row for row in line] for line in rows]
-        # print(self.previousRecords)
+
         return self.previousRecords
 
 
@@ -363,7 +363,6 @@ class SpecimenDataEntry():
                 # If more than 3 characters entered:
                 if len(self.searchString) >= 3:
                     # Get currently entered key strokes
-
                     keyStrokes = self.searchString.pop()
 
                     self.autoStorage.Show()
@@ -383,7 +382,6 @@ class SpecimenDataEntry():
                         # Move focus to next field (PrepTypes list). This is necessary due to all keys being captured
                         # for the autoSuggest/capture_suggestion function.
                         self.window['cbxPrepType'].set_focus()
-                        # self.window['iconPrep'].update(visible=True)
 
             if event.endswith("focus in storage"):
                 self.window['iconStorage'].update(text_color='black')
@@ -392,7 +390,6 @@ class SpecimenDataEntry():
                 self.window['iconStorage'].update(text_color=self.greenArea)
 
             if event.endswith("focus in prepType"):
-
                 self.window['iconPrep'].update(visible=True)
 
             if event == 'cbxPrepType':
@@ -400,26 +397,19 @@ class SpecimenDataEntry():
                 self.collobj.setPrepTypeFields(self.window[event].widget.current())
                 self.window['iconPrep'].update(visible=False)
                 self.window['cbxTypeStatus'].set_focus()
-            # elif event.endswith("focus out prepType"):
-            #     self.window['iconPrep'].update(visible=False)
 
             if event.endswith("focus out prepType"):
-
                 self.window['iconPrep'].update(visible=False)
 
             if event.endswith('+TAB'):
                 self.window['cbxTypeStatus'].set_focus()
                 # self.window['iconType'].update(visible=True)
 
-            # if event == 'cbxHigherTaxon':
-            #    pass
 
             elif event == 'cbxTypeStatus':
                 # TypeStatus is preloaded in the Class
-
                 self.collobj.setTypeStatusFields(self.window[event].widget.current())
                 self.collobj.typeStatusName = self.window['cbxTypeStatus'].get()
-                # self.window['iconType'].update(visible=False)
                 self.window['txtNotes'].set_focus()
 
             if event.endswith("focus in typeStatus"):
@@ -436,11 +426,6 @@ class SpecimenDataEntry():
             if event.endswith("focus in notes"):
                 self.window['iconNotes'].update(visible=True)
                 self.window['iconType'].update(visible=False)
-
-
-            # if event.endswith("focus out typeStatus"):
-            #     self.window['iconType'].update(visible=False)
-
 
             elif event == '_Tab':  # This ensures that the notes field id written to the collection object.
                 self.collobj.notes = values['txtNotes']
@@ -468,7 +453,7 @@ class SpecimenDataEntry():
 
             if event.endswith("focus in multispecimen"):
                 self.window['iconMulti'].update(visible=True)
-                self.window['iconNotes'].update(visible=False)
+                self.window['iconNotes'].update(visible=False) #Hack to make indicator arrow invisible
 
             if event.endswith("focus out multispecimen"):
                 self.window['iconMulti'].update(visible=False)
@@ -578,14 +563,6 @@ class SpecimenDataEntry():
                     self.window['lblRecordEnd'].update(visible=False)
                     self.collobj.id = 0
 
-
-            # if event == 'btnClear':
-            #     for key in self.clearingList:
-            #         self.window[key].update('')
-            #
-            #     self.window['lblExport'].update(visible=False)
-            #     self.window['lblRecordEnd'].update(visible=False)
-
             if event == 'btnExport':
                 export_result = dx.exportSpecimens('xlsx')
                 self.window['lblExport'].update(export_result, visible=True)
@@ -632,9 +609,9 @@ class SpecimenDataEntry():
             if event == 'tblPrevious':
                 if values[event]:
                     # The table element has been activated
-                    # Fetch previous records (again)
+                    # Fetch previous records (again). Will fill the form with the row selected.
                     try:
-                        recordAcute = self.previousRecords[values[event][0]] #The index of the chosen record from the table
+                        recordAcute = self.previousRecords[values[event][0]] #The index position of the chosen record from the table
                         acuteID = recordAcute[0] # Pure integer value extracted.
                     except Exception as e:
                         logging.debug(e)
