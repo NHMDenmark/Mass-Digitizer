@@ -262,7 +262,7 @@ class SpecimenDataEntry():
         self.window['cbxTypeStatus'].bind('<FocusIn>', '+focus in typeStatus')
         self.window['cbxTypeStatus'].bind('<FocusOut>', '+focus out typeStatus')
         self.window['cbxPrepType'].bind('<FocusIn>', '+focus in prepType')
-        self.window['cbxTypeStatus'].bind('<FocusOut>', '+focus out prepType')
+        self.window['cbxPrepType'].bind('<FocusOut>', '+focus out prepType')
         self.window['txtNotes'].bind('<FocusIn>', '+focus in notes')
         self.window['txtNotes'].bind('<FocusOut>', '+focus out notes')
         self.window['chkMultiSpecimen'].bind('<FocusIn>', '+focus in multispecimen')
@@ -329,13 +329,15 @@ class SpecimenDataEntry():
         """ Get previous three records. Kwargs expects an Id number (id=[integer]) or no keyword arg.
             Also feeds into the extractRowsInTwoFormats() function which is crucial.
         """
-        if id > 0:
-            filter = f"specimen WHERE id <= {id}"
-            rows = self.db.getRows(filter, limit=number, sortColumn='id DESC')
-        else:
-            rows = self.db.getRows('specimen', limit=number, sortColumn='id DESC')
-        self.previousRecords = [[row for row in line] for line in rows]
-
+        try:
+            if id > 0:
+                filter = f"specimen WHERE id <= {id}"
+                rows = self.db.getRows(filter, limit=number, sortColumn='id DESC')
+            else:
+                rows = self.db.getRows('specimen', limit=number, sortColumn='id DESC')
+            self.previousRecords = [[row for row in line] for line in rows]
+        except Exception as e:
+            logging.debug(e)
         return self.previousRecords
 
 
@@ -361,27 +363,30 @@ class SpecimenDataEntry():
             if event == 'inpStorage':
                 self.searchString.append(values[event])
                 # If more than 3 characters entered:
-                if len(self.searchString) >= 3:
-                    # Get currently entered key strokes
-                    keyStrokes = self.searchString.pop()
+                try:
+                    if len(self.searchString) >= 3:
+                        # Get currently entered key strokes
+                        keyStrokes = self.searchString.pop()
 
-                    self.autoStorage.Show()
+                        self.autoStorage.Show()
 
-                    # Fetch storage location record from database based on user interactions with autosuggest popup window
-                    selectedStorage = self.autoStorage.captureSuggestion(keyStrokes)
+                        # Fetch storage location record from database based on user interactions with autosuggest popup window
+                        selectedStorage = self.autoStorage.captureSuggestion(keyStrokes)
 
-                    # Set storage fields using record retrieved
-                    if selectedStorage is not None:
-                        # Set specimen record storage fields
-                        self.collobj.setStorageFieldsFromModel(selectedStorage)
+                        # Set storage fields using record retrieved
+                        if selectedStorage is not None:
+                            # Set specimen record storage fields
+                            self.collobj.setStorageFieldsFromModel(selectedStorage)
 
-                        # Update UI to indicate selected storage record
-                        self.window['txtStorageFullname'].update(selectedStorage.fullName)
-                        self.window['inpStorage'].update(selectedStorage.name)
+                            # Update UI to indicate selected storage record
+                            self.window['txtStorageFullname'].update(selectedStorage.fullName)
+                            self.window['inpStorage'].update(selectedStorage.name)
 
-                        # Move focus to next field (PrepTypes list). This is necessary due to all keys being captured
-                        # for the autoSuggest/capture_suggestion function.
-                        self.window['cbxPrepType'].set_focus()
+                            # Move focus to next field (PrepTypes list). This is necessary due to all keys being captured
+                            # for the autoSuggest/capture_suggestion function.
+                            self.window['cbxPrepType'].set_focus()
+                except Exception as e:
+                    logging.debug(e)
 
             if event.endswith("focus in storage"):
                 self.window['iconStorage'].update(text_color='black')
@@ -390,6 +395,7 @@ class SpecimenDataEntry():
                 self.window['iconStorage'].update(text_color=self.greenArea)
 
             if event.endswith("focus in prepType"):
+                self.window['iconStorage'].update(text_color=self.greenArea)
                 self.window['iconPrep'].update(visible=True)
 
             if event == 'cbxPrepType':
@@ -431,7 +437,7 @@ class SpecimenDataEntry():
                 self.collobj.notes = values['txtNotes']
                 # self.window['chkMultiSpecimen'].set_focus()
 
-            if event.endswith("focus in multi"):
+            if event.endswith("focus in multispecimen"):
                 self.window['iconMulti'].update(visible=True)
 
             if event == 'chkMultiSpecimen':
@@ -581,16 +587,19 @@ class SpecimenDataEntry():
                 # recordForSaving = self.collobj.loadCurrent(self.collobj.id)
                 # self.collobj.setFields(recordForSaving)
                 # save specimen and get its id
+                try:
+                    if len(self.notes) > 5:  # test to see if remark (verbatim note) was passed from autosuggest.
+                        self.collobj.notes = self.window['txtNotes'].Get() + ' | ' + self.notes
+                    else:
+                        self.collobj.notes = self.window['txtNotes'].Get()
+                    self.collobj.multiSpecimen = self.window['txtMultiSpecimen'].get()
+                    specimenRecord = self.collobj.save()
 
-                if len(self.notes) > 5:  # test to see if remark (verbatim note) was passed from autosuggest.
-                    self.collobj.notes = self.window['txtNotes'].Get() + ' | ' + self.notes
-                else:
-                    self.collobj.notes = self.window['txtNotes'].Get()
-                self.collobj.multiSpecimen = self.window['txtMultiSpecimen'].get()
-                specimenRecord = self.collobj.save()
-
-                self.clearNonStickyFields(values)
-
+                    self.clearNonStickyFields(values)
+                except Exception as e:
+                    sg.PopupError(e)
+                    errorMessage = f"Save action broke and the error is: {e}"
+                    logging.debug(errorMessage)
                 # Create a new specimen instance and add previous id to it
                 self.collobj = specimen.specimen(self.collectionId)
                 updatedRecordId = specimenRecord['id'] # Id to be used for refreshing the previous rows table.
@@ -656,6 +665,18 @@ class SpecimenDataEntry():
                     self.window['chkMultiSpecimen'].update(True)
                     self.window['txtMultiSpecimen'].update(multispecimenID)
                     pass
+
+            if event.endswith("focus out storage"):
+                self.window['iconStorage'].update(text_color=self.greenArea)
+
+            if event.endswith("focus out typeStatus"):
+                self.window['iconType'].update(visible=False)
+
+            if event.endswith("focus out prepType"):
+                self.window['iconPrep'].update(visible=False)
+
+            if event.endswith("focus out notes"):
+                self.window['iconNotes'].update(visible=False)
 
         self.window.close()
 
