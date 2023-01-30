@@ -132,8 +132,6 @@ class HomeScreen():
 
         return fullname
 
-
-
     def main(self):
         """
         Main loop of execution responding to user input 
