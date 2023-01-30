@@ -6,4 +6,4 @@ INSERT INTO "main"."georegion" ("name", "source", "collectionid") VALUES
 ,('Afrotropical', 'Major biogeographical region (Hansen 1998, World Catalogue of Insects)', (SELECT id FROM collection WHERE spid = 163841 AND institutionid = 1))
 ,('Oriental',     'Major biogeographical region (Hansen 1998, World Catalogue of Insects)', (SELECT id FROM collection WHERE spid = 163841 AND institutionid = 1))
 ,('Australian',   'Major biogeographical region (Hansen 1998, World Catalogue of Insects)', (SELECT id FROM collection WHERE spid = 163841 AND institutionid = 1))
-,('Danian',       'none', (SELECT id FROM collection WHERE spid = 163841 AND institutionid = 1))
+,('Dania',       'Major biogeographical region (NHMD)', (SELECT id FROM collection WHERE spid = 163841 AND institutionid = 1))
