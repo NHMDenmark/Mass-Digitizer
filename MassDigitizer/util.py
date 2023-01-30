@@ -37,7 +37,7 @@ def clear():
 def buildLogger(moduleName):
     sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}", "")
 
-    filePath = getLogsPath()  # util.getLogsPath throws a 'circular imports error'.
+    filePath = str(Path(getUserPath()).joinpath('logs'))
     sys.path.append(str(Path(__file__).parent.parent.joinpath(filePath)))
     logName = f"{moduleName}-{sTime}.log"
     logFilePath = str(Path(filePath).joinpath(f'{logName}'))
@@ -80,7 +80,10 @@ def pretty_print_POST(req):
     # print('------------END------------')
 
 def getLogsPath():
-    logsFilePath = os.path.expanduser(f'logs')
+   return str(Path(getUserPath()).joinpath('logs'))
+
+def getUserPath():
+    logsFilePath = os.path.expanduser(f'~\Documents\DaSSCO')
     return logsFilePath
 
 def logLine(line, level='info'):
