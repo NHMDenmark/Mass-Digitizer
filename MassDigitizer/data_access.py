@@ -273,6 +273,8 @@ class DataAccess():
           sql (String) :
           RETURNS table rows as dictionary
         """
+        message = f"Executing the following SQL: {sql}"
+        logging.debug(message)
         self.currentCursor = self.getDbCursor()
 
         rows = self.currentCursor.execute(sql).fetchall()
