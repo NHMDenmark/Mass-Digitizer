@@ -31,7 +31,7 @@ import version_number
 from models import specimen
 
 
-l = util.buildLogger('specimen_daat_access')
+l = util.buildLogger('specimen_data_access')
 
 class SpecimenDataEntry():
 
