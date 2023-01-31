@@ -542,6 +542,7 @@ class SpecimenDataEntry():
                 record = self.collobj.loadPrevious(self.collobj.id)
                 if record:
                     # If not empty, set form fields
+                    print([j for j in record])
                     self.fillFormFields(record)
                     rowForTable = self.extractRowsInTwoFormats(record['id'])
                     rowsAdjacent = rowForTable['adjecentrows']
@@ -738,7 +739,8 @@ class SpecimenDataEntry():
         # self.window['cbxHigherTaxon'].update('')
         self.window['cbxTypeStatus'].update(record['typestatusname'])
         self.window['txtNotes'].update(record['notes'])
-        if record['multispecimen'] == 'True':
+        self.window['txtMultiSpecimen'].update(record['multispecimen'])
+        if len(record['multispecimen']) > 2 : #Checks if txtMultiSpecimen is set.
             self.multiSpecimen = True
             self.window['chkMultiSpecimen'].update(True)
         else:
