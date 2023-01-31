@@ -46,15 +46,17 @@ class DataAccess():
                do_in_memory (boolean): Whether the database file should be run in-memory
         NOTE Database file is installed into user documents folder otherwise it would be readonly on a Windows PC in any case
         """
+        try:
+            self.currentCursor = None  # Reset cursor pointer
+            # logging.info("In ---data_access---")
+            # Point to database file provided and connect
+            filePath = util.getUserPath()
 
-        self.currentCursor = None  # Reset cursor pointer
-        # logging.info("In ---data_access---")
-        # Point to database file provided and connect
-        filePath = util.getUserPath()  
-            
-        # altFilePath = os.path.expanduser(
-        #     '~\OneDrive - University of Copenhagen\Documents\DaSSCO')  # For OneDrive users this is the file location
-        self.dbFilePath = str(Path(filePath).joinpath(f'{databaseName}.sqlite3'))
+            # altFilePath = os.path.expanduser(
+            #     '~\OneDrive - University of Copenhagen\Documents\DaSSCO')  # For OneDrive users this is the file location
+            self.dbFilePath = str(Path(filePath).joinpath(f'{databaseName}.sqlite3'))
+        except Exception as e:
+            logging.debug(e)
         # self.dbAltFilePath = str(Path(altFilePath).joinpath(f'{databaseName}.sqlite3'))
         # # self.setDatabase(databaseName)
         logging.debug(('Initializing with db file: %s ...' % self.dbFilePath))
