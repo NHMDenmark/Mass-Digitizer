@@ -336,5 +336,5 @@ start = time.time()
 #si.mergeTaxa(4051548, 364503)
 end = time.time()
 timeElapsed = end - start
-print(f'Time elapsed: {timeElapsed} ')
+#(f'Time elapsed: {timeElapsed} ')
 """
