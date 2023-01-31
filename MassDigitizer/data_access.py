@@ -46,6 +46,7 @@ class DataAccess():
                do_in_memory (boolean): Whether the database file should be run in-memory
         NOTE Database file is installed into user documents folder otherwise it would be readonly on a Windows PC in any case
         """
+        logging.debug("IN D.A. __init__")
         try:
             self.currentCursor = None  # Reset cursor pointer
             # logging.info("In ---data_access---")
