@@ -65,9 +65,9 @@ Begin with activating the virtual environment in console. [WINDOWS] CD to your p
 **Warning** If you get a security exception, you need to first start Powershell in admin mode and then put in :  
 `Set-ExecutionPolicy Unrestricted -Force`  
 
-For creating the executable, we used the Nuitka python compiler (https://nuitka.net/) using this command in the CLI:
+For creating the executable, we use PyInstaller (https://pyinstaller.org/) using this command in the CLI from the root folder:
 ```
-nuitka --windows-disable-console --follow-imports --onefile .\DaSSCo.py --plugin-enable=tk-inter --enable-plugin=numpy
+pyinstaller .\MassDigitizer\DaSSCo.py --onedir --paths=MassDigitizer\
 ```  
 
 Remember to activate venv and run pip install -r requirements.txt first
@@ -79,7 +79,7 @@ For creating the installer, we use Inno Setup and a definition file for a generi
 Due to the size of the taxonomic spine, it is necessary to generate seperate editions for respective collections with differents of the database file that is bundled with the app. Under [MassDigitizer/sql/editions](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/MassDigitizer/sql/editions/) there are folders for each edition containing the sql statements needed to insert not only taxonomic names, but also other predefined data specific for that edition such as storage locations, preparation types and type statuses. In the root of this folder there is a batch file ([prepare-db.bat](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/MassDigitizer/sql/editions/prepare-db.bat)) that needs to be run in order to execute the sql statements. The path to the edition folder needs to be passed as a parameter when executing the batch file (see below). The resulting updated db.sqlite3 file is located in the [MassDigitizer/temp](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/MassDigitizer/temp/) folder from where it will be picked up by Inno Setup for being bundled with the installer.  
 
 So the process for compilation are as follows: 
-1. Create the executable using nuitka
+1. Create the executable using PyInstaller
 2. Run the batch file to generate the db edition of choice 
 3. Run the Inno Setup script to create the installer for this edition 
 4. Repeat for the different editions giving each installer a distinct name by adding the **Edition Code** (see table below)
@@ -90,7 +90,7 @@ Here follows a table for the different editions and their path, which is the par
 
 | **Institution**   | **Collection**  | **Parameter**     | **Edition_Code** | **Remarks**                                                                  |
 |-------------------|-----------------|-------------------|------------------|------------------------------------------------------------------------------|
-| NHMD (Copenhagen) | Vascular Plants | NHMD\tracheophyta | NHMD-TRA         |                                                                              | 
+| NHMD (Copenhagen) | Vascular Plants | NHMD\tracheophyta | NHMD-VAS         |                                                                              | 
 | NHMD (Copenhagen) | Entomology      | NHMD\entomology   | NHMD-ENT         |Taxon spine restricted to selected taxa under Coleoptera & Lepidoptera        |
 | NHMA (Aarhus)     | Entomology      | NHMA\entomology   | NHMA-ENT         |                                                                              |
 
