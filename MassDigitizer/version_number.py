@@ -19,7 +19,7 @@ either express or implied. See the License for the specific language governing p
 
 
 #Central place to manage version numbers
-versionNumber = "0.2.8"
+versionNumber = "0.2.9"
 # Before compiling exe, please set the version number above
 
 
