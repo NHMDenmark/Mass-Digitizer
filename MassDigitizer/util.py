@@ -37,7 +37,7 @@ def clear():
 def buildLogger(moduleName):
     sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}", "")
 
-    filePath = str(Path(getUserPath()).joinpath('logs'))
+    filePath = getLogsPath()
     sys.path.append(str(Path(__file__).parent.parent.joinpath(filePath)))
     logName = f"{moduleName}-{sTime}.log"
     logFilePath = str(Path(filePath).joinpath(f'{logName}'))
@@ -67,17 +67,21 @@ def convert_dbrow_list(list, addEmptyRow=False):
 
    return new_list
 
-def pretty_print_POST(req):
-    """
-    Format HTTP request header and body into easily legible output
-    """
-    # print('{}\n{}\r\n{}\r\n\r\n{}'.format(
-    #     '-----------START-----------',
-    #     req.method + ' ' + req.url,
-    #     '\r\n'.join('{}: {}'.format(k, v) for k, v in req.headers.items()),
-    #     req.body,
-    # ))
-    # print('------------END------------')
+# def pretty_pront_POST(req):
+"""
+Format HTTP request header and body into easily legible output.
+Use pprint instead: 
+import pprint 
+pp = pprint.PrettyPrinter(indent=4)
+pp.pprint(a_dict) || for JSON use json.dumps()
+"""
+# print('{}\n{}\r\n{}\r\n\r\n{}'.format(
+#     '-----------START-----------',
+#     req.method + ' ' + req.url,
+#     '\r\n'.join('{}: {}'.format(k, v) for k, v in req.headers.items()),
+#     req.body,
+# ))
+# print('------------END------------')
 
 def getLogsPath():
    return str(Path(getUserPath()).joinpath('logs'))
