@@ -40,7 +40,7 @@ import specimen_data_entry as sde
 # currentpath = os.path.join(pathlib.Path(__file__).parent, '')
 
 l = util.buildLogger('home_screen') # Just an initializer - the var is unused.
-
+logging.debug("UTIL -- about to set 'db' and 'sp' --")
 db = data_access.DataAccess(gs.databaseName)
 sp = specify_interface.SpecifyInterface()
 
