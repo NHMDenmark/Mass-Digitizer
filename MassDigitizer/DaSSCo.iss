@@ -28,7 +28,7 @@ WizardStyle=modern
 SetupLogging=yes
 
 [Dirs]
-Name: {app}\logs
+Name: {userdocs}\DaSSCo\logs
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
