@@ -26,6 +26,7 @@ collectionId = 0
 collectionName = '-not set-'
 spUserName = '-not set-'
 spUserId = -1
+agentFullName = ''
 csrfToken = ''
 
 # logging
