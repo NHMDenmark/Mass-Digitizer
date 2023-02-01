@@ -20,6 +20,7 @@ from pathlib import Path
 import time
 import logging
 # from re import L
+import util
 
 
 def clear():
@@ -44,6 +45,15 @@ def buildLogger(moduleName):
     # print(logFilePath)
     logging.basicConfig(filename=logFilePath, encoding='utf-8', level=logging.DEBUG)
 
+def tryout_Path():
+    # Intended to return the True path in case OneDrive is running
+    usrPath = util.getUserPath()
+    altUsrPath = os.path.expanduser(
+        '~\OneDrive - University of Copenhagen\Documents\DaSSCO')
+    if os.path.isdir(usrPath):
+        return usrPath
+    elif os.path.isdir(altUsrPath):
+        return altUsrPath
 
 def shrink_dict(original_dict, input_string):
    """
