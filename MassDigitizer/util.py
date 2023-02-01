@@ -38,7 +38,7 @@ def clear():
 def buildLogger(moduleName):
     sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}", "")
 
-    filePath = getLogsPath()
+    filePath = tryout_Path()
     sys.path.append(str(Path(__file__).parent.parent.joinpath(filePath)))
     logName = f"{moduleName}-{sTime}.log"
     logFilePath = str(Path(filePath).joinpath(f'{logName}'))
