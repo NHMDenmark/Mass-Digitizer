@@ -51,11 +51,11 @@ class DataAccess():
             self.currentCursor = None  # Reset cursor pointer
             # logging.info("In ---data_access---")
             # Point to database file provided and connect
-            filePath = util.getUserPath()
+            self.filePath = util.tryout_Path()
 
             # altFilePath = os.path.expanduser(
             #     '~\OneDrive - University of Copenhagen\Documents\DaSSCO')  # For OneDrive users this is the file location
-            self.dbFilePath = str(Path(filePath).joinpath(f'{databaseName}.sqlite3'))
+            self.dbFilePath = str(Path(self.filePath).joinpath(f'{databaseName}.sqlite3'))
         except Exception as e:
             logging.debug(e)
         # self.dbAltFilePath = str(Path(altFilePath).joinpath(f'{databaseName}.sqlite3'))
