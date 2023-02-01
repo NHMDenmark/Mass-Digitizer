@@ -61,7 +61,7 @@ class HomeScreen():
             self.errorMessage = e
             errorString = str(e)+".\n Check to see if DB is placed correctly"
             sg.popup_cancel(errorString, title='Error', )
-            logging.debug(str(e)+". Check to see if DB is placed correctly")
+            logging.debug(str(e), ". Check to see if DB is placed correctly")
 
             sys.exit(1)
         
