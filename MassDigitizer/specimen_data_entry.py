@@ -443,8 +443,11 @@ class SpecimenDataEntry():
             if event == 'chkMultiSpecimen':
                 # Launch text box for multi-specimen with UUID value.
                 self.window['txtMultiSpecimen'].update('', visible=True)
-                import uuid
-                uniqID = uuid.uuid4()
+                from datetime import datetime
+                import random
+                r1 = random.randint(0, 10000)
+                r2 = random.randint(0, 10000)
+                uniqID = hash(f"{datetime.now()}{r1}")
                 self.window['txtMultiSpecimen'].update(uniqID)
                 check = self.window['chkMultiSpecimen'].Get()
                 self.collobj.multiSpecimen = values['chkMultiSpecimen']
