@@ -287,7 +287,6 @@ class SpecimenDataEntry():
         self.setControlEvents()
         self.searchString = []
 
-
     def extractRowsInTwoFormats(self, rowId):
         """Returns a dict containing 3 rows prior to rowId (see self.db.getRows... statement)
         Return: A dict with two keys containing the complete rows:
@@ -339,7 +338,6 @@ class SpecimenDataEntry():
         except Exception as e:
             logging.debug(e)
         return self.previousRecords
-
 
     def main(self):
         # Checks to see where in the process the app state is in.

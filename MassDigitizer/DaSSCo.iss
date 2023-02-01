@@ -5,7 +5,6 @@
 #define MyAppName "DaSSCo Mass Digitizer NHMA-ENT"
 
 #define MyAppName "DaSSCo Mass Digitizer"
-
 #define MyAppVersion "0.2.9"
 ; Remember to update the version in the version_number.py script
 #define MyAppPublisher "NHMD"
