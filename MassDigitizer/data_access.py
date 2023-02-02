@@ -66,6 +66,8 @@ class DataAccess():
         except Exception as e:
             # sg.popup_cancel(f"SQLite connection failed. Error: {e}")
             logging.debug("SQLite connection failed. Error: %s" % e)
+            logError = f"The path {self.dbFilePath} does not exist."
+            logging.debug(logError)
         # if gs.db_in_memory == True or do_in_memory == True:
         #     # Read database to tempfile
         #     tempfile = StringIO()
