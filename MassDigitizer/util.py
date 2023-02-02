@@ -54,6 +54,9 @@ def tryout_Path():
         return usrPath
     elif os.path.isdir(altUsrPath):
         return altUsrPath
+    else:
+        error_message = f"Neither {usrPath} or {altUsrPath} exist."
+        logging.debug(error_message)
 
 def shrink_dict(original_dict, input_string):
    """
