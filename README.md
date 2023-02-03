@@ -81,6 +81,8 @@ Due to the size of the taxonomic spine, it is necessary to generate seperate edi
 So the process for compilation are as follows: 
 1. Create the executable using PyInstaller
 2. Run the batch file to generate the db edition of choice 
+    - If the batch command doesn't work as expected, you will need to add this to the command line:  
+    - ` $env:PATH += ';path_to_directory_with_sqlite3.exe'`
 3. Run the Inno Setup script to create the installer for this edition 
 4. Repeat for the different editions giving each installer a distinct name by adding the **Edition Code** (see table below)
 
