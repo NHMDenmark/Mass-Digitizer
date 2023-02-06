@@ -67,7 +67,7 @@ Begin with activating the virtual environment in console. [WINDOWS] CD to your p
 
 For creating the executable, we use PyInstaller (https://pyinstaller.org/) using this command in the CLI from the root folder:
 ```
-pyinstaller .\MassDigitizer\DaSSCo.py --onedir --paths=MassDigitizer\
+pyinstaller .\MassDigitizer\DaSSCo.py --onedir --noconsole --paths=MassDigitizer\
 ```  
 
 Remember to activate venv and run pip install -r requirements.txt first
