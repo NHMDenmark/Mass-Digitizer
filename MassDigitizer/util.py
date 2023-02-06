@@ -5,7 +5,7 @@
   Copyright 2022 Natural History Museum of Denmark (NHMD)
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
+  You may obtain a copy of the License at::
   http://www.apache.org/licenses/LICENSE-2.0
   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
@@ -20,7 +20,7 @@ from pathlib import Path
 import time
 import logging
 # from re import L
-import util
+import ctypes
 
 
 def clear():
@@ -36,28 +36,40 @@ def clear():
     _ = system('clear')
 
 def buildLogger(moduleName):
+    # Generic logger: If imported and called it will allow - logging.debug(_your-message_). Log file is "moduleName&timeStamp"
     sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}", "")
 
     filePath = tryout_Path()
     sys.path.append(str(Path(__file__).parent.parent.joinpath(filePath)))
     logName = f"{moduleName}-{sTime}.log"
-    logFilePath = str(Path(filePath).joinpath(f'{logName}'))
-    # print(logFilePath)
+    logFilePath = str(Path(filePath).joinpath(logName))
+
     logging.basicConfig(filename=logFilePath, encoding='utf-8', level=logging.DEBUG)
 
 def tryout_Path():
-    # Intended to return the True path in case OneDrive is running
-    usrPath = util.getUserPath()
-    altUsrPath = os.path.expanduser(
-        '~\OneDrive - University of Copenhagen\Documents\DaSSCO')
-    if os.path.isdir(usrPath):
-        return usrPath
-    elif os.path.isdir(altUsrPath):
-        return altUsrPath
-    else:
-        error_message = f"Neither {usrPath} or {altUsrPath} exist."
-        logging.debug(error_message)
+    db_lowerLimit = 1000
+    # Intended to return the True path in case OneDrive is running. DB size testing will determine which path is returned.
+    alternativePath = os.path.expanduser(r'~\OneDrive - University of Copenhagen\Documents\DaSSCO')
+    regularPath = getUserPath()
 
+    test_regularDBPath = f"{regularPath}\db.sqlite3"  #Test on whether the DB is in the regular user path
+    usrPath = os.path.expanduser(getUserPath())
+    # print("usrPath;;", type(usrPath), usrPath)
+    test_altDBPath = os.path.expanduser(
+        r'~\OneDrive - University of Copenhagen\Documents\DaSSCO\db.sqlite3') #Test on whether the DB is in the alternative user path
+
+    sizeUserDB = os.stat(test_regularDBPath)
+    sizeAlternativeDB = os.stat(test_altDBPath)
+    regular_path_for_log = f'Regular {test_regularDBPath} raw size stat: {sizeUserDB.st_size}'
+    logging.debug(regular_path_for_log)
+    sizeTest_altuserPath = os.stat(test_altDBPath)
+    alternative_path_for_log = f'Alternative {sizeAlternativeDB} raw size : {sizeTest_altuserPath.st_size}'
+    logging.debug(alternative_path_for_log)
+    # Below is the size test on the regular path, and on the
+    if sizeUserDB.st_size > db_lowerLimit:
+        return usrPath
+    elif sizeTest_altuserPath.st_size > db_lowerLimit:
+        return alternativePath
 def shrink_dict(original_dict, input_string):
    """
    Filter entries in dictionary based on initial string (starts with)
@@ -124,7 +136,7 @@ def logLine(line, level='info'):
 
 # def obtainVersionNumber(filepath, keyWord):
 #    """
-#    Obtain application version number
+#    Obtain application version number from iss Inno setup file.
 #    """
 #
 #    with open(filepath, mode='r') as f:
