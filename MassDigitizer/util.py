@@ -47,7 +47,7 @@ def buildLogger(moduleName):
     logging.basicConfig(filename=logFilePath, encoding='utf-8', level=logging.DEBUG)
 
 def tryout_Path():
-    db_lowerLimit = 1000
+    db_lowerLimit = 1000 #DB size minimum limit for successful testing.
     # Intended to return the True path in case OneDrive is running. DB size testing will determine which path is returned.
     alternativePath = os.path.expanduser(r'~\OneDrive - University of Copenhagen\Documents\DaSSCO')
     regularPath = getUserPath()
