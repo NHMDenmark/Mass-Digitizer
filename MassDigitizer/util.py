@@ -47,28 +47,39 @@ def buildLogger(moduleName):
     logging.basicConfig(filename=logFilePath, encoding='utf-8', level=logging.DEBUG)
 
 def tryout_Path():
+    from pathlib import Path
     db_lowerLimit = 1000 #DB size minimum limit for successful testing.
     # Intended to return the True path in case OneDrive is running. DB size testing will determine which path is returned.
     alternativePath = os.path.expanduser(r'~\OneDrive - University of Copenhagen\Documents\DaSSCO')
     regularPath = getUserPath()
-
-    test_regularDBPath = f"{regularPath}\db.sqlite3"  #Test on whether the DB is in the regular user path
-    usrPath = os.path.expanduser(getUserPath())
+    print('regular:', getUserPath(), type(getUserPath()))
+    print('alternative:', alternativePath)
+    test_regularDBPath = regularPath+'\db.sqlite3'
+    print('regular DB:', test_regularDBPath)
+    # usrPath = os.path.expanduser(getUserPath())
     # print("usrPath;;", type(usrPath), usrPath)
     test_altDBPath = os.path.expanduser(
         r'~\OneDrive - University of Copenhagen\Documents\DaSSCO\db.sqlite3') #Test on whether the DB is in the alternative user path
+    sizeUserDB = None
+    try:
+        sizeUserDB = os.stat(test_regularDBPath)
+    except Exception as e:
+        logging.debug(e)
 
-    sizeUserDB = os.stat(test_regularDBPath)
+        pass
     sizeAlternativeDB = os.stat(test_altDBPath)
-    regular_path_for_log = f'Regular {test_regularDBPath} raw size stat: {sizeUserDB.st_size}'
-    logging.debug(regular_path_for_log)
+
+
     sizeTest_altuserPath = os.stat(test_altDBPath)
     alternative_path_for_log = f'Alternative {sizeAlternativeDB} raw size : {sizeTest_altuserPath.st_size}'
     logging.debug(alternative_path_for_log)
     # Below is the size test on the regular path, and on the
-    if sizeUserDB.st_size > db_lowerLimit:
-        return usrPath
+    if sizeUserDB:
+        if sizeUserDB.st_size > db_lowerLimit:
+            print('regular :: ',sizeUserDB.st_size )
+            return regularPath
     elif sizeTest_altuserPath.st_size > db_lowerLimit:
+        print('alternative :: ', sizeAlternativeDB.st_size)
         return alternativePath
 def shrink_dict(original_dict, input_string):
    """
