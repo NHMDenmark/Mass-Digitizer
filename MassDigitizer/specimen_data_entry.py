@@ -752,10 +752,6 @@ class SpecimenDataEntry():
         self.window['inpTaxonName'].update(record['taxonfullname'])
         self.window['txtCatalogNumber'].update(record['catalognumber'])
 
-
-        # self.previousRecords(record['id'])
-
-
     def clearNonStickyFields(self, values):
         """
         Function for clearing all fields that are non-sticky
