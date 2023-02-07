@@ -22,7 +22,6 @@ import logging
 # from re import L
 import ctypes
 
-
 def clear():
    """
    Clear Command Line Interface screen 
@@ -36,18 +35,19 @@ def clear():
     _ = system('clear')
 
 def buildLogger(moduleName):
-    # Generic logger: If imported and called it will allow - logging.debug(_your-message_). Log file is "moduleName&timeStamp"
-    sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}", "")
+   """
+   Sets up logging for code module calling this method. 
+   """
+   # Generic logger: If imported and called it will allow - logging.debug(_your-message_). Log file is "moduleName&timeStamp"
+   sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}", "")
 
-    filePath = tryout_Path()
-    sys.path.append(str(Path(__file__).parent.parent.joinpath(filePath)))
-    logName = f"{moduleName}-{sTime}.log"
-    logFilePath = str(Path(filePath).joinpath(logName))
+   #sys.path.append(str(Path(__file__).parent.parent.joinpath(getLogsPath)))
+   logName = f"{moduleName}-{sTime}.log"
+   logFilePath = str(Path(getLogsPath()).joinpath(logName))
+   print(logFilePath)
+   logging.basicConfig(filename=logFilePath, encoding='utf-8', level=logging.DEBUG)
 
-    logging.basicConfig(filename=logFilePath, encoding='utf-8', level=logging.DEBUG)
-
-def tryout_Path():
-    from pathlib import Path
+""" def tryout_Path():
     db_lowerLimit = 1000 #DB size minimum limit for successful testing.
     # Intended to return the True path in case OneDrive is running. DB size testing will determine which path is returned.
     alternativePath = os.path.expanduser(r'~\OneDrive - University of Copenhagen\Documents\DaSSCO')
@@ -81,54 +81,34 @@ def tryout_Path():
     elif sizeTest_altuserPath.st_size > db_lowerLimit:
         print('alternative :: ', sizeAlternativeDB.st_size)
         return alternativePath
-def shrink_dict(original_dict, input_string):
-   """
-   Filter entries in dictionary based on initial string (starts with)
-   """   
-   shrunken_dict = {}
-   # print('Dictionary length = ', len(original_dict))
-   for j in original_dict:
-      if j[0:len(input_string)] == input_string:
-         shrunken_dict[j] = original_dict[j]
-   return shrunken_dict
-
-def convert_dbrow_list(list, addEmptyRow=False):
-   """
-   Converts datarow list to name array 
-   """
-   new_list = []
-   if addEmptyRow: new_list.append('-please select-')
-   for item in list:
-      new_list.append(item['name'])
-
-   return new_list
-
-# def pretty_pront_POST(req):
-"""
-Format HTTP request header and body into easily legible output.
-Use pprint instead: 
-import pprint 
-pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(a_dict) || for JSON use json.dumps()
-"""
-# print('{}\n{}\r\n{}\r\n\r\n{}'.format(
-#     '-----------START-----------',
-#     req.method + ' ' + req.url,
-#     '\r\n'.join('{}: {}'.format(k, v) for k, v in req.headers.items()),
-#     req.body,
-# ))
-# print('------------END------------')
+ """
 
 def getLogsPath():
    return str(Path(getUserPath()).joinpath('logs'))
 
 def getUserPath():
-    logsFilePath = os.path.expanduser(f'~\Documents\DaSSCO')
-    return logsFilePath
+   """
+   Get user documents path agnostic of OS or presence of OneDrive setup 
+   """
+   # Assuming regular system; Get regular user home path 
+   homePath = str(Path(os.path.expanduser('~')))
+
+   # Now check for existance of OneDrive user documents path 
+   if "oneDrive" in os.environ:
+      # OneDrive system if full user documents path exists,
+      #  because that is where installer creates it:        
+         oneDrivePath = os.environ['OneDrive']
+         # If the full path exists then use the onedrivepath as home path 
+         if os.path.exists(str(Path(oneDrivePath).joinpath('Documents').joinpath('DaSSCo'))):
+            homePath = oneDrivePath   
+   # Extend the user home path with  
+   userPath = str(Path(homePath).joinpath('Documents').joinpath('DaSSCo'))
+   
+   return userPath
 
 def logLine(line, level='info'):
    """
-   Log line 
+   Write a line to the log using the logging module initialized.  
    """
    logging.basicConfig(filename='example.log', encoding='utf-8', level=logging.DEBUG)
 
@@ -144,6 +124,28 @@ def logLine(line, level='info'):
       logging.info(line)
 
    return line
+
+def shrink_dict(original_dict, input_string):
+   """
+   Filter entries in dictionary based on initial string (starts with)
+   """   
+   shrunken_dict = {}
+   
+   for j in original_dict:
+      if j[0:len(input_string)] == input_string:
+         shrunken_dict[j] = original_dict[j]
+   return shrunken_dict
+
+def convert_dbrow_list(list, addEmptyRow=False):
+   """
+   Converts datarow list to name array 
+   """
+   new_list = []
+   if addEmptyRow: new_list.append('-please select-')
+   for item in list:
+      new_list.append(item['name'])
+
+   return new_list
 
 # def obtainVersionNumber(filepath, keyWord):
 #    """

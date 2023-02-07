@@ -12,28 +12,13 @@
   PURPOSE: Generic Data Access Object for reading/writing local database file
 """
 import logging
-import os
-import sys
 import sqlite3
-# from io import StringIO
 from pathlib import Path
-import time
 
 # Local imports
 import PySimpleGUI as sg
-
-
 import util
-# import global_settings as gs
 
-
-# sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}", "")
-#
-# filePath = "~\Documents\DaSSCo\logs" # util.getLogsPath throws a 'circular imports error'.
-# sys.path.append(str(Path(__file__).parent.parent.joinpath(filePath)))
-# logName = f"Data_access-{sTime}.log"
-# logFilePath = str(Path(filePath).joinpath(f'{logName}'))
-# logging.debug("# Beginning data_access for DaSSCo #")
 l = util.buildLogger('data_access')
 logging.debug("IN data_access.py ---")
 
@@ -46,21 +31,18 @@ class DataAccess():
                do_in_memory (boolean): Whether the database file should be run in-memory
         NOTE Database file is installed into user documents folder otherwise it would be readonly on a Windows PC in any case
         """
-        logging.debug("IN D.A. __init__")
+        logging.debug("Initializing Data Access module...")
         try:
             self.currentCursor = None  # Reset cursor pointer
-            # logging.info("In ---data_access---")
             # Point to database file provided and connect
-            self.filePath = util.tryout_Path()
+            self.filePath = util.getUserPath()
 
-            # altFilePath = os.path.expanduser(
-            #     '~\OneDrive - University of Copenhagen\Documents\DaSSCO')  # For OneDrive users this is the file location
             self.dbFilePath = str(Path(self.filePath).joinpath(f'{databaseName}.sqlite3'))
         except Exception as e:
             logging.debug(e)
-        # self.dbAltFilePath = str(Path(altFilePath).joinpath(f'{databaseName}.sqlite3'))
-        # # self.setDatabase(databaseName)
-        logging.debug(('Initializing with db file: %s ...' % self.dbFilePath))
+
+        logging.debug(('Connecting to database file: %s ...' % self.dbFilePath))
+
         try:
             self.connection = sqlite3.connect(self.dbFilePath)
         except Exception as e:
@@ -68,23 +50,8 @@ class DataAccess():
             logging.debug("SQLite connection failed. Error: %s" % e)
             logError = f"The path {self.dbFilePath} does not exist."
             logging.debug(logError)
-        # if gs.db_in_memory == True or do_in_memory == True:
-        #     # Read database to tempfile
-        #     tempfile = StringIO()
-        #     for line in self.connection.iterdump():
-        #         tempfile.write('%s\n' % line)
-        #     self.connection.close()
-        #     tempfile.seek(0)
-        #
-        #     # Create a database in memory and import from tempfile
-        #     self.connection = sqlite3.connect(":memory:")
-        #     self.connection.cursor().executescript(tempfile.read())
-        #     self.connection.commit()
-        # else:
-        #     # print(' - running database as file')
-        #     pass
-
         self.connection.row_factory = sqlite3.Row
+
         try:
             self.currentCursor = self.connection.cursor()
         except Exception as e:
@@ -97,11 +64,8 @@ class DataAccess():
           CONTRACT
             dbFileName (String): the name of the file excluding the extension '.sqlite3'
         """
-        self.dbFilePath = str(Path(self.dbFilePath).joinpath(f'{dbFileName}.sqlite3'))
-        self.dbAltFilePath = str(Path(self.dbAltFilePath).joinpath(f'{dbFileName}.sqlite3'))
-        fps = self.dbFilePath, self.dbAltFilePath
-        logging.info("The database filepaths are: %s" % fps)
-
+        self.dbFilePath = str(Path(util.getUserPath()).joinpath(f'{dbFileName}.sqlite3'))
+        logging.info("Database filepath: %s" % self.dbFilePath)
 
     def getConnection(self):
         """
@@ -114,37 +78,10 @@ class DataAccess():
         """
         Generic function needed for database access
         CONTRACT
-          TODO: do_in_memory (boolean): Whether the database file should be run in-memory
           RETURNS database cursor object
         """
         # print(f'Connecting to db file: {self.dbFilePath} ...')
-
-        # Connect to database file. On error, try alternative location assuming OneDrive user
-        try:
-            self.connection = sqlite3.connect(self.dbFilePath)  # Normal user
-        except:
-            self.connection = sqlite3.connect(self.dbAltFilePath)  # Assumed OneDrive user
-
-        # Depending on in-memory flag, run database in memory
-        # TODO Momentarily deactivated, perhaps redundant
-        # gs.db_in_memory = do_in_memory # apply in-memory flag to global
-        # if gs.db_in_memory == True:
-        #     # print(' - running database in-memory')
-        #     # Read database to tempfile
-        #     tempfile = StringIO()
-        #     for line in self.connection.iterdump():
-        #         tempfile.write('%s\n' % line)
-        #     self.connection.close()
-        #     tempfile.seek(0)
-        #
-        #     # Create a database in memory and import from tempfile
-        #     self.connection = sqlite3.connect(":memory:")
-        #     self.connection.cursor().executescript(tempfile.read())
-        #     self.connection.commit()
-        # else:
-        #     # print(' - running database as file')
-        #     pass
-
+        self.connection = sqlite3.connect(self.dbFilePath)  # Normal user
         self.connection.row_factory = sqlite3.Row  # Enable column access by name: row['column_name']
         cursor = self.connection.cursor()
         # print('Connection established')

@@ -49,7 +49,7 @@ class HomeScreen():
 
     version = version_number.getVersionNumber()
 
-    logging.debug(f'///Starting HomeScreen/// app version {version}')
+    logging.debug(f'Starting Mass Digitizer App version {version}')
 
     def __init__(self):
         """
