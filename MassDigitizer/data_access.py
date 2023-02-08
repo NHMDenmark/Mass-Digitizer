@@ -19,9 +19,6 @@ from pathlib import Path
 import PySimpleGUI as sg
 import util
 
-l = util.buildLogger('data_access')
-logging.debug("IN data_access.py ---")
-
 class DataAccess():
 
     def __init__(self, databaseName='db', do_in_memory=False):
@@ -46,10 +43,10 @@ class DataAccess():
         try:
             self.connection = sqlite3.connect(self.dbFilePath)
         except Exception as e:
-            # sg.popup_cancel(f"SQLite connection failed. Error: {e}")
-            logging.debug("SQLite connection failed. Error: %s" % e)
-            logError = f"The path {self.dbFilePath} does not exist."
             logging.debug(logError)
+            logging.debug("SQLite connection failed. Error: %s" % e)
+            logError = f"The path {self.dbFilePath} may not exist."
+            
         self.connection.row_factory = sqlite3.Row
 
         try:

@@ -14,22 +14,8 @@
 
 import sys
 import PySimpleGUI as sg
-import logging
-import time
-import pathlib
-import os
 
-# The following lines allow for finding code files to be tested in the app root folder  
-from pathlib import Path
-# sys.path.append(str(Path(__file__).joinpath('MassDigitizer')))
-# sys.path.append(str(Path(__file__).parent.parent.joinpath('MassDigitizer/log')))
-# sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}", "")
-#
-# logName = f"HomeScreen_log{sTime}.log"
-#
-# logging.basicConfig(filename=logName, encoding='utf-8', level=logging.DEBUG, force=True)
-
-import version_number
+# Internal dependencies
 import util
 import global_settings as gs
 import data_access
@@ -39,17 +25,17 @@ import specimen_data_entry as sde
 # sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer/log')))
 # currentpath = os.path.join(pathlib.Path(__file__).parent, '')
 
-l = util.buildLogger('home_screen') # Just an initializer - the var is unused.
-logging.debug("UTIL -- about to set 'db' and 'sp' --")
+util.buildLogger() #'home_screen') # 
+
 db = data_access.DataAccess(gs.databaseName)
 sp = specify_interface.SpecifyInterface()
 
 class HomeScreen():
     # Get version number to set into the homeScreen welcome menu.
 
-    version = version_number.getVersionNumber()
+    version = util.getVersionNumber()
 
-    logging.debug(f'Starting Mass Digitizer App version {version}')
+    util.logging.debug(f'Starting Mass Digitizer App version {version}')
 
     def __init__(self):
         """
@@ -61,7 +47,7 @@ class HomeScreen():
             self.errorMessage = e
             errorString = str(e)+".\n Check to see if DB is placed correctly"
             sg.popup_cancel(errorString, title='Error', )
-            logging.debug(str(e), ". Check to see if DB is placed correctly")
+            util.logging.debug(str(e), ". Check to see if DB is placed correctly")
 
             sys.exit(1)
         
@@ -76,7 +62,7 @@ class HomeScreen():
         except Exception as e:
             self.errorMessage = e
             # sg.popup_cancel(e, title='Error', )
-            logging.debug(str(e))
+            util.logging.debug(str(e))
             sys.exit(1)
 
         btn_exit = [sg.Button("Exit", key='btnExit')]
@@ -112,16 +98,15 @@ class HomeScreen():
     def getAgentFullname(self, agentName, userName, password, collectionId):
         #AgentName is the Specify login name
         sp = specify_interface
-        si = sp.SpecifyInterface()
         usr = userName
         pw = password
-        tok = si.getCSRFToken()
-        si.login(usr, pw, collectionId, tok)
-        specifyObject = si.getSpecifyObjects('specifyuser', filters={"name":f"{usr}"})[0]
+        initialToken = sp.getCSRFToken()
+        token = sp.login(usr, pw, collectionId, initialToken)
+        specifyObject = sp.getSpecifyObjects('specifyuser', filters={"name":f"{usr}"})[0]
         agentID = specifyObject['id']
 
         # Getting the full name based on user ID
-        userProfile = si.getSpecifyObjects('agent', filters={"specifyuser": agentID})[0]
+        userProfile = sp.getSpecifyObjects('agent', filters={"specifyuser": agentID})[0]
 
         if userProfile['middleinitial']:
             fullname = f"{userProfile['firstname']} {userProfile['middleinitial']}. {userProfile['lastname']}"
@@ -158,22 +143,16 @@ class HomeScreen():
                 password = values['inpPassword']
                 
                 if username != '' and password != '':
-
+                    # A username and password has been entered 
                     selected_collection = values['lstSelectCollection']
-                    collection = db.getRowsOnFilters('collection', {
-                                                    'name = ':'"%s"'%selected_collection, 
-                                                    'institutionid = ':'%s'%institution_id,})
-
-
+                    collection = db.getRowsOnFilters('collection', {'name = ':'"%s"'%selected_collection,'institutionid = ':'%s'%institution_id,})
+                    
                     if len(collection) > 0:
                         collection_id = collection[0]['id']
 
-                        res = self.getAgentFullname(username, userName=username, password=password,
-                                              collectionId=collection_id)
-
                         if collection_id > 0:
                             gs.baseURL = institution_url
-                            gs.csrfToken = sp.specifyLogin(username, password, collection_id)
+                            gs.csrfToken = sp.specifyLogin(username, password, collection[0]['spid'])
 
                             if gs.csrfToken != '':
                                 #gs.spUserId = userid
@@ -185,25 +164,24 @@ class HomeScreen():
 
                                 # TODO Specify fetch user agent first name, middle, last name 
 
-
                                 # 1. Fetch SpecifyUser on username (/api/specify/specifyuser/?name=username)
-                                # 2. Fetch Agent on specifyuser prinmary key (/api/specify/agent/?specifyuser=n)
+                                user = sp.getSpecifyObjects('specifyuser', filters={"name":f"{username}"})[0]
+                                # 2. Fetch Agent on specifyuser primary key (/api/specify/agent/?specifyuser=n)
+                                agent = sp.getSpecifyObjects('agent', filters={"specifyuser": user['id']})[0]
                                 # 3. Store full name in global settings (as single, concatenated string of first, middle, last 
-                                # (In Specimen Data Entry add field for user full name)
+                                gs.agentFullName = f"{agent['firstname']} {agent['middleinitial']}. {agent['lastname']}".strip()
 
                                 self.window.close()
-                                #de.init(collection_id)
+                                
                                 sde.SpecimenDataEntry(collection_id)
                             else:
                                 self.window['autherror'].Update(visible=True)
                                 #self.window['lstSelectCollection'].set_value([])
-                                pass
                         else:
                             self.window['collerror'].Update(visible=True)
                 else:
                     self.window['incomplete'].Update(visible=True)
                     #self.window['lstSelectCollection'].set_value([])
-                    pass
 
             if event == 'btnExit':
                 break
