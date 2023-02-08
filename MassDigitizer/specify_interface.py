@@ -86,7 +86,14 @@ class SpecifyInterface():
     # print('Log in using CSRF token & username/password')
     headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL}
     response = self.spSession.put(gs.baseURL + "context/login/", json={"username": username, "password": passwd, "collection": collectionid}, headers=headers, verify=False) 
-    csrftoken = response.cookies.get('csrftoken') # Keep and use new CSRF token after login
+    
+    if response.status_code > 299:
+      csrftoken = ''
+      util.logging.error('Error logging in to Specify! ')
+      util.logging.error(response.text)
+    else:
+      csrftoken = response.cookies.get('csrftoken') # Keep and use new CSRF token after login
+
     # print(' - Response: %s %s' %(str(response.status_code), response.reason))
     # print(' - New CSRF Token: ', csrftoken)
     #print('------------------------------')

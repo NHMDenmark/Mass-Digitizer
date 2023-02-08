@@ -142,8 +142,6 @@ class AutoSuggest_popup():
 
             # If a suggestion is clicked in the listbox OR 'Enter' is pressed then handle suggested taxon name 
             if event == 'lstSuggestions' or event == 'btnReturn':
-                # print('Selected suggestion : ', type(values['lstSuggestions']), values['lstSuggestions'])
-                # print('Selected parent     : ', values['txtInput'])
                 #Fix for novel parent name
                 if not values['lstSuggestions']:
                     pass
