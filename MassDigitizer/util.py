@@ -23,7 +23,7 @@ import logging
 import ctypes
 
 #Central place to manage version numbers
-versionNumber = "0.2.9" # Before compiling exe, please set the version number above
+versionNumber = "0.2.10" # Before compiling exe, please set the version number above
 
 def clear():
    """

@@ -100,7 +100,8 @@ class SpecimenDataEntry():
         checkText_size = (20, 1)
 
         # Set text fonts
-        font = ('Bahnschrift', 13)
+        captionFont = ('Bahnschrift', 13)
+        fieldFont = ('Arial', 12) #
         labelHeadlineMeta = ('Bahnschrift', 12)
         titleFont = ('Bahnschrift', 18)
         smallLabelFont = ('Arial', 11, 'italic')
@@ -114,39 +115,36 @@ class SpecimenDataEntry():
 
         # Green Area elements
         storage = [
-            sg.Text("Storage location:", size=storage_size, background_color=greenArea, font=font),
-            sg.InputText('', key='inpStorage', focus=True, size=green_size, text_color='black', pad=(10,0),
-                         background_color='white', font=('Arial', 12), enable_events=True),
+            sg.Text("Storage location:", size=storage_size, background_color=greenArea, font=captionFont),
+            sg.InputText('None', key='inpStorage', focus=True, size=green_size, text_color='black', pad=(10,0),
+                         background_color='white', font=fieldFont, enable_events=True),
             sg.Text(indicator, key='iconStorage', background_color=greenArea, visible=True, text_color=greenArea, font=wingding),
             sg.Text("", key='txtStorageFullname', size=(50, 2), background_color=greenArea, font=smallLabelFont),
             ]
 
         preparation = [
-            sg.Text("Preparation type:", size=defaultSize, justification='l', background_color=greenArea, font=font),
+            sg.Text("Preparation type:", size=defaultSize, justification='l', background_color=greenArea, font=captionFont),
             sg.Combo(util.convert_dbrow_list(self.collobj.prepTypes), key='cbxPrepType', size=green_size,
                      text_color='black',
-                     background_color='white', font=('Arial', 12), readonly=True, enable_events=True, pad=(0,0)),
+                     background_color='white', font=fieldFont, readonly=True, enable_events=True, pad=(0,0)),
                 sg.Text(indicator, key='iconPrep', background_color=greenArea, visible=False, font=wingding)]
-        # taxonomy = [ #Currently not used
-        #     sg.Text("Taxonomic group:", size=defaultSize, visible=False, background_color=greenArea, font=font),
-        #     sg.Combo(taxonomicGroups, key='cbxHigherTaxon', visible=False, size=green_size, text_color='black',
-        #             background_color='white', font=('Arial', 12), readonly=True, enable_events=True), ]
+
         type_status = [
-            sg.Text('Type status:', size=defaultSize, background_color=greenArea, font=font),
+            sg.Text('Type status:', size=defaultSize, background_color=greenArea, font=captionFont),
             sg.Combo(util.convert_dbrow_list(self.collobj.typeStatuses), key='cbxTypeStatus', size=green_size,
                      text_color='black',
-                     background_color='white', font=('Arial', 12), readonly=True, enable_events=True, pad=(0,0)),
+                     background_color='white', font=fieldFont, readonly=True, enable_events=True, pad=(0,0)),
         sg.Text(indicator, pad=(7,0), key='iconType', background_color=greenArea, visible=False, font=wingding ),]
         notes = [
-            sg.Text('Notes', size=defaultSize, background_color=greenArea, font=font),
+            sg.Text('Notes', size=defaultSize, background_color=greenArea, font=captionFont),
             sg.InputText(size=(80,5), key='txtNotes', background_color='white', text_color='black', pad=(0, 0),
-                         enable_events=False),
+                         enable_events=False, font=fieldFont),
             sg.Text(indicator, key='iconNotes', background_color=greenArea, visible=False, font=wingding)]
 
         multispecimen = [
-            sg.Checkbox('Multispecimen object', key='chkMultiSpecimen', size=checkText_size, enable_events=True, background_color=greenArea,
-                        font=(11) ), sg.InputText(size=(80,5), key='txtMultiSpecimen', background_color='white', text_color='black', pad=(3, 0),
-                         enable_events=True, visible=False), sg.Text(indicator, key='iconMulti', background_color=greenArea, visible=False, font=wingding)]
+            sg.Checkbox('Multispecimen object', key='chkMultiSpecimen', size=checkText_size, enable_events=True, background_color=greenArea, font=captionFont ), 
+                         sg.InputText(size=(80,5), key='txtMultiSpecimen', background_color='white', text_color='black', pad=(3, 0), enable_events=True, font=fieldFont, visible=False), 
+                         sg.Text(indicator, key='iconMulti', background_color=greenArea, visible=False, font=wingding)]
 
         layout_greenarea = [
             storage, preparation, type_status, notes, multispecimen, ]
@@ -154,24 +152,24 @@ class SpecimenDataEntry():
         # Blue Area elements
         broadGeo = [
             sg.Text('Broad geographic region:', size=defaultSize, background_color=blueArea, text_color='black',
-                    font=font),
+                    font=captionFont),
             sg.Combo(util.convert_dbrow_list(self.collobj.geoRegions), size=blue_size, key='cbxGeoRegion',
                      text_color='black',
-                     background_color='white', font=('Arial', 12), readonly=True, enable_events=True),
+                     background_color='white', font=fieldFont, readonly=True, enable_events=True),
                     sg.Text(indicator, key='iconBGR', background_color=blueArea, visible=False, font=wingding)]
         taxonInput = [
-            sg.Text('Taxonomic name:     ', size=defaultSize, background_color=blueArea, text_color='black', font=font),
+            sg.Text('Taxonomic name:     ', size=defaultSize, background_color=blueArea, text_color='black', font=captionFont),
             sg.Input('', size=blue_size, key='inpTaxonName', text_color='black', background_color='white',
-                     font=('Arial', 12), enable_events=True, pad=((5, 0), (0, 0))),
+                     font=fieldFont, enable_events=True, pad=((5, 0), (0, 0))),
             sg.Text(indicator, key='iconTaxon', background_color=blueArea, visible=False, font=wingding),
             sg.Text('No further record to go back to!', key='lblRecordEnd', visible=False, background_color="#ff5588",
                     border_width=3)]
 
         barcode = [
             sg.Text('Barcode:', size=defaultSize, background_color=blueArea, enable_events=True, text_color='black',
-                    font=font),
+                    font=captionFont),
             sg.InputText('', key='txtCatalogNumber', size=blue_size, text_color='black', background_color='white',
-                         font=('Arial', 12), enable_events=True), sg.Text(indicator, key='iconCatalog', background_color=blueArea, visible=False, font=wingding),]
+                         font=fieldFont, enable_events=True), sg.Text(indicator, key='iconCatalog', background_color=blueArea, visible=False, font=wingding),]
 
         # statusLabel = [sg.Text('Specimen record has been saved', font=('Arial',20),size=(20,10),justification='center',background_color='#4f280a',text_color = 'yellow',key='texto')]
 
@@ -283,6 +281,7 @@ class SpecimenDataEntry():
 
         # Set triggers for the different controls on the UI form
         self.setControlEvents()
+        # TODO Explain the functioning of searchString
         self.searchString = []
 
     def extractRowsInTwoFormats(self, rowId):
@@ -357,12 +356,14 @@ class SpecimenDataEntry():
 
             if event is None: break  # Empty event indicates user closing window
 
-            # Checking field events as switch construct 
+            # TODO Checking field events as a switch construct 
+
             if event == 'inpStorage':
+                keyStrokes = values['inpStorage']
                 self.searchString.append(values[event])
                 # If more than 3 characters entered:
-                if len(self.searchString) >= 3:
-                    self.HandleStorageInput()
+                if len(keyStrokes) >=3 and keyStrokes != 'None': #len(self.searchString) >= 3:
+                    self.HandleStorageInput(values['inpStorage'])
 
             if event.endswith("focus in storage"):
                 self.window['iconStorage'].update(text_color='black')
@@ -649,6 +650,20 @@ class SpecimenDataEntry():
                     sg.PopupError(validationMessage)
                     return
             
+            if values['txtCatalogNumber'] == '':
+                # Barcode (catalog number) must not be empty!
+                validationMessage = "Cannot leave barcode empty!"
+                self.log.error(validationMessage)
+                sg.PopupError(validationMessage)
+                return
+
+            if len(values['txtCatalogNumber']) != 8:
+                # Barcode (catalog number) must be 8 digits!
+                validationMessage = "Barcode incorrect length (8)!"
+                self.log.error(validationMessage)
+                sg.PopupError(validationMessage)
+                return
+
             # All checks out; Save specimen and clear non-sticky fields 
             specimenRecord = self.collobj.save()
             self.clearNonStickyFields(values)
@@ -678,13 +693,13 @@ class SpecimenDataEntry():
         
         return result 
 
-    def HandleStorageInput(self):
+    def HandleStorageInput(self, keyStrokes):
         """
         TODO Function contract 
         """
         try:
             # Get currently entered key strokes
-            keyStrokes = self.searchString.pop()
+            #keyStrokes = self.searchString.pop()
 
             self.autoStorage.Show()
 
@@ -761,7 +776,7 @@ class SpecimenDataEntry():
         Function for setting form fields from specimen data record
         """
         self.window['txtRecordID'].update('{}'.format(record['id']), visible=True)
-        self.window['inpStorage'].update(record['storagename'])
+        self.window['inpStorage'].update(self.displayStorage(record['storagename']))
         self.window['txtStorageFullname'].update(record['storagefullname'])
         self.window['cbxPrepType'].update(record['preptypename'])
         # self.window['cbxHigherTaxon'].update('')
@@ -778,6 +793,12 @@ class SpecimenDataEntry():
         self.window['cbxGeoRegion'].update(record['georegionname'])
         self.window['inpTaxonName'].update(record['taxonfullname'])
         self.window['txtCatalogNumber'].update(record['catalognumber'])
+
+    def displayStorage(self, storageNameValue):
+        if storageNameValue == '':
+            return 'None'
+        else:
+            return storageNameValue
 
     def clearNonStickyFields(self, values):
         """
