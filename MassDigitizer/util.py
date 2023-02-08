@@ -22,6 +22,9 @@ import logging
 # from re import L
 import ctypes
 
+#Central place to manage version numbers
+versionNumber = "0.2.9" # Before compiling exe, please set the version number above
+
 def clear():
    """
    Clear Command Line Interface screen 
@@ -34,7 +37,7 @@ def clear():
    else:
     _ = system('clear')
 
-def buildLogger(moduleName):
+def buildLogger(): #moduleName):
    """
    Sets up logging for code module calling this method. 
    """
@@ -42,10 +45,13 @@ def buildLogger(moduleName):
    sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}", "")
 
    #sys.path.append(str(Path(__file__).parent.parent.joinpath(getLogsPath)))
-   logName = f"{moduleName}-{sTime}.log"
+   logName = f"log-{sTime}.log"   
    logFilePath = str(Path(getLogsPath()).joinpath(logName))
-   print(logFilePath)
+   
    logging.basicConfig(filename=logFilePath, encoding='utf-8', level=logging.DEBUG)
+
+
+
 
 """ def tryout_Path():
     db_lowerLimit = 1000 #DB size minimum limit for successful testing.
@@ -101,7 +107,8 @@ def getUserPath():
          # If the full path exists then use the onedrivepath as home path 
          if os.path.exists(str(Path(oneDrivePath).joinpath('Documents').joinpath('DaSSCo'))):
             homePath = oneDrivePath   
-   # Extend the user home path with  
+            
+   # Extend the user home path to point to DaSSCo documents folder  
    userPath = str(Path(homePath).joinpath('Documents').joinpath('DaSSCo'))
    
    return userPath
@@ -166,6 +173,12 @@ def convert_dbrow_list(list, addEmptyRow=False):
 #                 versionPop = versionSplit.pop()
 #                 # print(versionPop.replace('"', ''))
 #                 return versionPop.replace('"', '')
+
+def getVersionNumber():
+    return versionNumber
+   # """This code can be modified to replace the version number in the
+   # DaSSCo.issfile which has this format:/ #define MyAppVersion "0.2.5" /
+   # (Please ignore the forward slashes above)"""
 
 class Struct:
     """A structure that can have any fields defined."""
