@@ -410,25 +410,19 @@ class SpecimenDataEntry():
                 self.collobj.notes = values['txtNotes']
                 self.window['chkMultiSpecimen'].set_focus()
             if event == 'chkMultiSpecimen':
-                # Launch text box for multi-specimen with UUID value.
                 self.window['txtMultiSpecimen'].update('', visible=True)
-                from datetime import datetime
-                import random
-                r1 = random.randint(0, 10000)
+                self.window['txtMultiSpecimen'].update(util.getRandomNumberString())
                 
-                uniqID = hash(f"{datetime.now()}{r1}") # Get random number as container name 
-                if uniqID < 0: uniqID += sys.maxsize   # Ensure that it's a positive number 
-                self.window['txtMultiSpecimen'].update(uniqID)
-                
-                self.collobj.multiSpecimen = values['chkMultiSpecimen']
+                self.collobj.multiSpecimen = values['txtMultiSpecimen']
                 self.window['cbxGeoRegion'].set_focus()
 
             elif values['chkMultiSpecimen'] == False :
                 # Resets the multi-specimen box
                 self.window['txtMultiSpecimen'].update('')
+                self.collobj.multiSpecimen = values['txtMultiSpecimen']
 
             elif event == 'chkMultiSpecimen_Edit':
-                self.collobj.multiSpecimen = values['chkMultiSpecimen']
+                self.collobj.multiSpecimen = values['txtMultiSpecimen']
 
             if event.endswith("focus in multispecimen"):
                 self.window['iconMulti'].update(visible=True)
@@ -443,7 +437,6 @@ class SpecimenDataEntry():
             if event == 'cbxGeoRegion':
                 self.collobj.setGeoRegionFields(self.window[event].widget.current())
                 self.window['inpTaxonName'].set_focus()
-
 
             if event.endswith("focus in BGR"):
                 self.window['iconBGR'].update(visible=True)
