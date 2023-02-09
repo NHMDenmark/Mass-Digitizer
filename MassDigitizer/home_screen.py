@@ -42,7 +42,7 @@ import specimen_data_entry as sde
 l = util.buildLogger('home_screen') # Just an initializer - the var is unused.
 logging.debug("UTIL -- about to set 'db' and 'sp' --")
 db = data_access.DataAccess(gs.databaseName)
-sp = specify_interface.SpecifyInterface()
+si = specify_interface.SpecifyInterface()
 
 class HomeScreen():
     # Get version number to set into the homeScreen welcome menu.
@@ -109,15 +109,18 @@ class HomeScreen():
 
         self.main()
 
-    def getAgentFullname(self, agentName, userName, password, collectionId):
+    def getAgentFullname(self, userName, password, collectionId):
         #AgentName is the Specify login name
-        sp = specify_interface
-        si = sp.SpecifyInterface()
+        print("in getagentfulnaem===== colID", collectionId)
         usr = userName
         pw = password
         tok = si.getCSRFToken()
-        si.login(usr, pw, collectionId, tok)
-        specifyObject = si.getSpecifyObjects('specifyuser', filters={"name":f"{usr}"})[0]
+        print("Token=====", tok)
+
+        login = si.login(usr, pw, collectionId, tok)
+        print('Login content token=', login)
+        specifyObject = si.getSpecifyObjects('specifyuser', filters={"name":f"{usr}"}) #[0]
+        print('specifyObject=', specifyObject)
         agentID = specifyObject['id']
 
         # Getting the full name based on user ID
@@ -164,16 +167,16 @@ class HomeScreen():
                                                     'name = ':'"%s"'%selected_collection, 
                                                     'institutionid = ':'%s'%institution_id,})
 
-
                     if len(collection) > 0:
                         collection_id = collection[0]['id']
-
-                        res = self.getAgentFullname(username, userName=username, password=password,
+                        print(f"the collID:{collection_id}: and the user:{username}: + pw :{password}:")
+                        agentFullName = self.getAgentFullname(userName=username, password=password,
                                               collectionId=collection_id)
 
                         if collection_id > 0:
                             gs.baseURL = institution_url
-                            gs.csrfToken = sp.specifyLogin(username, password, collection_id)
+                            gs.csrfToken = si.specifyLogin(username, password, collection_id)
+                            print('csrfToken:::', gs.csrfToken)
 
                             if gs.csrfToken != '':
                                 #gs.spUserId = userid
