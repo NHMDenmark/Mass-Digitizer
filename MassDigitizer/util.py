@@ -15,12 +15,9 @@
 from os import system, name
 # from hashlib import new
 import os
-import sys
 from pathlib import Path
 import time
 import logging
-# from re import L
-import ctypes
 
 #Central place to manage version numbers
 versionNumber = "0.2.10" # Before compiling exe, please set the version number above
@@ -39,13 +36,14 @@ def clear():
 
 def buildLogger(): #moduleName):
    """
-   Sets up logging for code module calling this method. 
+   Sets up logging  
    """
-   sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}", "")
+   sTime = time.strftime('{%Y%m%d%H%M%S}').replace("{", "").replace("}", "")
    logName = f"log-{sTime}.log"   
    logFilePath = str(Path(getLogsPath()).joinpath(logName))
-   
    logging.basicConfig(filename=logFilePath, encoding='utf-8', level=logging.DEBUG)
+   logging.debug('Logging set up')
+   print(logFilePath)
 
 """ def tryout_Path():
     db_lowerLimit = 1000 #DB size minimum limit for successful testing.
@@ -66,9 +64,7 @@ def buildLogger(): #moduleName):
     except Exception as e:
         logging.debug(e)
 
-        pass
     sizeAlternativeDB = os.stat(test_altDBPath)
-
 
     sizeTest_altuserPath = os.stat(test_altDBPath)
     alternative_path_for_log = f'Alternative {sizeAlternativeDB} raw size : {sizeTest_altuserPath.st_size}'
