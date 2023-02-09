@@ -16,7 +16,6 @@ from datetime import datetime
 
 # Internal dependencies
 from models import model
-import data_access
 import global_settings as gs
 
 class specimen(model.Model):

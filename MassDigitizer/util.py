@@ -41,17 +41,11 @@ def buildLogger(): #moduleName):
    """
    Sets up logging for code module calling this method. 
    """
-   # Generic logger: If imported and called it will allow - logging.debug(_your-message_). Log file is "moduleName&timeStamp"
    sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}", "")
-
-   #sys.path.append(str(Path(__file__).parent.parent.joinpath(getLogsPath)))
    logName = f"log-{sTime}.log"   
    logFilePath = str(Path(getLogsPath()).joinpath(logName))
    
    logging.basicConfig(filename=logFilePath, encoding='utf-8', level=logging.DEBUG)
-
-
-
 
 """ def tryout_Path():
     db_lowerLimit = 1000 #DB size minimum limit for successful testing.
@@ -117,8 +111,7 @@ def logLine(line, level='info'):
    """
    Write a line to the log using the logging module initialized.  
    """
-   logging.basicConfig(filename='example.log', encoding='utf-8', level=logging.DEBUG)
-
+   
    if(level == 'info'):
       logging.info(line)
    elif(level == 'debug'):
