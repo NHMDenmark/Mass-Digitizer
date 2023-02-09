@@ -12,12 +12,13 @@
   PURPOSE: Assemblage of generic utility functions used across the application. 
 """
 
+import os, sys
 from os import system, name
-# from hashlib import new
-import os
 from pathlib import Path
 import time
 import logging
+from datetime import datetime
+import random
 
 #Central place to manage version numbers
 versionNumber = "0.2.10" # Before compiling exe, please set the version number above
@@ -142,6 +143,15 @@ def convert_dbrow_list(list, addEmptyRow=False):
       new_list.append(item['name'])
 
    return new_list
+
+def getRandomNumberString():
+   """
+   Returns positive random number string based on date/time hash 
+   """
+   r1 = random.randint(0, 10000)                
+   randomNumberString = hash(f"{datetime.now()}{r1}") # Get random number as container name 
+   if randomNumberString < 0: randomNumberString += sys.maxsize   # Ensure that it's a positive number 
+   return randomNumberString
 
 # def obtainVersionNumber(filepath, keyWord):
 #    """
