@@ -191,7 +191,7 @@ class SpecimenDataEntry():
 
         # self.tableRecords = self.previousRecords['adjacentrows']
         lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
-        previousRecordsTable = [sg.Table(values=self.previousRecords, key = 'tblPrevious',enable_events=True, headings=self.operationalHeads, max_col_width=32)]
+        previousRecordsTable = [sg.Table(values=self.previousRecords, key = 'tblPrevious',enable_events=True,  hide_vertical_scroll=True, headings=self.operationalHeads, max_col_width=32)]
 
 
         layout_bluearea = [broadGeo, taxonInput, barcode, [  # taxonomicPicklist,
