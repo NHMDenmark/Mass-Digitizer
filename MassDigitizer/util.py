@@ -153,6 +153,16 @@ def getRandomNumberString():
    if randomNumberString < 0: randomNumberString += sys.maxsize   # Ensure that it's a positive number 
    return randomNumberString
 
+def getVersionNumber():
+    return versionNumber
+   # """This code can be modified to replace the version number in the
+   # DaSSCo.issfile which has this format:/ #define MyAppVersion "0.2.5" /
+   # (Please ignore the forward slashes above)"""
+
+class Struct:
+    """A structure that can have any fields defined."""
+    def __init__(self, **entries): self.__dict__.update(entries)
+
 # def obtainVersionNumber(filepath, keyWord):
 #    """
 #    Obtain application version number from iss Inno setup file.
@@ -172,14 +182,3 @@ def getRandomNumberString():
 #                 versionPop = versionSplit.pop()
 #                 # print(versionPop.replace('"', ''))
 #                 return versionPop.replace('"', '')
-
-def getVersionNumber():
-    return versionNumber
-   # """This code can be modified to replace the version number in the
-   # DaSSCo.issfile which has this format:/ #define MyAppVersion "0.2.5" /
-   # (Please ignore the forward slashes above)"""
-
-class Struct:
-    """A structure that can have any fields defined."""
-    def __init__(self, **entries): self.__dict__.update(entries)
-
