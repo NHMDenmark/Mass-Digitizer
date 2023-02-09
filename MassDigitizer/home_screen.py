@@ -23,7 +23,7 @@ import specify_interface
 import specimen_data_entry as sde
 
 db = data_access.DataAccess(gs.databaseName)
-sp = specify_interface.SpecifyInterface()
+si = specify_interface.SpecifyInterface()
 
 class HomeScreen():
     # Get version number to set into the homeScreen welcome menu.
@@ -90,18 +90,31 @@ class HomeScreen():
 
         self.main()
 
-    def getAgentFullname(self, agentName, userName, password, collectionId):
+    def getAgentFullname(self, userName, password, collectionId):
         #AgentName is the Specify login name
-        sp = specify_interface
+
+        print("in getagentfulnaem===== colID", collectionId)
         usr = userName
         pw = password
-        initialToken = sp.getCSRFToken()
-        token = sp.login(usr, pw, collectionId, initialToken)
-        specifyObject = sp.getSpecifyObjects('specifyuser', filters={"name":f"{usr}"})[0]
+        tok = si.getCSRFToken()
+        print("Token=====", tok)
+
+        login = si.login(usr, pw, collectionId, tok)
+        print('Login content token=', login)
+        specifyObject = si.getSpecifyObjects('specifyuser', filters={"name":f"{usr}"}) #[0]
+        print('specifyObject=', specifyObject)
+
+        # sp = specify_interface
+        usr = userName
+        pw = password
+        initialToken = si.getCSRFToken()
+        token = si.login(usr, pw, collectionId, initialToken)
+        specifyObject = si.getSpecifyObjects('specifyuser', filters={"name":f"{usr}"})[0]
+
         agentID = specifyObject['id']
 
         # Getting the full name based on user ID
-        userProfile = sp.getSpecifyObjects('agent', filters={"specifyuser": agentID})[0]
+        userProfile = si.getSpecifyObjects('agent', filters={"specifyuser": agentID})[0]
 
         if userProfile['middleinitial']:
             fullname = f"{userProfile['firstname']} {userProfile['middleinitial']}. {userProfile['lastname']}"
@@ -140,6 +153,22 @@ class HomeScreen():
                 if username != '' and password != '':
                     # A username and password has been entered 
                     selected_collection = values['lstSelectCollection']
+
+                    collection = db.getRowsOnFilters('collection', {
+                                                    'name = ':'"%s"'%selected_collection, 
+                                                    'institutionid = ':'%s'%institution_id,})
+
+                    if len(collection) > 0:
+                        collection_id = collection[0]['id']
+                        print(f"the collID:{collection_id}: and the user:{username}: + pw :{password}:")
+                        agentFullName = self.getAgentFullname(userName=username, password=password,
+                                              collectionId=collection_id)
+
+                        if collection_id > 0:
+                            gs.baseURL = institution_url
+                            gs.csrfToken = si.specifyLogin(username, password, collection_id)
+                            print('csrfToken:::', gs.csrfToken)
+
                     collection = db.getRowsOnFilters('collection', {'name = ':'"%s"'%selected_collection,'institutionid = ':'%s'%institution_id,})
                     
                     if len(collection) > 0:
@@ -147,7 +176,8 @@ class HomeScreen():
 
                         if collection_id > 0:
                             gs.baseURL = institution_url
-                            gs.csrfToken = sp.specifyLogin(username, password, collection[0]['spid'])
+                            gs.csrfToken = si.specifyLogin(username, password, collection[0]['spid'])
+
 
                             if gs.csrfToken != '':
                                 #gs.spUserId = userid
@@ -160,9 +190,9 @@ class HomeScreen():
                                 # TODO Specify fetch user agent first name, middle, last name 
 
                                 # 1. Fetch SpecifyUser on username (/api/specify/specifyuser/?name=username)
-                                user = sp.getSpecifyObjects('specifyuser', filters={"name":f"{username}"})[0]
+                                user = si.getSpecifyObjects('specifyuser', filters={"name":f"{username}"})[0]
                                 # 2. Fetch Agent on specifyuser primary key (/api/specify/agent/?specifyuser=n)
-                                agent = sp.getSpecifyObjects('agent', filters={"specifyuser": user['id']})[0]
+                                agent = si.getSpecifyObjects('agent', filters={"specifyuser": user['id']})[0]
                                 # 3. Store full name in global settings (as single, concatenated string of first, middle, last 
                                 gs.agentFullName = f"{agent['firstname']} {agent['middleinitial']}. {agent['lastname']}".strip()
 
