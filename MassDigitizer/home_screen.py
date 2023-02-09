@@ -23,7 +23,7 @@ import specify_interface
 import specimen_data_entry as sde
 
 db = data_access.DataAccess(gs.databaseName)
-si = specify_interface.SpecifyInterface()
+sp = specify_interface.SpecifyInterface()
 
 class HomeScreen():
     # Get version number to set into the homeScreen welcome menu.
@@ -90,41 +90,6 @@ class HomeScreen():
 
         self.main()
 
-    def getAgentFullname(self, userName, password, collectionId):
-        #AgentName is the Specify login name
-
-        print("in getagentfulnaem===== colID", collectionId)
-        usr = userName
-        pw = password
-        tok = si.getCSRFToken()
-        print("Token=====", tok)
-
-        login = si.login(usr, pw, collectionId, tok)
-        print('Login content token=', login)
-        specifyObject = si.getSpecifyObjects('specifyuser', filters={"name":f"{usr}"}) #[0]
-        print('specifyObject=', specifyObject)
-
-        # sp = specify_interface
-        usr = userName
-        pw = password
-        initialToken = si.getCSRFToken()
-        token = si.login(usr, pw, collectionId, initialToken)
-        specifyObject = si.getSpecifyObjects('specifyuser', filters={"name":f"{usr}"})[0]
-
-        agentID = specifyObject['id']
-
-        # Getting the full name based on user ID
-        userProfile = si.getSpecifyObjects('agent', filters={"specifyuser": agentID})[0]
-
-        if userProfile['middleinitial']:
-            fullname = f"{userProfile['firstname']} {userProfile['middleinitial']}. {userProfile['lastname']}"
-        else:
-            fullname = f"{userProfile['firstname']} {userProfile['lastname']}"
-        fullname = fullname.strip()
-        gs.agentFullName = fullname
-
-        return fullname
-
     def main(self):
         """
         Main loop of execution responding to user input 
@@ -141,7 +106,7 @@ class HomeScreen():
                 institution = db.getRowsOnFilters('institution', {' name = ':'"%s"'%selected_institution},1)
                 institution_id = institution[0]['id']
                 institution_url = institution[0]['url']
-                gs.baseURL = institution_url #This is a kind of hack since baseURL is also set further down.
+                gs.baseURL = institution_url
                 collections = util.convert_dbrow_list(db.getRowsOnFilters('collection', {' institutionid = ':'%s'%institution_id, 'visible = ': '1'}), True)
                 self.window['lstSelectCollection'].update(values=collections)
                 self.window['colNext'].update(visible=True)
@@ -154,21 +119,6 @@ class HomeScreen():
                     # A username and password has been entered 
                     selected_collection = values['lstSelectCollection']
 
-                    collection = db.getRowsOnFilters('collection', {
-                                                    'name = ':'"%s"'%selected_collection, 
-                                                    'institutionid = ':'%s'%institution_id,})
-
-                    if len(collection) > 0:
-                        collection_id = collection[0]['id']
-                        print(f"the collID:{collection_id}: and the user:{username}: + pw :{password}:")
-                        agentFullName = self.getAgentFullname(userName=username, password=password,
-                                              collectionId=collection_id)
-
-                        if collection_id > 0:
-                            gs.baseURL = institution_url
-                            gs.csrfToken = si.specifyLogin(username, password, collection_id)
-                            print('csrfToken:::', gs.csrfToken)
-
                     collection = db.getRowsOnFilters('collection', {'name = ':'"%s"'%selected_collection,'institutionid = ':'%s'%institution_id,})
                     
                     if len(collection) > 0:
@@ -176,11 +126,10 @@ class HomeScreen():
 
                         if collection_id > 0:
                             gs.baseURL = institution_url
-                            gs.csrfToken = si.specifyLogin(username, password, collection[0]['spid'])
-
+                            gs.csrfToken = sp.specifyLogin(username, password, collection[0]['spid'])
 
                             if gs.csrfToken != '':
-                                #gs.spUserId = userid
+                                # Login was successfull 
                                 gs.spUserName = username
                                 gs.collectionId = collection_id
                                 gs.collectionName = selected_collection
@@ -190,10 +139,11 @@ class HomeScreen():
                                 # TODO Specify fetch user agent first name, middle, last name 
 
                                 # 1. Fetch SpecifyUser on username (/api/specify/specifyuser/?name=username)
-                                user = si.getSpecifyObjects('specifyuser', filters={"name":f"{username}"})[0]
+                                user = sp.getSpecifyObjects('specifyuser', filters={"name":f"{username}"})[0]
+                                gs.spUserId = user['id']
                                 # 2. Fetch Agent on specifyuser primary key (/api/specify/agent/?specifyuser=n)
-                                agent = si.getSpecifyObjects('agent', filters={"specifyuser": user['id']})[0]
-                                # 3. Store full name in global settings (as single, concatenated string of first, middle, last 
+                                agent = sp.getSpecifyObjects('agent', filters={"specifyuser": gs.spUserId})[0]
+                                # 3. Store full name in global settings (as single, concatenated string of first, middle, last)
                                 gs.agentFullName = f"{agent['firstname']} {agent['middleinitial']}. {agent['lastname']}".strip()
 
                                 self.window.close()
