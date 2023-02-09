@@ -12,8 +12,9 @@
   PURPOSE: Assemblage of generic utility functions used across the application. 
 """
 
+import os, sys
 from os import system, name
-# from hashlib import new
+
 import os
 import sys
 from pathlib import Path
@@ -21,6 +22,12 @@ import time
 import logging
 # from re import L
 import ctypes
+
+from pathlib import Path
+import time
+import logging
+from datetime import datetime
+import random
 
 
 def clear():
@@ -103,6 +110,7 @@ def convert_dbrow_list(list, addEmptyRow=False):
 
    return new_list
 
+
 # def pretty_pront_POST(req):
 """
 Format HTTP request header and body into easily legible output.
@@ -144,6 +152,15 @@ def logLine(line, level='info'):
       logging.info(line)
 
    return line
+
+def getRandomNumberString():
+   """
+   Returns positive random number string based on date/time hash 
+   """
+   r1 = random.randint(0, 10000)                
+   randomNumberString = hash(f"{datetime.now()}{r1}") # Get random number as container name 
+   if randomNumberString < 0: randomNumberString += sys.maxsize   # Ensure that it's a positive number 
+   return randomNumberString
 
 # def obtainVersionNumber(filepath, keyWord):
 #    """
