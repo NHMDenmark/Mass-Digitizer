@@ -164,13 +164,18 @@ class SpecifyInterface():
     #print('Fetching "%s" with limit %d and offset %d ' %(objectName, limit, offset))
     objectSet = {}
     headers = {'content-type': 'application/json', 'X-CSRFToken': self.csrfToken, 'Referer': gs.baseURL}
+    print(headers)
     filterString = ""
     for key in filters:
       filterString = f"&{key}={filters[key]}"
-    apiCallString = f'{gs.baseURL}api/specify/{objectName}/?limit={limit}&offset={offset}{filterString}'
+    fundamentalApi = f'{gs.baseURL}api/specify/'
+    print('fundamental api :-- ', fundamentalApi)
+    apiCallString = f'{fundamentalApi}{objectName}/?limit={limit}&offset={offset}{filterString}'
+    print('api string::', apiCallString)
     #if limit == 1000: print("" + apiCallString)
     response = self.spSession.get(apiCallString, headers=headers)
     # print(' - Response: %s %s' %(str(response.status_code), response.reason))
+    print("spSession.get(apiCallString, headers=headers):", response)
     if response.status_code < 299:
       objectSet = json.loads(response.text)['objects'] # get collections from json string and convert into dictionary
       # print(' - Received %d object(s)' % len(objectSet))

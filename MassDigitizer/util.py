@@ -40,10 +40,11 @@ def buildLogger(moduleName):
     sTime = time.strftime('{%Y-%m-%d_%H,%M,%S}').replace("{", "").replace("}", "")
 
     filePath = tryout_Path()
+
     sys.path.append(str(Path(__file__).parent.parent.joinpath(filePath)))
     logName = f"{moduleName}-{sTime}.log"
-    logFilePath = str(Path(filePath).joinpath(logName))
-
+    logFilePath = str(Path(filePath).joinpath('logs', logName))
+    print('LOGfile path=', logFilePath)
     logging.basicConfig(filename=logFilePath, encoding='utf-8', level=logging.DEBUG)
 
 def tryout_Path():
@@ -52,10 +53,10 @@ def tryout_Path():
     # Intended to return the True path in case OneDrive is running. DB size testing will determine which path is returned.
     alternativePath = os.path.expanduser(r'~\OneDrive - University of Copenhagen\Documents\DaSSCO')
     regularPath = getUserPath()
-    print('regular:', getUserPath(), type(getUserPath()))
-    print('alternative:', alternativePath)
+    # print('regular:', getUserPath(), type(getUserPath()))
+    # print('alternative:', alternativePath)
     test_regularDBPath = regularPath+'\db.sqlite3'
-    print('regular DB:', test_regularDBPath)
+    # print('regular DB:', test_regularDBPath)
     # usrPath = os.path.expanduser(getUserPath())
     # print("usrPath;;", type(usrPath), usrPath)
     test_altDBPath = os.path.expanduser(
@@ -75,11 +76,11 @@ def tryout_Path():
     logging.debug(alternative_path_for_log)
     # Below is the size test on the regular path, and on the
     if sizeUserDB:
-        if sizeUserDB.st_size > db_lowerLimit:
-            print('regular :: ',sizeUserDB.st_size )
+        if sizeUserDB.st_size > db_lowerLimit:  # st_size returns file size in bytes.
+            # print('regular :: ',sizeUserDB.st_size )
             return regularPath
     elif sizeTest_altuserPath.st_size > db_lowerLimit:
-        print('alternative :: ', sizeAlternativeDB.st_size)
+        # print('alternative :: ', sizeAlternativeDB.st_size)
         return alternativePath
 def shrink_dict(original_dict, input_string):
    """
