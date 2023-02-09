@@ -43,9 +43,10 @@ class DataAccess():
         try:
             self.connection = sqlite3.connect(self.dbFilePath)
         except Exception as e:
-            util.logging.debug(logError)
+
             util.logging.debug("SQLite connection failed. Error: %s" % e)
             logError = f"The path {self.dbFilePath} may not exist."
+            util.logging.debug(logError)
             
         self.connection.row_factory = sqlite3.Row
 
