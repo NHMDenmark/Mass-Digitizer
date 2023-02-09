@@ -68,7 +68,7 @@ class AutoSuggest_popup():
             [sg.Frame('New taxon name detected...', [
             [sg.Text('Input higher taxonomy:', key='lblHiTax'),
              sg.Input(size=(24, 1), key='txtHiTax', enable_events=True), 
-             sg.Button('Cancel', key='btnCancel')]], #button Cancel is used to submit the novel name.
+             sg.Button('OK', key='btnOK')]], #button OK is used to submit the novel name.
              key='frmHiTax', expand_x=True, visible=False)],
             [sg.pin(
                 sg.Col([[sg.Listbox(values=[], key='lstSuggestions', size=(input_width, lines_to_show), enable_events=True,
@@ -142,8 +142,6 @@ class AutoSuggest_popup():
 
             # If a suggestion is clicked in the listbox OR 'Enter' is pressed then handle suggested taxon name 
             if event == 'lstSuggestions' or event == 'btnReturn':
-                # print('Selected suggestion : ', type(values['lstSuggestions']), values['lstSuggestions'])
-                # print('Selected parent     : ', values['txtInput'])
                 #Fix for novel parent name
                 if not values['lstSuggestions']:
                     pass
@@ -210,9 +208,9 @@ class AutoSuggest_popup():
                     self.handleSuggestions(values['txtHiTax'].lower(), 140)
                     # Rank Family is assumed (rank id: 140)
 
-            if event == 'btnCancel':
-                # Cancel button pressed during new taxon entry
-                # print('In buttonCancel // ASpopup|| table name is:-', self.tableName)
+            if event == 'btnOK':
+                # OK button pressed during new taxon entry
+                # print('In buttonOK // ASpopup|| table name is:-', self.tableName)
 
                 autoSuggestObject.table = self.tableName
                 autoSuggestObject.id   = 0
