@@ -107,19 +107,16 @@ class SpecifyInterface():
       RETURNS boolean to indicate session validity
     """  
     validity = None
-    print(gs.baseURL + "context/user.json", headers)
+
     headers = {'content-type': 'application/json', 'X-CSRFToken': token, 'Referer': gs.baseURL}
     response = self.spSession.get(gs.baseURL + "context/user.json", headers=headers)
-    print(' - Response: %s %s' %(str(response.status_code), response.reason))
+    
     if response.status_code > 299:
-      print(response.text)
-      print(' - Invalid session')
       validity = False 
     else:
-      print(' - Session verified. User id: ' + str(response.json()['id']))
       validity = True
       self.csrfToken = token
-    print('------------------------------')
+    
     return validity
 
   def specifyLogout(self):#, csrftoken):
