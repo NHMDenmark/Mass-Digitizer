@@ -11,12 +11,12 @@
 
   PURPOSE: Generic Data Access Object for reading/writing local database file
 """
+
 import logging
 import sqlite3
 from pathlib import Path
 
 # Local imports
-import PySimpleGUI as sg
 import util
 
 class DataAccess():
@@ -28,7 +28,7 @@ class DataAccess():
                do_in_memory (boolean): Whether the database file should be run in-memory
         NOTE Database file is installed into user documents folder otherwise it would be readonly on a Windows PC in any case
         """
-        logging.debug("Initializing Data Access module...")
+        util.logging.debug("Initializing Data Access module...")
         try:
             self.currentCursor = None  # Reset cursor pointer
             # Point to database file provided and connect
@@ -36,15 +36,15 @@ class DataAccess():
 
             self.dbFilePath = str(Path(self.filePath).joinpath(f'{databaseName}.sqlite3'))
         except Exception as e:
-            logging.debug(e)
+            util.logging.debug(e)
 
-        logging.debug(('Connecting to database file: %s ...' % self.dbFilePath))
+        util.logging.debug(('Connecting to database file: %s ...' % self.dbFilePath))
 
         try:
             self.connection = sqlite3.connect(self.dbFilePath)
         except Exception as e:
-            logging.debug(logError)
-            logging.debug("SQLite connection failed. Error: %s" % e)
+            util.logging.debug(logError)
+            util.logging.debug("SQLite connection failed. Error: %s" % e)
             logError = f"The path {self.dbFilePath} may not exist."
             
         self.connection.row_factory = sqlite3.Row
@@ -52,8 +52,7 @@ class DataAccess():
         try:
             self.currentCursor = self.connection.cursor()
         except Exception as e:
-            sg.popup_cancel(f"Get the DB cursor error: {e}")
-            logging.debug(e)
+            util.logging.debug(e)
 
     def setDatabase(self, dbFileName='db'):
         """
@@ -62,7 +61,7 @@ class DataAccess():
             dbFileName (String): the name of the file excluding the extension '.sqlite3'
         """
         self.dbFilePath = str(Path(util.getUserPath()).joinpath(f'{dbFileName}.sqlite3'))
-        logging.info("Database filepath: %s" % self.dbFilePath)
+        util.logging.info("Database filepath: %s" % self.dbFilePath)
 
     def getConnection(self):
         """
@@ -103,12 +102,12 @@ class DataAccess():
 
         if limit > 0:
             sqlString += f' LIMIT {limit}'
-        logging.info('getRows() SQL : %s' % sqlString)
+        util.logging.info('getRows() SQL : %s' % sqlString)
         try:
             records = currentCursor.execute(sqlString).fetchall()
         except Exception as e:
-            logging.debug(e)
-            pass
+            util.logging.debug(e)
+            
         self.currentCursor.connection.close()
 
         return records
@@ -128,7 +127,7 @@ class DataAccess():
         """
         currentCursor = self.getDbCursor()
         rowsOnFilterCall = f'-> getRowsONFilter({tableName}, {filters}, {limit})'
-        logging.info("get rows on filter call= %s" % rowsOnFilterCall)
+        util.logging.info("get rows on filter call= %s" % rowsOnFilterCall)
         sqlString = 'SELECT * FROM %s ' % tableName
 
         if filters.items():
@@ -213,7 +212,7 @@ class DataAccess():
           RETURNS table rows as dictionary
         """
         message = f"Executing the following SQL: {sql}"
-        logging.debug(message)
+        util.logging.debug(message)
         self.currentCursor = self.getDbCursor()
 
         rows = self.currentCursor.execute(sql).fetchall()

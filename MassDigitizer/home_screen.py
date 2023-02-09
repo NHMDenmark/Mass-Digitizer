@@ -22,11 +22,6 @@ import data_access
 import specify_interface
 import specimen_data_entry as sde
 
-# sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath('MassDigitizer/log')))
-# currentpath = os.path.join(pathlib.Path(__file__).parent, '')
-
-util.buildLogger() #'home_screen') # 
-
 db = data_access.DataAccess(gs.databaseName)
 si = specify_interface.SpecifyInterface()
 

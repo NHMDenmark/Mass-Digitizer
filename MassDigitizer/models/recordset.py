@@ -13,9 +13,8 @@
 """
 
 # Internal dependencies
-import data_access
+from models import model
 import global_settings as gs
-import specify_interface
 
 class recordset(model.Model):
     """
