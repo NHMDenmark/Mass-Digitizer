@@ -54,23 +54,16 @@ Eventually, the local DB instances will be uploaded to a server where the data w
 In order to exchange information with Specify, the app has a module for interfacing with the Specify7 API. For now, this is mainly used for user authentication and basic info, but eventually this is planned to be built out into full synchronization in both directions. 
 
 ### Compilation  
-##### Prior code cleanup  
-To make the compilation work as expercted, and not pulling up a CLI window, it is a requirement to remove/out-comment all print() statements. In PowerShell this command is useful:  
-`Select-String -Path .\*.py -Pattern 'print'`
-It returns all file names:line number: and the line itself in the directory. Like so:  
-`collection.py:117:            print('jsonObject EMPTY!!!')`  
 
-On PC Windows I prefer to use PowerShell but YMMV.
-Begin with activating the virtual environment in console. [WINDOWS] CD to your project directory and `cd venv\Scripts\` and then type `.\activate`. This should switch the environment to venv. You can see the command line changes to `(venv) PS C:\Users\myUser\Documents`  
-**Warning** If you get a security exception, you need to first start Powershell in admin mode and then put in :  
-`Set-ExecutionPolicy Unrestricted -Force`  
+Remember to activate venv and then run: 
+```
+pip install -r requirements.txt first
+```
 
 For creating the executable, we use PyInstaller (https://pyinstaller.org/) using this command in the CLI from the root folder:
 ```
 pyinstaller .\MassDigitizer\DaSSCo.py --onedir --noconsole --paths=MassDigitizer\
 ```  
-
-Remember to activate venv and run pip install -r requirements.txt first
 
 For creating the installer, we use Inno Setup and a definition file for a generic edition is located in the repo root [DaSSCO.iss](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/MassDigitizer/DaSSCo.iss). The Inno Setup scripts bundles the database with the executable into an installer file. Before running the Inno Setup script, it is necessary to fill the database file with the taxonomic spine and other predefined data specific for the edition you would like to generate an installer for (see below).
 
