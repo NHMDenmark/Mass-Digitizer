@@ -61,6 +61,7 @@ class specimen(model.Model):
         self.exported        = 0
         self.exportDateTime  = ''
         self.exportUserId    = ''
+        self.previousRecordEdit = False
 
         # Predefined data fields
         self.storageLocations = None 
