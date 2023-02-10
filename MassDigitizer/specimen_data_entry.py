@@ -46,7 +46,8 @@ class SpecimenDataEntry():
         
         # Various lists of fields to be cleared on command 
         self.clearingList = ['inpStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'txtNotes',
-                             'chkMultiSpecimen', 'cbxGeoRegion', 'inpTaxonName', 'txtCatalogNumber', 'txtRecordID']
+                             'chkMultiSpecimen', 'cbxGeoRegion', 'inpTaxonName', 'txtCatalogNumber', 'txtRecordID',
+                             'txtMultiSpecimen']
         self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'txtNotes'},
                              {'chkMultiSpecimen'}, {'txtMultiSpecimen'}, {'cbxGeoRegion'}, {'inpTaxonName'}]
         self.nonStickyFields = ['txtCatalogNumber', 'txtRecordID']
@@ -799,6 +800,9 @@ class SpecimenDataEntry():
         for key in self.nonStickyFields:
             field = self.window[key]
             field.update('')
+        
+        # Storage location is set to "None" to represent a blank entry in the UI
+        self.window['inpStorage'].update('None')
 
     def clearForm(self):
         """
@@ -811,3 +815,6 @@ class SpecimenDataEntry():
         self.searchString = []
         #Update collection object so that the ID is removed (preventing overwriting of previous record)
         self.collobj.id = 0
+
+        # Storage location is set to "None" to represent a blank entry in the UI
+        self.window['inpStorage'].update('None')
