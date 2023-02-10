@@ -77,11 +77,11 @@ class DataAccess():
         CONTRACT
           RETURNS database cursor object
         """
-        # print(f'Connecting to db file: {self.dbFilePath} ...')
+        util.logger.info(f'Connecting to db file: {self.dbFilePath} ...')
         self.connection = sqlite3.connect(self.dbFilePath)  # Normal user
         self.connection.row_factory = sqlite3.Row  # Enable column access by name: row['column_name']
         cursor = self.connection.cursor()
-        # print('Connection established')
+        util.logger.info('Connection established')
         return cursor
 
     def getRows(self, tableName, limit=100, sortColumn=None):
@@ -99,11 +99,13 @@ class DataAccess():
 
         if sortColumn is not None:
             sqlString += f' ORDER BY {sortColumn}'
-        # print(sqlString)
+            
 
         if limit > 0:
             sqlString += f' LIMIT {limit}'
-        util.logger.info('getRows() SQL : %s' % sqlString)
+        
+        util.logger.info(sqlString)
+
         try:
             records = currentCursor.execute(sqlString).fetchall()
         except Exception as e:
@@ -148,7 +150,7 @@ class DataAccess():
         records = currentCursor.execute(sqlString).fetchall()
 
         currentCursor.connection.close()
-        # print(len(records))
+
         return records
 
     def getRowOnId(self, tableName, id):
@@ -202,7 +204,7 @@ class DataAccess():
         sql = f'SELECT MAX({tableName}.id) FROM {tableName};'
         record = currentCursor.execute(sql).fetchone()
         currentCursor.connection.close()
-        # print(f'record: {record}')
+        
         return record
 
     def executeSqlStatement(self, sql):
@@ -319,16 +321,15 @@ class DataAccess():
                     sqlStringAppend.append(values[key])
             sqlStringLastPart = " WHERE id = {}".format(recordID)
             try:
-
                 sqlAdd = ' '.join(sqlStringAppend)
-
                 sqlAdd = sqlAdd[:-2]
-
                 sqlStringFinal = sqlStringPrepend + ' ' + sqlAdd + sqlStringLastPart
-                # print('FINAL SQL is : ', sqlStringFinal)
             except TypeError:
-                # print('IN sql build except typeError!')
+                util.logger.error('TypeError occurred while constructing SQL for record update...')
                 sqlStringFinal = ','.join(map(str, sqlStringAppend))
+
+        
+        util.logger.info('Update record SQL string: ', sqlStringFinal)
 
         self.currentCursor.execute(sqlStringFinal)
         self.currentCursor.connection.commit()

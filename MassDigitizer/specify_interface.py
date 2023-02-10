@@ -50,12 +50,12 @@ class SpecifyInterface():
     CONTRACT
        Returns csrftoken (String)
     """   
-    # print('Get CSRF token from ', gs.baseURL)
+    util.logger.debug('Get CSRF token from ', gs.baseURL)
     response = self.spSession.get(gs.baseURL + 'context/login/', verify=False)
     self.csrfToken = response.cookies.get('csrftoken')
-    # print(' - Response: %s %s' %(str(response.status_code), response.reason))
-    # print(' - CSRF Token: %s' % self.csrfToken)
-    # print('------------------------------')
+    util.logger.debug(' - Response: %s %s' %(str(response.status_code), response.reason))
+    util.logger.debug(' - CSRF Token: %s' % self.csrfToken)
+    util.logger.debug('------------------------------')
     return self.csrfToken
 
   def specifyLogin(self, username, passwd, collection_id):
@@ -66,9 +66,9 @@ class SpecifyInterface():
         passwd   (String) : Specify account password  
         RETURNS  (String) : The CSRF token necessary for further interactions in the session 
       """
-      # print('Connecting to Specify7 API at: ' + gs.baseURL)
+      util.logger.debug('Connecting to Specify7 API at: ' + gs.baseURL)
       token = self.login(username, passwd, collection_id, self.getCSRFToken())
-      #print(' - Log in CSRF Token: %s' % token)
+      util.logger.debug(' - Log in CSRF Token: %s' % token)
       if self.verifySession(token):
           return token
       else:
@@ -83,7 +83,7 @@ class SpecifyInterface():
       passwd    (String) : The password for the Specify account
       csrftoken (String) : The CSRF token is required for security reasons  
     """
-    # print('Log in using CSRF token & username/password')
+    util.logger.debug('Log in using CSRF token & username/password')
     headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL}
     response = self.spSession.put(gs.baseURL + "context/login/", json={"username": username, "password": passwd, "collection": collectionid}, headers=headers, verify=False) 
     
@@ -94,9 +94,9 @@ class SpecifyInterface():
     else:
       csrftoken = response.cookies.get('csrftoken') # Keep and use new CSRF token after login
 
-    # print(' - Response: %s %s' %(str(response.status_code), response.reason))
-    # print(' - New CSRF Token: ', csrftoken)
-    #print('------------------------------')
+    util.logger.debug(' - Response: %s %s' %(str(response.status_code), response.reason))
+    util.logger.debug(' - New CSRF Token: ', csrftoken)
+    util.logger.debug('------------------------------')
     return csrftoken
 
   def verifySession(self, token):
@@ -125,7 +125,7 @@ class SpecifyInterface():
       CONTRACT
         NOTE DEPRECATED: csrftoken (String) : The CSRF token required during logging in for the session 
       """
-      # print('logging out of Specify...')
+      util.logger.debug('logging out of Specify...')
       self.logout(self.csrftoken)
 
   def getCollObject(self, collectionObjectId):#, csrftoken):
@@ -136,17 +136,17 @@ class SpecifyInterface():
       NOTE DEPRECATED: csrftoken          (String)  : The CSRF token is required for security reasons 
       RETURNS fetched object 
     """   
-    # print('Query collection object')
+    util.logger.debug('Query collection object')
     headers = {'content-type': 'application/json', 'X-CSRFToken': self.csrfToken, 'Referer': gs.baseURL}
     response = self.spSession.get(gs.baseURL + "api/specify/collectionobject/" + str(collectionObjectId)  + "/", headers=headers)
-    # print(' - Response: %s %s' %(str(response.status_code), response.reason))
+    util.logger.debug(' - Response: %s %s' %(str(response.status_code), response.reason))
     if response.status_code < 299:
       object = response.json()
       catalogNr = response.json()['catalognumber']
-      # print(f' - Catalog number: {catalogNr}')
+      util.logger.debug(f' - Catalog number: {catalogNr}')
     else:
       object = {}
-    #print('------------------------------')
+    util.logger.debug('------------------------------')
     return object 
 
   def getSpecifyObjects(self, objectName, limit=100, offset=0, filters={}):
@@ -160,7 +160,7 @@ class SpecifyInterface():
       filters    (Dictionary) : Optional filters as a key, value pair of strings 
       RETURNS fetched object set 
     """ 
-    #print('Fetching "%s" with limit %d and offset %d ' %(objectName, limit, offset))
+    util.logger.debug('Fetching "%s" with limit %d and offset %d ' %(objectName, limit, offset))
     objectSet = {}
     headers = {'content-type': 'application/json', 'X-CSRFToken': self.csrfToken, 'Referer': gs.baseURL}
     filterString = ""
@@ -169,10 +169,10 @@ class SpecifyInterface():
     apiCallString = f'{gs.baseURL}api/specify/{objectName}/?limit={limit}&offset={offset}{filterString}'
     #if limit == 1000: print("" + apiCallString)
     response = self.spSession.get(apiCallString, headers=headers)
-    # print(' - Response: %s %s' %(str(response.status_code), response.reason))
+    util.logger.debug(' - Response: %s %s' %(str(response.status_code), response.reason))
     if response.status_code < 299:
       objectSet = json.loads(response.text)['objects'] # get collections from json string and convert into dictionary
-      # print(' - Received %d object(s)' % len(objectSet))
+      util.logger.debug(' - Received %d object(s)' % len(objectSet))
     
     return objectSet 
 
@@ -184,13 +184,13 @@ class SpecifyInterface():
       objectId   (Integer) : The primary key of the object
       RETURNS fetched object 
     """ 
-    #print('Fetching ' + objectName + ' object on id: ' + str(objectId))
+    util.logger.debug('Fetching ' + objectName + ' object on id: ' + str(objectId))
     headers = {'content-type': 'application/json', 'X-CSRFToken': self.csrfToken, 'Referer': gs.baseURL}
     apiCallString = f'{gs.baseURL}api/specify/{objectName}/{objectId}/' 
-    #print(apiCallString)
+    util.logger.debug(apiCallString)
     response = self.spSession.get(apiCallString, headers=headers, verify=False)
-    #print(' - Response: %s %s' %(str(response.status_code), response.reason))
-    #print(f' - Session cookies: {self.spSession.cookies.get_dict()}')
+    util.logger.debug(' - Response: %s %s' %(str(response.status_code), response.reason))
+    util.logger.debug(f' - Session cookies: {self.spSession.cookies.get_dict()}')
     if response.status_code < 299:
       object = response.json()
     else: 
@@ -210,11 +210,11 @@ class SpecifyInterface():
     """
     headers = {'content-type': 'application/json', 'X-CSRFToken': self.csrfToken, 'referer': gs.baseURL}
     apiCallString = "%sapi/specify/%s/%d/" %(gs.baseURL, objectName, objectId)
-    #print(apiCallString)
-    #print(specifyObject)
+    util.logger.debug(apiCallString)
+    util.logger.debug(specifyObject)
     response = self.spSession.put(apiCallString, data=json.dumps(specifyObject), headers=headers)
     #response = requests.put(apiCallString, data=specifyObject, json=specifyObject, headers=headers)
-    #print(' - Response: %s %s' %(str(response.status_code), response.reason))
+    util.logger.debug(' - Response: %s %s' %(str(response.status_code), response.reason))
     # if response.status_code < 299:
     #   object = response.json()
     # else: 
@@ -233,9 +233,9 @@ class SpecifyInterface():
     """ 
     headers = {'content-type': 'application/json', 'X-CSRFToken': self.csrfToken, 'referer': gs.baseURL}
     apiCallString = "%sapi/specify/%s/%d/" %(gs.baseURL, objectName)
-    # print(apiCallString)
+    util.logger.debug(apiCallString)
     response = self.spSession.post(apiCallString, headers=headers, data=specifyObject)
-    #print(' - Response: %s %s' %(str(response.status_code), response.reason))
+    util.logger.debug(' - Response: %s %s' %(str(response.status_code), response.reason))
     # if response.status_code < 299:
     #   object = response.json()
     # else: 
@@ -252,10 +252,10 @@ class SpecifyInterface():
       RETURNS response object  
     """ 
     apiCallString = "%s%s" %(gs.baseURL, callString)
-    # print(apiCallString)
+    util.logger.debug(apiCallString)
     headers = {'content-type': 'application/json', 'X-CSRFToken': self.csrfToken, 'Referer': gs.baseURL}
     response = self.spSession.get(apiCallString, headers=headers)
-    # print(' - Response: %s %s' %(str(response.status_code), response.reason))
+    util.logger.debug(' - Response: %s %s' %(str(response.status_code), response.reason))
     
     if response.status_code < 299:
       return json.loads(response.text)
@@ -267,11 +267,11 @@ class SpecifyInterface():
     CONTRACT 
       NOTE DEPRECATED: csrftoken (String) : The CSRF token is required for security reasons
     """ 
-    # print('Log out')
+    util.logger.debug('Log out')
     headers = {'content-type': 'application/json', 'X-CSRFToken': self.csrfToken, 'Referer': gs.baseURL}
     response = self.spSession.put(gs.baseURL + "context/login/", data="{\"username\": null, \"password\": null, \"collection\": 688130}", headers=headers)
-    # print(' - %s %s ' %(str(response.status_code), response.reason))
-    #print('------------------------------')
+    util.logger.debug(' - %s %s ' %(str(response.status_code), response.reason))
+    util.logger.debug('------------------------------')
 
   def getInitialCollections(self):
     """ 
@@ -279,13 +279,13 @@ class SpecifyInterface():
     CONTRACT
       RETURNS collections list (dictionary)
     """ 
-    # print('Get initial collections')
+    util.logger.debug('Get initial collections')
     response = self.spSession.get(gs.baseURL + "context/login/", verify=False)
-    # print(' - Response: ' + str(response.status_code) + " " + response.reason)
+    util.logger.debug(' - Response: ' + str(response.status_code) + " " + response.reason)
     collections = json.loads(response.text)['collections'] # get collections from json string and convert into dictionary
     collections = {k: v for v, k in collections.items()} # invert keys and values that for some reason are delivered switched around 
-    # print(' - Received %d collection(s)' % len(collections))
-    #print('------------------------------')
+    util.logger.debug(' - Received %d collection(s)' % len(collections))
+    util.logger.debug('------------------------------')
     return collections
 
   def mergeTaxa(self, source_id, target_id):#, csrftoken):
@@ -301,7 +301,7 @@ class SpecifyInterface():
     """   
     headers = {'X-CSRFToken': self.csrfToken, 'referer': gs.baseURL, } 
     apiCallString = "%sapi/specify_tree/taxon/%s/merge/"%(gs.baseURL, source_id)
-    # print(" - API call: %s"%apiCallString)
+    util.logger.debug(" - API call: %s"%apiCallString)
 
     #input('ready?')
     
@@ -309,10 +309,10 @@ class SpecifyInterface():
       response = self.spSession.post(apiCallString, headers=headers, data={'target' : target_id }, timeout=960) 
     except:
       response = util.Struct(status_code='408')
-    #print(response.request.body)
+    util.logger.debug(response.request.body)
     #util.pretty_print_POST(response.request)
-    #print('---------------------------')
-    #print(' - Response: %s %s %s.' %(str(response.status_code), response.reason, response.text))
+    util.logger.debug('---------------------------')
+    util.logger.debug(' - Response: %s %s %s.' %(str(response.status_code), response.reason, response.text))
 
     # if response.status_code < 299:
     #   object = response.json()
@@ -326,7 +326,7 @@ class SpecifyInterface():
 si = SpecifyInterface()
 gs.baseURL = "https://specify-test.science.ku.dk/"
 tok = si.getCSRFToken()
-#print(tok)
+util.logger.debug(tok)
 
 token = si.login('fedor.steeman', 'XmgrNuitCrowd', 688130, tok)
 si.verifySession(token)

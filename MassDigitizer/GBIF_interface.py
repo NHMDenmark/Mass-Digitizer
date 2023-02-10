@@ -82,7 +82,7 @@ class GBIFInterface():
 
     # Fetch possible alternatives with matching taxon names 
     urlString = self.baseURL + f'{object_name}/match?verbose=true&kingdom={kingdom}&name={taxon_name}'
-    print(urlString)
+    util.logger.debug(urlString)
     try:
       response = self.spSession.get(urlString)    
       # If succesful, load response into json object 
@@ -98,12 +98,11 @@ class GBIFInterface():
         if 'alternatives' in result:
           matches = result['alternatives']
           for m in matches: 
-            #print(m['usageKey'])
             if 'matchtype' in m and 'status' in m: 
               if m['matchType'] == 'EXACT' and (m['status'] == 'ACCEPTED' or m['status'] == 'DOUBTFUL'):
                 acceptedNames.append(self.getSpecies(int(m['usageKey'])))
     except:
-        print("Error occurred fetching accepting names at GBIF API!")
+        util.logger.error("Error occurred fetching accepting names at GBIF API!")
         pass
 
     return acceptedNames
