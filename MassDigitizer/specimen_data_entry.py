@@ -49,7 +49,7 @@ class SpecimenDataEntry():
                              'chkMultiSpecimen', 'cbxGeoRegion', 'inpTaxonName', 'txtCatalogNumber', 'txtRecordID']
         self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'txtNotes'},
                              {'chkMultiSpecimen'}, {'txtMultiSpecimen'}, {'cbxGeoRegion'}, {'inpTaxonName'}]
-        self.nonStickyFields = ['txtCatalogNumber', 'txtRecordID']
+        self.nonStickyFields = ['txtRecordID']
 
         # For arrow indicator use in window loop
         self.greenArea = '#E8F4EA'  # Stable fields
@@ -191,7 +191,7 @@ class SpecimenDataEntry():
 
         # self.tableRecords = self.previousRecords['adjacentrows']
         lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
-        previousRecordsTable = [sg.Table(values=self.previousRecords, key = 'tblPrevious',enable_events=True,  hide_vertical_scroll=True, headings=self.operationalHeads, max_col_width=32)]
+        previousRecordsTable = [sg.Table(values=self.previousRecords, key = 'tblPrevious',enable_events=False,  hide_vertical_scroll=True, headings=self.operationalHeads, max_col_width=32)]
 
 
         layout_bluearea = [broadGeo, taxonInput, barcode, [  # taxonomicPicklist,
@@ -199,7 +199,9 @@ class SpecimenDataEntry():
             sg.Text('', key='txtRecordID', size=(4, 1), background_color=blueArea),
             sg.StatusBar('', relief=None, size=(7, 1), background_color=blueArea),
             sg.Button('SAVE', key="btnSave", button_color='seagreen', size=9),
-            sg.StatusBar('', relief=None, size=(14, 1), background_color=blueArea),
+            sg.StatusBar('', relief=None, size=(5, 1), background_color=blueArea),
+            sg.Button('1st record', key="btn1st", button_color='white on black', font=('Arial', 8)),
+            sg.Button('newest record', key="btnNewest", button_color='black on yellow', font=('Arial', 8)),
             sg.Button('GO BACK', key="btnBack", button_color='#8b0000'),
             sg.Button('GO FORWARDS', key='btnForward', button_color=('black', 'LemonChiffon2')),
             sg.Button('CLEAR FORM', key='btnClear', button_color='black on white'),
@@ -518,6 +520,7 @@ class SpecimenDataEntry():
                     # Indicate no further records
                     self.window['lblRecordEnd'].update(visible=False)
                     self.collobj.id = 0 # resetting object ID allows for new record creation.
+                self.window['inpStorage'].set_focus()
 
 
             elif event == 'btnForward':
@@ -535,6 +538,7 @@ class SpecimenDataEntry():
                     # Indicate no further records
                     self.window['lblRecordEnd'].update(visible=False)
                     self.collobj.id = 0
+                self.window['inpStorage'].set_focus()
 
             if event == 'btnExport':
                 export_result = dx.exportSpecimens('xlsx')
@@ -612,6 +616,13 @@ class SpecimenDataEntry():
             # Save form
             if event == 'btnSave' or event == 'btnSave_Enter':
                 self.SaveForm(values)
+                self.window['inpStorage'].set_focus()
+
+            if event == 'btn1st':
+                self.getFirstOrLastRecord(position='first')
+
+            if event == 'btnNewest':
+                self.getFirstOrLastRecord(position='newest')
 
         self.window.close()
 
@@ -811,3 +822,20 @@ class SpecimenDataEntry():
         self.searchString = []
         #Update collection object so that the ID is removed (preventing overwriting of previous record)
         self.collobj.id = 0
+
+    def getFirstOrLastRecord(self, position='first'):
+        db = DataAccess(gs.databaseName)
+        if position == 'first':
+            sql = "SELECT min(id), * FROM specimen;"
+
+            # lastRecord = db.getMaxRow(tableName='specimen')
+            # print('maxRow:', [j for j in lastRecord])
+            firstRecord = db.executeSqlStatement(sql)
+            print(len(firstRecord), firstRecord[0]['georegionname'])
+            self.fillFormFields(firstRecord[0])
+        elif position == 'newest':
+            newestRecord = db.getMaxRow('specimen')
+            self.fillFormFields(newestRecord)
+
+
+g = SpecimenDataEntry(2)
