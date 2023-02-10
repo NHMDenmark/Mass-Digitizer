@@ -201,7 +201,7 @@ class DataAccess():
           RETURNS single table row (SQLITErow)
         """
         currentCursor = self.getDbCursor()
-        sql = f'SELECT MAX({tableName}.id), * FROM {tableName};'
+        sql = f'SELECT MAX({tableName}.id) FROM {tableName};'
         record = currentCursor.execute(sql).fetchone()
         currentCursor.connection.close()
         
