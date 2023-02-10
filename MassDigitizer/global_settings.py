@@ -29,10 +29,6 @@ spUserId = -1
 agentFullName = ''
 csrfToken = ''
 
-# logging
-# filePath = os.path.expanduser(util.getLogsPath()) # In order to debug / run, a copy of the db file should be moved into this folder on Windows machines
-# logging.basicConfig()
-
 def clearSession():
   institutionId = 0
   institutionName = '-not set-'
