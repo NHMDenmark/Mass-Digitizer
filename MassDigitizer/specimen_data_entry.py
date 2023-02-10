@@ -514,14 +514,14 @@ class SpecimenDataEntry():
                     self.fillFormFields(record)
                     rowForTable = self.extractRowsInTwoFormats(record['id'])
                     rowsAdjacent = rowForTable['adjacentrows']
-                    self.collobj.previousRecordEdit = True
+                    self.collobj.previousRecordEdit = True #Set a check to be used in save for edited records
                     self.window['tblPrevious'].update(rowsAdjacent)
 
                 else:
                     # Indicate no further records
                     self.window['lblRecordEnd'].update(visible=False)
                     self.collobj.id = 0 # resetting object ID allows for new record creation.
-                    self.collobj.previousRecordEdit = False
+                    self.collobj.previousRecordEdit = False #Unsets above check.
                 self.window['inpStorage'].set_focus()
 
 
@@ -534,13 +534,13 @@ class SpecimenDataEntry():
                     self.fillFormFields(record)
                     rowForTable = self.extractRowsInTwoFormats(record['id'])
                     rowsAdjacent = rowForTable['adjacentrows']
-                    self.collobj.previousRecordEdit = True
+                    self.collobj.previousRecordEdit = True  #Set a check to be used in save for edited records.
                     self.window['tblPrevious'].update(rowsAdjacent)
                 else:
                     # Indicate no further records
                     self.window['lblRecordEnd'].update(visible=False)
                     self.collobj.id = 0
-                    self.collobj.previousRecordEdit = False
+                    self.collobj.previousRecordEdit = False #unsets above check.
                 self.window['inpStorage'].set_focus()
 
             if event == 'btnExport':
@@ -693,9 +693,7 @@ class SpecimenDataEntry():
 
             result = "Successfully saved specimen record."
 
-            if recordPreviousStatus:
-                print('clearing all - prev record!!')
-                print("clearing list:", self.clearingList )
+            if recordPreviousStatus: #The check on if the record is an edited previous record.
                 self.clearForm()
 
         except Exception as e:
@@ -827,7 +825,6 @@ class SpecimenDataEntry():
         """
         # self.window['txtCatalogNumber'].update('')
         for key in self.clearingList:
-            print('key:', key)
             self.window[key].update('')
         self.window['lblExport'].update(visible=False)
         self.window['lblRecordEnd'].update(visible=False)
@@ -851,4 +848,3 @@ class SpecimenDataEntry():
         else:
             util.logger.debug(f"Illegal argument in parameter 'position': {position} !")
 
-g = SpecimenDataEntry(2)
