@@ -35,14 +35,14 @@ class HomeScreen():
         """
         Constructor initializing GUI elements after fetching available institutions 
         """
-        try:
-            self.institutions = util.convert_dbrow_list(db.getRows('institution'))
-        except Exception as e:
-            self.errorMessage = e
-            errorString = str(e)+".\n Check to see if DB is placed correctly"
-            sg.popup_cancel(errorString, title='Error', )
-            util.logger.debug(str(e), ". Check to see if DB is placed correctly")
 
+        try:
+            self.institutions = util.convert_dbrow_list(db.getRowsOnFilters('institution',{'visible = ': 1}))
+        except Exception as e:
+            # Error connecting to database file 
+            self.errorMessage = e
+            util.logger.debug(str(e))
+            sg.popup_cancel(e, title='Error', )            
             sys.exit(1)
         
         header_font = ("Corbel, 17")
@@ -50,19 +50,10 @@ class HomeScreen():
 
         separator_line = [sg.Text('_'  * 80)]
 
-        try: #Testing to see if the Documents/DaSSCo directory exists
-            self.db = data_access.DataAccess(gs.databaseName)
-            institutions = util.convert_dbrow_list(self.db.getRows('institution'))
-        except Exception as e:
-            self.errorMessage = e
-            # sg.popup_cancel(e, title='Error', )
-            util.logger.debug(str(e))
-            sys.exit(1)
-
         btn_exit = [sg.Button("Exit", key='btnExit')]
 
         lblSelectInstitution = [sg.Text('Please choose your institution to proceed:')]
-        lstSelectInstitution = [sg.Combo(list(institutions), readonly=True, enable_events=True, key='institution')]
+        lstSelectInstitution = [sg.Combo(list(self.institutions), readonly=True, enable_events=True, key='institution')]
 
         lblSelectCollection = [sg.Text('Choose a collection to log in:', key='lblSelectCollection')]
         lstSelectCollection = [sg.Combo({'-select a collection-'}, key='lstSelectCollection', readonly=True, size=(28, 1), enable_events=True)]

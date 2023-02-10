@@ -1,4 +1,4 @@
-INSERT INTO taxonname ("spid","name","fullname","rankid","taxontreedefid","parentfullname") VALUES 
+INSERT INTO taxonname ("spid","name","fullname","rankid","treedefid","parentfullname") VALUES 
  (4063781,"violella","Adela violella",220,5,"Adela")
 ,(4064506,"reaumurella","Adela reaumurella",220,5,"Adela")
 ,(4064855,"croesella","Adela croesella",220,5,"Adela")

@@ -1,4 +1,4 @@
-INSERT INTO taxonname ("spid","name","fullname","rankid","taxontreedefid","parentfullname") VALUES 
+INSERT INTO taxonname ("spid","name","fullname","rankid","treedefid","parentfullname") VALUES 
  (6118,"caesus","Peltodytes caesus",220,2,"Peltodytes")
 ,(6120,"elevatus","Brychius elevatus",220,2,"Brychius")
 ,(6122,"obliquus","Haliplus obliquus",220,2,"Haliplus")
