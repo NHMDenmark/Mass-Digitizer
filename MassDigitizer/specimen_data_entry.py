@@ -839,5 +839,3 @@ class SpecimenDataEntry():
         else:
             util.logger.debug(f"Illegal argument in parameter 'position': {position} !")
 
-
-g = SpecimenDataEntry(2)
