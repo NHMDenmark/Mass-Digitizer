@@ -18,6 +18,7 @@ import tempfile as tf
 from datetime import datetime as dt
 
 # internal dependencies
+import util
 import data_access
 import global_settings as gs
 
@@ -71,7 +72,7 @@ class DataExporter():
       pk_list = self.getPrimaryKeys(data_frame.to_dict())
       
       sql_statement = f'UPDATE {table_name} SET exported = 1, exportdatetime = "{dt.now()}", exportuserid = "{gs.spUserName}" WHERE id IN ({pk_list});'
-      #print(sql_statement)
+      util.logger.info(sql_statement)
       db.executeSqlStatement(sql_statement)
               
       return 'Exported file to %s'%file_name
