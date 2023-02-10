@@ -55,9 +55,9 @@ In order to exchange information with Specify, the app has a module for interfac
 
 ### Compilation  
 
-Remember to activate venv and then run: 
+Remember to activate the python virtual environment (venv) and then first run: 
 ```
-pip install -r requirements.txt first
+pip install -r requirements.txt
 ```
 
 For creating the executable, we use PyInstaller (https://pyinstaller.org/) using this command in the CLI from the root folder:
