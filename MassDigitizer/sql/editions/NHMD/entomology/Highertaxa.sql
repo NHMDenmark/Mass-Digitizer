@@ -1,4 +1,4 @@
-INSERT INTO taxonname ("spid","name","fullname","rankid","taxontreedefid","parentfullname") VALUES 
+INSERT INTO taxonname ("spid","name","fullname","rankid","treedefid","parentfullname") VALUES 
  (327456,"Animalia","Animalia",10,5,"Life")
 ,(26030,"Arthropoda","Arthropoda",30,5,"Animalia")
 ,(327457,"Hexapoda","Hexapoda",40,5,"Arthropoda")

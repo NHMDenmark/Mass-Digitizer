@@ -5,7 +5,7 @@ CREATE TABLE "taxonname" (
 	"fullname"	TEXT,
 	"rankid"	INTEGER,
 	"classid"	INTEGER,
-	"taxontreedefid"	INTEGER,
+	"treedefid"	INTEGER,
 	"parentfullname"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)
 )

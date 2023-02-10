@@ -1,4 +1,4 @@
-INSERT INTO taxonname ("spid","name","fullname","rankid","taxontreedefid","parentfullname") VALUES 
+INSERT INTO taxonname ("spid","name","fullname","rankid","treedefid","parentfullname") VALUES 
  (4052349,"nigrescens","Achillea millefolium f. nigrescens",260,13,"Achillea millefolium")
 ,(4052348,"nigrescens","Achillea millefolium var. nigrescens",240,13,"Achillea millefolium")
 ,(365961,"atanensis","Agropyrum latiglume var. atanensis",240,13,"Agropyrum latiglume")

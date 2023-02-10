@@ -358,6 +358,7 @@ class SpecimenDataEntry():
         self.collobj.id = tblRows[0][0]
         self.window['tblPrevious'].update(values=tblRows)
         self.window['inpStorage'].set_focus()
+        self.window['inpStorage'].update(select=True)
 
         while True:
             event, values = self.window.Read()
@@ -470,16 +471,8 @@ class SpecimenDataEntry():
                         ''' Set specimen record taxon name fields
                             The selectedTaxonName manipulation is for the case when 
                             there is a novel family name and the object.notes come back with artifacts.'''
-                        self.collobj.setTaxonNameFieldsFromModel(selectedTaxonName)
+                        self.collobj.setTaxonNameFieldsFromModel(selectedTaxonName)                        
 
-                        temp = str(selectedTaxonName).split(' ')
-                        util.logger.debug("The prepreNote is: %s", temp)
-                        prenote = temp[-2:]
-                        util.logger.debug("The real preNote is [-2:]: %s", prenote)
-                        if prenote[0] == '=':  # Removes superfluous equal sign.
-                            prenote.pop(0)
-                        self.notes = ' '.join(prenote)
-                        util.logger.debug("Notes to collObject is: %s", self.notes)
                         # Update UI to indicate selected taxon name record
                         self.window['inpTaxonName'].update(selectedTaxonName.fullName)
 
@@ -696,7 +689,10 @@ class SpecimenDataEntry():
             # Create a new specimen instance and add previous id to it
             self.collobj = specimen.specimen(self.collectionId)
             updatedRecordId = specimenRecord['id'] # Id to be used for refreshing the previous rows table.
-            self.collobj.setFields(specimenRecord) # Just updates object ID for other consumption.
+
+            # Transfer data in sticky fields to new record:
+            self.setRecordFields('specimen', specimenRecord, True)
+            self.collobj.id = 0  # resets the record ID which makes it possible for the collection object to create a new record rather than to update the current one.
 
             # Refresh records for tblPrevious after save.
             refreshedRecords = self.extractRowsInTwoFormats(updatedRecordId)
@@ -722,7 +718,7 @@ class SpecimenDataEntry():
 
         self.collobj.id = specimenRecord[0]
         return result 
-
+ 
     def HandleStorageInput(self, keyStrokes):
         """
         TODO Function contract 
@@ -851,9 +847,7 @@ class SpecimenDataEntry():
         self.window['lblExport'].update(visible=False)
         self.window['lblRecordEnd'].update(visible=False)
         self.searchString = []
-        #Update collection object so that the ID is removed (preventing overwriting of previous record)
-        self.collobj.id = 0
-
+        
         # Storage location is set to "None" to represent a blank entry in the UI
         self.window['inpStorage'].update('None')
 
@@ -874,3 +868,7 @@ class SpecimenDataEntry():
         else:
             util.logger.debug(f"Illegal argument in parameter 'position': {position} !")
 
+
+        # Create new empty record accordingly 
+        self.collobj = specimen.specimen(self.collectionId)
+    

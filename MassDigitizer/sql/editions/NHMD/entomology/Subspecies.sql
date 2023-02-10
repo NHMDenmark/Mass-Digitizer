@@ -1,4 +1,4 @@
-INSERT INTO taxonname ("spid","name","fullname","rankid","taxontreedefid","parentfullname") VALUES 
+INSERT INTO taxonname ("spid","name","fullname","rankid","treedefid","parentfullname") VALUES 
  (132545,"zernyi","Orectogyrus orientalis zernyi",230,5,"Orectogyrus orientalis")
 ,(132917,"congoensis","Coelostoma phalacroides congoensis",230,5,"Coelostoma phalacroides")
 ,(133129,"genopunctatus","Copris vankhaii genopunctatus",230,5,"Copris vankhaii")

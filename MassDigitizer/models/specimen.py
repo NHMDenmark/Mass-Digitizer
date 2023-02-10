@@ -245,6 +245,7 @@ class specimen(model.Model):
             self.taxonName = taxonNameRecord['name'] 
             self.taxonFullName = taxonNameRecord['fullname'] 
             self.higherTaxonName = taxonNameRecord['parentfullname'] 
+            #self.notes = f"{self.notes} | {taxonNameRecord['notes']}"
         else:
             # Empty record 
             self.taxonNameId = 0

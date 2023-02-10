@@ -1,4 +1,4 @@
-INSERT INTO taxonname ("spid","name","fullname","rankid","taxontreedefid","parentfullname") VALUES 
+INSERT INTO taxonname ("spid","name","fullname","rankid","treedefid","parentfullname") VALUES 
  (6237,"polonicum","Bembidion andreae polonicum",230,2,"Bembidion andreae")
 ,(6242,"illigeri","Bembidion genei illigeri",230,2,"Bembidion genei")
 ,(6280,"australis","Patrobus septentrionis australis",230,2,"Patrobus septentrionis")

@@ -18,6 +18,7 @@ import PySimpleGUI as sg
 from itertools import chain
 
 # Internal Dependencies
+import util 
 import data_access
 import global_settings as gs
 from models import model
@@ -136,18 +137,13 @@ class AutoSuggest_popup():
                 
                 # Minimum number of keystroke characters (default: 3) should be met in order to proceed 
                 if int(len(keystrokes)) >= int(minimumCharacters):
-                    self.handleSuggestions(keystrokes)
+                    self.handleSuggestions(keystrokes, 'rankid', '=')
                     # Focus back to text input field, to enable user to continue typing 
                     self.window['txtInput'].set_focus()
 
             # If a suggestion is clicked in the listbox OR 'Enter' is pressed then handle suggested taxon name 
             if event == 'lstSuggestions' or event == 'btnReturn':
-                # print('Selected suggestion : ', type(values['lstSuggestions']), values['lstSuggestions'])
-                # print('Selected parent     : ', values['txtInput'])
                 #Fix for novel parent name
-                if not values['lstSuggestions']:
-                    pass
-                    # print('NEW PARENT TAXON REQUIRED', values['txtHiTax'])
                 
                 # If there still are entries in the list box then this is a known name and the one selected is handled 
                 if len(values['lstSuggestions']) > 0:
@@ -160,37 +156,42 @@ class AutoSuggest_popup():
                     else:
                         column = 'fullname'
 
+                    # TODO comment below 
                     atomicNames = boxVal[0].split('|')
                     atomic = atomicNames.pop()
                     atomic = atomic.strip()
 
+                    # TODO comment below 
                     selected_row = next(row for row in self.suggestions if row[column]==atomic)
                     selected_row = dict(selected_row)
-                    # print("selected_row storage:", selected_row)
-                    
+                
+                    # TODO comment below 
+                    autoSuggestObject.table         = self.tableName
+                    autoSuggestObject.collectionId  = self.collectionID   
+                    if self.tableName == 'taxonname':
+                        autoSuggestObject.treedefid = self.collection.taxonTreeDefId  
+                        autoSuggestObject.rankid    = 999 # Generic catchall rank id 
+
                     # If text input box for higher taxon is not available then a known taxon is selected 
                     if window['frmHiTax'].visible == False: 
                         # Set taxon name fields for return 
-                        autoSuggestObject.table = self.tableName
-                        autoSuggestObject.id = selected_row['id']
-                        autoSuggestObject.spid = selected_row['spid']
-                        autoSuggestObject.name = selected_row['name']
-                        autoSuggestObject.fullName = selected_row['fullname']
-                        autoSuggestObject.collectionId  = self.collectionID
-                        autoSuggestObject.parentFullName = selected_row['parentfullname']
-                        
+                        autoSuggestObject.id       = selected_row['id']
+                        autoSuggestObject.spid     = selected_row['spid']
+                        autoSuggestObject.name     = selected_row['name']
+                        autoSuggestObject.fullName = selected_row['fullname']    
+                        autoSuggestObject.parentFullName = selected_row['parentfullname']                        
                     else: 
                         # Higher taxon being entered: Set new taxon name fields accordingly
-                        autoSuggestObject.table = self.tableName
-                        autoSuggestObject.id   = 0
-                        autoSuggestObject.spid = 0
-                        autoSuggestObject.name = values['txtInput'].split(' ').pop()
+                        autoSuggestObject.id       = 0
+                        autoSuggestObject.spid     = 0
+                        autoSuggestObject.name     = values['txtInput'].split(' ').pop()
                         autoSuggestObject.fullName = values['txtInput']
-                        autoSuggestObject.collectionId  = self.collectionID
-                        autoSuggestObject.parentFullName = values['lstSuggestions'][0] #selected_row['parentfullname']                        
+                        autoSuggestObject.parentFullName = values['lstSuggestions'][0] #selected_row['parentfullname'] 
+                        # TODO rankid              
+                        
                         window['frmHiTax'].update(visible=False)
                         window['txtInput'].SetFocus()                        
-                        # TODO Convert to taxon name subclass so we can set taxontreedefid !!! 
+                        
                         autoSuggestObject.save()
                    
                     break
@@ -207,13 +208,10 @@ class AutoSuggest_popup():
                 # Higher taxon is being entered: Update suggestions 
                 higherTaxonName = values['txtHiTax']
                 if len(higherTaxonName) >= minimumCharacters:
-                    self.handleSuggestions(values['txtHiTax'].lower(), 140)
-                    # Rank Family is assumed (rank id: 140)
+                    self.handleSuggestions(values['txtHiTax'].lower(), 140, '=') # Rank Family is assumed (rank id: 140)
 
             if event == 'btnOK':
                 # OK button pressed during new taxon entry
-                # print('In buttonOK // ASpopup|| table name is:-', self.tableName)
-
                 autoSuggestObject.table = self.tableName
                 autoSuggestObject.id   = 0
                 autoSuggestObject.spid = 0
@@ -225,14 +223,14 @@ class AutoSuggest_popup():
                 taxonomic_comment = f" Verbatim_taxon:{autoSuggestObject.fullName}"
                 autoSuggestObject.notes = taxonomic_comment
                 autoSuggestObject.parentFullName = values['txtHiTax']
+                autoSuggestObject.rankid = 999
                 autoSuggestObject.save()
                 window['frmHiTax'].update(visible=False)
                 if not values['txtHiTax']:
-                    autoSuggestObject.notes = autoSuggestObject.notes+f" Verbatim_taxon:{autoSuggestObject.fullName}"
-                    # return autoSuggestObject.notes
+                    autoSuggestObject.notes = autoSuggestObject.notes+taxonomic_comment
+                    return autoSuggestObject.notes
                 else:
                     pass
-                    # print("HITAX is true!!", values['txtHiTax'])
                 break
 
         if window is not None: 
@@ -240,18 +238,22 @@ class AutoSuggest_popup():
                 window.Hide()
             except:
                 pass
-                # print('Window may have been closed manually')
-        # print('IN ASugg. - autoSuggestObject ==', autoSuggestObject)
+
         return autoSuggestObject
 
-    def handleSuggestions(self, keyStrokes, minimumRank=270):  # rank id 270 == 'subforma'
+    def handleSuggestions(self, keyStrokes, rankId=270, rankSign='<='):  # rank id 270 == 'subforma'
         # Fetch suggestions from database based on keystrokes 
         #self.suggestions = self.lookupSuggestions(keystrokes, 'fullname', minimumRank)
-        if self.tableName == 'taxonname': 
-            fields = {'fullname' : f'LIKE lower("%{keyStrokes}%")', 'taxontreedefid' : f'= {self.collection.taxonTreeDefId}', 'rankid' : f'<={minimumRank}'}
-        else: 
-            fields = {'name' : f'LIKE lower("%{keyStrokes}%")'}
-        self.suggestions  = data_access.DataAccess(gs.databaseName).getRowsOnFilters(self.tableName, fields, 200)
+
+        try:
+            if self.tableName == 'taxonname': 
+                fields = {'fullname' : f'LIKE lower("%{keyStrokes}%")', 'treedefid' : f'= {self.collection.taxonTreeDefId}', 'rankid' : f'{rankSign}{rankId}'}
+            else: 
+                fields = {'name' : f'LIKE lower("%{keyStrokes}%")', 'collectionid' : f'= {self.collection.collectionId}' }
+            self.suggestions  = data_access.DataAccess(gs.databaseName).getRowsOnFilters(self.tableName, fields, 200)
+        except Exception as e:
+            util.logger.error(e)
+            sg.PopupError(e)
 
         # Convert records to list of fullnames 
         self.candidateNamesList = [row['fullname'] for row in self.suggestions]
@@ -271,7 +273,7 @@ class AutoSuggest_popup():
          keyStrokes: This parameter is the supplied keyStrokes from the user.
          rowLimit: at or below this the auto-suggest fires of its names
          returns: a list of SQLite rows 
-         TODO implement 'taxonTreeDefid' at convienient time.
+         TODO implement 'treeDefid' at convienient time.
         """
         responseType = ''
         # Local variable to determine the auto-suggest type: 'storage', taxon-keyStrokes, or 'parent taxon-name'.
@@ -279,7 +281,7 @@ class AutoSuggest_popup():
 
         # Get candidate name list from db based on keystrokes, rank and taxon tree 
         filters = {columnName       : f"LIKE lower('%{keyStrokes}%')", 
-                   'taxontreedefid' : f"{self.collection.taxonTreeDefId}", 
+                   'treedefid' : f"{self.collection.taxonTreeDefId}", 
                    'rankid'         : f"rankid <= {minimumRank}"
                    }
         rows = self.db.getRowsOnFilters(self.tableName, filters, rowLimit)
