@@ -49,7 +49,7 @@ class SpecimenDataEntry():
                              'chkMultiSpecimen', 'cbxGeoRegion', 'inpTaxonName', 'txtCatalogNumber', 'txtRecordID']
         self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'txtNotes'},
                              {'chkMultiSpecimen'}, {'txtMultiSpecimen'}, {'cbxGeoRegion'}, {'inpTaxonName'}]
-        self.nonStickyFields = ['txtRecordID']
+        self.nonStickyFields = ['txtCatalogNumber', 'txtRecordID']
 
         # For arrow indicator use in window loop
         self.greenArea = '#E8F4EA'  # Stable fields
@@ -510,16 +510,18 @@ class SpecimenDataEntry():
                 record = self.collobj.loadPrevious(self.collobj.id)
                 if record:
                     # If not empty, set form fields
-                    print([j for j in record])
+
                     self.fillFormFields(record)
                     rowForTable = self.extractRowsInTwoFormats(record['id'])
                     rowsAdjacent = rowForTable['adjacentrows']
-
+                    self.collobj.previousRecordEdit = True
                     self.window['tblPrevious'].update(rowsAdjacent)
+
                 else:
                     # Indicate no further records
                     self.window['lblRecordEnd'].update(visible=False)
                     self.collobj.id = 0 # resetting object ID allows for new record creation.
+                    self.collobj.previousRecordEdit = False
                 self.window['inpStorage'].set_focus()
 
 
@@ -532,12 +534,13 @@ class SpecimenDataEntry():
                     self.fillFormFields(record)
                     rowForTable = self.extractRowsInTwoFormats(record['id'])
                     rowsAdjacent = rowForTable['adjacentrows']
-
+                    self.collobj.previousRecordEdit = True
                     self.window['tblPrevious'].update(rowsAdjacent)
                 else:
                     # Indicate no further records
                     self.window['lblRecordEnd'].update(visible=False)
                     self.collobj.id = 0
+                    self.collobj.previousRecordEdit = False
                 self.window['inpStorage'].set_focus()
 
             if event == 'btnExport':
@@ -613,9 +616,11 @@ class SpecimenDataEntry():
             if event.endswith("focus out notes"):
                 self.window['iconNotes'].update(visible=False)
 
-            # Save form
+            ''' Save form - augmented with a state check to see if
+            the record minted is an edit of an existing record or not.
+            '''
             if event == 'btnSave' or event == 'btnSave_Enter':
-                self.SaveForm(values)
+                self.SaveForm(values, self.collobj.previousRecordEdit)
                 self.window['inpStorage'].set_focus()
 
             if event == 'btn1st':
@@ -626,7 +631,7 @@ class SpecimenDataEntry():
 
         self.window.close()
 
-    def SaveForm(self, values):
+    def SaveForm(self, values, recordPreviousStatus):
         """
         TODO Function contract 
         """
@@ -687,6 +692,11 @@ class SpecimenDataEntry():
             self.window['txtCatalogNumber'].set_focus()
 
             result = "Successfully saved specimen record."
+
+            if recordPreviousStatus:
+                print('clearing all - prev record!!')
+                print("clearing list:", self.clearingList )
+                self.clearForm()
 
         except Exception as e:
             errorMessage = f"Error occurred attempting to save specimen: {e}"
@@ -815,7 +825,9 @@ class SpecimenDataEntry():
         """
         Function for clearing all fields listed in clearing list
         """
+        # self.window['txtCatalogNumber'].update('')
         for key in self.clearingList:
+            print('key:', key)
             self.window[key].update('')
         self.window['lblExport'].update(visible=False)
         self.window['lblRecordEnd'].update(visible=False)
@@ -831,7 +843,7 @@ class SpecimenDataEntry():
             # lastRecord = db.getMaxRow(tableName='specimen')
             # print('maxRow:', [j for j in lastRecord])
             firstRecord = db.executeSqlStatement(sql)
-            print(len(firstRecord), firstRecord[0]['georegionname'])
+
             self.fillFormFields(firstRecord[0])
         elif position == 'newest':
             newestRecord = db.getMaxRow('specimen')
@@ -839,3 +851,4 @@ class SpecimenDataEntry():
         else:
             util.logger.debug(f"Illegal argument in parameter 'position': {position} !")
 
+g = SpecimenDataEntry(2)
