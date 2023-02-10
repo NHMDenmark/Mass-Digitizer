@@ -9,10 +9,9 @@
   http://www.apache.org/licenses/LICENSE-2.0
   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-  PURPOSE: Represent taxon data record as "Model" in the MVC pattern  
+  PURPOSE: Generic base class "Model" in the MVC pattern  
 """
 
-from datetime import datetime
 import sys
 from pathlib import Path
 
@@ -50,6 +49,10 @@ class Model:
         self.status         = 0
         self.source         = 'Unspecified'
         self.visible        = 0
+
+        # Enable usage as autosuggestobject
+        self.treedefid = 0
+        self.rankid = 0
 
         # 
         self.db = data_access.DataAccess(gs.databaseName)
@@ -199,6 +202,8 @@ class Model:
                 'fullname':f'"{self.fullName}"',
                 'parentfullname':f'"{self.parentFullName}"',
                 'collectionid':f'{self.collectionId}',
+                'treedefid':f'{self.treedefid}',
+                'rankid':f'{self.rankid}',
                 }
         
         return fieldsDict
@@ -214,8 +219,10 @@ class Model:
         self.id = record['id']
         self.name = record['name']
         self.fullName = record['fullname']
-        #self.parentfullname = record['parentfullname']
-        pass
+        self.parentFullName = record['parentfullname']
+        self.collectionId = record['collectionid']
+        self.treedefid = record['treedefid']
+        self.rankid = record['rankid']
 
 # Specify Interfacing functions 
 

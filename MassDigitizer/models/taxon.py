@@ -12,14 +12,10 @@
   PURPOSE: Represent taxon data record as "Model" in the MVC pattern  
 """
 
-from datetime import datetime
-import logging
-
 # Internal dependencies
 from models import model
 import data_access
 import global_settings as gs
-import specify_interface
 
 db = data_access.DataAccess(gs.databaseName)
 
