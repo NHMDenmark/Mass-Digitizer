@@ -836,6 +836,8 @@ class SpecimenDataEntry():
         elif position == 'newest':
             newestRecord = db.getMaxRow('specimen')
             self.fillFormFields(newestRecord)
+        else:
+            util.logger.debug(f"Illegal argument in parameter 'position': {position} !")
 
 
 g = SpecimenDataEntry(2)
