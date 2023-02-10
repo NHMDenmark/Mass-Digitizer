@@ -42,7 +42,7 @@ class SpecimenDataEntry():
         self.db = DataAccess(gs.databaseName)  # Instantiate database access module
         # self.retroRow = None  # Global to be used in step-back and other retrospective actions for saving.
         
-        util.logging.info("Initializing Data Entry form for Institution & collection: %s | %s" % (gs.institutionName, gs.collectionName))
+        util.logger.info("Initializing Data Entry form for Institution & collection: %s | %s" % (gs.institutionName, gs.collectionName))
         
         # Various lists of fields to be cleared on command 
         self.clearingList = ['inpStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'txtNotes',
@@ -82,7 +82,7 @@ class SpecimenDataEntry():
         """
         Initialize data entry form on basis of collection id
         """
-        util.logging.info('*** Specimen data entry setup ***')
+        util.logger.info('*** Specimen data entry setup ***')
 
         # Define UI areas
         sg.theme('SystemDefault')
@@ -292,7 +292,7 @@ class SpecimenDataEntry():
          ('adjacentrows':) which is a LIST
         """
         # Considering moving this function to util.py or to a model class.
-        util.logging.debug('Extracting rows in two formats: %s' % rowId)
+        util.logger.debug('Extracting rows in two formats: %s' % rowId)
 
         rows = self.previousRows(rowId)
         headers = ['id', 'spid', 'catalognumber', 'multispecimen', 'taxonfullname', 'taxonname', 'taxonnameid',
@@ -310,7 +310,7 @@ class SpecimenDataEntry():
         previousRows = []  # the curated rows needed to populate the table
         for row in specimenList:
             specimenDict = dict(zip(headers, row)) # creates the complete row dict to be appended.
-            util.logging.debug('the specimen dict in for loop is: %s' % specimenDict)
+            util.logger.debug('the specimen dict in for loop is: %s' % specimenDict)
             completeRowDicts.append(specimenDict)
             tempadjacent = []
             for k in self.operationalHeads:
@@ -334,7 +334,7 @@ class SpecimenDataEntry():
                 rows = self.db.getRows('specimen', limit=number, sortColumn='id DESC')
             self.previousRecords = [[row for row in line] for line in rows]
         except Exception as e:
-            util.logging.error(e)
+            util.logger.error(e)
             sg.PopupError(e)
         return self.previousRecords
 
@@ -464,13 +464,13 @@ class SpecimenDataEntry():
                         self.collobj.setTaxonNameFieldsFromModel(selectedTaxonName)
 
                         temp = str(selectedTaxonName).split(' ')
-                        util.logging.debug("The prepreNote is: %s", temp)
+                        util.logger.debug("The prepreNote is: %s", temp)
                         prenote = temp[-2:]
-                        util.logging.debug("The real preNote is [-2:]: %s", prenote)
+                        util.logger.debug("The real preNote is [-2:]: %s", prenote)
                         if prenote[0] == '=':  # Removes superfluous equal sign.
                             prenote.pop(0)
                         self.notes = ' '.join(prenote)
-                        util.logging.debug("Notes to collObject is: %s", self.notes)
+                        util.logger.debug("Notes to collObject is: %s", self.notes)
                         # Update UI to indicate selected taxon name record
                         self.window['inpTaxonName'].update(selectedTaxonName.fullName)
 
@@ -556,7 +556,7 @@ class SpecimenDataEntry():
                         recordAcute = self.previousRecords[values[event][0]] #The index position of the chosen record from the table
                         acuteID = recordAcute[0] # Pure integer value extracted.
                     except Exception as e:
-                        util.logging.error(e)
+                        util.logger.error(e)
                         sg.PopupError(e)
                     # TODO comment 
                     recordNow = self.extractRowsInTwoFormats(acuteID)
@@ -638,21 +638,21 @@ class SpecimenDataEntry():
                     self.collobj.multiSpecimen = multispecimenName
                 else:
                     validationMessage = "Attempt to save with empty multispecimen name blocked!"
-                    util.logging.error(validationMessage)
+                    util.logger.error(validationMessage)
                     sg.PopupError(validationMessage)
                     return
             
             if values['txtCatalogNumber'] == '':
                 # Barcode (catalog number) must not be empty!
                 validationMessage = "Cannot leave barcode empty!"
-                util.logging.error(validationMessage)
+                util.logger.error(validationMessage)
                 sg.PopupError(validationMessage)
                 return
 
             if len(values['txtCatalogNumber']) != 8:
                 # Barcode (catalog number) must be 8 digits!
                 validationMessage = "Barcode incorrect length (8)!"
-                util.logging.error(validationMessage)
+                util.logger.error(validationMessage)
                 sg.PopupError(validationMessage)
                 return
 
@@ -679,7 +679,7 @@ class SpecimenDataEntry():
 
         except Exception as e:
             errorMessage = f"Error occurred attempting to save specimen: {e}"
-            util.logging.error(errorMessage)
+            util.logger.error(errorMessage)
             sg.PopupError(e)
             result = errorMessage
         
@@ -711,7 +711,7 @@ class SpecimenDataEntry():
                 # for the autoSuggest/capture_suggestion function.
                 self.window['cbxPrepType'].set_focus()
         except Exception as e:
-            util.logging.error(e)
+            util.logger.error(e)
             sg.PopupError(e)
         
         return ''

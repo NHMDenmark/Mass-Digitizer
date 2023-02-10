@@ -22,6 +22,7 @@ import random
 
 #Central place to manage version numbers
 versionNumber = "0.2.10" # Before compiling exe, please set the version number above
+logger = logging.getLogger()
 
 def clear():
    """
@@ -39,12 +40,22 @@ def buildLogger(): #moduleName):
    """
    Sets up logging  
    """
+   # 1. Create log file name including directory path 
    sTime = time.strftime('{%Y%m%d%H%M%S}').replace("{", "").replace("}", "")
    logName = f"log-{sTime}.log"   
    logFilePath = str(Path(getLogsPath()).joinpath(logName))
-   logging.basicConfig(filename=logFilePath, encoding='utf-8', level=logging.DEBUG)
-   logging.debug('Logging set up')
-   print(logFilePath)
+
+   # 2. Set up file handler for logger
+   fileHandler = logging.FileHandler(filename=logFilePath)
+   logFileFormatter = logging.Formatter(fmt=f"%(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+   fileHandler.setFormatter(logFileFormatter)
+   fileHandler.setLevel(level=logging.DEBUG)
+   
+   # 3. Start logger 
+   logger.addHandler(fileHandler)
+   logger.setLevel(logging.DEBUG)
+   
+   logger.debug('Logging set up')
 
 """ def tryout_Path():
     db_lowerLimit = 1000 #DB size minimum limit for successful testing.
@@ -110,15 +121,15 @@ def logLine(line, level='info'):
    """
    
    if(level == 'info'):
-      logging.info(line)
+      logger.info(line)
    elif(level == 'debug'):
-      logging.debug(line)
+      logger.debug(line)
    elif(level == 'warning'):
-      logging.warning(line)
+      logger.warning(line)
    elif(level == 'error'):
-      logging.error(line)
+      logger.error(line)
    else:
-      logging.info(line)
+      logger.info(line)
 
    return line
 

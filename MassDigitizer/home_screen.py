@@ -27,10 +27,9 @@ sp = specify_interface.SpecifyInterface()
 
 class HomeScreen():
     # Get version number to set into the homeScreen welcome menu.
-
     version = util.getVersionNumber()
-
-    util.logging.debug(f'Starting Mass Digitizer App version {version}')
+    
+    util.logger.debug(f'Starting Mass Digitizer App version {version}')
 
     def __init__(self):
         """
@@ -42,7 +41,7 @@ class HomeScreen():
             self.errorMessage = e
             errorString = str(e)+".\n Check to see if DB is placed correctly"
             sg.popup_cancel(errorString, title='Error', )
-            util.logging.debug(str(e), ". Check to see if DB is placed correctly")
+            util.logger.debug(str(e), ". Check to see if DB is placed correctly")
 
             sys.exit(1)
         
@@ -57,7 +56,7 @@ class HomeScreen():
         except Exception as e:
             self.errorMessage = e
             # sg.popup_cancel(e, title='Error', )
-            util.logging.debug(str(e))
+            util.logger.debug(str(e))
             sys.exit(1)
 
         btn_exit = [sg.Button("Exit", key='btnExit')]

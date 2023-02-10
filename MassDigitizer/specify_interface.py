@@ -89,8 +89,8 @@ class SpecifyInterface():
     
     if response.status_code > 299:
       csrftoken = ''
-      util.logging.error('Error logging in to Specify! ')
-      util.logging.error(response.text)
+      util.logger.error('Error logging in to Specify! ')
+      util.logger.error(response.text)
     else:
       csrftoken = response.cookies.get('csrftoken') # Keep and use new CSRF token after login
 
