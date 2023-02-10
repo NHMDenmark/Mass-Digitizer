@@ -107,23 +107,28 @@ class Model:
         """
 
         # Construct query for extracting the previous record 
-        sql = f'SELECT * FROM {self.table} s ' 
+        sql = f'SELECT * FROM {self.table} s '
+
         # If existing record (id > 0) then fetch the one that has the highest lower id than current 
         if id > 0: 
             sql = sql + f"WHERE s.id < {id} " 
         # If blank record then fetch the one with the highest id 
-        sql = sql + " ORDER BY s.id DESC LIMIT 1 "        
-        # print(sql)
+        # sql = sql + " ORDER BY s.id DESC LIMIT 1 "
+
+        else:
+            return None
 
         # Fetch results from database
         try:
+
             results = self.db.executeSqlStatement(sql)
         except Exception as e:
             pass
             # print(f"The SQL could not be executed - {e}\n Please check the Statement: \n{sql}")
         # If results returned then pick first one, otherwise set record to nothing 
         if len(results) > 0:
-            record = results[0]
+            record = results.pop()
+            self.id = record[0]
         else: 
             record = None
 
@@ -148,8 +153,10 @@ class Model:
         if id > 0: 
             sql = sql + f"WHERE s.id > {id} " 
         # If blank record then fetch the one with the highest id 
-        sql = sql + " ORDER BY s.id LIMIT 1 "        
+        # sql = sql + " ORDER BY s.id LIMIT 1 "
         # print(sql)
+        else:
+            return None
 
         # Fetch results from database
         try:
