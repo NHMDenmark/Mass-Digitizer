@@ -167,6 +167,8 @@ class Model:
         # If results returned then pick first one, otherwise set record to nothing 
         if len(results) > 0:
             record = results[0]
+            print('record collobj', record)
+            # self.id = record
         else: 
             record = None
 
