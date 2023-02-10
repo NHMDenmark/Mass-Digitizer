@@ -40,6 +40,10 @@ class SpecimenDataEntry():
         self.window = None  # Create class level instance of window object
         self.collobj = specimen.specimen(collection_id)  # Create blank specimen record instance
         self.db = DataAccess(gs.databaseName)  # Instantiate database access module
+        mxRow = self.db.getMaxRow('specimen')
+
+        self.collobj.id = mxRow[0]
+
         # self.retroRow = None  # Global to be used in step-back and other retrospective actions for saving.
         
         util.logger.info("Initializing Data Entry form for Institution & collection: %s | %s" % (gs.institutionName, gs.collectionName))
@@ -200,8 +204,8 @@ class SpecimenDataEntry():
             sg.StatusBar('', relief=None, size=(7, 1), background_color=blueArea),
             sg.Button('SAVE', key="btnSave", button_color='seagreen', size=9),
             sg.StatusBar('', relief=None, size=(5, 1), background_color=blueArea),
-            sg.Button('1st record', key="btn1st", button_color='white on black', font=('Arial', 8)),
-            sg.Button('newest record', key="btnNewest", button_color='black on yellow', font=('Arial', 8)),
+            # sg.Button('1st record', key="btn1st", button_color='white on black', font=('Arial', 8)),
+            # sg.Button('newest record', key="btnNewest", button_color='black on yellow', font=('Arial', 8)),
             sg.Button('GO BACK', key="btnBack", button_color='#8b0000'),
             sg.Button('GO FORWARDS', key='btnForward', button_color=('black', 'LemonChiffon2')),
             sg.Button('CLEAR FORM', key='btnClear', button_color='black on white'),
@@ -330,7 +334,8 @@ class SpecimenDataEntry():
         """
         try:
             if id > 0:
-                filter = f"specimen WHERE id <= {id}"
+                filter = f"specimen WHERE id <= {id} AND collectionid = {self.collectionId}"
+
                 rows = self.db.getRows(filter, limit=number, sortColumn='id DESC')
             else:
                 rows = self.db.getRows('specimen', limit=number, sortColumn='id DESC')
@@ -349,6 +354,7 @@ class SpecimenDataEntry():
         else:  # Default state - an empty specimen table:
             overviewRows = {'adjacentrows': [[], [], []]}
         tblRows = list(overviewRows['adjacentrows'])
+        self.collobj.id = tblRows[0][0]
         self.window['tblPrevious'].update(values=tblRows)
         self.window['inpStorage'].set_focus()
 
@@ -507,6 +513,7 @@ class SpecimenDataEntry():
 
             elif event == 'btnBack':
                 # Fetch previous specimen record data on basis of current record ID, if any
+
                 record = self.collobj.loadPrevious(self.collobj.id)
                 if record:
                     # If not empty, set form fields
@@ -519,7 +526,9 @@ class SpecimenDataEntry():
 
                 else:
                     # Indicate no further records
-                    self.window['lblRecordEnd'].update(visible=False)
+                    # self.window['lblRecordEnd'].update(visible=True)
+
+                    self.window['btnBack'].update(disabled=True)
                     self.collobj.id = 0 # resetting object ID allows for new record creation.
                     self.collobj.previousRecordEdit = False #Unsets above check.
                 self.window['inpStorage'].set_focus()
@@ -625,6 +634,11 @@ class SpecimenDataEntry():
 
             if event == 'btn1st':
                 self.getFirstOrLastRecord(position='first')
+                self.collobj.previousRecordEdit = True
+
+                rowForTable = self.extractRowsInTwoFormats(record['id'])
+                rowsAdjacent = rowForTable['adjacentrows']
+                self.window['tblPrevious'].update(rowsAdjacent)
 
             if event == 'btnNewest':
                 self.getFirstOrLastRecord(position='newest')
@@ -674,6 +688,8 @@ class SpecimenDataEntry():
 
             # All checks out; Save specimen and clear non-sticky fields 
             specimenRecord = self.collobj.save()
+
+            self.collobj.id = specimenRecord[0]
             self.clearNonStickyFields(values)
             
             # Create a new specimen instance and add previous id to it
@@ -687,7 +703,7 @@ class SpecimenDataEntry():
             self.window['tblPrevious'].update(previousRefreshedRows)
             # Transfer data in sticky fields to new record:
             self.setRecordFields('specimen', specimenRecord, True)
-            self.collobj.id = 0  # resets the record ID which makes it possible for the collection object to create a new record rather than to update the current one.
+            self.collobj.previousRecordEdit = False  # resets the record ID which makes it possible for the collection object to create a new record rather than to update the current one.
 
             self.window['txtCatalogNumber'].set_focus()
 
@@ -701,7 +717,9 @@ class SpecimenDataEntry():
             util.logger.error(errorMessage)
             sg.PopupError(e)
             result = errorMessage
-        
+
+
+        self.collobj.id = specimenRecord[0]
         return result 
 
     def HandleStorageInput(self, keyStrokes):
@@ -840,8 +858,9 @@ class SpecimenDataEntry():
             # lastRecord = db.getMaxRow(tableName='specimen')
             # print('maxRow:', [j for j in lastRecord])
             firstRecord = db.executeSqlStatement(sql)
-
+            self.window['tblPrevious'].update(firstRecord)
             self.fillFormFields(firstRecord[0])
+
         elif position == 'newest':
             newestRecord = db.getMaxRow('specimen')
             self.fillFormFields(newestRecord)
