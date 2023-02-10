@@ -222,13 +222,13 @@ class AutoSuggest_popup():
                 autoSuggestObject.fullName = f"{values['txtHiTax']} {autoSuggestObject.name}".strip(' ')
                 #Remove leading whitespace if txtHiTax is empty.
                 autoSuggestObject.collectionId  = self.collectionID
-                taxonomic_comment = f" Verbatim_notes:{autoSuggestObject.fullName}"
-                autoSuggestObject.notes = f" Verbatim_notes:{autoSuggestObject.fullName}"
+                taxonomic_comment = f" Verbatim_taxon:{autoSuggestObject.fullName}"
+                autoSuggestObject.notes = taxonomic_comment
                 autoSuggestObject.parentFullName = values['txtHiTax']
                 autoSuggestObject.save()
                 window['frmHiTax'].update(visible=False)
                 if not values['txtHiTax']:
-                    autoSuggestObject.notes = autoSuggestObject.notes+f" Verbatim_notes:{autoSuggestObject.fullName}"
+                    autoSuggestObject.notes = autoSuggestObject.notes+f" Verbatim_taxon:{autoSuggestObject.fullName}"
                     # return autoSuggestObject.notes
                 else:
                     pass
