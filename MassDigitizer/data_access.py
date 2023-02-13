@@ -77,11 +77,11 @@ class DataAccess():
         CONTRACT
           RETURNS database cursor object
         """
-        util.logger.info(f'Connecting to db file: {self.dbFilePath} ...')
+        #util.logger.info(f'Connecting to db file: {self.dbFilePath} ...')
         self.connection = sqlite3.connect(self.dbFilePath)  # Normal user
         self.connection.row_factory = sqlite3.Row  # Enable column access by name: row['column_name']
         cursor = self.connection.cursor()
-        util.logger.info('Connection established')
+        #util.logger.info('Connection established')
         return cursor
 
     def getRows(self, tableName, limit=100, sortColumn=None):
@@ -129,8 +129,7 @@ class DataAccess():
           RETURNS table rows as list
         """
         currentCursor = self.getDbCursor()
-        rowsOnFilterCall = f'-> getRowsONFilter({tableName}, {filters}, {limit})'
-        util.logger.info("get rows on filter call= %s" % rowsOnFilterCall)
+
         sqlString = 'SELECT * FROM %s ' % tableName
 
         if filters.items():
@@ -145,7 +144,7 @@ class DataAccess():
         if limit > 0:
             sqlString += f' LIMIT {limit}'
 
-        util.logger.info("getRowsOnFilters SQL string : %s" % sqlString)
+        util.logger.debug(sqlString)
 
         records = currentCursor.execute(sqlString).fetchall()
 
@@ -214,8 +213,8 @@ class DataAccess():
           sql (String) :
           RETURNS table rows as dictionary
         """
-        message = f"Executing the following SQL: {sql}"
-        util.logger.debug(message)
+
+        util.logger.debug(sql)
         self.currentCursor = self.getDbCursor()
 
         rows = self.currentCursor.execute(sql).fetchall()
@@ -245,7 +244,7 @@ class DataAccess():
         """
         # (tableName, {' %s = ' % field: '"%s"' % name})[0]['id']
         currentCursor = self.getDbCursor()
-        sql = f'SELECT id FROM {tableName} WHERE name = {name};'
+        sql = f'SELECT id FROM {tableName} WHERE {field} = {name};'
         record = currentCursor.execute(sql).fetchone()
         currentCursor.connection.close()
         return record

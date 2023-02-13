@@ -40,9 +40,10 @@ class SpecimenDataEntry():
         self.window = None  # Create class level instance of window object
         self.collobj = specimen.specimen(collection_id)  # Create blank specimen record instance
         self.db = DataAccess(gs.databaseName)  # Instantiate database access module
-        mxRow = self.db.getMaxRow('specimen')
-
-        self.collobj.id = mxRow[0]
+        
+        # TODO explanation due for below lines 
+        #mxRow = self.db.getMaxRow('specimen') 
+        #self.collobj.id = mxRow[0] 
 
         # self.retroRow = None  # Global to be used in step-back and other retrospective actions for saving.
         
@@ -299,7 +300,7 @@ class SpecimenDataEntry():
          ('adjacentrows':) which is a LIST
         """
         # Considering moving this function to util.py or to a model class.
-        util.logger.debug('Extracting rows in two formats: %s' % rowId)
+        #util.logger.debug('Extracting rows in two formats: %s' % rowId)
 
         rows = self.previousRows(rowId)
         headers = ['id', 'spid', 'catalognumber', 'multispecimen', 'taxonfullname', 'taxonname', 'taxonnameid',
@@ -317,7 +318,7 @@ class SpecimenDataEntry():
         previousRows = []  # the curated rows needed to populate the table
         for row in specimenList:
             specimenDict = dict(zip(headers, row)) # creates the complete row dict to be appended.
-            util.logger.debug('the specimen dict in for loop is: %s' % specimenDict)
+            #util.logger.debug('the specimen dict in for loop is: %s' % specimenDict)
             completeRowDicts.append(specimenDict)
             tempadjacent = []
             for k in self.operationalHeads:
@@ -347,7 +348,7 @@ class SpecimenDataEntry():
         return self.previousRecords
 
     def main(self):
-        # Checks to see where in the process the app state is in.
+        # Checks to see where in the process the app state is in. TODO What does that mean? 
         if self.currentRecordId:  # if txtRecordId is set then...
             overviewRows = self.extractRowsInTwoFormats(self.currentRecordId)
         elif self.maxRow:  # when not 'stepped back' but specimen records do exist:
@@ -355,7 +356,7 @@ class SpecimenDataEntry():
         else:  # Default state - an empty specimen table:
             overviewRows = {'adjacentrows': [[], [], []]}
         tblRows = list(overviewRows['adjacentrows'])
-        self.collobj.id = tblRows[0][0]
+        #self.collobj.id = tblRows[0][0] # TODO WHY? This sets the collobj.id to be the last saved record… Why? 
         self.window['tblPrevious'].update(values=tblRows)
         self.window['inpStorage'].set_focus()
         self.window['inpStorage'].update(select=True)
@@ -511,22 +512,16 @@ class SpecimenDataEntry():
                 record = self.collobj.loadPrevious(self.collobj.id)
                 if record:
                     # If not empty, set form fields
-
                     self.fillFormFields(record)
                     rowForTable = self.extractRowsInTwoFormats(record['id'])
                     rowsAdjacent = rowForTable['adjacentrows']
                     self.collobj.previousRecordEdit = True #Set a check to be used in save for edited records
                     self.window['tblPrevious'].update(rowsAdjacent)
-
                 else:
                     # Indicate no further records
                     # self.window['lblRecordEnd'].update(visible=True)
-
-                    self.window['btnBack'].update(disabled=True)
-                    self.collobj.id = 0 # resetting object ID allows for new record creation.
                     self.collobj.previousRecordEdit = False #Unsets above check.
                 self.window['inpStorage'].set_focus()
-
 
             elif event == 'btnForward':
                 # Fetch next specimen record data on basis of current record ID, if any
@@ -553,7 +548,6 @@ class SpecimenDataEntry():
             if event == 'btnDismiss':
                 self.window['lblExport'].update(visible=False)
                 self.window['lblRecordEnd'].update(visible=False)
-
 
             if event == sg.WINDOW_CLOSED:
                 break
@@ -619,11 +613,10 @@ class SpecimenDataEntry():
             if event.endswith("focus out notes"):
                 self.window['iconNotes'].update(visible=False)
 
-            ''' Save form - augmented with a state check to see if
-            the record minted is an edit of an existing record or not.
-            '''
+            #Save form - augmented with a state check to see if
+            # the record minted is an edit of an existing record or not.
             if event == 'btnSave' or event == 'btnSave_Enter':
-                self.SaveForm(values, self.collobj.previousRecordEdit)
+                self.SaveForm(values)#, self.collobj.previousRecordEdit)
                 self.window['inpStorage'].set_focus()
 
             if event == 'btn1st':
@@ -639,7 +632,7 @@ class SpecimenDataEntry():
 
         self.window.close()
 
-    def SaveForm(self, values, recordPreviousStatus):
+    def SaveForm(self, values):
         """
         TODO Function contract 
         """
@@ -681,33 +674,33 @@ class SpecimenDataEntry():
                 return
 
             # All checks out; Save specimen and clear non-sticky fields 
-            specimenRecord = self.collobj.save()
+            savedRecord = self.collobj.save()
+            #self.collobj.id = savedRecord[0]
 
-            self.collobj.id = specimenRecord[0]
-            self.clearNonStickyFields(values)
+            # Remember id of record just save and prepare for blank record 
+            previousRecordId = savedRecord['id'] # Id to be used for refreshing the previous rows table.
+            self.clearNonStickyFields(values) # Clear non-sticky to prepare form for blank record
             
-            # Create a new specimen instance and add previous id to it
+            # Create a new, blank specimen record (id pre-set to 0)
             self.collobj = specimen.specimen(self.collectionId)
-            updatedRecordId = specimenRecord['id'] # Id to be used for refreshing the previous rows table.
-
+                        
             # Transfer data in sticky fields to new record:
-            self.setRecordFields('specimen', specimenRecord, True)
-            self.collobj.id = 0  # resets the record ID which makes it possible for the collection object to create a new record rather than to update the current one.
+            self.setRecordFields('specimen', savedRecord, True)
 
             # Refresh records for tblPrevious after save.
-            refreshedRecords = self.extractRowsInTwoFormats(updatedRecordId)
+            refreshedRecords = self.extractRowsInTwoFormats(previousRecordId)
             previousRefreshedRows = refreshedRecords['adjacentrows']
             self.window['tblPrevious'].update(previousRefreshedRows)
             # Transfer data in sticky fields to new record:
-            self.setRecordFields('specimen', specimenRecord, True)
-            self.collobj.previousRecordEdit = False  # resets the record ID which makes it possible for the collection object to create a new record rather than to update the current one.
+            self.setRecordFields('specimen', savedRecord, True)
+            self.collobj.id = 0  # resets the record ID which makes it possible for the collection object to create a new record rather than to update the current one.
 
             self.window['txtCatalogNumber'].set_focus()
 
             result = "Successfully saved specimen record."
 
-            if recordPreviousStatus: #The check on if the record is an edited previous record.
-                self.clearForm()
+            #if recordPreviousStatus: #The check on if the record is an edited previous record.
+            self.clearForm()
 
         except Exception as e:
             errorMessage = f"Error occurred attempting to save specimen: {e}"
@@ -715,8 +708,7 @@ class SpecimenDataEntry():
             sg.PopupError(e)
             result = errorMessage
 
-
-        self.collobj.id = specimenRecord[0]
+        #self.collobj.id = savedRecord[0]
         return result 
  
     def HandleStorageInput(self, keyStrokes):
@@ -781,10 +773,8 @@ class SpecimenDataEntry():
             record : New record that should have its fields set
             stickyFieldsOnly : Flag for indicating whether only sticky fields should be set
         """
-        tableName = 'storage' #Switching from 'specimen' to 'storage' since that is needed now
-        strow = self.db.getRowOnId(tableName, record['storageid'])
-        self.collobj.setStorageFields(self.db.getRowOnId(tableName, record['storageid']))
-        strecord = self.collobj.setStorageFields(self.db.getRowOnId(tableName, record['storageid']))
+        
+        self.collobj.setStorageFields(self.db.getRowOnId('storage', record['storageid']))
         self.collobj.setPrepTypeFields(self.window['cbxPrepType'].widget.current())
         self.collobj.setTypeStatusFields(self.window['cbxTypeStatus'].widget.current())
         self.collobj.notes = record['notes']
