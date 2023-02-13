@@ -84,7 +84,8 @@ class specimen(model.Model):
         self.typeStatuses = self.db.getRowsOnFilters('typestatus', {'collectionid =': f'{self.collectionId}'}, 100, 'ordinal')
         self.geoRegions = self.db.getRowsOnFilters('georegion', {'collectionid =': f'{self.collectionId}'}) 
         #self.geoRegionSources = self.db.getRowsOnFilters('georegionsource', {'collectionid =': f'{self.collectionId}'}) 
-
+        pass 
+    
     def getFieldsAsDict(self):
         """
         Generates a dictonary with database column names as keys and specimen records fields as values 
@@ -214,6 +215,7 @@ class specimen(model.Model):
 
         self.geoRegionId = self.geoRegions[index]['id']
         self.geoRegionName = self.geoRegions[index]['name']       
+        pass
 
     def setStorageFields(self, index):
         """

@@ -14,6 +14,7 @@
 
 import sys
 from pathlib import Path
+import util
 
 # Below line is needed for accessing internal dependencies for some fucking reason 
 sys.path.append(str(Path(__file__).parent.parent.joinpath('')))
@@ -114,20 +115,50 @@ class Model:
 
         # If existing record (id > 0) then fetch the one that has the highest lower id than current 
         if id > 0: 
-            sql = sql + f"WHERE s.id < {id} AND s.collectionid = {self.collectionId}" 
-        # If blank record then fetch the one with the highest id 
-        # sql = sql + " ORDER BY s.id DESC LIMIT 1 "
+            sql = sql + f"WHERE s.id < {id} AND s.collectionid = {self.collectionId}"
+        else: 
+            # Blank record: Fetch the one with the highest id 
+            sql = sql + f"WHERE s.id = (SELECT MAX(id) FROM {self.table})" 
 
+        sql = sql + f" AND s.collectionid = {self.collectionId}" # Filter on current collection
+        sql = sql + " ORDER BY s.id DESC LIMIT 1 "  
+
+        return self.loadFromSql(sql)
+
+    def loadNext(self, id):
+        """
+        Function for loading next object record data, if any 
+        CONTRACT
+           id: Primary key of current record; If 0 then latest record    
+           RETURNS record or None, if none retrieved  
+        """
+
+        # Construct query for extracting the previous record 
+        sql = f"SELECT * FROM {self.table} s " 
+        # If existing record (id > 0) then fetch the one that has the lowest higher id than current 
+        if id > 0: 
+            sql = sql + f"WHERE s.id > {id} " 
         else:
+            # Blank record: No going forward
+            util.logger.debug('Attempt to forward on blank record')
             return None
 
-        # Fetch results from database
-        try:
+        sql = sql + f" AND s.collectionid = {self.collectionId}" # Filter on current collection
+        # Sort on ID to get the latest record out
+        sql = sql + " ORDER BY s.id LIMIT 1 "        
 
+        return self.loadFromSql(sql)
+
+    def loadFromSql(self, sql):
+        # Fetch results from database
+            
+        util.logger.debug(sql)
+        try:
             results = self.db.executeSqlStatement(sql)
         except Exception as e:
-            pass
-            # print(f"The SQL could not be executed - {e}\n Please check the Statement: \n{sql}")
+            util.logger.error(f"The SQL could not be executed - {e}\n Please check the Statement: \n{sql}")
+            return None
+
         # If results returned then pick first one, otherwise set record to nothing 
         if len(results) > 0:
             record = results.pop()
@@ -142,46 +173,6 @@ class Model:
         # NOTE: If not record retrieved None is returned 
         return record 
     
-    def loadNext(self, id):
-        """
-        Function for loading next object record data, if any 
-        CONTRACT
-           id: Primary key of current record; If 0 then latest record    
-           RETURNS record or None, if none retrieved  
-        """
-
-        # Construct query for extracting the previous record 
-        sql = f"SELECT * FROM {self.table} s " 
-        # If existing record (id > 0) then fetch the one that has the lowest higher id than current 
-        if id > 0: 
-            sql = sql + f"WHERE s.id > {id} AND s.collectionid = {self.collectionId}" 
-        # If blank record then fetch the one with the highest id 
-        # sql = sql + " ORDER BY s.id LIMIT 1 "
-        # print(sql)
-        else:
-            return None
-
-        # Fetch results from database
-        try:
-            results = self.db.executeSqlStatement(sql)
-        except Exception as e:
-            pass
-            # print(f"The SQL could not be executed - {e}\n Please check the Statement: \n{sql}")
-        # If results returned then pick first one, otherwise set record to nothing 
-        if len(results) > 0:
-            record = results[0]
-            print('record collobj', record)
-            # self.id = record
-        else: 
-            record = None
-
-        # If record retrieved set fields 
-        if record:
-            self.setFields(record)
-        
-        # NOTE: If not record retrieved None is returned 
-        return record
-
 # Functions fully implemented in inheriting classes 
 
     def loadPredefinedData(self):

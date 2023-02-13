@@ -12,21 +12,21 @@ cd temp\
 echo switched to temporary folder
 
 set editions=NHMD\tracheophyta\ NHMD\entomology\ NHMA\entomology\
+set sqlfiles=PrepTypes TypeStatuses GeoRegions Storage Highertaxa Species-Batch1 Species-Batch2 Species-Batch3 Species-Batch4 Subspecies VarForma
 
 (for %%e in (%editions%) do (
     echo
     echo ***** Preparing db edition %%e *****
 
-    set list=PrepTypes TypeStatuses GeoRegions Storage Highertaxa Species-Batch1 Species-Batch2 Species-Batch3 Species-Batch4 Subspecies VarForma
-    (for %%t in (%list%) do ( 
-        echo Reading %%t
-        copy ..\%%e%%t.sql %%t.sql
-        sqlite3 db.sqlite3 ".read %%t.sql"
-        rem echo Added %%t
-        del /f %%t.sql
+    (for %%s in (%sqlfiles%) do ( 
+        echo Reading %%s
+        copy ..\%%e%%s.sql %%s.sql
+        sqlite3 db.sqlite3 ".read %%s.sql"
+        rem echo Added %%s
+        del /f %%s.sql
         echo Done.
         echo **************************
-        if !errorlevel! neq 0 exit /b !errorlevel!
+        rem if !errorlevel! neq 0 exit /b !errorlevel!
     ))
 
     echo Done with %%e ... 
