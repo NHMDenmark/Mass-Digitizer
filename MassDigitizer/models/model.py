@@ -114,7 +114,7 @@ class Model:
 
         # If existing record (id > 0) then fetch the one that has the highest lower id than current 
         if id > 0: 
-            sql = sql + f"WHERE s.id < {id} " 
+            sql = sql + f"WHERE s.id < {id} AND s.collectionid = {self.collectionId}" 
         # If blank record then fetch the one with the highest id 
         # sql = sql + " ORDER BY s.id DESC LIMIT 1 "
 
@@ -154,7 +154,7 @@ class Model:
         sql = f"SELECT * FROM {self.table} s " 
         # If existing record (id > 0) then fetch the one that has the lowest higher id than current 
         if id > 0: 
-            sql = sql + f"WHERE s.id > {id} " 
+            sql = sql + f"WHERE s.id > {id} AND s.collectionid = {self.collectionId}" 
         # If blank record then fetch the one with the highest id 
         # sql = sql + " ORDER BY s.id LIMIT 1 "
         # print(sql)
