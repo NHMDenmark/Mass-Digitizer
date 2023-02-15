@@ -69,11 +69,8 @@ class SpecimenDataEntry():
 
         # Gets the newest row by highest ID
         self.currentRecordId = self.window['txtRecordID'].get() # A check to see if UI is being "navigated" (btnBack/forward)
-        if self.currentRecordId:
-            pass
-        else:
-            pass
         self.maxRow = self.db.getMaxRow('specimen')[0]
+        # TODO The above breaks the MVC pattern by storing data in the view that is actually contained in the model
 
         # Create auto-suggest popup window for storage locations
         self.autoStorage = autoSuggest_popup.AutoSuggest_popup('storage', collection_id)
@@ -112,9 +109,6 @@ class SpecimenDataEntry():
         smallLabelFont = ('Arial', 11, 'italic')
         wingding = ('Wingding', 18)
         indicator = '◀'
-
-        # TODO placeholder For when higher taxonomic groups are added as filter
-        taxonomicGroups = ['placeholder...']
 
         # NOTE Elements are stored  in variables to make it easier to include and position in the frames
 
@@ -538,6 +532,8 @@ class SpecimenDataEntry():
                     # Indicate no further records
                     self.window['lblRecordEnd'].update(visible=False)
                     self.collobj.id = 0
+                    
+                    
                     self.collobj.previousRecordEdit = False #unsets above check.
                 self.window['inpStorage'].set_focus()
 
@@ -617,7 +613,7 @@ class SpecimenDataEntry():
             # the record minted is an edit of an existing record or not.
             if event == 'btnSave' or event == 'btnSave_Enter':
                 self.SaveForm(values)#, self.collobj.previousRecordEdit)
-                self.window['inpStorage'].set_focus()
+                #self.window['inpStorage'].set_focus() # TODO Explain why this line was added 
 
             if event == 'btn1st':
                 self.getFirstOrLastRecord(position='first')
@@ -679,6 +675,7 @@ class SpecimenDataEntry():
 
             # Remember id of record just save and prepare for blank record 
             previousRecordId = savedRecord['id'] # Id to be used for refreshing the previous rows table.
+
             self.clearNonStickyFields(values) # Clear non-sticky to prepare form for blank record
             
             # Create a new, blank specimen record (id pre-set to 0)
@@ -696,7 +693,6 @@ class SpecimenDataEntry():
             self.collobj.id = 0  # resets the record ID which makes it possible for the collection object to create a new record rather than to update the current one.
 
             self.window['txtCatalogNumber'].set_focus()
-
             result = "Successfully saved specimen record."
 
         except Exception as e:
