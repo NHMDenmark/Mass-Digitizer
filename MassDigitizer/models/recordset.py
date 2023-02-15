@@ -14,17 +14,39 @@
 
 # Internal dependencies
 from models import model
+from models import specimen
+import data_access
 import global_settings as gs
 
 class recordset(model.Model):
     """
     The recordset class is a representation of a set of specimen records allowing for easy navigation. 
-    
     """
 
-    def __init__(self, collection_id, specimen_id = 0):
+    def __init__(self, collection_id, range=3, specimen_id = 0):
+      """
+      Initialize (Constructor)
+      """
+      self.collectionId = collection_id
+      self.recordRange = range
+      
+      self.db = data_access.DataAccess(gs.databaseName)
+      
+      if specimen_id > 0:
+        specimenRecord = self.db.getRowOnId('specimen', specimen_id)
+        self.currentSpecimen = specimen.specimen(self.collectionId). self.db.getRowOnId('specimen', specimen_id)
+      else:
+        self.currentSpecimen = None 
+
+    def load(self):
+      """
+      Load adjacent records in range 
+      """
+
+      records = self.db.getRowsOnFilters('specimen',{
+          'collectionid': f'={self.collectionId}',
+          'id' : f'<={self.currentSpecimen}',
+        }, limit=self.recordRange)
 
 
-
-        
-        pass
+      pass
