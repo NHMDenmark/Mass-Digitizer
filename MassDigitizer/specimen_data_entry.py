@@ -699,9 +699,6 @@ class SpecimenDataEntry():
 
             result = "Successfully saved specimen record."
 
-            #if recordPreviousStatus: #The check on if the record is an edited previous record.
-            self.clearForm()
-
         except Exception as e:
             errorMessage = f"Error occurred attempting to save specimen: {e}"
             util.logger.error(errorMessage)
