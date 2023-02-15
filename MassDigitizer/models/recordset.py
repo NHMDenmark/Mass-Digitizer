@@ -18,7 +18,7 @@ from models import specimen
 import data_access
 import global_settings as gs
 
-class recordset(model.Model):
+class Recordset(model.Model):
     """
     The recordset class is a representation of a set of specimen records allowing for easy navigation. 
     """
@@ -34,7 +34,7 @@ class recordset(model.Model):
       
       if specimen_id > 0:
         specimenRecord = self.db.getRowOnId('specimen', specimen_id)
-        self.currentSpecimen = specimen.specimen(self.collectionId). self.db.getRowOnId('specimen', specimen_id)
+        self.currentSpecimen = specimen.Specimen(self.collectionId). self.db.getRowOnId('specimen', specimen_id)
       else:
         self.currentSpecimen = None 
 
