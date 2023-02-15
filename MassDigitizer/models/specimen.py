@@ -18,7 +18,7 @@ from datetime import datetime
 from models import model
 import global_settings as gs
 
-class specimen(model.Model):
+class Specimen(model.Model):
     """
     The specimen class is a representation of a specimen record to hold its data
     Any instance is either an existing record in the database or transient pending an insert

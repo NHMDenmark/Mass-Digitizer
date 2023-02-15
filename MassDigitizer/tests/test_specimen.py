@@ -24,7 +24,7 @@ TESTDATAPATH = Path(__file__).parent
 import models.specimen as collobj
 
 # Create blank specimen record instance 
-specimenObject = collobj.specimen(29)
+specimenObject = collobj.Specimen(29)
 predefData = None
 
 def rowObjectToList(rowObject):
@@ -156,7 +156,7 @@ def test_save_load_delete():
 
     # Clean up record 
     specimenObject.delete()
-    newSpecimenObject = collobj.specimen(29)
+    newSpecimenObject = collobj.Specimen(29)
     # 
     newSpecimenObject.load(savedSpecimenId)
     if newSpecimenObject.catalogNumber == '':

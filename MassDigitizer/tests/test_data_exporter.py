@@ -25,7 +25,7 @@ filePath = os.path.expanduser(r'~\Documents\DaSSCO')
 
 def test_exportSpecimens():
 
-    testSpecimen = co.specimen(13)
+    testSpecimen = co.Specimen(13)
     testSpecimen.catalogNumber = '1234567890'
     testSpecimen.save()
 

@@ -38,7 +38,7 @@ class SpecimenDataEntry():
         self.versionNumber = util.getVersionNumber() # Get app version number for displaying
         self.collectionId = collection_id  # Set collection Id
         self.window = None  # Create class level instance of window object
-        self.collobj = specimen.specimen(collection_id)  # Create blank specimen record instance
+        self.collobj = specimen.Specimen(collection_id)  # Create blank specimen record instance
         self.db = DataAccess(gs.databaseName)  # Instantiate database access module
         
         # TODO explanation due for below lines 
@@ -682,7 +682,7 @@ class SpecimenDataEntry():
             self.clearNonStickyFields(values) # Clear non-sticky to prepare form for blank record
             
             # Create a new, blank specimen record (id pre-set to 0)
-            self.collobj = specimen.specimen(self.collectionId)
+            self.collobj = specimen.Specimen(self.collectionId)
                         
             # Transfer data in sticky fields to new record:
             self.setRecordFields('specimen', savedRecord, True)
@@ -855,7 +855,6 @@ class SpecimenDataEntry():
         else:
             util.logger.debug(f"Illegal argument in parameter 'position': {position} !")
 
-
         # Create new empty record accordingly 
-        self.collobj = specimen.specimen(self.collectionId)
+        self.collobj = specimen.Specimen(self.collectionId)
     
