@@ -13,12 +13,13 @@
 """
 
 # Internal dependencies
+import util
 from models import model
 from models import specimen
 import data_access
 import global_settings as gs
 
-class Recordset(model.Model):
+class RecordSet():#model.Model):
     """
     The recordset class is a representation of a set of specimen records allowing for easy navigation. 
     """
@@ -27,26 +28,73 @@ class Recordset(model.Model):
       """
       Initialize (Constructor)
       """
+      util.logger.debug(f'Initializing recordset with collection_id {collection_id}, range={range}, specimen_id={specimen_id}')
+
       self.collectionId = collection_id
       self.recordRange = range
+      self.records = []
       
       self.db = data_access.DataAccess(gs.databaseName)
+
+      self.headers = self.db.getTableHeaders('specimen')
       
+      self.reLoad(specimen_id)
+    
+    def reLoad(self, specimen_id):
+      """
+      Sets the current specimen record and instance  
+      """
+      self.setCurrentSpecimen(specimen_id)
+      self.load()
+
+    def setCurrentSpecimen(self, specimen_id):
+      """
+      TODO Description / Contract
+      """
       if specimen_id > 0:
+        # if specimen record id specified fetch it as the current record in focus 
         specimenRecord = self.db.getRowOnId('specimen', specimen_id)
-        self.currentSpecimen = specimen.Specimen(self.collectionId). self.db.getRowOnId('specimen', specimen_id)
       else:
-        self.currentSpecimen = None 
+        # if no id is specified, fetch the latest record as the focus 
+        specimenRecord = self.db.getMaxRow('specimen') 
+
+      # Create specimen instance from record data 
+      self.currentSpecimen = specimen.Specimen(self.collectionId)
+      self.currentSpecimen.setFields(specimenRecord)
 
     def load(self):
       """
       Load adjacent records in range 
       """
-
-      records = self.db.getRowsOnFilters('specimen',{
+      util.logger.debug(f'recordset: Load adjacent records in range. collectionId: {self.collectionId}, currentSpecimen id: {self.currentSpecimen.id}, range: {self.recordRange}')
+      self.records = self.db.getRowsOnFilters('specimen',{
           'collectionid': f'={self.collectionId}',
-          'id' : f'<={self.currentSpecimen}',
+          'id' : f'<={self.currentSpecimen.id}',
         }, limit=self.recordRange)
+      
+
+    def getAdjacentRecordList(self, tableHeaders):
+      """
+      TODO Explanation forthcoming
+      """
+      util.logger.debug(f'recordSet.getRecordList({tableHeaders})')
+
+      # TODO Explain 
+      recordList = [[row for row in line] for line in self.records]
+      adjacentRecords = []  # the curated rows needed to populate the table
+      #completeRowDicts = [] # full rows needed to populate the form
+      for record in recordList:
+        columnSet = dict(zip(self.headers, record))
+        #completeRowDicts.append(columnSet)
+        adjacentRecord = []
+        for column in tableHeaders:
+            recordRow = columnSet[column]
+            adjacentRecord.append(recordRow)
+        adjacentRecords.append(adjacentRecord)
+
+      return adjacentRecords
+  
+      
 
 
-      pass
+      

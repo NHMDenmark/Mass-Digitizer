@@ -1,4 +1,4 @@
-import logging
+import traceback
 
 # Internal dependencies
 import home_screen
@@ -16,6 +16,7 @@ def main() -> None:
         home = home_screen.HomeScreen()    
     except Exception as e:
         util.logger.error(str(e))
+        util.logger.error(traceback.format_exc())
 
     # TODO start background processes? 
 

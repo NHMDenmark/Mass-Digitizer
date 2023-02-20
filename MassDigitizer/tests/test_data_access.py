@@ -96,7 +96,7 @@ def test_getMaxRow():
     maxIdInstitution = db.getMaxRow('institution') # THIS fucker
 
     # Check whether both record IDs match
-    #assert lastInstitution['id'] == maxIdInstitution['id']
+    assert lastInstitution['id'] == maxIdInstitution['id']
 
 def test_executeSqlStatement():
 
