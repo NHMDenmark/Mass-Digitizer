@@ -64,7 +64,7 @@ For creating the executable, we use PyInstaller (https://pyinstaller.org/) using
 pyinstaller .\MassDigitizer\DaSSCo.py --onedir --noconsole --paths=MassDigitizer\
 ```  
 
-For creating the installer, we use [Inno Setup](https://jrsoftware.org/isinfo.php) and a definition file is located in the repo root [DaSSCO.iss](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/MassDigitizer/DaSSCo.iss). The Inno Setup scripts bundles the database with the executable into an installer file. Before running the Inno Setup script, it is necessary to fill the database file with the taxonomic spine and other predefined data. This is done for two main reasons: 1) To keep the size of the skeleton database on the rep below the 50MB limit and 2) to have version control of the predefined data by having it stored in SQL text files. 
+For creating the installer, we use [Inno Setup](https://jrsoftware.org/isinfo.php) and a definition file is located in the repo root [DaSSCO.iss](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/MassDigitizer/DaSSCo.iss). The Inno Setup scripts bundles the database with the executable into an installer file. Before running the Inno Setup script, it is necessary to fill the database file with the taxonomic spine and other predefined data. This is done for two main reasons: 1) To keep the size of the skeleton database on the repository below the 50MB limit and 2) to have version control of the predefined data by having it stored in SQL text files. 
 
 #### Preparing Database File for Bundling 
 
