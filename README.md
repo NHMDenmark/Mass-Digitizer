@@ -76,12 +76,12 @@ This is done for two main reasons:
 
 In the root of this folder there is a batch file ([prepare-db.bat](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/MassDigitizer/sql/editions/prepare-db.bat)) that needs to be run in order to execute the sql statements. The resulting updated db.sqlite3 file is located in the [temp](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/MassDigitizer/sql/editions/temp) folder from where it will be picked up by Inno Setup for being bundled with the installer.  
 
-In order to run the batch file, you need to install [sqlite command tools](https://sqlite.org/download.html) first and add its path to your machine's PATH environment variables. 
+In order to run the batch file, you need to install [sqlite command tools](https://sqlite.org/download.html) first and make sure its path is added to your machine's PATH environment variables. 
 
 So the process for compilation are as follows: 
 1. Create the executable using PyInstaller
-2. Run the batch file to generate the db edition of choice 
-3. Run the Inno Setup script to create the installer for this edition 
+2. Run the batch file to prepare the database
+3. Run the Inno Setup script to create the installer
 
 Here follows a table for the different collections supported so far: 
 
@@ -90,5 +90,3 @@ Here follows a table for the different collections supported so far:
 | NHMD (Copenhagen) | Vascular Plants | NHMD\tracheophyta |                                                                              | 
 | NHMD (Copenhagen) | Entomology      | NHMD\entomology   |Taxon spine restricted to selected taxa under Coleoptera & Lepidoptera        |
 | NHMA (Aarhus)     | Entomology      | NHMA\entomology   |                                                                              |
-
-NOTE: In order to run the batch file, it's necessary to install sqlite command tools first: https://sqlite.org/download.html 
