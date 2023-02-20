@@ -16,9 +16,6 @@ import sys
 from pathlib import Path
 import util
 
-# Below line is needed for accessing internal dependencies for some fucking reason 
-sys.path.append(str(Path(__file__).parent.parent.joinpath('')))
-
 # Internal dependencies
 import data_access
 import global_settings as gs

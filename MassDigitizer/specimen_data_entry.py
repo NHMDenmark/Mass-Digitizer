@@ -27,6 +27,7 @@ import global_settings as gs
 import data_exporter as dx
 import autoSuggest_popup
 from models import specimen
+from models import recordset
 
 class SpecimenDataEntry():
 
@@ -34,17 +35,19 @@ class SpecimenDataEntry():
         """
         Constructor that initializes class variables and dependent class instances 
         """
+        util.logger.debug(f'Initializing speciment data entry form with collection_id {collection_id}')
         
-        self.versionNumber = util.getVersionNumber() # Get app version number for displaying
         self.collectionId = collection_id  # Set collection Id
         self.window = None  # Create class level instance of window object
         self.collobj = specimen.Specimen(collection_id)  # Create blank specimen record instance
+        
         self.db = DataAccess(gs.databaseName)  # Instantiate database access module
+
+        self.recordSet = recordset.RecordSet(collection_id, 3) # Create recordset of last 3 saved records 
         
         # TODO explanation due for below lines 
         #mxRow = self.db.getMaxRow('specimen') 
         #self.collobj.id = mxRow[0] 
-
         # self.retroRow = None  # Global to be used in step-back and other retrospective actions for saving.
         
         util.logger.info("Initializing Data Entry form for Institution & collection: %s | %s" % (gs.institutionName, gs.collectionName))
@@ -175,9 +178,9 @@ class SpecimenDataEntry():
         self.headers = ['id', 'spid', 'catalognumber', 'multispecimen', 'taxonfullname', 'taxonname', 'taxonnameid',
                         'taxonspid', 'highertaxonname', 'preptypename', 'typestatusname', 'typestatusid',
                         'georegionname', 'georegionid', 'storagefullname', 'storagename']
-        self.operationalHeads = ['id', 'catalognumber', 'taxonfullname', 'multispecimen',
+        self.tableHeaders = ['id', 'catalognumber', 'taxonfullname', 'multispecimen',
                                  'georegionname', 'storagename', 'notes']
-        # self.operationalHeads are headings for generating rows going into the previousRecordsTable
+        # self.tableHeaders are headings for generating rows going into the previousRecordsTable
 
 
         # Records to be processed for display in the previousRecordsTable.
@@ -185,13 +188,13 @@ class SpecimenDataEntry():
 
         lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
         # previousRecordsTable = [
-        #     sg.Table(values=self.previousRecords, key='tblPrevious', enable_events=True, headings=self.operationalHeads,
+        #     sg.Table(values=self.previousRecords, key='tblPrevious', enable_events=True, headings=self.tableHeaders,
         #              max_col_width=32)]
 
 
         # self.tableRecords = self.previousRecords['adjacentrows']
         lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
-        previousRecordsTable = [sg.Table(values=self.previousRecords, key = 'tblPrevious',enable_events=False,  hide_vertical_scroll=True, headings=self.operationalHeads, max_col_width=32)]
+        previousRecordsTable = [sg.Table(values=self.previousRecords, key = 'tblPrevious',enable_events=False,  hide_vertical_scroll=True, headings=self.tableHeaders, max_col_width=32)]
 
 
         layout_bluearea = [broadGeo, taxonInput, barcode, [  # taxonomicPicklist,
@@ -225,7 +228,7 @@ class SpecimenDataEntry():
         version = [
             sg.Text(f"Version number: ", size=(14, 1), background_color=greyArea, text_color='black',
                     font=labelHeadlineMeta),
-            sg.Text(self.versionNumber, size=(20, 1), background_color=greyArea, font=smallLabelFont,
+            sg.Text(util.getVersionNumber(), size=(20, 1), background_color=greyArea, font=smallLabelFont,
                     text_color='black')]
 
         # Header section
@@ -315,7 +318,7 @@ class SpecimenDataEntry():
             #util.logger.debug('the specimen dict in for loop is: %s' % specimenDict)
             completeRowDicts.append(specimenDict)
             tempadjacent = []
-            for k in self.operationalHeads:
+            for k in self.tableHeaders: 
                 res = specimenDict[k]
                 tempadjacent.append(res)
             previousRows.append(tempadjacent)
@@ -351,7 +354,7 @@ class SpecimenDataEntry():
             overviewRows = {'adjacentrows': [[], [], []]}
         tblRows = list(overviewRows['adjacentrows'])
         #self.collobj.id = tblRows[0][0] # TODO WHY? This sets the collobj.id to be the last saved record… Why? 
-        self.window['tblPrevious'].update(values=tblRows)
+        self.window['tblPrevious'].update(values=self.recordSet.getAdjacentRecordList(self.tableHeaders)) #tblRows)
         self.window['inpStorage'].set_focus()
         self.window['inpStorage'].update(select=True)
 

@@ -28,7 +28,7 @@ class DataAccess():
                do_in_memory (boolean): Whether the database file should be run in-memory
         NOTE Database file is installed into user documents folder otherwise it would be readonly on a Windows PC in any case
         """
-        util.logger.debug("Initializing Data Access module...")
+        #util.logger.debug("Initializing Data Access module...")
         try:
             self.currentCursor = None  # Reset cursor pointer
             # Point to database file provided and connect
@@ -38,7 +38,7 @@ class DataAccess():
         except Exception as e:
             util.logger.debug(e)
 
-        util.logger.debug(('Connecting to database file: %s ...' % self.dbFilePath))
+        #util.logger.debug(('Connecting to database file: %s ...' % self.dbFilePath))
 
         try:
             self.connection = sqlite3.connect(self.dbFilePath)
@@ -62,7 +62,7 @@ class DataAccess():
             dbFileName (String): the name of the file excluding the extension '.sqlite3'
         """
         self.dbFilePath = str(Path(util.getUserPath()).joinpath(f'{dbFileName}.sqlite3'))
-        util.logger.info("Database filepath: %s" % self.dbFilePath)
+        #util.logger.info("Database filepath: %s" % self.dbFilePath)
 
     def getConnection(self):
         """
@@ -98,18 +98,19 @@ class DataAccess():
         sqlString = f'SELECT * FROM {tableName}'
 
         if sortColumn is not None:
-            sqlString += f' ORDER BY {sortColumn}'
-            
+            sqlString += f' ORDER BY {sortColumn}'            
 
         if limit > 0:
             sqlString += f' LIMIT {limit}'
         
-        util.logger.info(sqlString)
+        #util.logger.info(sqlString)
 
         try:
             records = currentCursor.execute(sqlString).fetchall()
         except Exception as e:
-            util.logger.debug(e)
+            util.logger.debug(sqlString)
+            util.logger.error(e)
+            records = None
             
         self.currentCursor.connection.close()
 
@@ -128,7 +129,7 @@ class DataAccess():
                     Numbers should be formatted as strings
           RETURNS table rows as list
         """
-        currentCursor = self.getDbCursor()
+        self.currentCursor = self.getDbCursor()
 
         sqlString = 'SELECT * FROM %s ' % tableName
 
@@ -146,9 +147,14 @@ class DataAccess():
 
         util.logger.debug(sqlString)
 
-        records = currentCursor.execute(sqlString).fetchall()
+        try:
+            records = self.currentCursor.execute(sqlString).fetchall()
+        except Exception as e:
+            util.logger.debug(sqlString)
+            util.logger.error(e)
+            records = None
 
-        currentCursor.connection.close()
+        self.currentCursor.connection.close()
 
         return records
 
@@ -160,9 +166,19 @@ class DataAccess():
           id (Integer) : The primary key of the row to be returned
           RETURNS single table row
         """
-        currentCursor = self.getDbCursor()
-        record = currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(id)).fetchone()
-        currentCursor.connection.close()
+        self.currentCursor = self.getDbCursor()
+        
+        sqlString = f'SELECT * FROM {tableName} WHERE id = {str(id)};'
+
+        util.logger.debug(sqlString)
+
+        try:
+            record = self.currentCursor.execute(sqlString).fetchone()
+        except Exception as e:
+            util.logger.error(e)
+            record = None
+
+        self.currentCursor.connection.close()
 
         return record
 
@@ -174,9 +190,15 @@ class DataAccess():
           spid (Integer) : The Specify primary key of the row to be returned
           RETURNS single table row
         """
-        currentCursor = self.getDbCursor()
-        record = currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(spid)).fetchone()
-        currentCursor.connection.close()
+        self.currentCursor = self.getDbCursor()
+        
+        try:
+            record = self.currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(spid)).fetchone()
+        except Exception as e:
+            util.logger.error(e)
+            record = None
+
+        self.currentCursor.connection.close()
 
         return record
 
@@ -187,10 +209,15 @@ class DataAccess():
         tableName (String): The name of the table to be queried
         id (Integer) : The primary key of the row to be returned
         """
-        currentCursor = self.getDbCursor()
-        currentCursor.execute(f'DELETE FROM {tableName} WHERE id = {id};')
-        currentCursor.connection.commit()
-        currentCursor.connection.close()
+        self.currentCursor = self.getDbCursor()
+        
+        try:
+            self.currentCursor.execute(f'DELETE FROM {tableName} WHERE id = {id};')
+        except Exception as e:
+            util.logger.error(e)
+        
+        self.currentCursor.connection.commit()
+        self.currentCursor.connection.close()
 
     def getMaxRow(self, tableName):
         """
@@ -199,30 +226,44 @@ class DataAccess():
           tableName (String): The name of the table to be queried
           RETURNS single table row (SQLITErow)
         """
-        currentCursor = self.getDbCursor()
-        sql = f'SELECT MAX({tableName}.id) FROM {tableName};'
-        record = currentCursor.execute(sql).fetchone()
-        currentCursor.connection.close()
+        self.currentCursor = self.getDbCursor()
+
+        sqlString = f'SELECT * FROM {tableName} WHERE id = (SELECT MAX(id) FROM {tableName});'
+        
+        util.logger.debug(sqlString)
+
+        try:
+            record = self.currentCursor.execute(sqlString).fetchone()
+        except Exception as e:
+            util.logger.debug(sqlString)
+            util.logger.error(e)
+            record = None
+
+        self.currentCursor.connection.close()
         
         return record
 
-    def executeSqlStatement(self, sql):
+    def executeSqlStatement(self, sqlString):
         """
-        Execute specified sql statement
+        Execute specified SQL statement
         CONTRACT
-          sql (String) :
-          RETURNS table rows as dictionary
+          sqlString (String) :
+          RETURNS table rows as SqliteRow object list
         """
 
-        util.logger.debug(sql)
         self.currentCursor = self.getDbCursor()
 
-        rows = self.currentCursor.execute(sql).fetchall()
+        try:
+            records = self.currentCursor.execute(sqlString).fetchall()
+        except Exception as e:
+            util.logger.debug(sqlString)
+            util.logger.error(e)
+            records = None
 
         self.currentCursor.connection.commit()
         self.currentCursor.connection.close()
 
-        return rows
+        return records
 
     def getRowOnSpecifyId(self, tableName, id):
         """
@@ -230,7 +271,7 @@ class DataAccess():
         CONTRACT
           tableName (String): The name of the table to be queried
           id (Integer) : The primary key of the row to be returned
-          RETURNS single table row
+          RETURNS single SqliteRow object from source table 
         """
         self.currentCursor = self.getDbCursor()
         record = self.currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(id)).fetchone()
@@ -241,12 +282,15 @@ class DataAccess():
     def getPrimaryKey(self, tableName, name, field='name'):
         """
         Function for fetching id (primary key) on name value
+        CONTRACT 
+           tableName (String): The name of the table to be queried
+           name (String): The name of the 
         """
         # (tableName, {' %s = ' % field: '"%s"' % name})[0]['id']
-        currentCursor = self.getDbCursor()
-        sql = f'SELECT id FROM {tableName} WHERE {field} = {name};'
-        record = currentCursor.execute(sql).fetchone()
-        currentCursor.connection.close()
+        self.currentCursor = self.getDbCursor()
+        sqlString = f'SELECT id FROM {tableName} WHERE {field} = {name};'
+        record = self.currentCursor.execute(sqlString).fetchone()
+        self.currentCursor.connection.close()
         return record
 
     def insertRow(self, tableName, fields):
@@ -279,7 +323,7 @@ class DataAccess():
         self.currentCursor.execute(sqlString)
         self.currentCursor.connection.commit()
         recordID = self.currentCursor.lastrowid
-        record = self.currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(recordID)).fetchone()
+        record = self.currentCursor.execute(f'SELECT * FROM {tableName} WHERE id = {str(recordID)}').fetchone()
         self.currentCursor.connection.close()
 
         return record
@@ -328,11 +372,11 @@ class DataAccess():
                 sqlStringFinal = ','.join(map(str, sqlStringAppend))
 
         
-        util.logger.info('Update record SQL string: ', sqlStringFinal)
+        #util.logger.info('Update record SQL string: ', sqlStringFinal)
 
         self.currentCursor.execute(sqlStringFinal)
         self.currentCursor.connection.commit()
-        record = self.currentCursor.execute("SELECT * FROM " + tableName + " WHERE id = " + str(recordID)).fetchone()
+        record = self.currentCursor.execute(f'SELECT * FROM {tableName} WHERE id = {str(recordID)}').fetchone()
         self.currentCursor.connection.close()
 
         return record
@@ -341,7 +385,6 @@ class DataAccess():
         """
         Get fields for a given DB API 2.0 cursor object that has been executed
         CONTRACT
-          cursor (Cursor) : Cursor object to be field mapped
           RETURNS a dictionary that maps each field name to a column index; 0 and up.
         """
         currentCursor = self.getDbCursor()
@@ -350,6 +393,19 @@ class DataAccess():
         for d in currentCursor.description:
             results[d[0]] = column
             column = column + 1
-
+        self.currentCursor.connection.close()
         return results
 
+    def getTableHeaders(self, tableName):
+        """
+        Get fields for a given DB API 2.0 cursor object that has been executed
+        CONTRACT
+           tableName
+           
+           RETURNS a dictionary that maps each field name to a column index; 0 and up.
+        """
+        self.currentCursor = self.getDbCursor()
+        self.currentCursor.execute(f'SELECT * FROM {tableName} LIMIT 1')
+        headers = list(map(lambda x: x[0], self.currentCursor.description))
+        self.currentCursor.connection.close()
+        return headers

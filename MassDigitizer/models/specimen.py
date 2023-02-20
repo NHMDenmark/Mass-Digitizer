@@ -15,6 +15,7 @@
 from datetime import datetime
 
 # Internal dependencies
+import util
 from models import model
 import global_settings as gs
 
@@ -132,6 +133,8 @@ class Specimen(model.Model):
            record: sqliterow object containing specimen record data 
         """
         #model.Model.setFields(self, record)
+        util.logger.debug(f'Initializing specimen record with keys: {record.keys()}')
+        
         self.id = record['id']
         self.catalogNumber = record['catalognumber']
         self.multiSpecimen = record['multispecimen']
