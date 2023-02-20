@@ -7,7 +7,6 @@ The DaSSCo project is tasked with digitizing millions of specimens. To speed thi
 
 ### Installation
 Installation is done using a setup file that will ensure all dependencies are in place. The installer will also add a clean local database for registering entries in a "DaSSCo" folder under the user's documents folder. Be mindful to backup the database file upon reinstallation, so it is not overwritten and and data in it erased.   
-FOR Science IT PC users: **Please be aware that the App needs 'elevated access rights' to install properly**. Simply type 'admin' into the lower left corner search field and the 'Administrator access' app will be at the top.
 
 Downloads: 
 (https://github.com/NHMDenmark/DaSSCo/releases/)
@@ -65,20 +64,24 @@ For creating the executable, we use PyInstaller (https://pyinstaller.org/) using
 pyinstaller .\MassDigitizer\DaSSCo.py --onedir --noconsole --paths=MassDigitizer\
 ```  
 
-For creating the installer, we use [Inno Setup](https://jrsoftware.org/isinfo.php) and a definition file is located in the repo root [DaSSCO.iss](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/MassDigitizer/DaSSCo.iss). The Inno Setup scripts bundles the database with the executable into an installer file. Before running the Inno Setup script, it is necessary to fill the database file with the taxonomic spine and other predefined data specific for the edition you would like to generate an installer for (see below).
+For creating the installer, we use [Inno Setup](https://jrsoftware.org/isinfo.php) and a definition file is located in the repo root [DaSSCO.iss](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/MassDigitizer/DaSSCo.iss). The Inno Setup scripts bundles the database with the executable into an installer file. Before running the Inno Setup script, it is necessary to fill the database file with the taxonomic spine and other predefined data. 
 
 #### Preparing Database File for Bundling 
 
-As part of the source code, there is a skeleton sqlite database file that needs to be filled with pre-defined data, not in the least the taxonomic spines for each collection. Before creating the installer, a temporary copy of the database file is generated that is then filled with the predefined data. Under [MassDigitizer/sql/editions](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/MassDigitizer/sql/editions/) there are folders for each collection containing the SQL statements needed to insert not only taxonomic names, but also other predefined data specific for that collection such as storage locations, preparation types and type statuses.
+As part of the source code, there is a skeleton sqlite database file that needs to be filled with pre-defined data, not in the least the taxonomic spines for each collection. Before creating the installer, a temporary copy of the database file is generated that is then filled with the predefined data. Under [MassDigitizer/sql/editions](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/MassDigitizer/sql/editions/) there are folders for each collection containing the SQL statements needed to insert not only taxonomic names, but also other predefined data specific for that collection such as storage locations, preparation types and type statuses. 
+
+This is done for two main reasons: 
+1. To keep the size of the skeleton database on the repository below the 50MB limit 
+2. To have version control of the predefined data by having it stored in SQL text files. 
 
 In the root of this folder there is a batch file ([prepare-db.bat](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/MassDigitizer/sql/editions/prepare-db.bat)) that needs to be run in order to execute the sql statements. The resulting updated db.sqlite3 file is located in the [temp](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/MassDigitizer/sql/editions/temp) folder from where it will be picked up by Inno Setup for being bundled with the installer.  
 
-In order to run the batch file, you need to install [sqlite command tools](https://sqlite.org/download.html) first and add its path to your machine's PATH environment variables. 
+In order to run the batch file, you need to install [sqlite command tools](https://sqlite.org/download.html) first and make sure its path is added to your machine's PATH environment variables. 
 
 So the process for compilation are as follows: 
 1. Create the executable using PyInstaller
-2. Run the batch file to generate the db edition of choice 
-3. Run the Inno Setup script to create the installer for this edition 
+2. Run the batch file to prepare the database
+3. Run the Inno Setup script to create the installer
 
 Here follows a table for the different collections supported so far: 
 
@@ -87,5 +90,3 @@ Here follows a table for the different collections supported so far:
 | NHMD (Copenhagen) | Vascular Plants | NHMD\tracheophyta |                                                                              | 
 | NHMD (Copenhagen) | Entomology      | NHMD\entomology   |Taxon spine restricted to selected taxa under Coleoptera & Lepidoptera        |
 | NHMA (Aarhus)     | Entomology      | NHMA\entomology   |                                                                              |
-
-NOTE: In order to run the batch file, it's necessary to install sqlite command tools first: https://sqlite.org/download.html 
