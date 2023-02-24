@@ -65,7 +65,7 @@ class Model:
         CONTRACT 
            RETURNS database record 
         """
-
+        
         # Checking if Save is a novel record, or if it is updating existing record.
 
             # print(f' - Updated {self.table} record with id: {self.id} and specify id: {self.spid} ')
@@ -79,16 +79,28 @@ class Model:
 
         return record
 
-    def load(self, id):
+    def load(self, id=0):
         """
         Function for loading and populating instance from database record  
         CONTRACT 
-           id: Primary key of current record   
+           id: Primary key of current record. If zero then instance id is checked otherwise nothing is loaded. 
+            RETURNS: Record as SqliteRow object 
         """
-        #print(f' - loading record with id: {id}')
+        
+        if id == 0: id = self.id 
+        
         record = self.db.getRowOnId(self.table , id)
+
         if record is not None: 
             self.setFields(record)
+        
+        return record
+
+    def refresh(self):
+        """
+        TODO Function contract 
+        """
+        return self.load(self, self.id)
 
     def delete(self):
         """
@@ -112,12 +124,12 @@ class Model:
 
         # If existing record (id > 0) then fetch the one that has the highest lower id than current 
         if id > 0: 
-            sql = sql + f"WHERE s.id < {id} AND s.collectionid = {self.collectionId}"
+            sql = sql + f"WHERE s.id < {id} "
         else: 
             # Blank record: Fetch the one with the highest id 
-            sql = sql + f"WHERE s.id = (SELECT MAX(id) FROM {self.table})" 
+            sql = sql + f"WHERE s.id = (SELECT MAX(id) FROM {self.table}) " 
 
-        sql = sql + f" AND s.collectionid = {self.collectionId}" # Filter on current collection
+        sql = sql + f"AND s.collectionid = {self.collectionId}" # Filter on current collection
         sql = sql + " ORDER BY s.id DESC LIMIT 1 "  
 
         return self.loadFromSql(sql)

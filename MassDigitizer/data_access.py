@@ -116,7 +116,7 @@ class DataAccess():
 
         return records
 
-    def getRowsOnFilters(self, tableName, filters, limit=10000, sort=None):
+    def getRowsOnFilters(self, tableName, filters, limit=10000, sort=None, descending=False):
         """
         Getting specific rows specified by filters from the table specified by name
         CONTRACT
@@ -139,11 +139,12 @@ class DataAccess():
                 sqlString += f'{key} {value} AND '
         sqlString = sqlString[0:len(sqlString) - 4]  # Remove trailing " AND "
 
-        if sort is not None:
-            sqlString += f' ORDER BY {sort}'
-
-        if limit > 0:
-            sqlString += f' LIMIT {limit}'
+        # Add sorting if set 
+        if sort: sqlString += f' ORDER BY {sort}'
+        # Add sorting direction if descending 
+        if descending: sqlString += ' DESC'
+        # Add range (row limit) if set 
+        if limit > 0: sqlString += f' LIMIT {limit}'
 
         util.logger.debug(sqlString)
 
@@ -219,7 +220,7 @@ class DataAccess():
         self.currentCursor.connection.commit()
         self.currentCursor.connection.close()
 
-    def getMaxRow(self, tableName):
+    def getLastRow(self, table_name, collection_id):
         """
         Get the row from the specified table with the highest primary key (id)
         CONTRACT
@@ -228,7 +229,7 @@ class DataAccess():
         """
         self.currentCursor = self.getDbCursor()
 
-        sqlString = f'SELECT * FROM {tableName} WHERE id = (SELECT MAX(id) FROM {tableName});'
+        sqlString = f'SELECT * FROM {table_name} WHERE id = (SELECT MAX(id) FROM {table_name} WHERE collectionid = {collection_id}) AND collectionid = {collection_id};'
         
         util.logger.debug(sqlString)
 
@@ -237,7 +238,7 @@ class DataAccess():
         except Exception as e:
             util.logger.debug(sqlString)
             util.logger.error(e)
-            record = None
+            raise e
 
         self.currentCursor.connection.close()
         
@@ -320,15 +321,19 @@ class DataAccess():
         valuesSql = '","'.join(sqlValues)
         valuesSql = f'"{valuesSql}")'
         sqlString = sqlString + valuesSql
+        
+        util.logger.debug('Inserting record using SQL: ', sqlString)
+        
         self.currentCursor.execute(sqlString)
         self.currentCursor.connection.commit()
+
         recordID = self.currentCursor.lastrowid
         record = self.currentCursor.execute(f'SELECT * FROM {tableName} WHERE id = {str(recordID)}').fetchone()
         self.currentCursor.connection.close()
 
         return record
 
-    def updateRow(self, tableName, recordID, values, where='', sqlString=None):
+    def updateRow(self, tableName, recordID, values, where=''):
         """
         Updates a row made of field values in the table specified by name
         CONTRACT
@@ -372,7 +377,7 @@ class DataAccess():
                 sqlStringFinal = ','.join(map(str, sqlStringAppend))
 
         
-        #util.logger.info('Update record SQL string: ', sqlStringFinal)
+        util.logger.debug('Update record using SQL: ', sqlStringFinal)
 
         self.currentCursor.execute(sqlStringFinal)
         self.currentCursor.connection.commit()
