@@ -21,7 +21,7 @@ from datetime import datetime
 import random
 
 #Central place to manage version numbers
-versionNumber = "0.2.11" # Before compiling exe, please set the version number above
+versionNumber = "0.3.0" # Before compiling exe, please set the version number above
 logger = logging.getLogger()
 
 def clear():
@@ -48,7 +48,7 @@ def buildLogger(): #moduleName):
    # 2. Set up file handler for logger
    fileHandler = logging.FileHandler(filename=logFilePath)
    #logFileFormatter = logging.Formatter(fmt=f"%(message)s", datefmt="%Y-%m-%d %H:%M:%S")
-   logFileFormatter = logging.Formatter('[%(asctime)s] p%(process)s {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s','%m-%d %H:%M:%S')
+   logFileFormatter = logging.Formatter('[%(asctime)s] p%(process)s {%(filename)s:%(lineno)d} %(levelname)s - %(message)s','%m-%d %H:%M:%S')
    fileHandler.setFormatter(logFileFormatter)
    fileHandler.setLevel(level=logging.DEBUG)
    
