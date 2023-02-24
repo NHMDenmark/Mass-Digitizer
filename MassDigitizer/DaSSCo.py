@@ -1,4 +1,5 @@
 import traceback
+import PySimpleGUI as sg
 
 # Internal dependencies
 import home_screen
@@ -16,7 +17,9 @@ def main() -> None:
         home = home_screen.HomeScreen()    
     except Exception as e:
         util.logger.error(str(e))
-        util.logger.error(traceback.format_exc())
+        traceBack = traceback.format_exc()
+        util.logger.error(traceBack)
+        sg.popup_error(f'{e} \n\n {traceBack}', title='Error',  )   
 
     # TODO start background processes? 
 

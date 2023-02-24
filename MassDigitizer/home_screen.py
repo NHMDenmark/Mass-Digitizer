@@ -36,14 +36,7 @@ class HomeScreen():
         Constructor initializing GUI elements after fetching available institutions 
         """
 
-        try:
-            self.institutions = util.convert_dbrow_list(db.getRowsOnFilters('institution',{'visible = ': 1}))
-        except Exception as e:
-            # Error connecting to database file 
-            self.errorMessage = e
-            util.logger.debug(str(e))
-            sg.popup_cancel(e, title='Error', )            
-            sys.exit(1)
+        self.institutions = util.convert_dbrow_list(db.getRowsOnFilters('institution',{'visible = ': 1}))
         
         header_font = ("Corbel, 17")
         header = [sg.Text(f"DaSSCo Mass Digitizer App - Version {self.version}", size=(58,1), font=header_font, justification='left')]

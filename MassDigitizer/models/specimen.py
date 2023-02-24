@@ -34,7 +34,7 @@ class Specimen(model.Model):
         self.apiname         = 'collectionobject'
         self.id              = 0
         self.catalogNumber   = ''
-        self.multiSpecimen   = 'False'
+        self.multiSpecimen   = ''
         self.taxonFullName   = ''
         self.taxonName       = ''
         self.taxonNameId     = 0
@@ -62,7 +62,6 @@ class Specimen(model.Model):
         self.exported        = 0
         self.exportDateTime  = ''
         self.exportUserId    = ''
-        self.previousRecordEdit = False
 
         # Predefined data fields
         self.storageLocations = None 
@@ -133,38 +132,41 @@ class Specimen(model.Model):
            record: sqliterow object containing specimen record data 
         """
         #model.Model.setFields(self, record)
-        util.logger.debug(f'Initializing specimen record with keys: {record.keys()}')
-        
-        self.id = record['id']
-        self.catalogNumber = record['catalognumber']
-        self.multiSpecimen = record['multispecimen']
-        self.taxonFullName = record['taxonfullname']
-        self.taxonName = record['taxonname']
-        self.taxonNameId = record['taxonnameid']
-        #self.taxonspid = record['taxonspid']
-        self.higherTaxonName = record['highertaxonname']
-        self.typeStatusName = record['typestatusname']
-        self.typeStatusId = record['typestatusid']
-        self.geoRegionName = record['georegionname']
-        self.geoRegionId = record['georegionid']
-        self.storageFullName = record['storagefullname']
-        self.storageName = record['storagename']
-        self.storageId = record['storageid']
-        self.prepTypeName = record['preptypename']
-        self.prepTypeId = record['preptypeid']
-        self.notes = record['notes'] 
-        self.institutionId = record['institutionid']
-        self.institutionName = record['institutionname']
-        self.collectionId = record['collectionid']
-        self.collectionName = record['collectionname']
-        self.userName = record['username']
-        self.userId = record['userid']
+        if record is not None:
+            util.logger.debug(f'Initializing specimen record with keys: {record.keys()}')
+            
+            self.id = record['id']
+            self.catalogNumber = record['catalognumber']
+            self.multiSpecimen = record['multispecimen']
+            self.taxonFullName = record['taxonfullname']
+            self.taxonName = record['taxonname']
+            self.taxonNameId = record['taxonnameid']
+            #self.taxonspid = record['taxonspid']
+            self.higherTaxonName = record['highertaxonname']
+            self.typeStatusName = record['typestatusname']
+            self.typeStatusId = record['typestatusid']
+            self.geoRegionName = record['georegionname']
+            self.geoRegionId = record['georegionid']
+            self.storageFullName = record['storagefullname']
+            self.storageName = record['storagename']
+            self.storageId = record['storageid']
+            self.prepTypeName = record['preptypename']
+            self.prepTypeId = record['preptypeid']
+            self.notes = record['notes'] 
+            self.institutionId = record['institutionid']
+            self.institutionName = record['institutionname']
+            self.collectionId = record['collectionid']
+            self.collectionName = record['collectionname']
+            self.userName = record['username']
+            self.userId = record['userid']
 
-        self.recordDateTime = record['recorddatetime']
-        self.exported = record['exported']
-        self.exportDateTime = record['exportdatetime']
-        self.exportUserId = record['exportuserid']
-        self.agentfullname = record['agentfullname']
+            self.recordDateTime = record['recorddatetime']
+            self.exported = record['exported']
+            self.exportDateTime = record['exportdatetime']
+            self.exportUserId = record['exportuserid']
+            self.agentfullname = record['agentfullname']
+        else:
+            pass
 
         self.loadPredefinedData()
     
@@ -237,20 +239,20 @@ class Specimen(model.Model):
         self.storageId = object.id
         self.storageName = object.name
         self.storageFullName = object.fullName
-    
-    def setTaxonNameFields(self, taxonNameRecord):
+
+    def setTaxonNameFields(self, record):
         """
         Set taxon name fields from selected name record
         CONTRACT
-          taxonNameRecord (sqliterow) : SQLite Row holding taxon name record
+          record (sqliterow) : SQLite Row holding taxon name record
         RETURNS taxonNameId (int) : 
         """
-        if taxonNameRecord is not None: 
-            self.taxonNameId = taxonNameRecord['id'] 
-            self.taxonName = taxonNameRecord['name'] 
-            self.taxonFullName = taxonNameRecord['fullname'] 
-            self.higherTaxonName = taxonNameRecord['parentfullname'] 
-            #self.notes = f"{self.notes} | {taxonNameRecord['notes']}"
+        if record is not None: 
+            self.taxonNameId = record['id'] 
+            self.taxonName = record['name'] 
+            self.taxonFullName = record['fullname'] 
+            self.higherTaxonName = record['parentfullname'] 
+            #self.notes = f"{self.notes} | {record['notes']}"
         else:
             # Empty record 
             self.taxonNameId = 0
@@ -356,3 +358,7 @@ class Specimen(model.Model):
             return ''
         else: 
             return self.storageName
+        
+    def __str__ (self):
+        return f'[{self.table}] id:{self.id}, name:{self.name}, fullname = {self.fullName}, notes = {self.notes}'
+    
