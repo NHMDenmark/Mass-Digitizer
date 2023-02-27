@@ -14,6 +14,7 @@ src/.vscode/launch.json
 .vscode
 *.sqlite3-journal
 .venv
+ENV_DIR
 /MassDigitizer/*.bak
 *.bak
 DaSSCo.build/

@@ -43,6 +43,9 @@ class AutoSuggest_popup():
         self.collectionID = collection_id
         self.collection = coll.Collection(collection_id) 
 
+        # Using 'Model' base object (superclass) to encompass both derived models be it Storage or TaxonName
+        self.autoSuggestObject = None # Set to None as it should be re-instantiated at every capture 
+
         self.suggestions = []
 
         self.window = self.buildGui()
@@ -95,13 +98,13 @@ class AutoSuggest_popup():
         minimumCharacters is an integer on how many key strokes it takes to start the auto-suggester.
         """ 
 
+        # Re-instantiate blank autoSuggest objet 
+        self.autoSuggestObject = model.Model(self.collectionID)
+        self.autoSuggestObject.table = self.tableName
+
         # Resetting base variables 
         select_item = 0 # index of selected item i.e. the position in the listbox 
        
-        # Using 'Model' base object (superclass) to encompass both derived models be it Storage or TaxonName
-        autoSuggestObject = model.Model(self.collectionID)
-        autoSuggestObject.table = self.tableName
-
         # Get GUI input events 
         window = self.window
         window['txtInput'].update(keyStrokes)
@@ -140,106 +143,96 @@ class AutoSuggest_popup():
                     self.handleSuggestions(keystrokes, 'rankid', '=')
                     # Focus back to text input field, to enable user to continue typing 
                     self.window['txtInput'].set_focus()
-
-            # If a suggestion is clicked in the listbox OR 'Enter' is pressed then handle suggested taxon name 
-            if event == 'lstSuggestions' or event == 'btnReturn':
-                #Fix for novel parent name
-                
-                # If there still are entries in the list box then this is a known name and the one selected is handled 
-                if len(values['lstSuggestions']) > 0:
-                    # A known name is selected 
-                    boxVal = values['lstSuggestions']
-                    if self.tableName == 'storage':
-                        column = 'name'
-                        # It makes no sense to search on storage fullname since the distinctive value
-                        # is at the end of a long string.
-                    else:
-                        column = 'fullname'
-
-                    # TODO comment below 
-                    atomicNames = boxVal[0].split('|')
-                    atomic = atomicNames.pop()
-                    atomic = atomic.strip()
-
-                    # TODO comment below 
-                    selected_row = next(row for row in self.suggestions if row[column]==atomic)
-                    selected_row = dict(selected_row)
-                
-                    # TODO comment below 
-                    autoSuggestObject.table         = self.tableName
-                    autoSuggestObject.collectionId  = self.collectionID   
-                    if self.tableName == 'taxonname':
-                        autoSuggestObject.treedefid = self.collection.taxonTreeDefId  
-                        autoSuggestObject.rankid    = 999 # Generic catchall rank id 
-
-                    # If text input box for higher taxon is not available then a known taxon is selected 
-                    if window['frmHiTax'].visible == False: 
-                        # Set taxon name fields for return 
-                        autoSuggestObject.id       = selected_row['id']
-                        autoSuggestObject.spid     = selected_row['spid']
-                        autoSuggestObject.name     = selected_row['name']
-                        autoSuggestObject.fullName = selected_row['fullname']    
-                        autoSuggestObject.parentFullName = selected_row['parentfullname']                        
-                    else: 
-                        # Higher taxon being entered: Set new taxon name fields accordingly
-                        autoSuggestObject.id       = 0
-                        autoSuggestObject.spid     = 0
-                        autoSuggestObject.name     = values['txtInput'].split(' ').pop()
-                        autoSuggestObject.fullName = values['txtInput']
-                        autoSuggestObject.parentFullName = values['lstSuggestions'][0] #selected_row['parentfullname'] 
-                        # TODO rankid              
-                        
-                        window['frmHiTax'].update(visible=False)
-                        window['txtInput'].SetFocus()                        
-                        
-                        autoSuggestObject.save()
-                   
-                    break
-                else:                    
-                    # Since the listbox is empty a new name is assumed 
-
-                    # Only valid in case of taxon name and not storage 
-                    if self.tableName == 'taxonname':
-                        # New taxon name is assumed and higher taxon input field is made available 
-                        window['frmHiTax'].update(visible=True)
-                        window['txtHiTax'].SetFocus()
                                                
-            if values['txtHiTax']:
+            elif event == 'txtHiTax':
                 # Higher taxon is being entered: Update suggestions 
                 higherTaxonName = values['txtHiTax']
                 if len(higherTaxonName) >= minimumCharacters:
                     self.handleSuggestions(values['txtHiTax'].lower(), 140, '=') # Rank Family is assumed (rank id: 140)
 
-            if event == 'btnOK':
+            # If a suggestion is clicked in the listbox OR 'Enter' is pressed then handle suggested taxon name 
+            elif event == 'lstSuggestions' or event == 'btnReturn':
+                #Fix for novel parent name
+                
+                # If there still are entries in the list box then this is a known name and the one selected is handled 
+                if len(values['lstSuggestions']) > 0:
+                    # A known name is selected 
+                    selectedSuggestion = values['lstSuggestions'][0]
+
+                    # Iterate suggestion list until selection is hit 
+                    selected_row = next(row for row in self.suggestions if row['fullname']==selectedSuggestion)
+                    selected_row = dict(selected_row)
+                
+                    # TODO comment below 
+                    self.autoSuggestObject.table         = self.tableName
+                    self.autoSuggestObject.collectionId  = self.collectionID   
+                    if self.tableName == 'taxonname':
+                        self.autoSuggestObject.treedefid = self.collection.taxonTreeDefId  
+                        self.autoSuggestObject.rankid    = 999 # Generic catchall rank id 
+
+                    # If text input box for higher taxon is not available then a known taxon is selected 
+                    if window['frmHiTax'].visible == False: 
+                        # Set taxon name fields for return and escape
+                        self.autoSuggestObject.id       = selected_row['id']
+                        self.autoSuggestObject.spid     = selected_row['spid']
+                        self.autoSuggestObject.name     = selected_row['name']
+                        self.autoSuggestObject.fullName = selected_row['fullname']    
+                        self.autoSuggestObject.parentFullName = selected_row['parentfullname']   
+                        break                     
+                    else: 
+                        # Higher taxon being entered: Set new taxon name fields accordingly
+                        self.autoSuggestObject.id       = 0
+                        self.autoSuggestObject.spid     = 0
+                        self.autoSuggestObject.name     = values['txtInput'].split(' ').pop()
+                        self.autoSuggestObject.fullName = values['txtInput']
+                        self.autoSuggestObject.parentFullName = values['lstSuggestions'][0] #selected_row['parentfullname'] 
+                        # TODO rankid 
+
+                        # 
+                        window['txtHiTax'].Update(self.autoSuggestObject.parentFullName)
+                        
+                        #window['frmHiTax'].update(visible=False)
+                        window['btnOK'].SetFocus()                        
+                        
+                        #self.autoSuggestObject.save()                   
+                    #break # Stay for confirmation of higher taxon entry
+                else:                    
+                    # Since the listbox is empty a new name is assumed 
+                    if self.tableName == 'taxonname':
+                        # New taxon name is assumed and higher taxon input field is made available 
+                        window['frmHiTax'].update(visible=True)
+                        window['txtHiTax'].SetFocus()
+
+            elif event == 'btnOK' :
                 # OK button pressed during new taxon entry
-                autoSuggestObject.table = self.tableName
-                autoSuggestObject.id   = 0
-                autoSuggestObject.spid = 0
-                # autoSuggestObject.name = values['txtInput'].split(' ').pop()
-                autoSuggestObject.name = values['txtInput']
-                autoSuggestObject.fullName = f"{values['txtHiTax']} {autoSuggestObject.name}".strip(' ')
-                #Remove leading whitespace if txtHiTax is empty.
-                autoSuggestObject.collectionId  = self.collectionID
-                taxonomic_comment = f" Verbatim_taxon:{autoSuggestObject.fullName}"
-                autoSuggestObject.notes = taxonomic_comment
-                autoSuggestObject.parentFullName = values['txtHiTax']
-                autoSuggestObject.rankid = 999
-                autoSuggestObject.save()
+                self.autoSuggestObject.table = self.tableName
+                self.autoSuggestObject.id   = 0
+                self.autoSuggestObject.spid = 0
+                # self.autoSuggestObject.name = values['txtInput'].split(' ').pop()
+                self.autoSuggestObject.name = values['txtInput']
+                self.autoSuggestObject.fullName = f"{self.autoSuggestObject.name}".strip(' ')
+                self.autoSuggestObject.collectionId  = self.collectionID
+                taxonomic_comment = f" Verbatim_taxon:{self.autoSuggestObject.fullName}"
+                self.autoSuggestObject.notes = taxonomic_comment
+                self.autoSuggestObject.parentFullName = values['txtHiTax']
+                self.autoSuggestObject.rankid = 999
+                self.autoSuggestObject.save()
                 window['frmHiTax'].update(visible=False)
                 if not values['txtHiTax']:
-                    autoSuggestObject.notes = autoSuggestObject.notes+taxonomic_comment
-                    return autoSuggestObject.notes
+                    self.autoSuggestObject.notes = self.autoSuggestObject.notes+taxonomic_comment
+                    return self.autoSuggestObject.notes
                 else:
                     pass
                 break
-
+        
         if window is not None: 
+            # Escaped event loop: Try to close window 
             try:
                 window.Hide()
             except:
-                pass
+                util.logger.error('Attempt to close autosuggest window failed...')
 
-        return autoSuggestObject
+        return self.autoSuggestObject
 
     def handleSuggestions(self, keyStrokes, rankId=270, rankSign='<='):  # rank id 270 == 'subforma'
         # Fetch suggestions from database based on keystrokes 

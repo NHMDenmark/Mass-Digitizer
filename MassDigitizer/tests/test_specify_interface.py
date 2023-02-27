@@ -15,7 +15,7 @@
 
 import specify_interface
 import global_settings as gs
-from pprint import pprint
+#from pprint import pprint
 from getpass import getpass
 
 class Test_specify_interface():

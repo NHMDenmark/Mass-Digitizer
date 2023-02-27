@@ -12,8 +12,6 @@
   PURPOSE: Generic base class "Model" in the MVC pattern  
 """
 
-import sys
-from pathlib import Path
 import util
 
 # Internal dependencies
@@ -132,7 +130,12 @@ class Model:
         sql = sql + f"AND s.collectionid = {self.collectionId}" # Filter on current collection
         sql = sql + " ORDER BY s.id DESC LIMIT 1 "  
 
-        return self.loadFromSql(sql)
+        record = self.db.loadSingleRecordFromSql(sql)
+
+        if record is not None: 
+            self.setFields(record)
+
+        return record
 
     def loadNext(self, id):
         """
@@ -156,32 +159,29 @@ class Model:
         # Sort on ID to get the latest record out
         sql = sql + " ORDER BY s.id LIMIT 1 "        
 
-        return self.loadFromSql(sql)
+        record = self.db.loadSingleRecordFromSql(sql)
 
-    def loadFromSql(self, sql):
-        # Fetch results from database
-            
-        util.logger.debug(sql)
-        try:
-            results = self.db.executeSqlStatement(sql)
-        except Exception as e:
-            util.logger.error(f"The SQL could not be executed - {e}\n Please check the Statement: \n{sql}")
-            return None
-
-        # If results returned then pick first one, otherwise set record to nothing 
-        if len(results) > 0:
-            record = results.pop()
-            self.id = record[0]
-        else: 
-            record = None
-
-        # If record retrieved set fields 
-        if record:
+        if record is not None: 
             self.setFields(record)
-        
-        # NOTE: If not record retrieved None is returned 
-        return record 
-    
+
+        return record
+
+    def loadOnFullname(self, fullname, collection_id):
+        """
+        Retrieves data and fills instance based on fullname field 
+        CONTRACT 
+            fullname (String)   : fullname field to searched on 
+            collection_id (Int) : primary key of collection to be filtered on 
+        """
+        records = self.db.getRowsOnFilters(self.table, {'fullname': f'={fullname}', 'collectionid' : f'{collection_id}'}, 1)
+        if len(records) > 0: 
+            record = records[0]
+            self.setFields(record)
+        else: 
+            record = None 
+
+        return record
+
 # Functions fully implemented in inheriting classes 
 
     def loadPredefinedData(self):

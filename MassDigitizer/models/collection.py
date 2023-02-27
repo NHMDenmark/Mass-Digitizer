@@ -12,14 +12,8 @@
   PURPOSE: Represent collection data record as "Model" in the MVC pattern  
 """
 
-from datetime import datetime
-
 # Internal dependencies
 from models import model
-from models import discipline
-#import data_access
-import global_settings as gs
-#import specify_interface
 
 class Collection(model.Model):
     """

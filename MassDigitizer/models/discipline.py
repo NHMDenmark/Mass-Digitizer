@@ -12,12 +12,8 @@
   PURPOSE: Represent discipline data record as "Model" in the MVC pattern  
 """
 
-from datetime import datetime
-
 # Internal dependencies
 from models import model
-#import data_access
-import global_settings as gs
 
 class Discipline(model.Model):
     """

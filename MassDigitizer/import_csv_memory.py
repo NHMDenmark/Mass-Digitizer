@@ -15,7 +15,6 @@
 
 import csv, sqlite3
 import time
-import taxonomy_shrinker
 
 con = sqlite3.connect(":memory:")
 # sets the DB to be in memory exclusively

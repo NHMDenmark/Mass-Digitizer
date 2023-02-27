@@ -17,7 +17,6 @@ from datetime import datetime
 
 # Internal dependencies
 from models import model
-from models import discipline
 import data_access
 import global_settings as gs
 import specify_interface

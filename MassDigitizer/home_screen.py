@@ -12,7 +12,6 @@
   PURPOSE: The home screen or starting point of the application, where the user is asked to choose institution and log in.  
 """
 
-import sys
 import PySimpleGUI as sg
 
 # Internal dependencies
