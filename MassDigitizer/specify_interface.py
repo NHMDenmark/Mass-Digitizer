@@ -12,7 +12,6 @@
   PURPOSE: Interface to the Specify API 
 """
 
-import time 
 import requests # Documentation: https://requests.readthedocs.io/en/latest/api/ 
 import json 
 import urllib3

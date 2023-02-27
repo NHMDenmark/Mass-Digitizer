@@ -15,19 +15,16 @@
         IMPORTANT! This is also where the target URL for the Specify7 API instance is set. 
 """
 
-import sys
 import time 
 import logging
 from getpass import getpass
 
 #internal dependencies
-import util
 import specify_interface
 import global_settings as gs 
 import data_exporter
 import GBIF_interface
 
-from models.model import Model
 from models import taxon
 from models import collection as col
 from models import discipline as dsc

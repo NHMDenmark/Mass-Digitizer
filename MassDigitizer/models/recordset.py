@@ -14,7 +14,6 @@
 
 # Internal dependencies
 import util
-from models import model
 from models import specimen
 import data_access
 import global_settings as gs
