@@ -12,7 +12,6 @@
   PURPOSE: Synchronizing local database with Specify 
 """
 
-from ast import Is, Not
 from getpass import getpass
 
 # Internal Dependencies

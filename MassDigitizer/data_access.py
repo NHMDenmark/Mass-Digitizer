@@ -12,7 +12,6 @@
   PURPOSE: Generic Data Access Object for reading/writing local database file
 """
 
-import logging
 import sqlite3
 from pathlib import Path
 
@@ -414,3 +413,26 @@ class DataAccess():
         headers = list(map(lambda x: x[0], self.currentCursor.description))
         self.currentCursor.connection.close()
         return headers
+
+    def loadSingleRecordFromSql(self, sql):
+        """
+        Retrieve single record from database based on sql query
+        """
+            
+        util.logger.debug(sql)
+        try:
+            results = self.executeSqlStatement(sql)
+        except Exception as e:
+            util.logger.error(f"The SQL could not be executed - {e}\n Please check the Statement: \n{sql}")
+            return None
+
+        # If results returned then pick first one, otherwise set record to nothing 
+        if len(results) > 0:
+            record = results.pop()
+            self.id = record[0]
+        else: 
+            record = None
+        
+        # NOTE: If no record retrieved None is returned 
+        return record 
+    
