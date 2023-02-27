@@ -218,11 +218,6 @@ class AutoSuggest_popup():
                 self.autoSuggestObject.rankid = 999
                 self.autoSuggestObject.save()
                 window['frmHiTax'].update(visible=False)
-                if not values['txtHiTax']:
-                    self.autoSuggestObject.notes = self.autoSuggestObject.notes+taxonomic_comment
-                    return self.autoSuggestObject.notes
-                else:
-                    pass
                 break
         
         if window is not None: 

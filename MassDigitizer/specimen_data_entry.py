@@ -353,9 +353,12 @@ class SpecimenDataEntry():
                 self.collobj.typeStatusName = self.window['cbxTypeStatus'].get()
                 self.setFieldFocus('inpNotes')
 
-            elif (event == 'inpNotes_Edit' or event == 'inpNotes_Enter' or event == 'inpNotes_FocusOut'):
+            elif (event == 'inpNotes_Edit' or event == 'inpNotes_Enter'):
                 self.collobj.notes = values['inpNotes']
                 self.setFieldFocus('chkMultiSpecimen')
+            
+            elif event == 'inpNotes_FocusOut':
+                self.collobj.notes = values['inpNotes']
 
             elif (event == 'chkMultiSpecimen' or event == 'chkMultiSpecimen_Enter'):
                 #   
