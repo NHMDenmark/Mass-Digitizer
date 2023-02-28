@@ -300,8 +300,8 @@ class SpecimenDataEntry():
 
     def main(self):
 
-        self.setFieldFocus('inpStorage') # Set focus on storage field
         self.window['inpStorage'].update(select=True) # Select all on field to enable overwriting pre-filled "None" placeholder
+        self.setFieldFocus('inpStorage')              # Set focus on storage field
         self.window['tblPrevious'].update(values=self.recordSet.getAdjacentRecordList(self.tableHeaders)) # 
         
         while True:
@@ -441,6 +441,7 @@ class SpecimenDataEntry():
                     
                 # Reset focus back to first field (Storage)
                 self.setFieldFocus('inpStorage')
+                self.window['inpStorage'].update(select=True) # Select all characters in field 
 
             elif event == 'btnForward':
                 # First get current instance as record
@@ -458,8 +459,6 @@ class SpecimenDataEntry():
                     if current:        
                         # Transfer data in sticky fields to new record:
                         self.setSpecimenFields(True)
-                    # TODO When creating a new record after btnForward, data in sticky fields is not transferred !!!
-
                 else:
                     # Fill form from record data 
                     self.fillFormFields(record)
@@ -470,6 +469,7 @@ class SpecimenDataEntry():
 
                 # Reset focus back to first field (Storage)
                 self.setFieldFocus('inpStorage')
+                self.window['inpStorage'].update(select=True) # Select all characters in field 
 
             elif event == 'btnExport':
                 export_result = dx.exportSpecimens('xlsx')
@@ -589,10 +589,6 @@ class SpecimenDataEntry():
                 # Prepare form for next new record
                 self.clearNonStickyFields(values)             
                 self.setFieldFocus('inpCatalogNumber')
-            else:
-                # Existing record: Stay on record 
-
-                pass
             
             # Refresh adjacent record set 
             self.recordSet.reload(savedRecord)
@@ -629,6 +625,7 @@ class SpecimenDataEntry():
                 # Update UI to indicate selected storage record
                 self.window['txtStorageFullname'].update(selectedStorage.fullName)
                 self.window['inpStorage'].update(selectedStorage.name)
+                self.window['inpStorage'].update(select=True) # Select all characters in field 
 
                 # Move focus to next field (PrepTypes list). 
                 self.setFieldFocus('cbxPrepType')
@@ -697,7 +694,7 @@ class SpecimenDataEntry():
         TODO Method for synchronizing Model with View ... 
         """    
         
-        self.collobj.setStorageFields(self.getStorageRecord())
+        self.collobj.setStorageFieldsFromRecord(self.getStorageRecord())
         self.collobj.setPrepTypeFields(self.window['cbxPrepType'].widget.current())
         self.collobj.setTypeStatusFields(self.window['cbxTypeStatus'].widget.current())
         self.collobj.notes = self.window['inpNotes'].get()
@@ -746,7 +743,7 @@ class SpecimenDataEntry():
             stickyFieldsOnly : Flag for indicating whether only sticky fields should be set
         """
         
-        self.collobj.setStorageFields(self.db.getRowOnId('storage', record['storageid']))
+        self.collobj.setStorageFieldsFromRecord(self.db.getRowOnId('storage', record['storageid']))
         self.collobj.setPrepTypeFields(self.window['cbxPrepType'].widget.current())
         self.collobj.setTypeStatusFields(self.window['cbxTypeStatus'].widget.current())
         self.collobj.notes = record['notes']
@@ -800,7 +797,7 @@ class SpecimenDataEntry():
             field.update('')
         
         # Storage location is set to "None" to represent a blank entry in the UI
-        self.window['inpStorage'].update('None')
+        #self.window['inpStorage'].update('None')
 
     def clearForm(self):
         """
