@@ -326,7 +326,7 @@ class SpecimenDataEntry():
                     else: fieldIndex = 0 # End of sequence: Loop around to first field 
                     fieldName = self.inputFieldList[fieldIndex]
                     self.setFieldFocus(fieldName)
-                #self.tabToInputField(1) # Move to next input field  # TODO common method
+                #self.tabToInputField(1) # Move to next input field  # TODO common method for the above lines? 
             
             elif event == 'Shift-Tab':
                  # When tabbing, find the next field in the sequence and set focus on that field 
@@ -337,10 +337,10 @@ class SpecimenDataEntry():
                     else: fieldIndex = len(self.inputFieldList) - 1 # Beginning of sequence: Loop around to last field 
                     fieldName = self.inputFieldList[fieldIndex]
                     self.setFieldFocus(fieldName)
-                #self.tabToInputField(-1) # Move to preceding input field # TODO common method
+                #self.tabToInputField(-1) # Move to preceding input field # TODO common method for the above lines? 
 
             elif event.endswith('_Tab'):
-                # TODO Uncertain value
+                # TODO Re-evaluate the need for this event originally set for inpTaxonName and inpNotes
                 util.logger.debug(f'field {event[0:-4]} tabbed')
 
             elif event == 'cbxPrepType':
@@ -504,11 +504,11 @@ class SpecimenDataEntry():
 
     def setFieldFocus(self, fieldName):
         """
-        TODO 
+        Common method for shifting focus to a specified input field as picked from array self.inputFieldList 
+        CONTRACT 
+            fieldName (String) : Name of the input field to receive focus
         """
-
-        #return  # Disable function
-                
+        
         # Iterate focus indicators and hide all 
         for field in self.focusIconList:
             self.window[field].update(visible=False)
@@ -518,14 +518,15 @@ class SpecimenDataEntry():
             if field[0:3] == 'inp':
                 self.window[field].update(background_color='#ffffff')
         
+        # If field name has been specified shift focus: 
         if fieldName != '':
             self.window[fieldName].set_focus()              # Set focus on field 
             #self.window[fieldName].update(select=True)     # Select all contents of field (TODO Doesn't work for combo lists)
             indicatorName = 'inr' + fieldName[3:]           # Derive focus indicator name 
             self.window[indicatorName].update(visible=True) # Unhide focus indicator 
             if fieldName[0:3] == 'inp':
-                #self.window[fieldName].update(background_color=self.highlight)
-                pass # TODO Deactivated, because comboboxes won't play nice and also allow for changing background colour 
+                self.window[fieldName].update(background_color=self.highlight)
+            # TODO Comboboxes won't play nice and also allow for changing background colour 
             elif fieldName[0:3] == 'cbx':
                 self.window[fieldName].ttk_style.configure(self.window[fieldName].ttk_style_name, fieldbackground=self.highlight)
         
@@ -533,21 +534,26 @@ class SpecimenDataEntry():
             self.fieldInFocusIndex = self.inputFieldList.index(fieldName)
         # If fieldName is empty then all indicators are left unset 
 
-        util.logger.debug(f'set focus on: {fieldName}')
+        util.logger.debug(f'Shifted focus on input field: "{fieldName}"')
 
     def saveForm(self, values):
         """
-        TODO Function contract 
+        Saving specimen data to database including validation of form input fields.  
+        The contents of the form input fields should have been immediately been transferred to the fields of the specimen object instance. 
+        A final validation and transfer of selected input fields is still performed to ensure data integrity.   
         """
         result = ''
         try:
             
+            # Make sure that contents of notes input field are transferred to specimen object instance 
             self.collobj.notes = self.window['inpNotes'].Get()
             
+            # Get and validate contents of multispecimen input field 
             multispecimenName = self.window['inpMultiSpecimen'].get().strip()
             if values['chkMultiSpecimen'] == True:
                 # If the multispecimen checkbox has been checked then the name field mustn't be empty ! 
                 if multispecimenName != '':
+                    # If there are contents ensure that these are transferred to the the specimen object instance 
                     self.collobj.multiSpecimen = multispecimenName
                 else:
                     validationMessage = "Attempt to save with empty multispecimen name blocked!"
@@ -555,19 +561,22 @@ class SpecimenDataEntry():
                     sg.PopupError(validationMessage)
                     return
             
+            # Validating of catalog number input field 
             if values['inpCatalogNumber'] == '':
                 # Barcode (catalog number) must not be empty!
                 validationMessage = "Cannot leave barcode empty!"
                 util.logger.error(validationMessage)
                 sg.PopupError(validationMessage)
                 return
-
+            
             if len(values['inpCatalogNumber']) != 8:
                 # Barcode (catalog number) must be 8 digits!
                 validationMessage = "Barcode incorrect length (8)!"
                 util.logger.error(validationMessage)
                 sg.PopupError(validationMessage)
                 return
+
+            self.collobj.catalogNumber = values['inpCatalogNumber']
 
             # Check if either updating existing or saving new record 
             if self.collobj.id == 0: newRecord = True
@@ -608,7 +617,7 @@ class SpecimenDataEntry():
  
     def handleStorageInput(self, keyStrokes):
         """
-        TODO Function contract 
+        Show autosuggest popup for Storage selection and handle input from that window. 
         """
 
         try:
@@ -640,8 +649,8 @@ class SpecimenDataEntry():
 
     def handleTaxonNameInput(self, keyStrokes):
         """
-        TODO Function contract 
-        """               
+        Show autosuggest popup for Taxon Name selection and handle input from that window. 
+        """              
         
         try:
             self.autoTaxonName.Show()
@@ -674,6 +683,9 @@ class SpecimenDataEntry():
         return ''
 
     def handleMultiSpecimenCheck(self, value):
+        """
+        Handle event from MultiSpecimen checkbox 
+        """
         inpMultiSpecimenNewValue = ''
         if self.collobj.multiSpecimen == '':
             # Multispecimen field not yet set: Unhide field and generate random name 
@@ -691,9 +703,12 @@ class SpecimenDataEntry():
 
     def setSpecimenFields(self, stickyFieldsOnly=True):
         """
-        TODO Method for synchronizing Model with View ... 
+        Method for synchronizing specimen data object instance (Model) with form input fields (View).
+        CONTRACT 
+            stickyFieldsOnly (Boolean) : Indication of only sticky fields should be synchronized usually in case of a new blank record 
         """    
         
+        # Set specimen object instance fields from input form 
         self.collobj.setStorageFieldsFromRecord(self.getStorageRecord())
         self.collobj.setPrepTypeFields(self.window['cbxPrepType'].widget.current())
         self.collobj.setTypeStatusFields(self.window['cbxTypeStatus'].widget.current())
@@ -702,6 +717,7 @@ class SpecimenDataEntry():
         self.collobj.setGeoRegionFields(self.window['cbxGeoRegion'].widget.current())
         self.collobj.setTaxonNameFields(self.getTaxonNameRecord())
 
+        # Include non-sticky fields usually in case of synchronizing an existing record 
         if not stickyFieldsOnly:
             txtRecordId = self.window['txtRecordID'].get() 
             if txtRecordId != '': 
@@ -713,9 +729,11 @@ class SpecimenDataEntry():
         
     def getStorageRecord(self):
         """
-        TODO
+        Retrieve storage record based on storage input field contents. 
+        Search is to be done on fullname since identical atomic values can occur across the storage tree with different parentage. 
         """
-        storageFullName = self.window['txtStorageFullname'].get()
+
+        storageFullName = self.window['txtStorageFullname'].get() 
         storageRecords = self.db.getRowsOnFilters('storage', {'fullname': f'="{storageFullName}"', 'collectionid' : f'={self.collectionId}'}, 1)
         if len(storageRecords) > 0: 
             storageRecord = storageRecords[0]
@@ -725,7 +743,8 @@ class SpecimenDataEntry():
     
     def getTaxonNameRecord(self):
         """
-        TODO
+        Retrieve taxon name record based on taxon name input field contents. 
+        Search is to be done on taxon fullname and taxon tree definition derived from collection. 
         """
         taxonFullName = self.window['inpTaxonName'].get()
         taxonRecords = self.db.getRowsOnFilters('taxonname', {'fullname': f'="{taxonFullName}"', 'treedefid' : f'={self.collection.taxonTreeDefId}'}, 1)
