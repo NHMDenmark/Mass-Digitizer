@@ -132,7 +132,7 @@ class SpecimenDataEntry():
             sg.Text('Notes', size=captionSize, background_color=greenArea, font=captionFont),
             #sg.Text(indicatorLeft, key='inlNotes', text_color='black', background_color=greenArea, visible=True, font=wingdingFont),
             sg.InputText(size=(80,5), key='inpNotes', pad=(0,0), enable_events=False, font=fieldFont, background_color='white', text_color='black'),
-            sg.Text(indicatorRight, key='inrNotes', background_color=greenArea, visible=False, font=wingdingFont)
+            sg.Text(indicatorRight,   key='inrNotes', background_color=greenArea, visible=False, font=wingdingFont)
             ]
 
         multispecimen = [
@@ -171,7 +171,7 @@ class SpecimenDataEntry():
 
         self.headers = ['id', 'spid',  'catalognumber',   'multispecimen', 'taxonfullname',  'taxonname',    'taxonnameid',
                         'taxonspid',   'highertaxonname', 'preptypename',  'typestatusname', 'typestatusid', 'georegionname', 
-                        'georegionid', 'storagefullname', 'storagename']
+                        'georegionid', 'storagefullname', 'storagename'] # TODO Not currently used 
         self.tableHeaders = ['id', 'catalognumber', 'taxonfullname', 'multispecimen', 'georegionname', 'storagename', 'notes'] # Headers for previousRecordsTable
 
         lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
@@ -229,11 +229,8 @@ class SpecimenDataEntry():
         layout = [[
             sg.Frame('', layoutTitle, size=(550, 100), pad=(0, 0), background_color=greyArea, border_width=0),
             sg.Frame('', layoutMeta, size=(500, 120), pad=(0, 0), border_width=0, background_color=greyArea)],
-            [sg.Frame('', [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(250, 185),
-                      background_color=greenArea, expand_x=True, ), ],  # expand_y=True,
-            [sg.Frame('', [[sg.Column(layout_bluearea, background_color=blueArea)]],
-                      title_location=sg.TITLE_LOCATION_TOP,
-                      background_color=blueArea, expand_x=True, expand_y=True, )], ]  #
+            [sg.Frame('', [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(250, 185), background_color=greenArea, expand_x=True, ), ],  # expand_y=True,
+            [sg.Frame('', [[sg.Column(layout_bluearea, background_color=blueArea)]], title_location=sg.TITLE_LOCATION_TOP, background_color=blueArea, expand_x=True, expand_y=True, )], ]  
 
         # Launch window
         self.window = sg.Window("Mass Annotated Digitization Desk (MADD)", layout, margins=(2, 2), size=(1024, 540),
