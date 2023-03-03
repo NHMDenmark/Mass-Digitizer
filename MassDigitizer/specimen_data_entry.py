@@ -453,9 +453,9 @@ class SpecimenDataEntry():
                     self.collobj = specimen.Specimen(self.collectionId)
                     self.clearNonStickyFields(values)
 
-                    if current:        
-                        # Transfer data in sticky fields to new record:
-                        self.setSpecimenFields(True)
+                    #if current: # TODO Unsure what this line was intended for, but it caused sticky fields not being transferred when btnForwards was pressed once more than necessary 
+                    # Transfer data in sticky fields to new record:
+                    self.setSpecimenFields(True)
                 else:
                     # Fill form from record data 
                     self.fillFormFields(record)
