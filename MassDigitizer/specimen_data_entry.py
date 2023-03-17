@@ -49,12 +49,10 @@ class SpecimenDataEntry():
         self.recordSet = recordset.RecordSet(collection_id, 3) # Create recordset of last 3 saved records 
         
         # Various lists of fields to be cleared on command 
-        self.inputFieldList  = ['inpStorage',  'cbxPrepType',  'cbxTypeStatus',  'inpNotes',  'chkMultiSpecimen',  'cbxGeoRegion',  'inpTaxonName',  'inpCatalogNumber']
-        self.focusIconList   = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrNotes', 'inrMultiSpecimen', 'inrGeoRegion', 'inrTaxonName', 'inrCatalogNumber']
-        self.clearingList    = ['inpStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'inpNotes','chkMultiSpecimen', 
-                                'cbxGeoRegion', 'inpTaxonName', 'inpCatalogNumber', 'txtRecordID','inpMultiSpecimen']
-        self.stickyFields    = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'inpNotes'},
-                                {'chkMultiSpecimen'}, {'inpMultiSpecimen'}, {'cbxGeoRegion'}, {'inpTaxonName'}]
+        self.inputFieldList  = ['inpStorage',  'cbxPrepType', 'cbxTypeStatus', 'inpNotes', 'chkMultiSpecimen', 'cbxGeoRegion', 'inpTaxonName', 'inpCatalogNumber']
+        self.focusIconList   = ['inrStorage',  'inrPrepType', 'inrTypeStatus', 'inrNotes', 'inrMultiSpecimen', 'inrGeoRegion', 'inrTaxonName', 'inrCatalogNumber']
+        self.clearingList    = ['inpStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'inpNotes','chkMultiSpecimen', 'cbxGeoRegion', 'inpTaxonName', 'inpCatalogNumber', 'txtRecordID','inpMultiSpecimen']
+        self.stickyFields    = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'inpNotes'}, {'chkMultiSpecimen'}, {'inpMultiSpecimen'}, {'cbxGeoRegion'}, {'inpTaxonName'}]
         self.nonStickyFields = ['inpCatalogNumber', 'txtRecordID']
 
         # Global variables 
@@ -277,23 +275,12 @@ class SpecimenDataEntry():
         self.window['btnSave'].bind("<Return>", "_Enter")
 
         # Input field focus events
-        self.window['inpStorage'].bind('<FocusIn>', '_FocusIn')
-        #self.window['inpStorage'].bind('<FocusOut>', '_FocusOut')
-        self.window['cbxPrepType'].bind('<Click>', '_FocusIn')
-        #self.window['cbxPrepType'].bind('<FocusOut>', '_FocusOut')
-        self.window['cbxTypeStatus'].bind('<Click>', '_FocusIn')
-        #self.window['cbxTypeStatus'].bind('<FocusOut>', '_FocusOut')
-        self.window['inpNotes'].bind('<FocusIn>', '_FocusIn')
+        for fieldName in self.inputFieldList:
+            eventName = ''
+            if fieldName[0:3]   == 'inp': eventName = '<FocusIn>'
+            elif fieldName[0:3] == 'cbx': eventName = '<Click>'
+            self.window[fieldName].bind(eventName, '_FocusIn')
         self.window['inpNotes'].bind('<FocusOut>', '_FocusOut')
-        ##self.window['chkMultiSpecimen'].bind('<FocusIn>', '_FocusIn')
-        ##self.window['chkMultiSpecimen'].bind('<FocusOut>', '_FocusOut')
-        self.window['cbxGeoRegion'].bind('<Click>', '_FocusIn')
-        #self.window['cbxGeoRegion'].bind('<FocusOut>', '_FocusOut')
-        #self.window['chkMultiSpecimen'].bind('<ButtonPress-1>', '_Button1')
-        self.window['inpTaxonName'].bind('<FocusIn>', '_FocusIn')
-        #self.window['inpTaxonName'].bind('<FocusOut>', '_FocusOut')
-        self.window['inpCatalogNumber'].bind('<FocusIn>', '_FocusIn')
-        #self.window['inpCatalogNumber'].bind('<FocusOut>', '_FocusOut')
 
     def main(self):
 
@@ -322,7 +309,7 @@ class SpecimenDataEntry():
                         fieldIndex = self.fieldInFocusIndex + 1
                     else: fieldIndex = 0 # End of sequence: Loop around to first field 
                     fieldName = self.inputFieldList[fieldIndex]
-                    self.setFieldFocus(fieldName)
+                self.setFieldFocus(fieldName)
                 #self.tabToInputField(1) # Move to next input field  # TODO common method for the above lines? 
             
             elif event == 'Shift-Tab':
@@ -404,7 +391,7 @@ class SpecimenDataEntry():
             # **** Focus Events ****
 
             elif event.endswith('_FocusIn'):
-                self.setFieldFocus(event[0:-8])
+                self.setFieldFocus(event[0:-8]) # Remove "_FocusIn" from event so we get the actual fieldname 
 
             # **** Button Events ****
 
@@ -522,7 +509,7 @@ class SpecimenDataEntry():
             indicatorName = 'inr' + fieldName[3:]           # Derive focus indicator name 
             self.window[indicatorName].update(visible=True) # Unhide focus indicator 
             if fieldName[0:3] == 'inp':
-                self.window[fieldName].update(background_color=self.highlight)
+                self.window[fieldName].update(background_color='#ffffff') #self.highlight) # TODO Disabled until we get comboboxes to work
             # TODO Comboboxes won't play nice and also allow for changing background colour 
             elif fieldName[0:3] == 'cbx':
                 self.window[fieldName].ttk_style.configure(self.window[fieldName].ttk_style_name, fieldbackground=self.highlight)
