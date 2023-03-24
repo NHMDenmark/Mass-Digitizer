@@ -1,4 +1,7 @@
+
   -- To be run on Specify database for each collection 
+
+-- To be run on Specify database for each collection 
 SELECT CONCAT('("', t1.unit, '",', CONCAT( t1.stor), ' | ', t1.unit, '", ', '"',t1.rank_name, '", ', '(SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1)),') AS storage_  FROM
 (
 SELECT CONCAT_WS(' | ', '"Natural History Museum of Denmark' , t1.Name , t2.name ) AS stor, stdi.name AS rank_name,
@@ -11,3 +14,6 @@ LEFT JOIN storage AS t3 ON t3.parentID = t2.storageID
 LEFT JOIN storagetreedefitem stdi ON t3.RankID = stdi.RankID
 WHERE t1.Name IN ( 'Priorparken') AND t2.Name LIKE ('Herbarium%')
 )t1;
+-- The query is only three levels deep which makes it managable with LEFT JOINs. 
+-- After running the query please remove the very last comma in the file.
+
