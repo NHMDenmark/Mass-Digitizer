@@ -162,17 +162,23 @@ class AutoSuggest_popup():
                     # Iterate suggestion list until selection is hit 
                     selected_row = next(row for row in self.suggestions if row['fullname']==selectedSuggestion)
                     selected_row = dict(selected_row)
-                
+
                     # TODO comment below 
                     self.autoSuggestObject.table         = self.tableName
                     self.autoSuggestObject.collectionId  = self.collectionID   
                     if self.tableName == 'taxonname':
                         self.autoSuggestObject.treedefid = self.collection.taxonTreeDefId  
-                        self.autoSuggestObject.rankid    = 999 # Generic catchall rank id 
+                        self.autoSuggestObject.rankid    = 999 # Generic catchall rank id
+
+                    if self.tableName == 'storage': #STORAGE
+                        # Populate the object as storage
+                        self.autoSuggestObject.name     = selected_row['name']
+                        self.autoSuggestObject.fullName = selected_row['fullname']
+                        self.autoSuggestObject.rankName = selected_row['storagerankname']
 
                     # If text input box for higher taxon is not available then a known taxon is selected 
                     if window['frmHiTax'].visible == False: 
-                        # Set taxon name fields for return and escape
+                        # Set taxon name fields for return and escape since no higher taxon is necessary.
                         self.autoSuggestObject.id       = selected_row['id']
                         self.autoSuggestObject.spid     = selected_row['spid']
                         self.autoSuggestObject.name     = selected_row['name']
