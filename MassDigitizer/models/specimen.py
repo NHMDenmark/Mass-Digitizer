@@ -47,6 +47,7 @@ class Specimen(model.Model):
         self.storageFullName = ''
         self.storageName     = ''
         self.storageId       = 0
+        self.storageRankName = ''
         self.prepTypeName    = ''
         self.prepTypeId      = 0
         self.notes           = ''
@@ -106,6 +107,7 @@ class Specimen(model.Model):
                 'storagefullname': f'"{self.storageFullName}"',
                 'storagename':     f'"{self.getStorageName()}"',
                 'storageid':       f'"{self.storageId}"',
+                'storageRankName': f'"{self.storageRankName}"',
                 'preptypename':    f'"{self.prepTypeName}"',
                 'preptypeid':      f'"{self.prepTypeId}"',
                 'notes':           f'"{self.notes}"',
@@ -132,6 +134,7 @@ class Specimen(model.Model):
            record: sqliterow object containing specimen record data 
         """
         #model.Model.setFields(self, record)
+        # print('record!!!!!!!!!', [j for j in record])
         if record is not None:
             util.logger.debug(f'Initializing specimen record with keys: {record.keys()}')
             
@@ -150,6 +153,7 @@ class Specimen(model.Model):
             self.storageFullName = record['storagefullname']
             self.storageName = record['storagename']
             self.storageId = record['storageid']
+            self.storageRankName = record['storagerankname']
             self.prepTypeName = record['preptypename']
             self.prepTypeId = record['preptypeid']
             self.notes = record['notes'] 
@@ -229,7 +233,8 @@ class Specimen(model.Model):
         """
         self.storageId = self.storageLocations[index]['id']
         self.storageName = self.storageLocations[index]['name']
-        self.storageFullName = self.storageLocations[index]['fullname']     
+        self.storageFullName = self.storageLocations[index]['fullname']
+        self.storageRankName = self.storageLocations[index]['storagerankname']
 
     def setStorageFieldsFromRecord(self, storageRecord):
         """
@@ -242,7 +247,8 @@ class Specimen(model.Model):
         if storageRecord is not None: 
             self.storageId = storageRecord['id'] 
             self.storageName = storageRecord['name']
-            self.storageFullName = storageRecord['fullname'] 
+            self.storageFullName = storageRecord['fullname']
+            self.storageRankName = storageRecord['storagerankname']
         else:
             # Empty record 
             self.storageId = 0
@@ -257,6 +263,8 @@ class Specimen(model.Model):
         self.storageId = object.id
         self.storageName = object.name
         self.storageFullName = object.fullName
+        self.storageRankName = object.rankName
+        print("self.storageRankName = object.rankName", self.storageRankName)
 
     def setTaxonNameFields(self, record):
         """
@@ -293,7 +301,8 @@ class Specimen(model.Model):
         if resultsRowCount == 1:
             self.storageId = storageRecord[0]['id'] 
             self.storageName = storageRecord[0]['name'] 
-            self.storageFullName = storageRecord[0]['fullname'] 
+            self.storageFullName = storageRecord[0]['fullname']
+            self.storageFullName = storageRecord[0]['storagerankname']
         elif resultsRowCount == 0:
             # Unknown storage full name, add verbatim 
             self.storageFullName = storageFullName 
