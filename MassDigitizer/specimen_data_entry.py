@@ -19,6 +19,7 @@ either express or implied. See the License for the specific language governing p
 
 import traceback
 import PySimpleGUI as sg
+import sys
 
 # Internal dependencies
 import util
@@ -442,7 +443,7 @@ class SpecimenDataEntry():
 
                     #if current: # TODO Unsure what this line was intended for, but it caused sticky fields not being transferred when btnForwards was pressed once more than necessary 
                     # Transfer data in sticky fields to new record:
-                    self.setSpecimenFields(True)
+                    self.setSpecimenFields()
                 else:
                     # Fill form from record data 
                     self.fillFormFields(record)
@@ -528,23 +529,21 @@ class SpecimenDataEntry():
         """
         result = ''
         try:
-            
             # Make sure that contents of notes input field are transferred to specimen object instance 
             self.collobj.notes = self.window['inpNotes'].Get()
-            
+
             # Get and validate contents of multispecimen input field 
             multispecimenName = self.window['inpMultiSpecimen'].get().strip()
             if values['chkMultiSpecimen'] == True:
-                # If the multispecimen checkbox has been checked then the name field mustn't be empty ! 
+                # If the multispecimen checkbox has been checked then the name field mustn't be empty !
                 if multispecimenName != '':
-                    # If there are contents ensure that these are transferred to the the specimen object instance 
+                    # If there are contents ensure that these are transferred to the the specimen object instance
                     self.collobj.multiSpecimen = multispecimenName
                 else:
                     validationMessage = "Attempt to save with empty multispecimen name blocked!"
                     util.logger.error(validationMessage)
                     sg.PopupError(validationMessage)
                     return
-            
             # Validating of catalog number input field 
             if values['inpCatalogNumber'] == '':
                 # Barcode (catalog number) must not be empty!
@@ -569,16 +568,16 @@ class SpecimenDataEntry():
             # All checks out; Save specimen and clear non-sticky fields 
             savedRecord = self.collobj.save()
 
-            # Remember id of record just save and prepare for blank record 
+            # Remember id of record just save and prepare for blank record
             previousRecordId = savedRecord['id'] # Id to be used for refreshing the previous rows table.
 
-            if newRecord:            
+            if newRecord:
+
                 # Create a new, blank specimen record (id pre-set to 0)
                 self.collobj = specimen.Specimen(self.collectionId)
                             
                 # Transfer data in sticky fields to new record:
-                self.setSpecimenFields(True)
-
+                self.setSpecimenFields()
                 # Prepare form for next new record
                 self.clearNonStickyFields(values)             
                 self.setFieldFocus('inpCatalogNumber')
@@ -627,7 +626,7 @@ class SpecimenDataEntry():
             util.logger.error(str(e))
             traceBack = traceback.format_exc()
             util.logger.error(traceBack)
-            sg.popup_error(f'{e} \n\n {traceBack}', title='Error',  )  
+            sg.popup_error(f'{e} \n\n {traceBack}', title='Error handle storage input',  )
         
         return ''
 
@@ -662,7 +661,7 @@ class SpecimenDataEntry():
             util.logger.error(str(e))
             traceBack = traceback.format_exc()
             util.logger.error(traceBack)
-            sg.popup_error(f'{e} \n\n {traceBack}', title='Error',  )   
+            sg.popup_error(f'{e} \n\n {traceBack}', title='Error handleTaxonNameInput',  )
         
         return ''
 
@@ -692,7 +691,8 @@ class SpecimenDataEntry():
             stickyFieldsOnly (Boolean) : Indication of only sticky fields should be synchronized usually in case of a new blank record 
         """    
         
-        # Set specimen object instance fields from input form 
+        # Set specimen object instance fields from input form
+
         self.collobj.setStorageFieldsFromRecord(self.getStorageRecord())
         self.collobj.setPrepTypeFields(self.window['cbxPrepType'].widget.current())
         self.collobj.setTypeStatusFields(self.window['cbxTypeStatus'].widget.current())
@@ -700,8 +700,7 @@ class SpecimenDataEntry():
         self.collobj.multiSpecimen = self.window['inpMultiSpecimen'].get()
         self.collobj.setGeoRegionFields(self.window['cbxGeoRegion'].widget.current())
         self.collobj.setTaxonNameFields(self.getTaxonNameRecord())
-
-        # Include non-sticky fields usually in case of synchronizing an existing record 
+        # Include non-sticky fields usually in case of synchronizing an existing record
         if not stickyFieldsOnly:
             txtRecordId = self.window['txtRecordID'].get() 
             if txtRecordId != '': 
@@ -716,13 +715,18 @@ class SpecimenDataEntry():
         Retrieve storage record based on storage input field contents. 
         Search is to be done on fullname since identical atomic values can occur across the storage tree with different parentage. 
         """
-
-        storageFullName = self.window['txtStorageFullname'].get() 
-        storageRecords = self.db.getRowsOnFilters('storage', {'fullname': f'="{storageFullName}"', 'collectionid' : f'={self.collectionId}'}, 1)
-        if len(storageRecords) > 0: 
+        storageFullName = self.window['inpStorage'].get()
+        try:
+                storageRecords = self.db.getRowsOnFilters('storage', {'fullname': f'="{storageFullName}"', 'collectionid' : f'={self.collectionId}'}, 1)
+        except:
+            e = sys.exc_info()[0]+' from getStorageRecord'
+            util.logger.error(e)
+            return None
+        if len(storageRecords) > 0:
             storageRecord = storageRecords[0]
-        else: 
-            storageRecord = None 
+        else:
+            storageRecord = None
+
         return storageRecord
     
     def getTaxonNameRecord(self):
@@ -735,7 +739,7 @@ class SpecimenDataEntry():
         if len(taxonRecords) > 0: 
             taxonRecord = taxonRecords[0]
         else: 
-            taxonRecord = None 
+            taxonRecord = None # For NHM entomology there are no storage.
         return taxonRecord
 
     def setRecordFields(self, record, stickyFieldsOnly=False):

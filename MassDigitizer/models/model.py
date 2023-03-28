@@ -12,12 +12,18 @@
   PURPOSE: Generic base class "Model" in the MVC pattern  
 """
 
-import util
-
+import os
+import sys
 # Internal dependencies
-import data_access
+current = os.path.dirname(os.path.realpath(__file__))
+parent = os.path.dirname(current)
+sys.path.append(parent)
+# from .. import *
+# import
 import global_settings as gs
 import specify_interface
+import util
+import data_access
 
 class Model:
     """

@@ -72,6 +72,14 @@ class HomeScreen():
 
         self.main()
 
+    def atomizeUserName(self, username):
+        # Output will be formatted into [firstName] [middleInitial] [LastName]
+        atomized = username.split('.')
+        fname = atomized[0]
+        middleInit = atomized[1:len(atomized)-1] #Takes all between 1st and last element in list
+        lname = atomized[len(atomized) - 1]
+        return [fname, ' '.join(middleInit), lname]
+
     def main(self):
         """
         Main loop of execution responding to user input 
@@ -111,7 +119,11 @@ class HomeScreen():
                             gs.csrfToken = sp.specifyLogin(username, password, collection[0]['spid'])
 
                             if gs.csrfToken != '':
-                                # Login was successfull 
+                                # Login was successfull
+                                splitName = self.atomizeUserName(username)
+                                gs.spFirstName = splitName[0]
+                                gs.spMiddleInit = splitName[1]
+                                gs.spLastName = splitName[2]
                                 gs.spUserName = username
                                 gs.collectionId = collection_id
                                 gs.collectionName = selected_collection

@@ -174,7 +174,7 @@ class AutoSuggest_popup():
                         # Populate the object as storage
                         self.autoSuggestObject.name     = selected_row['name']
                         self.autoSuggestObject.fullName = selected_row['fullname']
-                        self.autoSuggestObject.rankName = selected_row['storagerankname']
+                        self.autoSuggestObject.rankName = selected_row['rankname']
 
                     # If text input box for higher taxon is not available then a known taxon is selected 
                     if window['frmHiTax'].visible == False: 
