@@ -1,4 +1,4 @@
-INSERT INTO storage (name, fullname, storagerankname, collectionid) VALUES
+INSERT INTO storage (name, fullname, rankname, collectionid) VALUES
 ("Box 1", "Natural History Museum of Denmark | Priorparken | Herbarium C: Danish Vascular Plant Collection | Box 1","Box",(SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1)), 
 ("Box 2", "Natural History Museum of Denmark | Priorparken | Herbarium C: Danish Vascular Plant Collection | Box 2","Box",(SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1)), 
 ("Box 3", "Natural History Museum of Denmark | Priorparken | Herbarium C: Danish Vascular Plant Collection | Box 3","Box",(SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1)), 
