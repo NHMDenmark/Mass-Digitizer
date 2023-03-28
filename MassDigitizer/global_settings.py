@@ -21,12 +21,12 @@ db_in_memory = False
 
 # session 
 institutionId = 0
-institutionName = '-not set-'
+institutionName = ''
 collectionId = 0
-collectionName = '-not set-'
-spFirstName = '-not set-'
-spMiddleInitial = '-not set-'
-spLastName = '-not set-'
+collectionName = ''
+spFirstName = ''
+spMiddleInitial = ''
+spLastName = ''
 spUserId = -1
 agentFullName = ' '.join([spFirstName, spMiddleInitial, spLastName])
 csrfToken = ''
