@@ -175,22 +175,3 @@ class Struct:
     """A structure that can have any fields defined."""
     def __init__(self, **entries): self.__dict__.update(entries)
 
-# def obtainVersionNumber(filepath, keyWord):
-#    """
-#    Obtain application version number from iss Inno setup file.
-#    """
-#
-#    with open(filepath, mode='r') as f:
-#         text = f.readlines()
-#         version = ''
-#         for line in text:
-#             # check if string present on a current line
-#             keyWord = '#define MyAppVersion'
-#             # print(row.find(word))
-#             # find() method returns -1 if the value is not found,
-#             # if found it returns index of the first occurrence of the substring
-#             if line.find(keyWord) != -1:
-#                 versionSplit = line.split(' ')
-#                 versionPop = versionSplit.pop()
-#                 # print(versionPop.replace('"', ''))
-#                 return versionPop.replace('"', '')

@@ -24,9 +24,11 @@ institutionId = 0
 institutionName = '-not set-'
 collectionId = 0
 collectionName = '-not set-'
-spUserName = '-not set-'
+spFirstName = '-not set-'
+spMiddleInitial = '-not set-'
+spLastName = '-not set-'
 spUserId = -1
-agentFullName = ''
+agentFullName = ' '.join([spFirstName, spMiddleInitial, spLastName])
 csrfToken = ''
 
 def clearSession():
