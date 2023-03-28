@@ -12,14 +12,22 @@
   PURPOSE: Represent specimen data record as "Model" in the MVC pattern  
 """
 
+import os
+import sys
 from datetime import datetime
+# Internal dependencies
+current = os.path.dirname(os.path.realpath(__file__))
+parent = os.path.dirname(current)
+sys.path.append(parent)
 
 # Internal dependencies
-import util
-from models import model
-import global_settings as gs
 
-class Specimen(model.Model):
+from .model import Model
+import global_settings as gs
+import util
+
+
+class Specimen(Model):
     """
     The specimen class is a representation of a specimen record to hold its data
     Any instance is either an existing record in the database or transient pending an insert
@@ -29,7 +37,7 @@ class Specimen(model.Model):
         """
         Set up blank specimen record instance for data entry on basis of collection id 
         """ 
-        model.Model.__init__(self, collection_id)
+        Model.__init__(self, collection_id)
         self.table           = 'specimen'   
         self.apiname         = 'collectionobject'
         self.id              = 0
@@ -57,7 +65,10 @@ class Specimen(model.Model):
         self.collectionName  = gs.collectionName
         self.userName        = gs.spUserName
         self.userId          = gs.spUserId
-        self.agentfullname   = gs.agentFullName
+        # self.agentfullname   = gs.agentFullName
+        self.firstName       = gs.spFirstName
+        self.middleInitial      = gs.spMiddleInitial
+        self.lastName        = gs.spLastName
         # self.workStation     = ''
         self.recordDateTime  = str(datetime.now())
         self.exported        = 0
@@ -107,7 +118,7 @@ class Specimen(model.Model):
                 'storagefullname': f'"{self.storageFullName}"',
                 'storagename':     f'"{self.getStorageName()}"',
                 'storageid':       f'"{self.storageId}"',
-                'storageRankName': f'"{self.storageRankName}"',
+                'storagerankName': f'"{self.storageRankName}"',
                 'preptypename':    f'"{self.prepTypeName}"',
                 'preptypeid':      f'"{self.prepTypeId}"',
                 'notes':           f'"{self.notes}"',
@@ -117,12 +128,14 @@ class Specimen(model.Model):
                 'collectionname':  f'"{self.collectionName}"',
                 'username':        f'"{self.userName}"',
                 'userid':          f'"{self.userId}"',
+                'agentfirstname':  f'"{self.firstName}"',
+                'agentmiddleinitial':     f'"{self.middleInitial}"',
+                'agentlastname':          f'"{self.lastName}"',
                 # 'workstation':     f'"{self.workStation}"',
                 'recorddatetime':  f'"{self.recordDateTime}"',
                 'exported':        f'"{self.exported}"',
                 'exportdatetime':  f'"{self.exportDateTime}"',
-                'exportuserid':    f'"{self.exportUserId}"',
-                'agentfullname':   f'"{self.agentfullname}"'
+                'exportuserid':    f'"{self.exportUserId}"'
                 }
         
         return fieldsDict
@@ -134,7 +147,7 @@ class Specimen(model.Model):
            record: sqliterow object containing specimen record data 
         """
         #model.Model.setFields(self, record)
-        # print('record!!!!!!!!!', [j for j in record])
+
         if record is not None:
             util.logger.debug(f'Initializing specimen record with keys: {record.keys()}')
             
@@ -163,12 +176,14 @@ class Specimen(model.Model):
             self.collectionName = record['collectionname']
             self.userName = record['username']
             self.userId = record['userid']
-
+            self.firstName = record['agentfirstname']
+            self.middleInitial = record['agentmiddleinitial']
+            self.lastName = record['agentlastname']
             self.recordDateTime = record['recorddatetime']
             self.exported = record['exported']
             self.exportDateTime = record['exportdatetime']
             self.exportUserId = record['exportuserid']
-            self.agentfullname = record['agentfullname']
+            # self.agentfullname = record['agentfullname']
         else:
             pass
 
@@ -248,9 +263,10 @@ class Specimen(model.Model):
             self.storageId = storageRecord['id'] 
             self.storageName = storageRecord['name']
             self.storageFullName = storageRecord['fullname']
-            self.storageRankName = storageRecord['storagerankname']
+            self.storageRankName = storageRecord['rankname']
         else:
-            # Empty record 
+            # Empty record
+
             self.storageId = 0
 
         return self.storageId
@@ -264,7 +280,6 @@ class Specimen(model.Model):
         self.storageName = object.name
         self.storageFullName = object.fullName
         self.storageRankName = object.rankName
-        print("self.storageRankName = object.rankName", self.storageRankName)
 
     def setTaxonNameFields(self, record):
         """
@@ -368,5 +383,5 @@ class Specimen(model.Model):
         else: 
             return self.storageName
         
-    def __str__ (self):
-        return f'[{self.table}] id:{self.id}, name:{self.name}, fullname = {self.fullName}, notes = {self.notes}'
+    # def __str__ (self):
+    #     return f'[{self.table}] id:{self.id}, name:{self.name}, fullname = {self.fullName}, notes = {self.notes}'
