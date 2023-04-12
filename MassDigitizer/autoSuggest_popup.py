@@ -70,7 +70,7 @@ class AutoSuggest_popup():
              # 'btnReturn' is for binding return to nothing in case of a new name and higher taxonomy lacking.
             ],
             [sg.Frame('New taxon name detected...', [
-            [sg.Text('Input higher taxonomy:', key='lblHiTax'),
+            [sg.Text('Input family name:', key='lblHiTax'),
              sg.Input(size=(24, 1), key='txtHiTax', enable_events=True), 
              sg.Button('OK', key='btnOK')]], #button OK is used to submit the novel name.
              key='frmHiTax', expand_x=True, visible=False)],
@@ -145,8 +145,8 @@ class AutoSuggest_popup():
                     self.window['txtInput'].set_focus()
                                                
             elif event == 'txtHiTax':
-                # Higher taxon is being entered: Update suggestions 
-                higherTaxonName = values['txtHiTax']
+                # Family name taxon is being entered: Update suggestions
+                higherTaxonName = values['txtHiTax'] # Family name
                 if len(higherTaxonName) >= minimumCharacters:
                     self.handleSuggestions(values['txtHiTax'].lower(), 140, '=') # Rank Family is assumed (rank id: 140)
 
@@ -219,6 +219,7 @@ class AutoSuggest_popup():
                 self.autoSuggestObject.fullName = f"{self.autoSuggestObject.name}".strip(' ')
                 self.autoSuggestObject.collectionId  = self.collectionID
                 taxonomic_comment = f" Verbatim_taxon:{self.autoSuggestObject.fullName}"
+                print('taxonomic comment:::', taxonomic_comment)
                 self.autoSuggestObject.notes = taxonomic_comment
                 self.autoSuggestObject.parentFullName = values['txtHiTax']
                 self.autoSuggestObject.rankid = 999
