@@ -528,6 +528,7 @@ class SpecimenDataEntry():
         A final validation and transfer of selected input fields is still performed to ensure data integrity.   
         """
         result = ''
+
         try:
             # Make sure that contents of notes input field are transferred to specimen object instance 
             self.collobj.notes = self.window['inpNotes'].Get()
@@ -715,7 +716,7 @@ class SpecimenDataEntry():
         Retrieve storage record based on storage input field contents. 
         Search is to be done on fullname since identical atomic values can occur across the storage tree with different parentage. 
         """
-        storageFullName = self.window['inpStorage'].get()
+        storageFullName = self.window['txtStorageFullname'].get()
         try:
                 storageRecords = self.db.getRowsOnFilters('storage', {'fullname': f'="{storageFullName}"', 'collectionid' : f'={self.collectionId}'}, 1)
         except:
