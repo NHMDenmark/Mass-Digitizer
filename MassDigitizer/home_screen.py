@@ -72,13 +72,7 @@ class HomeScreen():
 
         self.main()
 
-    def atomizeUserName(self, username):
-        # Output will be formatted into [firstName] [middleInitial] [LastName]
-        atomized = username.split('.')
-        fname = atomized[0]
-        middleInit = atomized[1:len(atomized)-1] #Takes all between 1st and last element in list
-        lname = atomized[len(atomized) - 1]
-        return [fname, ' '.join(middleInit), lname]
+
 
     def main(self):
         """
@@ -120,11 +114,8 @@ class HomeScreen():
 
                             if gs.csrfToken != '':
                                 # Login was successfull
-                                splitName = self.atomizeUserName(username)
-                                gs.spFirstName = splitName[0]
-                                gs.spMiddleInit = splitName[1]
-                                gs.spLastName = splitName[2]
-                                gs.spUserName = username
+
+                                gs.userName = username
                                 gs.collectionId = collection_id
                                 gs.collectionName = selected_collection
                                 gs.institutionId = institution_id
@@ -138,7 +129,9 @@ class HomeScreen():
                                 # 2. Fetch Agent on specifyuser primary key (/api/specify/agent/?specifyuser=n)
                                 agent = sp.getSpecifyObjects('agent', filters={"specifyuser": gs.spUserId})[0]
                                 # 3. Store full name in global settings (as single, concatenated string of first, middle, last)
-                                gs.agentFullName = f"{agent['firstname']} {agent['middleinitial']}. {agent['lastname']}".strip()
+                                gs.firstName = agent['firstname']
+                                gs.middleInitial = agent['middleinitial']
+                                gs.lastName = agent['lastname']
 
                                 self.window.close()
                                 
