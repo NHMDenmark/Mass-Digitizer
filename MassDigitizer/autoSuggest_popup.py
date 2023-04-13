@@ -33,6 +33,7 @@ class AutoSuggest_popup():
         """
         Initialize
         """
+        print('IN DB init')
 
         #self.startQueryLimit = 3 # No. of keystrokes before auto suggest function is triggered
         self.candidateNamesList = [] # list/array of candidate names 
@@ -41,7 +42,8 @@ class AutoSuggest_popup():
         self.db = data_access.DataAccess(gs.databaseName) 
         self.tableName = table_name
         self.collectionID = collection_id
-        self.collection = coll.Collection(collection_id) 
+        self.collection = coll.Collection(collection_id)
+        print('coll id: ', self.collectionID, self.collection, type(self.collection), '---',self.collection.taxonTreeDefId)
 
         # Using 'Model' base object (superclass) to encompass both derived models be it Storage or TaxonName
         self.autoSuggestObject = None # Set to None as it should be re-instantiated at every capture 
@@ -98,9 +100,10 @@ class AutoSuggest_popup():
         minimumCharacters is an integer on how many key strokes it takes to start the auto-suggester.
         """ 
 
-        # Re-instantiate blank autoSuggest objet 
+        # Re-instantiate blank autoSuggest object
         self.autoSuggestObject = model.Model(self.collectionID)
         self.autoSuggestObject.table = self.tableName
+        # self.speccy = model.specimen.familyName
 
         # Resetting base variables 
         select_item = 0 # index of selected item i.e. the position in the listbox 
@@ -182,7 +185,11 @@ class AutoSuggest_popup():
                         self.autoSuggestObject.id       = selected_row['id']
                         self.autoSuggestObject.spid     = selected_row['spid']
                         self.autoSuggestObject.name     = selected_row['name']
-                        self.autoSuggestObject.fullName = selected_row['fullname']    
+                        self.autoSuggestObject.fullName = selected_row['fullname']
+                        if self.tableName == 'taxonname':
+                            # self.autoSuggestObject.familyName = self.searchParentTaxon(self.autoSuggestObject.fullName, 140, self.collection.taxonTreeDefId)
+                            self.autoSuggestObject.familyName = self.searchParentTaxon(self.autoSuggestObject.fullName, 140, self.collection.taxonTreeDefId)
+                            print('###########################3--'+self.autoSuggestObject.familyName+'--################'+self.autoSuggestObject.fullName)
                         self.autoSuggestObject.parentFullName = selected_row['parentfullname']   
                         break                     
                     else: 
@@ -282,6 +289,35 @@ class AutoSuggest_popup():
         rows = self.db.getRowsOnFilters(self.tableName, filters, rowLimit)
 
         return rows
+
+    def searchParentTaxon(self, taxonName, rankid, treedefid):
+        ''' Will climb the taxonname table to get at the family name which is rankid 140
+       taxonName: is the desired name to acquire a family name for.
+       rankid: is the target rank , in this case 'family' - id = 140
+       returns: target higher rank concept
+    '''
+        print('treefefID?', self.collectionID)
+        while (taxonName != rankid):  # The logic for this while() makes no sense but serves its purpose to keep going.
+            # taxonRankID = 0
+            taxonName = f"= '{taxonName}'"
+            treedefid_format = f"= '{treedefid}'"
+            spTaxon = self.db.getRowsOnFilters('taxonname', filters={'fullname': taxonName, 'treedefid': treedefid_format})
+
+            for j in spTaxon:
+                print([k for k in j])
+
+            if spTaxon is not None:
+                taxonRankId = spTaxon[0][4]
+                taxonId = spTaxon[0][0]
+                taxonName = spTaxon[0][3]
+                parentName = spTaxon[0][6]
+                # print(' - retrieved parent taxon %s|%s|%s: "%s" ' %(taxonId,taxonRankId,parentId,taxonName))
+                if taxonRankId == rankid:
+                    return taxonName
+                elif taxonRankId < 140:
+                    return None
+                else:
+                    return (self.searchParentTaxon(parentName, rankid, treedefid))
 
     def Show(self):
         """Make auto-suggest popup window visible""" 
