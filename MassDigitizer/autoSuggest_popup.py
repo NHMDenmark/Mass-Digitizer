@@ -69,13 +69,13 @@ class AutoSuggest_popup():
             [sg.Input(default_text='', key='txtInput', size=(input_width, 1), enable_events=True),
              sg.Button('OK', key='btnReturn', visible=False, bind_return_key=True),
              sg.Button('Exit', visible=False)
-             # 'btnReturn' is for binding return to nothing in case of a new name and higher taxonomy lacking.
+             # 'btnReturn' is for binding return to nothing in case of a new name and family lacking.
             ],
             [sg.Frame('New taxon name detected...', [
-            [sg.Text('Input family name:', key='lblHiTax'),
-             sg.Input(size=(24, 1), key='txtHiTax', enable_events=True), 
+            [sg.Text('Input family:', key='lblFamily'),
+             sg.Input(size=(24, 1), key='txtFamily', enable_events=True), 
              sg.Button('OK', key='btnOK')]], #button OK is used to submit the novel name.
-             key='frmHiTax', expand_x=True, visible=False)],
+             key='frmFamily', expand_x=True, visible=False)],
             [sg.pin(
                 sg.Col([[sg.Listbox(values=[], key='lstSuggestions', size=(input_width, lines_to_show), enable_events=True,
                                     bind_return_key=True, select_mode='extended')]],
@@ -88,7 +88,7 @@ class AutoSuggest_popup():
         self.lstSuggestionsElement: sg.Listbox = window.Element('lstSuggestions')  # store listbox element for easier access and to get to docstrings
         self.txtInput: sg.Text = window.Element('txtInput')
         
-        window['txtHiTax'].bind('<FocusIn>', '+INPUT FOCUS+')
+        window['txtFamily'].bind('<FocusIn>', '+INPUT FOCUS+')
         window.Finalize = True # Needed for being able to reactivate window, otherwise PySimpleGUI will throw an error 
         window.hide()
 
@@ -147,11 +147,11 @@ class AutoSuggest_popup():
                     # Focus back to text input field, to enable user to continue typing 
                     self.window['txtInput'].set_focus()
                                                
-            elif event == 'txtHiTax':
+            elif event == 'txtFamily':
                 # Family name taxon is being entered: Update suggestions
-                higherTaxonName = values['txtHiTax'] # Family name
+                higherTaxonName = values['txtFamily'] # Family name
                 if len(higherTaxonName) >= minimumCharacters:
-                    self.handleSuggestions(values['txtHiTax'].lower(), 140, '=') # Rank Family is assumed (rank id: 140)
+                    self.handleSuggestions(values['txtFamily'].lower(), 140, '=') # Rank Family is assumed (rank id: 140)
 
             # If a suggestion is clicked in the listbox OR 'Enter' is pressed then handle suggested taxon name 
             elif event == 'lstSuggestions' or event == 'btnReturn':
@@ -180,7 +180,7 @@ class AutoSuggest_popup():
                         self.autoSuggestObject.rankName = selected_row['rankname']
 
                     # If text input box for higher taxon is not available then a known taxon is selected 
-                    if window['frmHiTax'].visible == False: 
+                    if window['frmFamily'].visible == False: 
                         # Set taxon name fields for return and escape since no higher taxon is necessary.
                         self.autoSuggestObject.id       = selected_row['id']
                         self.autoSuggestObject.spid     = selected_row['spid']
@@ -202,9 +202,9 @@ class AutoSuggest_popup():
                         # TODO rankid 
 
                         # 
-                        window['txtHiTax'].Update(self.autoSuggestObject.parentFullName)
+                        window['txtFamily'].Update(self.autoSuggestObject.parentFullName)
                         
-                        #window['frmHiTax'].update(visible=False)
+                        #window['frmFamily'].update(visible=False)
                         window['btnOK'].SetFocus()                        
                         
                         #self.autoSuggestObject.save()                   
@@ -213,8 +213,8 @@ class AutoSuggest_popup():
                     # Since the listbox is empty a new name is assumed 
                     if self.tableName == 'taxonname':
                         # New taxon name is assumed and higher taxon input field is made available 
-                        window['frmHiTax'].update(visible=True)
-                        window['txtHiTax'].SetFocus()
+                        window['frmFamily'].update(visible=True)
+                        window['txtFamily'].SetFocus()
 
             elif event == 'btnOK' :
                 # OK button pressed during new taxon entry
@@ -226,12 +226,12 @@ class AutoSuggest_popup():
                 self.autoSuggestObject.fullName = f"{self.autoSuggestObject.name}".strip(' ')
                 self.autoSuggestObject.collectionId  = self.collectionID
                 taxonomic_comment = f" Verbatim_taxon:{self.autoSuggestObject.fullName}"
-                print('taxonomic comment:::', taxonomic_comment)
+                
                 self.autoSuggestObject.notes = taxonomic_comment
-                self.autoSuggestObject.parentFullName = values['txtHiTax']
-                self.autoSuggestObject.rankid = 999
+                self.autoSuggestObject.parentFullName = values['txtFamily']
+                self.autoSuggestObject.rankid = 140
                 self.autoSuggestObject.save()
-                window['frmHiTax'].update(visible=False)
+                window['frmFamily'].update(visible=False)
                 break
         
         if window is not None: 
