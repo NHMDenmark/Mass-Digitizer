@@ -43,6 +43,7 @@ class Model:
         self.code           = ''
         self.name           = ''
         self.fullName       = ''
+        self.familyName     = ''
         self.parentFullName = ''
         self.parentId       = 0
         self.remarks        = ' '
@@ -112,7 +113,7 @@ class Model:
         CONTRACT 
            id: Primary key of current record   
         """
-        # print(f' - deleting record with id: {self.id}')
+
         record = self.db.deleteRowOnId(self.table, self.id)
 
     def loadPrevious(self, id):
@@ -207,6 +208,7 @@ class Model:
                 'name':f'"{self.name}"',
                 'fullname':f'"{self.fullName}"',
                 'parentfullname':f'"{self.parentFullName}"',
+                'familyname':f'"{self.familyName}"',
                 'collectionid':f'{self.collectionId}',
                 'treedefid':f'{self.treedefid}',
                 'rankid':f'{self.rankid}',
