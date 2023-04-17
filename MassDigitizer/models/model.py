@@ -43,7 +43,7 @@ class Model:
         self.code           = ''
         self.name           = ''
         self.fullName       = ''
-        self.familyName     = ''
+
         self.parentFullName = ''
         self.parentId       = 0
         self.remarks        = ' '
@@ -203,12 +203,12 @@ class Model:
         Generic function that generates and returns a dictonary with database column names as keys and the instance's fields as values for passing on to data access handler
         NOTE Fully implemented in inheriting classes 
         """
-        
+
         fieldsDict = {
                 'name':f'"{self.name}"',
                 'fullname':f'"{self.fullName}"',
                 'parentfullname':f'"{self.parentFullName}"',
-                'familyname':f'"{self.familyName}"',
+
                 'collectionid':f'{self.collectionId}',
                 'treedefid':f'{self.treedefid}',
                 'rankid':f'{self.rankid}',
