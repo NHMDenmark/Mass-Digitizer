@@ -36,7 +36,9 @@ class Specimen(Model):
     def __init__(self, collection_id):
         """
         Set up blank specimen record instance for data entry on basis of collection id 
-        """ 
+        """
+        # self.fieldsasdict = Model.getFieldsAsDict()
+
         Model.__init__(self, collection_id)
         self.table           = 'specimen'   
         self.apiname         = 'collectionobject'
@@ -46,7 +48,8 @@ class Specimen(Model):
         self.taxonFullName   = ''
         self.taxonName       = ''
         self.taxonNameId     = 0
-        #self.taxonspid 
+        #self.taxonspid
+        self.familyName      = ''
         self.higherTaxonName = ''
         self.typeStatusName  = ''
         self.typeStatusId    = 0
@@ -63,12 +66,12 @@ class Specimen(Model):
         self.institutionName = gs.institutionName
         self.collectionId    = collection_id
         self.collectionName  = gs.collectionName
-        self.userName        = gs.spUserName
+        self.userName        = gs.userName
         self.userId          = gs.spUserId
         # self.agentfullname   = gs.agentFullName
-        self.firstName       = gs.spFirstName
-        self.middleInitial      = gs.spMiddleInitial
-        self.lastName        = gs.spLastName
+        self.firstName       = gs.firstName
+        self.middleInitial      = gs.middleInitial
+        self.lastName        = gs.lastName
         # self.workStation     = ''
         self.recordDateTime  = str(datetime.now())
         self.exported        = 0
@@ -85,6 +88,10 @@ class Specimen(Model):
         self.loadPredefinedData()
 
 # Overriding inherited functions
+    def getClassName(self):
+        print('classname::')
+        print(__name__)
+
 
     def loadPredefinedData(self):
         """
@@ -103,7 +110,7 @@ class Specimen(Model):
         Generates a dictonary with database column names as keys and specimen records fields as values 
         RETURNS said dictionary for passing on to data access handler 
         """
-        
+
         fieldsDict = {
                 'catalognumber':   f'"{self.catalogNumber}"', 
                 'multispecimen':   f'"{self.multiSpecimen}"',
@@ -113,6 +120,7 @@ class Specimen(Model):
                 'typestatusname':  f'"{self.typeStatusName}"',
                 'typestatusid':    f'"{self.typeStatusId}"',
                 'highertaxonname': f'"{self.higherTaxonName}"',
+                'familyname':      f'"{self.familyName}"',  #f'"{self.familyName}"',
                 'georegionname':   f'"{self.geoRegionName}"',
                 'georegionid':     f'"{self.geoRegionId}"',
                 'storagefullname': f'"{self.storageFullName}"',
@@ -137,7 +145,7 @@ class Specimen(Model):
                 'exportdatetime':  f'"{self.exportDateTime}"',
                 'exportuserid':    f'"{self.exportUserId}"'
                 }
-        
+
         return fieldsDict
 
     def setFields(self, record):
@@ -158,6 +166,7 @@ class Specimen(Model):
             self.taxonName = record['taxonname']
             self.taxonNameId = record['taxonnameid']
             #self.taxonspid = record['taxonspid']
+            self.familyName =record['familyname']
             self.higherTaxonName = record['highertaxonname']
             self.typeStatusName = record['typestatusname']
             self.typeStatusId = record['typestatusid']
