@@ -23,6 +23,7 @@ import data_access
 import global_settings as gs
 from models import model
 from models import collection as coll
+from models import specimen
 
 
 class AutoSuggest_popup():
@@ -100,7 +101,7 @@ class AutoSuggest_popup():
         """ 
 
         # Re-instantiate blank autoSuggest object
-        self.autoSuggestObject = model.Model(self.collectionID)
+        self.autoSuggestObject = specimen.Specimen(self.collectionID)
         self.autoSuggestObject.table = self.tableName
         # self.speccy = model.specimen.familyName
 
@@ -171,12 +172,11 @@ class AutoSuggest_popup():
                     self.autoSuggestObject.collectionId  = self.collectionID
 
                     if self.tableName == 'taxonname':
-                        selected_row['familyname'] = self.searchParentTaxon(selected_row['fullname'], 140,
-                                                                            self.collection.taxonTreeDefId)
-                        self.autoSuggestObject.treedefid = self.collection.taxonTreeDefId  
+                        self.autoSuggestObject.treedefid = self.collection.taxonTreeDefId
                         self.autoSuggestObject.rankid    = 999 # Generic catchall rank id
-                        self.familyName = selected_row['familyname']
-                        # The above value will be picked up by the specimen-data-entry class
+                        self.familyName = self.searchParentTaxon(selected_row['fullname'], 140,
+                                                                            self.collection.taxonTreeDefId)
+                        # The above family name will be picked up by the specimen-data-entry class
 
                     if self.tableName == 'storage': #STORAGE
                         # Populate the object as storage
