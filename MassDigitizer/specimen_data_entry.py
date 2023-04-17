@@ -197,7 +197,7 @@ class SpecimenDataEntry():
         # Grey Area (Header) elements
         loggedIn = [
             sg.Text('Logged in as:', size=sessionInfoSize, background_color=greyArea, font=sessionInfoFont),
-            sg.Text(gs.spUserName, key='txtUserName', size=(25, 1), background_color=greyArea, text_color='black',
+            sg.Text(gs.userName, key='txtUserName', size=(25, 1), background_color=greyArea, text_color='black',
                     font=smallLabelFont), ]
         
         institution_ = [
@@ -237,7 +237,7 @@ class SpecimenDataEntry():
         self.window.TKroot.focus_force() # Forces the app to be in focus.
 
         # Set session fields
-        self.window.Element('txtUserName').Update(value=gs.spUserName)
+        self.window.Element('txtUserName').Update(value=gs.userName)
         collection = self.db.getRowOnId('collection', collection_id)
         if collection is not None:
             self.window.Element('txtCollection').Update(value=collection[2])
@@ -527,12 +527,12 @@ class SpecimenDataEntry():
         The contents of the form input fields should have been immediately been transferred to the fields of the specimen object instance. 
         A final validation and transfer of selected input fields is still performed to ensure data integrity.   
         """
-        result = ''
+        family_name = self.autoTaxonName.familyName
 
         try:
             # Make sure that contents of notes input field are transferred to specimen object instance 
             self.collobj.notes = self.window['inpNotes'].Get()
-
+            self.collobj.familyName = family_name
             # Get and validate contents of multispecimen input field 
             multispecimenName = self.window['inpMultiSpecimen'].get().strip()
             if values['chkMultiSpecimen'] == True:
@@ -566,7 +566,8 @@ class SpecimenDataEntry():
             if self.collobj.id == 0: newRecord = True
             else: newRecord = False
 
-            # All checks out; Save specimen and clear non-sticky fields 
+            # All checks out; Save specimen and clear non-sticky fields
+
             savedRecord = self.collobj.save()
 
             # Remember id of record just save and prepare for blank record
@@ -652,7 +653,9 @@ class SpecimenDataEntry():
 
                 # Add taxon name verbatim note to notes field and update UI field accordingly
                 if selectedTaxonName.notes != '':
-                    self.collobj.notes = self.window['inpNotes'].Get() + ' | ' + selectedTaxonName.notes
+                    cleanedNotes = self.window['inpNotes'].Get().split('|', 1)[0]
+                    # above strips redundant new taxonomy notes.
+                    self.collobj.notes = cleanedNotes + '|' + selectedTaxonName.notes
                 self.window['inpNotes'].Update(self.collobj.notes)
 
                 # Move focus further to next field (Barcode textbox)
