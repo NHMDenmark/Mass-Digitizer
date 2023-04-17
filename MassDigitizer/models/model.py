@@ -43,7 +43,7 @@ class Model:
         self.code           = ''
         self.name           = ''
         self.fullName       = ''
-
+        self.rankName       = ''
         self.parentFullName = ''
         self.parentId       = 0
         self.remarks        = ' '
@@ -139,7 +139,7 @@ class Model:
 
         record = self.db.loadSingleRecordFromSql(sql)
 
-        if record is not None: 
+        if record is not None:
             self.setFields(record)
 
         return record
@@ -223,6 +223,7 @@ class Model:
            record: sqliterow object containing record data 
         NOTE Fully implemented in inheriting classes 
         """
+        print('setFields record::', record)
 
         self.id = record['id']
         self.name = record['name']
