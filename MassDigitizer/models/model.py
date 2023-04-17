@@ -73,7 +73,6 @@ class Model:
         
         # Checking if Save is a novel record, or if it is updating existing record.
 
-            # print(f' - Updated {self.table} record with id: {self.id} and specify id: {self.spid} ')
         if self.id > 0:
             # Record Id is not 0 therefore existing record to be updated
             record = self.db.updateRow(self.table, self.id, self.getFieldsAsDict())
@@ -223,7 +222,6 @@ class Model:
            record: sqliterow object containing record data 
         NOTE Fully implemented in inheriting classes 
         """
-        print('setFields record::', record)
 
         self.id = record['id']
         self.name = record['name']
