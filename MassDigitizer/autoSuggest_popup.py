@@ -103,7 +103,6 @@ class AutoSuggest_popup():
         # Re-instantiate blank autoSuggest object
         self.autoSuggestObject = specimen.Specimen(self.collectionID)
         self.autoSuggestObject.table = self.tableName
-        # self.speccy = model.specimen.familyName
 
         # Resetting base variables 
         select_item = 0 # index of selected item i.e. the position in the listbox 
@@ -185,27 +184,17 @@ class AutoSuggest_popup():
                         self.autoSuggestObject.rankName = selected_row['rankname']
 
                     # If text input box for higher taxon is not available then a known taxon is selected 
-                    if window['frmHiTax'].visible == False: 
+                    if window['frmHiTax'].visible == False:
                         # Set taxon name fields for return and escape since no higher taxon is necessary.
-
                         self.autoSuggestObject.id       = selected_row['id']
                         self.autoSuggestObject.spid     = selected_row['spid']
                         self.autoSuggestObject.name     = selected_row['name']
                         self.autoSuggestObject.fullName = selected_row['fullname']
-                        self.autoSuggestObject.parentFullName = selected_row['parentfullname']   
+                        self.autoSuggestObject.parentFullName = selected_row['parentfullname']
                         break                     
                     else: 
-                        # Higher taxon being entered: Set new taxon name fields accordingly
-                        self.autoSuggestObject.id       = 0
-                        self.autoSuggestObject.spid     = 0
-                        self.autoSuggestObject.name     = values['txtInput'].split(' ').pop()
-                        self.autoSuggestObject.fullName = values['txtInput']
-                        self.autoSuggestObject.parentFullName = values['lstSuggestions'][0] #selected_row['parentfullname'] 
-                        # TODO rankid 
-
-                        # 
+                        #
                         window['txtHiTax'].Update(self.autoSuggestObject.parentFullName)
-                        
                         #window['frmHiTax'].update(visible=False)
                         window['btnOK'].SetFocus()                        
                         
@@ -217,9 +206,25 @@ class AutoSuggest_popup():
                         # New taxon name is assumed and higher taxon input field is made available 
                         window['frmHiTax'].update(visible=True)
                         window['txtHiTax'].SetFocus()
+                        self.autoSuggestObject.id       = 0
+                        self.autoSuggestObject.spid     = 0
+                        self.autoSuggestObject.name     = values['txtInput'].split(' ').pop()
+                        self.autoSuggestObject.fullName = values['txtInput']
+
+                        if values['lstSuggestions']:
+                            self.autoSuggestObject.parentFullName = values['lstSuggestions'][0]
+                        else:
+                            self.autoSuggestObject.parentFullName = None
+                            self.autoSuggestObject.higherTaxonName = None
+                            # self.autoSuggestObject.parentFullName = values['lstSuggestions'][0] #selected_row['parentfullname']
+
+                        self.autoSuggestObject.familyName = self.searchParentTaxon(self.autoSuggestObject.parentFullName, 140, self.collection.taxonTreeDefId)
+                        self.familyName = self.autoSuggestObject.familyName
 
             elif event == 'btnOK' :
                 # OK button pressed during new taxon entry
+                self.tableName = 'specimen' # Added as temporary patch due to incompatible columns.
+                # Will need an update to handle novel taxon name entries into table taxonname.
                 self.autoSuggestObject.table = self.tableName
                 self.autoSuggestObject.id   = 0
                 self.autoSuggestObject.spid = 0
@@ -231,7 +236,7 @@ class AutoSuggest_popup():
                 self.autoSuggestObject.notes = taxonomic_comment
                 self.autoSuggestObject.parentFullName = values['txtHiTax']
                 self.autoSuggestObject.rankid = 999
-                self.autoSuggestObject.save()
+                # self.autoSuggestObject.save()
                 window['frmHiTax'].update(visible=False)
                 break
         
@@ -249,11 +254,16 @@ class AutoSuggest_popup():
         #self.suggestions = self.lookupSuggestions(keystrokes, 'fullname', minimumRank)
 
         try:
-            if self.tableName == 'taxonname': 
-                fields = {'fullname' : f'LIKE lower("%{keyStrokes}%")', 'treedefid' : f'= {self.collection.taxonTreeDefId}', 'rankid' : f'{rankSign}{rankId}'}
-            else: # Storage table is assumed
+            if self.tableName == 'storage':
                 fields = {'name' : f'LIKE lower("%{keyStrokes}%")', 'collectionid' : f'= {self.collection.collectionId}' }
-            self.suggestions  = data_access.DataAccess(gs.databaseName).getRowsOnFilters(self.tableName, fields, 200)
+                self.suggestions = data_access.DataAccess(gs.databaseName).getRowsOnFilters('storage', fields, 200)
+
+            else: # taxon
+                self.tableName = 'taxonname'
+                fields = {'fullname': f'LIKE lower("%{keyStrokes}%")',
+                          'treedefid': f'= {self.collection.taxonTreeDefId}', 'rankid': f'{rankSign}{rankId}'}
+                self.suggestions = data_access.DataAccess(gs.databaseName).getRowsOnFilters('taxonname', fields, 200)
+
         except Exception as e:
             util.logger.error(e)
             sg.PopupError(e)
@@ -306,21 +316,22 @@ class AutoSuggest_popup():
             spTaxon = self.db.getRowsOnFilters('taxonname', filters={'fullname': taxonName, 'treedefid': treedefid_format})
 
             for j in spTaxon:
-                print('spTaxon row:', [k for k in j])
+                print('spTaxon row:', [k for k in j]) # Sanity check for family search
 
-            if spTaxon is not None:
+            if len(spTaxon) > 0:
                 taxonRankId = spTaxon[0][4]
                 taxonId = spTaxon[0][0]
                 taxonName = spTaxon[0][3]
                 parentName = spTaxon[0][6]
-                # print(' - retrieved parent taxon %s|%s|%s: "%s" ' %(taxonId,taxonRankId,parentId,taxonName))
+
                 if taxonRankId == rankid:
                     return taxonName
                 elif taxonRankId < 140:
-                    return None
+                    return 'unknown'
                 else:
                     return (self.searchParentTaxon(parentName, rankid, treedefid))
-
+            else:
+                return 'Unknown'
     def Show(self):
         """Make auto-suggest popup window visible""" 
 
