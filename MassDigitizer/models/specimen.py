@@ -87,11 +87,6 @@ class Specimen(Model):
 
         self.loadPredefinedData()
 
-# Overriding inherited functions
-    def getClassName(self):
-        print('classname::')
-        print(__name__)
-
 
     def loadPredefinedData(self):
         """
