@@ -566,6 +566,9 @@ class SpecimenDataEntry():
             if self.collobj.id == 0: newRecord = True
             else: newRecord = False
 
+            #Get the rank name
+            taxon_rank = self.get_rankname(values['inpTaxonName'])
+            self.collobj.taxonRankName = taxon_rank
             # All checks out; Save specimen and clear non-sticky fields
 
             savedRecord = self.collobj.save()
@@ -668,6 +671,16 @@ class SpecimenDataEntry():
             sg.popup_error(f'{e} \n\n {traceBack}', title='Error handleTaxonNameInput',  )
         
         return ''
+
+    def get_rankname(self, input_taxonName):
+        # Acquiring the taxon rank based on the taxon name.
+
+        sql = f"SELECT t.fullname, tr.rankname FROM taxonname t JOIN taxonrank tr ON tr.rankid = t.rankid WHERE t.fullname = '{input_taxonName}' and t.treedefid = {self.collection.taxonTreeDefId};"
+        db = DataAccess(gs.databaseName)
+        record = db.executeSqlStatement(sql)
+        rankname = record[0]['rankname']
+
+        return rankname
 
     def handleMultiSpecimenCheck(self, value):
         """
