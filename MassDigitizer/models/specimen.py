@@ -49,6 +49,7 @@ class Specimen(Model):
         self.taxonName       = ''
         self.taxonNameId     = 0
         #self.taxonspid
+        self.taxonRankName = ''
         self.familyName      = ''
         self.higherTaxonName = ''
         self.typeStatusName  = ''
@@ -112,6 +113,7 @@ class Specimen(Model):
                 'taxonfullname':   f'"{self.taxonFullName}"', 
                 'taxonname':       f'"{self.taxonName}"',
                 'taxonnameid':     f'"{self.taxonNameId}"',
+                'taxonrankname':   f'"{self.taxonRankName}"',
                 'typestatusname':  f'"{self.typeStatusName}"',
                 'typestatusid':    f'"{self.typeStatusId}"',
                 'highertaxonname': f'"{self.higherTaxonName}"',
@@ -160,6 +162,7 @@ class Specimen(Model):
             self.taxonFullName = record['taxonfullname']
             self.taxonName = record['taxonname']
             self.taxonNameId = record['taxonnameid']
+            self.taxonRankName = record['taxonrankname']
             #self.taxonspid = record['taxonspid']
             self.familyName =record['familyname']
             self.higherTaxonName = record['highertaxonname']
