@@ -44,6 +44,7 @@ class AutoSuggest_popup():
         self.collectionID = collection_id
         self.collection = coll.Collection(collection_id)
         self.familyName = '' # Global var to capture the family-name from searchParentTaxon()
+        self.recordGlobal = None
 
         # Using 'Model' base object (superclass) to encompass both derived models be it Storage or TaxonName
         self.autoSuggestObject = None # Set to None as it should be re-instantiated at every capture 
@@ -164,6 +165,7 @@ class AutoSuggest_popup():
                     # Iterate suggestion list until selection is hit 
                     selected_row = next(row for row in self.suggestions if row['fullname']==selectedSuggestion)
                     selected_row = dict(selected_row)
+                    self.recordGlobal = selected_row
 
 
                     # TODO comment below 
