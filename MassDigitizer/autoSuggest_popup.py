@@ -44,6 +44,7 @@ class AutoSuggest_popup():
         self.collectionID = collection_id
         self.collection = coll.Collection(collection_id)
         self.familyName = '' # Global var to capture the family-name from searchParentTaxon()
+        self.rankId = 0 # global var for taxon rank id.
 
         # Using 'Model' base object (superclass) to encompass both derived models be it Storage or TaxonName
         self.autoSuggestObject = None # Set to None as it should be re-instantiated at every capture 
@@ -164,13 +165,16 @@ class AutoSuggest_popup():
                     # Iterate suggestion list until selection is hit 
                     selected_row = next(row for row in self.suggestions if row['fullname']==selectedSuggestion)
                     selected_row = dict(selected_row)
-
+                    # print('selected row:::::', selected_row)
 
                     # TODO comment below 
                     self.autoSuggestObject.table         = self.tableName
                     self.autoSuggestObject.collectionId  = self.collectionID
 
                     if self.tableName == 'taxonname':
+                        rankID = selected_row['rankid']
+
+                        self.rankId = rankID
                         self.autoSuggestObject.treedefid = self.collection.taxonTreeDefId
                         self.autoSuggestObject.rankid    = 999 # Generic catchall rank id
                         self.familyName = self.searchParentTaxon(selected_row['fullname'], 140,
@@ -186,14 +190,15 @@ class AutoSuggest_popup():
                     # If text input box for higher taxon is not available then a known taxon is selected 
                     if window['frmHiTax'].visible == False:
                         # Set taxon name fields for return and escape since no higher taxon is necessary.
+                        # self.autoSuggestObject.rankid   = selected_row['rankid']
                         self.autoSuggestObject.id       = selected_row['id']
                         self.autoSuggestObject.spid     = selected_row['spid']
                         self.autoSuggestObject.name     = selected_row['name']
                         self.autoSuggestObject.fullName = selected_row['fullname']
                         self.autoSuggestObject.parentFullName = selected_row['parentfullname']
                         break                     
-                    else: 
-                        #
+                    else:
+                        self.autoSuggestObject.rankid = selected_row['rankid']
                         window['txtHiTax'].Update(self.autoSuggestObject.parentFullName)
                         #window['frmHiTax'].update(visible=False)
                         window['btnOK'].SetFocus()                        
@@ -217,7 +222,6 @@ class AutoSuggest_popup():
                             self.autoSuggestObject.parentFullName = None
                             self.autoSuggestObject.higherTaxonName = None
                             # self.autoSuggestObject.parentFullName = values['lstSuggestions'][0] #selected_row['parentfullname']
-
                         self.autoSuggestObject.familyName = self.searchParentTaxon(self.autoSuggestObject.parentFullName, 140, self.collection.taxonTreeDefId)
                         self.familyName = self.autoSuggestObject.familyName
 
@@ -310,28 +314,32 @@ class AutoSuggest_popup():
 
         while (taxonName != rankid):  # The logic for this while() makes no sense but serves its purpose to keep going.
             # taxonRankID = 0
+            try:
+                taxonName = f"= '{taxonName}'"
+                treedefid_format = f"= '{treedefid}'"
+                spTaxon = self.db.getRowsOnFilters('taxonname', filters={'fullname': taxonName, 'treedefid': treedefid_format})
 
-            taxonName = f"= '{taxonName}'"
-            treedefid_format = f"= '{treedefid}'"
-            spTaxon = self.db.getRowsOnFilters('taxonname', filters={'fullname': taxonName, 'treedefid': treedefid_format})
+                # for j in spTaxon:
+                #     print('spTaxon row:', [k for k in j]) # Sanity check for family search
+                # print('len(spTaxon)', len(spTaxon), spTaxon[0])
+                if len(spTaxon) > 0:
+                    taxonRankId = spTaxon[0][4]
+                    taxonId = spTaxon[0][0]
+                    taxonName = spTaxon[0][3]
+                    parentName = spTaxon[0][6]
 
-            for j in spTaxon:
-                print('spTaxon row:', [k for k in j]) # Sanity check for family search
-
-            if len(spTaxon) > 0:
-                taxonRankId = spTaxon[0][4]
-                taxonId = spTaxon[0][0]
-                taxonName = spTaxon[0][3]
-                parentName = spTaxon[0][6]
-
-                if taxonRankId == rankid:
-                    return taxonName
-                elif taxonRankId < 140:
-                    return 'unknown'
+                    if taxonRankId == rankid:
+                        return taxonName
+                    elif taxonRankId < 140:
+                        # return 'unknown'
+                        return ''
+                    else:
+                        return (self.searchParentTaxon(parentName, rankid, treedefid))
                 else:
-                    return (self.searchParentTaxon(parentName, rankid, treedefid))
-            else:
-                return 'Unknown'
+                    # return 'Unknown'
+                    return ''
+            except:
+                return ''
     def Show(self):
         """Make auto-suggest popup window visible""" 
 
