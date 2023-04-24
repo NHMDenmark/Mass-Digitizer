@@ -528,6 +528,8 @@ class SpecimenDataEntry():
         A final validation and transfer of selected input fields is still performed to ensure data integrity.   
         """
         family_name = self.autoTaxonName.familyName
+        taxonRankId = self.autoTaxonName.rankId
+        self.collobj.rankid = taxonRankId
 
         try:
             # Make sure that contents of notes input field are transferred to specimen object instance 
@@ -568,7 +570,10 @@ class SpecimenDataEntry():
 
             #Get the rank name
             taxon_rank = self.get_rankname(values['inpTaxonName'])
+
             self.collobj.taxonRankName = taxon_rank
+            if self.collobj.taxonRankName == '':
+                self.collobj.higherTaxonName = ''
             # All checks out; Save specimen and clear non-sticky fields
 
             savedRecord = self.collobj.save()
@@ -645,7 +650,14 @@ class SpecimenDataEntry():
 
             # Fetch taxon name record from database based on user interactions with autosuggest popup window
             selectedTaxonName = self.autoTaxonName.captureSuggestion(keyStrokes)
+            selectedName = str(selectedTaxonName)
+            selectedSplit = selectedName.split(' ')
+            spid = selectedSplit.pop()
 
+            self.collobj.taxonSpid = spid
+            # sql = 'taxonname', {'fullname': f'="{full_name}"', 'collectionid' : f'={self.collectionId}'}, 1
+            # row = self.db.getRowsOnFilters(sql)
+            # print(j for j in row[0])
             # Set taxon name fields using record retrieved
             if selectedTaxonName is not None:
                 # Set specimen record taxon name fields
@@ -678,7 +690,11 @@ class SpecimenDataEntry():
         sql = f"SELECT t.fullname, tr.rankname FROM taxonname t JOIN taxonrank tr ON tr.rankid = t.rankid WHERE t.fullname = '{input_taxonName}' and t.treedefid = {self.collection.taxonTreeDefId};"
         db = DataAccess(gs.databaseName)
         record = db.executeSqlStatement(sql)
-        rankname = record[0]['rankname']
+
+        try:
+            rankname = record[0]['rankname']
+        except:
+            rankname = ''
 
         return rankname
 
