@@ -1,0 +1,618 @@
+[
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonspid",
+    "expression": "grel:if((value==null).or(value==0), 1, 0)",
+    "onError": "set-to-blank",
+    "newColumnName": "newtaxonflag",
+    "columnInsertIndex": 11,
+    "description": "Create column newtaxonflag at index 11 based on column taxonspid using expression grel:if((value==null).or(value==0), 1, 0)"
+  },
+  {
+    "op": "core/column-rename",
+    "oldColumnName": "multispecimen",
+    "newColumnName": "containername",
+    "description": "Rename column multispecimen to containername"
+  },
+  {
+    "op": "core/column-split",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "storagefullname",
+    "guessCellType": true,
+    "removeOriginalColumn": true,
+    "mode": "separator",
+    "separator": " | ",
+    "regex": false,
+    "maxColumns": 0,
+    "description": "Split column storagefullname by separator"
+  },
+  {
+    "op": "core/column-rename",
+    "oldColumnName": "storagefullname 1",
+    "newColumnName": "institution",
+    "description": "Rename column storagefullname 1 to institution"
+  },
+  {
+    "op": "core/column-rename",
+    "oldColumnName": "storagefullname 2",
+    "newColumnName": "site",
+    "description": "Rename column storagefullname 2 to site"
+  },
+  {
+    "op": "core/column-rename",
+    "oldColumnName": "storagefullname 3",
+    "newColumnName": "collection",
+    "description": "Rename column storagefullname 3 to collection"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonfullname",
+    "expression": "grel:if(cells['rankid'].value >= 180, value.split(' ')[0], '')",
+    "onError": "set-to-blank",
+    "newColumnName": "genus",
+    "columnInsertIndex": 5,
+    "description": "Create column genus at index 5 based on column taxonfullname using expression grel:if(cells['rankid'].value >= 180, value.split(' ')[0], '')"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonfullname",
+    "expression": "grel:if(cells['rankid'].value >= 220, value.split(' ')[1], '')",
+    "onError": "set-to-blank",
+    "newColumnName": "species",
+    "columnInsertIndex": 5,
+    "description": "Create column species at index 5 based on column taxonfullname using expression grel:if(cells['rankid'].value >= 220, value.split(' ')[1], '')"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonfullname",
+    "expression": "grel:if(cells['rankid'].value == 230, value.split(' ')[2], '')",
+    "onError": "set-to-blank",
+    "newColumnName": "subspecies",
+    "columnInsertIndex": 5,
+    "description": "Create column subspecies at index 5 based on column taxonfullname using expression grel:if(cells['rankid'].value == 230, value.split(' ')[2], '')"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonfullname",
+    "expression": "grel:if(cells['rankid'].value == 240, value.split(' ')[3], '')",
+    "onError": "set-to-blank",
+    "newColumnName": "variety",
+    "columnInsertIndex": 5,
+    "description": "Create column variety at index 5 based on column taxonfullname using expression grel:if(cells['rankid'].value == 240, value.split(' ')[3], '')"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "variety",
+    "expression": "grel:if(cells[\"taxonfullname\"].value.contains(\"var.\"), cells[\"taxonfullname\"].value.split(' ')[3], value)",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Text transform on cells in column variety using expression grel:if(cells[\"taxonfullname\"].value.contains(\"var.\"), cells[\"taxonfullname\"].value.split(' ')[3], value)"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonfullname",
+    "expression": "grel:if(cells['rankid'].value == 260, value.split(' ')[3], '')",
+    "onError": "set-to-blank",
+    "newColumnName": "forma",
+    "columnInsertIndex": 5,
+    "description": "Create column forma at index 5 based on column taxonfullname using expression grel:if(cells['rankid'].value == 260, value.split(' ')[3], '')"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "forma",
+    "expression": "grel:if(cells[\"taxonfullname\"].value.contains(\" forma \"), cells[\"taxonfullname\"].value.split(' ')[3], value)",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Text transform on cells in column forma using expression grel:if(cells[\"taxonfullname\"].value.contains(\" forma \"), cells[\"taxonfullname\"].value.split(' ')[3], value)"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "forma",
+    "expression": "grel:if(cells[\"taxonfullname\"].value.contains(\" f\\. \"), cells[\"taxonfullname\"].value.split(' ')[3], value)",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Text transform on cells in column forma using expression grel:if(cells[\"taxonfullname\"].value.contains(\" f\\. \"), cells[\"taxonfullname\"].value.split(' ')[3], value)"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "forma",
+    "expression": "grel:if(cells[\"taxonfullname\"].value.contains(\" f\\. \"), cells[\"taxonfullname\"].value.split(' ')[3], value)",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Text transform on cells in column forma using expression grel:if(cells[\"taxonfullname\"].value.contains(\" f\\. \"), cells[\"taxonfullname\"].value.split(' ')[3], value)"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "newtaxonflag",
+    "expression": "grel:if((value==1).and(cells['taxonfullname'].value.contains(' forma ')), 1, 0)",
+    "onError": "set-to-blank",
+    "newColumnName": "newformaflag",
+    "columnInsertIndex": 17,
+    "description": "Create column newformaflag at index 17 based on column newtaxonflag using expression grel:if((value==1).and(cells['taxonfullname'].value.contains(' forma ')), 1, 0)"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "newformaflag",
+    "expression": "grel:if((cells['newtaxonflag'].value==1).and(cells['taxonfullname'].value.contains(' f\\. ')), 1, value)",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Text transform on cells in column newformaflag using expression grel:if((cells['newtaxonflag'].value==1).and(cells['taxonfullname'].value.contains(' f\\. ')), 1, value)"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "newtaxonflag",
+    "expression": "grel:if((cells['newtaxonflag'].value==1).and(cells['taxonfullname'].value.contains(' var\\. ')), 1, 0)",
+    "onError": "set-to-blank",
+    "newColumnName": "newvarietyflag",
+    "columnInsertIndex": 17,
+    "description": "Create column newvarietyflag at index 17 based on column newtaxonflag using expression grel:if((cells['newtaxonflag'].value==1).and(cells['taxonfullname'].value.contains(' var\\. ')), 1, 0)"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "range",
+          "name": "newtaxonflag",
+          "expression": "value",
+          "columnName": "newtaxonflag",
+          "from": 0.92,
+          "to": 1.01,
+          "selectNumeric": true,
+          "selectNonNumeric": true,
+          "selectBlank": true,
+          "selectError": true
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "newtaxonflag",
+    "expression": "grel:if((cells['newtaxonflag'].value==1).and(cells['taxonfullname'].value.split(' ').length()==3), 1, 0)",
+    "onError": "set-to-blank",
+    "newColumnName": "newsubspeciesflag",
+    "columnInsertIndex": 17,
+    "description": "Create column newsubspeciesflag at index 17 based on column newtaxonflag using expression grel:if((cells['newtaxonflag'].value==1).and(cells['taxonfullname'].value.split(' ').length()==3), 1, 0)"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "range",
+          "name": "newtaxonflag",
+          "expression": "value",
+          "columnName": "newtaxonflag",
+          "from": 0.92,
+          "to": 1.01,
+          "selectNumeric": true,
+          "selectNonNumeric": true,
+          "selectBlank": true,
+          "selectError": true
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "newtaxonflag",
+    "expression": "grel:if((cells['newtaxonflag'].value==1).and(cells['taxonfullname'].value.split(' ').length()==2), 1, 0)",
+    "onError": "set-to-blank",
+    "newColumnName": "newspeciesflag",
+    "columnInsertIndex": 17,
+    "description": "Create column newspeciesflag at index 17 based on column newtaxonflag using expression grel:if((cells['newtaxonflag'].value==1).and(cells['taxonfullname'].value.split(' ').length()==2), 1, 0)"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "range",
+          "name": "newtaxonflag",
+          "expression": "value",
+          "columnName": "newtaxonflag",
+          "from": 0.92,
+          "to": 1.01,
+          "selectNumeric": true,
+          "selectNonNumeric": true,
+          "selectBlank": true,
+          "selectError": true
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "newtaxonflag",
+    "expression": "grel:if((cells['newtaxonflag'].value==1).and(cells['taxonfullname'].value.split(' ').length()==1), 1, 0)",
+    "onError": "set-to-blank",
+    "newColumnName": "newgenusflag",
+    "columnInsertIndex": 17,
+    "description": "Create column newgenusflag at index 17 based on column newtaxonflag using expression grel:if((cells['newtaxonflag'].value==1).and(cells['taxonfullname'].value.split(' ').length()==1), 1, 0)"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "genus",
+    "expression": "grel:if(cells['taxonfullname'].value.split(' ').length()>1, cells['taxonfullname'].value.split(' ')[0], value)",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Text transform on cells in column genus using expression grel:if(cells['taxonfullname'].value.split(' ').length()>1, cells['taxonfullname'].value.split(' ')[0], value)"
+  },
+  {
+    "op": "core/column-rename",
+    "oldColumnName": "familyname",
+    "newColumnName": "family",
+    "description": "Rename column familyname to family"
+  },
+  {
+    "op": "core/column-reorder",
+    "columnNames": [
+      "id",
+      "spid",
+      "catalognumber",
+      "containername",
+      "taxonfullname",
+      "family",
+      "genus",
+      "species",
+      "subspecies",
+      "variety",
+      "forma",
+      "taxonname",
+      "taxonnameid",
+      "taxonrankname",
+      "rankid",
+      "taxonspid",
+      "newtaxonflag",
+      "newgenusflag",
+      "newspeciesflag",
+      "newsubspeciesflag",
+      "newvarietyflag",
+      "newformaflag",
+      "highertaxonname",
+      "typestatusname",
+      "typestatusid",
+      "georegionname",
+      "georegionid",
+      "institution",
+      "site",
+      "collection",
+      "storagename",
+      "storageid",
+      "storagerankname",
+      "preptypename",
+      "preptypeid",
+      "notes",
+      "institutionid",
+      "institutionname",
+      "collectionid",
+      "collectionname",
+      "username",
+      "userid",
+      "recorddatetime",
+      "exported",
+      "exportdatetime",
+      "exportuserid",
+      "agentfirstname",
+      "agentmiddleinitial",
+      "agentlastname"
+    ],
+    "description": "Reorder columns"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "species",
+    "expression": "grel:if(cells['taxonfullname'].value.split(' ').length()>1, cells['taxonfullname'].value.split(' ')[1], value)",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Text transform on cells in column species using expression grel:if(cells['taxonfullname'].value.split(' ').length()>1, cells['taxonfullname'].value.split(' ')[1], value)"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "storagename",
+    "expression": "grel:if(value.split(' ')[0] == 'Shelf', value.split(' ')[1], '')",
+    "onError": "set-to-blank",
+    "newColumnName": "shelf",
+    "columnInsertIndex": 31,
+    "description": "Create column shelf at index 31 based on column storagename using expression grel:if(value.split(' ')[0] == 'Shelf', value.split(' ')[1], '')"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "storagename",
+    "expression": "grel:if(value.split(' ')[0] == 'Box', value.split(' ')[1], '')",
+    "onError": "set-to-blank",
+    "newColumnName": "box",
+    "columnInsertIndex": 31,
+    "description": "Create column box at index 31 based on column storagename using expression grel:if(value.split(' ')[0] == 'Box', value.split(' ')[1], '')"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "id",
+    "description": "Remove column id"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "spid",
+    "description": "Remove column spid"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "taxonfullname",
+    "description": "Remove column taxonfullname"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "taxonnameid",
+    "description": "Remove column taxonnameid"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "taxonrankname",
+    "description": "Remove column taxonrankname"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "rankid",
+    "description": "Remove column rankid"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "taxonspid",
+    "description": "Remove column taxonspid"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "highertaxonname",
+    "description": "Remove column highertaxonname"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "typestatusid",
+    "description": "Remove column typestatusid"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "georegionid",
+    "description": "Remove column georegionid"
+  },
+  {
+    "op": "core/column-rename",
+    "oldColumnName": "site",
+    "newColumnName": "site/building",
+    "description": "Rename column site to site/building"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "storagename",
+    "description": "Remove column storagename"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "storageid",
+    "description": "Remove column storageid"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "preptypeid",
+    "description": "Remove column preptypeid"
+  },
+  {
+    "op": "core/column-reorder",
+    "columnNames": [
+      "catalognumber",
+      "containername",
+      "family",
+      "genus",
+      "species",
+      "subspecies",
+      "variety",
+      "forma",
+      "newtaxonflag",
+      "newgenusflag",
+      "newspeciesflag",
+      "newsubspeciesflag",
+      "newvarietyflag",
+      "newformaflag",
+      "typestatusname",
+      "georegionname",
+      "institution",
+      "site/building",
+      "collection",
+      "box",
+      "shelf",
+      "storagerankname",
+      "preptypename",
+      "notes",
+      "recorddatetime",
+      "agentfirstname",
+      "agentmiddleinitial",
+      "agentlastname"
+    ],
+    "description": "Reorder columns"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "georegionname",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "locality name",
+    "columnInsertIndex": 16,
+    "description": "Create column locality name at index 16 based on column georegionname using expression grel:value"
+  },
+  {
+    "op": "core/column-move",
+    "columnName": "locality name",
+    "index": 15,
+    "description": "Move column locality name to position 15"
+  },
+  {
+    "op": "core/column-move",
+    "columnName": "recorddatetime",
+    "index": 0,
+    "description": "Move column recorddatetime to position 0"
+  },
+  {
+    "op": "core/column-move",
+    "columnName": "recorddatetime",
+    "index": 1,
+    "description": "Move column recorddatetime to position 1"
+  },
+  {
+    "op": "core/column-split",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "recorddatetime",
+    "guessCellType": true,
+    "removeOriginalColumn": true,
+    "mode": "separator",
+    "separator": " ",
+    "regex": false,
+    "maxColumns": 0,
+    "description": "Split column recorddatetime by separator"
+  },
+  {
+    "op": "core/column-rename",
+    "oldColumnName": "recorddatetime 1",
+    "newColumnName": "cataloged date",
+    "description": "Rename column recorddatetime 1 to cataloged date"
+  },
+  {
+    "op": "core/column-rename",
+    "oldColumnName": "recorddatetime 2",
+    "newColumnName": "cataloged time",
+    "description": "Rename column recorddatetime 2 to cataloged time"
+  },
+  {
+    "op": "core/column-reorder",
+    "columnNames": [
+      "catalognumber",
+      "cataloged date",
+      "cataloged time",
+      "agentfirstname",
+      "agentmiddleinitial",
+      "agentlastname",
+      "containername",
+      "family",
+      "genus",
+      "species",
+      "subspecies",
+      "variety",
+      "forma",
+      "newtaxonflag",
+      "newgenusflag",
+      "newspeciesflag",
+      "newsubspeciesflag",
+      "newvarietyflag",
+      "newformaflag",
+      "typestatusname",
+      "locality name",
+      "georegionname",
+      "institution",
+      "site/building",
+      "collection",
+      "box",
+      "shelf",
+      "storagerankname",
+      "preptypename",
+      "notes"
+    ],
+    "description": "Reorder columns"
+  },
+  {
+    "op": "core/column-rename",
+    "oldColumnName": "agentfirstname",
+    "newColumnName": "cataloger firstname",
+    "description": "Rename column agentfirstname to cataloger firstname"
+  },
+  {
+    "op": "core/column-rename",
+    "oldColumnName": "agentmiddleinitial",
+    "newColumnName": "cataloger middle",
+    "description": "Rename column agentmiddleinitial to cataloger middle"
+  },
+  {
+    "op": "core/column-rename",
+    "oldColumnName": "agentlastname",
+    "newColumnName": "cataloger lastname",
+    "description": "Rename column agentlastname to cataloger lastname"
+  }
+]
