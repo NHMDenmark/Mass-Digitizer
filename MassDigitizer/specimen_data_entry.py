@@ -62,12 +62,11 @@ class SpecimenDataEntry():
         self.fieldInFocusIndex = -1 # Stores list index of field currently in focus 
         
         # Create auto-suggest popup windows
-        self.autoStorage = autoSuggest_popup.AutoSuggest_popup('storage', collection_id)     #  for storage locations
-        self.autoTaxonName = autoSuggest_popup.AutoSuggest_popup('taxonname', collection_id) # for taxon names
+        self.autoStorage = None     # global for storage locations
+        self.autoTaxonName = None    # global for taxon names
         
         # Set up user interface 
         self.setup(collection_id)
-        
         # Run 
         self.main()
 
@@ -465,7 +464,9 @@ class SpecimenDataEntry():
                 self.window['lblRecordEnd'].update(visible=False)
 
             elif event == 'btnSave' or event == 'btnSave_Enter':
+
                 self.saveForm(values)
+
 
             elif event == 'btnFirst':
             #     self.getFirstOrLastRecord(position='first')
@@ -527,14 +528,17 @@ class SpecimenDataEntry():
         The contents of the form input fields should have been immediately been transferred to the fields of the specimen object instance. 
         A final validation and transfer of selected input fields is still performed to ensure data integrity.   
         """
-        family_name = self.autoTaxonName.familyName
-        taxonRankId = self.autoTaxonName.rankId
-        self.collobj.rankid = taxonRankId
+        try:
+            taxonRankId = self.autoTaxonName.rankId
+            # family_name = self.autoTaxonName.fa
+        except AttributeError:
+            pass
+        self.collobj.rankid = taxonRankId # Should it be rankid = 0 ?
 
         try:
             # Make sure that contents of notes input field are transferred to specimen object instance 
             self.collobj.notes = self.window['inpNotes'].Get()
-            self.collobj.familyName = family_name
+
             # Get and validate contents of multispecimen input field 
             multispecimenName = self.window['inpMultiSpecimen'].get().strip()
             if values['chkMultiSpecimen'] == True:
@@ -547,6 +551,13 @@ class SpecimenDataEntry():
                     util.logger.error(validationMessage)
                     sg.PopupError(validationMessage)
                     return
+
+            if len(values['inpTaxonName']) < 2:
+                validationMessage = "Cannot leave taxonomic name field empty!"
+                util.logger.error(validationMessage)
+                sg.PopupError(validationMessage)
+                return
+
             # Validating of catalog number input field 
             if values['inpCatalogNumber'] == '':
                 # Barcode (catalog number) must not be empty!
@@ -565,7 +576,9 @@ class SpecimenDataEntry():
             self.collobj.catalogNumber = values['inpCatalogNumber']
 
             # Check if either updating existing or saving new record 
-            if self.collobj.id == 0: newRecord = True
+            if int(self.collobj.taxonSpid) == 0:
+                newRecord = True
+                # self.collobj.rankid = 0
             else: newRecord = False
 
             #Get the rank name
@@ -577,14 +590,16 @@ class SpecimenDataEntry():
             # All checks out; Save specimen and clear non-sticky fields
 
             savedRecord = self.collobj.save()
+            self.window['inpCatalogNumber'].update('') #clear barcode
+            self.collobj.id = 0   # Prepare for a new record
 
             # Remember id of record just save and prepare for blank record
             previousRecordId = savedRecord['id'] # Id to be used for refreshing the previous rows table.
 
             if newRecord:
-
                 # Create a new, blank specimen record (id pre-set to 0)
                 self.collobj = specimen.Specimen(self.collectionId)
+                self.collobj.rankid = 0
                             
                 # Transfer data in sticky fields to new record:
                 self.setSpecimenFields()
@@ -612,7 +627,7 @@ class SpecimenDataEntry():
         """
         Show autosuggest popup for Storage selection and handle input from that window. 
         """
-
+        self.autoStorage = autoSuggest_popup.AutoSuggest_popup('storage', self.collectionId)
         try:
             self.autoStorage.Show()
 
@@ -643,13 +658,15 @@ class SpecimenDataEntry():
     def handleTaxonNameInput(self, keyStrokes):
         """
         Show autosuggest popup for Taxon Name selection and handle input from that window. 
-        """              
-        
+        """
+        self.autoTaxonName = autoSuggest_popup.AutoSuggest_popup('taxonname', self.collectionId)
         try:
             self.autoTaxonName.Show()
 
             # Fetch taxon name record from database based on user interactions with autosuggest popup window
             selectedTaxonName = self.autoTaxonName.captureSuggestion(keyStrokes)
+
+            self.collobj.familyName = selectedTaxonName.getFieldsAsDict()['familyname']
             selectedName = str(selectedTaxonName)
             selectedSplit = selectedName.split(' ')
             spid = selectedSplit.pop()
@@ -659,6 +676,8 @@ class SpecimenDataEntry():
             # row = self.db.getRowsOnFilters(sql)
             # print(j for j in row[0])
             # Set taxon name fields using record retrieved
+            if self.collobj.taxonSpid == 0:
+                self.collobj.rankid = 0
             if selectedTaxonName is not None:
                 # Set specimen record taxon name fields
                 self.collobj.setTaxonNameFieldsFromModel(selectedTaxonName)                        
@@ -676,25 +695,39 @@ class SpecimenDataEntry():
                 # Move focus further to next field (Barcode textbox)
                 self.setFieldFocus('inpCatalogNumber')
 
+            if len(self.autoTaxonName.get_family()) > 0:
+                self.collobj.familyName = self.autoTaxonName.get_family()
+
         except Exception as e:
             util.logger.error(str(e))
             traceBack = traceback.format_exc()
             util.logger.error(traceBack)
             sg.popup_error(f'{e} \n\n {traceBack}', title='Error handleTaxonNameInput',  )
-        
+
+
         return ''
 
-    def get_rankname(self, input_taxonName):
+    def get_rankname(self, input_taxonName, rankid=False):
         # Acquiring the taxon rank based on the taxon name.
 
-        sql = f"SELECT t.fullname, tr.rankname FROM taxonname t JOIN taxonrank tr ON tr.rankid = t.rankid WHERE t.fullname = '{input_taxonName}' and t.treedefid = {self.collection.taxonTreeDefId};"
+        sql = f"SELECT t.fullname, tr.rankname, tr.rankid FROM taxonname t JOIN taxonrank tr ON tr.rankid = t.rankid WHERE t.fullname = '{input_taxonName}' and t.treedefid = {self.collection.taxonTreeDefId};"
         db = DataAccess(gs.databaseName)
         record = db.executeSqlStatement(sql)
+        if rankid:
+            try:
+                if record[0]['rankid']:
+                    return record[0]['rankid']
+                else:
+                    return 0
+            except:
+                return 0
+        else:
 
-        try:
-            rankname = record[0]['rankname']
-        except:
-            rankname = ''
+
+            try:
+                rankname = record[0]['rankname']
+            except:
+                rankname = ''
 
         return rankname
 
