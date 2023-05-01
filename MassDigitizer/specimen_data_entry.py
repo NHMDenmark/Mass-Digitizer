@@ -236,6 +236,8 @@ class SpecimenDataEntry():
         self.window.TKroot.focus_force() # Forces the app to be in focus.
 
         # Set session fields
+        # self.winInpTaxon = self.window['inpTaxonName']
+        # self.winInpTaxon.bind('<FocusOut>', 'Focus Out')
         self.window.Element('txtUserName').Update(value=gs.userName)
         collection = self.db.getRowOnId('collection', collection_id)
         if collection is not None:
@@ -273,6 +275,7 @@ class SpecimenDataEntry():
         self.window['inpCatalogNumber'].bind('<Leave>', '_Edit')
         self.window['inpCatalogNumber'].bind("<Return>", "_Enter")
         self.window['btnSave'].bind("<Return>", "_Enter")
+        self.window['inpTaxonName'].bind('<FocusOut>', '_FocusOutTax')
 
         # Input field focus events
         for fieldName in self.inputFieldList:
@@ -294,7 +297,7 @@ class SpecimenDataEntry():
             event, values = self.window.Read()
             #util.logger.debug(f'events: {event} | {values}')
             if event is None: break  # Empty event indicates user closing window
-
+            print(event)
             if event == 'inpStorage':
                 keyStrokes = values['inpStorage']
                 # Activate autosuggest box, when more than 3 characters entered:
@@ -375,7 +378,14 @@ class SpecimenDataEntry():
                 keyStrokes = values['inpTaxonName']
                 # Activate autosuggest box, when more than 3 characters entered:
                 if len(keyStrokes) >=3 and keyStrokes != 'None': 
-                    self.handleTaxonNameInput(values['inpTaxonName'])  
+                    self.handleTaxonNameInput(values['inpTaxonName'])
+
+            elif event == 'inpTaxonName_FocusOutTax':
+                print("IN FOCUS OUT TAXX")
+                if not values['inpTaxonName']:
+                    validationMessage = "Cannot leave taxonomic name field empty!"
+                    sg.PopupError(validationMessage)
+                    self.setFieldFocus('inpTaxonName')
 
             elif event == 'inpCatalogNumber_Edit':
                 self.collobj.catalogNumber = values['inpCatalogNumber']
@@ -387,6 +397,12 @@ class SpecimenDataEntry():
 
             elif event == 'inpCatalogNumber':  # In production this will come from a barcode reader.
                 self.collobj.catalogNumber = values[event]
+                # print('Length values taxonname:', len(values['inpTaxonName']))
+                # if len(values['inpTaxonName']) < 2:
+                #     validationMessage = "Cannot leave taxonomic name field empty!"
+                #     # sg.PopupError(validationMessage)
+                #     util.logger.error(validationMessage)
+                #     self.window('inpTaxonName').set_focus()
 
             # **** Focus Events ****
 
@@ -695,7 +711,7 @@ class SpecimenDataEntry():
                 # Move focus further to next field (Barcode textbox)
                 self.setFieldFocus('inpCatalogNumber')
 
-            if len(self.autoTaxonName.get_family()) > 0:
+            if self.autoTaxonName.get_family():
                 self.collobj.familyName = self.autoTaxonName.get_family()
 
         except Exception as e:
