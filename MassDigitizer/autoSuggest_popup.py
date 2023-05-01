@@ -30,6 +30,7 @@ class AutoSuggest_popup():
     '''
     Generic Autosuggest class catering to taxon names, and storage for now.
     '''
+    classFamily = ''
     def __init__(self, table_name, collection_id):
         """
         Initialize
@@ -150,6 +151,7 @@ class AutoSuggest_popup():
             elif event == 'txtHiTax':
                 # Family name taxon is being entered: Update suggestions
                 higherTaxonName = values['txtHiTax'] # Family name
+                self.autoSuggestObject.familyName = higherTaxonName
                 if len(higherTaxonName) >= minimumCharacters:
                     self.handleSuggestions(values['txtHiTax'].lower(), 140, '=') # Rank Family is assumed (rank id: 140)
 
@@ -165,13 +167,13 @@ class AutoSuggest_popup():
                     # Iterate suggestion list until selection is hit 
                     selected_row = next(row for row in self.suggestions if row['fullname']==selectedSuggestion)
                     selected_row = dict(selected_row)
-                    # print('selected row:::::', selected_row)
 
                     # TODO comment below 
                     self.autoSuggestObject.table         = self.tableName
                     self.autoSuggestObject.collectionId  = self.collectionID
 
                     if self.tableName == 'taxonname':
+
                         rankID = selected_row['rankid']
 
                         self.rankId = rankID
@@ -179,9 +181,11 @@ class AutoSuggest_popup():
                         self.autoSuggestObject.rankid    = 999 # Generic catchall rank id
                         self.familyName = self.searchParentTaxon(selected_row['fullname'], 140,
                                                                             self.collection.taxonTreeDefId)
+                        self.autoSuggestObject.familyName = self.familyName
                         # The above family name will be picked up by the specimen-data-entry class
 
                     if self.tableName == 'storage': #STORAGE
+
                         # Populate the object as storage
                         self.autoSuggestObject.name     = selected_row['name']
                         self.autoSuggestObject.fullName = selected_row['fullname']
@@ -189,6 +193,7 @@ class AutoSuggest_popup():
 
                     # If text input box for higher taxon is not available then a known taxon is selected 
                     if window['frmHiTax'].visible == False:
+
                         # Set taxon name fields for return and escape since no higher taxon is necessary.
                         # self.autoSuggestObject.rankid   = selected_row['rankid']
                         self.autoSuggestObject.id       = selected_row['id']
@@ -198,7 +203,13 @@ class AutoSuggest_popup():
                         self.autoSuggestObject.parentFullName = selected_row['parentfullname']
                         break                     
                     else:
-                        self.autoSuggestObject.rankid = selected_row['rankid']
+
+                        # Inputting novel taxon name
+                        # self.autoSuggestObject.rankid = selected_row['rankid']
+                        self.autoSuggestObject.rankid = 0
+
+                        # if not self.autoSuggestObject.parentFullName:
+
                         window['txtHiTax'].Update(self.autoSuggestObject.parentFullName)
                         #window['frmHiTax'].update(visible=False)
                         window['btnOK'].SetFocus()                        
@@ -208,7 +219,7 @@ class AutoSuggest_popup():
                 else:                    
                     # Since the listbox is empty a new name is assumed 
                     if self.tableName == 'taxonname':
-                        # New taxon name is assumed and higher taxon input field is made available 
+                        # New taxon name is assumed and higher taxon input field is made available
                         window['frmHiTax'].update(visible=True)
                         window['txtHiTax'].SetFocus()
                         self.autoSuggestObject.id       = 0
@@ -219,13 +230,16 @@ class AutoSuggest_popup():
                         if values['lstSuggestions']:
                             self.autoSuggestObject.parentFullName = values['lstSuggestions'][0]
                         else:
-                            self.autoSuggestObject.parentFullName = None
+                            self.autoSuggestObject.parentFullName = values['txtHiTax']
                             self.autoSuggestObject.higherTaxonName = None
                             # self.autoSuggestObject.parentFullName = values['lstSuggestions'][0] #selected_row['parentfullname']
                         self.autoSuggestObject.familyName = self.searchParentTaxon(self.autoSuggestObject.parentFullName, 140, self.collection.taxonTreeDefId)
                         self.familyName = self.autoSuggestObject.familyName
 
             elif event == 'btnOK' :
+
+                self.classFamily = self.familyName
+                self.autoSuggestObject.familyName = self.familyName
                 # OK button pressed during new taxon entry
                 self.tableName = 'specimen' # Added as temporary patch due to incompatible columns.
                 # Will need an update to handle novel taxon name entries into table taxonname.
@@ -239,18 +253,17 @@ class AutoSuggest_popup():
                 taxonomic_comment = f" Verbatim_taxon:{self.autoSuggestObject.fullName}"
                 self.autoSuggestObject.notes = taxonomic_comment
                 self.autoSuggestObject.parentFullName = values['txtHiTax']
+                self.autoSuggestObject.familyName = values['txtHiTax']
                 self.autoSuggestObject.rankid = 999
-                # self.autoSuggestObject.save()
                 window['frmHiTax'].update(visible=False)
                 break
-        
+
         if window is not None: 
             # Escaped event loop: Try to close window 
             try:
                 window.Hide()
             except:
                 util.logger.error('Attempt to close autosuggest window failed...')
-
         return self.autoSuggestObject
 
     def handleSuggestions(self, keyStrokes, rankId=270, rankSign='<='):  # rank id 270 == 'subforma'
@@ -284,26 +297,26 @@ class AutoSuggest_popup():
         # self.lstSuggestionsElement.update(values=self.candidateNamesList, set_to_index=[0])
         return self.candidateNamesList
 
-    def lookupSuggestions(self, keyStrokes, columnName='fullname', minimumRank=270, rowLimit=200):
-        """ 
-        Database lookup of suggestions based on three or more entered characters. 
-         keyStrokes: This parameter is the supplied keyStrokes from the user.
-         rowLimit: at or below this the auto-suggest fires of its names
-         returns: a list of SQLite rows 
-         TODO implement 'treeDefid' at convienient time.
-        """
-        responseType = ''
-        # Local variable to determine the auto-suggest type: 'storage', taxon-keyStrokes, or 'parent taxon-name'.
-        # It is included in the return statement.
-
-        # Get candidate name list from db based on keystrokes, rank and taxon tree 
-        filters = {columnName       : f"LIKE lower('%{keyStrokes}%')", 
-                   'treedefid' : f"{self.collection.taxonTreeDefId}", 
-                   'rankid'         : f"rankid <= {minimumRank}"
-                   }
-        rows = self.db.getRowsOnFilters(self.tableName, filters, rowLimit)
-
-        return rows
+    # def lookupSuggestions(self, keyStrokes, columnName='fullname', minimumRank=270, rowLimit=200):
+    #     """
+    #     Database lookup of suggestions based on three or more entered characters.
+    #      keyStrokes: This parameter is the supplied keyStrokes from the user.
+    #      rowLimit: at or below this the auto-suggest fires of its names
+    #      returns: a list of SQLite rows
+    #      TODO implement 'treeDefid' at convienient time.
+    #     """
+    #     responseType = ''
+    #     # Local variable to determine the auto-suggest type: 'storage', taxon-keyStrokes, or 'parent taxon-name'.
+    #     # It is included in the return statement.
+    #
+    #     # Get candidate name list from db based on keystrokes, rank and taxon tree
+    #     filters = {columnName       : f"LIKE lower('%{keyStrokes}%')",
+    #                'treedefid' : f"{self.collection.taxonTreeDefId}",
+    #                'rankid'         : f"rankid <= {minimumRank}"
+    #                }
+    #     rows = self.db.getRowsOnFilters(self.tableName, filters, rowLimit)
+    #
+    #     return rows
 
     def searchParentTaxon(self, taxonName, rankid, treedefid):
         ''' Will climb the taxonname table to get at the family name which is rankid 140
@@ -311,7 +324,6 @@ class AutoSuggest_popup():
        rankid: is the target rank , in this case 'family' - id = 140
        returns: target higher rank concept
     '''
-
         while (taxonName != rankid):  # The logic for this while() makes no sense but serves its purpose to keep going.
             # taxonRankID = 0
             try:
@@ -336,8 +348,7 @@ class AutoSuggest_popup():
                     else:
                         return (self.searchParentTaxon(parentName, rankid, treedefid))
                 else:
-                    # return 'Unknown'
-                    return ''
+                    return 0
             except:
                 return ''
     def Show(self):
@@ -364,6 +375,9 @@ class AutoSuggest_popup():
         flatCandidates = list(chain.from_iterable(rowsObject))
         rows = list(flatCandidates)
         return rows
+
+    def get_family(self):
+        return self.classFamily
 
     def __exit__(self, exc_type, exc_value, traceback):
         pass
