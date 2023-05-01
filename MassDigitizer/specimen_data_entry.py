@@ -568,11 +568,14 @@ class SpecimenDataEntry():
                     sg.PopupError(validationMessage)
                     return
 
-            if len(values['inpTaxonName']) < 2:
-                validationMessage = "Cannot leave taxonomic name field empty!"
-                util.logger.error(validationMessage)
-                sg.PopupError(validationMessage)
-                return
+            if len(values['inpTaxonName']):
+                if self.collobj.familyName:
+                    pass
+                else:
+                    print('NO FAM !!8(')
+                    fam = self.autoTaxonName.get_family()
+                    self.collobj.familyName = fam
+                    return
 
             # Validating of catalog number input field 
             if values['inpCatalogNumber'] == '':
