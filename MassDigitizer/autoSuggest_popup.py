@@ -377,6 +377,7 @@ class AutoSuggest_popup():
         return rows
 
     def get_family(self):
+        
         return self.classFamily
 
     def __exit__(self, exc_type, exc_value, traceback):
