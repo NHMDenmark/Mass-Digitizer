@@ -297,7 +297,7 @@ class SpecimenDataEntry():
             event, values = self.window.Read()
             #util.logger.debug(f'events: {event} | {values}')
             if event is None: break  # Empty event indicates user closing window
-            print(event)
+
             if event == 'inpStorage':
                 keyStrokes = values['inpStorage']
                 # Activate autosuggest box, when more than 3 characters entered:
@@ -381,7 +381,7 @@ class SpecimenDataEntry():
                     self.handleTaxonNameInput(values['inpTaxonName'])
 
             elif event == 'inpTaxonName_FocusOutTax':
-                print("IN FOCUS OUT TAXX")
+
                 if not values['inpTaxonName']:
                     validationMessage = "Cannot leave taxonomic name field empty!"
                     sg.PopupError(validationMessage)
@@ -572,7 +572,7 @@ class SpecimenDataEntry():
                 if self.collobj.familyName:
                     pass
                 else:
-                    print('NO FAM !!8(')
+
                     fam = self.autoTaxonName.get_family()
                     self.collobj.familyName = fam
                     return
