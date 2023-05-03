@@ -59,7 +59,8 @@ class SpecimenDataEntry():
         # Global variables 
         self.notes = '' # Notes for access in autoSuggest_popup 
         self.fieldInFocus = ''      # Stores name of field currently in focus 
-        self.fieldInFocusIndex = -1 # Stores list index of field currently in focus 
+        self.fieldInFocusIndex = -1 # Stores list index of field currently in focus
+        self.currentRecord = None
         
         # Create auto-suggest popup windows
         self.autoStorage = None     # global for storage locations
@@ -297,7 +298,7 @@ class SpecimenDataEntry():
             event, values = self.window.Read()
             #util.logger.debug(f'events: {event} | {values}')
             if event is None: break  # Empty event indicates user closing window
-
+            # print(event)
             if event == 'inpStorage':
                 keyStrokes = values['inpStorage']
                 # Activate autosuggest box, when more than 3 characters entered:
@@ -381,6 +382,9 @@ class SpecimenDataEntry():
                     self.handleTaxonNameInput(values['inpTaxonName'])
 
             elif event == 'inpTaxonName_FocusOutTax':
+
+                if not self.collobj.taxonName:
+                    pass
 
                 if not values['inpTaxonName']:
                     validationMessage = "Cannot leave taxonomic name field empty!"
@@ -546,6 +550,7 @@ class SpecimenDataEntry():
         """
         try:
             taxonRankId = self.autoTaxonName.rankId
+
             # family_name = self.autoTaxonName.fa
         except AttributeError:
             pass
@@ -568,14 +573,22 @@ class SpecimenDataEntry():
                     sg.PopupError(validationMessage)
                     return
 
-            if len(values['inpTaxonName']):
-                if self.collobj.familyName:
-                    pass
-                else:
+            for _ in range(1): # Had issues moving past this condition. The for loop fixed that.
 
-                    fam = self.autoTaxonName.get_family()
-                    self.collobj.familyName = fam
-                    return
+                # curRecord = self.autoTaxonName.get_record()
+                if values['inpTaxonName']:
+
+                    self.collobj.taxonFullName = values['inpTaxonName']
+
+                    # self.collobj.taxonName = self.autoTaxonName.
+                    if self.collobj.familyName:
+                        break
+                    else:
+                        # fam = curRecord['familyName']
+                        fam = self.autoTaxonName.familyName
+                        self.collobj.familyName = fam
+                        break
+
 
             # Validating of catalog number input field 
             if values['inpCatalogNumber'] == '':
@@ -607,6 +620,9 @@ class SpecimenDataEntry():
             if self.collobj.taxonRankName == '':
                 self.collobj.higherTaxonName = ''
             # All checks out; Save specimen and clear non-sticky fields
+
+            if len(self.collobj.taxonFullName.split(' ')) >= 2:
+                self.collobj.taxonName = self.collobj.taxonFullName.split(' ')[-1] # Last name in string
 
             savedRecord = self.collobj.save()
             self.window['inpCatalogNumber'].update('') #clear barcode
@@ -684,7 +700,6 @@ class SpecimenDataEntry():
 
             # Fetch taxon name record from database based on user interactions with autosuggest popup window
             selectedTaxonName = self.autoTaxonName.captureSuggestion(keyStrokes)
-
             self.collobj.familyName = selectedTaxonName.getFieldsAsDict()['familyname']
             selectedName = str(selectedTaxonName)
             selectedSplit = selectedName.split(' ')
@@ -699,7 +714,7 @@ class SpecimenDataEntry():
                 self.collobj.rankid = 0
             if selectedTaxonName is not None:
                 # Set specimen record taxon name fields
-                self.collobj.setTaxonNameFieldsFromModel(selectedTaxonName)                        
+                self.collobj.setTaxonNameFieldsFromModel(selectedTaxonName)
 
                 # Update UI to indicate selected taxon name record
                 self.window['inpTaxonName'].update(selectedTaxonName.fullName)
@@ -714,8 +729,9 @@ class SpecimenDataEntry():
                 # Move focus further to next field (Barcode textbox)
                 self.setFieldFocus('inpCatalogNumber')
 
-            if self.autoTaxonName.get_family():
-                self.collobj.familyName = self.autoTaxonName.get_family()
+            if self.autoTaxonName.familyName:
+                self.collobj.familyName = self.autoTaxonName.familyName
+            # self.currentRecord = self.autoTaxonName.get_record()
 
         except Exception as e:
             util.logger.error(str(e))
