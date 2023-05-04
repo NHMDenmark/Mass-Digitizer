@@ -217,7 +217,7 @@ class SpecimenDataEntry():
                     text_color='black')]
 
         # Header section
-        appTitle = sg.Text('Mass Annotation Digitization Desk (MADD)', size=(34, 3), background_color=greyArea, font=titleFont)
+        appTitle = sg.Text('Mass Annotated Digitization Desk', size=(34, 3), background_color=greyArea, font=titleFont)
         settingsButton = sg.Button('SETTINGS', key='btnSettings', button_color='grey30')
         logoutButton = sg.Button('LOG OUT', key='btnLogOut', button_color='grey10')
         layoutTitle = [[appTitle], ]
@@ -283,6 +283,8 @@ class SpecimenDataEntry():
             eventName = ''
             if fieldName[0:3]   == 'inp': eventName = '<FocusIn>'
             elif fieldName[0:3] == 'cbx': eventName = '<Click>'
+            else:
+                break
             self.window[fieldName].bind(eventName, '_FocusIn')
         self.window['inpNotes'].bind('<FocusOut>', '_FocusOut')
 
@@ -317,8 +319,9 @@ class SpecimenDataEntry():
                 #self.tabToInputField(1) # Move to next input field  # TODO common method for the above lines? 
             
             elif event == 'Shift-Tab':
+                print("self.fieldInFocusIndex=", self.fieldInFocusIndex)
                  # When tabbing, find the next field in the sequence and set focus on that field 
-                if(self.fieldInFocusIndex >= 0):
+                if self.fieldInFocusIndex >= 0:
                     # Increment index of field in focus unless it reached the end
                     if self.fieldInFocusIndex > 0: 
                         fieldIndex = self.fieldInFocusIndex - 1
@@ -381,15 +384,16 @@ class SpecimenDataEntry():
                 if len(keyStrokes) >=3 and keyStrokes != 'None': 
                     self.handleTaxonNameInput(values['inpTaxonName'])
 
-            elif event == 'inpTaxonName_FocusOutTax':
-
-                if not self.collobj.taxonName:
-                    pass
-
-                if not values['inpTaxonName']:
-                    validationMessage = "Cannot leave taxonomic name field empty!"
-                    sg.PopupError(validationMessage)
-                    self.setFieldFocus('inpTaxonName')
+            # elif event == 'inpTaxonName_FocusOutTax':
+            #     print(f"coll obj inp taxon name={self.collobj.taxonFullName}=")
+            #     self.window['inpTaxonName'].update(self.collobj.taxonFullName)
+            #     if not self.collobj.taxonName:
+            #         pass
+            #
+            #     if not values['inpTaxonName']:
+            #         validationMessage = "Cannot leave taxonomic name field empty!"
+            #         sg.PopupError(validationMessage)
+            #         self.setFieldFocus('inpTaxonName')
 
             elif event == 'inpCatalogNumber_Edit':
                 self.collobj.catalogNumber = values['inpCatalogNumber']
@@ -514,7 +518,7 @@ class SpecimenDataEntry():
         CONTRACT 
             fieldName (String) : Name of the input field to receive focus
         """
-        
+        print('setFocusField fieldname:', fieldName)
         # Iterate focus indicators and hide all 
         for field in self.focusIconList:
             self.window[field].update(visible=False)
@@ -526,10 +530,15 @@ class SpecimenDataEntry():
         
         # If field name has been specified shift focus: 
         if fieldName != '':
+            print('In fieldName !')
             self.window[fieldName].set_focus()              # Set focus on field 
             #self.window[fieldName].update(select=True)     # Select all contents of field (TODO Doesn't work for combo lists)
-            indicatorName = 'inr' + fieldName[3:]           # Derive focus indicator name 
-            self.window[indicatorName].update(visible=True) # Unhide focus indicator 
+            indicatorName = 'inr' + fieldName[3:]           # Derive focus indicator name
+            if fieldName[3:] == 'btn': # In case we are on the Save-button
+                print('IN FieldNAME -btn------')
+                indicatorName = 'inr' + fieldName[3:]
+            print(f"INDICATORR NAME:{indicatorName}")
+            self.window[indicatorName].update(visible=True) # Unhide focus indicator
             if fieldName[0:3] == 'inp':
                 self.window[fieldName].update(background_color='#ffffff') #self.highlight) # TODO Disabled until we get comboboxes to work
             # TODO Comboboxes won't play nice and also allow for changing background colour 
@@ -548,13 +557,21 @@ class SpecimenDataEntry():
         The contents of the form input fields should have been immediately been transferred to the fields of the specimen object instance. 
         A final validation and transfer of selected input fields is still performed to ensure data integrity.   
         """
-        try:
-            taxonRankId = self.autoTaxonName.rankId
+        if len(values['inpTaxonName']) < 2:
+            validationMessage = "Cannot leave taxonomic name field empty!"
+            sg.PopupError(validationMessage)
+            self.setFieldFocus('inpTaxonName')
+            return
+        else:
+            try:
+                taxonRankId = self.autoTaxonName.rankId
+                rankName = self.get_rankname(values['inpTaxonName'])
+                print("RANK NAME IS", rankName)
+                # family_name = self.autoTaxonName.fa
+            except AttributeError:
+                pass
+            self.collobj.rankid = taxonRankId # Should it be rankid = 0 ?
 
-            # family_name = self.autoTaxonName.fa
-        except AttributeError:
-            pass
-        self.collobj.rankid = taxonRankId # Should it be rankid = 0 ?
 
         try:
             # Make sure that contents of notes input field are transferred to specimen object instance 
@@ -742,15 +759,17 @@ class SpecimenDataEntry():
 
         return ''
 
-    def get_rankname(self, input_taxonName, rankid=False):
+    def get_rankname(self, input_taxonName, rankid=None):
         # Acquiring the taxon rank based on the taxon name.
 
         sql = f"SELECT t.fullname, tr.rankname, tr.rankid FROM taxonname t JOIN taxonrank tr ON tr.rankid = t.rankid WHERE t.fullname = '{input_taxonName}' and t.treedefid = {self.collection.taxonTreeDefId};"
         db = DataAccess(gs.databaseName)
         record = db.executeSqlStatement(sql)
         if rankid:
+            print('IN rankid of get_rankname()', record)
             try:
                 if record[0]['rankid']:
+                    print("record[0]['rankid']:", record[0]['rankid'])
                     return record[0]['rankid']
                 else:
                     return 0
