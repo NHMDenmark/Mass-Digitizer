@@ -9,10 +9,13 @@ The DaSSCo project is tasked with digitizing millions of specimens. To speed thi
 Installation is done using a setup file that will ensure all dependencies are in place. The installer will also add a clean local database for registering entries in a "DaSSCo" folder under the user's documents folder. Be mindful to backup the database file upon reinstallation, so it is not overwritten and and data in it erased.   
 
 Downloads: 
-(https://github.com/NHMDenmark/DaSSCo/releases/)
+(https://github.com/NHMDenmark/DaSSCo/releases/)  
+
+For Windows users: Please press the green tick mark icon in the process line under 'Show hidden icons' which represents 'Request administrator access'. Before installing you need to right-click the installation icon and select 'Run as administrator'. This will trigger a prompt to submit your KU credentials (Swedish license plate username + pass phrase).
 
 ### Usage
 There is a path to follow that requires only little training. A user must have credentials in order to employ the app. One could say that a specimen record is being created bit by bit and submitted to local DB at the end. 
+  
 
 #### Data entry  
 After log in, the first section focuses on specimen storage location which has an autosuggest feature. The path leads through prep type and status, and into Geographic region and taxonomy. The latter also has the auto suggest feature. Auto-suggest takes three keystroke to query among all the names and returns a row object of names. As the input to which the keystrokes contribute increases, the smaller the subset gets at which point it is feasible to arrow down through the result until the desired name is reached and press _Enter_.  
