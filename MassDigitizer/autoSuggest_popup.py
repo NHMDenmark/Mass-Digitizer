@@ -155,15 +155,27 @@ class AutoSuggest_popup():
                                                
             elif event == 'txtHiTax':
                 # Family name taxon is being entered: Update suggestions
+                # IMplies a NOVEL NAME
                 higherTaxonName = values['txtHiTax'] # Family name
                 self.autoSuggestObject.familyName = higherTaxonName
                 if len(higherTaxonName) >= minimumCharacters:
                     self.handleSuggestions(values['txtHiTax'].lower(), 140, '=') # Rank Family is assumed (rank id: 140)
 
-            # If a suggestion is clicked in the listbox OR 'Enter' is pressed then handle suggested taxon name 
+            # If a suggestion is clicked in the listbox OR 'Enter' is pressed then handle suggested taxon name
+            # TODO| this is a mess of 'if' statements and should be simplified. There must be a split between
+            # TODO| the section dealing with novel names and the known name case.
+                taxonFullName = values['txtInput']
+                self.autoSuggestObject.taxonFullName = taxonFullName
+                print('in txtHiTax IF - taxonfullname=', taxonFullName)
+                taxonName = taxonFullName.split(' ')[-1]
+                print("taxon DISCREET name=", taxonName)
+                self.autoSuggestObject.taxonName = taxonName
+                window['frmHiTax'].update(visible=True)
+
+
             elif event == 'lstSuggestions' or event == 'btnReturn':
                 #Fix for novel parent name
-
+                print('button returned?', event)
                 # If there still are entries in the list box then this is a known name and the one selected is handled 
                 if len(values['lstSuggestions']) > 0:
                     # A known name is selected 
@@ -223,26 +235,43 @@ class AutoSuggest_popup():
                         
                         #self.autoSuggestObject.save()                   
                     #break # Stay for confirmation of higher taxon entry
-                elif self.novelTaxon:
-                    # Since the listbox is empty a NOVEL! name has been set to True
+                else: # Family name is needed.
                     if self.tableName == 'taxonname':
-
-                        # New taxon name is assumed and higher taxon input field is made available
                         window['frmHiTax'].update(visible=True)
                         window['txtHiTax'].SetFocus()
-                        self.autoSuggestObject.id       = 0
-                        self.autoSuggestObject.spid     = 0
-                        self.autoSuggestObject.name     = values['txtInput'].split(' ').pop()
+                        self.autoSuggestObject.name = values['txtInput'].split(' ').pop()
                         self.autoSuggestObject.fullName = values['txtInput']
-
-                        if values['lstSuggestions']: # Asking for family name.
+                        if values['lstSuggestions']:  # Asking for family name.
                             self.autoSuggestObject.parentFullName = values['lstSuggestions'][0]
-                        else:
+                        else: # family name submitted not recognized or empty.
                             self.autoSuggestObject.parentFullName = values['txtHiTax']
-                            self.autoSuggestObject.higherTaxonName = None
-                            # self.autoSuggestObject.parentFullName = values['lstSuggestions'][0] #selected_row['parentfullname']
-                        self.autoSuggestObject.familyName = self.searchParentTaxon(self.autoSuggestObject.parentFullName, 140, self.collection.taxonTreeDefId)
+                            print("txtHiTax:", values['txtHiTax'])
+                        self.autoSuggestObject.familyName = self.searchParentTaxon(self.autoSuggestObject.parentFullName,
+                                                                                   140, self.collection.taxonTreeDefId)
                         self.familyName = self.autoSuggestObject.familyName
+                window['txtHiTax'].update(self.familyName)
+
+
+                # elif self.novelTaxon:
+                #     # Since the listbox is empty a NOVEL! name has been set to True
+                #     if self.tableName == 'taxonname':
+                #
+                #         # New taxon name is assumed and higher taxon input field is made available
+                #         window['frmHiTax'].update(visible=True)
+                #         window['txtHiTax'].SetFocus()
+                #         self.autoSuggestObject.id       = 0
+                #         self.autoSuggestObject.spid     = 0
+                #         self.autoSuggestObject.name     = values['txtInput'].split(' ').pop()
+                #         self.autoSuggestObject.fullName = values['txtInput']
+                #
+                #         if values['lstSuggestions']: # Asking for family name.
+                #             self.autoSuggestObject.parentFullName = values['lstSuggestions'][0]
+                #         else:
+                #             self.autoSuggestObject.parentFullName = values['txtHiTax']
+                #             self.autoSuggestObject.higherTaxonName = None
+                #             # self.autoSuggestObject.parentFullName = values['lstSuggestions'][0] #selected_row['parentfullname']
+                #         self.autoSuggestObject.familyName = self.searchParentTaxon(self.autoSuggestObject.parentFullName, 140, self.collection.taxonTreeDefId)
+                #         self.familyName = self.autoSuggestObject.familyName
 
             elif event == 'btnOK' :
 
