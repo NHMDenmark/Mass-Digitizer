@@ -490,6 +490,8 @@ class SpecimenDataEntry():
             elif event == 'btnSave' or event == 'btnSave_Enter':
 
                 self.saveForm(values)
+                self.setFieldFocus('inpCatalogNumber')
+
 
 
             elif event == 'btnFirst':
@@ -558,10 +560,10 @@ class SpecimenDataEntry():
         A final validation and transfer of selected input fields is still performed to ensure data integrity.   
         """
         if len(values['inpTaxonName']) < 2:
-            validationMessage = "Cannot leave taxonomic name field empty!"
-            sg.PopupError(validationMessage)
+            validationMessage = "Input taxonomic name is less than two characters!"
+            util.logger.error(validationMessage)
             self.setFieldFocus('inpTaxonName')
-            return
+            pass
         else:
             try:
                 taxonRankId = self.autoTaxonName.rankId
