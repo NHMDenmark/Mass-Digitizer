@@ -108,7 +108,7 @@ class AutoSuggest_popup():
         """ 
 
         # Re-instantiate blank autoSuggest object
-        self.autoSuggestObject = specimen.Specimen(self.collectionID)
+        self.autoSuggestObject = model.Model(self.collectionID) #%specimen.Specimen(self.collectionID)
         self.autoSuggestObject.table = self.tableName
 
         # Resetting base variables 
@@ -166,16 +166,13 @@ class AutoSuggest_popup():
             # TODO| the section dealing with novel names and the known name case.
                 taxonFullName = values['txtInput']
                 self.autoSuggestObject.taxonFullName = taxonFullName
-                print('in txtHiTax IF - taxonfullname=', taxonFullName)
                 taxonName = taxonFullName.split(' ')[-1]
-                print("taxon DISCREET name=", taxonName)
                 self.autoSuggestObject.taxonName = taxonName
                 window['frmHiTax'].update(visible=True)
 
 
             elif event == 'lstSuggestions' or event == 'btnReturn':
-                #Fix for novel parent name
-                print('button returned?', event)
+                # Fix for novel parent name
                 # If there still are entries in the list box then this is a known name and the one selected is handled 
                 if len(values['lstSuggestions']) > 0:
                     # A known name is selected 
@@ -191,13 +188,10 @@ class AutoSuggest_popup():
 
                     if self.tableName == 'taxonname':
 
-                        rankID = self.selected_row['rankid']
-
-                        self.rankId = rankID
+                        self.rankId = self.selected_row['rankid']
+                        self.autoSuggestObject.rankid = self.rankId 
                         self.autoSuggestObject.treedefid = self.collection.taxonTreeDefId
-                        self.autoSuggestObject.rankid    = 999 # Generic catchall rank id
-                        self.familyName = self.searchParentTaxon(self.selected_row['fullname'], 140,
-                                                                            self.collection.taxonTreeDefId)
+                        self.familyName = self.searchParentTaxon(self.selected_row['fullname'], 140, self.collection.taxonTreeDefId)
                         self.autoSuggestObject.familyName = self.familyName
                         self.currentRecord = self.autoSuggestObject.getFieldsAsDict()
                         # The above family name will be picked up by the specimen-data-entry class
@@ -219,8 +213,7 @@ class AutoSuggest_popup():
                         self.autoSuggestObject.fullName = self.selected_row['fullname']
                         self.autoSuggestObject.parentFullName = self.selected_row['parentfullname']
                         break
-                        # if self.knownNameProcess():
-                        #     pass
+
                     else:
 
                         # Inputting novel taxon name
@@ -245,7 +238,6 @@ class AutoSuggest_popup():
                             self.autoSuggestObject.parentFullName = values['lstSuggestions'][0]
                         else: # family name submitted not recognized or empty.
                             self.autoSuggestObject.parentFullName = values['txtHiTax']
-                            print("txtHiTax:", values['txtHiTax'])
                         self.autoSuggestObject.familyName = self.searchParentTaxon(self.autoSuggestObject.parentFullName,
                                                                                    140, self.collection.taxonTreeDefId)
                         self.familyName = self.autoSuggestObject.familyName
@@ -279,7 +271,7 @@ class AutoSuggest_popup():
                 self.taxonName = self.autoSuggestObject.taxonName
                 self.autoSuggestObject.familyName = self.familyName
                 # OK button pressed during new taxon entry
-                self.tableName = 'specimen' # Added as temporary patch due to incompatible columns.
+                #self.tableName = 'specimen' # Added as temporary patch due to incompatible columns.
                 # Will need an update to handle novel taxon name entries into table taxonname.
                 self.autoSuggestObject.table = self.tableName
                 self.autoSuggestObject.id   = 0
@@ -302,6 +294,7 @@ class AutoSuggest_popup():
                 window.Hide()
             except:
                 util.logger.error('Attempt to close autosuggest window failed...')
+                
         return self.autoSuggestObject
 
     def handleSuggestions(self, keyStrokes, rankId=270, rankSign='<='):  # rank id 270 == 'subforma'
@@ -358,53 +351,40 @@ class AutoSuggest_popup():
     #
     #     return rows
 
-    def knownNameProcess(self):
-        #TODO for refactoring
-        # Set taxon name fields for return and escape since no higher taxon is necessary.
+    def searchParentTaxon(self, taxonName, target_rankid, treedefid):
+        """
+        Will traverse a given taxon's parental lineage until it hits the target rank 
+        taxonName: is the desired name to acquire a family name for.
+        target_rankid: is the target rank
+        returns: target higher rank concept
+        """
+        
+        taxonRankId = 270 # Start with lowest possible rank
 
-        try:
-            self.autoSuggestObject.id = self.selected_row['id']
-            self.autoSuggestObject.spid = self.selected_row['spid']
-            self.autoSuggestObject.name = self.selected_row['name']
-            self.autoSuggestObject.fullName = self.selected_row['fullname']
-            self.autoSuggestObject.parentFullName = self.selected_row['parentfullname']
-            return 1
-        except Exception as e:
-            print(e)
+        # Keep on traversing parental branch until the specified rank level has been passed
+        while (taxonRankId >= target_rankid):
+            # Get current taxon record on fullname and taxon tree   
+            taxonNameRecords = self.db.getRowsOnFilters('taxonname', filters={'fullname': f"='{taxonName}'", 'treedefid': f"= '{treedefid}'"})
 
-    def searchParentTaxon(self, taxonName, rankid, treedefid):
-        ''' Will climb the taxonname table to get at the family name which is rankid 140
-       taxonName: is the desired name to acquire a family name for.
-       rankid: is the target rank , in this case 'family' - id = 140
-       returns: target higher rank concept
-    '''
-        while (taxonName != rankid):  # The logic for this while() makes no sense but serves its purpose to keep going.
-            # taxonRankID = 0
-            try:
-                taxonName = f"= '{taxonName}'"
-                treedefid_format = f"= '{treedefid}'"
-                spTaxon = self.db.getRowsOnFilters('taxonname', filters={'fullname': taxonName, 'treedefid': treedefid_format})
+            if len(taxonNameRecords) > 0: 
+                taxonRankId = taxonNameRecords[0]['rankid']
+                taxonName = taxonNameRecords[0]['name']
+                parentName = taxonNameRecords[0]['parentfullname'] # TODO More secure with primary keys 
 
-                # for j in spTaxon:
-                #     print('spTaxon row:', [k for k in j]) # Sanity check for family search
-                # print('len(spTaxon)', len(spTaxon), spTaxon[0])
-                if len(spTaxon) > 0:
-                    taxonRankId = spTaxon[0][4]
-                    taxonId = spTaxon[0][0]
-                    taxonName = spTaxon[0][3]
-                    parentName = spTaxon[0][6]
-
-                    if taxonRankId == rankid:
-                        return taxonName
-                    elif taxonRankId < 140:
-                        # return 'unknown'
-                        return ''
-                    else:
-                        return (self.searchParentTaxon(parentName, rankid, treedefid))
+                # Given taxon matches rank
+                if taxonRankId == target_rankid: 
+                    break 
                 else:
-                    return 0
-            except:
-                return ''
+                    # Target rank not hit; check next parent in line 
+                    return (self.searchParentTaxon(parentName, target_rankid, treedefid))
+                
+            else:
+                # Can't find (further) parent taxon 
+                taxonName = '-not found-' # return current 
+                raise Exception(f"Could not retrieve parent taxon of target rank: {target_rankid} !") 
+        
+        return taxonName
+    
     def Show(self):
         """Make auto-suggest popup window visible""" 
 
@@ -424,24 +404,9 @@ class AutoSuggest_popup():
         # Make window visible 
         self.window.Hide()
 
-    def flatten_rows(self, rowsObject):
-        # The SQLite rowsObject is slightly odd in that it is a "list of dicts", but not really.
-        flatCandidates = list(chain.from_iterable(rowsObject))
-        rows = list(flatCandidates)
-        return rows
-
     def get_name(self):
 
         return self.taxonName
 
     def __exit__(self, exc_type, exc_value, traceback):
         pass
-
-
-
-# EXE section -- remember "taxonname" or "storage"#
-# ob = AutoSuggest_popup('taxonname', 29)
-# autoTaxonName = ob.Show()
-# ob.autosuggest_gui('')
-# ob.autoSuggest_popup.AutoSuggest_popup('taxonname', 29)
-

@@ -46,6 +46,7 @@ class Model:
         self.rankName       = ''
         self.parentFullName = ''
         self.parentId       = 0
+        self.familyName     = '' # TODO Too specific! Solve in a different way ... 
         self.remarks        = ' '
         self.notes          = ''
         self.collectionId   = collection_id

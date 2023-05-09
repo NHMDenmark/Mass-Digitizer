@@ -490,8 +490,6 @@ class SpecimenDataEntry():
             elif event == 'btnSave' or event == 'btnSave_Enter':
 
                 self.saveForm(values)
-                self.setFieldFocus('inpCatalogNumber')
-
 
 
             elif event == 'btnFirst':
@@ -560,10 +558,10 @@ class SpecimenDataEntry():
         A final validation and transfer of selected input fields is still performed to ensure data integrity.   
         """
         if len(values['inpTaxonName']) < 2:
-            validationMessage = "Input taxonomic name is less than two characters!"
-            util.logger.error(validationMessage)
+            validationMessage = "Cannot leave taxonomic name field empty!"
+            sg.PopupError(validationMessage)
             self.setFieldFocus('inpTaxonName')
-            pass
+            return
         else:
             try:
                 taxonRankId = self.autoTaxonName.rankId
@@ -719,15 +717,11 @@ class SpecimenDataEntry():
 
             # Fetch taxon name record from database based on user interactions with autosuggest popup window
             selectedTaxonName = self.autoTaxonName.captureSuggestion(keyStrokes)
-            self.collobj.familyName = selectedTaxonName.getFieldsAsDict()['familyname']
-            selectedName = str(selectedTaxonName)
-            selectedSplit = selectedName.split(' ')
-            spid = selectedSplit.pop()
-
-            self.collobj.taxonSpid = spid
-            # sql = 'taxonname', {'fullname': f'="{full_name}"', 'collectionid' : f'={self.collectionId}'}, 1
-            # row = self.db.getRowsOnFilters(sql)
-            # print(j for j in row[0])
+            
+            # Set specimen record taxon fields 
+            self.collobj.taxonSpid = selectedTaxonName.spid
+            self.collobj.familyName = selectedTaxonName.familyName 
+                
             # Set taxon name fields using record retrieved
             if self.collobj.taxonSpid == 0:
                 self.collobj.rankid = 0
