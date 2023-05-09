@@ -740,17 +740,38 @@ class SpecimenDataEntry():
         return ''
 
     def getRankname(self, rankid):
-        """ TODO 
+        """ Gets the rankname by rankid
         """
         taxonRanks = {
-            'Phylum':'30',
-            'Class':'60',
-            'Order':'100',
-            'Family':'140',
-            'Genus':'180',
-            'Species':'220',
-            'Subspecies':'230',
-            }
+            '0': 'Life',
+            '10': 'Kingdom',
+            '20': 'Subkingdom',
+            '30': 'Phylum',
+            '30': 'Division',
+            '40': 'Subdivision',
+            '40': 'Subphylum',
+            '50': 'Superclass',
+            '60': 'Class',
+            '70': 'Subclass',
+            '80': 'Infraclass',
+            '90': 'Superorder',
+            '100': 'Order',
+            '110': 'Suborder',
+            '120': 'Infraorder',
+            '130': 'Superfamily',
+            '140': 'Family',
+            '150': 'Subfamily',
+            '160': 'Tribe',
+            '170': 'Subtribe',
+            '180': 'Genus',
+            '190': 'Subgenus',
+            '220': 'Species',
+            '230': 'Subspecies',
+            '240': 'variety',
+            '250': 'subvariety',
+            '260': 'forma',
+            '270': 'subforma'
+        }
         
         return taxonRanks[rankid]
 
