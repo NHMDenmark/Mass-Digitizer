@@ -47,7 +47,7 @@ class Specimen(Model):
         self.taxonFullName   = ''
         self.taxonName       = ''
         self.taxonNameId     = 0
-        #self.taxonspid
+        self.taxonSpid       = 0
         self.taxonRankName   = ''
         self.familyName      = ''
         self.higherTaxonName = ''
@@ -86,6 +86,8 @@ class Specimen(Model):
         self.geoRegions = None 
         #self.geoRegionSources = None 
 
+        
+
         self.loadPredefinedData()
 
 
@@ -113,11 +115,13 @@ class Specimen(Model):
                 'taxonfullname':   f'"{self.taxonFullName}"', 
                 'taxonname':       f'"{self.taxonName}"',
                 'taxonnameid':     f'"{self.taxonNameId}"',
+                'familyname':      f'"{self.familyName}"',  
+                'taxonspid':       f'"{self.taxonSpid}"',
+                'highertaxonname': f'"{self.higherTaxonName}"',
+                'rankid':          f'"{self.rankid}"',
                 'taxonrankname':   f'"{self.taxonRankName}"',
                 'typestatusname':  f'"{self.typeStatusName}"',
                 'typestatusid':    f'"{self.typeStatusId}"',
-                'highertaxonname': f'"{self.higherTaxonName}"',
-                'familyname':      f'"{self.familyName}"',  #f'"{self.familyName}"',
                 'georegionname':   f'"{self.geoRegionName}"',
                 'georegionid':     f'"{self.geoRegionId}"',
                 'storagefullname': f'"{self.storageFullName}"',
@@ -128,14 +132,14 @@ class Specimen(Model):
                 'preptypeid':      f'"{self.prepTypeId}"',
                 'notes':           f'"{self.notes}"',
                 'institutionid':   f'"{self.institutionId}"',
-                'institutionname':  f'"{self.institutionName}"',
+                'institutionname': f'"{self.institutionName}"',
                 'collectionid':    f'"{self.collectionId}"',
                 'collectionname':  f'"{self.collectionName}"',
                 'username':        f'"{self.userName}"',
                 'userid':          f'"{self.userId}"',
                 'agentfirstname':  f'"{self.firstName}"',
-                'agentmiddleinitial':     f'"{self.middleInitial}"',
-                'agentlastname':          f'"{self.lastName}"',
+                'agentmiddleinitial': f'"{self.middleInitial}"',
+                'agentlastname':   f'"{self.lastName}"',
                 # 'workstation':     f'"{self.workStation}"',
                 'recorddatetime':  f'"{self.recordDateTime}"',
                 'exported':        f'"{self.exported}"',
@@ -162,10 +166,11 @@ class Specimen(Model):
             self.taxonFullName = record['taxonfullname']
             self.taxonName = record['taxonname']
             self.taxonNameId = record['taxonnameid']
-            self.taxonRankName = record['taxonrankname']
-            #self.taxonspid = record['taxonspid']
             self.familyName =record['familyname']
+            self.taxonSpid = record['taxonspid']
             self.higherTaxonName = record['highertaxonname']
+            self.rankid = record['rankid']
+            self.taxonRankName = record['taxonrankname']
             self.typeStatusName = record['typestatusname']
             self.typeStatusId = record['typestatusid']
             self.geoRegionName = record['georegionname']

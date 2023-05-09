@@ -557,27 +557,25 @@ class SpecimenDataEntry():
         The contents of the form input fields should have been immediately been transferred to the fields of the specimen object instance. 
         A final validation and transfer of selected input fields is still performed to ensure data integrity.   
         """
-        if len(values['inpTaxonName']) < 2:
-            validationMessage = "Cannot leave taxonomic name field empty!"
-            sg.PopupError(validationMessage)
-            self.setFieldFocus('inpTaxonName')
-            return
-        else:
-            try:
-                taxonRankId = self.autoTaxonName.rankId
-                rankName = self.get_rankname(values['inpTaxonName'])
-                print("RANK NAME IS", rankName)
-                # family_name = self.autoTaxonName.fa
-            except AttributeError:
-                pass
-            self.collobj.rankid = taxonRankId # Should it be rankid = 0 ?
-
 
         try:
-            # Make sure that contents of notes input field are transferred to specimen object instance 
-            self.collobj.notes = self.window['inpNotes'].Get()
+            # TODO Ensure taxon names are set 
+            # for _ in range(1): # Had issues moving past this condition. The for loop fixed that.
 
-            # Get and validate contents of multispecimen input field 
+            #     # curRecord = self.autoTaxonName.get_record()
+            #     if values['inpTaxonName']:
+
+            #         self.collobj.taxonFullName = values['inpTaxonName']
+
+            #         # self.collobj.taxonName = self.autoTaxonName.
+            #         if self.collobj.familyName:
+            #             break
+            #         else:
+            #             self.collobj.familyName = self.autoTaxonName.familyName
+            #             break
+
+            # VALIDATIONS: 
+            # 1. Validate contents of multispecimen input field 
             multispecimenName = self.window['inpMultiSpecimen'].get().strip()
             if values['chkMultiSpecimen'] == True:
                 # If the multispecimen checkbox has been checked then the name field mustn't be empty !
@@ -590,57 +588,42 @@ class SpecimenDataEntry():
                     sg.PopupError(validationMessage)
                     return
 
-            for _ in range(1): # Had issues moving past this condition. The for loop fixed that.
 
-                # curRecord = self.autoTaxonName.get_record()
-                if values['inpTaxonName']:
-
-                    self.collobj.taxonFullName = values['inpTaxonName']
-
-                    # self.collobj.taxonName = self.autoTaxonName.
-                    if self.collobj.familyName:
-                        break
-                    else:
-                        # fam = curRecord['familyName']
-                        fam = self.autoTaxonName.familyName
-                        self.collobj.familyName = fam
-                        break
-
-
-            # Validating of catalog number input field 
+            # 2. Validating of catalog number input field 
             if values['inpCatalogNumber'] == '':
                 # Barcode (catalog number) must not be empty!
                 validationMessage = "Cannot leave barcode empty!"
                 util.logger.error(validationMessage)
                 sg.PopupError(validationMessage)
                 return
-            
             if len(values['inpCatalogNumber']) != 8:
                 # Barcode (catalog number) must be 8 digits!
                 validationMessage = "Barcode incorrect length (8)!"
                 util.logger.error(validationMessage)
                 sg.PopupError(validationMessage)
                 return
+            # END VALIDATION
 
+            # Ensure catalog nr field is set 
             self.collobj.catalogNumber = values['inpCatalogNumber']
+
+            # Ensure  contents of notes input field are transferred to specimen object instance 
+            self.collobj.notes = self.window['inpNotes'].Get()
+
+            # Get taxon rank name
+            self.collobj.taxonRankName  = self.get_rankname(values['inpTaxonName'])
+            
+            # Parse binomial taxon name 
+            if len(self.collobj.taxonFullName.split(' ')) >= 2:
+                self.collobj.taxonName = self.collobj.taxonFullName.split(' ')[-1] # Last name in string
 
             # Check if either updating existing or saving new record 
             if int(self.collobj.taxonSpid) == 0:
                 newRecord = True
                 # self.collobj.rankid = 0
             else: newRecord = False
-
-            #Get the rank name
-            taxon_rank = self.get_rankname(values['inpTaxonName'])
-
-            self.collobj.taxonRankName = taxon_rank
-            if self.collobj.taxonRankName == '':
-                self.collobj.higherTaxonName = ''
+            
             # All checks out; Save specimen and clear non-sticky fields
-
-            if len(self.collobj.taxonFullName.split(' ')) >= 2:
-                self.collobj.taxonName = self.collobj.taxonFullName.split(' ')[-1] # Last name in string
-
             savedRecord = self.collobj.save()
             self.window['inpCatalogNumber'].update('') #clear barcode
             self.collobj.id = 0   # Prepare for a new record
@@ -721,10 +704,11 @@ class SpecimenDataEntry():
             # Set specimen record taxon fields 
             self.collobj.taxonSpid = selectedTaxonName.spid
             self.collobj.familyName = selectedTaxonName.familyName 
+            self.collobj.rankid = selectedTaxonName.rankid # TODO: taxonrankid 
                 
             # Set taxon name fields using record retrieved
             if self.collobj.taxonSpid == 0:
-                self.collobj.rankid = 0
+                self.collobj.rankid = 0 
             if selectedTaxonName is not None:
                 # Set specimen record taxon name fields
                 self.collobj.setTaxonNameFieldsFromModel(selectedTaxonName)
@@ -754,6 +738,21 @@ class SpecimenDataEntry():
 
 
         return ''
+
+    def getRankname(self, rankid):
+        """ TODO 
+        """
+        taxonRanks = {
+            'Phylum':'30',
+            'Class':'60',
+            'Order':'100',
+            'Family':'140',
+            'Genus':'180',
+            'Species':'220',
+            'Subspecies':'230',
+            }
+        
+        return taxonRanks[rankid]
 
     def get_rankname(self, input_taxonName, rankid=None):
         # Acquiring the taxon rank based on the taxon name.
