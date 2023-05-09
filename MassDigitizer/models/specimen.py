@@ -21,11 +21,10 @@ parent = os.path.dirname(current)
 sys.path.append(parent)
 
 # Internal dependencies
-
-from .model import Model
-import global_settings as gs
 import util
-
+import global_settings as gs
+from .model import Model
+from models import collection as coll
 
 class Specimen(Model):
     """
@@ -49,7 +48,7 @@ class Specimen(Model):
         self.taxonName       = ''
         self.taxonNameId     = 0
         #self.taxonspid
-        self.taxonRankName = ''
+        self.taxonRankName   = ''
         self.familyName      = ''
         self.higherTaxonName = ''
         self.typeStatusName  = ''
@@ -67,6 +66,7 @@ class Specimen(Model):
         self.institutionName = gs.institutionName
         self.collectionId    = collection_id
         self.collectionName  = gs.collectionName
+        self.collection      = coll.Collection(collection_id)
         self.userName        = gs.userName
         self.userId          = gs.spUserId
         # self.agentfullname   = gs.agentFullName
