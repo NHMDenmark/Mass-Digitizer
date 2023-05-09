@@ -1,6 +1,6 @@
-INSERT INTO "main"."georegion" ("name", "source", "collectionid") VALUES 
-('Dania',  'Major biogeographical region (NHMD)', (SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1)),
+INSERT INTO "main"."georegion" ("name", "source", "collectionid") VALUES
 ('None', 'none', (SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1)),
+('Dania',  'Major biogeographical region (NHMD)', (SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1)),
 ('Fennoscandia', 'Major biogeographical region (NHMD)', (SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1)),
 ('Grønland', 'Major biogeographical region (NHMD)', (SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1)),
 ('Europe', 'Major biogeographical region (NHMD)', (SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1)),
