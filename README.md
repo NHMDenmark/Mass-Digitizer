@@ -64,7 +64,7 @@ pip install -r requirements.txt
 
 For creating the executable, we use PyInstaller (https://pyinstaller.org/) using this command in the CLI from the root folder:
 ```
-pyinstaller .\MassDigitizer\DaSSCo.py --onedir --noconsole --paths=MassDigitizer\
+pyinstaller .\MassDigitizer\DaSSCo.py --onedir --noconsole --noconfirm --paths=MassDigitizer\
 ```  
 
 For creating the installer, we use [Inno Setup](https://jrsoftware.org/isinfo.php) and a definition file is located in the repo root [DaSSCO.iss](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/MassDigitizer/DaSSCo.iss). The Inno Setup scripts bundles the database with the executable into an installer file. Before running the Inno Setup script, it is necessary to fill the database file with the taxonomic spine and other predefined data. 
