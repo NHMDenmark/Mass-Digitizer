@@ -370,10 +370,12 @@ class AutoSuggest_popup():
                 taxonRankId = taxonNameRecords[0]['rankid']
                 taxonName = taxonNameRecords[0]['name']
                 parentName = taxonNameRecords[0]['parentfullname'] # TODO More secure with primary keys 
-
+                print('taxonRank IDDD:', taxonRankId)
                 # Given taxon matches rank
                 if taxonRankId == target_rankid: 
-                    break 
+                    break
+                elif taxonRankId < target_rankid:
+                    break
                 else:
                     # Target rank not hit; check next parent in line 
                     return (self.searchParentTaxon(parentName, target_rankid, treedefid))
