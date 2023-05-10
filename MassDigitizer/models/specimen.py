@@ -347,21 +347,60 @@ class Specimen(Model):
           taxonNameRecord (sqliterow) : SQLite Row holding taxon name record
         RETURNS taxonNameId (int) : 
         """
+        
         if object is not None: 
             self.taxonNameId = object.id
+            self.taxonSpid = object.spid
             self.taxonName = object.name
             self.taxonFullName = object.fullName
+            self.rankid = object.rankid # TODO: taxonrankid
+            self.taxonRankName = self.getTaxonRankname(object.rankid)
             self.higherTaxonName = object.parentFullName
+            self.familyName = object.familyName 
+             
         else:
             # Empty record 
             self.taxonNameId = 0
 
         return self.taxonNameId
     
+    def getTaxonRankname(self, rankid):
+        """ Return Taxon Rank name as based on rank id """
+
+        taxonRanks = {
+            0:'Life',
+            10:'Kingdom',
+            20:'Subkingdom',
+            30:'Phylum',
+            40:'Subphylum',
+            50:'Superclass',
+            60:'Class',
+            70:'Subclass',
+            80:'Infraclass',
+            90:'Superorder',
+            100:'Order',
+            110:'Suborder',
+            120:'Infraorder',
+            130:'Superfamily',
+            140:'Family',
+            150:'Subfamily',
+            160:'Tribe',
+            170:'Subtribe',
+            180:'Genus',
+            190:'Subgenus',
+            220:'Species',
+            230:'Subspecies',
+            240:'variety',
+            250:'subvariety',
+            260:'forma',
+            270:'subforma'
+            }
+        
+        return taxonRanks[rankid]
+
     def setTaxonNameFieldsUsingFullName(self, taxonFullName):
         """
-        Get taxon name record on the basis of full name  
-           and set respective fields 
+        Get taxon name record on the basis of full name and set respective fields 
         CONTRACT 
           taxonFullName (string) : Fullname value of selected taxon 
         RETURNS taxonNameId (int) : Primary key of selected taxon record 
