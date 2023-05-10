@@ -373,7 +373,8 @@ class AutoSuggest_popup():
                 
                 # Return when given taxon already matches rank or is of higher rank
                 if taxonRankId <= target_rankid:
-                    return ''
+                    # taxonName = ''
+                    break
                 else:
                     # Target rank not yet hit; check next parent in line 
                     return (self.searchParentTaxon(parentName, target_rankid, treedefid))
