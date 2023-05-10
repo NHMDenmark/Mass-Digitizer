@@ -156,7 +156,7 @@ class AutoSuggest_popup():
             elif event == 'txtHiTax':
                 # Family name taxon is being entered: Update suggestions
                 # IMplies a NOVEL NAME
-                higherTaxonName = values['txtHiTax'] # Family name
+                higherTaxonName = values['txtHiTax']
                 self.autoSuggestObject.familyName = higherTaxonName
                 if len(higherTaxonName) >= minimumCharacters:
                     self.handleSuggestions(values['txtHiTax'].lower(), 140, '=') # Rank Family is assumed (rank id: 140)
@@ -373,7 +373,7 @@ class AutoSuggest_popup():
                 
                 # Return when given taxon already matches rank or is of higher rank
                 if taxonRankId <= target_rankid:
-                    break
+                    return ''
                 else:
                     # Target rank not yet hit; check next parent in line 
                     return (self.searchParentTaxon(parentName, target_rankid, treedefid))
