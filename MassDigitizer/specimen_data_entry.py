@@ -588,7 +588,7 @@ class SpecimenDataEntry():
             #     self.collobj.taxonName = self.collobj.taxonFullName.split(' ')[-1] # Last name in string
 
             # Check if either updating existing or saving new record 
-            if int(self.collobj.taxonSpid) == 0:
+            if int(self.collobj.id) == 0:
                 newRecord = True
             else: newRecord = False
             
