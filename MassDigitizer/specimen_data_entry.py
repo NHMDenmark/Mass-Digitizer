@@ -592,10 +592,8 @@ class SpecimenDataEntry():
                 newRecord = True
             else: newRecord = False
             
-            # All checks out; Save specimen and clear non-sticky fields
+            # All checks out; Save specimen 
             savedRecord = self.collobj.save()
-            self.window['inpCatalogNumber'].update('') #clear barcode
-            self.collobj.id = 0   # Prepare for a new record
 
             # Remember id of record just save and prepare for blank record
             previousRecordId = savedRecord['id'] # Id to be used for refreshing the previous rows table.
