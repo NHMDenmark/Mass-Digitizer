@@ -634,6 +634,7 @@ class SpecimenDataEntry():
 
             # Fetch storage location record from database based on user interactions with autosuggest popup window
             selectedStorage = self.autoStorage.captureSuggestion(keyStrokes)
+            self.autoStorage = None # Reset autosuggest box
 
             # Set storage fields using record retrieved
             if selectedStorage is not None:
@@ -666,15 +667,7 @@ class SpecimenDataEntry():
 
             # Fetch taxon name record from database based on user interactions with autosuggest popup window
             selectedTaxonName = self.autoTaxonName.captureSuggestion(keyStrokes)
-            
-            # TODO Following is obsolete thanks to encapsulation into Specimen Model 
-            # # Set specimen record taxon fields 
-            # self.collobj.taxonSpid = selectedTaxonName.spid
-            # self.collobj.familyName = selectedTaxonName.familyName 
-            # self.collobj.rankid = selectedTaxonName.rankid 
-            # # Set taxon name fields 
-            # if self.collobj.taxonSpid == 0:
-            #     self.collobj.rankid = 0 
+            self.autoTaxonName = None # Reset autosuggest box
 
             if selectedTaxonName is not None:
                 # Set specimen record taxon name fields using record retrieved
@@ -684,19 +677,19 @@ class SpecimenDataEntry():
                 self.window['inpTaxonName'].update(selectedTaxonName.fullName)
 
                 # Add taxon name verbatim note to notes field and update UI field accordingly
-                if selectedTaxonName.notes != '':
-                    # First strip off previous new taxonomy notes
-                    cleanedNotes = self.window['inpNotes'].Get().split('|', 1)[0]
-                    # Add new taxonomy notes  
-                    self.collobj.notes = cleanedNotes + '|' + selectedTaxonName.notes
+                #if selectedTaxonName.notes != '':
+                currentNotes = self.window['inpNotes'].Get()
+                
+                # First strip off any previous new taxonomy notes
+                if ' | Verbatim_taxon:' in currentNotes: 
+                    currentNotes = currentNotes.split(' | Verbatim_taxon:', 1)[0]
+                # Add new taxonomy notes, if any   
+                self.collobj.notes = currentNotes + selectedTaxonName.notes
+            
                 self.window['inpNotes'].Update(self.collobj.notes)
 
                 # Move focus further to next field (Barcode textbox)
                 self.setFieldFocus('inpCatalogNumber')
-
-            # if self.autoTaxonName.familyName:
-            #     self.collobj.familyName = self.autoTaxonName.familyName
-            # self.currentRecord = self.autoTaxonName.get_record()
 
         except Exception as e:
             util.logger.error(str(e))

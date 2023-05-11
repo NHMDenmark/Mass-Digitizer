@@ -211,6 +211,9 @@ class AutoSuggest_popup():
                         self.autoSuggestObject.name     = self.selected_row['name']
                         self.autoSuggestObject.fullName = self.selected_row['fullname']
                         self.autoSuggestObject.parentFullName = self.selected_row['parentfullname']
+                        # Transfer any novel taxon verbatim notes 
+                        if self.autoSuggestObject.spid == 0 or self.autoSuggestObject.spid is None:
+                            self.autoSuggestObject.notes =  f" | Verbatim_taxon:{self.autoSuggestObject.fullName}"
                         break
                     else:
                         # Inputting novel taxon name
@@ -278,7 +281,7 @@ class AutoSuggest_popup():
                 # self.autoSuggestObject.name = values['txtInput']
                 # self.autoSuggestObject.fullName = f"{self.autoSuggestObject.name}".strip(' ')
                 self.autoSuggestObject.collectionId  = self.collectionID
-                self.autoSuggestObject.notes =  f" Verbatim_taxon:{self.autoSuggestObject.fullName}"
+                self.autoSuggestObject.notes =  f" | Verbatim_taxon:{self.autoSuggestObject.fullName}"
                 self.autoSuggestObject.parentFullName = values['txtHiTax'].strip()
                 self.autoSuggestObject.familyName = values['txtHiTax'].strip()
                 self.autoSuggestObject.rankid = self.determineRank(self.autoSuggestObject.fullName)
