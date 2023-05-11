@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "DaSSCo Mass Digitizer"
-#define MyAppVersion "0.4.1"
+#define MyAppVersion "0.4.0"
 ; Remember to update the version in the version_number.py script
 #define MyAppPublisher "NHMD"
 #define MyAppExeName "DaSSCo.exe"
