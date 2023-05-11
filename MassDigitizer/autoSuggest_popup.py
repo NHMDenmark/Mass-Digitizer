@@ -406,23 +406,20 @@ class AutoSuggest_popup():
                 taxonRankId = taxonNameRecords[0]['rankid']
                 taxonName = taxonNameRecords[0]['name']
                 parentName = taxonNameRecords[0]['parentfullname'] # TODO More secure with primary keys 
-                
+                print('----', taxonRankId, taxonName, parentName, '----')
                 # Return when given taxon already matches rank or is of higher rank
-<<<<<<< HEAD
-                if taxonRankId < target_rankid:
-                    # self.taxonName = ''
-                    break
-=======
-                if taxonRankId <= target_rankid:
+
+                if taxonRankId == target_rankid:
                     return taxonName
->>>>>>> 8d9f2806927df54982cf3b77c7102cca680f3ee9
+
                 else:
-                    # Target rank not yet hit; check next parent in line 
+                    # Target rank not yet hit; check next parent in line
+                    print('IN recursion!!!')
                     return (self.searchParentTaxon(parentName, target_rankid, treedefid))
                 
             else:
                 # Can't find (further) parent taxon 
-                #taxonName = '-not found-'  
+                taxonName = ''
                 #raise Exception(f"Could not retrieve parent taxon of target rank: {target_rankid} !") 
                 break # return current
         
