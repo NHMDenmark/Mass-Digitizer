@@ -232,26 +232,27 @@ class Specimen(Model):
         Get prep type record on the basis of list index 
             and set respective fields 
         """
-        self.prepTypeId = self.prepTypes[index]['id']
-        self.prepTypeName = self.prepTypes[index]['name']
+        if index >= 0: # Apparently, index -1 selects the last item in the list 
+            self.prepTypeId = self.prepTypes[index]['id']
+            self.prepTypeName = self.prepTypes[index]['name']
 
     def setTypeStatusFields(self,index):
         """
         Get type status record on the basis of list index 
             and set respective fields 
         """
-        self.typeStatusId = self.typeStatuses[index]['id']
-        self.typeStatusName = self.typeStatuses[index]['name']
+        if index >= 0: # Apparently, index -1 selects the last item in the list 
+            self.typeStatusId = self.typeStatuses[index]['id']
+            self.typeStatusName = self.typeStatuses[index]['name']
 
     def setGeoRegionFields(self,index):
         """
         Get type status record on the basis of list index 
             and set respective fields 
         """
-
-        self.geoRegionId = self.geoRegions[index]['id']
-        self.geoRegionName = self.geoRegions[index]['name']       
-        pass
+        if index >= 0: # Apparently, index -1 selects the last item in the list 
+            self.geoRegionId = self.geoRegions[index]['id']
+            self.geoRegionName = self.geoRegions[index]['name']       
 
     def setStorageFields(self, index):
         """
