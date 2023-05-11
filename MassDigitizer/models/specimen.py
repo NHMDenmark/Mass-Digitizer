@@ -48,8 +48,8 @@ class Specimen(Model):
         self.taxonName       = ''
         self.taxonNameId     = 0
         self.taxonSpid       = 0
-        self.taxonRankName   = ''
-        self.familyName      = ''
+        self.taxonRankName   = '' # TODO 
+        self.familyName      = '' # TODO 
         self.higherTaxonName = ''
         self.typeStatusName  = ''
         self.typeStatusId    = 0
@@ -232,26 +232,27 @@ class Specimen(Model):
         Get prep type record on the basis of list index 
             and set respective fields 
         """
-        self.prepTypeId = self.prepTypes[index]['id']
-        self.prepTypeName = self.prepTypes[index]['name']
+        if index >= 0: # Apparently, index -1 selects the last item in the list 
+            self.prepTypeId = self.prepTypes[index]['id']
+            self.prepTypeName = self.prepTypes[index]['name']
 
     def setTypeStatusFields(self,index):
         """
         Get type status record on the basis of list index 
             and set respective fields 
         """
-        self.typeStatusId = self.typeStatuses[index]['id']
-        self.typeStatusName = self.typeStatuses[index]['name']
+        if index >= 0: # Apparently, index -1 selects the last item in the list 
+            self.typeStatusId = self.typeStatuses[index]['id']
+            self.typeStatusName = self.typeStatuses[index]['name']
 
     def setGeoRegionFields(self,index):
         """
         Get type status record on the basis of list index 
             and set respective fields 
         """
-
-        self.geoRegionId = self.geoRegions[index]['id']
-        self.geoRegionName = self.geoRegions[index]['name']       
-        pass
+        if index >= 0: # Apparently, index -1 selects the last item in the list 
+            self.geoRegionId = self.geoRegions[index]['id']
+            self.geoRegionName = self.geoRegions[index]['name']       
 
     def setStorageFields(self, index):
         """
@@ -302,9 +303,14 @@ class Specimen(Model):
         """
         if record is not None: 
             self.taxonNameId = record['id'] 
+            self.taxonSpid = record['spid']
             self.taxonName = record['name'] 
             self.taxonFullName = record['fullname'] 
             self.higherTaxonName = record['parentfullname'] 
+            self.rankid = record['rankid']  # TODO 
+            self.taxonRankName   = self.getTaxonRankname(self.rankid) 
+            self.familyName      = self.searchParentTaxon(self.taxonFullName, 140, self.collection.taxonTreeDefId) 
+
             #self.notes = f"{self.notes} | {record['notes']}"
         else:
             # Empty record 
@@ -439,5 +445,64 @@ class Specimen(Model):
         else: 
             return self.storageName
         
-    # def __str__ (self):
-    #     return f'[{self.table}] id:{self.id}, name:{self.name}, fullname = {self.fullName}, notes = {self.notes}'
+    def determineRank(self, taxonNameEntry):
+        """
+        Determine rank of given taxon name entry  
+        TODO Function contract 
+        """
+        rankid = 999
+        try: 
+            elementCount = len(taxonNameEntry.strip().split(' '))
+            subgenusCount = 0
+            if '(' in taxonNameEntry: subgenusCount = 1
+
+            if ' var. ' in taxonNameEntry: rankid = 240
+            elif ' subvar.  ' in taxonNameEntry: rankid = 250
+            elif ' f. ' in taxonNameEntry: rankid = 260 
+            elif ' subf. ' in taxonNameEntry: rankid = 270 
+            elif elementCount == 3 + subgenusCount: rankid = 230
+            elif elementCount == 2 + subgenusCount: rankid = 220
+            elif elementCount == 1 + subgenusCount: rankid = 180
+        except: 
+            util.logger.error(f'Could not determine rank of novel taxon: {taxonNameEntry}')
+        
+        return rankid
+    
+    def searchParentTaxon(self, taxonName, target_rankid, treedefid):
+        """
+        Will traverse a given taxon's parental lineage until it hits the target rank 
+        taxonName: is the desired name to acquire a family name for.
+        target_rankid: is the target rank
+        returns: target higher rank concept
+        """
+        
+        taxonRankId = 270 # Start with lowest possible rank
+
+        # Keep on traversing parental branch until the specified rank level has been passed
+        while (taxonRankId >= target_rankid):
+            # Get current taxon record on fullname and taxon tree   
+            taxonNameRecords = self.db.getRowsOnFilters('taxonname', filters={'fullname': f"='{taxonName}'", 'treedefid': f"= '{treedefid}'"})
+
+            if len(taxonNameRecords) > 0: 
+                taxonRankId = taxonNameRecords[0]['rankid']
+                taxonName = taxonNameRecords[0]['name']
+                parentName = taxonNameRecords[0]['parentfullname'] # TODO More secure with primary keys 
+                
+                # Return when given taxon already matches rank or is of higher rank
+                if taxonRankId <= target_rankid:
+                    break # return current
+                else:
+                    # Target rank not yet hit; check next parent in line 
+                    return (self.searchParentTaxon(parentName, target_rankid, treedefid))
+                
+            else:
+                # Can't find (further) parent taxon 
+                #taxonName = '-not found-'  
+                #raise Exception(f"Could not retrieve parent taxon of target rank: {target_rankid} !") 
+                break # return current
+        
+        return taxonName
+   
+    def __str__ (self):
+        return f'[{self.table}] id:{self.id}, name:{self.name}, fullname = {self.fullName}, notes = {self.notes}'
+ 

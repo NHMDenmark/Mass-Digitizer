@@ -147,7 +147,7 @@ class SpecimenDataEntry():
         broadGeo = [
             sg.Text('Broad geographic region:', size=captionSize, background_color=blueArea, text_color='black', font=captionFont),
             #sg.Text(indicatorLeft, key='inlGeoRegion', text_color='black', background_color=blueArea, visible=True, font=wingdingFont),
-            sg.Combo(util.convert_dbrow_list(self.collobj.geoRegions), size=blueSize, key='cbxGeoRegion', text_color='black', background_color='white', font=fieldFont, readonly=True, enable_events=True),
+            sg.Combo(util.convert_dbrow_list(self.collobj.geoRegions),   key='cbxGeoRegion',  size=blueSize,  text_color='black', background_color='white', font=fieldFont, readonly=True, enable_events=True, pad=(0,0)),
             sg.Text(indicatorRight, key='inrGeoRegion', background_color=blueArea, visible=False, font=wingdingFont)
             ]
         
@@ -726,7 +726,6 @@ class SpecimenDataEntry():
         """    
         
         # Set specimen object instance fields from input form
-
         self.collobj.setStorageFieldsFromRecord(self.getStorageRecord())
         self.collobj.setPrepTypeFields(self.window['cbxPrepType'].widget.current())
         self.collobj.setTypeStatusFields(self.window['cbxTypeStatus'].widget.current())

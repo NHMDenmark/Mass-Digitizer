@@ -2,9 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "DaSSCo Mass Digitizer"
-
-#define MyAppVersion "0.4.1"
-
+#define MyAppVersion "0.4.0"
 ; Remember to update the version in the version_number.py script
 #define MyAppPublisher "NHMD"
 #define MyAppExeName "DaSSCo.exe"
@@ -46,7 +44,7 @@ Source: "sql\editions\temp\db.sqlite3"; DestDir: "{userdocs}\DaSSCo"; Flags: ign
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
-Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"                                                     
+Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 ;[Run]
