@@ -367,6 +367,8 @@ class Specimen(Model):
     def getTaxonRankname(self, rankid):
         """ Return Taxon Rank name as based on rank id """
 
+        taxonRank = 'unknown'
+
         taxonRanks = {
             0:'Life',
             10:'Kingdom',
@@ -396,7 +398,10 @@ class Specimen(Model):
             270:'subforma'
             }
         
-        return taxonRanks[rankid]
+        if rankid in taxonRanks:
+            taxonRank = taxonRanks[rankid]
+
+        return taxonRank
 
     def setTaxonNameFieldsUsingFullName(self, taxonFullName):
         """

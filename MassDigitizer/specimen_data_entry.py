@@ -553,23 +553,17 @@ class SpecimenDataEntry():
                     # If there are contents ensure that these are transferred to the the specimen object instance
                     self.collobj.multiSpecimen = multispecimenName
                 else:
-                    validationMessage = "Attempt to save with empty multispecimen name blocked!"
-                    util.logger.error(validationMessage)
-                    sg.PopupError(validationMessage)
+                    self.validationFeedback("Cannot save with empty multispecimen name!")
                     return
 
             # 2. Validate catalog number (barcode) input field 
             if values['inpCatalogNumber'] == '':
                 # Barcode (catalog number) must not be empty!
-                validationMessage = "Cannot leave barcode empty!"
-                util.logger.error(validationMessage)
-                sg.PopupError(validationMessage)
+                self.validationFeedback("Cannot leave barcode empty!")
                 return
             if len(values['inpCatalogNumber']) != 8:
                 # Barcode (catalog number) must be 8 digits!
-                validationMessage = "Barcode incorrect length (8)!"
-                util.logger.error(validationMessage)
-                sg.PopupError(validationMessage)
+                self.validationFeedback("Barcode incorrect length (8)!")
                 return
             # END VALIDATIONS
 
@@ -625,6 +619,11 @@ class SpecimenDataEntry():
 
         return result 
  
+    def validationFeedback(self, validationMessage):
+        """Gives a validation feedback message to the user"""
+        util.logger.error(validationMessage)
+        sg.PopupTimed(validationMessage)
+
     def handleStorageInput(self, keyStrokes):
         """
         Show autosuggest popup for Storage selection and handle input from that window. 
