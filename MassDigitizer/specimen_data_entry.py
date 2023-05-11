@@ -780,7 +780,7 @@ class SpecimenDataEntry():
         if len(taxonRecords) > 0: 
             taxonRecord = taxonRecords[0]
         else: 
-            taxonRecord = None # For NHM entomology there are no storage.
+            taxonRecord = None 
         return taxonRecord
 
     def setRecordFields(self, record, stickyFieldsOnly=False):

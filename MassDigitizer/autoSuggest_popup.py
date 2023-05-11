@@ -15,7 +15,6 @@ either express or implied. See the License for the specific language governing p
 """
 
 import PySimpleGUI as sg
-from itertools import chain
 
 # Internal Dependencies
 import util 
@@ -24,8 +23,6 @@ import global_settings as gs
 
 from models import model
 from models import collection as coll
-from models import specimen
-from models import taxon
 
 class AutoSuggest_popup():
     '''
@@ -289,6 +286,13 @@ class AutoSuggest_popup():
                 self.autoSuggestObject.rankid = self.determineRank(self.autoSuggestObject.fullName)
 
                 # TODO Persist novel taxon so it will be auto-suggested next time around
+                self.db.insertRow('taxonname', {"name": f'"{self.autoSuggestObject.name.strip()}"', 
+                                                "fullname": f'"{self.autoSuggestObject.fullName.strip()}"',
+                                                "rankid": f'{self.autoSuggestObject.rankid}',
+                                                "parentfullname": f'"{self.autoSuggestObject.parentFullName}"',
+                                                "treedefid": f'{self.collection.taxonTreeDefId}',
+                                                "taxonrank": f'"{self.autoSuggestObject.rankName}"',
+                                                } )
 
                 window['frmHiTax'].update(visible=False) # Hide family search panel for next taxon name entry 
                 break
