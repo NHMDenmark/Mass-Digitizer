@@ -187,6 +187,7 @@ class AutoSuggest_popup():
                     self.autoSuggestObject.collectionId  = self.collectionID
 
                     if self.tableName == 'taxonname':
+                        print('A known name!! in', event)
 
                         self.rankId = self.selected_row['rankid']
                         self.autoSuggestObject.rankid = self.rankId 
@@ -372,8 +373,8 @@ class AutoSuggest_popup():
                 parentName = taxonNameRecords[0]['parentfullname'] # TODO More secure with primary keys 
                 
                 # Return when given taxon already matches rank or is of higher rank
-                if taxonRankId <= target_rankid:
-                    # taxonName = ''
+                if taxonRankId < target_rankid:
+                    # self.taxonName = ''
                     break
                 else:
                     # Target rank not yet hit; check next parent in line 
