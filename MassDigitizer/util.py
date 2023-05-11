@@ -21,7 +21,7 @@ from datetime import datetime
 import random
 
 #Central place to manage version numbers
-versionNumber = "0.3.3" # Before compiling exe, please set the version number above
+versionNumber = "0.4.1" # Before compiling exe, please set the version number above
 logger = logging.getLogger()
 
 def clear():
