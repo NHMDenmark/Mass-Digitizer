@@ -726,7 +726,6 @@ class SpecimenDataEntry():
         """    
         
         # Set specimen object instance fields from input form
-
         self.collobj.setStorageFieldsFromRecord(self.getStorageRecord())
         self.collobj.setPrepTypeFields(self.window['cbxPrepType'].widget.current())
         self.collobj.setTypeStatusFields(self.window['cbxTypeStatus'].widget.current())

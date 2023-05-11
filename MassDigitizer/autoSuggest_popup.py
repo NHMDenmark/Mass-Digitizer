@@ -22,6 +22,7 @@ import data_access
 import global_settings as gs
 
 from models import model
+from models import specimen
 from models import collection as coll
 
 class AutoSuggest_popup():
@@ -54,6 +55,8 @@ class AutoSuggest_popup():
         self.suggestions = []
         self.selected_row = None
 
+        # TODO Temporary hack instantiating a specimen model for common access to functions
+        self.specimen = specimen.Specimen(collection_id)
 
         self.window = self.buildGui()
 
@@ -190,7 +193,7 @@ class AutoSuggest_popup():
                         self.rankId = self.selected_row['rankid']
                         self.autoSuggestObject.rankid = self.rankId 
                         self.autoSuggestObject.treedefid = self.collection.taxonTreeDefId
-                        self.familyName = self.searchParentTaxon(self.selected_row['fullname'], 140, self.collection.taxonTreeDefId)
+                        self.familyName = self.specimen.searchParentTaxon(self.selected_row['fullname'], 140, self.collection.taxonTreeDefId)
                         self.autoSuggestObject.familyName = self.familyName
                         self.currentRecord = self.autoSuggestObject.getFieldsAsDict()
                         # The above family name will be picked up by the specimen-data-entry class
@@ -221,13 +224,12 @@ class AutoSuggest_popup():
                         self.autoSuggestObject.rankid = 0
 
                         # if not self.autoSuggestObject.parentFullName:
-
                         window['txtHiTax'].Update(self.autoSuggestObject.parentFullName)
                         #window['frmHiTax'].update(visible=False)
                         window['btnOK'].SetFocus()                        
                         
                         #self.autoSuggestObject.save()                   
-                    #break # Stay for confirmation of higher taxon entry
+                    #break # Disabled as to stay for confirmation of higher taxon entry
                 else:                      
                     if self.tableName == 'taxonname':
                         # Unknown taxon: Switch to family name search
@@ -242,30 +244,9 @@ class AutoSuggest_popup():
                             self.autoSuggestObject.parentFullName = values['lstSuggestions'][0]
                         else: # family name submitted not recognized or empty.
                             self.autoSuggestObject.parentFullName = values['txtHiTax']
-                        self.autoSuggestObject.familyName = self.searchParentTaxon(self.autoSuggestObject.parentFullName, 140, self.collection.taxonTreeDefId)
+                        self.autoSuggestObject.familyName = self.specimen.searchParentTaxon(self.autoSuggestObject.parentFullName, 140, self.collection.taxonTreeDefId)
                         self.familyName = self.autoSuggestObject.familyName
                 window['txtHiTax'].update(self.familyName)
-
-                # elif self.novelTaxon:
-                #     # Since the listbox is empty a NOVEL! name has been set to True
-                #     if self.tableName == 'taxonname':
-                #
-                #         # New taxon name is assumed and higher taxon input field is made available
-                #         window['frmHiTax'].update(visible=True)
-                #         window['txtHiTax'].SetFocus()
-                #         self.autoSuggestObject.id       = 0
-                #         self.autoSuggestObject.spid     = 0
-                #         self.autoSuggestObject.name     = values['txtInput'].split(' ').pop()
-                #         self.autoSuggestObject.fullName = values['txtInput']
-                #
-                #         if values['lstSuggestions']: # Asking for family name.
-                #             self.autoSuggestObject.parentFullName = values['lstSuggestions'][0]
-                #         else:
-                #             self.autoSuggestObject.parentFullName = values['txtHiTax']
-                #             self.autoSuggestObject.higherTaxonName = None
-                #             # self.autoSuggestObject.parentFullName = values['lstSuggestions'][0] #selected_row['parentfullname']
-                #         self.autoSuggestObject.familyName = self.searchParentTaxon(self.autoSuggestObject.parentFullName, 140, self.collection.taxonTreeDefId)
-                #         self.familyName = self.autoSuggestObject.familyName
 
             elif event == 'btnOK' :
                 # Approval of family selected for novel taxon entry 
@@ -284,7 +265,7 @@ class AutoSuggest_popup():
                 self.autoSuggestObject.notes =  f" | Verbatim_taxon:{self.autoSuggestObject.fullName}"
                 self.autoSuggestObject.parentFullName = values['txtHiTax'].strip()
                 self.autoSuggestObject.familyName = values['txtHiTax'].strip()
-                self.autoSuggestObject.rankid = self.determineRank(self.autoSuggestObject.fullName)
+                self.autoSuggestObject.rankid = self.specimen.determineRank(self.autoSuggestObject.fullName)
 
                 # TODO Persist novel taxon so it will be auto-suggested next time around
                 self.db.insertRow('taxonname', {"name": f'"{self.autoSuggestObject.name.strip()}"', 
@@ -306,29 +287,6 @@ class AutoSuggest_popup():
                 util.logger.error('Attempt to close autosuggest window failed...')
                 
         return self.autoSuggestObject
-
-    def determineRank(self, taxonNameEntry):
-        """
-        Determine rank of given taxon name entry  
-        TODO Function contract 
-        """
-        rankid = 999
-        try: 
-            elementCount = len(taxonNameEntry.strip().split(' '))
-            subgenusCount = 0
-            if '(' in taxonNameEntry: subgenusCount = 1
-
-            if ' var. ' in taxonNameEntry: rankid = 240
-            elif ' subvar.  ' in taxonNameEntry: rankid = 250
-            elif ' f. ' in taxonNameEntry: rankid = 260 
-            elif ' subf. ' in taxonNameEntry: rankid = 270 
-            elif elementCount == 3 + subgenusCount: rankid = 230
-            elif elementCount == 2 + subgenusCount: rankid = 220
-            elif elementCount == 1 + subgenusCount: rankid = 180
-        except: 
-            util.logger.error(f'Could not determine rank of novel taxon: {taxonNameEntry}')
-        
-        return rankid
 
     def handleSuggestions(self, keyStrokes, rankId=270, rankSign='<='):  # rank id 270 == 'subforma'
         """
@@ -388,41 +346,6 @@ class AutoSuggest_popup():
     #
     #     return rows
 
-    def searchParentTaxon(self, taxonName, target_rankid, treedefid):
-        """
-        Will traverse a given taxon's parental lineage until it hits the target rank 
-        taxonName: is the desired name to acquire a family name for.
-        target_rankid: is the target rank
-        returns: target higher rank concept
-        """
-        
-        taxonRankId = 270 # Start with lowest possible rank
-
-        # Keep on traversing parental branch until the specified rank level has been passed
-        while (taxonRankId >= target_rankid):
-            # Get current taxon record on fullname and taxon tree   
-            taxonNameRecords = self.db.getRowsOnFilters('taxonname', filters={'fullname': f"='{taxonName}'", 'treedefid': f"= '{treedefid}'"})
-
-            if len(taxonNameRecords) > 0: 
-                taxonRankId = taxonNameRecords[0]['rankid']
-                taxonName = taxonNameRecords[0]['name']
-                parentName = taxonNameRecords[0]['parentfullname'] # TODO More secure with primary keys 
-                
-                # Return when given taxon already matches rank or is of higher rank
-                if taxonRankId <= target_rankid:
-                    return taxonName
-                else:
-                    # Target rank not yet hit; check next parent in line 
-                    return (self.searchParentTaxon(parentName, target_rankid, treedefid))
-                
-            else:
-                # Can't find (further) parent taxon 
-                #taxonName = '-not found-'  
-                #raise Exception(f"Could not retrieve parent taxon of target rank: {target_rankid} !") 
-                break # return current
-        
-        return taxonName
-    
     def Show(self):
         """Make auto-suggest popup window visible""" 
 
