@@ -490,6 +490,7 @@ class Specimen(Model):
                 
                 # Return when given taxon already matches rank or is of higher rank
                 if taxonRankId <= target_rankid:
+                    if taxonRankId < target_rankid: taxonName = '' # Clear taxon name if higher than target rank
                     break # return current
                 else:
                     # Target rank not yet hit; check next parent in line 

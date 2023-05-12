@@ -21,7 +21,7 @@ from datetime import datetime
 import random
 
 #Central place to manage version numbers
-versionNumber = "0.4.0" # Before compiling exe, please set the version number above
+versionNumber = "0.4.1" # Before compiling exe, please set the version number above
 logger = logging.getLogger()
 
 def clear():
@@ -57,40 +57,6 @@ def buildLogger(): #moduleName):
    logger.setLevel(logging.DEBUG)
    
    logger.debug('Logging set up')
-
-""" def tryout_Path():
-    db_lowerLimit = 1000 #DB size minimum limit for successful testing.
-    # Intended to return the True path in case OneDrive is running. DB size testing will determine which path is returned.
-    alternativePath = os.path.expanduser(r'~\OneDrive - University of Copenhagen\Documents\DaSSCO')
-    regularPath = getUserPath()
-    print('regular:', getUserPath(), type(getUserPath()))
-    print('alternative:', alternativePath)
-    test_regularDBPath = regularPath+'\db.sqlite3'
-    print('regular DB:', test_regularDBPath)
-    # usrPath = os.path.expanduser(getUserPath())
-    # print("usrPath;;", type(usrPath), usrPath)
-    test_altDBPath = os.path.expanduser(
-        r'~\OneDrive - University of Copenhagen\Documents\DaSSCO\db.sqlite3') #Test on whether the DB is in the alternative user path
-    sizeUserDB = None
-    try:
-        sizeUserDB = os.stat(test_regularDBPath)
-    except Exception as e:
-        logging.debug(e)
-
-    sizeAlternativeDB = os.stat(test_altDBPath)
-
-    sizeTest_altuserPath = os.stat(test_altDBPath)
-    alternative_path_for_log = f'Alternative {sizeAlternativeDB} raw size : {sizeTest_altuserPath.st_size}'
-    logging.debug(alternative_path_for_log)
-    # Below is the size test on the regular path, and on the
-    if sizeUserDB:
-        if sizeUserDB.st_size > db_lowerLimit:
-            print('regular :: ',sizeUserDB.st_size )
-            return regularPath
-    elif sizeTest_altuserPath.st_size > db_lowerLimit:
-        print('alternative :: ', sizeAlternativeDB.st_size)
-        return alternativePath
- """
 
 def getLogsPath():
    return str(Path(getUserPath()).joinpath('logs'))
