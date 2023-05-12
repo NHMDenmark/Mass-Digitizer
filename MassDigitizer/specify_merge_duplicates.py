@@ -74,7 +74,7 @@ class MergeDuplicates():
             
             # Allow user selection of collection (currently limited to NHMD Vascular Plants)
             collectionId = 0
-            collIndex = input('?')
+            collIndex = input('Enter collection index (e.g. 1):')
             if collIndex == "1": 
                 # NHMD Vascular plants selected  
                 collectionId = 688130
@@ -98,6 +98,7 @@ class MergeDuplicates():
                 if self.collection.spid > 0:
                     # Collection object succesfully fetched & instantiated  
                     max_tries = 0
+                    self.printLegend()
                     #self.handleQualifiedTaxa()
                     self.checkPrecollectedTaxa()
                     self.scan()
@@ -133,7 +134,7 @@ class MergeDuplicates():
                 # If 
                 self.handleSpecifyTaxon(specifyTaxon)
             else:
-                print(f'Could not retrieve taxon...', end='') 
+                print('#', end='') #[Could not retrieve taxon]
 
     def scan(self):
         """
@@ -167,7 +168,7 @@ class MergeDuplicates():
                     # Iterate taxa in batch 
                     for specifyTaxon in batch:
                         self.handleSpecifyTaxon(specifyTaxon)
-                    print()
+                    print(']', end='') 
                     
                     # Prepare for fetching next batch, by increasing offset with batchsize 
                     offset += self.batchSize
@@ -187,7 +188,9 @@ class MergeDuplicates():
           - Performing merge of any unambiguous duplicates after updating author info if needed 
           - Recording any ambivalent cases
         """
-        print('.', end='')  
+        #print('.', end='')  # Handling taxon 
+        specifyTaxonId = specifyTaxon['id']
+        print(f'[{specifyTaxonId}]', end='')  # Handling taxon 
         # Create local taxon instance from original Specify taxon data 
         original = taxon.Taxon(self.collection.id)
         original.fill(specifyTaxon)
@@ -217,7 +220,7 @@ class MergeDuplicates():
 
                     # If the parents match then treat as duplicate 
                     if lookup.parentId == original.parentId:
-                        print()
+                        print('!', end='') # possible duplicate hit! 
                         self.logger.info('Duplicate detected!')
                         self.logger.info(f' - original : "{original}"')
                         self.logger.info(f' - duplicate : "{lookup}"')
@@ -233,25 +236,7 @@ class MergeDuplicates():
                         
                         # If both original and lookup contain author data and the author is not identical, 
                         #   retrieve authorship from GBIF 
-                        unResolved = True 
-                        if (original.author != lookup.author) and (original.author is not None or lookup.author is not None) and (original.author != '' or lookup.author != ''): # and (original.author is not None and lookup.author is not None): 
-                            #self.logger.info('Both original and lookup contain author data and the author is not identical! ')
-                            self.logger.info('Original author and lookup author are not identical and neither is empty!')
-                            self.logger.info('Retrieving authorship from GBIF...')
-                            
-                            criterium1 = self.resolveAuthorName(original)
-                            criterium2 = self.resolveAuthorName(lookup)
-                            unResolved = criterium1 and criterium2 
-                        else:
-                            if (original.author is None and lookup.author is None):
-                                self.logger.info('Author info is missing...')
-                                # Update authorname at Specify also 
-                                criterium1 = self.resolveAuthorName(original)
-                                criterium2 = self.resolveAuthorName(lookup)
-                                unResolved = criterium1 and criterium2
-                            else:
-                                self.logger.info('Original and lookup have no author data or the author is identical. ')
-                                unResolved = False  
+                        unResolved = self.resolveAuthorNames(original, lookup)
 
                         if unResolved:
                         # If authorship could not be resolved, add to ambivalent cases 
@@ -263,6 +248,7 @@ class MergeDuplicates():
                             lookup.remarks = str(lookup.remarks) + f' | {ambivalence}'
                             lookup.duplicateSpid = original.spid
                             self.ambivalentCases.append(lookup)
+                            print('?', end='')
                         else: 
                             # Prepare for merging by resetting target & source before evaluation 
                             target = None
@@ -282,6 +268,7 @@ class MergeDuplicates():
                                 # Stop latch for user interaction (disabled)
                                 if True: # input(f'Do you want to merge {source.spid} with {target.spid} (y/n)?') == 'y':
                                     # Do the actual merging 
+                                    print('{', end='')
                                     start = time.time()
                                     response = self.sp.mergeTaxa(source.spid, target.spid)
                                     if response.status_code == "404":
@@ -290,6 +277,7 @@ class MergeDuplicates():
                                         self.logger.info(' - 500: Internal Server Error.')
                                     end = time.time()
                                     timeElapsed = end - start
+                                    print(round(timeElapsed, 2), end='}')
                                     self.logger.info(f'Merged {source.spid} with {target.spid}; Time elapsed: {timeElapsed} ')
                                     pass
                     else:
@@ -302,9 +290,35 @@ class MergeDuplicates():
                         lookup.remarks = str(lookup.remarks) + f' | {ambivalence}'
                         lookup.duplicateSpid = original.spid
                         self.ambivalentCases.append(lookup)
+                        print('¿', end='')
         else:
-            print('x', end='')
+            print('x', end='') # Duplicate no (more) found 
 
+    def resolveAuthorNames(self, original, lookup):
+        # If both original and lookup contain author data and the author is not identical, 
+        #   retrieve authorship from GBIF 
+        unResolved = True 
+        if (original.author != lookup.author) and (original.author is not None or lookup.author is not None) and (original.author != '' or lookup.author != ''): # and (original.author is not None and lookup.author is not None): 
+            #self.logger.info('Both original and lookup contain author data and the author is not identical! ')
+            self.logger.info('Original author and lookup author are not identical and neither is empty!')
+            self.logger.info('Retrieving authorship from GBIF...')
+            
+            criterium1 = self.resolveAuthorName(original)
+            criterium2 = self.resolveAuthorName(lookup)
+            unResolved = criterium1 and criterium2 
+        else:
+            if (original.author is None and lookup.author is None):
+                self.logger.info('Author info is missing...')
+                # Update authorname at Specify also 
+                criterium1 = self.resolveAuthorName(original)
+                criterium2 = self.resolveAuthorName(lookup)
+                unResolved = criterium1 and criterium2
+            else:
+                self.logger.info('Original and lookup have no author data or the author is identical. ')
+                unResolved = False  
+        
+        return unResolved
+            
     def resolveAuthorName(self, taxonInstance):
         """
         Method for resolve the author name of a given taxon class instance by consulting the GBIF API 
@@ -313,8 +327,8 @@ class MergeDuplicates():
         RETURNS boolean : Flag to indicate whether the resolution was succesful 
         """
         self.logger.info('Resolving author name...')
-        acceptedNameMatches = self.gbif.matchName('species', taxonInstance.fullName, self.collection.spid)
-                            
+        acceptedNameMatches = self.gbif.matchName('species', taxonInstance.fullName, self.collection.spid, 'Plantae')
+        
         nrOfMatches = len(acceptedNameMatches)
         if nrOfMatches == 1:
             self.logger.info('Retrieved unambiguous accepted name from GBIF...')
@@ -324,6 +338,31 @@ class MergeDuplicates():
                 unResolved = False
             else:
                 unResolved = True
+        else:
+            self.logger.info(f'Could not retrieve unambiguous accepted name from GBIF... ({nrOfMatches} matches)')
+            unResolved = True
+        return unResolved
+
+    def resolveParentTaxon(self, taxonInstance):
+        """
+        Method for resolve the parent taxon of a given taxon class instance by consulting the GBIF API 
+        CONTRACT 
+            taxonInstance (taxon.Taxon) : Taxon class instance for which the parent taxon should be resolved
+        RETURNS boolean : Flag to indicate whether the resolution was succesful 
+        """
+        self.logger.info('Resolving parent taxon...')
+        acceptedNameMatches = self.gbif.matchName('species', taxonInstance.fullName, self.collection.spid, 'Plantae')
+        
+        nrOfMatches = len(acceptedNameMatches)
+        if nrOfMatches == 1:
+            self.logger.info('Retrieved unambiguous accepted name from GBIF...')
+            print(acceptedNameMatches[0]['parent'])
+            # Update the parent taxon at Specify 
+            #res = self...
+            #if res != '500':
+            #    unResolved = False
+            #else:
+            #    unResolved = True
         else:
             self.logger.info(f'Could not retrieve unambiguous accepted name from GBIF... ({nrOfMatches} matches)')
             unResolved = True
@@ -342,6 +381,11 @@ class MergeDuplicates():
         else: 
             return 500 
 
+    def updateSpecifyTaxonParent(self, taxonInstance, taxonParent):
+
+
+        pass
+
     def recordAmbivalentCase(self, original, lookup, ambivalence):
         """
         Function for recording ambivalent duplicate cases for export 
@@ -353,10 +397,21 @@ class MergeDuplicates():
         lookup.remarks = str(lookup.remarks) + f' | {ambivalence}'
         self.ambivalentCases.append(lookup)
 
+    def printLegend(self):
+        print('LEGEND:')
+        print('[id] = Single taxon entry (id = primary key)')
+        print('!    = Possible duplicate ')
+        print('#    = Could not retrieve taxon ')
+        print('?    = Ambivalence on authors ')
+        print('¿    = Ambivalence on parent taxa ')
+        print('x    = Duplicate no longer there ')
+        print(r'{t}  = Merging duplicate (t = time elapsed)')
+        #print('[    = Start of batch ')
+        #print(']    = End of batch ')
+        
 
 gs.baseURL = 'https://specify-snm.science.ku.dk/' # Set target URL for Specify7 API instance 
 
 md = MergeDuplicates() # Instantiate class 
 
 md.main() # Run code 
-
