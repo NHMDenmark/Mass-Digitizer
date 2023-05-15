@@ -139,12 +139,21 @@ def getRandomNumberString():
     randomNumberString = hash(f"{datetime.now()}{r1}")  # Get random number as container name
     if randomNumberString < 0: randomNumberString += sys.maxsize  # Ensure that it's a positive number
     return randomNumberString
-
+    
+def pretty_print_POST(req):
+    """
+    Format HTTP request header and body into easily legible output
+    """
+    print('{}\n{}\r\n{}\r\n\r\n{}'.format(
+      '-----------START-----------',
+      req.method + ' ' + req.url,
+      '\r\n'.join('{}: {}'.format(k, v) for k, v in req.headers.items()),
+      req.body,
+    ))
+    print('------------END------------')
 
 def getVersionNumber():
     return versionNumber
-
-
 # """This code can be modified to replace the version number in the
 # DaSSCo.issfile which has this format:/ #define MyAppVersion "0.2.5" /
 # (Please ignore the forward slashes above)"""
