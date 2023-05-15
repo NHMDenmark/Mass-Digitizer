@@ -144,7 +144,6 @@ class DataAccess():
         if descending: sqlString += ' DESC'
         # Add range (row limit) if set 
         if limit > 0: sqlString += f' LIMIT {limit}'
-        # print("SQL STRING:::::", sqlString)
         util.logger.debug(sqlString)
 
         try:

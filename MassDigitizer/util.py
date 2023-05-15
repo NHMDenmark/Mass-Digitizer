@@ -21,14 +21,14 @@ from datetime import datetime
 import random
 
 # Central place to manage version numbers
-versionNumber = "0.4.0"  # Before compiling exe, please set the version number above
+versionNumber = "0.4.1"  # Before compiling exe, please set the version number above
 logger = logging.getLogger()
 
 
 def clear():
     """
-   Clear Command Line Interface screen
-   """
+    Clear Command Line Interface screen
+    """
     # for windows
     if name == 'nt':
         _ = system('cls')
@@ -40,8 +40,8 @@ def clear():
 
 def buildLogger():  # moduleName):
     """
-   Sets up logging
-   """
+    Sets up logging
+    """
     # 1. Create log file name including directory path
     sTime = time.strftime('{%Y%m%d%H%M%S}').replace("{", "").replace("}", "")
     logName = f"log-{sTime}.log"
@@ -62,49 +62,14 @@ def buildLogger():  # moduleName):
     logger.debug('Logging set up')
 
 
-""" def tryout_Path():
-    db_lowerLimit = 1000 #DB size minimum limit for successful testing.
-    # Intended to return the True path in case OneDrive is running. DB size testing will determine which path is returned.
-    alternativePath = os.path.expanduser(r'~\OneDrive - University of Copenhagen\Documents\DaSSCO')
-    regularPath = getUserPath()
-    print('regular:', getUserPath(), type(getUserPath()))
-    print('alternative:', alternativePath)
-    test_regularDBPath = regularPath+'\db.sqlite3'
-    print('regular DB:', test_regularDBPath)
-    # usrPath = os.path.expanduser(getUserPath())
-    # print("usrPath;;", type(usrPath), usrPath)
-    test_altDBPath = os.path.expanduser(
-        r'~\OneDrive - University of Copenhagen\Documents\DaSSCO\db.sqlite3') #Test on whether the DB is in the alternative user path
-    sizeUserDB = None
-    try:
-        sizeUserDB = os.stat(test_regularDBPath)
-    except Exception as e:
-        logging.debug(e)
-
-    sizeAlternativeDB = os.stat(test_altDBPath)
-
-    sizeTest_altuserPath = os.stat(test_altDBPath)
-    alternative_path_for_log = f'Alternative {sizeAlternativeDB} raw size : {sizeTest_altuserPath.st_size}'
-    logging.debug(alternative_path_for_log)
-    # Below is the size test on the regular path, and on the
-    if sizeUserDB:
-        if sizeUserDB.st_size > db_lowerLimit:
-            print('regular :: ',sizeUserDB.st_size )
-            return regularPath
-    elif sizeTest_altuserPath.st_size > db_lowerLimit:
-        print('alternative :: ', sizeAlternativeDB.st_size)
-        return alternativePath
- """
-
-
 def getLogsPath():
     return str(Path(getUserPath()).joinpath('logs'))
 
 
 def getUserPath():
     """
-   Get user documents path agnostic of OS or presence of OneDrive setup
-   """
+    Get user documents path agnostic of OS or presence of OneDrive setup
+    """
     # Assuming regular system; Get regular user home path
     homePath = str(Path(os.path.expanduser('~')))
 
@@ -125,8 +90,8 @@ def getUserPath():
 
 def logLine(line, level='info'):
     """
-   Write a line to the log using the logging module initialized.
-   """
+    Write a line to the log using the logging module initialized.
+    """
 
     if (level == 'info'):
         logger.info(line)
@@ -144,8 +109,8 @@ def logLine(line, level='info'):
 
 def shrink_dict(original_dict, input_string):
     """
-   Filter entries in dictionary based on initial string (starts with)
-   """
+    Filter entries in dictionary based on initial string (starts with)
+    """
     shrunken_dict = {}
 
     for j in original_dict:
@@ -156,8 +121,8 @@ def shrink_dict(original_dict, input_string):
 
 def convert_dbrow_list(list, addEmptyRow=False):
     """
-   Converts datarow list to name array
-   """
+    Converts datarow list to name array
+    """
     new_list = []
     if addEmptyRow: new_list.append('-please select-')
     for item in list:
@@ -168,8 +133,8 @@ def convert_dbrow_list(list, addEmptyRow=False):
 
 def getRandomNumberString():
     """
-   Returns positive random number string based on date/time hash
-   """
+    Returns positive random number string based on date/time hash
+    """
     r1 = random.randint(0, 10000)
     randomNumberString = hash(f"{datetime.now()}{r1}")  # Get random number as container name
     if randomNumberString < 0: randomNumberString += sys.maxsize  # Ensure that it's a positive number

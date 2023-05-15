@@ -108,7 +108,6 @@ class Collection(model.Model):
                 #self.fetchDiscipline(disciplineId, token)
         else:
             self.remarks = 'Could not set values, because empty object was passed. '
-            print('jsonObject EMPTY!!!')
 
     # Collection class specific functions 
 
