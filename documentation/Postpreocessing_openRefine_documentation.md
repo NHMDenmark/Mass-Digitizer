@@ -17,6 +17,8 @@
 - The same for 'species' and here the GREL is `if(cells['rankid'].value == 220, value.split(' ')[1], '')`
 
 
+## Mapping
+new[name]flag -> Determinations ->det.1 -> Taxon -> [rankname] -> Yes No1
 
 ## Columns that must be removed:
 ### As the very last step  
@@ -35,3 +37,6 @@
 * exportuserid
 * export
 * taxonfullname
+* taxonname
+* taxonrankname
+* 
