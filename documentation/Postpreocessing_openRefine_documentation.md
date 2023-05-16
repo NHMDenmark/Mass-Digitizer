@@ -15,3 +15,23 @@
   - the GREL script is `if(value.split(' ')[0] == 'Shelf', value.split(' ')[1], '')` - please exchange 'shelf' with 'box' for the second go-around.
 - Create the 'genus' column based on 'taxonfullname' . The process is similar to above and the scrip is `if(cells['rankid'].value >= 180, value.split(' ')[0], '')`
 - The same for 'species' and here the GREL is `if(cells['rankid'].value == 220, value.split(' ')[1], '')`
+
+
+
+## Columns that must be removed:
+### As the very last step  
+
+* ID
+* spid
+* taxonnameid
+* rankid
+* Typestatusid
+* georegionid
+* storageid
+* institutionid
+* preptypeid
+* userid
+* username
+* exportuserid
+* export
+* taxonfullname
