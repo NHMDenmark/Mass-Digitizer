@@ -20,7 +20,7 @@
 ## Mapping
 new[name]flag -> Determinations ->det.1 -> Taxon -> [rankname] -> Yes No1
 
-## Columns that must be removed:
+## Columns that can be removed:
 ### As the very last step  
 
 * ID
@@ -39,4 +39,7 @@ new[name]flag -> Determinations ->det.1 -> Taxon -> [rankname] -> Yes No1
 * taxonfullname
 * taxonname
 * taxonrankname
+* institution
+* recorddatetime
+* exportdatetime
 * 
