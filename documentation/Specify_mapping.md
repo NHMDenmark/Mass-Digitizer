@@ -8,6 +8,6 @@ Same for all the other straight up taxon names.
 new[name]flag -> Determinations ->det.1 -> Taxon -> [rankname] -> Yes No1  
 'typestatusname' -> determinations -> Det. #1 -> Type status
 'broadgeographicalregion' -> Collecting information -> Locality -> Broad geographical region  
-'
+'localityname' -> Collecting information -> Locality name  
 
 
