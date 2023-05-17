@@ -42,4 +42,5 @@ new[name]flag -> Determinations ->det.1 -> Taxon -> [rankname] -> Yes No1
 * institution
 * recorddatetime
 * exportdatetime
-* 
+* collectionname
+* institutionname
