@@ -25,7 +25,7 @@ import sys
 import util
 from data_access import DataAccess
 import global_settings as gs
-import data_exporter as dx
+#import data_exporter as dx
 import autoSuggest_popup
 from models import specimen
 from models import recordset
@@ -466,8 +466,9 @@ class SpecimenDataEntry():
 
             elif event == 'btnExport':
                 # Export data table to spreadsheet 
-                export_result = dx.exportSpecimens('xlsx')
-                self.window['lblExport'].update(export_result, visible=True)
+                #export_result = dx.exportSpecimens('xlsx')
+                #self.window['lblExport'].update(export_result, visible=True)
+                pass 
 
             elif event == 'btnDismiss':
                 # Hide any error and other messages 
