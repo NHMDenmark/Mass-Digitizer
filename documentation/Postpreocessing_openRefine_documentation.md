@@ -43,11 +43,12 @@ The time has come to add new[taxonRank]flags to the code.
 `"description": "Create column newspeciesflag at based on column taxonfullname using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.split(' ').length()==2), 'True',  '')"
   }`  
 `"description": "Create column newgenusflag based on column genus using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value == 180), 'True', '')"`  
-`"description": "Rename column familyname to family"`
+`"description": "Rename column familyname to family"`  
 `"description": "Rename column multispecimen to container"`  
 `"description": "Rename column georegionname to broadgeographicalregion"`  
 
-The broadgeographicalregion is duplicated into a column named 'localityname'.
+
+The broadgeographicalregion is duplicated into a column named 'localityname'.  
 `"description": "Create column localityname based on column georegionname using expression grel:value"`
 
 
