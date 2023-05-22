@@ -32,8 +32,11 @@ class Taxon(model.Model):
         self.sptype         = 'taxon'
         self.author         = ''
         self.rankId         = 0
+        self.parentid       = 0
+        self.parentFullName = ''
         self.duplicateSpid  = 0
         self.gbifKey        = 0
+        self.parent         = None
 
         self.institutionId   = gs.institutionId #db.getRowOnId('collection',collection_id)['institutionid']
         self.collectionId    = collection_id
@@ -134,7 +137,7 @@ class Taxon(model.Model):
             self.parent.fill(parentTaxonObj)
         except:
             print("ERROR: Failed to retrieve parent taxon.")
-            pass
+            
         return self.parent 
 
     def getParentage(self, specify_interface):

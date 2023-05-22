@@ -123,7 +123,8 @@ class MergeDuplicates():
         The list is retrieved from a simple text file with a taxon id for each line. 
         The text file itself is based on the results of a query joining taxa on fullname (GetTaxonDuplicates.sql in 'sql' folder). 
         """
-        idList = open('bootstrap/duplicate-taxa-ids.txt', 'r')
+        self.logger.info('**** Checking pre-collected taxon ids ****')
+        idList = open('bootstrap/NHMD/duplicate-taxa-ids.txt', 'r')
         taxonIds = idList.readlines() 
         print(f'Checking {len(taxonIds)} pre-collected taxa...')
         for taxonId in taxonIds: 
@@ -140,7 +141,7 @@ class MergeDuplicates():
         """
         Function for scanning and iterating taxa retrieved from the Specify API in batches per taxon rank.         """
         
-        self.logger.info(f'Scanning {self.collection.spid} ...')
+        self.logger.info(f'Scanning {self.collection.spid}  ...')
 
         # Fetch taxon ranks from selected collection's discipline taxon tree 
         taxonranks = self.sp.getSpecifyObjects('taxontreedefitem', 100, 0, {"treedef":str(self.collection.discipline.taxontreedefid)})
@@ -199,13 +200,15 @@ class MergeDuplicates():
         fullName = original.fullName.replace(' ','%20')
         rankId = original.rankId
 
+        self.logger.info(f'Handling taxon {fullName} [{specifyTaxonId}] of rank {rankId}')
+        
         # Look up taxa with matching fullname & rank
         taxonLookup = self.sp.getSpecifyObjects('taxon', 100000, 0, 
             {'definition':'13', 'rankid':f'{rankId}', 'fullname':f'{fullName}'}) #, 'parent':f'{original.parentid}'})
         
         # If more than one result is returned, there will be duplicates 
         if len(taxonLookup) > 1:
-            
+            self.logger.info('Potential duplicates detected...')
             # Iterate taxa with identical names to original                             
             for tl in taxonLookup:
                 # Create local taxon instance from looked up Specify taxon data 
@@ -217,7 +220,7 @@ class MergeDuplicates():
                 # If the looked up taxon isn't the same record (as per 'spid') then treat as potential duplicate 
                 # NOTE We need to compare the Specify id ('spid') and not the local id, which is always 0 until saved
                 if lookup.spid != original.spid:
-
+                    
                     # If the parents match then treat as duplicate 
                     if lookup.parentId == original.parentId:
                         print('!', end='') # possible duplicate hit! 
@@ -263,26 +266,14 @@ class MergeDuplicates():
                                 target = original
                                 source = lookup 
 
-                            # Merge taxa 
-                            if target is not None and source is not None: 
-                                # Stop latch for user interaction (disabled)
-                                if True: # input(f'Do you want to merge {source.spid} with {target.spid} (y/n)?') == 'y':
-                                    # Do the actual merging 
-                                    print('{', end='')
-                                    start = time.time()
-                                    response = self.sp.mergeTaxa(source.spid, target.spid)
-                                    if response.status_code == "404":
-                                        self.logger.info(' - 404: Taxon already merged.')
-                                    elif response.status_code == "500":
-                                        self.logger.info(' - 500: Internal Server Error.')
-                                    end = time.time()
-                                    timeElapsed = end - start
-                                    print(round(timeElapsed, 2), end='}')
-                                    self.logger.info(f'Merged {source.spid} with {target.spid}; Time elapsed: {timeElapsed} ')
-                                    pass
+                            # Output token to indicate merging of taxa 
+                            print('*', end='')
+
+                            self.mergeTaxa(source, target)
+
                     else:
                         # Found taxa with matching names, but different parents: Add to ambivalent cases 
-                        ambivalence = f'Ambivalence on parent taxa: {original.parent.fullName} vs {lookup.parent.fullName} '
+                        ambivalence = f'Ambivalence on parent taxa: {original.parent.fullName} [{original.parent.spid}] vs {lookup.parent.fullName} [{lookup.parent.spid}] '
                         self.logger.info(ambivalence)
                         original.remarks = str(original.remarks) + f' | {ambivalence}'
                         original.duplicateSpid = lookup.spid
@@ -291,8 +282,36 @@ class MergeDuplicates():
                         lookup.duplicateSpid = original.spid
                         self.ambivalentCases.append(lookup)
                         print('¿', end='')
+
+                        # Attempt to resolve parentage and move duplicate taxon to certified parent
+                        #self.resolveParentTaxon(original)
+                        #self.resolveParentTaxon(lookup) 
+
         else:
-            print('x', end='') # Duplicate no (more) found 
+            self.logger.info(f'Duplicate {fullName} no longer found! (Original taxon Specify id: {original.spid})')
+            print('x', end='') # Duplicate no longer found 
+    
+    def mergeTaxa(self, source, target):
+        """
+        TODO Function contract 
+        """
+        if target is not None and source is not None: 
+            # Stop latch for user interaction (disabled)
+            if True: # input(f'Do you want to merge {source.spid} with {target.spid} (y/n)?') == 'y':
+                # Do the actual merging 
+                print(f'|{source.spid}->{target.spid}|', end='')
+                print('{', end='')
+                start = time.time()
+                response = self.sp.mergeTaxa(source.spid, target.spid)
+                if response.status_code == "404":
+                    self.logger.info(' - 404: Taxon already merged.')
+                elif response.status_code == "500":
+                    self.logger.info(' - 500: Internal Server Error.')
+                    print('@', end= '')
+                end = time.time()
+                timeElapsed = end - start
+                print(round(timeElapsed, 2), end='}')
+                self.logger.info(f'Merged {source.spid} with {target.spid}; Time elapsed: {timeElapsed} ')
 
     def resolveAuthorNames(self, original, lookup):
         # If both original and lookup contain author data and the author is not identical, 
@@ -351,40 +370,105 @@ class MergeDuplicates():
         RETURNS boolean : Flag to indicate whether the resolution was succesful 
         """
         self.logger.info('Resolving parent taxon...')
-        acceptedNameMatches = self.gbif.matchName('species', taxonInstance.fullName, self.collection.spid, 'Plantae')
-        
-        nrOfMatches = len(acceptedNameMatches)
-        if nrOfMatches == 1:
-            self.logger.info('Retrieved unambiguous accepted name from GBIF...')
-            print(acceptedNameMatches[0]['parent'])
-            # Update the parent taxon at Specify 
-            #res = self...
-            #if res != '500':
-            #    unResolved = False
-            #else:
-            #    unResolved = True
+        success = False
+
+        # Get taxon's currently set parent from Specify
+        currentParent = self.sp.getSpecifyObject('taxon', taxonInstance.parent.spid)
+        if currentParent is not None: 
+            currentParentName = currentParent['fullname']
+            self.logger.info(f'Checking current parent taxon: {currentParentName} ')
+            # Get taxon's certified parent name from GBIF 
+            matches = self.gbif.matchName('species', taxonInstance.fullName, self.collection.spid, 'Plantae')
+            if len(matches) >= 1:
+                # Found parent name match in GBIF 
+                match = matches[0]
+
+                parentName = ''                
+                if match['rank'] == "SUBSPECIES":
+                    parentName = match['species']
+                elif match['rank'] == "SPECIES":
+                    parentName = match['genus']
+                elif match['rank'] == "GENUS":
+                    parentName = match['family']
+                elif match['rank'] == "FAMILY":
+                    parentName = match['order']
+                elif match['rank'] == "ORDER":
+                    parentName = match['class']            
+                if parentName == '': 
+                    self.logger.error(f'Error retrieving parent taxon to "{taxonInstance.fullName}" from GBIF...')
+                    print('@', end='') # output token to indicate issue with retrieving parent 
+                else: 
+                    self.logger.info(f'Retrieved GBIF certified parent taxon match: {parentName} ')
+
+                # Check if GBIF certified parent taxon name differs from current parent taxon name  
+                if parentName != currentParent['fullname']:
+                    # Get certified (target) parent taxon from Specify 
+                    parentLookup = self.sp.getSpecifyObjects('taxon', 10, 0, {'fullname':f'{parentName}','definition':'13'})
+                    
+                    if len(parentLookup) > 0:
+                        # Instantiate parent taxon from Specify record 
+                        targetParent = taxon.Taxon(self.collection.id)
+                        targetParent.fill(parentLookup[0], "Specify")
+
+                        # Output token to indicate move of taxon to new parent taxon 
+                        self.logger.info(f'Parents differ; Moving taxon to GBIF certified parent taxon: {parentName} ')
+                        print('*', end='')
+
+                        # Update the parent taxon at Specify 
+                        success = self.updateSpecifyTaxonParent(taxonInstance, targetParent)
+                    else:
+                        self.logger.info(f'Could not find parent taxon: {parentName} in Specify!')
+                        success = False
+                else: 
+                    self.logger.info(f'Parent taxa identical; No move action performed. ')
+                    success = False
         else:
-            self.logger.info(f'Could not retrieve unambiguous accepted name from GBIF... ({nrOfMatches} matches)')
-            unResolved = True
-        return unResolved
+            self.logger.info(f'Could not retrieve unambiguous accepted name from GBIF... ({len(matches)} matches)')
+            success = False
+        return success
 
     def updateSpecifyTaxonAuthor(self, taxonInstance, acceptedAuthor):
         """
         Function for direct call to Specify7 API to set a new author name. 
         """
-        # Update the authorname at Specify 
         self.logger.info(f'Updating author name at Specify for: [{taxonInstance}] to: "{acceptedAuthor}"')
+        
+        # Get original specify taxon record  
         spobjOriginal = self.sp.getSpecifyObject('taxon',taxonInstance.spid)
         if spobjOriginal: 
+            # Update the author name of the original specify taxon record 
             spobjOriginal['author'] = acceptedAuthor
+            # Update the original specify taxon record through API PUT
             return self.sp.putSpecifyObject('taxon', taxonInstance.spid, spobjOriginal)
         else: 
             return 500 
 
-    def updateSpecifyTaxonParent(self, taxonInstance, taxonParent):
+    def updateSpecifyTaxonParent(self, taxonInstance, targetParent):
+        """
+        Function for direct call to Specify7 API to move a taxon to a new parent  
+        """
+        # Update the parent taxon at Specify 
+        self.logger.info(f'Updating parent taxon at Specify for: [{taxonInstance}] to: "{targetParent}"')
+        success = False
 
+        # 
+        print(f'|{taxonInstance.spid}->{targetParent.spid}|', end='')
+        print('{', end='')
+        start = time.time()
+        result = self.sp.moveTaxon(taxonInstance.spid, targetParent.spid)
+        end = time.time()
+        timeElapsed = end - start
+        print(round(timeElapsed, 2), end='}')
+        if result.status_code == "500": 
+            self.logger.info(' - 500: Internal Server Error.')
+            print('@', end= '')
+        self.logger.info(f'Moved {taxonInstance.spid} to target parent {targetParent.spid}; Time elapsed: {timeElapsed} ')
+                        
+        # If result is OK, then mark as resolved  
+        if result.status_code == '200':
+            success = True
 
-        pass
+        return success
 
     def recordAmbivalentCase(self, original, lookup, ambivalence):
         """
@@ -399,16 +483,18 @@ class MergeDuplicates():
 
     def printLegend(self):
         print('LEGEND:')
-        print('[id] = Single taxon entry (id = primary key)')
-        print('!    = Possible duplicate ')
-        print('#    = Could not retrieve taxon ')
-        print('?    = Ambivalence on authors ')
-        print('¿    = Ambivalence on parent taxa ')
-        print('x    = Duplicate no longer there ')
-        print(r'{t}  = Merging duplicate (t = time elapsed)')
+        print('[id]   = Single taxon entry (id = primary key)')
+        print('!      = Possible duplicate ')
+        print('#      = Could not retrieve taxon ')
+        print('?      = Ambivalence on authors ')
+        print('¿      = Ambivalence on parent taxa ')
+        print('x      = Duplicate no longer there ')
+        print('*      = Ambiguity resolved for merge/move ')
+        print('|s->t| = Merge/move request (s = taxon id, t = target id)')
+        print(r'{t}    = Merge/move duration (t = time elapsed)')
+        print('@      = An error occurred' )
         #print('[    = Start of batch ')
         #print(']    = End of batch ')
-        
 
 gs.baseURL = 'https://specify-snm.science.ku.dk/' # Set target URL for Specify7 API instance 
 
