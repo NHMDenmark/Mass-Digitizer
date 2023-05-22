@@ -51,10 +51,13 @@ The time has come to add new[taxonRank]flags to the code.
 The broadgeographicalregion is duplicated into a column named 'localityname'.  
 `"description": "Create column localityname based on column georegionname using expression grel:value"`
 
-The column 'catalogeddate' is needed and must be created from a timestamp column which requires these steps:  
+The column 'catalogeddate' is needed and must be created from a timestamp column 'recordeddatetime' which requires these steps:  
 `"description": "Create column catalogeddate based on column recorddatetime using expression grel:value.slice(0,10)"`  
 `"description": "Text transform on cells in column catalogeddate using expression value.toDate()"`  
-`"description": "Text transform on cells in column catalogeddate using expression grel:value.toString('dd/MM/yyyy')"`
+`"description": "Text transform on cells in column catalogeddate using expression grel:value.toString('dd/MM/yyyy')"`  
+
+This time we catch any novel family names appearing:  
+`"description": "Text transform on cells in column family using expression grel:if(cells['rankid'] < 180, '', value)"`
 
 
 - Create column name 'shelf' and 'box' from the 'storagename' column by 'Add column based on this column' 
