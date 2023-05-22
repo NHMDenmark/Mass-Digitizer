@@ -36,13 +36,14 @@ Variety:
 `"expression": "grel:if(cells[\"taxonfullname\"].value.contains(\"var.\"), cells[\"taxonfullname\"].value.split(' ')[3], value)"`  
 
 The time has come to add new[taxonRank]flags to the code.  
+`"description": "Create column newformaflag based on column taxonfullname using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==260), 'True',  '')"`  
 `"description": "Create column newvarietyflag based on column newtaxonflag using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.contains(' var\\. ')), 'True',  '')"
   }`  
 `"description": "Create column newsubspeciesflag based on column newtaxonflag using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.split(' ').length()==3), 'True',  '')"`  
 `"description": "Create column newspeciesflag at based on column taxonfullname using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.split(' ').length()==2), 'True',  '')"
   }`  
 `"description": "Create column newgenusflag based on column genus using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value == 180), 'True', '')"`  
-
+`"description": "Rename column familyname to family"`
 
 
 
