@@ -46,6 +46,8 @@ The time has come to add new[taxonRank]flags to the code.
 `"description": "Rename column familyname to family"`  
 `"description": "Rename column multispecimen to container"`  
 `"description": "Rename column georegionname to broadgeographicalregion"`  
+`"description": "Rename column multispecimen to container"`  
+
 
 
 The broadgeographicalregion is duplicated into a column named 'localityname'.  
@@ -59,19 +61,14 @@ The column 'catalogeddate' is needed and must be created from a timestamp column
 This time we catch any novel family names appearing:  
 `"description": "Text transform on cells in column family using expression grel:if(cells['rankid'] < 180, '', value)"`
 
-
-- Create column name 'shelf' and 'box' from the 'storagename' column by 'Add column based on this column' 
-  - the GREL script is `if(value.split(' ')[0] == 'Shelf', value.split(' ')[1], '')` - please exchange 'shelf' with 'box' for the second go-around.
-- Create the 'genus' column based on 'taxonfullname' . The process is similar to above and the scrip is `if(cells['rankid'].value >= 180, value.split(' ')[0], '')`
-- The same for 'species' and here the GREL is `if(cells['rankid'].value == 220, value.split(' ')[1], '')`  
-- 
+#### Lastly reorder the column names to your liking
 
 
 ## Mapping
 new[name]flag -> Determinations ->det.1 -> Taxon -> [rankname] -> Yes No1
 
 ## Columns that can be removed:
-### As the very last step  
+### (As the very last step)  
 
 * ID
 * spid
