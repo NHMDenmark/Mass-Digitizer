@@ -12,9 +12,11 @@
   PURPOSE: Interface to the Specify API 
 """
 
+import time
 import requests # Documentation: https://requests.readthedocs.io/en/latest/api/ 
 import json 
 import urllib3
+import traceback
 
 # Internal Dependencies
 import util
@@ -118,16 +120,14 @@ class SpecifyInterface():
     
     return validity
 
-  def specifyLogout(self):#, csrftoken):
+  def specifyLogout(self):
       """ 
       Function for logging out of the Specify7 API again 
-      CONTRACT
-        NOTE DEPRECATED: csrftoken (String) : The CSRF token required during logging in for the session 
       """
       util.logger.debug('logging out of Specify...')
       self.logout(self.csrftoken)
 
-  def getCollObject(self, collectionObjectId):#, csrftoken):
+  def getCollObject(self, collectionObjectId):
     """ 
     Fetches collection objects from the Specify API using their primary key 
     CONTRACT 
@@ -153,22 +153,21 @@ class SpecifyInterface():
     Generic method for fetching object sets from the Specify API based on object name 
     CONTRACT 
       objectName (String)     : The API's name for the objects to be queried  
-      NOTE DEPRECATED: csrftoken  (String)     : The CSRF token is required for security reasons
       limit      (Integer)    : Maximum amount of records to be retrieve at a time. Default value: 100 
       offset     (Integer)    : Offset of the records to be retrieved for enabling paging. Default value: 0 
       filters    (Dictionary) : Optional filters as a key, value pair of strings 
       RETURNS fetched object set 
     """ 
-    util.logger.debug('Fetching "%s" with limit %d and offset %d ' %(objectName, limit, offset))
+    util.logger.debug(f'Fetching "{objectName}" with limit {limit} and offset {offset} ')
     objectSet = {}
     headers = {'content-type': 'application/json', 'X-CSRFToken': self.csrfToken, 'Referer': gs.baseURL}
     filterString = ""
     for key in filters:
-      filterString = f"&{key}={filters[key]}"
+      filterString += f"&{key}={filters[key]}"
     apiCallString = f'{gs.baseURL}api/specify/{objectName}/?limit={limit}&offset={offset}{filterString}'
     #if limit == 1000: print("" + apiCallString)
     response = self.spSession.get(apiCallString, headers=headers)
-    util.logger.debug(' - Response: %s %s' %(str(response.status_code), response.reason))
+    util.logger.debug(f' - Response: {str(response.status_code)} {response.reason}')
     if response.status_code < 299:
       objectSet = json.loads(response.text)['objects'] # get collections from json string and convert into dictionary
       util.logger.debug(' - Received %d object(s)' % len(objectSet))
@@ -188,7 +187,7 @@ class SpecifyInterface():
     apiCallString = f'{gs.baseURL}api/specify/{objectName}/{objectId}/' 
     util.logger.debug(apiCallString)
     response = self.spSession.get(apiCallString, headers=headers, verify=False)
-    util.logger.debug(' - Response: %s %s' %(str(response.status_code), response.reason))
+    util.logger.debug(f' - Response: {str(response.status_code)} {response.reason}')
     util.logger.debug(f' - Session cookies: {self.spSession.cookies.get_dict()}')
     if response.status_code < 299:
       object = response.json()
@@ -197,23 +196,22 @@ class SpecifyInterface():
 
     return object 
 
-  def putSpecifyObject(self, objectName, objectId, specifyObject):#, csrftoken):
+  def putSpecifyObject(self, objectName, objectId, specifyObject):
     """ 
     Generic method for putting changes to an existing object to the Specify API using their primary key 
     CONTRACT 
       objectName    (String)  : The API's name for the object to be fetched  
       objectId      (Integer) : The primary key of the object 
       specifyObject (JSON)    : The (possibly altered) state of the object 
-      NOTE DEPRECATED: csrftoken     (String)  : The CSRF token is required for security reasons  
       RETURNS response status code (String)
     """
     headers = {'content-type': 'application/json', 'X-CSRFToken': self.csrfToken, 'referer': gs.baseURL}
-    apiCallString = "%sapi/specify/%s/%d/" %(gs.baseURL, objectName, objectId)
+    apiCallString = f"{gs.baseURL}api/specify/{objectName}/{objectId}/"
     util.logger.debug(apiCallString)
     util.logger.debug(specifyObject)
     response = self.spSession.put(apiCallString, data=json.dumps(specifyObject), headers=headers)
     #response = requests.put(apiCallString, data=specifyObject, json=specifyObject, headers=headers)
-    util.logger.debug(' - Response: %s %s' %(str(response.status_code), response.reason))
+    util.logger.debug(f' - Response: {str(response.status_code)} response.reason')
     # if response.status_code < 299:
     #   object = response.json()
     # else: 
@@ -221,17 +219,16 @@ class SpecifyInterface():
     # return object 
     return response.status_code 
 
-  def postSpecifyObject(self, objectName, specifyObject):#, csrftoken):
+  def postSpecifyObject(self, objectName, specifyObject):
     """ 
     Generic method for posting a new object to the Specify API including a primary key
     CONTRACT 
       objectName    (String)  : The API's name for the object to be fetched  
       specifyObject (JSON)    : The state of the object to be created 
-      NOTE DEPRECATED: csrftoken     (String)  : The CSRF token is required for security reasons  
       RETURNS response  
     """ 
     headers = {'content-type': 'application/json', 'X-CSRFToken': self.csrfToken, 'referer': gs.baseURL}
-    apiCallString = "%sapi/specify/%s/%d/" %(gs.baseURL, objectName)
+    apiCallString = f"{gs.baseURL}api/specify/{objectName}/"
     util.logger.debug(apiCallString)
     response = self.spSession.post(apiCallString, headers=headers, data=specifyObject)
     util.logger.debug(' - Response: %s %s' %(str(response.status_code), response.reason))
@@ -287,7 +284,7 @@ class SpecifyInterface():
     util.logger.debug('------------------------------')
     return collections
 
-  def mergeTaxa(self, source_id, target_id):#, csrftoken):
+  def mergeTaxa(self, source_id, target_id):
     """
     Special function for merging taxa. 
     Merging is done from the source taxon to the target taxon. 
@@ -295,44 +292,55 @@ class SpecifyInterface():
     CONTRACT 
       source_id (int)    : Specify ID of the taxon to be merged into the target taxon 
       target_id (int)    : Specify ID of the taxon to be merged with (the target taxon)
-      NOTE DEPRECATED: csrftoken (String) : The CSRF token is required for security reasons
       RETURNS response object 
     """   
     headers = {'X-CSRFToken': self.csrfToken, 'referer': gs.baseURL, } 
     apiCallString = "%sapi/specify_tree/taxon/%s/merge/"%(gs.baseURL, source_id)
     util.logger.debug(" - API call: %s"%apiCallString)
+    exception = False
 
     #input('ready?')
     
     try:
       response = self.spSession.post(apiCallString, headers=headers, data={'target' : target_id }, timeout=960) 
-    except:
+    except Exception as e:
+      util.logger.error(str(e))
+      traceBack = traceback.format_exc()
+      util.logger.error(traceBack)
+      exception = True
+      #util.logger.debug(f' - Response: {str(response.status_code)} {response.reason} {response.text}.')
       response = util.Struct(status_code='408')
-    util.logger.debug(response.request.body)
-    #util.pretty_print_POST(response.request)
-    util.logger.debug('---------------------------')
-    util.logger.debug(' - Response: %s %s %s.' %(str(response.status_code), response.reason, response.text))
-
-    # if response.status_code < 299:
-    #   object = response.json()
-    # else: 
-    #   object = None
-    # return object  
 
     return response
 
-""" 
-si = SpecifyInterface()
-gs.baseURL = "https://specify-test.science.ku.dk/"
-tok = si.getCSRFToken()
-util.logger.debug(tok)
 
-token = si.login('fedor.steeman', 'XmgrNuitCrowd', 688130, tok)
-si.verifySession(token)
+  def moveTaxon(self, taxon_id, target_id):
+    """
+    Special function for moving a taxon to another parent. 
+    The parent taxon to be moved to is termed the target taxon. 
+    CONTRACT 
+      source_id (int)    : Specify ID of the taxon to be moved to the target taxon being the new parent 
+      target_id (int)    : Specify ID of the new parent taxon to be moved to (the target taxon)
+      RETURNS response object 
+    """   
+    headers = {'X-CSRFToken': self.csrfToken, 'referer': gs.baseURL, } 
+    apiCallString = f"{gs.baseURL}api/specify_tree/taxon/{taxon_id}/move/"
+    # TODO target_id into header as "target"
+    util.logger.debug(" - API call: %s"%apiCallString)
+    exception = False
 
-start = time.time()
-#si.mergeTaxa(4051548, 364503)
-end = time.time()
-timeElapsed = end - start
-#(f'Time elapsed: {timeElapsed} ')
-"""
+    #input('ready?')
+    
+    try:
+      response = self.spSession.post(apiCallString, headers=headers, data={'target' : target_id }, timeout=960) 
+    except Exception as e:
+      util.logger.error(str(e))
+      traceBack = traceback.format_exc()
+      util.logger.error(traceBack)
+      exception = True
+      #util.logger.debug(f' - Response: {str(response.status_code)} {response.reason} {response.text}.')
+      response = util.Struct(status_code='408')
+    
+    #print(response) 
+
+    return response
