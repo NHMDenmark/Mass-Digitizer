@@ -83,10 +83,6 @@ This time we catch any novel family names appearing:
 
 #### Lastly reorder the column names to your liking
 
-
-## Mapping
-new[name]flag -> Determinations ->det.1 -> Taxon -> [rankname] -> Yes No1
-
 ## Columns that can be removed:
 #### (As the very last step)  
 
