@@ -49,8 +49,6 @@ The time has come to add new[taxonRank]flags to the code.
 `"description": "Rename column familyname to family"`  
 `"description": "Rename column multispecimen to container"`  
 `"description": "Rename column georegionname to broadgeographicalregion"`  
-`"description": "Rename column multispecimen to container"`  
-
 
 
 The broadgeographicalregion is duplicated into a column named 'localityname'.  
