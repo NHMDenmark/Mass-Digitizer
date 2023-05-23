@@ -1,5 +1,5 @@
 # Steps in the refine tool post processing workflow
-*Note -  I am using the term 'refine tool' to make the description  generic. The refine tool used was OpenRefine.
+*Note -  The term 'refine tool' is used to make the description  generic. The refine tool used was OpenRefine.
 
 
 The digitiztion files come in Excel, TSV or CSV formats and have to be imported into the refine tool.
@@ -82,13 +82,10 @@ This time we catch any novel family names appearing:
 - Text transform on cells in column family using expression grel:if(cells['rankid'] < 180, '', value)
 
 #### Lastly reorder the column names to your liking
-
-
-## Mapping
-new[name]flag -> Determinations ->det.1 -> Taxon -> [rankname] -> Yes No1
+- This depends on the refine tool employed.
 
 ## Columns that can be removed:
-### (As the very last step)  
+#### (As the very last step)  
 
 * ID
 * spid
