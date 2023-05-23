@@ -52,31 +52,34 @@ Variety:
 
 /end-abrogated
 
-The time has come to add new[taxonRank]flags to the code.  
+The time has come to add new[ *taxonRank* ] flags to the code.  
 - Create column newgenusflag based on column genus using expression:
     - `grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value == 180), 'True', '')`  
-- `Create column newspeciesflag based on column taxonfullname using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.split(' ').length()==2), 'True',  '')`  
-- `Create column newsubspeciesflag based on column newtaxonflag using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.split(' ').length()==3), 'True',  '')`  
-- `Create column newvarietyflag based on column newtaxonflag using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.contains(' var\\. ')), 'True',  '')`  
-- `Create column newformaflag based on column taxonfullname using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==260), 'True',  '')`
+- Create column newspeciesflag based on column taxonfullname using expression:
+    - `grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.split(' ').length()==2), 'True',  '')`  
+- Create column newsubspeciesflag based on column newtaxonflag using expression: 
+    - `grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.split(' ').length()==3), 'True',  '')`  
+- Create column newvarietyflag based on column newtaxonflag using expression:
+    - `grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.contains(' var\\. ')), 'True',  '')`  
+- Create column newformaflag based on column taxonfullname using expression: 
+    - `grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==260), 'True',  '')`
 
 
-#### [Should we have processing for novel taxon names that looks at the name format , or is that overtaken by events??]
-`"description": "Rename column familyname to family"`  
-`"description": "Rename column multispecimen to container"`  
-`"description": "Rename column georegionname to broadgeographicalregion"`  
+- Rename column familyname to family
+- Rename column multispecimen to container  
+- Rename column georegionname to broadgeographicalregion  
 
 
 The broadgeographicalregion is duplicated into a column named 'localityname'.  
-`"description": "Create column localityname based on column georegionname using expression grel:value"`
+- Create column localityname based on column georegionname using expression grel:value
 
 The column 'catalogeddate' is needed and must be created from a timestamp column 'recordeddatetime' which requires these steps:  
-`"description": "Create column catalogeddate based on column recorddatetime using expression grel:value.slice(0,10)"`  
-`"description": "Text transform on cells in column catalogeddate using expression value.toDate()"`  
-`"description": "Text transform on cells in column catalogeddate using expression grel:value.toString('dd/MM/yyyy')"`  
+- "Create column catalogeddate based on column recorddatetime using expression grel:value.slice(0,10)"`  
+- "Text transform on cells in column catalogeddate using expression value.toDate()"`  
+- "Text transform on cells in column catalogeddate using expression grel:value.toString('dd/MM/yyyy')"`  
 
 This time we catch any novel family names appearing:  
-`"description": "Text transform on cells in column family using expression grel:if(cells['rankid'] < 180, '', value)"`
+- Text transform on cells in column family using expression grel:if(cells['rankid'] < 180, '', value)
 
 #### Lastly reorder the column names to your liking
 
