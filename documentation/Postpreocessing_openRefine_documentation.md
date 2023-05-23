@@ -19,7 +19,7 @@ Next we need to split the 'storeagefullname' column by separator so that we can 
 `"description": "Rename column storagefullname 2 to site"`  
 `"description": "Rename column storagefullname 3 to collection"`  
 
-At this point we need a 'shelf' column and a 'box' column.  
+At this point we need a 'shelf' column and a 'box' column. This is specific for NHMD Vascular Plants which has shelves and boxes. 
 `"description": "Create column shelf based on column storagename using expression grel:if(value.split(' ')[0] == 'Shelf', value.split(' ')[1], '')"` 
 
 The box column is made in a similar way by replacing the word 'shelf' with 'box'.  
