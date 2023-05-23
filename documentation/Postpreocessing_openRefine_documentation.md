@@ -20,8 +20,10 @@ Next we need to split the 'storeagefullname' column by separator so that we can 
 `"description": "Rename column storagefullname 3 to collection"`  
 
 At this point we need a 'shelf' column and a 'box' column.  
-`"description": "Create column shelf based on column storagename using expression grel:if(value.split(' ')[0] == 'Shelf', value.split(' ')[1], '')"`  
+`"description": "Create column shelf based on column storagename using expression grel:if(value.split(' ')[0] == 'Shelf', value.split(' ')[1], '')"` 
+
 The box column is made in a similar way by replacing the word 'shelf' with 'box'.  
+
 We have reached a place where taxonomy should be fleshed out.  
 
 `"description": "Create column genus based on column taxonfullname using expression grel:if(cells['rankid'].value >= 180, value.split(' ')[0], '')"`  
@@ -43,6 +45,7 @@ The time has come to add new[taxonRank]flags to the code.
 `"description": "Create column newspeciesflag at based on column taxonfullname using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.split(' ').length()==2), 'True',  '')"
   }`  
 `"description": "Create column newgenusflag based on column genus using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value == 180), 'True', '')"`  
+#### [Should we have processing for novel taxon names that looks at the name format , or is that overtaken by events??]
 `"description": "Rename column familyname to family"`  
 `"description": "Rename column multispecimen to container"`  
 `"description": "Rename column georegionname to broadgeographicalregion"`  
