@@ -20,8 +20,8 @@ Next we need to split the 'storeagefullname' column by separator so that we can 
 - `"Remove column storagefullname 1"` 
 
 At this point we need a 'shelf' column and a 'box' column. This is specific for NHMD Vascular Plants which has shelves and boxes. 
-- `"Create column shelf based on column storagename using expression grel:if(value.split(' ')[0] == 'Shelf', value.split(' ')[1], '')"` 
-- `"Create column box based on column storagename using expression grel:if(value.split(' ')[0] == 'Box', value.split(' ')[1], '')"`
+- `Create column shelf based on column storagename using expression grel:if(value.split(' ')[0] == 'Shelf', value.split(' ')[1], '')` 
+- `Create column box based on column storagename using expression grel:if(value.split(' ')[0] == 'Box', value.split(' ')[1], '')`
 
 
 We have reached a place where taxonomy should be fleshed out.  
@@ -33,22 +33,34 @@ We have reached a place where taxonomy should be fleshed out.
 - `Create column forma at on column taxonfullname using expression grel:if(cells['rankid'].value == 260, value.split(' ')[3], '')`  
 
 Another round must processed so that the taxonomic ranks can be populated:  
+- Text transform on cells in column genus using expression:
+    - `grel:if(cells['rankid'].value==180, cells['taxonfullname'].value.split(' ')[0], value)`  
+- Text transform on cells in column species using expression:
+    - `grel:if(cells['rankid'].value==220, cells['taxonfullname'].value.split(' ')[1], value)`  
+- Text transform on cells in column subspecies using expression:
+    - `grel:if(cells['rankid'].value==230, cells['taxonfullname'].value.split(' ')[2], value)`
 - Text transform on cells in column variety using expression:   
-    - `grel:if(cells[\"taxonfullname\"].value.contains(\"var.\"), cells[\"taxonfullname\"].value.split(' ')[3], value)`
+    - `grel:if(cells['rankid'].value==240, cells[\"taxonfullname\"].value.split(' ')[3], value)`  
+- Text transform on cells in column forma using expression:
+    - `grel:if(cells['taxonfullname'].value==260, cells[\"taxonfullname\"].value.split(' ')[3], value)`
 
+/abrogated
 In order to pick out variety or forma taxa out of novel names we have to look at the name structure: Variety names will have `'var.'` in the name string. Likewise forma names will have the substring `' f.'`   
 - `"grel:if(cells[\"taxonfullname\"].value.contains(\" f\\. \"), cells[\"taxonfullname\"].value.split(' ')[3], value)"`  
 Variety:  
 - `"grel:if(cells[\"taxonfullname\"].value.contains(\"var.\"), cells[\"taxonfullname\"].value.split(' ')[3], value)"`  
 
+/end-abrogated
+
 The time has come to add new[taxonRank]flags to the code.  
-`"description": "Create column newformaflag based on column taxonfullname using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==260), 'True',  '')"`  
-`"description": "Create column newvarietyflag based on column newtaxonflag using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.contains(' var\\. ')), 'True',  '')"
-  }`  
-`"description": "Create column newsubspeciesflag based on column newtaxonflag using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.split(' ').length()==3), 'True',  '')"`  
-`"description": "Create column newspeciesflag at based on column taxonfullname using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.split(' ').length()==2), 'True',  '')"
-  }`  
-`"description": "Create column newgenusflag based on column genus using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value == 180), 'True', '')"`  
+- Create column newgenusflag based on column genus using expression:
+    - `grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value == 180), 'True', '')`  
+- `Create column newspeciesflag based on column taxonfullname using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.split(' ').length()==2), 'True',  '')`  
+- `Create column newsubspeciesflag based on column newtaxonflag using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.split(' ').length()==3), 'True',  '')`  
+- `Create column newvarietyflag based on column newtaxonflag using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.contains(' var\\. ')), 'True',  '')`  
+- `Create column newformaflag based on column taxonfullname using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==260), 'True',  '')`
+
+
 #### [Should we have processing for novel taxon names that looks at the name format , or is that overtaken by events??]
 `"description": "Rename column familyname to family"`  
 `"description": "Rename column multispecimen to container"`  
