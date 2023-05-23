@@ -16795,5 +16795,5 @@ INSERT INTO taxonname ("spid","name","fullname","rankid","taxonRank", "treedefid
 (138017,"laticollis","Zyras laticollis",	220,"Species", 5,"Zyras"),
 (138039,"limbatus","Zyras limbatus",	220,"Species", 5,"Zyras"),
 (138018,"lugens","Zyras lugens",	220,"Species", 5,"Zyras"),
-(4057027,"fulva","[(Stictoleptura fulva",	220,"Species", 5,"[(Stictoleptura")
+(4057027,"fulva","Stictoleptura fulva",	220,"Species", 5,"Stictoleptura")
 ;
