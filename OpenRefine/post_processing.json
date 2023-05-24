@@ -217,7 +217,7 @@
 			"mode": "row-based"
 		},
 		"baseColumnName": "newtaxonflag",
-		"expression": "grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.split(' ').length()==3), 'True',  '')",
+		"expression": "grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==230), 'True',  '')",
 		"onError": "set-to-blank",
 		"newColumnName": "newsubspeciesflag",
 		"columnInsertIndex": 17,
