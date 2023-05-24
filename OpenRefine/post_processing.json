@@ -146,7 +146,7 @@
 			"mode": "row-based"
 		},
 		"baseColumnName": "taxonfullname",
-		"expression": "grel:if(cells[\"rankid\"].value == 240, cells[\"taxonfullname\"].value.split(' ')[3], '')",
+		"expression": "grel:if(cells[\"rankid\"].value == 240, cells[\"taxonfullname\"].value.split(' ')[-1], '')",
 		"onError": "set-to-blank",
 		"newColumnName": "variety",
 		"columnInsertIndex": 5,
