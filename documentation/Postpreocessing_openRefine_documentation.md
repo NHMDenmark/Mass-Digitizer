@@ -71,7 +71,9 @@ The time has come to add new[ *taxonRank* ] flags to the code.
 
 
 The broadgeographicalregion is duplicated into a column named 'localityname'.  
-- Create column localityname based on column georegionname using expression grel:value
+- Create column localityname based on column georegionname using expression grel:value  
+
+The agentMiddleInitial must be checked to see if it has the value 'None'!
 
 The column 'catalogeddate' is needed and must be created from a timestamp column 'recordeddatetime' which requires these steps:  
 - "Create column catalogeddate based on column recorddatetime using expression grel:value.slice(0,10)"`  
