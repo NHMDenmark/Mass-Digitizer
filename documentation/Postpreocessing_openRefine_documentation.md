@@ -4,7 +4,7 @@
 
 The digitiztion files come in Excel, TSV or CSV formats and have to be imported into the refine tool.
 
- Should there be numerical data columns that import as text formatted data, these need to be converted to numerical because there are GREL code that tests on the assumption that numbers are numbers.   
+ Should there be numerical data columns that import as text formatted data, these need to be converted to numerical because there are GREL code that tests on the assumption that numbers are numbers. GREL code con be obtained here: https://github.com/NHMDenmark/Mass-Digitizer/blob/main/OpenRefine/post_processing.json   
  - `"Text transform on cells in column taxonspid using expression value.toNumber()"`  
  - `"Text transform on cells in column rankid using expression value.toNumber()"`
 
