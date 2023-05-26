@@ -9,4 +9,5 @@
 - At this step the data is ready for import into the live Specify portal through Workbench.
 When you have done a successful import into Specify through Workbench, then there will be an existing 'upload plan' - please use this. It is a tremendous time saver and will prevent mistakes in mapping.
 - Now it is time to save the workbench. Afterwards validate the project - there might be issues showing up at this point.  
+- Before one start mapping into Workbench - MAKE SURE you are on the correct server and database: There is "specify-snm.science.ku.dk", "specify-test.science.ku.dk", and "specify-nhma.science.ku.dk" (MHMD, MHMD-test, Aarhus Herbarium)
 ### Resolve issues solution upcoming ...
