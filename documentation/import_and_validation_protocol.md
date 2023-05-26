@@ -8,4 +8,5 @@
 - Save the result as a TSV or CSV file in the Post_process_has_been_imported directory. Now might be a good time to have another set of eyes looking at the data.
 - At this step the data is ready for import into the live Specify portal through Workbench.
 When you have done a successful import into Specify through Workbench, then there will be an existing 'upload plan' - please use this. It is a tremendous time saver and will prevent mistakes in mapping.
-- Now it is time to save the workbench. Afterwards validate the project - there might be issues showing up at this point.
+- Now it is time to save the workbench. Afterwards validate the project - there might be issues showing up at this point.  
+### Resolve issues solution upcoming ...
