@@ -13,6 +13,6 @@ When you have done a successful import into Specify through Workbench, then ther
 - Now it is time to save the workbench. Afterwards validate the project - there might be issues showing up at this point.  
 - Before one start mapping into Workbench - _MAKE SURE_ you are on the correct server and collection/database: There is "specify-snm.science.ku.dk", "specify-test.science.ku.dk", and "specify-nhma.science.ku.dk" (NHMD, NHMD-test, Aarhus Herbarium), and in NHMD you have both Vascular Plants and Entomology. You have to access the right server AND the right collection.
 - A request must be sent to one of the Specify data coordinators (via the e-mail specify@snm.ku.dk) to have the specified range of dummy records deleted. There are 250K reserved catalog numbers that must be freed for the new records to be accepted in Specify.
-### Surprising issues solution
+
 
 
