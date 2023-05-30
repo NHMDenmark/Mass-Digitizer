@@ -568,5 +568,18 @@
     "repeat": false,
     "repeatCount": 10,
     "description": "Text transform on cells in column publish using expression grel:'True'"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "notes",
+    "expression": "grel:'DaSSCo'",
+    "onError": "set-to-blank",
+    "newColumnName": "projectname",
+    "columnInsertIndex": 3,
+    "description": "Create column projectname at index 3 based on column notes using expression grel:'DaSSCo'"
   }
 ]
