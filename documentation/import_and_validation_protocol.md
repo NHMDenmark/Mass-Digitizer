@@ -1,7 +1,7 @@
 # New data from the Mass Digitization App must be handled according to these guidelines
 
 - The data files come into Exported_from_app_data_files directory
-- Do a quick review of the data before proceeding to the post processing (OpenRefine stage). Use your favorite spreadsheet application but do not save the file as a spreadsheet for the purpose of OpenRefine.
+- Do a quick review of the data before proceeding to the post processing (OpenRefine stage). Use your favorite spreadsheet application but do not save the file as a spreadsheet for the purpose of the OpenRefine step.
 - Be careful that you do not open the exported data file in Excel because it tends to corrupt long integers. You can always make a copy of the file and then open it in MS Excel.
 - If the data is incomplete or has other issues contact the digitizer and write to Pip Brewer as well.
 - If the data passes inspection then proceed to the post processing which currently takes place in OpenRefine. Details are here: https://github.com/NHMDenmark/Mass-Digitizer/blob/main/documentation/Postpreocessing_openRefine_documentation.md 
