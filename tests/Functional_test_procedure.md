@@ -12,9 +12,9 @@
 ☐ Enter novel taxon name (name not existing in the app spine)  
 ☐ Enter novel taxon name AND novel family name  
 ☐ Update the latest record  
-☐ set multi specimen checkbox  
-☐ clear all - Update the latest record  
-☐ clear all – Create new record  
+☐ Set multi specimen checkbox  
+☐ Clear all - Update the latest record  
+☐ Clear all – Create new record  
 ☐ Create new record without green-area input  
 ☐ Create new record without Geo-region  
 ☐ Create new record without Taxonomy (should pop-up with error)  
