@@ -21,5 +21,5 @@
 ☐ Create new record with novel family name  
 ☐ Create new record with multispecimen ticked  
 ☐ Try Creating another one…  
-
+- At every step of the way you need to check to see if the action resulted in an expected change in the database, so please have the DB editor open.
 
