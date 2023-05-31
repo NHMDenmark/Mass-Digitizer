@@ -81,7 +81,11 @@ The column 'catalogeddate' is needed and must be created from a timestamp column
 - "Text transform on cells in column catalogeddate using expression grel:value.toString('dd/MM/yyyy')"`  
 
 This time we catch any novel family names appearing:  
-- Text transform on cells in column family using expression grel:if(cells['rankid'] < 180, '', value)
+- Text transform on cells in column family using expression grel:if(cells['rankid'] < 180, '', value)  
+
+Finally it is time to add two columns for ready-to-publish and project-name:
+- A novel column is made with the name 'publish' and the value 'True' signifying that the records are ready for publishing.
+- Another column is needed: 'project' which contains the name 'DaSSCo'. This will make it easier to find records from the DaSSCo project.
 
 #### Lastly reorder the column names to your liking
 
