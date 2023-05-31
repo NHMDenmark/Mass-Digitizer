@@ -13,6 +13,7 @@
 ☐ Enter novel taxon name AND novel family name  
 ☐ Update the latest record  
 ☐ Set multi specimen checkbox  
+☐ Try removing the multi specimen checkbox  
 ☐ Clear all - Update the latest record  
 ☐ Clear all – Create new record  
 ☐ Create new record without green-area input  
