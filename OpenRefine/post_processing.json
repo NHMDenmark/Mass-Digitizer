@@ -578,6 +578,19 @@
     "baseColumnName": "notes",
     "expression": "grel:'DaSSCo'",
     "onError": "set-to-blank",
+    "newColumnName": "project",
+    "columnInsertIndex": 3,
+    "description": "Create column broJECT at index 3 based on column notes using expression grel:'DaSSCo'"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "notes",
+    "expression": "grel:'DaSSCo'",
+    "onError": "set-to-blank",
     "newColumnName": "projectname",
     "columnInsertIndex": 3,
     "description": "Create column projectname at index 3 based on column notes using expression grel:'DaSSCo'"
