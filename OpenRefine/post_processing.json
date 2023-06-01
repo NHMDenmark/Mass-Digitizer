@@ -251,6 +251,12 @@
     "newColumnName": "container",
     "description": "Rename column multispecimen to container"
   },
+    {
+    "op": "core/column-rename",
+    "oldColumnName": "georegionname",
+    "newColumnName": "broadgeographicalregion",
+    "description": "Rename column georegionname to broadgeographicalregion"
+  },
   {
     "op": "core/column-addition",
     "engineConfig": {
@@ -341,12 +347,6 @@
     "repeat": false,
     "repeatCount": 10,
     "description": "Text transform on cells in column publish using expression grel:'True'"
-  },
-  {
-    "op": "core/column-rename",
-    "oldColumnName": "georegionname",
-    "newColumnName": "broadgeographicalregion",
-    "description": "Rename column georegionname to broadgeographicalregion"
   },
   {
     "op": "core/column-reorder",
