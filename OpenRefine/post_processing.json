@@ -162,19 +162,6 @@
     "description": "Create column variety at index 5 based on column taxonfullname using expression grel:if(cells[\"rankid\"].value == 240, cells[\"taxonfullname\"].value.split(' ')[-1], '')"
   },
   {
-    "op": "core/text-transform",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "columnName": "variety",
-    "expression": "grel:if(cells[\"taxonfullname\"].value.contains(\"var.\"), cells[\"taxonfullname\"].value.split(' ')[3], value)",
-    "onError": "keep-original",
-    "repeat": false,
-    "repeatCount": 10,
-    "description": "Text transform on cells in column variety using expression grel:if(cells[\"taxonfullname\"].value.contains(\"var.\"), cells[\"taxonfullname\"].value.split(' ')[3], value)"
-  },
-  {
     "op": "core/column-addition",
     "engineConfig": {
       "facets": [],
@@ -186,19 +173,6 @@
     "newColumnName": "forma",
     "columnInsertIndex": 5,
     "description": "Create column forma at index 5 based on column taxonfullname using expression grel:if(cells['rankid'].value == 260, value.split(' ')[3], '')"
-  },
-  {
-    "op": "core/text-transform",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "columnName": "forma",
-    "expression": "grel:if(cells[\"taxonfullname\"].value.contains(\" f\\. \"), cells[\"taxonfullname\"].value.split(' ')[3], value)",
-    "onError": "keep-original",
-    "repeat": false,
-    "repeatCount": 10,
-    "description": "Text transform on cells in column forma using expression grel:if(cells[\"taxonfullname\"].value.contains(\" f\\. \"), cells[\"taxonfullname\"].value.split(' ')[3], value)"
   },
   {
     "op": "core/column-addition",
@@ -309,45 +283,6 @@
       "facets": [],
       "mode": "row-based"
     },
-    "columnName": "genus",
-    "expression": "grel:if(cells['rankid'].value==180, cells['taxonfullname'].value.split(' ')[0], value)",
-    "onError": "keep-original",
-    "repeat": false,
-    "repeatCount": 10,
-    "description": "Text transform on cells in column genus using expression grel:if(cells['rankid'].value==180, cells['taxonfullname'].value.split(' ')[0], value)"
-  },
-  {
-    "op": "core/text-transform",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "columnName": "species",
-    "expression": "grel:if(cells['rankid'].value==220, cells['taxonfullname'].value.split(' ')[1], value)",
-    "onError": "keep-original",
-    "repeat": false,
-    "repeatCount": 10,
-    "description": "Text transform on cells in column species using expression grel:if(cells['rankid'].value==220, cells['taxonfullname'].value.split(' ')[1], value)"
-  },
-  {
-    "op": "core/text-transform",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "columnName": "subspecies",
-    "expression": "grel:if(cells['rankid'].value==230, cells['taxonfullname'].value.split(' ')[2], value)",
-    "onError": "keep-original",
-    "repeat": false,
-    "repeatCount": 10,
-    "description": "Text transform on cells in column subspecies using expression grel:if(cells['rankid'].value==230, cells['taxonfullname'].value.split(' ')[2], value)"
-  },
-  {
-    "op": "core/text-transform",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
     "columnName": "agentmiddleinitial",
     "expression": "grel:if(value=='None', '', value)",
     "onError": "keep-original",
@@ -393,19 +328,6 @@
     "repeat": false,
     "repeatCount": 10,
     "description": "Text transform on cells in column catalogeddate using expression grel:value.toString('dd/MM/yyyy')"
-  },
-  {
-    "op": "core/text-transform",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "columnName": "family",
-    "expression": "grel:if(cells['rankid'] < 180, '', value)",
-    "onError": "keep-original",
-    "repeat": false,
-    "repeatCount": 10,
-    "description": "Text transform on cells in column family using expression grel:if(cells['rankid'] < 180, '', value)"
   },
   {
     "op": "core/column-addition",
@@ -581,19 +503,6 @@
     "newColumnName": "project",
     "columnInsertIndex": 3,
     "description": "Create column broJECT at index 3 based on column notes using expression grel:'DaSSCo'"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "baseColumnName": "notes",
-    "expression": "grel:'DaSSCo'",
-    "onError": "set-to-blank",
-    "newColumnName": "projectname",
-    "columnInsertIndex": 3,
-    "description": "Create column projectname at index 3 based on column notes using expression grel:'DaSSCo'"
   },
     {
     "op": "core/text-transform",
