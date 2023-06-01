@@ -489,7 +489,7 @@
     "onError": "set-to-blank",
     "newColumnName": "project",
     "columnInsertIndex": 3,
-    "description": "Create column broJECT at index 3 based on column notes using expression grel:'DaSSCo'"
+    "description": "Create column project at index 3 based on column notes using expression grel:'DaSSCo'"
   },
     {
     "op": "core/text-transform",
