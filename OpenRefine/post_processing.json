@@ -129,7 +129,7 @@
       "mode": "row-based"
     },
     "baseColumnName": "taxonfullname",
-    "expression": "grel:if(cells['rankid'].value == 220, value.split(' ')[1], '')",
+    "expression": "grel:if(cells['rankid'].value >= 220, value.split(' ')[1], '')",
     "onError": "set-to-blank",
     "newColumnName": "species",
     "columnInsertIndex": 5,
