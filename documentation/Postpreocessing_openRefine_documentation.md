@@ -32,25 +32,6 @@ The following steps create the taxonomy based on the rank ID.
 - `Create column variety based on column taxonfullname using expression grel:if(cells['rankid'].value == 240, value.split(' ')[3], '')`  
 - `Create column forma at on column taxonfullname using expression grel:if(cells['rankid'].value == 260, value.split(' ')[3], '')`  
 
-Another round must processed so that the taxonomic ranks can be populated:  
-- Text transform on cells in column genus using expression:
-    - `grel:if(cells['rankid'].value==180, cells['taxonfullname'].value.split(' ')[0], value)`  
-- Text transform on cells in column species using expression:
-    - `grel:if(cells['rankid'].value==220, cells['taxonfullname'].value.split(' ')[1], value)`  
-- Text transform on cells in column subspecies using expression:
-    - `grel:if(cells['rankid'].value==230, cells['taxonfullname'].value.split(' ')[2], value)`
-- Text transform on cells in column variety using expression:   
-    - `grel:if(cells['rankid'].value==240, cells[\"taxonfullname\"].value.split(' ')[3], value)`  
-- Text transform on cells in column forma using expression:
-    - `grel:if(cells['taxonfullname'].value==260, cells[\"taxonfullname\"].value.split(' ')[3], value)`
-
-/abrogated
-In order to pick out variety or forma taxa out of novel names we have to look at the name structure: Variety names will have `'var.'` in the name string. Likewise forma names will have the substring `' f.'`   
-- `"grel:if(cells[\"taxonfullname\"].value.contains(\" f\\. \"), cells[\"taxonfullname\"].value.split(' ')[3], value)"`  
-Variety:  
-- `"grel:if(cells[\"taxonfullname\"].value.contains(\"var.\"), cells[\"taxonfullname\"].value.split(' ')[3], value)"`  
-
-/end-abrogated
 
 The time has come to add new[ *taxonRank* ] flags to the code.  
 - Create column newgenusflag based on column genus using expression:
