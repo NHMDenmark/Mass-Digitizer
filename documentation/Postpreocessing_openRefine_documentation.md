@@ -1,4 +1,4 @@
-# Steps in the refine tool post processing script
+# Steps in the post processing script
 *Note -  I am using the term 'refine tool' to make the description  generic. The refine tool used was OpenRefine.
 
 
