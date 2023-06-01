@@ -68,6 +68,9 @@ There will be two columns for ready-to-publish and project-name:
 The hybrids will be caught:
 - Text transform on cells in column species using expression grel:if(cells['genus'].value.contains(\" x \"), cells['genus'].value, value)
 
+Format container by removing the prepended apostrophe:
+- Text transform on cells in column container using expression grel:if(value.startsWith(\"'\"), value.replace(\"'\", ''), '')
+
 #### Lastly reorder the column names to your liking
 
 ## Columns that can be removed:
