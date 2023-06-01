@@ -161,6 +161,19 @@
     "columnInsertIndex": 5,
     "description": "Create column forma at index 5 based on column taxonfullname using expression grel:if(cells['rankid'].value == 260, value.split(' ')[3], '')"
   },
+    {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonfullname",
+    "expression": "grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==260), 'True',  '')",
+    "onError": "set-to-blank",
+    "newColumnName": "newformaflag",
+    "columnInsertIndex": 5,
+    "description": "Create column newformaflag at index 5 based on column taxonfullname using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==260), 'True',  '')"
+  },
   {
     "op": "core/column-addition",
     "engineConfig": {
@@ -250,19 +263,6 @@
     "newColumnName": "localityname",
     "columnInsertIndex": 26,
     "description": "Create column localityname at index 26 based on column georegionname using expression grel:value"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "baseColumnName": "taxonfullname",
-    "expression": "grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==260), 'True',  '')",
-    "onError": "set-to-blank",
-    "newColumnName": "newformaflag",
-    "columnInsertIndex": 5,
-    "description": "Create column newformaflag at index 5 based on column taxonfullname using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==260), 'True',  '')"
   },
   {
     "op": "core/text-transform",
