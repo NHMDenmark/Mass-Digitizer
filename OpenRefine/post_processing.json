@@ -5,19 +5,6 @@
       "facets": [],
       "mode": "row-based"
     },
-    "columnName": "catalognumber",
-    "expression": "value.toNumber()",
-    "onError": "keep-original",
-    "repeat": false,
-    "repeatCount": 10,
-    "description": "Text transform on cells in column catalognumber using expression value.toNumber()"
-  },
-  {
-    "op": "core/text-transform",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
     "columnName": "taxonspid",
     "expression": "value.toNumber()",
     "onError": "keep-original",
@@ -181,7 +168,7 @@
       "mode": "row-based"
     },
     "baseColumnName": "newtaxonflag",
-    "expression": "grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.contains(' var\\. ')), 'True',  '')",
+    "expression": "grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==240), 'True',  '')",
     "onError": "set-to-blank",
     "newColumnName": "newvarietyflag",
     "columnInsertIndex": 17,
