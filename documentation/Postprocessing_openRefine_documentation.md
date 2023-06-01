@@ -24,7 +24,7 @@ At this point a 'shelf' column and a 'box' column is created. This is specific f
 - `Create column box based on column storagename using expression grel:if(value.split(' ')[0] == 'Box', value.split(' ')[1], '')`
 
 
-The following steps create the taxonomy based on the rank ID.  
+The following steps create the taxonomy and assign the rank based on the rank ID.  
 
 - `Create column genus based on column taxonfullname using expression grel:if(cells['rankid'].value >= 180, value.split(' ')[0], '')`  
 - `Create column species based on column taxonfullname using expression grel:if(cells['rankid'].value >= 220, value.split(' ')[1], '')`  
@@ -54,19 +54,19 @@ The time has come to add new[ *taxonRank* ] flags to the code.
 The broadgeographicalregion is duplicated into a column named 'localityname'.  
 - Create column localityname based on column georegionname using expression grel:value  
 
-The agentMiddleInitial must be checked to see if it has the value 'None'!
+The agentMiddleInitial is checked and corrected if the value is 'None'
 
 The column 'catalogeddate' is needed and must be created from a timestamp column 'recordeddatetime' which requires these steps:  
 - "Create column catalogeddate based on column recorddatetime using expression grel:value.slice(0,10)"`  
 - "Text transform on cells in column catalogeddate using expression value.toDate()"`  
 - "Text transform on cells in column catalogeddate using expression grel:value.toString('dd/MM/yyyy')"`  
 
-This time we catch any novel family names appearing:  
-- Text transform on cells in column family using expression grel:if(cells['rankid'] < 180, '', value)  
-
-Finally we need to add two columns for ready-to-publish and project-name:
-- A novel column is made with the name 'publish' and the value 'True' signifying that the records are ready for publishing.
+There will be two columns for ready-to-publish and project-name:
+- A novel column is made with the name 'publish' and the value 'True' signifying that the records are ready for publishing to GBIF.
 - Another column is needed: 'project' which contains the name 'DaSSCo'. This will make it easier to find records from the DaSSCo project.
+
+The hybrids will be caught:
+- Text transform on cells in column species using expression grel:if(cells['genus'].value.contains(\" x \"), cells['genus'].value, value)
 
 #### Lastly reorder the column names to your liking
 
