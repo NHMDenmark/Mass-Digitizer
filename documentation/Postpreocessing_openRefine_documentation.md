@@ -8,23 +8,23 @@ The digitization files come in Excel, TSV or CSV formats and have to be imported
  - `"Text transform on cells in column taxonspid using expression value.toNumber()"`  
  - `"Text transform on cells in column rankid using expression value.toNumber()"`
 
-A new column 'newtaxonflag' is created. We derive this column from the 'taxonspid' field:  
+A new column 'newtaxonflag' is created is derived from the 'taxonspid' field:  
 - Create column newtaxonflag at index 11 based on column taxonspid using expression 
     - `grel:if((value==null).or(value==0), 'True', 'False')`
  
 
-Next we need to split the 'storeagefullname' column by separator so that we can have the storage property in atomic units.  
+The storagefullname column is split by separator so that we can have the storage property in atomic units.  
 - `"Split column storagefullname by separator"` The separator here is " | " (notice the leading and trailing whitespace)
 - `"Rename column storagefullname 2 to site"`  
 - `"Rename column storagefullname 3 to collection"` 
-- `"Remove column storagefullname 1"` 
+- `"Remove column storagefullname 1"` This is the institution column that we are not mapping.
 
-At this point we need a 'shelf' column and a 'box' column. This is specific for NHMD Vascular Plants which has shelves and boxes. 
-- `Create column shelf based on column storagename using expression grel:if(value.split(' ')[0] == 'Shelf', value.split(' ')[1], '')` 
+At this point a 'shelf' column and a 'box' column is created. This is specific for NHMD Vascular Plants which has shelves and boxes. 
+- `Create column shelf based on column storagename using expression grel:if(value.split(' ')[0] == 'Shelf', value.split(' ')[1], '')`  
 - `Create column box based on column storagename using expression grel:if(value.split(' ')[0] == 'Box', value.split(' ')[1], '')`
 
 
-We have reached a place where taxonomy should be fleshed out.  
+The following steps create the taxonomy based on the rank ID.  
 
 - `Create column genus based on column taxonfullname using expression grel:if(cells['rankid'].value >= 180, value.split(' ')[0], '')`  
 - `Create column species based on column taxonfullname using expression grel:if(cells['rankid'].value == 220, value.split(' ')[1], '')`  
