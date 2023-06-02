@@ -24,7 +24,7 @@ At this point a 'shelf' column and a 'box' column is created. This is specific f
 - `Create column box based on column storagename using expression grel:if(value.split(' ')[0] == 'Box', value.split(' ')[1], '')`
 
 
-The following steps create the taxonomy and assign the rank based on the rank ID.  
+The following steps create the taxonomy levels and assign based on the rank ID.  
 
 - `Create column genus based on column taxonfullname using expression grel:if(cells['rankid'].value >= 180, value.split(' ')[0], '')`  
 - `Create column species based on column taxonfullname using expression grel:if(cells['rankid'].value >= 220, value.split(' ')[1], '')`  
