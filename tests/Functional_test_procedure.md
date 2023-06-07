@@ -27,7 +27,6 @@ To be written...
 ☐ Check that sticky fields are carried over to the new record: StorageFullname, PrepType, TypeStatus, Notes, MultiSpecimen, MultiSpecimen serial, GeoRegion, TaxonName  
 ☐ Create new record without green-area input  
 ☐ Create new record without Geo-region  
-☐ Create new record without Taxonomy (should pop-up with error)  
 ☐ Create new record with novel family name  
 ☐ Create new record with multispecimen ticked  
 ☐ Then try creating another new record  
