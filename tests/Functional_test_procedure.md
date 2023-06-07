@@ -18,7 +18,7 @@
 ☐ Try removing the multi specimen tick mark from older records  
 ☐ Clear all - Update the latest record  
 ☐ Clear all – Create new record  
-☐ Check that sticky fields are carried over to the new record: txtStorageFullname, cbxPrepType, cbxTypeStatus, inpNotes, chkMultiSpecimen, inpMultiSpecimen, cbxGeoRegion, inpTaxonName  
+☐ Check that sticky fields are carried over to the new record: StorageFullname, PrepType, TypeStatus, Notes, MultiSpecimen, MultiSpecimen serial, GeoRegion, TaxonName  
 ☐ Create new record without green-area input  
 ☐ Create new record without Geo-region  
 ☐ Create new record without Taxonomy (should pop-up with error)  
