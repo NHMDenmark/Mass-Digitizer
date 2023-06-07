@@ -22,14 +22,13 @@ To be written...
 ☐ Set multi specimen checkbox  
 ☐ Try removing the multi specimen checkbox  
 ☐ Try removing the multi specimen tick mark from older records  
-☐ Clear all - Update the latest record  
-☐ Clear all – Create new record  
+☐ Clear form - Update the latest record  
+☐ Clear form – Create new record  
 ☐ Check that sticky fields are carried over to the new record: StorageFullname, PrepType, TypeStatus, Notes, MultiSpecimen, MultiSpecimen serial, GeoRegion, TaxonName  
 ☐ Create new record without green-area input  
 ☐ Create new record without Geo-region  
 ☐ Create new record with novel family name  
 ☐ Create new record with multispecimen ticked  
-☐ Then try creating another new record  
 ☐ Check to see if there is a meaningful error message when saving a record without a barcode  
 - At every step of the way you need to check to see if the action resulted in an expected change in the database, so please have the DB editor open.
 
