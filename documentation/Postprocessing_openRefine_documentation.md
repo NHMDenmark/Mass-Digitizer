@@ -37,11 +37,11 @@ The time has come to add new[ *taxonRank* ] flags to the code.
 - Create column newgenusflag based on column genus using expression:
     - `grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value == 180), 'True', '')`  
 - Create column newspeciesflag based on column taxonfullname using expression:
-    - `grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.split(' ').length()==2), 'True',  '')`  
+    - `grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value == 220, 'True',  '')`  
 - Create column newsubspeciesflag based on column newtaxonflag using expression: 
-    - `grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.split(' ').length()==3), 'True',  '')`  
+    - `grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value == 230), 'True',  '')`  
 - Create column newvarietyflag based on column newtaxonflag using expression:
-    - `grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.contains(' var\\. ')), 'True',  '')`  
+    - `grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value == 240), 'True',  '')`  
 - Create column newformaflag based on column taxonfullname using expression: 
     - `grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==260), 'True',  '')`
 
