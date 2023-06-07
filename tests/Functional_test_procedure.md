@@ -9,14 +9,16 @@
 ☐ Go back to beginning  
 ☐ Edit the first record  
 ☐ Edit the second record  
-☐ Enter novel taxon name (name not existing in the app spine)  
+☐ Enter novel taxon name (name not existing in the app spine) - this addresses #305  
 ☐ Enter novel taxon name AND novel family name  
+☐ Enter higher taxon name (level family or order)  
 ☐ Update the latest record  
 ☐ Set multi specimen checkbox  
 ☐ Try removing the multi specimen checkbox  
 ☐ Try removing the multi specimen tick mark from older records  
 ☐ Clear all - Update the latest record  
 ☐ Clear all – Create new record  
+☐ Check that sticky fields are carried over to the new record: txtStorageFullname, cbxPrepType, cbxTypeStatus, inpNotes, chkMultiSpecimen, inpMultiSpecimen, cbxGeoRegion, inpTaxonName  
 ☐ Create new record without green-area input  
 ☐ Create new record without Geo-region  
 ☐ Create new record without Taxonomy (should pop-up with error)  
