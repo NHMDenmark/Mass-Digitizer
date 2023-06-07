@@ -7,6 +7,7 @@
 ☐ Log in with wrong credentials  
 ☐ Create three new entries  
 ☐ Go back to beginning  
+☐ At every Go-back or -Forward step check to see if everything is carried over as expected. Does the database table content match what the APP displays?
 ☐ Edit the first record  
 ☐ Edit the second record  
 ☐ Enter novel taxon name (name not existing in the app spine) - this addresses #305  
