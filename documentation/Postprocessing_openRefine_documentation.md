@@ -5,7 +5,7 @@
 The digitization files come in Excel, TSV or CSV formats and have to be imported into the refine tool.
 
  The following columns 'taxonspid' and 'rankid' are converted to numerical data columns that import as text formatted data, these need to be converted to numerical because there are GREL code that tests on the assumption that numbers are numbers. GREL code con be obtained here: https://github.com/NHMDenmark/Mass-Digitizer/blob/main/OpenRefine/post_processing.json   
- - `"Text transform on cells in column taxonspid using expression value.toNumber()"`  
+ 
  - `"Text transform on cells in column rankid using expression value.toNumber()"`
 
 A new column 'newtaxonflag' is created is derived from the 'taxonspid' field:  
