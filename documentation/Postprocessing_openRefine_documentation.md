@@ -46,7 +46,7 @@ Workbench steps
 - Log into the Specify7 site that corresponds to the institution that the data is generated at 
 - Switch the collection 
 - At this step the data is ready for import into Specify through Workbench.
-When you have done a successful import into Specify through Workbench, then there will be an existing 'upload plan' - please use this. It is a tremendous time saver and will prevent mistakes in mapping.
+When you have done a successful import into Specify through Workbench, then there will be an existing 'upload plan' - please use this. It is a tremendous time saver and will prevent mistakes in mapping. The mapping is outlined here: [Specify Workbench mapping](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/documentation/Workbench_mapping.md)
 - Now it is time to save the dataset. Afterwards validate the project - there might be issues showing up at this point.  
 - A request must be sent to one of the Specify data coordinators (via the e-mail specify@snm.ku.dk) to have the specified range of dummy records deleted. This means the new catalog numbers being used in the import must be sent to the above mentioned email. There are 250K reserved catalog numbers that must be freed for the new records to be accepted in Specify.
 
