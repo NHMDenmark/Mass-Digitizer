@@ -1,5 +1,5 @@
 ## This is how to map post processed data in Specify Workbench 
-#### This page directs a data manager to map a file from the digi app with headers similar to the names (first string of the pair) below.
+#### This page directs how a data manager to map a file from the digi app in Specify workbench.
 catalognumber ->
 Catalog Number
 
