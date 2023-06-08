@@ -1,5 +1,5 @@
 ## This is how to map post processed data in Specify Workbench 
-
+#### This page directs a data manager to map in workbench from a file with headers similar to the names (first string of the pair) below.
 catalognumber ->
 Catalog Number
 
