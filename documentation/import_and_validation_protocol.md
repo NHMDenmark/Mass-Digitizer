@@ -1,6 +1,9 @@
 # Import protocol
 
 - The data files come into Exported_from_app_data_files directory
+- Upload to OpenRefine 
+
+OpenRefine steps: 
 - Do a quick review of the data before proceeding to the post processing (OpenRefine stage). Use your favorite spreadsheet application but do not save the file as a spreadsheet for the purpose of the OpenRefine step.
 - Be careful that you do not open the exported data file in Excel because it tends to corrupt long integers. You can always make a copy of the file and then open it in MS Excel.
 - If the data is incomplete or has other issues contact the digitizer, and get in touch with Pip Brewer as well.
@@ -9,7 +12,10 @@
 - Make sure that the new column 'Publish' which has the value "True" exists. This signifies that the records are to be published to GBIF. This is currently included in the GREL script.
 - Make sure that the new column 'project' has been added which has the value "DaSSCo" exists
 - Save the result as a TSV or CSV file in the Post_process_has_been_imported directory.
-- Before mapping into Workbench - _MAKE SURE_ you are on the correct server and collection/database: There is "specify-snm.science.ku.dk", "specify-test.science.ku.dk", and "specify-nhma.science.ku.dk" (NHMD, NHMD-test, Aarhus Herbarium), and in NHMD you have both Vascular Plants and Entomology. You have to access the right server AND the right collection.
+
+Workbench steps
+- Log into the Specify7 site that corresponds to the institution that the data is generated at 
+- Switch the collection 
 - At this step the data is ready for import into Specify through Workbench.
 When you have done a successful import into Specify through Workbench, then there will be an existing 'upload plan' - please use this. It is a tremendous time saver and will prevent mistakes in mapping.
 - Now it is time to save the dataset. Afterwards validate the project - there might be issues showing up at this point.  
