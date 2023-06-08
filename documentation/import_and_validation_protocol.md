@@ -7,7 +7,7 @@ OpenRefine steps:
 - Do a quick review of the data before proceeding to the post processing (OpenRefine stage). Use your favorite spreadsheet application but do not save the file as a spreadsheet for the purpose of the OpenRefine step.
 - Be careful that you do not open the exported data file in Excel because it tends to corrupt long integers. You can always make a copy of the file and then open it in MS Excel.
 - If the data is incomplete or has other issues contact the digitizer, and get in touch with Pip Brewer as well.
-- If the data passes inspection then proceed to the post processing which currently takes place in OpenRefine. Details are here: [Post processing](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/documentation/Postpreocessing_openRefine_documentation.md/)
+- If the data passes inspection then proceed to the post processing which currently takes place in OpenRefine. Details are here: [Post processing](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/documentation/Postprocessing_openRefine_documentation.md)
 - When the post processing has been run. Check to see if the number of rows match what was expected. Check if all columns are there (import list of columns desired).   
 - Make sure that the new column 'Publish' which has the value "True" exists. This signifies that the records are to be published to GBIF. This is currently included in the GREL script.
 - Make sure that the new column 'project' has been added which has the value "DaSSCo" exists
