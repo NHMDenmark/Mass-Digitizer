@@ -1,5 +1,5 @@
 # Steps in the post processing script
-*Note -  I am using the term 'refine tool' to make the description  generic. The refine tool used was OpenRefine.
+The refine tool used here is OpenRefine.
 
 
 The digitization files come in CSV format and they have to be imported into the Open Refine tool.
