@@ -43,8 +43,8 @@ OpenRefine steps:
 - Save the result as a CSV file in the Post_process_has_been_imported directory.
 
 Workbench steps
-- Log into the Specify7 site that corresponds to the institution that the data is generated at 
-- Switch to the relevant collection 
+- Log into the Specify7 site that corresponds to the institution that the data is generated at. 
+- Switch to the relevant collection. 
 - At this step the data is ready for import into Specify through Workbench.
 - If an 'upload plan' exists, please use this.
 - Now it is time to save the dataset. Afterwards validate the project - there might be issues showing up at this point.  
