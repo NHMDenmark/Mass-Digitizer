@@ -26,7 +26,6 @@ OpenRefine steps:
   - newsubspeciesflag
   - newvarietyflag
   - newformaflag
-  - taxonspid
   - typestatusname
   - broadgeographicalregion
   - preptypename
@@ -38,8 +37,8 @@ OpenRefine steps:
   - agentmiddleinitial
   - agentlastname
   - recorddatetime  
-- Make sure that the new column 'Publish' which has the value "True" exists. This signifies that the records are to be published to GBIF. This is currently included in the GREL script.
-- Make sure that the new column 'project' has been added which has the value "DaSSCo" exists
+- Make sure that the new column 'publish' which has the value "True" exists. This signifies that the records are to be published to GBIF. This is currently included in the GREL script.
+- Check that the new column 'project' has been added which has the value "DaSSCo".
 - Save the result as a CSV file in the Post_process_has_been_imported directory.
 
 Workbench steps
