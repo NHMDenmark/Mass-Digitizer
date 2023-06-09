@@ -4,7 +4,7 @@
 - Upload to OpenRefine 
 
 OpenRefine steps: 
-- Do a quick review of the data before proceeding to the post processing (OpenRefine stage). 
+- Do a quick review of the data before proceeding to the post processing (OpenRefine provides a review on upload). 
 - If the data is incomplete or has other issues contact the digitizer, and get in touch with Pip Brewer as well.
 - If the data passes inspection then apply the post processing script: [Post processing script](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/OpenRefine/post_processing.json)
 - Documentation on the post processing script is located here: [Post processing documentation](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/documentation/Postprocessing_openRefine_documentation.md)
