@@ -15,10 +15,11 @@ A new column 'newtaxonflag' is created is derived from the 'taxonspid' field:
  
 
 The storagefullname column is split by separator so that we can have the storage property in atomic units.  
-- `"Split column storagefullname by separator"` The separator here is " | " (notice the leading and trailing whitespace)
+- `"Split column storagefullname by separator"` The separator here is " | " (notice the leading and trailing whitespace)  
+- `"Remove column storagefullname 1"` This is the institution column that we are not mapping.
 - `"Rename column storagefullname 2 to site"`  
 - `"Rename column storagefullname 3 to collection"` 
-- `"Remove column storagefullname 1"` This is the institution column that we are not mapping.
+
 
 At this point a 'shelf' column and a 'box' column is created. This is specific for NHMD Vascular Plants which has shelves and boxes. 
 - `Create column shelf based on column storagename using expression grel:if(value.split(' ')[0] == 'Shelf', value.split(' ')[1], '')`  
