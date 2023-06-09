@@ -48,7 +48,7 @@ Workbench steps
 - At this step the data is ready for import into Specify through Workbench.
 - If an 'upload plan' exists, please use this.
 - Now it is time to save the dataset. Afterwards validate the project - there might be issues showing up at this point.  
-- A request must be sent to one of the Specify data coordinators (via the e-mail specify@snm.ku.dk) to have the specified range of dummy records deleted. This means the new catalog numbers being used in the import must be sent to the above mentioned email. There are 250K reserved catalog numbers that must be freed for the new records to be accepted in Specify.
+- A request must be sent to one of the Specify data coordinators (via the e-mail specify@snm.ku.dk) to have the specified range of dummy records deleted as well as the institution and collection. This means the new catalog numbers being used in the import must be sent to the above mentioned email. There are 250K reserved catalog numbers that must be freed for the new records to be accepted in Specify.
 - After the reserved catalog numbers are removed the import can commence.
 
 
