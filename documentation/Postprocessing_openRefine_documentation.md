@@ -73,6 +73,8 @@ The hybrids will be caught:
 Format container by removing the prepended apostrophe:
 - Text transform on cells in column container using expression grel:if(value.startsWith(\"'\"), value.replace(\"'\", ''), '')
 
+Adding the localityname again as a duplicate to satisfy Workbench. It tends to drop out of the Open Refine process.
+
 #### Lastly reorder the column names to your liking
 
 ## Columns that are removed:
