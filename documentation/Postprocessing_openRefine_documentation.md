@@ -101,3 +101,4 @@ Adding the localityname again as a duplicate to satisfy Workbench. It tends to d
 * exportdatetime
 * collectionname
 * institutionname
+For collections that do not have 'box' or 'shelf' these two columns can also be removed.
