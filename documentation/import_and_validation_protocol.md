@@ -8,7 +8,36 @@ OpenRefine steps:
 - If the data is incomplete or has other issues contact the digitizer, and get in touch with Pip Brewer as well.
 - If the data passes inspection then apply the post processing script: [Post processing script](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/OpenRefine/post_processing.json)
 - Documentation on the post processing script is located here: [Post processing](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/documentation/Postprocessing_openRefine_documentation.md)
-- When the post processing has been run. Check to see if the number of rows match the number of inputted rows. Check if all columns are there as described in the documentation above.  
+- When the post processing has been run. Check to see if the number of rows match the number of inputted rows. Check if all columns are there. The Columns to be persisted are:
+  - catalognumber
+  - catalogeddate
+  - notes
+  - project
+  - publish
+  - container
+  - family
+  - genus
+  - species
+  - subspecies
+  - variety
+  - forma
+  - newgenusflag
+  - newspeciesflag
+  - newsubspeciesflag
+  - newvarietyflag
+  - newformaflag
+  - taxonspid
+  - typestatusname
+  - broadgeographicalregion
+  - preptypename
+  - site
+  - collection
+  - shelf
+  - box
+  - agentfirstname
+  - agentmiddleinitial
+  - agentlastname
+  - recorddatetime  
 - Make sure that the new column 'Publish' which has the value "True" exists. This signifies that the records are to be published to GBIF. This is currently included in the GREL script.
 - Make sure that the new column 'project' has been added which has the value "DaSSCo" exists
 - Save the result as a CSV file in the Post_process_has_been_imported directory.
