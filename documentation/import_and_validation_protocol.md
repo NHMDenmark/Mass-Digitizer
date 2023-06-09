@@ -1,6 +1,6 @@
 # Import protocol
 
-- The data files come into Exported_from_app_data_files directory
+- The data files from the DigiApp come into Exported_from_app_data_files directory (N drive)
 - Upload to OpenRefine 
 
 OpenRefine steps: 
