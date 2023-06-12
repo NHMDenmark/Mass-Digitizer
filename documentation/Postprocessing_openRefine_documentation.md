@@ -25,6 +25,8 @@ At this point a 'shelf' column and a 'box' column is created. This is specific f
 - `Create column shelf based on column storagename using expression grel:if(value.split(' ')[0] == 'Shelf', value.split(' ')[1], '')`  
 - `Create column box based on column storagename using expression grel:if(value.split(' ')[0] == 'Box', value.split(' ')[1], '')`
 
+In case there are [name sp.] taxon values in fullname, then these need to be marked up in a qualifier column.
+- `Create column qualifier at index 5 based on column taxonfullname using expression grel:if(value.contains(" sp. "), 'sp.', '')`
 
 The following steps create the taxonomy levels and assign values to them based on the rank ID.  
 
