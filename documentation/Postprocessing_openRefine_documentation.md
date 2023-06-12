@@ -61,9 +61,9 @@ The broadgeographicalregion is duplicated into a column named 'localityname'.
 The agentMiddleInitial is checked and corrected if the value is 'None'
 
 The column 'catalogeddate' is needed and must be created from a timestamp column 'recordeddatetime' which requires these steps:  
-- "Create column catalogeddate based on column recorddatetime using expression grel:value.slice(0,10)"`  
-- "Text transform on cells in column catalogeddate using expression value.toDate()"`  
-- "Text transform on cells in column catalogeddate using expression grel:value.toString('dd/MM/yyyy')"`  
+- Create column catalogeddate based on column recorddatetime using expression `value.slice(0,10)`  
+- Text transform on cells in column catalogeddate using expression `value.toDate()`  
+- Text transform on cells in column catalogeddate using expression `value.toString('dd/MM/yyyy')`  
 
 There will be two columns for ready-to-publish and project-name:
 - A novel column is made with the name 'publish' and the value 'True' signifying that the records are ready for publishing to GBIF.
