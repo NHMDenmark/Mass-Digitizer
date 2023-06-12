@@ -9,9 +9,12 @@ The digitization files come in CSV format and they have to be imported into the 
  - `"Text transform on cells in column rankid using expression value.toNumber()"`  
  - `"Text transform on cells in column taxonspid using expression value.toNumber()"`
 
+We check to see if the value "None" appears in taxonspid.
+- Text transform on cells in column taxonspid using expression `if((value==null).or(value==0).or(value=='None'), '', value)`
+
 A new column 'newtaxonflag' is created is derived from the 'taxonspid' field:  
 - Create column newtaxonflag at index 11 based on column taxonspid using expression 
-    - `grel:if((value==null).or(value==0), 'True', 'False')`
+    - `if((value==null).or(value==0), 'True', 'False')`
  
 
 The storagefullname column is split by separator so that we can have the storage property in atomic units.  
