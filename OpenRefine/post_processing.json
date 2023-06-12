@@ -188,83 +188,81 @@
     "description": "Create column forma at index 5 based on column taxonfullname using expression grel:if(cells['rankid'].value == 260, value.split(' ')[3], '')"
   },
   {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "baseColumnName": "taxonfullname",
-    "expression": "grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==260), 'True',  '')",
-    "onError": "set-to-blank",
-    "newColumnName": "newformaflag",
-    "columnInsertIndex": 5,
-    "description": "Create column newformaflag at index 5 based on column taxonfullname using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==260), 'True',  '')"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "baseColumnName": "newtaxonflag",
-    "expression": "grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==240), 'True',  '')",
-    "onError": "set-to-blank",
-    "newColumnName": "newvarietyflag",
-    "columnInsertIndex": 17,
-    "description": "Create column newvarietyflag at index 17 based on column newtaxonflag using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==240), 'True',  '')"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [
-        {
-          "type": "range",
-          "name": "newtaxonflag",
-          "expression": "value",
-          "columnName": "newtaxonflag",
-          "from": 0.92,
-          "to": 1.01,
-          "selectNumeric": true,
-          "selectNonNumeric": true,
-          "selectBlank": true,
-          "selectError": true
-        }
-      ],
-      "mode": "row-based"
-    },
-    "baseColumnName": "newtaxonflag",
-    "expression": "grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==230), 'True',  '')",
-    "onError": "set-to-blank",
-    "newColumnName": "newsubspeciesflag",
-    "columnInsertIndex": 17,
-    "description": "Create column newsubspeciesflag at index 17 based on column newtaxonflag using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==230), 'True',  '')"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "baseColumnName": "taxonfullname",
-    "expression": "grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.split(' ').length()==2), 'True',  '')",
-    "onError": "set-to-blank",
-    "newColumnName": "newspeciesflag",
-    "columnInsertIndex": 5,
-    "description": "Create column newspeciesflag at index 5 based on column taxonfullname using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.split(' ').length()==2), 'True',  '')"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "baseColumnName": "genus",
-    "expression": "grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value == 180), 'True', '')",
-    "onError": "set-to-blank",
-    "newColumnName": "newgenusflag",
-    "columnInsertIndex": 8,
-    "description": "Create column newgenusflag at index 8 based on column genus using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value == 180), 'True', '')"
-  },
+ 		"op": "core/column-addition",
+ 		"engineConfig": {
+ 			"facets": [],
+ 			"mode": "row-based"
+ 		},
+ 		"baseColumnName": "genus",
+ 		"expression": "grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value == 180), 'True', '')",
+ 		"onError": "set-to-blank",
+ 		"newColumnName": "newgenusflag",
+ 		"columnInsertIndex": 8,
+ 		"description": "Create column newgenusflag at index 8 based on column genus using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value == 180), 'True', '')"
+ 	}, {
+ 		"op": "core/column-addition",
+ 		"engineConfig": {
+ 			"facets": [],
+ 			"mode": "row-based"
+ 		},
+ 		"baseColumnName": "taxonfullname",
+ 		"expression": "grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.split(' ').length()==2), 'True',  '')",
+ 		"onError": "set-to-blank",
+ 		"newColumnName": "newspeciesflag",
+ 		"columnInsertIndex": 5,
+ 		"description": "Create column newspeciesflag at index 5 based on column taxonfullname using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.split(' ').length()==2), 'True',  '')"
+ 	},
+ 	{
+ 		"op": "core/column-addition",
+ 		"engineConfig": {
+ 			"facets": [{
+ 				"type": "range",
+ 				"name": "newtaxonflag",
+ 				"expression": "value",
+ 				"columnName": "newtaxonflag",
+ 				"from": 0.92,
+ 				"to": 1.01,
+ 				"selectNumeric": true,
+ 				"selectNonNumeric": true,
+ 				"selectBlank": true,
+ 				"selectError": true
+ 			}],
+ 			"mode": "row-based"
+ 		},
+ 		"baseColumnName": "newtaxonflag",
+ 		"expression": "grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==230), 'True',  '')",
+ 		"onError": "set-to-blank",
+ 		"newColumnName": "newsubspeciesflag",
+ 		"columnInsertIndex": 17,
+ 		"description": "Create column newsubspeciesflag at index 17 based on column newtaxonflag using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==230), 'True',  '')"
+ 	}, {
+ 		"op": "core/column-addition",
+ 		"engineConfig": {
+ 			"facets": [],
+ 			"mode": "row-based"
+ 		},
+ 		"baseColumnName": "newtaxonflag",
+ 		"expression": "grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==240), 'True',  '')",
+ 		"onError": "set-to-blank",
+ 		"newColumnName": "newvarietyflag",
+ 		"columnInsertIndex": 17,
+ 		"description": "Create column newvarietyflag at index 17 based on column newtaxonflag using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==240), 'True',  '')"
+ 	},
+
+ 	{
+ 		"op": "core/column-addition",
+ 		"engineConfig": {
+ 			"facets": [],
+ 			"mode": "row-based"
+ 		},
+ 		"baseColumnName": "taxonfullname",
+ 		"expression": "grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==260), 'True',  '')",
+ 		"onError": "set-to-blank",
+ 		"newColumnName": "newformaflag",
+ 		"columnInsertIndex": 5,
+ 		"description": "Create column newformaflag at index 5 based on column taxonfullname using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==260), 'True',  '')"
+ 	} 
+ ,
   {
     "op": "core/column-rename",
     "oldColumnName": "familyname",
@@ -523,13 +521,9 @@
       "box",
       "shelf",
       "localityname",
-      "taxonrankname",
       "typestatusname",
       "broadgeographicalregion",
-      "storagename",
-      "storagerankname",
       "preptypename",
-      "collectionname",
       "recorddatetime",
       "agentfirstname",
       "agentmiddleinitial",
