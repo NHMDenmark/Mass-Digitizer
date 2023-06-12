@@ -6,8 +6,8 @@ The digitization files come in CSV format and they have to be imported into the 
 
  The following columns 'taxonspid' and 'rankid' are converted to numerical data columns that import as text formatted data, these need to be converted to numerical because there are GREL code that tests on the assumption that numbers are numbers. GREL code con be obtained here: https://github.com/NHMDenmark/Mass-Digitizer/blob/main/OpenRefine/post_processing.json   
  
- - `"Text transform on cells in column rankid using expression value.toNumber()"`  
- - `"Text transform on cells in column taxonspid using expression value.toNumber()"`
+ - Text transform on cells in column rankid using expression `value.toNumber()`  
+ - Text transform on cells in column taxonspid using expression `value.toNumber()`
 
 We check to see if the value "None" appears in taxonspid.
 - Text transform on cells in column taxonspid using expression `if((value==null).or(value==0).or(value=='None'), '', value)`
@@ -25,32 +25,32 @@ The storagefullname column is split by separator so that we can have the storage
 
 
 At this point a 'shelf' column and a 'box' column is created. This is specific for NHMD Vascular Plants which has shelves and boxes. 
-- `Create column shelf based on column storagename using expression grel:if(value.split(' ')[0] == 'Shelf', value.split(' ')[1], '')`  
-- `Create column box based on column storagename using expression grel:if(value.split(' ')[0] == 'Box', value.split(' ')[1], '')`
+- Create column shelf based on column storagename using expression `if(value.split(' ')[0] == 'Shelf', value.split(' ')[1], '')`  
+- Create column box based on column storagename using expression `if(value.split(' ')[0] == 'Box', value.split(' ')[1], '')`
 
 In case there are [name sp.] taxon values in fullname, then these need to be marked up in a qualifier column.
-- `Create column qualifier at index 5 based on column taxonfullname using expression grel:if(value.contains(" sp. "), 'sp.', '')`
+- Create column qualifier at index 5 based on column taxonfullname using expression `if(value.contains(" sp. "), 'sp.', '')`
 
 The following steps create the taxonomy levels and assign values to them based on the rank ID.  
 
-- `Create column genus based on column taxonfullname using expression grel:if(cells['rankid'].value >= 180, value.split(' ')[0], '')`  
-- `Create column species based on column taxonfullname using expression grel:if(cells['rankid'].value >= 220, value.split(' ')[1], '')`  
-- `Create column subspecies based on column taxonfullname using expression grel:if(cells['rankid'].value == 230, value.split(' ')[2], '')`  
-- `Create column variety based on column taxonfullname using expression grel:if(cells['rankid'].value == 240, value.split(' ')[3], '')`  
-- `Create column forma at on column taxonfullname using expression grel:if(cells['rankid'].value == 260, value.split(' ')[3], '')`  
+- Create column genus based on column taxonfullname using expression `if(cells['rankid'].value >= 180, value.split(' ')[0], '')`  
+- Create column species based on column taxonfullname using expression `if(cells['rankid'].value >= 220, value.split(' ')[1], '')`  
+- Create column subspecies based on column taxonfullname using expression `if(cells['rankid'].value == 230, value.split(' ')[2], '')`  
+- Create column variety based on column taxonfullname using expression `if(cells['rankid'].value == 240, value.split(' ')[3], '')`  
+- Create column forma at on column taxonfullname using expression `if(cells['rankid'].value == 260, value.split(' ')[3], '')`  
 
 
 In order to identify new taxon ranks we have to add new[ *taxonRank* ] flags to the code.  
 - Create column newgenusflag based on column genus using expression:
-    - `grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value == 180), 'True', '')`  
+    - `if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value == 180), 'True', '')`  
 - Create column newspeciesflag based on column taxonfullname using expression:
-    - `grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value == 220, 'True',  '')`  
+    - `if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value == 220, 'True',  '')`  
 - Create column newsubspeciesflag based on column newtaxonflag using expression: 
-    - `grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value == 230), 'True',  '')`  
+    - `if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value == 230), 'True',  '')`  
 - Create column newvarietyflag based on column newtaxonflag using expression:
-    - `grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value == 240), 'True',  '')`  
+    - `if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value == 240), 'True',  '')`  
 - Create column newformaflag based on column taxonfullname using expression: 
-    - `grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==260), 'True',  '')`
+    - `if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==260), 'True',  '')`
 
 
 - Rename column familyname to family
@@ -73,10 +73,10 @@ There will be two columns for ready-to-publish and project-name:
 - Another column is needed: 'project' which contains the name 'DaSSCo'. This will make it easier to find records from the DaSSCo project.
 
 The hybrids will be caught:
-- Text transform on cells in column species using expression grel:if(cells['genus'].value.contains(\" x \"), cells['genus'].value, value)
+- Text transform on cells in column species using expression `if(cells['genus'].value.contains(\" x \"), cells['genus'].value, value)`
 
 Format container by removing the prepended apostrophe:
-- Text transform on cells in column container using expression grel:if(value.startsWith(\"'\"), value.replace(\"'\", ''), '')
+- Text transform on cells in column container using expression `if(value.startsWith(\"'\"), value.replace(\"'\", ''), '')`
 
 Adding the localityname again as a duplicate to satisfy Workbench. It tends to drop out of the Open Refine process.
 
