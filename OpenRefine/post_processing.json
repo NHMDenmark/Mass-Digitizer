@@ -481,20 +481,7 @@
     "repeat": false,
     "repeatCount": 10,
     "description": "Text transform on cells in column container using expression grel:if(value.startsWith(\"'\"), value.replace(\"'\", ''), '')"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "baseColumnName": "broadgeographicalregion",
-    "expression": "grel:value",
-    "onError": "set-to-blank",
-    "newColumnName": "localityname",
-    "columnInsertIndex": 20,
-    "description": "Create column localityname at index 20 based on column broadgeographicalregion using expression grel:value"
-  },
+  },  
   {
     "op": "core/column-reorder",
     "columnNames": [
