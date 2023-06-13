@@ -112,7 +112,7 @@ class HomeScreen():
                             gs.baseURL = institution_url
                             gs.csrfToken = sp.specifyLogin(username, password, collection[0]['spid'])
 
-                            if gs.csrfToken != '':
+                            if gs.csrfToken != '': # TODO Check token format for extra security 
                                 # Login was successfull
 
                                 gs.userName = username
@@ -120,8 +120,6 @@ class HomeScreen():
                                 gs.collectionName = selected_collection
                                 gs.institutionId = institution_id
                                 gs.institutionName = selected_institution 
-
-                                # TODO Specify fetch user agent first name, middle, last name 
 
                                 # 1. Fetch SpecifyUser on username (/api/specify/specifyuser/?name=username)
                                 user = sp.getSpecifyObjects('specifyuser', filters={"name":f"{username}"})[0]
