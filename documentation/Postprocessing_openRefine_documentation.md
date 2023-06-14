@@ -82,7 +82,8 @@ The hybrids will be caught:
 Format container by removing the prepended apostrophe:
 - Text transform on cells in column container using expression `if(value.startsWith(\"'\"), value.replace(\"'\", ''), '')`
 
-The term "sp." is removed from the species column. `if(value.contains('sp.'), '', value)` 
+The term "sp." is removed from the species column. 
+- `if(value.contains('sp.'), '', value)` 
 
 #### Lastly reorder the column names to your liking
 
