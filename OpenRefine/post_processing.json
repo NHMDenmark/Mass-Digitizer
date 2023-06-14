@@ -123,6 +123,19 @@
     "description": "Create column qualifier at index 5 based on column taxonfullname using expression grel:if(value.contains(\" sp.\"), 'sp.', '')"
   },
   {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "species",
+    "expression": "grel:if(value.contains('sp.'), '', value)",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Text transform on cells in column species using expression grel:if(value.contains('sp.'), '', value)"
+  },
+  {
     "op": "core/column-addition",
     "engineConfig": {
       "facets": [],
