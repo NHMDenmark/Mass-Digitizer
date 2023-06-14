@@ -1,4 +1,4 @@
-# Functional test procedure  
+# Usability test procedure  
 
 ## Testing goals
 To be written...
