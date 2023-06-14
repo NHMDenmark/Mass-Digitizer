@@ -60,6 +60,8 @@ In order to identify new taxon ranks we have to add new[ *taxonRank* ] flags to 
 
 The broadgeographicalregion is duplicated into a column named 'localityname'.  
 - Create column localityname based on column georegionname using expression grel:value  
+Workbench will fail validation if this element is not here.
+
 
 The agentMiddleInitial is checked and corrected if the value is 'None'
 
@@ -72,13 +74,15 @@ There will be two columns for ready-to-publish and project-name:
 - A novel column is made with the name 'publish' and the value 'True' signifying that the records are ready for publishing to GBIF.
 - Another column is needed: 'project' which contains the name 'DaSSCo'. This will make it easier to find records from the DaSSCo project.
 
+
+
 The hybrids will be caught:
 - Text transform on cells in column species using expression `if(cells['genus'].value.contains(\" x \"), cells['genus'].value, value)`
 
 Format container by removing the prepended apostrophe:
 - Text transform on cells in column container using expression `if(value.startsWith(\"'\"), value.replace(\"'\", ''), '')`
 
-Adding the localityname again as a duplicate to satisfy Workbench. It tends to drop out of the Open Refine process.
+The term "sp." is removed from the species column. `if(value.contains('sp.'), '', value)` 
 
 #### Lastly reorder the column names to your liking
 
