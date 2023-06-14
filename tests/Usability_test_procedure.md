@@ -1,7 +1,7 @@
 # Usability test procedure  
 
 ## Testing goals
-To be written...
+To quickly ascertain that the usability of the app is in place. Actions in the app behaves as expected.
 
 ## Test scenarios
 
