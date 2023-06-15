@@ -85,7 +85,11 @@ Format container by removing the prepended apostrophe:
 The term "sp." is removed from the species column. 
 - `if(value.contains('sp.'), '', value)` 
 
-Check to see if the qualifiers aff. or cf. are showing up in the species field.
+Populate the qualifier column with qualifiers aff. or cf.
+- `if(value.contains("aff\."), 'aff.', value)`
+- `if((value.contains("cf\."), 'cf.', value)`
+
+Remove the qualifiers aff. or cf. in the species field if any show up.
 - `if((value.contains("aff\.").or(value.contains("cf\."))), '', value)`
 
 #### Lastly reorder the column names to your liking
