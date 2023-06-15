@@ -39,6 +39,7 @@ OpenRefine steps:
   - recorddatetime  
 - Make sure that the new column 'publish' which has the value "True" exists. This signifies that the records are to be published to GBIF. This is currently included in the GREL script.
 - Check that the new column 'project' has been added which has the value "DaSSCo".
+- It is imperative that taxonfullnames with qualifiers ('cf.', 'aff.', 'sp.') are handled, so that they won't automatically be interpreted as novel names. This means looking the geuns up in the taxonomy to determine if it is a known name or not.
 - Save the result as a CSV file in the Post_process_has_been_imported directory.
 
 Workbench steps
