@@ -588,5 +588,18 @@
     "repeat": false,
     "repeatCount": 10,
     "description": "Text transform on cells in column species using expression grel:if(value=='sp.', '', value)"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "species",
+    "expression": "grel:if(cells['taxonfullname'].value.contains(\" x \"), cells['taxonfullname'].value.split(' ').slice(1).join(\" \"), value)",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Text transform on cells in column species using expression grel:if(cells['taxonfullname'].value.contains(\" x \"), cells['taxonfullname'].value.split(' ').slice(1).join(\" \"), value)"
   }
 ]
