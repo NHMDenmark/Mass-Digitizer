@@ -601,5 +601,41 @@
     "repeat": false,
     "repeatCount": 10,
     "description": "Text transform on cells in column species using expression grel:if(cells['taxonfullname'].value.contains(\" x \"), cells['taxonfullname'].value.split(' ').slice(1).join(\" \"), value)"
+  },
+  {
+    "op": "core/column-reorder",
+    "columnNames": [
+      "catalognumber",
+      "catalogeddate",
+      "notes",
+      "publish",
+      "project",
+      "container",
+      "family",
+      "genus",
+      "species",
+      "subspecies",
+      "variety",
+      "forma",
+      "newgenusflag",
+      "newspeciesflag",
+      "newsubspeciesflag",
+      "newvarietyflag",
+      "newformaflag",
+      "qualifier",
+      "site",
+      "collection",
+      "box",
+      "shelf",
+      "localityname",
+      "typestatusname",
+      "broadgeographicalregion",
+      "preptypename",
+      "recorddatetime",
+      "agentfirstname",
+      "agentmiddleinitial",
+      "agentlastname"
+    ],
+    "description": "Reorder columns"
   }
 ]
