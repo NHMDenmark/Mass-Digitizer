@@ -1,5 +1,57 @@
 [
   {
+    "op": "core/column-split",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "storagefullname",
+    "guessCellType": true,
+    "removeOriginalColumn": true,
+    "mode": "separator",
+    "separator": " | ",
+    "regex": false,
+    "maxColumns": 0,
+    "description": "Split column storagefullname by separator"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "storagefullname 1",
+    "description": "Remove column storagefullname 1"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "storagefullname 3",
+    "expression": "grel:\"C: Danish Herbarium\"",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Text transform on cells in column storagefullname 3 using expression grel:\"C: Danish Herbarium\""
+  },
+  {
+    "op": "core/column-rename",
+    "oldColumnName": "multispecimen",
+    "newColumnName": "container",
+    "description": "Rename column multispecimen to container"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "container",
+    "expression": "grel:if(value!=null, 'MSO'+value, '')",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Text transform on cells in column container using expression grel:if(value!=null, 'MSO'+value, '')"
+  },
+  {
     "op": "core/text-transform",
     "engineConfig": {
       "facets": [],
@@ -50,26 +102,6 @@
     "newColumnName": "newtaxonflag",
     "columnInsertIndex": 11,
     "description": "Create column newtaxonflag at index 11 based on column taxonspid using expression grel:if((value==null).or(value==0), 'True', 'False')"
-  },
-  {
-    "op": "core/column-split",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "columnName": "storagefullname",
-    "guessCellType": true,
-    "removeOriginalColumn": true,
-    "mode": "separator",
-    "separator": " | ",
-    "regex": false,
-    "maxColumns": 0,
-    "description": "Split column storagefullname by separator"
-  },
-  {
-    "op": "core/column-removal",
-    "columnName": "storagefullname 1",
-    "description": "Remove column storagefullname 1"
   },
   {
     "op": "core/column-rename",
@@ -273,12 +305,6 @@
   },
   {
     "op": "core/column-rename",
-    "oldColumnName": "multispecimen",
-    "newColumnName": "container",
-    "description": "Rename column multispecimen to container"
-  },
-  {
-    "op": "core/column-rename",
     "oldColumnName": "georegionname",
     "newColumnName": "broadgeographicalregion",
     "description": "Rename column georegionname to broadgeographicalregion"
@@ -334,19 +360,6 @@
     "repeat": false,
     "repeatCount": 10,
     "description": "Text transform on cells in column catalogeddate using expression grel:value.toString('dd/MM/yyyy')"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "baseColumnName": "container",
-    "expression": "grel:'DaSSCo'",
-    "onError": "set-to-blank",
-    "newColumnName": "project",
-    "columnInsertIndex": 4,
-    "description": "Create column project at index 4 based on column container using expression grel:'DaSSCo'"
   },
   {
     "op": "core/column-reorder",
@@ -470,19 +483,6 @@
     "repeat": false,
     "repeatCount": 10,
     "description": "Text transform on cells in column species using expression grel:if(cells['genus'].value.contains(\" x \"), cells['genus'].value, value)"
-  },
-  {
-    "op": "core/text-transform",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "columnName": "container",
-    "expression": "grel:if(value.startsWith(\"'\"), value.replace(\"'\", ''), '')",
-    "onError": "keep-original",
-    "repeat": false,
-    "repeatCount": 10,
-    "description": "Text transform on cells in column container using expression grel:if(value.startsWith(\"'\"), value.replace(\"'\", ''), '')"
   },
   {
     "op": "core/column-addition",
