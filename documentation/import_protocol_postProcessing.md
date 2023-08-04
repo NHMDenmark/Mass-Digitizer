@@ -1,12 +1,12 @@
 # Import protocol
 
 - The datasets from the DigiApp come into Exported_from_app_data_files directory (N drive)
-- Path: `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data + \Exported_from_app_data_files`
-- After a file comes into the path/Exported_from_app_data_files and the dataset is picked up by the data manager, it needs to be transferred (*cut and paste*) into the Exports_in_process sub-directory to facilitate tracking of the process. It is desirable to have the Exported_from_app_data_files directory almost empty which tells us the datasets that were exported are being post-processed and imported into Specify.
-- Dataset is then moved to `PostProcessed_NOT_been_imported`
+- Path: `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\1.Exported files from App`
+- After a file comes into this directory and the dataset is picked up by the data manager, it needs to be post processed according to `https://github.com/NHMDenmark/Mass-Digitizer/blob/main/documentation/Postprocessing_openRefine_documentation.md`. It is desirable to have the Exported_from_app_data_files directory almost empty which tells us the datasets that were exported are being post-processed and imported into Specify.
+- Dataset is then moved to `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\2.PostProcessed_openRefine`
 - Upload dataset to OpenRefine
 - Map, save and validate in Workbench - then 'import'.  
-- After the post processed dataset is imported into Specify it is moved into imported_into_specify_datasets.
+- After the post processed dataset is imported into Specify it is moved into `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\3.Imported specify`.
    
 OpenRefine steps: 
 - Do a quick review of the data before proceeding to the post processing (OpenRefine provides a review on upload). 
