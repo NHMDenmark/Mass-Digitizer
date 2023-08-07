@@ -416,19 +416,6 @@
     "description": "Create column shelf at index 35 based on column storagename using expression grel:if(value.split(' ')[0]=='Shelf', value.split(' ')[1], '')"
   },
   {
-    "op": "core/text-transform",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "columnName": "storagefullname 3",
-    "expression": "grel:\"C: Danish Herbarium\"",
-    "onError": "keep-original",
-    "repeat": false,
-    "repeatCount": 10,
-    "description": "Text transform on cells in column storagefullname 3 using expression grel:\"C: Danish Herbarium\""
-  },
-  {
     "op": "core/column-rename",
     "oldColumnName": "storagefullname 3",
     "newColumnName": "collection",
