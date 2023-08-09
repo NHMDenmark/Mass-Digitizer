@@ -4,7 +4,7 @@
 Created
 on Thu May 26 17:44:00 2022
 
-@authors: Jan K. Legind, NHMD; Fedor A. Steeman NHMD 
+@authors: Jan K. Legind, NHMD; Fedor A. Steeman NHMD
 
 Copyright 2022 Natural History Museum of Denmark (NHMD)
 
@@ -22,7 +22,7 @@ either express or implied. See the License for the specific language governing p
 import traceback
 import PySimpleGUI as sg
 import sys
-import binascii
+import time
 # Internal dependencies
 import util
 from data_access import DataAccess
@@ -35,12 +35,12 @@ from models import collection as coll
 
 class SpecimenDataEntry():
     """
-    Interface for entering specimen records.  
+    Interface for entering specimen records.
     """
 
     def __init__(self, collection_id):
         """
-        Constructor that initializes class variables and dependent class instances 
+        Constructor that initializes class variables and dependent class instances
         """
         util.logger.info("Initializing Data Entry form for Institution & collection: %s | %s" % (
         gs.institutionName, gs.collectionName))
@@ -72,6 +72,7 @@ class SpecimenDataEntry():
         self.nonStickyFields = ['inpCatalogNumber', 'txtRecordID']
 
         # Global variables
+        self.barcodeList = []
         self.notes = ''  # Notes for access in autoSuggest_popup
         self.fieldInFocus = ''  # Stores name of field currently in focus
         self.fieldInFocusIndex = -1  # Stores list index of field currently in focus
@@ -227,9 +228,7 @@ class SpecimenDataEntry():
                         'taxonspid', 'highertaxonname', 'preptypename', 'typestatusname', 'typestatusid',
                         'georegionname',
                         'georegionid', 'storagefullname', 'storagename']  # TODO Not currently used
-        # self.tableHeaders = ['id', 'catalognumber', 'taxonfullname', 'multispecimen', 'georegionname', 'storagename']  # Headers for previousRecordsTable
-        self.tableHeaders = self.db.getTableHeaders('specimen')
-        print('TABLE HEEEEADERZZZZ:', self.tableHeaders)
+        self.tableHeaders = ['id', 'catalognumber', 'taxonfullname', 'containertype', 'georegionname', 'storagename']  # Headers for previousRecordsTable
 
         lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
 
@@ -353,33 +352,13 @@ class SpecimenDataEntry():
             self.window[Name].bind(eventName, '_FocusIn')
         self.window['inpNotes'].bind('<FocusOut>', '_FocusOut')
 
-    def barcodeProcessor(barcodeList):
-        '''Takes barcode in list of binary'''
-        print('BClist:::', barcodeList)
-        # rus = [j.decode('ascii') for j in barcodeList]
-        rus = []
-        for k in barcodeList:
-            item = k.strip()
-            if isinstance(k, (bytes, bytearray)):
-                bnry = binascii.unhexlify(item)
-                str = bnry.decode('ascii')
-                rus.append(str)
-            else:
-                pass
-        joint = ''.join(rus)
-        joint = joint[::-1]
-        jsplit = joint.split("\n")
-        jEnd = [x for x in jsplit if x != '']
-        print("*****************", jEnd[0], 'ØØØ', jEnd)
-
     def main(self):
 
         self.window['inpStorage'].update(
             select=True)  # Select all on field to enable overwriting pre-filled "None" placeholder
         self.setFieldFocus('inpStorage')  # Set focus on storage field
         self.window['tblPrevious'].update(values=self.recordSet.getAdjacentRecordList(self.tableHeaders))  #
-        BClist = []
-        barcodeData = ''
+
 
         while True:
             # Main loop going through User Interface (UI) events
@@ -525,68 +504,34 @@ class SpecimenDataEntry():
 
             elif event == 'inpCatalogNumber':
                 # Respond to barcode being entered or scanned by setting corresponding field value
-
                 validation = ''
-                barcode = values['inpCatalogNumber']
-                print('barcode ===', barcode)
-                # time.sleep(0.1)
-                barcode = values['inpCatalogNumber']
+                self.barcodeList.append(values['inpCatalogNumber'])
                 ''' In this codeblock the input barcode is appended to a list which is then joined.
                  This is to catch the case where barcode digits come in a "stream" (one at a time).
                  It prevents the first digit triggering the save() and will allow mot USB scanners to work.'''
-                barcode_data += values[event]
-                BClist.append(barcode)
-                latestBarcode = []
-                for j in barcode_data:
-                    k = bytes(j, 'utf-8')
-                    khex = binascii.hexlify(k)
-                    print(f"{j}-_")
-                    print(khex)
-                    BClist.append(khex)
-                    print('Last two', BClist[-2:])
-                    latestBarcode.append(j)
-                    if BClist[-2:] == [b'0a', b'0a']:
-                        print('END OF  BARCODE -------------------')
-                        print(BClist)
-                        BClist.pop(0)
-
                 baracuda = []
-                for j in barcode:
-                    if '\n' in j:
-                        print('NEWLINE in barcode !"#¤')
-                        break
-                    else:
-                        baracuda.append(j)
-
-
-                # time.sleep(6)
+                for j in self.barcodeList:
+                    baracuda.append(j)
+                    print('barcode list', baracuda)
                 barcode = ''.join(baracuda)
-
-
-                # validation = self.verifyCatalogNumber(barcode)
-                # if validation == 'valid':
-                #     self.collobj.catalogNumber = barcode
-
-                if gs.collectionName == 'NHMD Vascular Plants':
-                    if len(barcode) >= 9:
-                        validation = 'valid'
-                    else:
-                        pass
-                if gs.collectionName == 'NHMD Entomology':
-                    if len(barcode) == 8:
-                        validation = 'valid'
-                    else:
-                        pass
-
+                self.clearNonStickyFields(self.nonStickyFields) #Remove spill-over from barcode read.
+                '''The following code block validates per collection 
+                   so that each collection catalog number format is verified. '''
+                print(f"Barcode after non-sticky:{barcode}")
+                print(f"Barcode after non-sticky LENGTH:{len(barcode)}")
+                if gs.collectionName == "NHMD Vascular Plants":
+                    gs.lengthCatalogNumber = 8
+                    if len(barcode) == gs.lengthCatalogNumber:
+                        validation = self.verifyCatalogNumber(barcode)
+                elif gs.collectionName == "NHMD Entomology":
+                    if len(barcode) == 9:
+                        validation = self.verifyCatalogNumber(barcode)
                 if validation == 'valid':
                     self.collobj.catalogNumber = barcode
                     print('self.collobj.catalogNumber', self.collobj.catalogNumber)
                     self.window['inpCatalogNumber'].set_focus()
                     self.saveForm(self.collobj.getFieldsAsDict())
-                else:
-                    e = "Barcode/catalog number is not eight digits or contains non numeric characters."
-                    sg.PopupError(e)
-                    # self.window['inpCatalogNumber'].update(value=barcode)
+                        # self.window['inpCatalogNumber'].update(value=barcode)
 
                     # self.window['inpCatalogNumber'].update(select=True)
 
@@ -700,14 +645,13 @@ class SpecimenDataEntry():
             elif event == 'btnSave' or event == 'btnSave_Enter': #Should btnSave_Enter be removed?
                 # Save current specimen record to app database
                 print('btnsave values::::____', self.collobj.getFieldsAsDict())
-                print('Collection name == ', gs.collectionName)
                 # Validation follows
                 print("real cat NOOOOOOOO|", self.collobj.catalogNumber, f"length cat no is :{len(self.collobj.catalogNumber)} and type is {type(self.collobj.catalogNumber)}")
 
-                if len(self.collobj.catalogNumber) == 9:
+                if len(self.collobj.catalogNumber) == gs.lengthCatalogNumber:
                     self.saveForm(self.collobj.getFieldsAsDict())
                 else:
-                    err = "Catalog number must have a length of 9 digits."
+                    err = f"Catalog number must have a length of {gs.lengthCatalogNumber} digits."
                     sg.popup_error(err)
 
             elif event == 'btnFirst':
@@ -777,11 +721,10 @@ class SpecimenDataEntry():
         A final validation and transfer of selected input fields is still performed to ensure data integrity.
         """
         try:
-            print("In SAVEform() - catalognumber =", record['catalognumber'])
-
-            print('CAT no.....', self.window['inpCatalogNumber'].get(), 'len =', len(self.window['inpCatalogNumber'].get()))
-            print(f"The submitted values record is::: {record}")
-            print('Values window is---', self.values_reuse)
+            catNo = record['catalognumber'].replace('"', '')
+            print("In SAVEform() - catalognumber =", record['catalognumber'], 'length cata no=', len(catNo))
+            if len(catNo) != gs.lengthCatalogNumber:
+                sg.popup_error(f"Catalog number is not {gs.lengthCatalogNumber}.")
             # Ensure that container properties are picked up on go-back operations.
             containername = self.window['inpContainerID'].get().strip()
             containerType = self.radioSelector(self.values_reuse)
@@ -792,7 +735,7 @@ class SpecimenDataEntry():
             self.collobj.containertype = containerType
             self.collobj.containername = containername
             # CONTAINER values are already taken care of in the radio button events.
-            print("cname and ctype", self.collobj.containername, self.collobj.containertype)
+
             print('saveForm collobj record ==', self.collobj.getFieldsAsDict())
             # TODO Following is obsolete thanks to encapsulation into Specimen Model
             # # Get taxon rank name
@@ -1071,6 +1014,7 @@ class SpecimenDataEntry():
         # Storage location is set to "None" to represent a blank entry in the UI
         # self.window['inpStorage'].update('None')
 
+
     def clearForm(self):
         """
         Function for clearing all fields listed in clearing list and setting up for a blank record
@@ -1144,21 +1088,10 @@ class SpecimenDataEntry():
         return self.collobj.containertype
 
     def verifyCatalogNumber(self, catalogNumber):
-        '''Makes sure that catalog number is the correct format depending on collection name'''
-        if gs.collectionName == 'NHMD Vascular Plants':
-            print(f"---------------Collection name == {gs.collectionName}-----------")
-            if catalogNumber.isdigit() and len(catalogNumber) == 9:
-                print(catalogNumber, 'is indeed digits and 9 numbers')
-                return 'valid'
-            else:
-                e = "Barcode/catalog number is not eight digits or contains non numeric characters."
-                sg.PopupError(e)
-
-        elif gs.collectionName == 'NHMD Entomology':
-            print(f"---------------Collection name == {gs.collectionName}-----------")
-            if catalogNumber.isdigit() and len(catalogNumber) >= 8:
-                print(catalogNumber, 'is indeed digits and 8 or greater numbers')
-                return 'valid'
+    #Validates if barcode is digits
+        if catalogNumber.isdigit() :
+            print(catalogNumber, 'is indeed digits :)')
+            return 'valid'
         else:
-            e = "Barcode/catalog number is not eight digits or contains non numeric characters."
+            e = "Barcode/catalog number contains non numeric symbols."
             sg.PopupError(e)
