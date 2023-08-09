@@ -83,6 +83,7 @@ class SpecimenDataEntry():
         # Create auto-suggest popup windows
         self.autoStorage = ''  # global for storage locations
         self.autoTaxonName = None  # global for taxon names
+        self.taxonNameList = []
 
         # Set up user interface
         self.setup(collection_id)
@@ -205,7 +206,7 @@ class SpecimenDataEntry():
             sg.Text('Taxonomic name:     ', size=captionSize, background_color=blueArea, text_color='black',
                     font=captionFont),
             # sg.Text(indicatorLeft, key='inlTaxonName', text_color='black', background_color=blueArea, visible=True, font=wingdingFont),
-            sg.Input('', size=blueSize, key='inpTaxonName', text_color='black', background_color='white',
+            sg.Multiline('', size=blueSize, key='inpTaxonName', rstrip=False, no_scrollbar=True, text_color='black', background_color='white',
                      font=fieldFont, enable_events=True, pad=((5, 0), (0, 0))),
             sg.Text(indicatorRight, key='inrTaxonName', background_color=blueArea, visible=True, font=wingdingFont),
             sg.Text('No further record to go back to!', key='lblRecordEnd', visible=False, background_color="#ff5588",
@@ -481,39 +482,48 @@ class SpecimenDataEntry():
                 self.setFieldFocus('inpTaxonName')
 
             elif event == 'inpTaxonName':
-                keyStrokes = values['inpTaxonName']
+
+                keyStrokes = values['inpTaxonName'].rstrip("\n")
+                self.taxonNameList.append(keyStrokes)
+                print(self.taxonNameList)
                 '''Activate autosuggest box, when three characters or more are entered.'''
                 # if gs.collectionName == 'NHMA Entomology':
                 #     # print('inpTaxonname:::', values[event])
                 # # self.collobj.taxonFullName = event
                 # else:
                     # print('keystrokes:::', keyStrokes)
+                res = None
                 if len(keyStrokes) >= 3 and keyStrokes != 'None':
-                    self.handleTaxonNameInput(values['inpTaxonName'])
-
+                    res = self.handleTaxonNameInput(values['inpTaxonName'].rstrip("\n"))
+                    #Artifact from barcode reader produces an appended "\n"
+                if res == 'Done':
+                    self.window['inpCatalogNumber'].set_focus()
             # elif event == 'inpCatalogNumber_Edit':
             #     self.collobj.catalogNumber = values['inpCatalogNumber']
 
-            elif event == "inpCatalogNumber_Enter":
-                print('Enter barcode event --')
+            # elif event == "inpCatalogNumber_Enter":
+            #     print('Enter barcode event --')
+            #
+            #     # self.collobj.catalogNumber = values['inpCatalogNumber']
+            #
+            #     # self.window['btnSave'].set_focus()
+            #     self.setFieldFocus('')
 
-                # self.collobj.catalogNumber = values['inpCatalogNumber']
-
-                # self.window['btnSave'].set_focus()
-                self.setFieldFocus('')
-
-            elif event == 'inpCatalogNumber':
+            elif event == 'inpCatalogNumber_Enter':
                 # Respond to barcode being entered or scanned by setting corresponding field value
+
                 validation = ''
-                self.barcodeList.append(values['inpCatalogNumber'])
+                print(f"real catalognumbaah :: {values['inpCatalogNumber']}")
+                barcode = values['inpCatalogNumber']
+                # self.barcodeList.append(values['inpCatalogNumber'])
                 ''' In this codeblock the input barcode is appended to a list which is then joined.
                  This is to catch the case where barcode digits come in a "stream" (one at a time).
                  It prevents the first digit triggering the save() and will allow mot USB scanners to work.'''
-                baracuda = []
-                for j in self.barcodeList:
-                    baracuda.append(j)
-                    print('barcode list', baracuda)
-                barcode = ''.join(baracuda)
+                # baracuda = []
+                # for j in self.barcodeList:
+                #     baracuda.append(j)
+                #     print('barcode list', baracuda)
+                # barcode = ''.join(baracuda)
                 self.clearNonStickyFields(self.nonStickyFields) #Remove spill-over from barcode read.
                 '''The following code block validates per collection 
                    so that each collection catalog number format is verified. '''
@@ -528,7 +538,7 @@ class SpecimenDataEntry():
                         validation = self.verifyCatalogNumber(barcode)
                 if validation == 'valid':
                     self.collobj.catalogNumber = barcode
-                    print('self.collobj.catalogNumber', self.collobj.catalogNumber)
+                    print('VALID self.collobj.catalogNumber', self.collobj.catalogNumber)
                     self.window['inpCatalogNumber'].set_focus()
                     self.saveForm(self.collobj.getFieldsAsDict())
                         # self.window['inpCatalogNumber'].update(value=barcode)
@@ -831,6 +841,7 @@ class SpecimenDataEntry():
         """
         Show autosuggest popup for Taxon Name selection and handle input from that window.
         """
+        print(f"IN autosuggest - KS={keyStrokes}--")
         self.autoTaxonName = autoSuggest_popup.AutoSuggest_popup('taxonname', self.collectionId)
         try:
             self.autoTaxonName.Show()
@@ -867,7 +878,7 @@ class SpecimenDataEntry():
             util.logger.error(traceBack)
             sg.popup_error(f'{e} \n\n {traceBack}', title='Error handleTaxonNameInput', )
 
-        return ''
+        return 'Done'
 
     # def handleMultiSpecimenCheck(self, value):
     #     """
@@ -980,7 +991,8 @@ class SpecimenDataEntry():
         self.window['cbxPrepType'].update(record['preptypename'])
         self.window['cbxTypeStatus'].update(record['typestatusname'])
         self.window['inpNotes'].update(record['notes'])
-        self.window['inpContainerID'].update(record['containername'].strip())
+        if record['containername']: # If not strip() is applied to none
+            self.window['inpContainerID'].update(record['containername'].strip())
 
         # multispecimen = record['multispecimen']
         # if multispecimen != '' and multispecimen is not None:
