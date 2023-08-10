@@ -22,7 +22,6 @@ either express or implied. See the License for the specific language governing p
 import traceback
 import PySimpleGUI as sg
 import sys
-import time
 # Internal dependencies
 import util
 from data_access import DataAccess
@@ -52,8 +51,7 @@ class SpecimenDataEntry():
         self.db = DataAccess(gs.databaseName)  # Instantiate database access module
         self.collobj = specimen.Specimen(collection_id)  # Create blank specimen record instance
         self.recordSet = recordset.RecordSet(collection_id, 3)  # Create recordset of last 3 saved records
-        self.backRecord = None  #
-        self.initialStep = True
+
         # A switch to place the process in a state of 'freshness'. If initial then tab behavior is affected to go araound all fields.
 
         # Various lists of fields to be cleared on command
@@ -442,17 +440,36 @@ class SpecimenDataEntry():
                 self.collobj.notes = values['inpNotes']
 
             if event == 'radRadioMSO':
-                self.radioSelector(values)
+                mKey = util.getRandomNumberString()
+
+                MSOkey = 'MSO' + str(mKey)
+                print(f"MSO key ={MSOkey}")
+                self.collobj.containertype = 'Multiple specimens on one object'
+                self.collobj.containername = MSOkey.strip()
+                self.window['inpContainerID'].update(value=MSOkey, disabled=False)
+                #
+                # self.radioSelector(values)
                 self.window['cbxGeoRegion'].set_focus()
                 self.window['inrGeoRegion'].update(visible=True)
             elif event == 'radRadioMOS':
-                self.radioSelector(values)
+                mKey = util.getRandomNumberString()
+                MOSkey = 'MOS' + str(mKey)
+                print(f"MOS key =={MOSkey}=")
+                self.collobj.containertype = 'One specimen on multiple objects'
+                self.collobj.containername = MOSkey.strip()
+                self.window['inpContainerID'].update(value=MOSkey, disabled=False)
+
+                # self.radioSelector(values)
                 self.window['cbxGeoRegion'].set_focus()
                 self.window['inrGeoRegion'].update(visible=True)
             elif event == 'radRadioSSO':
+                self.window['inpContainerID'].update(value='')
+                self.collobj.containername = ''
+                self.collobj.containertype = ''
+
                 self.window['radRadioMOS'].reset_group()
                 self.window['radRadioSSO'].update(value=True)
-                self.radioSelector(values)
+                # self.radioSelector(values)
 
             # elif event == 'chkMultiSpecimen' or event == 'chkMultiSpecimen_Enter':
             #     # When multispecimen checkbox is checked or enter is pressed while in focus:
@@ -541,6 +558,9 @@ class SpecimenDataEntry():
                     print('VALID self.collobj.catalogNumber', self.collobj.catalogNumber)
                     self.window['inpCatalogNumber'].set_focus()
                     self.saveForm(self.collobj.getFieldsAsDict())
+                else:
+                    err = "catalog number has the wrong format!"
+                    sg.popup_error(err)
                         # self.window['inpCatalogNumber'].update(value=barcode)
 
                     # self.window['inpCatalogNumber'].update(select=True)
@@ -559,20 +579,25 @@ class SpecimenDataEntry():
             elif event == 'btnBack':
                 # Fetch previous specimen record data on basis of current record ID, if any
                 record = self.collobj.loadPrevious(self.collobj.id)
-
+                print([j for j in record])
                 self.window['inpContainerID'].update(disabled=True)
                 if record:
+                    containerType = record['containertype']
                     if record['containertype']:
-                        containerType = util.readMultispecimenID(record).strip()
-                        print(f"Record containertype =:={containerType}-")
+                        # containerType = util.readMultispecimenID(record).strip()
+                        # print(f"Record containertype =:={containerType}-")
+                        print(f"Record containertype =:={record['containertype']}-")
                         if containerType == 'Multiple specimens on one object':
+                            print("MSO")
                             self.window.Element('radRadioMSO').Update(value=True)
                             self.window['inpContainerID'].update(disabled=False)
-                        elif containerType == 'One specimen covering multiple objects':
+                        elif containerType == 'One specimen on multiple objects':
+                            print("MOS")
                             self.window.Element('radRadioMOS').update(value=True)
                             self.window['inpContainerID'].update(disabled=False)
                     else:
                         self.window.Element('radRadioSSO').update(value=True)
+                        self.window['inpContainerID'].update('')
 
                 # If no further record back, retrieve current record (if any) or last record (if any)
                 if not record:
@@ -610,7 +635,8 @@ class SpecimenDataEntry():
                     print('keys ==', record.keys())
                     print(f'val for key id =', record['containername'])
                     if record['containername']:
-                        containerName = util.readMultispecimenID(record).strip()
+                        # containerName = util.readMultispecimenID(record).strip()
+                        containerName = record['containername']
                         if containerName == 'Multiple specimens on one object':
                             self.window.Element('radRadioMSO').Update(value=True)
                             self.window['inpContainerID'].update(disabled=False)
@@ -731,19 +757,26 @@ class SpecimenDataEntry():
         A final validation and transfer of selected input fields is still performed to ensure data integrity.
         """
         try:
+            print("TAXON INFO:::", self.getTaxonNameRecord())
             catNo = record['catalognumber'].replace('"', '')
             print("In SAVEform() - catalognumber =", record['catalognumber'], 'length cata no=', len(catNo))
             if len(catNo) != gs.lengthCatalogNumber:
                 sg.popup_error(f"Catalog number is not {gs.lengthCatalogNumber}.")
+            # Make sure everything is read on immediate barcode scan
+            taxonFullName = self.window['inpTaxonName'].get()
             # Ensure that container properties are picked up on go-back operations.
-            containername = self.window['inpContainerID'].get().strip()
-            containerType = self.radioSelector(self.values_reuse)
+            currentSpecimen = self.collobj.getFieldsAsDict()
+            # containername = self.window['inpContainerID'].get().strip()
+            # # currentSpecimen = self.collobj.getFieldsAsDict()
+            containerType = record['containertype']
+            containerName = record['containername']
+
             print('container TYPPPE:', containerType)
             # Ensure  contents of notes input field are transferred to specimen object instance
             self.collobj.notes = self.window['inpNotes'].Get()
             # Below ensures that the value in the container ID field is persisted from MSO to MSO record.
             self.collobj.containertype = containerType
-            self.collobj.containername = containername
+            self.collobj.containername = containerName
             # CONTAINER values are already taken care of in the radio button events.
 
             print('saveForm collobj record ==', self.collobj.getFieldsAsDict())
@@ -795,7 +828,7 @@ class SpecimenDataEntry():
             sg.PopupError(e)
             result = errorMessage
 
-        self.initialStep = False
+        # self.initialStep = False
         self.window['inpCatalogNumber'].set_focus()
         return result
 
@@ -1045,7 +1078,7 @@ class SpecimenDataEntry():
         self.window['radRadioMOS'].update(value = False)
         self.window['radRadioMSO'].update(value=False)
         self.window['radRadioSSO'].update(value=True)
-        self.initialStep = True
+        # self.initialStep = True
 
         # Set blank record
         self.collobj = specimen.Specimen(self.collectionId)
@@ -1072,11 +1105,11 @@ class SpecimenDataEntry():
         # Create new empty record accordingly
         self.collobj = specimen.Specimen(self.collectionId)
 
-    def radioSelector(self, formValues):
+    def radioSelector(self, containerKey):
         # Takes a list of radio values and selects the true one for the collobj.
 
         mKey = util.getRandomNumberString()
-        if formValues['radRadioMSO']:
+        if containerKey['radRadioMSO']:
 
             MSOkey = 'MSO'+str(mKey)
             print(f"MSO key ={MSOkey}")
@@ -1084,13 +1117,13 @@ class SpecimenDataEntry():
             self.collobj.containername = MSOkey.strip()
             self.window['inpContainerID'].update(value=MSOkey, disabled=False)
             # return self.collobj.containertype
-        elif formValues['radRadioMOS']:
+        elif containerKey['radRadioMOS']:
             MOSkey = 'MOS'+str(mKey)
             print(f"MOS key =={MOSkey}=")
             self.collobj.containertype = 'One specimen on multiple objects'
             self.collobj.containername = MOSkey.strip()
             self.window['inpContainerID'].update(value=MOSkey, disabled=False)
-        elif formValues['radRadioSSO']:
+        elif containerKey['radRadioSSO']:
             print('Punched the SSO radio dial')
             self.window['inpContainerID'].update(value='')
             self.collobj.containername = ''
