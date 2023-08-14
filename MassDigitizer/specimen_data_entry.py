@@ -17,6 +17,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing,
 software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+CONVENTION :
+'txt' in the element key means 'label'
+'inp' in the element key means 'input field'
 """
 
 import traceback
@@ -57,16 +61,16 @@ class SpecimenDataEntry():
         # Various lists of fields to be cleared on command
         # Needs radio in the input field list
         self.inputFieldList = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'inpNotes', 'radRadioSSO', 'radRadioMSO', 'radRadioMOS', 'inpContainerID', 'cbxGeoRegion', 'inpTaxonName',
-                               'inpCatalogNumber', 'btnSave']
+                               'inpNHMAid', 'inpCatalogNumber', 'btnSave']
         self.inputFieldListSSO = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'inpNotes', 'inpCatalogNumber']
         self.focusIconList = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrNotes', 'inrRadioSSO', 'inrRadioMSO', 'inrRadioMOS', 'inrContainerID','inrGeoRegion',
-                              'inrTaxonName', 'inrCatalogNumber', 'inrSave']
+                              'inrTaxonName', 'inrNHMAid', 'inrCatalogNumber', 'inrSave']
         self.focusIconListSSO = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrNotes', 'inrCatalogNumber']
         self.clearingList = ['inpStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'inpNotes',
-                             'inpContainerID', 'cbxGeoRegion', 'inpTaxonName', 'inpCatalogNumber', 'txtRecordID'
+                             'inpContainerID', 'cbxGeoRegion', 'inpTaxonName', 'inpNHMAid', 'inpCatalogNumber', 'txtRecordID'
                              ]
         self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'inpNotes'}, {'inpContainerID'},
-                              {'cbxGeoRegion'}, {'inpTaxonName'}]
+                              {'cbxGeoRegion'}, {'inpTaxonName'}, {'inpNHMAid'}]
         self.nonStickyFields = ['inpCatalogNumber', 'txtRecordID']
 
         # Global variables
@@ -77,6 +81,9 @@ class SpecimenDataEntry():
         self.currentRecord = None
         self.fieldname = ''
         self.input_list = None
+        lastRow = self.db.getLastRow('specimen', self.collectionId)
+        print(lastRow[0])
+        self.collobj.id = lastRow[0]
 
         # Create auto-suggest popup windows
         self.autoStorage = ''  # global for storage locations
@@ -206,7 +213,12 @@ class SpecimenDataEntry():
             # sg.Text(indicatorLeft, key='inlTaxonName', text_color='black', background_color=blueArea, visible=True, font=wingdingFont),
             sg.Multiline('', size=blueSize, key='inpTaxonName', rstrip=False, no_scrollbar=True, text_color='black', background_color='white',
                      font=fieldFont, enable_events=True, pad=((5, 0), (0, 0))),
+
             sg.Text(indicatorRight, key='inrTaxonName', background_color=blueArea, visible=True, font=wingdingFont),
+            sg.Text('Taxonomic ID:', key='txtNHMAid', font=captionFont, background_color=blueArea, text_color='black', visible=False),
+            sg.InputText('', size=(7, 1), key='inpNHMAid', text_color='black', background_color='white', font=fieldFont,
+                         enable_events=True, visible=False),
+            sg.Text(indicatorRight, key='inrNHMAid', background_color=blueArea, visible=True, font=wingdingFont),
             sg.Text('No further record to go back to!', key='lblRecordEnd', visible=False, background_color="#ff5588",
                     border_width=3)
         ]
@@ -308,6 +320,10 @@ class SpecimenDataEntry():
             institution = self.db.getRowOnId('institution', collection[3])
             self.window.Element('txtInstitution').Update(value=institution[2])
 
+        if gs.collectionName == 'NHMA Entomology':
+            self.window.Element('txtNHMAid').Update(visible=True)
+            self.window.Element('inpNHMAid').Update(visible=True)
+
         # Set triggers for the different controls on the UI form
         self.setControlEvents()
 
@@ -336,6 +352,7 @@ class SpecimenDataEntry():
         # self.window['inpTaxonName'].bind("<Tab>", "_Tab")
         self.window['inpCatalogNumber'].bind('<Leave>', '_Edit')
         self.window['inpCatalogNumber'].bind("<Return>", "_Enter")
+        self.window['inpNHMAid'].bind("<Return>", "_Enter")
         self.window['btnSave'].bind("<Return>", "_Enter")
         self.window['inpTaxonName'].bind('<FocusOut>', '_FocusOutTax')
 
@@ -357,7 +374,11 @@ class SpecimenDataEntry():
             select=True)  # Select all on field to enable overwriting pre-filled "None" placeholder
         self.setFieldFocus('inpStorage')  # Set focus on storage field
         self.window['tblPrevious'].update(values=self.recordSet.getAdjacentRecordList(self.tableHeaders))  #
-
+        ##TEST (to be deleted)
+        res = self.db.getRows('specimen')
+        for j in res:
+            print(j)
+        ##END TEST
 
         while True:
             # Main loop going through User Interface (UI) events
@@ -501,6 +522,10 @@ class SpecimenDataEntry():
             elif event == 'inpTaxonName':
 
                 keyStrokes = values['inpTaxonName'].rstrip("\n")
+                if keyStrokes == '\t':
+                    sg.popup_error(f"Tab characters are not allowed in this field!")
+                    self.window['inpTaxonName'].Update('')
+                    self.setFieldFocus('inpTaxonName')
                 self.taxonNameList.append(keyStrokes)
                 print(self.taxonNameList)
                 '''Activate autosuggest box, when three characters or more are entered.'''
@@ -525,6 +550,12 @@ class SpecimenDataEntry():
             #
             #     # self.window['btnSave'].set_focus()
             #     self.setFieldFocus('')
+            elif event == 'inpNHMAid_Enter':
+                print("IN NHMA IDDDDDDD+++++++++")
+                id = self.window['inpNHMAid'].get()
+                spid = util.NHMAlookup(id)
+                print(f"Spid of {id} is = {spid}")
+
 
             elif event == 'inpCatalogNumber_Enter':
                 # Respond to barcode being entered or scanned by setting corresponding field value
@@ -553,6 +584,10 @@ class SpecimenDataEntry():
                 elif gs.collectionName == "NHMD Entomology":
                     if len(barcode) == 9:
                         validation = self.verifyCatalogNumber(barcode)
+                elif gs.collectionName == "NHMA Entomology":
+                    gs.lengthCatalogNumber = 8
+                    if len(barcode) == gs.lengthCatalogNumber:
+                        validation = self.verifyCatalogNumber(barcode)
                 if validation == 'valid':
                     self.collobj.catalogNumber = barcode
                     print('VALID self.collobj.catalogNumber', self.collobj.catalogNumber)
@@ -578,8 +613,9 @@ class SpecimenDataEntry():
 
             elif event == 'btnBack':
                 # Fetch previous specimen record data on basis of current record ID, if any
+                print('self.collobj.id', self.collobj.id)
                 record = self.collobj.loadPrevious(self.collobj.id)
-                print([j for j in record])
+
                 self.window['inpContainerID'].update(disabled=True)
                 if record:
                     containerType = record['containertype']
@@ -727,6 +763,8 @@ class SpecimenDataEntry():
         for field in self.inputFieldList:
             if field[0:3] == 'inp':
                 self.window[field].update(background_color='#ffffff')
+                if self.window[field] == '\t':
+                    sg.popup_error('Tab characters not allowed in this field.')
 
         # If field name has been specified shift focus:
         if fieldName != '':
@@ -760,14 +798,13 @@ class SpecimenDataEntry():
             print("TAXON INFO:::", self.getTaxonNameRecord())
             catNo = record['catalognumber'].replace('"', '')
             print("In SAVEform() - catalognumber =", record['catalognumber'], 'length cata no=', len(catNo))
-            if len(catNo) != gs.lengthCatalogNumber:
-                sg.popup_error(f"Catalog number is not {gs.lengthCatalogNumber}.")
+
             # Make sure everything is read on immediate barcode scan
             taxonFullName = self.window['inpTaxonName'].get()
+            self.collobj.taxonFullName = taxonFullName
             # Ensure that container properties are picked up on go-back operations.
             currentSpecimen = self.collobj.getFieldsAsDict()
-            # containername = self.window['inpContainerID'].get().strip()
-            # # currentSpecimen = self.collobj.getFieldsAsDict()
+
             containerType = record['containertype']
             containerName = record['containername']
 
@@ -892,7 +929,7 @@ class SpecimenDataEntry():
 
                 # Add taxon name verbatim note to notes field and update UI field accordingly
                 # if selectedTaxonName.notes != '':
-                currentNotes = self.window['inpNotes'].Get()
+                currentNotes = self.window['inpNotes'].get()
 
                 # First strip off any previous new taxonomy notes
                 if ' | Verbatim_taxon:' in currentNotes:
