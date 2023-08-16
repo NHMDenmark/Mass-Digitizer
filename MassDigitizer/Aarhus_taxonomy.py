@@ -13,17 +13,13 @@
 """
 
 import pandas as pd
-import dataAccess as db
+import data_access
 
+db = data_access.DataAccess()
+cur = db.getDbCursor()
 
-aaDF = pd.read_excel('Aarhus.xls', index_col=None, na_filter=False)
-sortnr = list(aaDF['Sortnr']) # Sortnr is the same as taxonomic ID in NHMA parlance.
-sortNr = [j//10 for j in sortnr] #The ID was submitted with a zero tagged on to the genuine ID
+aaDF = pd.read_excel('Aarhus.xls', index_col=None, na_filter=False) #Original NHMA Entomologi taxonomy
 
-AaRanks = list(aaDF['TYPE'])
-AaNames = list(aaDF['NAME'])
-AaAuthors = list(aaDF['AUTOR'])
-zipAa = list(zip(sortNr, AaRanks, AaNames, AaAuthors)) # Creates a list of tuples that will populate the taxonomic records (specimen)
 
 
 specimen = {'taxonid': 0, 'superfamily':'', 'family':'', 'genus': '', 'species': '', 'author':''}
@@ -35,91 +31,141 @@ species = ''
 author = ''
 finalList = []
 
-for j in zipAa:
-    sortNumber = int(j[0]) # Position 0 is ID, 1 is rank, 2 is name, 3 is author
-    if j[1] == 'supfam' :
-        superFamily = family = genus = species = '' #Each instance of superfamily will reset the record.
-        superFamily = j[2]
-    if j[1] == 'famil':
-        family = genus = species = '' # As above but further down the hierarchy
-        family = j[2]
-    if j[1] == 'genus':
-        genus = species = ''
-        genus = j[2]
-    if j[1] == 'species':
-        species = j[2]
-    author = j[3]
+##Make this conditional somehow so that the Aarhus.xls is not read and processed every time.
 
-    specimen['taxonid'] = sortNumber
-    specimen['superfamily'] = superFamily
-    specimen['family'] = family
-    specimen['genus'] = genus
-    specimen['species'] = species
-    if author:
-        specimen['author'] = author
-    else:
-        specimen['author'] = ''
+###
 
-    finalList.append(specimen.copy())
+def parseAarhus(spreadsheet):
+    # Turn the Aarhus NHMA Entomology taxonomy Excel sheet into atomic records
+    arhusTax = pd.read_excel(spreadsheet, index_col=None, na_filter=False)
+    sortnr = list(arhusTax['Sortnr'])  # Sortnr is the same as taxonomic ID in NHMA parlance.
+    sortNr = [j // 10 for j in sortnr]  # The ID was submitted with a zero tagged on to the genuine ID
 
-AaDF = pd.DataFrame(finalList)
+    AaRanks = list(arhusTax['TYPE'])
+    AaNames = list(arhusTax['NAME'])
+    AaAuthors = list(arhusTax['AUTOR'])
+    zipAa = list(zip(sortNr, AaRanks, AaNames,
+                     AaAuthors))
+    # Creates a list of tuples that will populate the taxonomic records (specimen)
 
-dbaccess = db.DataAccess()
+    for j in zipAa:
+        sortNumber = int(j[0]) # Position 0 is ID, 1 is rank, 2 is name, 3 is author
+        if j[1] == 'supfam' :
+            superFamily = family = genus = species = '' #Each instance of superfamily will reset the record.
+            superFamily = j[2]
+        if j[1] == 'famil':
+            family = genus = species = '' # As above but further down the hierarchy
+            family = j[2]
+        if j[1] == 'genus':
+            genus = species = ''
+            genus = j[2]
+        if j[1] == 'species':
+            species = j[2]
+        author = j[3]
 
+        specimen['taxonid'] = sortNumber
+        specimen['superfamily'] = superFamily
+        specimen['family'] = family
+        specimen['genus'] = genus
+        specimen['species'] = species
+        if author:
+            specimen['author'] = author
+        else:
+            specimen['author'] = ''
+
+        finalList.append(specimen.copy())
+
+    refinedDF = pd.DataFrame(finalList)
+    return refinedDF
+# AaDF = pd.DataFrame(finalList)
+arhusdf = parseAarhus('Aarhus.xls')
+print(arhusdf.head(60).to_string())
 def coalesceDF(df):
-    # Populate dataframe with column SPID and fullname
-    df = df.replace('', None)
-    # Adds new column with the first name read from right to left.
-    df['coalesce'] = df[['species', 'genus', 'family', 'superfamily']].bfill(axis='columns')['species']
+    # Populates a dataframe with column SPID and fullname
 
-    # with pd.ExcelWriter('NHMA_to_excel.xlsx') as writer:
-    #     df['coalesce'].to_excel(writer, sheet_name='sheet1')
+    # Add empty binomial column to df
+    df.insert(6, 'binomial', '')
+
+    # Adds new column 'binomial' with the first name read from right to left.
+    df['binomial'] = df[['genus', 'species']].apply(lambda x: ' '.join(x.dropna()), axis=1)
+    # Iterate over each row
+    for index, rows in df.iterrows():
+        # Create list for the current row
+        my_list = [rows.superfamily, rows.family, rows.genus]
+        my_list = [x for x in my_list if x != ''] #Keep items with content only.
+
+        # Below is codeblock for assigning suprefamily and family to the binomial column.
+        myLength = len(my_list)
+        if myLength == 1: #Must be superfamily.
+            df.at[index,'binomial'] = my_list[0]
+            print('len = 1 so binomial::', my_list[0])
+        if myLength == 2:#Consequently must be family.
+            df.at[index, 'binomial'] = my_list[1]
+            print('len = 2 so binomial::', my_list[1])
+
     return df
 
+res = coalesceDF(arhusdf)
+print(res.head(20).to_string())
+# res.to_excel("ArhusTaxonomy_w_binomial.xls")
 def spidLookup(name):
     #Looks up spid based on name and treedefid = 2 (Aarhus - NHMA)
 
-    sql = f"SELECT spid FROM taxonname t WHERE t.name = '{name}' and t.treedefid = 2;"
-
+    sql = f"SELECT spid FROM taxonname t WHERE t.fullname = '{name}' and t.treedefid = 2;"
+    # print(sql)
     try:
-        res = dbaccess.executeSqlStatement(sql)
+        res = db.executeSqlStatement(sql)
         print("SPID is", res[0]['spid'])
         spid = res[0]['spid']
     except IndexError:
-        print(f"The name {name} wasn't found in the taxonomy. Returning ''.")
+        # print(f"The name {name} wasn't found in the taxonomy. Returning ''.")
         spid = ''
         pass
     return spid
 
 # Add the lookups
-res = coalesceDF(AaDF)
-res.reset_index(drop=True, inplace=True)
-nameList = list(res['coalesce'])
-# res['spid'] = nameList
-spidList = []
 
-### Write to file in order to avoid the timeconsuming spidLookup step
-with open("test.txt", "a") as myfile:
+# res.reset_index(drop=True, inplace=True)
+nameList = list(res['binomial'])
+# # res['spid'] = nameList
 
-    for name in nameList:
-        spid = spidLookup(name)
-        myfile.write(f"{spid}\n")
-        spidList.append(spid)
-### see below:
-###-- If spid txt file has been saved previously we use this as it saves a tremendous amount of time in DB lookup
-# rd = open('NHMA_spid_file.txt', 'r')
-# lines = rd.readlines()
+def createSpidFile(processedDf, fileName):
+    # Doing the actual lookups and writing to output file
+    ### Write to file in order to avoid the timeconsuming spidLookup step
+    spidList = []
+    taxonidList = list(processedDf['taxonid'])
+    # print(taxonidList[:11])
+    joinDF = pd.DataFrame(columns=['spid', 'name', 'taxonid'])
+    with open(fileName, "a") as myfile:
+
+        for name in nameList:
+            spid = spidLookup(name)
+            aTaxonid = taxonidList.pop(0)
+            # print("{spid};{name};{aTaxonid}",f"{spid};{name};{aTaxonid}\n")
+            joinDF = joinDF.append({'spid':spid, 'name':name, 'taxonid':aTaxonid}, ignore_index=True)
+            myfile.write(f"{spid};{name};{aTaxonid}\n")
+            spidList.append(spid)
+
+    return joinDF
+
+nm = createSpidFile(res, "check20230816.txt")
+print(nm.head(24).to_string())
+# ### see below:
+# ###-- If spid txt file has been saved previously we use this as it saves a tremendous amount of time in DB lookup
+# # rd = open('NHMA_spid_file.txt', 'r')
+# # lines = rd.readlines()
+# #
+# # res['spid'] = lines
+# # res['spid'] = res['spid'].str.rstrip()
+# ###-- end block
+# res['spid'] = spidList
 #
-# res['spid'] = lines
-# res['spid'] = res['spid'].str.rstrip()
-###-- end block
-res['spid'] = spidList
-
-conn = dbaccess.getConnection()
-res.to_sql('NHMAjoin', conn, if_exists='replace', index=False ) # Create the join table for NHMA in DB.
-#REMEMBER TO clean out species names with 'sp.'
-##check to see if table creation was a success
-ras = pd.read_sql('SELECT * FROM nhmajoin', conn)
-print(ras)
-##End check
+# # Last part here creats the NHMAjoin table that is vital to the NHMA taxonomic id lookup.
+# conn = dbaccess.getConnection()
+# res.to_sql('NHMAjoin', conn, if_exists='replace', index=False ) # Create the join table for NHMA in DB.
+# #REMEMBER TO clean out species names with 'sp.'
+# ##check to see if table creation was a success
+# ras = pd.read_sql('SELECT * FROM nhmajoin', conn)
+# print(ras.head(24))
+# ##End check
 
