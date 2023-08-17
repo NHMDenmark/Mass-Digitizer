@@ -31,9 +31,11 @@ import util
 from data_access import DataAccess
 import global_settings as gs
 import autoSuggest_popup
+import NHMA_lookup
 from models import specimen
 from models import recordset
 from models import collection as coll
+
 
 
 class SpecimenDataEntry():
@@ -78,11 +80,12 @@ class SpecimenDataEntry():
         self.notes = ''  # Notes for access in autoSuggest_popup
         self.fieldInFocus = ''  # Stores name of field currently in focus
         self.fieldInFocusIndex = -1  # Stores list index of field currently in focus
-        self.currentRecord = None
+        self.NHMAcurrentRecord = None
+        #To be used on reused new records where the UI content is the same apart from ID
         self.fieldname = ''
         self.input_list = None
         lastRow = self.db.getLastRow('specimen', self.collectionId)
-        print(lastRow[0])
+
         self.collobj.id = lastRow[0]
 
         # Create auto-suggest popup windows
@@ -374,11 +377,6 @@ class SpecimenDataEntry():
             select=True)  # Select all on field to enable overwriting pre-filled "None" placeholder
         self.setFieldFocus('inpStorage')  # Set focus on storage field
         self.window['tblPrevious'].update(values=self.recordSet.getAdjacentRecordList(self.tableHeaders))  #
-        ##TEST (to be deleted)
-        res = self.db.getRows('specimen')
-        for j in res:
-            print(j)
-        ##END TEST
 
         while True:
             # Main loop going through User Interface (UI) events
@@ -522,10 +520,13 @@ class SpecimenDataEntry():
             elif event == 'inpTaxonName':
 
                 keyStrokes = values['inpTaxonName'].rstrip("\n")
-                if keyStrokes == '\t':
-                    sg.popup_error(f"Tab characters are not allowed in this field!")
+                if "\t" in keyStrokes:
+                    self.window['inpCatalogNumber'].set_focus()
+                print('keyStrokes==', keyStrokes)
+                if keyStrokes == '\t' and gs.collectionName == 'NHMA Entomology':
+                    # sg.popup_error(f"Tab characters are not allowed in this field!")
                     self.window['inpTaxonName'].Update('')
-                    self.setFieldFocus('inpTaxonName')
+                    self.setFieldFocus('inpNHMAid')
                 self.taxonNameList.append(keyStrokes)
                 print(self.taxonNameList)
                 '''Activate autosuggest box, when three characters or more are entered.'''
@@ -552,10 +553,15 @@ class SpecimenDataEntry():
             #     self.setFieldFocus('')
             elif event == 'inpNHMAid_Enter':
                 print("IN NHMA IDDDDDDD+++++++++")
-                id = self.window['inpNHMAid'].get()
-                spid = util.NHMAlookup(id)
-                print(f"Spid of {id} is = {spid}")
 
+                id = self.window['inpNHMAid'].get()
+                res = NHMA_lookup.NHMAlookup(id)
+                self.NHMAcurrentRecord = res #To be used on reused new records
+                print("Name is:", res['name'])
+                fullName = res['fullname']
+                self.window['inpTaxonName'].update(fullName)
+                self.window['inpCatalogNumber'].set_focus()
+                self.collobj.setTaxonNameFieldsFromDict(res)
 
             elif event == 'inpCatalogNumber_Enter':
                 # Respond to barcode being entered or scanned by setting corresponding field value
@@ -815,7 +821,8 @@ class SpecimenDataEntry():
             self.collobj.containertype = containerType
             self.collobj.containername = containerName
             # CONTAINER values are already taken care of in the radio button events.
-
+            if gs.collectionName == 'NHMA Entomology':
+                self.collobj.setTaxonNameFieldsFromDict(self.NHMAcurrentRecord)
             print('saveForm collobj record ==', self.collobj.getFieldsAsDict())
             # TODO Following is obsolete thanks to encapsulation into Specimen Model
             # # Get taxon rank name
@@ -826,7 +833,9 @@ class SpecimenDataEntry():
             #     self.collobj.taxonName = self.collobj.taxonFullName.split(' ')[-1] # Last name in string
 
             # Check if either updating existing or saving new record
-            if int(self.collobj.id) == 0:
+            print("self.window['txtRecordID']", self.window['txtRecordID'].get())
+            if self.window['txtRecordID'].get() == '':
+                print('NEW RECORDDDDD')
                 newRecord = True
             else:
                 newRecord = False
