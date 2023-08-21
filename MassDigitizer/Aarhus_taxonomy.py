@@ -24,8 +24,6 @@ cur = db.getDbCursor()
 collobj = specimen.Specimen(gs.collectionId)
 aaDF = pd.read_excel('Aarhus.xls', index_col=None, na_filter=False) #Original NHMA Entomologi taxonomy
 
-
-
 specimen = {'alttaxonid': 0, 'rankid': 0, 'rankname': '', 'superfamily':'', 'family':'', 'genus': '', 'species': '', 'parent': '', 'author':'', 'source':'NHMA Entomology'}
 
 rankid = 0
@@ -129,7 +127,6 @@ def coalesceDF(df):
 
     return df
 
-
 def spidLookup(name):
     #Looks up spid based on name and treedefid = 2 (Aarhus - NHMA)
     #Returns the SPID value looked up.
@@ -175,7 +172,6 @@ def createSpidFile(processedDf, fileName, nameDF):
 
     return joinDF
 
-
 res = coalesceDF(arhusdf)
 print(res.head(20).to_string())
 res.to_excel("NHMAtaxonomy_w_binomial.xls", index=False)
@@ -186,9 +182,6 @@ res.to_excel("NHMAtaxonomy_w_binomial.xls", index=False)
 # newArhusJoin.to_pickle("./newArhusJoin.pkl") '''Useful for not having to call DB many times with spidLookup()'''
 # print(newArhusJoin.head(24).to_string())
 # ##End
-
-
-
 
 # ### see below:
 # ###-- If spid txt file has been saved previously we use this as it saves a tremendous amount of time in DB lookup
