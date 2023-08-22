@@ -5,5 +5,5 @@ Instead of using the taxonomic name field to look up names, a digitizer logged i
 
 <sup>1</sup> 
 SSO= A single specimen in/on one container  
-MOS = One specimen taking up several containers
+MOS = One specimen taking up several containers  
 MSO = One container containing multiple specimens
