@@ -109,10 +109,11 @@ class Specimen(Model):
         Generates a dictonary with database column names as keys and specimen records fields as values
         RETURNS said dictionary for passing on to data access handler
         """
-
+        if self.containername: #Check if containername is None
+            self.containername = self.containername.strip()
         fieldsDict = {
             'catalognumber': f'{self.catalogNumber}',
-            'containername': f'"{self.containername.strip()}"',
+            'containername': f'"{self.containername}"',
             'containertype': f'"{self.containertype}"',
             'taxonfullname': f'"{self.taxonFullName}"',
             'taxonname': f'"{self.taxonName}"',
@@ -321,6 +322,30 @@ class Specimen(Model):
 
         return self.taxonNameId
 
+    def setTaxonNameFieldsFromDict(self, recordDict):
+        """
+        Set taxon name fields from selected name record (used in specimen_data_entry, event == 'inpNHMAid_Enter')
+        CONTRACT
+          record (dictionary) : Dict Row holding taxon name record
+        RETURNS taxonNameId (int) :
+        """
+        if recordDict is not None:
+            self.taxonNameId = recordDict['taxonid']
+            self.taxonSpid = recordDict['spid']
+            self.taxonName = recordDict['name']
+            self.taxonFullName = recordDict['fullname']
+            self.higherTaxonName = recordDict['parent']
+            self.rankid = recordDict['rankid']  # TODO
+            self.taxonRankName = self.getTaxonRankname(self.rankid)
+            self.familyName = self.searchParentTaxon(self.taxonFullName, 140, self.collection.taxonTreeDefId)
+
+            # self.notes = f"{self.notes} | {record['notes']}"
+        else:
+            # Empty record
+            self.taxonNameId = 0
+
+        return self.taxonNameId
+
     def setStorageFieldsUsingFullName(self, storageFullName):
         """
         Get storage record on the basis of full name and set respective fields
@@ -370,7 +395,7 @@ class Specimen(Model):
         else:
             # Empty record
             self.taxonNameId = 0
-
+        print(f'family name:_:{self.familyName}--', self.familyName)
         return self.taxonNameId
 
     def getTaxonRankname(self, rankid):
