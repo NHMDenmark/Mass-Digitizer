@@ -64,14 +64,28 @@ class SpecimenDataEntry():
         # A switch to place the process in a state of 'freshness'. If initial then tab behavior is affected to go araound all fields.
 
         # Various lists of fields to be cleared on command
-        # Needs radio in the input field list
-        self.inputFieldList = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'inpNotes', 'radRadioSSO', 'radRadioMSO', 'radRadioMOS', 'inpContainerID', 'cbxGeoRegion', 'inpTaxonName',
-                               'inpNHMAid', 'inpCatalogNumber', 'btnSave']
-        self.inputFieldListSSO = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'inpNotes', 'inpCatalogNumber']
-        self.focusIconList = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrNotes', 'inrRadioSSO', 'inrRadioMSO', 'inrRadioMOS', 'inrContainerID','inrGeoRegion',
-                              'inrTaxonName', 'inrNHMAid', 'inrCatalogNumber', 'inrSave']
-        self.focusIconListSSO = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrNotes', 'inrCatalogNumber']
-        self.clearingList = ['inpStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'inpNotes',
+        #¤¤¤ This block is actually logic
+        if gs.collectionName == 'NHMA Entomology': #Check to see if inpTaxonName should be skipped.
+            print("IN NHMA Lepidoptera...")
+            self.inputFieldList = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'chkdamage', 'inpNotes', 'radRadioSSO',
+                                   'radRadioMSO', 'radRadioMOS', 'inpContainerID', 'cbxGeoRegion',
+                                   'inpNHMAid', 'inpCatalogNumber', 'btnSave']
+            self.focusIconList = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrdamage', 'inrNotes', 'inrRadioSSO',
+                                  'inrRadioMSO', 'inrRadioMOS', 'inrContainerID', 'inrGeoRegion',
+                                  'inrNHMAid', 'inrCatalogNumber', 'inrSave']
+        else: # If collection name is NHMD Vasc Plants or Entomology
+            self.inputFieldList = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'chkdamage', 'inpNotes', 'radRadioSSO',
+                                   'radRadioMSO', 'radRadioMOS', 'inpContainerID', 'cbxGeoRegion', 'inpTaxonName',
+                                   'inpNHMAid', 'inpCatalogNumber', 'btnSave']
+            self.focusIconList = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrdamage', 'inrNotes', 'inrRadioSSO',
+                                  'inrRadioMSO', 'inrRadioMOS', 'inrContainerID', 'inrGeoRegion',
+                                  'inrTaxonName', 'inrNHMAid', 'inrCatalogNumber', 'inrSave']
+        #¤¤¤ End /
+        print('input field list ===', self.inputFieldList)
+        self.inputFieldListSSO = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus','chkdamage','inpNotes', 'inpCatalogNumber']
+
+        self.focusIconListSSO = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrdamage', 'inrNotes', 'inrCatalogNumber']
+        self.clearingList = ['inpStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'chkdamage', 'inpNotes',
                              'inpContainerID', 'cbxGeoRegion', 'inpTaxonName', 'inpNHMAid', 'inpCatalogNumber', 'txtRecordID'
                              ]
         self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'inpNotes'}, {'inpContainerID'},
@@ -167,6 +181,11 @@ class SpecimenDataEntry():
                     font=wingdingFont),
         ]
 
+        damaged_specimen = [
+            sg.Text('Damaged specimen:', size=(21,1), background_color=greenArea, font=captionFont), sg.Checkbox('',key="chkdamage", background_color=greenArea),
+            sg.Text(indicatorRight, pad=(7,0), key='inrdamage', background_color=greenArea, visible=False, font=wingdingFont)
+        ]
+
         notes = [
             sg.Text('Notes', size=captionSize, background_color=greenArea, font=captionFont),
             # sg.Text(indicatorLeft, key='inlNotes', text_color='black', background_color=greenArea, visible=True, font=wingdingFont),
@@ -201,7 +220,7 @@ class SpecimenDataEntry():
         containerID = [sg.Text('Container ID ', font=sessionInfoFont, background_color=greenArea, size = captionSize),  sg.InputText(size=(50, 5), key='inpContainerID', disabled=True, pad=(0, 0), enable_events=False, font=fieldFont,
                          background_color='white', text_color='black'), sg.Text(indicatorRight, key='inrContainerID', background_color=greenArea, visible=False, font=wingdingFont),]
 
-        layout_greenarea = [storage, preparation, type_status, notes, multiRadio, containerID
+        layout_greenarea = [storage, preparation, type_status, damaged_specimen, notes, multiRadio, containerID
                             ]
 
         # Blue Area elements
@@ -301,14 +320,14 @@ class SpecimenDataEntry():
         layout = [[
             sg.Frame('', layoutTitle, size=(550, 100), pad=(0, 0), background_color=greyArea, border_width=0),
             sg.Frame('', layoutMeta, size=(500, 120), pad=(0, 0), border_width=0, background_color=greyArea)],
-            [sg.Frame('', [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(250, 220),
+            [sg.Frame('', [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(250, 260),
                       background_color=greenArea, expand_x=True, ), ],  # expand_y=True,
             [sg.Frame('', [[sg.Column(layout_bluearea, background_color=blueArea)]],
                       title_location=sg.TITLE_LOCATION_TOP, background_color=blueArea, expand_x=True,
                       expand_y=True, )], ]
 
-        # Launch window
-        self.window = sg.Window("Mass Annotated Digitization Desk", layout, margins=(2, 2), size=(1048, 600),
+        # Launch window WINDOW-size !!!
+        self.window = sg.Window("Mass Annotated Digitization Desk", layout, margins=(2, 2), size=(1048, 620),
                                 resizable=True, return_keyboard_events=True, finalize=True, background_color=greyArea)
         self.window.TKroot.focus_force()  # Forces the app to be in focus.
 
@@ -344,6 +363,7 @@ class SpecimenDataEntry():
 
         # GREEN AREA
         self.window['inpNotes'].bind('<Return>', '_Enter')
+        self.window['inpTaxonName'].bind("<Tab>", "_Tab")
 
         # BLUE AREA
         # cbxGeoRegion  # Combobox therefore already triggered
@@ -353,6 +373,7 @@ class SpecimenDataEntry():
         self.window['inpNHMAid'].bind("<Return>", "_Enter")
         self.window['btnSave'].bind("<Return>", "_Enter")
         self.window['inpTaxonName'].bind('<FocusOut>', '_FocusOutTax')
+        self.window['inpTaxonName'].bind('<Return>', '_Enter')
 
         # Input field focus events
         for Name in self.inputFieldList:
@@ -454,6 +475,7 @@ class SpecimenDataEntry():
                 MSOkey = 'MSO' + str(mKey)
                 print(f"MSO key ={MSOkey}")
                 self.collobj.containertype = 'Multiple specimens on one object'
+                #
                 self.collobj.containername = MSOkey.strip()
                 self.window['inpContainerID'].update(value=MSOkey, disabled=False)
                 #
@@ -465,7 +487,9 @@ class SpecimenDataEntry():
                 MOSkey = 'MOS' + str(mKey)
                 print(f"MOS key =={MOSkey}=")
                 self.collobj.containertype = 'One specimen on multiple objects'
+                # ¤¤¤ logic on string cleaning - should this part be in the specimen class?
                 self.collobj.containername = MOSkey.strip()
+                # ¤¤¤ end
                 self.window['inpContainerID'].update(value=MOSkey, disabled=False)
 
                 # self.radioSelector(values)
@@ -480,44 +504,36 @@ class SpecimenDataEntry():
                 self.window['radRadioSSO'].update(value=True)
                 # self.radioSelector(values)
 
-            # elif event == 'chkMultiSpecimen' or event == 'chkMultiSpecimen_Enter':
-            #     # When multispecimen checkbox is checked or enter is pressed while in focus:
-            #     inpMultiSpecimenNewValue = ''
-            #     if self.collobj.multiSpecimen == '':
-            #         # Multispecimen field not yet set: Unhide field, check field and generate random name
-            #         self.window['inpMultiSpecimen'].update(visible=True)
-            #         self.window['chkMultiSpecimen'].update(True)  # Check
-            #         inpMultiSpecimenNewValue = util.getRandomNumberString()
-            #     else:
-            #         # Multispecimen field already set: Reset and hide text field
-            #         self.window['chkMultiSpecimen'].update(False)  # Uncheck
-            #         self.window['inpMultiSpecimen'].update(visible=False)
-            #         inpMultiSpecimenNewValue = ''
-            #
-            #         # Update field with new value and reflect on specimen record
-            #     self.window['inpMultiSpecimen'].update(value=inpMultiSpecimenNewValue)
-            #     self.collobj.multiSpecimen = inpMultiSpecimenNewValue
-            #     self.setFieldFocus('cbxGeoRegion')
-
-            # elif event == 'inpMultiSpecimen_Edit':
-            #     self.collobj.multiSpecimen = values['inpMultiSpecimen']
-            #     self.setFieldFocus('cbxGeoRegion')
-
             elif event == 'cbxGeoRegion':
                 self.collobj.setGeoRegionFields(self.window[event].widget.current())
-                self.setFieldFocus('inpTaxonName')
+                if gs.collectionName == 'NHMA Entomology':
+                    self.setFieldFocus('inpNHMAid')
+                else:
+                    self.setFieldFocus('inpTaxonName')
+
+            elif event == 'inpTaxonName_Enter':
+                self.handleTaxonNameInput(values['inpTaxonName'].rstrip("\n"))
+                if gs.collectionName == 'NHMA Entomology':
+                    self.window['inpNHMAid'].set_focus()
+                else:
+                    self.window['inpCatalogNumber'].set_focus()
+
+            elif event == 'inpTaxonName_Tab':
+                    print("tabbed in inpTaxon!.!")
+                    self.window['inpCatalogNumber'].set_focus()
 
             elif event == 'inpTaxonName':
-
+                print("event == 'inpTaxonName'")
                 keyStrokes = self.window['inpTaxonName'].get()
-
+                # ¤¤¤ This block is logic
                 if "\t" in keyStrokes:
 
-                    self.autoTrigger = 'Done'
+                    # self.autoTrigger = 'Done'
                     cleanName = keyStrokes.replace("\t", '')
+                    # ¤¤¤ End
                     self.window['inpTaxonName'].update(cleanName)
                     self.window['inpCatalogNumber'].set_focus()
-                keyStrokes = keyStrokes.replace("\t", '')
+                keyStrokes = keyStrokes.replace("\t", '').replace("\n", '')
 
                 # if "\t" in keyStrokes:
                 #     # sg.popup_error(f"Tab characters are not allowed in this field!")
@@ -532,6 +548,8 @@ class SpecimenDataEntry():
                 elif len(keyStrokes) >= 3 and keyStrokes != 'None' and ("\t" not in keyStrokes):
 
                     res = self.handleTaxonNameInput(values['inpTaxonName'].rstrip("\n"))
+                    self.window['inpCatalogNumber'].set_focus()
+
                     #Artifact from barcode reader produces an appended "\n"
 
             # elif event == 'inpCatalogNumber_Edit':
@@ -707,7 +725,7 @@ class SpecimenDataEntry():
                 print('btnsave values::::____', self.collobj.getFieldsAsDict())
                 # Validation follows
 
-                if len(self.collobj.catalogNumber) == gs.lengthCatalogNumber:
+                if self.collobj.catalogNumber and len(self.collobj.catalogNumber) == gs.lengthCatalogNumber:
                     self.saveForm(self.collobj.getFieldsAsDict())
                 else:
                     err = f"Catalog number must have a length of {gs.lengthCatalogNumber} digits."
@@ -758,6 +776,7 @@ class SpecimenDataEntry():
             self.window[fieldName].set_focus()  # Set focus on field
             # self.window[fieldName].update(select=True)     # Select all contents of field (TODO Doesn't work for combo lists)
             indicatorName = 'inr' + fieldName[3:]  # Derive focus indicator name
+            print(f"focus indicator name =::-{indicatorName}-")
             if fieldName[3:] == 'btn':  # In case we are on the Save-button
                 indicatorName = 'inr' + fieldName[3:]
             self.window[indicatorName].update(visible=True)  # Unhide focus indicator
