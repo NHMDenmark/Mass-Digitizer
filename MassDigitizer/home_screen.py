@@ -117,6 +117,7 @@ class HomeScreen():
 
                                 gs.userName = username
                                 gs.collectionId = collection_id
+                                print(f"COLLECTION IIIIDDDD:--{collection_id}--")
                                 gs.collectionName = selected_collection
                                 gs.institutionId = institution_id
                                 gs.institutionName = selected_institution 
@@ -134,6 +135,12 @@ class HomeScreen():
                                 self.window.close()
                                 
                                 sde.SpecimenDataEntry(collection_id)
+                                ##Codeblock for barcode validation logic
+                                if collection_id == 13:  # NHMD Vascular Plants
+                                    gs.lengthCatalogNumber = 8
+                                elif collection_id == 2:  # NHMD Pinned Insects
+                                    gs.lengthCatalogNumber = 9
+                                ##End code block
                             else:
                                 self.window['autherror'].Update(visible=True)
                                 #self.window['lstSelectCollection'].set_value([])
