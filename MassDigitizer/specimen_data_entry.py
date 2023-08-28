@@ -90,7 +90,7 @@ class SpecimenDataEntry():
                              ]
         self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'inpNotes'}, {'inpContainerID'},
                               {'cbxGeoRegion'}, {'inpTaxonName'}, {'inpNHMAid'}]
-        self.nonStickyFields = ['inpCatalogNumber', 'txtRecordID']
+        self.nonStickyFields = ['chkdamage', 'inpCatalogNumber', 'txtRecordID']
 
         # Global variables
         self.barcodeList = []
@@ -102,9 +102,11 @@ class SpecimenDataEntry():
         self.fieldname = ''
         self.input_list = None
         lastRow = self.db.getLastRow('specimen', self.collectionId)
-
-        self.collobj.id = lastRow[0]
-
+        try:
+            if lastRow[0]:
+                self.collobj.id = lastRow[0]
+        except TypeError:
+            self.collobj.id = 0
         # Create auto-suggest popup windows
         self.autoStorage = ''  # global for storage locations
         self.autoTaxonName = None  # global for taxon names
@@ -237,7 +239,7 @@ class SpecimenDataEntry():
                     font=captionFont),
             sg.Multiline('', size=blueSize, key='inpTaxonName', rstrip=False, no_scrollbar=True, text_color='black', background_color='white',
                      font=fieldFont, enable_events=True, pad=((5, 0), (0, 0))),
-            sg.Text(indicatorRight, key='inrTaxonName', background_color=blueArea, visible=True, font=wingdingFont),
+            sg.Text(indicatorRight, key='inrTaxonName', background_color=blueArea, visible=False, font=wingdingFont),
             sg.Text('Taxonomic ID:', key='txtNHMAid', font=captionFont, background_color=blueArea, text_color='black', visible=False),
             sg.InputText('', size=(7, 1), key='inpNHMAid', text_color='black', background_color='white', font=fieldFont,
                          enable_events=True, visible=False),
@@ -462,6 +464,9 @@ class SpecimenDataEntry():
                 self.collobj.typeStatusName = self.window['cbxTypeStatus'].get()
                 self.setFieldFocus('inpNotes')
 
+            if values['chkdamage'] == True:
+                self.collobj.needsRepair = True
+
             elif (event == 'inpNotes_Edit' or event == 'inpNotes_Enter'):
                 self.collobj.notes = values['inpNotes']
                 # self.setFieldFocus('radioSingle')
@@ -630,7 +635,7 @@ class SpecimenDataEntry():
 
                 record = self.collobj.loadPrevious(self.collobj.id)
 
-                self.window['inpContainerID'].update(disabled=True)
+                # self.window['inpContainerID'].update(disabled=True)
                 if record:
                     containerType = record['containertype']
                     if record['containertype']:
@@ -1065,6 +1070,7 @@ class SpecimenDataEntry():
         self.window['txtStorageFullname'].update(record['storagefullname'])
         self.window['cbxPrepType'].update(record['preptypename'])
         self.window['cbxTypeStatus'].update(record['typestatusname'])
+        self.window['chkdamage'].update(record['needsrepair'])
         self.window['inpNotes'].update(record['notes'])
         if record['containername']: # If not strip() is applied to none
             self.window['inpContainerID'].update(record['containername'].strip())
@@ -1083,6 +1089,8 @@ class SpecimenDataEntry():
         self.window['cbxGeoRegion'].update(record['georegionname'])
         self.window['inpTaxonName'].update(record['taxonfullname'])
         self.window['inpCatalogNumber'].update(record['catalognumber'])
+        if gs.collectionName == 'NHMA Entomology':
+            self.window['inpNHMAid'].update(record['taxonnameid'])
 
     def displayStorage(self, storageNameValue):
         if storageNameValue == '':
@@ -1096,11 +1104,13 @@ class SpecimenDataEntry():
         """
         for key in self.nonStickyFields:
             field = self.window[key]
-            field.update('')
+            if key == "chkdamage":
+                field.update(False)
+            else:
+                field.update('')
 
         # Storage location is set to "None" to represent a blank entry in the UI
         # self.window['inpStorage'].update('None')
-
 
     def clearForm(self):
         """
