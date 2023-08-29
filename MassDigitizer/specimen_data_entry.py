@@ -462,7 +462,7 @@ class SpecimenDataEntry():
                 # TypeStatus is preloaded in the Class
                 self.collobj.setTypeStatusFields(self.window[event].widget.current())
                 self.collobj.typeStatusName = self.window['cbxTypeStatus'].get()
-                self.setFieldFocus('inpNotes')
+                self.setFieldFocus('chkdamage')
 
             if values['chkdamage'] == True:
                 self.collobj.needsRepair = True
@@ -592,18 +592,20 @@ class SpecimenDataEntry():
                 self.clearNonStickyFields(self.nonStickyFields) #Remove spill-over from barcode read.
                 '''The following code block validates per collection 
                    so that each collection catalog number format is verified. '''
-
+                print("gs.collectionName ===", gs.collectionName)
                 if gs.collectionName == "NHMD Vascular Plants":
 
-                    gs.lengthCatalogNumber = 8
-                    if len(barcode) == gs.lengthCatalogNumber:
+                    lengthCatalogNumber = gs.shared_out['catalogNumberLength_NHMDvascularPlants']
+                    print(f'Target length for {gs.collectionName} is = -{lengthCatalogNumber}-')
+                    if len(barcode) == lengthCatalogNumber:
                         validation = self.verifyCatalogNumber(barcode)
                 elif gs.collectionName == "NHMD Entomology":
-                    if len(barcode) == 9:
+                    lengthCatalogNumber = gs.shared_out['catalogNumberLength_NHMDentomology']
+                    if len(barcode) == lengthCatalogNumber:
                         validation = self.verifyCatalogNumber(barcode)
                 elif gs.collectionName == "NHMA Entomology":
-                    gs.lengthCatalogNumber = 8
-                    if len(barcode) == gs.lengthCatalogNumber:
+                    lengthCatalogNumber = gs.shared_out['catalogNumberLength_NHMAentomology']
+                    if len(barcode) == lengthCatalogNumber:
                         validation = self.verifyCatalogNumber(barcode)
                 else:
                     print("NO GS COLLECTIONNAME WAS FOUND!!!")
@@ -613,7 +615,7 @@ class SpecimenDataEntry():
                     self.window['inpCatalogNumber'].set_focus()
                     self.saveForm(self.collobj.getFieldsAsDict())
                 else:
-                    err = "catalog number has the wrong format!"
+                    err = "catalog number has the wrong format or length!"
                     sg.popup_error(err)
                         # self.window['inpCatalogNumber'].update(value=barcode)
 
@@ -632,7 +634,7 @@ class SpecimenDataEntry():
 
             elif event == 'btnBack':
                 # Fetch previous specimen record data on basis of current record ID, if any
-
+                print(gs.shared_out)
                 record = self.collobj.loadPrevious(self.collobj.id)
 
                 # self.window['inpContainerID'].update(disabled=True)
@@ -729,12 +731,7 @@ class SpecimenDataEntry():
                 # Save current specimen record to app database
                 print('btnsave values::::____', self.collobj.getFieldsAsDict())
                 # Validation follows
-
-                if self.collobj.catalogNumber and len(self.collobj.catalogNumber) == gs.lengthCatalogNumber:
-                    self.saveForm(self.collobj.getFieldsAsDict())
-                else:
-                    err = f"Catalog number must have a length of {gs.lengthCatalogNumber} digits."
-                    sg.popup_error(err)
+                self.saveForm(self.collobj.getFieldsAsDict())
 
             elif event == 'btnFirst':
                 # Go to first record in db table
@@ -1065,12 +1062,21 @@ class SpecimenDataEntry():
         """
         Function for setting form fields from specimen data record
         """
+        print('fillformFields called!"#¤%')
         self.window['txtRecordID'].update('{}'.format(record['id']), visible=True)
         self.window['inpStorage'].update(self.displayStorage(record['storagename']))
         self.window['txtStorageFullname'].update(record['storagefullname'])
         self.window['cbxPrepType'].update(record['preptypename'])
         self.window['cbxTypeStatus'].update(record['typestatusname'])
-        self.window['chkdamage'].update(record['needsrepair'])
+        print(f"THe chk box value is : -{record['needsrepair']}- for id {record['id']}")
+        if record['needsrepair'] is None:
+            print(f"record['needsrepair'] is -{record['needsrepair']}- for id {record['id']}")
+            print([j for j in record])
+            self.window['chkdamage'].update(value=False)
+        elif record['needsrepair'] == 'True':
+            self.window['chkdamage'].update(value=True)
+        else:
+            self.window['chkdamage'].update(value=False)
         self.window['inpNotes'].update(record['notes'])
         if record['containername']: # If not strip() is applied to none
             self.window['inpContainerID'].update(record['containername'].strip())
@@ -1133,7 +1139,7 @@ class SpecimenDataEntry():
         # self.initialStep = True
 
         # Set blank record
-        self.collobj = specimen.Specimen(self.collectionId)
+        # self.collobj = specimen.Specimen(self.collectionId)
 
         # Storage location is set to "None" to represent a blank entry in the UI
         # self.window['inpStorage'].update('None')
