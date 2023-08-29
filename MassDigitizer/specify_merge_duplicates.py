@@ -40,11 +40,14 @@ class MergeDuplicates():
         #self.offset = 0
         self.batchSize = 1000
         self.ambivalentCases = []
-
+        
         self.sp = specify_interface.SpecifyInterface()
         self.gbif = GBIF_interface.GBIFInterface()
         self.dx = data_exporter.DataExporter()
         #db = data_access.DataAccess('db')
+
+        # Global variables 
+        self.collectionId = 0
 
         # Set up logging
         self.logger = logging.getLogger('MergeDuplicates')
@@ -69,25 +72,31 @@ class MergeDuplicates():
         self.logger.info('*** Specify Merge Duplicates ***')
         
         while max_tries > 0:
-            self.logger.info('Choose collection to scan: ')
-            self.logger.info('1. Vascular Plants (688130)')
+            print('Choose collection to scan: ')
+            print('1. Vascular Plants (688130)')
+            print('2. Herpetology (589825)')
+            print('3. Ichthyology (851970)')
             
             # Allow user selection of collection (currently limited to NHMD Vascular Plants)
             collectionId = 0
             collIndex = input('Enter collection index (e.g. 1):')
             if collIndex == "1": 
                 # NHMD Vascular plants selected  
-                collectionId = 688130
+                self.collectionId = 688130
+            elif collIndex == "2":
+                self.collectionId = 589825
+            elif collIndex == "3":
+                self.collectionId = 851970
             else: break 
 
             # Get username and password from input and log in to Specify7 API 
-            token = self.sp.specifyLogin(input('Enter username: '), getpass('Enter password: '), collectionId)
+            token = self.sp.specifyLogin(input('Enter username: '), getpass('Enter password: '), self.collectionId)
             # Upon succesful login, valid token is produced 
 
             if token != '': 
                 # User is succesfully logged into Specify7 API: Proceed to fetch collection & discipline data and instantiate corresponding model objects. 
-                self.collection = col.Collection(collectionId)
-                spCollection = self.sp.getSpecifyObject('collection', collectionId)
+                self.collection = col.Collection(self.collectionId)
+                spCollection = self.sp.getSpecifyObject('collection', self.collectionId)
                 self.collection.fill(spCollection)
                 spDiscipline = self.sp.getSpecifyObject('discipline', self.collection.disciplineId)
                 self.collection.discipline = dsc.Discipline(self.collection.collectionId)
@@ -143,8 +152,10 @@ class MergeDuplicates():
         
         self.logger.info(f'Scanning {self.collection.spid}  ...')
 
+        taxontreedefid = self.collection.discipline.taxontreedefid
+
         # Fetch taxon ranks from selected collection's discipline taxon tree 
-        taxonranks = self.sp.getSpecifyObjects('taxontreedefitem', 100, 0, {"treedef":str(self.collection.discipline.taxontreedefid)})
+        taxonranks = self.sp.getSpecifyObjects('taxontreedefitem', 100, 0, {"treedef":str(taxontreedefid)})
 
         # Iterate taxon ranks for analysis
         for rank in taxonranks:
@@ -161,7 +172,7 @@ class MergeDuplicates():
 
                     # Fetch batches from API
                     self.logger.info(f'Fetching batch with offset: {offset}')
-                    batch = self.sp.getSpecifyObjects('taxon', self.batchSize, offset, {'definition':'13', 'rankid':f'{rankId}'})
+                    batch = self.sp.getSpecifyObjects('taxon', self.batchSize, offset, {'definition':taxontreedefid, 'rankid':f'{rankId}'})
                     resultCount = len(batch)
 
                     self.logger.info(f' - Fetched {resultCount} taxa')
@@ -204,7 +215,7 @@ class MergeDuplicates():
         
         # Look up taxa with matching fullname & rank
         taxonLookup = self.sp.getSpecifyObjects('taxon', 100000, 0, 
-            {'definition':'13', 'rankid':f'{rankId}', 'fullname':f'{fullName}'}) #, 'parent':f'{original.parentid}'})
+            {'definition':str(self.collection.discipline.taxontreedefid), 'rankid':f'{rankId}', 'fullname':f'{fullName}'}) #, 'parent':f'{original.parentid}'})
         
         # If more than one result is returned, there will be duplicates 
         if len(taxonLookup) > 1:
@@ -223,54 +234,9 @@ class MergeDuplicates():
                     
                     # If the parents match then treat as duplicate 
                     if lookup.parentId == original.parentId:
-                        print('!', end='') # possible duplicate hit! 
-                        self.logger.info('Duplicate detected!')
-                        self.logger.info(f' - original : "{original}"')
-                        self.logger.info(f' - duplicate : "{lookup}"')
-                        
-                        # Reset variables for weighting the two candidates for merging 
-                        originalWeight  = 0
-                        duplicateWeight = 0
-
-                        # If original author is empty, but lookup author isn't, then weight lookup higher
-                        if original.author == None and lookup.author is not None: 
-                            duplicateWeight += 1
-                        # TODO more weighting rules ? 
-                        
-                        # If both original and lookup contain author data and the author is not identical, 
-                        #   retrieve authorship from GBIF 
-                        unResolved = self.resolveAuthorNames(original, lookup)
-
-                        if unResolved:
-                        # If authorship could not be resolved, add to ambivalent cases 
-                            ambivalence = f'Ambivalence on authors: {original.author} vs {lookup.author} '
-                            self.logger.info(ambivalence)
-                            original.remarks = str(original.remarks) + f' | {ambivalence}'
-                            original.duplicateSpid = lookup.spid
-                            self.ambivalentCases.append(original)
-                            lookup.remarks = str(lookup.remarks) + f' | {ambivalence}'
-                            lookup.duplicateSpid = original.spid
-                            self.ambivalentCases.append(lookup)
-                            print('?', end='')
-                        else: 
-                            # Prepare for merging by resetting target & source before evaluation 
-                            target = None
-                            source = None
-                            # Determine target and source taxon record as based on weighting 
-                            if duplicateWeight > originalWeight: 
-                                # Prefer looked up duplicate over original 
-                                target = lookup
-                                source = original 
-                            else: 
-                                # Prefer original 
-                                target = original
-                                source = lookup 
-
-                            # Output token to indicate merging of taxa 
-                            print('*', end='')
-
-                            self.mergeTaxa(source, target)
-
+                        self.handleDuplicate(original, lookup)
+                    #elif lookup.y:
+                    #    print('hey')
                     else:
                         # Found taxa with matching names, but different parents: Add to ambivalent cases 
                         ambivalence = f'Ambivalence on parent taxa: {original.parent.fullName} [{original.parent.spid}] vs {lookup.parent.fullName} [{lookup.parent.spid}] '
@@ -284,13 +250,65 @@ class MergeDuplicates():
                         print('¿', end='')
 
                         # Attempt to resolve parentage and move duplicate taxon to certified parent
-                        #self.resolveParentTaxon(original)
-                        #self.resolveParentTaxon(lookup) 
+                        self.resolveParentTaxon(original)
+                        self.resolveParentTaxon(lookup) 
 
         else:
             self.logger.info(f'Duplicate {fullName} no longer found! (Original taxon Specify id: {original.spid})')
             print('x', end='') # Duplicate no longer found 
     
+    def handleDuplicate(self, original, lookup):
+        """
+
+        """
+        print('!', end='') # possible duplicate hit! 
+        self.logger.info('Duplicate detected!')
+        self.logger.info(f' - original : "{original}"')
+        self.logger.info(f' - duplicate : "{lookup}"')
+        
+        # Reset variables for weighting the two candidates for merging 
+        originalWeight  = 0
+        duplicateWeight = 0
+
+        # If original author is empty, but lookup author isn't, then weight lookup higher
+        if original.author == None and lookup.author is not None: 
+            duplicateWeight += 1
+        # TODO more weighting rules ? 
+        
+        # If both original and lookup contain author data and the author is not identical, 
+        #   retrieve authorship from GBIF 
+        unResolved = self.resolveAuthorNames(original, lookup)
+
+        if unResolved:
+        # If authorship could not be resolved, add to ambivalent cases 
+            ambivalence = f'Ambivalence on authors: {original.author} vs {lookup.author} '
+            self.logger.info(ambivalence)
+            original.remarks = str(original.remarks) + f' | {ambivalence}'
+            original.duplicateSpid = lookup.spid
+            self.ambivalentCases.append(original)
+            lookup.remarks = str(lookup.remarks) + f' | {ambivalence}'
+            lookup.duplicateSpid = original.spid
+            self.ambivalentCases.append(lookup)
+            print('?', end='')
+        else: 
+            # Prepare for merging by resetting target & source before evaluation 
+            target = None
+            source = None
+            # Determine target and source taxon record as based on weighting 
+            if duplicateWeight > originalWeight: 
+                # Prefer looked up duplicate over original 
+                target = lookup
+                source = original 
+            else: 
+                # Prefer original 
+                target = original
+                source = lookup 
+
+            # Output token to indicate merging of taxa 
+            print('*', end='')
+
+            self.mergeTaxa(source, target)
+
     def mergeTaxa(self, source, target):
         """
         TODO Function contract 

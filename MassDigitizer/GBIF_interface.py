@@ -81,7 +81,7 @@ class GBIFInterface():
     acceptedNames = []
 
     # Fetch possible alternatives with matching taxon names 
-    urlString = self.baseURL + f'{object_name}/match?verbose=true&kingdom={kingdom}&name={taxon_name}'
+    urlString = self.baseURL + f'{object_name}  {kingdom}&name={taxon_name}'
     util.logger.debug(urlString)
     try:
       response = self.spSession.get(urlString)    

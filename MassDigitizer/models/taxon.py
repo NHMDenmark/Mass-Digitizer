@@ -37,6 +37,8 @@ class Taxon(model.Model):
         self.duplicateSpid  = 0
         self.gbifKey        = 0
         self.parent         = None
+        
+        self.merge          = None
 
         self.institutionId   = gs.institutionId #db.getRowOnId('collection',collection_id)['institutionid']
         self.collectionId    = collection_id
@@ -114,6 +116,7 @@ class Taxon(model.Model):
                 self.parentId = jsonObject['parent'].split('/')[4]
                 self.parentFullName = '' # TODO Fetch parent full name 
                 self.parent = Taxon(self.collectionId)
+                self.merge = jsonObject['yesno10']
             elif source == "GBIF":
                 self.gbifKey = jsonObject['key']
                 self.guid = jsonObject['constituentKey']
@@ -126,6 +129,7 @@ class Taxon(model.Model):
                 self.parent = Taxon(self.collectionId)
             else:
                 self.remarks(f'Could not fill from unsupported source: "{source}"...')
+            return
 
     def loadPredefinedData(self):
         pass
