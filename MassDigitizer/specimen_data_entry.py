@@ -613,7 +613,8 @@ class SpecimenDataEntry():
                     self.collobj.catalogNumber = barcode
 
                     self.window['inpCatalogNumber'].set_focus()
-                    self.saveForm(self.collobj.getFieldsAsDict())
+                    specimenDamaged = self.window['chkdamage'].get()
+                    self.saveForm(self.collobj.getFieldsAsDict(), damaged=specimenDamaged)
                 else:
                     err = "catalog number has the wrong format or length!"
                     sg.popup_error(err)
@@ -717,10 +718,12 @@ class SpecimenDataEntry():
                 self.window['inpStorage'].update(select=True)  # Select all characters in field
 
             elif event == 'btnExport':
+                #¤¤¤ All this is logic
                 # Export data table to spreadsheet
                 # export_result = dx.exportSpecimens('xlsx')
                 # self.window['lblExport'].update(export_result, visible=True)
                 pass
+                #¤¤¤ End logic
 
             elif event == 'btnDismiss':
                 # Hide any error and other messages
@@ -731,7 +734,8 @@ class SpecimenDataEntry():
                 # Save current specimen record to app database
                 print('btnsave values::::____', self.collobj.getFieldsAsDict())
                 # Validation follows
-                self.saveForm(self.collobj.getFieldsAsDict())
+                specimenDamaged = self.window['chkdamage'].get()
+                self.saveForm(self.collobj.getFieldsAsDict(), damaged=specimenDamaged)
 
             elif event == 'btnFirst':
                 # Go to first record in db table
@@ -796,7 +800,7 @@ class SpecimenDataEntry():
 
         util.logger.debug(f'Shifted focus on input field: "{fieldName}"')
 
-    def saveForm(self, record):
+    def saveForm(self, record, damaged=False):
         """
         Saving specimen data to database including validation of form input fields.
         The contents of the form input fields should have been immediately been transferred
@@ -810,6 +814,8 @@ class SpecimenDataEntry():
             # Make sure everything is read on immediate barcode scan
             taxonFullName = self.window['inpTaxonName'].get()
             self.collobj.taxonFullName = taxonFullName.strip()
+            #Update needsrepair field
+            self.collobj.needsRepair = damaged
             # Ensure that container properties are picked up on go-back operations.
 
             containerType = record['containertype']
