@@ -92,8 +92,6 @@ class SpecimenDataEntry():
         self.fieldname = ''
         self.input_list = None
 
-        print(f"INIT() collobj.id == |{self.collobj.id}|")
-
         # Create auto-suggest popup windows
         self.autoStorage = ''  # global for storage locations
         self.autoTaxonName = None  # global for taxon names

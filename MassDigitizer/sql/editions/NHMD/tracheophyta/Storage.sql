@@ -4285,5 +4285,5 @@ INSERT INTO storage (name, fullname, rankname, collectionid) VALUES
 ("411","Natural History Museum of Denmark | Priorparken | C-CP Danish Vascular Plant Collection | 411", "Shelf", (SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1)),
 ("412","Natural History Museum of Denmark | Priorparken | C-CP Danish Vascular Plant Collection | 412", "Shelf", (SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1)),
 ("413","Natural History Museum of Denmark | Priorparken | C-CP Danish Vascular Plant Collection | 413", "Shelf", (SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1)),
-("414","Natural History Museum of Denmark | Priorparken | C-CP Danish Vascular Plant Collection | 414", "Shelf", (SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1)),
+("414","Natural History Museum of Denmark | Priorparken | C-CP Danish Vascular Plant Collection | 414", "Shelf", (SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1))
 ;
