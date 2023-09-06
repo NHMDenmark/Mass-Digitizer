@@ -9,11 +9,12 @@
   http://www.apache.org/licenses/LICENSE-2.0
   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-  PURPOSE: Generic base class "Model" in the MVC pattern  
+  PURPOSE: Generic base class "Model" in the MVC pattern
 """
 
 import os
 import sys
+
 # Internal dependencies
 current = os.path.dirname(os.path.realpath(__file__))
 parent = os.path.dirname(current)
@@ -25,6 +26,7 @@ import specify_interface
 import util
 import data_access
 
+
 class Model:
     """
     The model class is a base class for data models inheriting & re-using a suite of shared functions
@@ -32,53 +34,56 @@ class Model:
 
     def __init__(self, collection_id):
         """
-        Set up blank record instance for data entry on basis of collection id 
-        """ 
-        self.table          = 'model'
-        self.sptype         = 'model' # NOTE not represented in Specify API
-        self.id             = 0
-        self.spid           = 0 
-        self.gbifKey        = 0
-        self.guid           = ''
-        self.code           = ''
-        self.name           = ''
-        self.fullName       = ''
-        self.rankName       = ''
+        Set up blank record instance for data entry on basis of collection id
+        """
+        self.table = 'model'
+        self.sptype = 'model'  # NOTE not represented in Specify API
+        self.id = 0
+        self.spid = 0
+        self.gbifKey = 0
+        self.guid = ''
+        self.code = ''
+        self.name = ''
+        self.fullName = ''
+        self.rankName = ''
         self.parentFullName = ''
-        self.parentId       = 0
-        self.familyName     = '' # TODO Too specific! Solve in a different way ... 
-        self.remarks        = ' '
-        self.notes          = ''
-        self.collectionId   = collection_id
-        self.status         = 0
-        self.source         = 'Unspecified'
-        self.visible        = 0
+        self.parentId = 0
+        self.familyName = ''  # TODO Too specific! Solve in a different way ...
+        self.remarks = ' '
+        self.notes = ''
+        self.collectionId = collection_id
+        self.status = 0
+        self.source = 'Unspecified'
+        self.visible = 0
 
         # Enable usage as autosuggestobject
         self.treedefid = 0
         self.rankid = 0
 
-        # 
+        #
         self.db = data_access.DataAccess(gs.databaseName)
         self.sp = specify_interface.SpecifyInterface()
-    
-# Generic local database interfacing functions 
+
+    # Generic local database interfacing functions
 
     def save(self):
         """
         Function telling instance to save its data either as a new record (INSERT) or updating an existing one (UPDATE)
-        Data to be saved is retrieved from self as a dictionary with the object table headers as 'keys' and the form field content as 'values'.        
-        CONTRACT 
-           RETURNS database record 
+        Data to be saved is retrieved from self as a dictionary with the object table headers as 'keys' and the form field content as 'values'.
+        CONTRACT
+           RETURNS database record
         """
-        
-        # Checking if Save is a novel record, or if it is updating existing record.
 
+        # Checking if Save is a novel record, or if it is updating existing record.
+        print('SELF ID =', self.id)
+        rec = self.getFieldsAsDict()
+        print('In Model record:', rec)
         if self.id > 0:
             # Record Id is not 0 therefore existing record to be updated
             record = self.db.updateRow(self.table, self.id, self.getFieldsAsDict())
         else:
             # Record Id is 0 therefore existing record to be created
+            print('CREATING NEEEW RECORD :DDDDDDD', self.getFieldsAsDict())
             record = self.db.insertRow(self.table, self.getFieldsAsDict())
             self.id = record['id']
 
@@ -86,142 +91,154 @@ class Model:
 
     def load(self, id=0):
         """
-        Function for loading and populating instance from database record  
-        CONTRACT 
-           id: Primary key of current record. If zero then instance id is checked otherwise nothing is loaded. 
-            RETURNS: Record as SqliteRow object 
-        """
-        
-        if id == 0: id = self.id 
-        
-        record = self.db.getRowOnId(self.table , id)
-
-        if record is not None: 
-            self.setFields(record)
-        
-        return record
-
-    def refresh(self):
-        """
-        TODO Function contract 
-        """
-        return self.load(self, self.id)
-
-    def delete(self):
-        """
-        Function for deleting database record belonging to current instance 
-        CONTRACT 
-           id: Primary key of current record   
-        """
-
-        record = self.db.deleteRowOnId(self.table, self.id)
-
-    def loadPrevious(self, id):
-        """
-        Function for loading previous object record data 
+        Function for loading and populating instance from database record
         CONTRACT
-           id: Primary key of current record; If 0 then latest record    
-           RETURNS record or None, if none retrieved 
+           id: Primary key of current record. If zero then instance id is checked otherwise nothing is loaded.
+            RETURNS: Record as SqliteRow object
         """
 
-        # Construct query for extracting the previous record 
-        sql = f'SELECT * FROM {self.table} s '
+        if id == 0: id = self.id
 
-        # If existing record (id > 0) then fetch the one that has the highest lower id than current 
-        if id > 0: 
-            sql = sql + f"WHERE s.id < {id} "
-        else: 
-            # Blank record: Fetch the one with the highest id 
-            sql = sql + f"WHERE s.id = (SELECT MAX(id) FROM {self.table}) " 
-
-        sql = sql + f"AND s.collectionid = {self.collectionId}" # Filter on current collection
-        sql = sql + " ORDER BY s.id DESC LIMIT 1 "  
-
-        record = self.db.loadSingleRecordFromSql(sql)
+        record = self.db.getRowOnId(self.table, id)
 
         if record is not None:
             self.setFields(record)
 
         return record
 
-    def loadNext(self, id):
+    def refresh(self):
         """
-        Function for loading next object record data, if any 
+        TODO Function contract
+        """
+        return self.load(self, self.id)
+
+    def delete(self):
+        """
+        Function for deleting database record belonging to current instance
         CONTRACT
-           id: Primary key of current record; If 0 then latest record    
-           RETURNS record or None, if none retrieved  
+           id: Primary key of current record
         """
 
-        # Construct query for extracting the previous record 
-        sql = f"SELECT * FROM {self.table} s " 
-        # If existing record (id > 0) then fetch the one that has the lowest higher id than current 
-        if id > 0: 
-            sql = sql + f"WHERE s.id > {id} " 
+        record = self.db.deleteRowOnId(self.table, self.id)
+
+    def loadPrevious(self, id):
+        """
+        Function for loading previous object record data
+        CONTRACT
+           id: Primary key of current record; If 0 then latest record
+           RETURNS record or None, if none retrieved
+        """
+        if not id:
+            id = 0
+        else:
+            id = int(id)
+        print('loading prev. for collection id:', self.collectionId)
+        print('initial rec id=', id)
+        # Construct query for extracting the previous record
+        # sql = f'''SELECT * FROM specimen s JOIN
+        #        (SELECT max(id) as mx FROM specimen s WHERE collectionid={cid})t1
+        #        ON t1.mx = s.id;'''
+        sql = f'SELECT * FROM {self.table} s '
+
+        # If existing record (id > 0) then fetch the one that has the highest lower id than current
+        if id > 0:
+            sql = sql + f"WHERE s.id < {id} "
+        else:
+            # Blank record: Fetch the one with the highest id
+            sql = sql + f"WHERE s.id = (SELECT MAX(id) FROM {self.table} WHERE s.collectionid = {self.collectionId}) "
+
+        # sql = sql + f"AND s.collectionid = {self.collectionId}" # Filter on current collection
+        sql = sql + f"AND s.collectionid = {self.collectionId}"  # Filter on current collection
+        # sql = sql + "LIMIT 1; "
+
+        record = self.db.loadSingleRecordFromSql(sql)
+        # print("loadPrev ID:", record[0], '\n', [j for j in record])
+        if record is not None:
+            self.setFields(record)
+            return record
+        else:
+            print('No older records!')
+
+    def loadNext(self, id):
+        """
+        Function for loading next object record data, if any
+        CONTRACT
+           id: Primary key of current record; If 0 then latest record
+           RETURNS record or None, if none retrieved
+        """
+
+        # Construct query for extracting the previous record
+        sql = f"SELECT * FROM {self.table} s "
+        # If existing record (id > 0) then fetch the one that has the lowest higher id than current
+        if id > 0:
+            sql = sql + f"WHERE s.id > {id} "
         else:
             # Blank record: No going forward
+            print('Attempt to forward on blank record')
             util.logger.debug('Attempt to forward on blank record')
             return None
 
-        sql = sql + f" AND s.collectionid = {self.collectionId}" # Filter on current collection
+        sql = sql + f" AND s.collectionid = {self.collectionId}"  # Filter on current collection
         # Sort on ID to get the latest record out
-        sql = sql + " ORDER BY s.id LIMIT 1 "        
-
+        sql = sql + " ORDER BY s.id LIMIT 1 "
+        print('forwardbutton sql:', sql)
         record = self.db.loadSingleRecordFromSql(sql)
-
-        if record is not None: 
+        record
+        if record is not None:
             self.setFields(record)
-
+            print(self.getFieldsAsDict())
         return record
 
     def loadOnFullname(self, fullname, collection_id):
         """
-        Retrieves data and fills instance based on fullname field 
-        CONTRACT 
-            fullname (String)   : fullname field to searched on 
-            collection_id (Int) : primary key of collection to be filtered on 
+        Retrieves data and fills instance based on fullname field
+        CONTRACT
+            fullname (String)   : fullname field to searched on
+            collection_id (Int) : primary key of collection to be filtered on
         """
-        records = self.db.getRowsOnFilters(self.table, {'fullname': f'={fullname}', 'collectionid' : f'{collection_id}'}, 1)
-        if len(records) > 0: 
+        records = self.db.getRowsOnFilters(self.table, {'fullname': f'={fullname}', 'collectionid': f'{collection_id}'},
+                                           1)
+        if len(records) > 0:
             record = records[0]
             self.setFields(record)
-        else: 
-            record = None 
+        else:
+            record = None
 
         return record
 
-# Functions fully implemented in inheriting classes 
+    # Functions fully implemented in inheriting classes
 
     def loadPredefinedData(self):
         """
-        Generic function for loading predefined data in order to get primary keys and other info to be pooled at selection in GUI 
-        NOTE Implemented in inheriting classes. 
+        Generic function for loading predefined data in order to get primary keys and other info to be pooled at selection in GUI
+        NOTE Implemented in inheriting classes.
         """
         pass
 
     def getFieldsAsDict(self):
         """
         Generic function that generates and returns a dictonary with database column names as keys and the instance's fields as values for passing on to data access handler
-        NOTE Fully implemented in inheriting classes 
+        NOTE Fully implemented in inheriting classes
         """
 
         fieldsDict = {
-                'name':f'"{self.name}"',
-                'fullname':f'"{self.fullName}"',
-                'parentfullname':f'"{self.parentFullName}"',
+            'name': f'"{self.name}"',
+            'fullname': f'"{self.fullName}"',
+            'parentfullname': f'"{self.parentFullName}"',
 
-                'collectionid':f'{self.collectionId}',
-                'treedefid':f'{self.treedefid}',
-                'rankid':f'{self.rankid}',
-                }
-        
+            'collectionid': f'{self.collectionId}',
+            'treedefid': f'{self.treedefid}',
+            'rankid': f'{self.rankid}',
+        }
+
         return fieldsDict
 
     def setFields(self, record):
         """
-        Function for setting base object data field from record 
-        CONTRACT 
-           record: sqliterow object containing record data 
-        NOTE Fully implemented in inheriting classes 
+        Function for setting base object data field from record
+        CONTRACT
+           record: sqliterow object containing record data
+        NOTE Fully implemented in inheriting classes
         """
 
         self.id = record['id']
@@ -232,15 +249,15 @@ class Model:
         self.treedefid = record['treedefid']
         self.rankid = record['rankid']
 
-# Specify Interfacing functions 
+    # Specify Interfacing functions
 
     def fetch(self, token, spid=0):
         """
         Generic function for fetching a data record from Specify API and passing it to the fill(...)-function
-        CONTRACT 
-            token (String)  : CSFR token needed for accessing the Specify API 
-            id (Integer)    : Primary key of the object in question 
-        NOTE Implemented in inheriting classes. 
+        CONTRACT
+            token (String)  : CSFR token needed for accessing the Specify API
+            id (Integer)    : Primary key of the object in question
+        NOTE Implemented in inheriting classes.
         """
         if spid == 0: spid = self.spid
         #
@@ -251,11 +268,11 @@ class Model:
     def fill(self, jsonObject, source="Specify"):
         """
         Function for filling model's fields with data from record fetched from external source
-        CONTRACT 
+        CONTRACT
             jsonObject (json)  : Data record fetched from external source
-            source (String)    : String describing external source. 
+            source (String)    : String describing external source.
                                  Options:
-                                     "Specify = "Specify API 
+                                     "Specify = "Specify API
         """
         self.spid = jsonObject['id']
         self.name = jsonObject['name']
@@ -263,23 +280,23 @@ class Model:
 
     def getParent(self, specify_interface):
         """
-        Generic function for fetching current instance's parent record 
-        CONTRACT 
+        Generic function for fetching current instance's parent record
+        CONTRACT
             specify_interface TODO
-        NOTE Implemented in inheriting classes 
-        """        
+        NOTE Implemented in inheriting classes
+        """
         pass
 
     def getParentage(self, specify_interface):
         """
-        Generic function for recursively fetching the entire parentage tree for current instance 
-        CONTRACT 
+        Generic function for recursively fetching the entire parentage tree for current instance
+        CONTRACT
             specify_interface TODO
-        NOTE Implemented in inheriting classes 
-        """        
+        NOTE Implemented in inheriting classes
+        """
         pass
 
-# Generic functions
+    # Generic functions
 
-    def __str__ (self):
+    def __str__(self):
         return f'[{self.table}] id:{self.id}, name:{self.name}, fullname = {self.fullName}, notes = {self.notes}'

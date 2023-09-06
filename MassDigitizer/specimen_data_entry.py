@@ -27,14 +27,14 @@ import traceback
 import PySimpleGUI as sg
 import sys
 # Internal dependencies
-from .MassDigitizer import util
-from .MassDigitizer import data_access
-from .MassDigitizer import global_settings as gs
-from .MassDigitizer import autoSuggest_popup
-from .MassDigitizer.models import specimen
-from .MassDigitizer.models import recordset
-from .MassDigitizer.models import collection as coll
-from .MassDigitizer.models import model
+import util
+import data_access
+import global_settings as gs
+import autoSuggest_popup
+from models import specimen
+from models import recordset
+from models import collection as coll
+from models import model
 
 
 class SpecimenDataEntry():
