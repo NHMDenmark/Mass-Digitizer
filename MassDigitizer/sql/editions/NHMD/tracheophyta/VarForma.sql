@@ -327,7 +327,6 @@ INSERT INTO taxonname ("spid","name","fullname","rankid","taxonRank", "treedefid
 (4052306,"trifidus","Erigeron compositus var. trifidus",	240,"variety", 13,"Erigeron compositus"),
 (4052300,"eriocephala","Erigeron eriocephalus var. eriocephala",	240,"variety", 13,"Erigeron eriocephalus"),
 (4052292,"unalaschkense","Erigeron pulchellus var. unalaschkense",	240,"variety", 13,"Erigeron pulchellus"),
-(4052302,"eriocephalus","Erigeron sp.#? var. eriocephalus",	240,"variety", 13,"Erigeron sp.#?"),
 (4052298,"ereocephala","Erigeron uniflorus var. ereocephala",	240,"variety", 13,"Erigeron uniflorus"),
 (4052294,"eriocephala","Erigeron uniflorus var. eriocephala",	240,"variety", 13,"Erigeron uniflorus"),
 (4052297,"eriocephalus","Erigeron uniflorus var. eriocephalus",	240,"variety", 13,"Erigeron uniflorus"),

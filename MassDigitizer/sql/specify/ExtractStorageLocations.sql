@@ -17,7 +17,8 @@ FROM storage AS t1
 LEFT JOIN storage AS t2 ON t2.ParentID = t1.storageID
 LEFT JOIN storage AS t3 ON t3.parentID = t2.storageID
 LEFT JOIN storagetreedefitem stdi ON t3.RankID = stdi.RankID
-WHERE t2.storageid IN ( 81648, 89805) )t1;
+WHERE t2.storageid IN (81648, 89805) -- For NHMD Botany 
+)t1;
 -- The query is only three levels deep which makes it managable with LEFT JOINs. 
 -- After running the query remember to remove the very last comma in the file.
 

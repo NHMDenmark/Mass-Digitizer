@@ -2,7 +2,7 @@
   SELECT
 	 -- t.TaxonID taxonid, t.Name name, t.FullName fullname, t.RankID rankid, t.TaxonTreeDefID taxontreedefid, p1.FullName parentfullname, p2.FullName, p3.FullName, p4.FullName,
 	 CONCAT(
-	'(', t.TaxonID, ',"', t.Name, '","', t.FullName, '",	', t.RankID ,',"', ttd.Name ,'", ', t.TaxonTreeDefID, ',"', p1.FullName, '"),' )-- 1 for NMHD, 2 for NHMA
+	'(', t.TaxonID, ',"', t.Name, '","', t.FullName, '",', t.RankID ,',"', ttd.Name ,'", ', t.TaxonTreeDefID, ',"', p1.FullName, '"),' )-- 1 for NMHD, 2 for NHMA
 	  sqlstatement
  FROM taxon t
 	LEFT JOIN taxon p1 ON p1.TaxonID = t.ParentID
