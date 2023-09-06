@@ -7,6 +7,7 @@
 - Upload dataset to OpenRefine
 - Map, save and validate in Workbench - then 'import'.  
 - After the post processed dataset is imported into Specify it is moved into `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\3.Imported specify`.
+- After the spreadsheets have been checked they should be moved to N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\4.Archive
    
 OpenRefine steps: 
 - Do a quick review of the data before proceeding to the post processing (OpenRefine provides a review on upload). 

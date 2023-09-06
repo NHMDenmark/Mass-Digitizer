@@ -81,9 +81,12 @@ class SpecimenDataEntry():
         self.currentRecord = None
         self.fieldname = ''
         self.input_list = None
+<<<<<<< HEAD
         lastRow = self.db.getLastRow('specimen', self.collectionId)
         print(lastRow[0])
         self.collobj.id = lastRow[0]
+=======
+>>>>>>> c093df51965754c5b58b0bec1c686ea1e6c1f622
 
         # Create auto-suggest popup windows
         self.autoStorage = ''  # global for storage locations
