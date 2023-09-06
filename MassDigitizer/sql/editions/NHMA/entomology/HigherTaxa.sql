@@ -1,2067 +1,2070 @@
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6368,"Abax","Abax",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7387,"Abdera","Abdera",	180,"Genus", 2,"Serropalpidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15638,"Abraxas","Abraxas",	180,"Genus", 2,"Geometridae",3290)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15789,"Abrostola","Abrostola",	180,"Genus", 2,"Noctuidae",3738)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14802,"Acaenitinae","Acaenitinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229687,"Acalypta","Acalypta",	180,"Genus", 2,"Tingidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7050,"Acanthocinus","Acanthocinus",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7046,"Acanthoderes","Acanthoderes",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15029,"Acanthopsyche","Acanthopsyche",	180,"Genus", 2,"Psychidae",267)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14697,"Acari","Acari",	80,"Infraclass", 2,"Arachnida",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15634,"Acasis","Acasis",	180,"Genus", 2,"Geometridae",3278)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15514,"Acentria","Acentria",	180,"Genus", 2,"Crambidae",2811)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9023,"Acetropis","Acetropis",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15345,"Acharia","Acharia",	180,"Genus", 2,"Limacodidae",2186)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7908,"Achenium","Achenium",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15555,"Acherontia","Acherontia",	180,"Genus", 2,"Sphingidae",2934)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15532,"Achlya","Achlya",	180,"Genus", 2,"Drepanidae",2864)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15419,"Achroia","Achroia",	180,"Genus", 2,"Pyralidae",2441)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15649,"Achrosis","Achrosis",	180,"Genus", 2,"Geometridae",3324)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7209,"Acilius","Acilius",	180,"Genus", 2,"Dytiscidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15272,"Acleris","Acleris",	180,"Genus", 2,"Tortricidae",1659)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6957,"Acmaeops","Acmaeops",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15146,"Acompsia","Acompsia",	180,"Genus", 2,"Gelechiidae",919)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15801,"Acontia","Acontia",	180,"Genus", 2,"Noctuidae",3784)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18989,"Acrabasis","Acrabasis",	180,"Genus", 2,"Pyralidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15442,"Acrobasis","Acrobasis",	180,"Genus", 2,"Pyralidae",2510)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15065,"Acrocercops","Acrocercops",	180,"Genus", 2,"Gracillariidae",437)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15089,"Acrolepia","Acrolepia",	180,"Genus", 2,"Glyphipterigidae",627)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15088,"Acrolepiopsis","Acrolepiopsis",	180,"Genus", 2,"Glyphipterigidae",625)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7934,"Acrolocha","Acrolocha",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15809,"Acronicta","Acronicta",	180,"Genus", 2,"Noctuidae",3802)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8039,"Acrotrichis","Acrotrichis",	180,"Genus", 2,"Ptiliidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7930,"Acrulia","Acrulia",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15930,"Actebia","Actebia",	180,"Genus", 2,"Noctuidae",4276)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15550,"Actias","Actias",	180,"Genus", 2,"Saturniidae",2920)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8023,"Actidium","Actidium",	180,"Genus", 2,"Ptiliidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8059,"Actinopteryx","Actinopteryx",	180,"Genus", 2,"Ptiliidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15843,"Actinotia","Actinotia",	180,"Genus", 2,"Noctuidae",3940)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6611,"Acupalpus","Acupalpus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7823,"Acylophorus","Acylophorus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15227,"Adaina","Adaina",	180,"Genus", 2,"Pterophoridae",1505)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15009,"Adela","Adela",	180,"Genus", 2,"Adelidae",172)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14924,"Adelidae","Adelidae",	140,"Family", 2,"Lepidoptera",162)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14803,"Adelognathinae","Adelognathinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8845,"Adelphocoris","Adelphocoris",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7491,"Aderidae","Aderidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7492,"Aderus","Aderus",	180,"Genus", 2,"Aderidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19023,"Adosophyes","Adosophyes",	180,"Genus", 2,"Tortricidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15261,"Adoxophyes","Adoxophyes",	180,"Genus", 2,"Tortricidae",1624)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15347,"Adscita","Adscita",	180,"Genus", 2,"Zygaenidae",2192)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15802,"Aedia","Aedia",	180,"Genus", 2,"Noctuidae",3787)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6886,"Aegialia","Aegialia",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15680,"Aethalura","Aethalura",	180,"Genus", 2,"Geometridae",3412)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15281,"Aethes","Aethes",	180,"Genus", 2,"Tortricidae",1731)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7153,"Agabus","Agabus",	180,"Genus", 2,"Dytiscidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7054,"Agapanthia","Agapanthia",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15279,"Agapeta","Agapeta",	180,"Genus", 2,"Tortricidae",1724)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7450,"Agaricophagus","Agaricophagus",	180,"Genus", 2,"Liodidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7461,"Agathidium","Agathidium",	180,"Genus", 2,"Liodidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15208,"Agdistis","Agdistis",	180,"Genus", 2,"Pterophoridae",1435)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15389,"Aglais","Aglais",	180,"Genus", 2,"Nymphalidae",2345)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8166,"Aglenus","Aglenus",	180,"Genus", 2,"Colydiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15547,"Aglia","Aglia",	180,"Genus", 2,"Saturniidae",2910)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15463,"Aglossa","Aglossa",	180,"Genus", 2,"Pyralidae",2591)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15037,"Agnathosia","Agnathosia",	180,"Genus", 2,"Tineidae",293)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8863,"Agnocoris","Agnocoris",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15125,"Agonopterix","Agonopterix",	180,"Genus", 2,"Depressariidae",784)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6324,"Agonum","Agonum",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229699,"Agramma","Agramma",	180,"Genus", 2,"Tingidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15379,"Agraulis","Agraulis",	180,"Genus", 2,"Nymphalidae",2305)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15411,"Agriades","Agriades",	180,"Genus", 2,"Lycaenidae",2416)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15667,"Agriopis","Agriopis",	180,"Genus", 2,"Geometridae",3374)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14804,"Agriotypinae","Agriotypinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15508,"Agriphila","Agriphila",	180,"Genus", 2,"Crambidae",2775)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18867,"Agriphila","Agriphila",	180,"Genus", 2,"Pyralidae",2775)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15554,"Agrius","Agrius",	180,"Genus", 2,"Sphingidae",2932)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15883,"Agrochola","Agrochola",	180,"Genus", 2,"Noctuidae",4070)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15480,"Agrotera","Agrotera",	180,"Genus", 2,"Crambidae",2670)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15933,"Agrotis","Agrotis",	180,"Genus", 2,"Noctuidae",4295)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8088,"Agyrtes","Agyrtes",	180,"Genus", 2,"Silphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15673,"Alcis","Alcis",	180,"Genus", 2,"Geometridae",3391)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15271,"Aleimma","Aleimma",	180,"Genus", 2,"Tortricidae",1657)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15685,"Aleucis","Aleucis",	180,"Genus", 2,"Geometridae",3423)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19074,"Algedonia","Algedonia",	180,"Genus", 2,"Crambidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14726,"Allantinae","Allantinae",	150,"Subfamily", 2,"Tenthredinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7349,"Allecula","Allecula",	180,"Genus", 2,"Alleculidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7348,"Alleculidae","Alleculidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15012,"Alloclemensia","Alloclemensia",	180,"Genus", 2,"Incurvariidae",196)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9063,"Alloeotomus","Alloeotomus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15818,"Allophyes","Allophyes",	180,"Genus", 2,"Noctuidae",3856)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15740,"Aloa","Aloa",	180,"Genus", 2,"Erebidae",3594)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6989,"Alosterna","Alosterna",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7337,"Alphitobius","Alphitobius",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7320,"Alphitophagus","Alphitophagus",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15662,"Alsophila","Alsophila",	180,"Genus", 2,"Geometridae",3360)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15187,"Altenia","Altenia",	180,"Genus", 2,"Gelechiidae",1146)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15207,"Alucita","Alucita",	180,"Genus", 2,"Alucitidae",1429)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14960,"Alucitidae","Alucitidae",	140,"Family", 2,"Lepidoptera",1428)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(233961,"Alysson","Alysson",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6374,"Amara","Amara",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15212,"Amblyptilia","Amblyptilia",	180,"Genus", 2,"Pterophoridae",1453)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8847,"Amblytylus","Amblytylus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15899,"Ammoconia","Ammoconia",	180,"Genus", 2,"Noctuidae",4135)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14875,"Ammophila","Ammophila",	180,"Genus", 2,"Sphecidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7458,"Amphicyllis","Amphicyllis",	180,"Genus", 2,"Liodidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6900,"Amphimallon","Amphimallon",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15855,"Amphipoea","Amphipoea",	180,"Genus", 2,"Noctuidae",3969)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15815,"Amphipyra","Amphipyra",	180,"Genus", 2,"Noctuidae",3845)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15119,"Amphisbatis","Amphisbatis",	180,"Genus", 2,"Lypusidae",767)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14754,"Ampulicidae","Ampulicidae",	140,"Family", 2,"Apoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6721,"Anacaena","Anacaena",	180,"Genus", 2,"Hydrophilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15139,"Anacampsis","Anacampsis",	180,"Genus", 2,"Gelechiidae",892)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7026,"Anaglyptus","Anaglyptus",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15472,"Anania","Anania",	180,"Genus", 2,"Crambidae",2626)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15949,"Anaplectoides","Anaplectoides",	180,"Genus", 2,"Noctuidae",4354)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15144,"Anarsia","Anarsia",	180,"Genus", 2,"Gelechiidae",907)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15910,"Anarta","Anarta",	180,"Genus", 2,"Noctuidae",4179)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15392,"Anartia","Anartia",	180,"Genus", 2,"Nymphalidae",2357)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8769,"Anasimyia","Anasimyia",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7404,"Anaspidae","Anaspidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7405,"Anaspis","Anaspis",	180,"Genus", 2,"Anaspidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8239,"Anatis","Anatis",	180,"Genus", 2,"Coccinellidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15129,"Anchinia","Anchinia",	180,"Genus", 2,"Depressariidae",841)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15305,"Ancylis","Ancylis",	180,"Genus", 2,"Tortricidae",1874)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18788,"Ancylis ","Ancylis ",	180,"Genus", 2,"Tortricidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15453,"Ancylosis","Ancylosis",	180,"Genus", 2,"Pyralidae",2553)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8457,"Andrena","Andrena",	180,"Genus", 2,"Andrenidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8315,"Andrenidae","Andrenidae",	140,"Family", 2,"Apoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18609,"Andrion","Andrion",	180,"Genus", 2,"Sitonini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15460,"Anerastia","Anerastia",	180,"Genus", 2,"Pyralidae",2583)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15654,"Angerona","Angerona",	180,"Genus", 2,"Geometridae",3336)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14692,"Animalia","Animalia",	10,"Kingdom", 2,"Life",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6590,"Anisodactylus","Anisodactylus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7452,"Anisomata","Anisomata",	180,"Genus", 2,"Liodidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8264,"Anisosticta","Anisosticta",	180,"Genus", 2,"Coccinellidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7385,"Anisoxya","Anisoxya",	180,"Genus", 2,"Serropalpidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7608,"Anitys","Anitys",	180,"Genus", 2,"Anobiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7561,"Anobiidae","Anobiidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7583,"Anobium","Anobium",	180,"Genus", 2,"Anobiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6907,"Anomala","Anomala",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14805,"Anomaloninae","Anomaloninae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8180,"Anommatus","Anommatus",	180,"Genus", 2,"Colydiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15907,"Anorthoa","Anorthoa",	180,"Genus", 2,"Noctuidae",4171)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15549,"Antheraea","Antheraea",	180,"Genus", 2,"Saturniidae",2916)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7477,"Anthicidae","Anthicidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7480,"Anthicus","Anthicus",	180,"Genus", 2,"Anthicidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8327,"Anthidium","Anthidium",	180,"Genus", 2,"Megachilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7976,"Anthobium","Anthobium",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15360,"Anthocharis","Anthocharis",	180,"Genus", 2,"Pieridae",2249)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15234,"Anthophila","Anthophila",	180,"Genus", 2,"Choreutidae",1538)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8330,"Anthophora","Anthophora",	180,"Genus", 2,"Apidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15753,"Antichloris","Antichloris",	180,"Genus", 2,"Erebidae",3621)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15582,"Anticlea","Anticlea",	180,"Genus", 2,"Geometridae",3069)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15617,"Anticollix","Anticollix",	180,"Genus", 2,"Geometridae",3169)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15490,"Antigastra","Antigastra",	180,"Genus", 2,"Crambidae",2693)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15006,"Antispila","Antispila",	180,"Genus", 2,"Heliozelidae",155)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15898,"Antitype","Antitype",	180,"Genus", 2,"Noctuidae",4133)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6811,"Apalus","Apalus",	180,"Genus", 2,"Meloidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15873,"Apamea","Apamea",	180,"Genus", 2,"Noctuidae",4017)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15386,"Apatura","Apatura",	180,"Genus", 2,"Nymphalidae",2333)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15655,"Apeira","Apeira",	180,"Genus", 2,"Geometridae",3338)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15374,"Aphantopus","Aphantopus",	180,"Genus", 2,"Nymphalidae",2293)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15257,"Aphelia","Aphelia",	180,"Genus", 2,"Tortricidae",1604)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14762,"Aphelinidae","Aphelinidae",	140,"Family", 2,"Chalcidoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6833,"Aphodius","Aphodius",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15416,"Aphomia","Aphomia",	180,"Genus", 2,"Pyralidae",2433)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8270,"Apidae","Apidae",	140,"Family", 2,"Apoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14747,"Apion","Apion",	180,"Genus", 2,"Apionini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14745,"Apioninae","Apioninae",	150,"Subfamily", 2,"Brentidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14746,"Apionini","Apionini",	160,"Tribe", 2,"Apioninae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8306,"Apis","Apis",	180,"Genus", 2,"Apidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15695,"Aplasta","Aplasta",	180,"Genus", 2,"Geometridae",3446)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15628,"Aplocera","Aplocera",	180,"Genus", 2,"Geometridae",3263)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15114,"Aplota","Aplota",	180,"Genus", 2,"Oecophoridae",747)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15663,"Apocheima","Apocheima",	180,"Genus", 2,"Geometridae",3362)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14712,"Apocrita","Apocrita",	110,"Suborder", 2,"Hymenoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15342,"Apoda","Apoda",	180,"Genus", 2,"Limacodidae",2180)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14755,"Apoidea","Apoidea",	120,"Infraorder", 2,"Apocrita",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8856,"Apolygus","Apolygus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15443,"Apomyelois","Apomyelois",	180,"Genus", 2,"Pyralidae",2522)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15776,"Apopestes","Apopestes",	180,"Genus", 2,"Erebidae",3693)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15361,"Aporia","Aporia",	180,"Genus", 2,"Pieridae",2251)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15900,"Aporophyla","Aporophyla",	180,"Genus", 2,"Noctuidae",4137)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15288,"Apotomis","Apotomis",	180,"Genus", 2,"Tortricidae",1776)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15138,"Aproaerema","Aproaerema",	180,"Genus", 2,"Gelechiidae",890)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15895,"Apterogenum","Apterogenum",	180,"Genus", 2,"Noctuidae",4125)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14694,"Arachnida","Arachnida",	60,"Class", 2,"Arthropoda",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14890,"Arachnospila","Arachnospila",	180,"Genus", 2,"Pompilinae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15387,"Araschnia","Araschnia",	180,"Genus", 2,"Nymphalidae",2337)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15865,"Archanara","Archanara",	180,"Genus", 2,"Noctuidae",3993)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15636,"Archiearis","Archiearis",	180,"Genus", 2,"Geometridae",3283)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15041,"Archinemapogon","Archinemapogon",	180,"Genus", 2,"Tineidae",307)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15248,"Archips","Archips",	180,"Genus", 2,"Tortricidae",1573)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15745,"Arctia","Arctia",	180,"Genus", 2,"Erebidae",3605)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8710,"Arctophila","Arctophila",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15727,"Arctornis","Arctornis",	180,"Genus", 2,"Erebidae",3555)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15862,"Arenostola","Arenostola",	180,"Genus", 2,"Noctuidae",3986)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14713,"Argidae","Argidae",	140,"Family", 2,"Symphyta",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(233963,"Argogorytes","Argogorytes",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15162,"Argolamprotes","Argolamprotes",	180,"Genus", 2,"Gelechiidae",987)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15383,"Argynnis","Argynnis",	180,"Genus", 2,"Nymphalidae",2318)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15082,"Argyresthia","Argyresthia",	180,"Genus", 2,"Argyresthiidae",573)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14934,"Argyresthiidae","Argyresthiidae",	140,"Family", 2,"Lepidoptera",572)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15295,"Argyroploce","Argyroploce",	180,"Genus", 2,"Tortricidae",1829)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15250,"Argyrotaenia","Argyrotaenia",	180,"Genus", 2,"Tortricidae",1585)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15674,"Arichanna","Arichanna",	180,"Genus", 2,"Geometridae",3394)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15413,"Aricia","Aricia",	180,"Genus", 2,"Lycaenidae",2421)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15157,"Aristotelia","Aristotelia",	180,"Genus", 2,"Gelechiidae",967)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15171,"Aroga","Aroga",	180,"Genus", 2,"Gelechiidae",1044)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7019,"Aromia","Aromia",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14693,"Arthropoda","Arthropoda",	30,"Phylum", 2,"Animalia",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6210,"Asaphidion","Asaphidion",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15783,"Ascalapha","Ascalapha",	180,"Genus", 2,"Erebidae",3712)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9079,"Asciodema","Asciodema",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7522,"Asclera","Asclera",	180,"Genus", 2,"Oedemeridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6943,"Asemum","Asemum",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7649,"Aspidiphoridae","Aspidiphoridae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7650,"Aspidiphorus","Aspidiphorus",	180,"Genus", 2,"Aspidiphoridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15061,"Aspilapteryx","Aspilapteryx",	180,"Genus", 2,"Gracillariidae",427)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15693,"Aspitates","Aspitates",	180,"Genus", 2,"Geometridae",3440)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15450,"Assara","Assara",	180,"Genus", 2,"Pyralidae",2542)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15816,"Asteroscopus","Asteroscopus",	180,"Genus", 2,"Noctuidae",3852)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15606,"Asthena","Asthena",	180,"Genus", 2,"Geometridae",3138)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15892,"Atethmia","Atethmia",	180,"Genus", 2,"Noctuidae",4119)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15837,"Athetis","Athetis",	180,"Genus", 2,"Noctuidae",3925)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15166,"Athrips","Athrips",	180,"Genus", 2,"Gelechiidae",1024)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15761,"Atolmis","Atolmis",	180,"Genus", 2,"Erebidae",3640)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8962,"Atractotomus","Atractotomus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7850,"Atrecus","Atrecus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15158,"Atremaea","Atremaea",	180,"Genus", 2,"Gelechiidae",971)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15193,"Augasma","Augasma",	180,"Genus", 2,"Coleophoridae",1162)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14778,"Aulacidae","Aulacidae",	140,"Family", 2,"Evanioidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15797,"Autographa","Autographa",	180,"Genus", 2,"Noctuidae",3762)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14943,"Autostichidae","Autostichidae",	140,"Family", 2,"Lepidoptera",700)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15934,"Axylia","Axylia",	180,"Genus", 2,"Noctuidae",4307)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8512,"Baccha","Baccha",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15024,"Bacotia","Bacotia",	180,"Genus", 2,"Psychidae",251)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15302,"Bactra","Bactra",	180,"Genus", 2,"Tortricidae",1863)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6295,"Badister","Badister",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8037,"Baeocrara","Baeocrara",	180,"Genus", 2,"Ptiliidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14806,"Banchinae","Banchinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15023,"Bankesia","Bankesia",	180,"Genus", 2,"Psychidae",247)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14848,"Barynotus","Barynotus",	180,"Genus", 2,"Brachyderini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15110,"Batia","Batia",	180,"Genus", 2,"Oecophoridae",737)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15192,"Batrachedra","Batrachedra",	180,"Genus", 2,"Batrachedridae",1158)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14952,"Batrachedridae","Batrachedridae",	140,"Family", 2,"Lepidoptera",1157)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15095,"Bedellia","Bedellia",	180,"Genus", 2,"Bedelliidae",674)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14940,"Bedelliidae","Bedelliidae",	140,"Family", 2,"Lepidoptera",673)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14838,"Belytinae","Belytinae",	150,"Subfamily", 2,"Diapriidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15340,"Bembecia","Bembecia",	180,"Genus", 2,"Sesiidae",2172)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6214,"Bembidion","Bembidion",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(233966,"Bembix","Bembix",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18612,"Bena","Bena",	180,"Genus", 2,"Nolidae",4396)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6740,"Berosus","Berosus",	180,"Genus", 2,"Hydrophilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14787,"Bethylidae","Bethylidae",	140,"Family", 2,"Chrysidoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7091,"Bidessus","Bidessus",	180,"Genus", 2,"Dytiscidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15101,"Bisigna","Bisigna",	180,"Genus", 2,"Oecophoridae",708)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15666,"Biston","Biston",	180,"Genus", 2,"Geometridae",3371)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7292,"Blaps","Blaps",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14716,"Blasticotomidae","Blasticotomidae",	140,"Family", 2,"Symphyta",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14957,"Blastobasidae","Blastobasidae",	140,"Family", 2,"Lepidoptera",1401)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15203,"Blastobasis","Blastobasis",	180,"Genus", 2,"Blastobasidae",1402)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15198,"Blastodacna","Blastodacna",	180,"Genus", 2,"Parametriotidae",1370)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14727,"Blennocampinae","Blennocampinae",	150,"Subfamily", 2,"Tenthredinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8944,"Blepharidopterus","Blepharidopterus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15903,"Blepharita","Blepharita",	180,"Genus", 2,"Noctuidae",4148)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8803,"Blera","Blera",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6168,"Blethisa","Blethisa",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8080,"Blitophaga","Blitophaga",	180,"Genus", 2,"Silphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15002,"Bohemannia","Bohemannia",	180,"Genus", 2,"Nepticulidae",118)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7306,"Bolitophagus","Bolitophagus",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15380,"Boloria","Boloria",	180,"Genus", 2,"Nymphalidae",2307)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8271,"Bombus","Bombus",	180,"Genus", 2,"Apidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14982,"Bombycidae","Bombycidae",	140,"Family", 2,"Lepidoptera",2905)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15546,"Bombyx","Bombyx",	180,"Genus", 2,"Bombycidae",2906)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15108,"Borkhausenia","Borkhausenia",	180,"Genus", 2,"Oecophoridae",730)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229728,"Bostrichidae","Bostrichidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7610,"Bostrychidae","Bostrychidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229715,"Bothynoderes","Bothynoderes",	180,"Genus", 2,"Lixini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15637,"Boudinotiana","Boudinotiana",	180,"Genus", 2,"Geometridae",3285)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15817,"Brachionycha","Brachionycha",	180,"Genus", 2,"Noctuidae",3854)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15147,"Brachmia","Brachmia",	180,"Genus", 2,"Gelechiidae",923)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9046,"Brachyarthrum","Brachyarthrum",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14731,"Brachycerinae","Brachycerinae",	150,"Subfamily", 2,"Curculionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14732,"Brachyderini","Brachyderini",	160,"Tribe", 2,"Brachycerinae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15893,"Brachylomia","Brachylomia",	180,"Genus", 2,"Noctuidae",4121)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6655,"Brachynus","Brachynus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8725,"Brachyopa","Brachyopa",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8820,"Brachypalpoides","Brachypalpoides",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8826,"Brachypalpus","Brachypalpus",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14881,"Brachysomus","Brachysomus",	180,"Genus", 2,"Brachyderini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14750,"Braconidae","Braconidae",	140,"Family", 2,"Ichneumonidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6602,"Bradycellus","Bradycellus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14980,"Brahmaeidae","Brahmaeidae",	140,"Family", 2,"Lepidoptera",2898)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15382,"Brenthis","Brenthis",	180,"Genus", 2,"Nymphalidae",2316)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14730,"Brentidae","Brentidae",	140,"Family", 2,"Curculionoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6208,"Broscus","Broscus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6119,"Brychius","Brychius",	180,"Genus", 2,"Haliplidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8966,"Bryocoris","Bryocoris",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15828,"Bryophila","Bryophila",	180,"Genus", 2,"Noctuidae",3889)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15156,"Bryotropha","Bryotropha",	180,"Genus", 2,"Gelechiidae",956)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14931,"Bucculatricidae","Bucculatricidae",	140,"Family", 2,"Lepidoptera",388)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15057,"Bucculatrix","Bucculatrix",	180,"Genus", 2,"Bucculatricidae",389)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15220,"Buckleria","Buckleria",	180,"Genus", 2,"Pterophoridae",1479)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15682,"Bupalus","Bupalus",	180,"Genus", 2,"Geometridae",3416)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229735,"Buprestidae","Buprestidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15210,"Buszkoiana","Buszkoiana",	180,"Genus", 2,"Pterophoridae",1446)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229726,"Byrrhidae","Byrrhidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15683,"Cabera","Cabera",	180,"Genus", 2,"Geometridae",3418)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6816,"Caccobius","Caccobius",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15256,"Cacoecimorpha","Cacoecimorpha",	180,"Genus", 2,"Tortricidae",1602)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15405,"Cacyreus","Cacyreus",	180,"Genus", 2,"Lycaenidae",2400)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15459,"Cadra","Cadra",	180,"Genus", 2,"Pyralidae",2580)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7606,"Caenocara","Caenocara",	180,"Genus", 2,"Anobiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7671,"Cafius","Cafius",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15847,"Calamia","Calamia",	180,"Genus", 2,"Noctuidae",3948)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15505,"Calamotropha","Calamotropha",	180,"Genus", 2,"Crambidae",2757)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18972,"Calamotropha","Calamotropha",	180,"Genus", 2,"Pyralidae",2757)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6310,"Calathus","Calathus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7006,"Callidium","Callidium",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15747,"Callimorpha","Callimorpha",	180,"Genus", 2,"Erebidae",3609)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19013,"Callistege","Callistege",	180,"Genus", 2,"Erebidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15068,"Callisto","Callisto",	180,"Genus", 2,"Gracillariidae",443)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15732,"Calliteara","Calliteara",	180,"Genus", 2,"Erebidae",3567)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15401,"Callophrys","Callophrys",	180,"Genus", 2,"Lycaenidae",2391)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15826,"Callopistria","Callopistria",	180,"Genus", 2,"Noctuidae",3883)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8841,"Calocoris","Calocoris",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15814,"Calophasia","Calophasia",	180,"Genus", 2,"Noctuidae",3842)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15059,"Caloptilia","Caloptilia",	180,"Genus", 2,"Gracillariidae",410)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6148,"Calosoma","Calosoma",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18931,"Calospilos","Calospilos",	180,"Genus", 2,"Geometridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15063,"Calybites","Calybites",	180,"Genus", 2,"Gracillariidae",432)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7285,"Calyptomerus","Calyptomerus",	180,"Genus", 2,"Clambidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15072,"Cameraria","Cameraria",	180,"Genus", 2,"Gracillariidae",521)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15687,"Campaea","Campaea",	180,"Genus", 2,"Geometridae",3427)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14807,"Campopleginae","Campopleginae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15578,"Camptogramma","Camptogramma",	180,"Genus", 2,"Geometridae",3055)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8937,"Camptozygum","Camptozygum",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9119,"Campylomma","Campylomma",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8918,"Campyloneura","Campyloneura",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229711,"Campylosteira","Campylosteira",	180,"Genus", 2,"Tingidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15030,"Canephora","Canephora",	180,"Genus", 2,"Psychidae",269)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229722,"Cantharidae","Cantharidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15421,"Caphys","Caphys",	180,"Genus", 2,"Pyralidae",2446)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15219,"Capperia","Capperia",	180,"Genus", 2,"Pterophoridae",1477)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8959,"Capsodes","Capsodes",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8876,"Capsus","Capsus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15246,"Capua","Capua",	180,"Genus", 2,"Tortricidae",1568)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6147,"Carabidae","Carabidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6152,"Carabus","Carabus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15832,"Caradrina","Caradrina",	180,"Genus", 2,"Noctuidae",3905)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19135,"Caradrina (Paradrina)","Caradrina (Paradrina)",	180,"Genus", 2,"Noctuidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19127,"Caradrina (Platyperigea)","Caradrina (Platyperigea)",	180,"Genus", 2,"Noctuidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15120,"Carcina","Carcina",	180,"Genus", 2,"Peleopodidae",770)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7390,"Caridina","Caridina",	180,"Genus", 2,"Serropalpidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15184,"Carpatolechia","Carpatolechia",	180,"Genus", 2,"Gelechiidae",1134)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15627,"Carsia","Carsia",	180,"Genus", 2,"Geometridae",3261)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14912,"Carterocephalus","Carterocephalus",	180,"Genus", 2,"Hesperiidae",2229)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15181,"Caryocolum","Caryocolum",	180,"Genus", 2,"Gelechiidae",1103)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14968,"Castniidae","Castniidae",	140,"Family", 2,"Lepidoptera",2146)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15515,"Cataclysta","Cataclysta",	180,"Genus", 2,"Crambidae",2814)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15576,"Catarhoe","Catarhoe",	180,"Genus", 2,"Geometridae",3050)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15784,"Catocala","Catocala",	180,"Genus", 2,"Erebidae",3715)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8102,"Catops","Catops",	180,"Genus", 2,"Silphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15365,"Catopsilia","Catopsilia",	180,"Genus", 2,"Pieridae",2267)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15509,"Catoptria","Catoptria",	180,"Genus", 2,"Crambidae",2785)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15010,"Cauchas","Cauchas",	180,"Genus", 2,"Adelidae",179)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15080,"Cedestis","Cedestis",	180,"Genus", 2,"Yponomeutidae",565)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15850,"Celaena","Celaena",	180,"Genus", 2,"Noctuidae",3955)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15407,"Celastrina","Celastrina",	180,"Genus", 2,"Lycaenidae",2404)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15291,"Celypha","Celypha",	180,"Genus", 2,"Tortricidae",1800)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7256,"Cephennium","Cephennium",	180,"Genus", 2,"Scydmaenidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14717,"Cephidae","Cephidae",	140,"Family", 2,"Symphyta",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15646,"Cepphis","Cepphis",	180,"Genus", 2,"Geometridae",3317)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6938,"Cerambycidae","Cerambycidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6961,"Cerambyx","Cerambyx",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15916,"Ceramica","Ceramica",	180,"Genus", 2,"Noctuidae",4208)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14759,"Ceraphronidae","Ceraphronidae",	140,"Family", 2,"Ceraphronoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14758,"Ceraphronoidea","Ceraphronoidea",	120,"Infraorder", 2,"Apocrita",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15909,"Cerapteryx","Cerapteryx",	180,"Genus", 2,"Noctuidae",4177)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15937,"Cerastis","Cerastis",	180,"Genus", 2,"Noctuidae",4318)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(233968,"Cerceris","Cerceris",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6677,"Cercyon","Cercyon",	180,"Genus", 2,"Hydrophilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14833,"Ceropalinae","Ceropalinae",	150,"Subfamily", 2,"Pompilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15707,"Cerura","Cerura",	180,"Genus", 2,"Notodontidae",3478)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8182,"Cerylon","Cerylon",	180,"Genus", 2,"Colydiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6922,"Cetonia","Cetonia",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14859,"Ceutorhynchini","Ceutorhynchini",	160,"Tribe", 2,"Curculioninae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14871,"Ceutorhynchus","Ceutorhynchus",	180,"Genus", 2,"Ceutorhynchini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6733,"Chaetarthria","Chaetarthria",	180,"Genus", 2,"Hydrophilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14763,"Chalcididae","Chalcididae",	140,"Family", 2,"Chalcidoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14761,"Chalcidoidea","Chalcidoidea",	120,"Infraorder", 2,"Apocrita",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8822,"Chalcosyrphus","Chalcosyrphus",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8701,"Chamaesyrphus","Chamaesyrphus",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18608,"Charagmus","Charagmus",	180,"Genus", 2,"Sitonini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8878,"Charagochilus","Charagochilus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15835,"Charanyca","Charanyca",	180,"Genus", 2,"Noctuidae",3920)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15689,"Charissa","Charissa",	180,"Genus", 2,"Geometridae",3432)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8652,"Cheilosia","Cheilosia",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8674,"Cheliosia","Cheliosia",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8375,"Chelostoma","Chelostoma",	180,"Genus", 2,"Megachilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15941,"Chersotis","Chersotis",	180,"Genus", 2,"Noctuidae",4328)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15629,"Chesias","Chesias",	180,"Genus", 2,"Geometridae",3266)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15645,"Chiasmia","Chiasmia",	180,"Genus", 2,"Geometridae",3315)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15502,"Chilo","Chilo",	180,"Genus", 2,"Crambidae",2750)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18883,"Chilo","Chilo",	180,"Genus", 2,"Pyralidae",2750)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8229,"Chilocorus","Chilocorus",	180,"Genus", 2,"Coccinellidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15834,"Chilodes","Chilodes",	180,"Genus", 2,"Noctuidae",3918)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14945,"Chimabachidae","Chimabachidae",	140,"Family", 2,"Lepidoptera",750)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15173,"Chionodes","Chionodes",	180,"Genus", 2,"Gelechiidae",1048)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6286,"Chlaenius","Chlaenius",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8968,"Chlamydatus","Chlamydatus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15844,"Chloantha","Chloantha",	180,"Genus", 2,"Noctuidae",3942)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15704,"Chlorissa","Chlorissa",	180,"Genus", 2,"Geometridae",3467)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18983,"Chloroclysis","Chloroclysis",	180,"Genus", 2,"Geometridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15600,"Chloroclysta","Chloroclysta",	180,"Genus", 2,"Geometridae",3118)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15624,"Chloroclystis","Chloroclystis",	180,"Genus", 2,"Geometridae",3192)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8126,"Choleva","Choleva",	180,"Genus", 2,"Silphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14702,"Chordata","Chordata",	30,"Phylum", 2,"Animalia",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14965,"Choreutidae","Choreutidae",	140,"Family", 2,"Lepidoptera",1536)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15237,"Choreutis","Choreutis",	180,"Genus", 2,"Choreutidae",1545)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15249,"Choristoneura","Choristoneura",	180,"Genus", 2,"Tortricidae",1581)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19040,"Chortodes","Chortodes",	180,"Genus", 2,"Noctuidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7526,"Chrysanthia","Chrysanthia",	180,"Genus", 2,"Oedemeridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14786,"Chrysididae","Chrysididae",	140,"Family", 2,"Chrysidoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14785,"Chrysidoidea","Chrysidoidea",	120,"Infraorder", 2,"Apocrita",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15201,"Chrysoclista","Chrysoclista",	180,"Genus", 2,"Parametriotidae",1377)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15792,"Chrysodeixis","Chrysodeixis",	180,"Genus", 2,"Noctuidae",3748)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15154,"Chrysoesthia","Chrysoesthia",	180,"Genus", 2,"Gelechiidae",945)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8735,"Chrysogaster","Chrysogaster",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6762,"Chrysomelidae","Chrysomelidae",	140,"Family", 2,"Cucujiformia",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15506,"Chrysoteuchia","Chrysoteuchia",	180,"Genus", 2,"Crambidae",2760)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18792,"Chrysoteuchia","Chrysoteuchia",	180,"Genus", 2,"Pyralidae",2760)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8541,"Chrysotoxum","Chrysotoxum",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6142,"Cicindela","Cicindela",	180,"Genus", 2,"Cicindelidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6141,"Cicindelidae","Cicindelidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8172,"Cicones","Cicones",	180,"Genus", 2,"Colydiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15593,"Cidaria","Cidaria",	180,"Genus", 2,"Geometridae",3100)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15524,"Cilix","Cilix",	180,"Genus", 2,"Drepanidae",2844)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14718,"Cimbicidae","Cimbicidae",	140,"Family", 2,"Symphyta",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15881,"Cirrhia","Cirrhia",	180,"Genus", 2,"Noctuidae",4063)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7626,"Cis","Cis",	180,"Genus", 2,"Cisidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7623,"Cisidae","Cisidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7284,"Clambidae","Clambidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7287,"Clambus","Clambus",	180,"Genus", 2,"Clambidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15322,"Clavigesta","Clavigesta",	180,"Genus", 2,"Tortricidae",2026)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229713,"Cleonis","Cleonis",	180,"Genus", 2,"Lixini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18646,"Cleopomiarus","Cleopomiarus",	180,"Genus", 2,"Mecinini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15671,"Cleora","Cleora",	180,"Genus", 2,"Geometridae",3387)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15690,"Cleorodes","Cleorodes",	180,"Genus", 2,"Geometridae",3434)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15259,"Clepsis","Clepsis",	180,"Genus", 2,"Tortricidae",1610)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6205,"Clivina","Clivina",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15722,"Clostera","Clostera",	180,"Genus", 2,"Notodontidae",3529)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8880,"Closterotomus","Closterotomus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7031,"Clytus","Clytus",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15214,"Cnaemidophorus","Cnaemidophorus",	180,"Genus", 2,"Pterophoridae",1462)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15268,"Cnephasia","Cnephasia",	180,"Genus", 2,"Tortricidae",1643)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8206,"Coccidula","Coccidula",	180,"Genus", 2,"Coccinellidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8241,"Coccinella","Coccinella",	180,"Genus", 2,"Coccinellidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8201,"Coccinellidae","Coccinellidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15282,"Cochylidia","Cochylidia",	180,"Genus", 2,"Tortricidae",1746)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15276,"Cochylimorpha","Cochylimorpha",	180,"Genus", 2,"Tortricidae",1703)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15283,"Cochylis","Cochylis",	180,"Genus", 2,"Tortricidae",1752)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7096,"Coelambus","Coelambus",	180,"Genus", 2,"Dytiscidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18595,"Coeliodes","Coeliodes",	180,"Genus", 2,"Ceutorhynchini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8348,"Coelioxys","Coelioxys",	180,"Genus", 2,"Megachilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15866,"Coenobia","Coenobia",	180,"Genus", 2,"Noctuidae",3996)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15372,"Coenonympha","Coenonympha",	180,"Genus", 2,"Nymphalidae",2287)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15952,"Coenophila","Coenophila",	180,"Genus", 2,"Noctuidae",4375)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7448,"Colenis","Colenis",	180,"Genus", 2,"Liodidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15194,"Coleophora","Coleophora",	180,"Genus", 2,"Coleophoridae",1164)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14953,"Coleophoridae","Coleophoridae",	140,"Family", 2,"Lepidoptera",1161)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6115,"Coleoptera","Coleoptera",	100,"Order", 2,"Insecta",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15364,"Colias","Colias",	180,"Genus", 2,"Pieridae",2261)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14698,"Collembola","Collembola",	100,"Order", 2,"Entognatha",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8367,"Colletes","Colletes",	180,"Genus", 2,"Colletidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8366,"Colletidae","Colletidae",	140,"Family", 2,"Apoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14808,"Collyrinae","Collyrinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15779,"Colobochyla","Colobochyla",	180,"Genus", 2,"Erebidae",3700)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19150,"Colobochyla","Colobochyla",	180,"Genus", 2,"Noctuidae",3700)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15805,"Colocasia","Colocasia",	180,"Genus", 2,"Noctuidae",3792)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8114,"Colon","Colon",	180,"Genus", 2,"Silphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15602,"Colostygia","Colostygia",	180,"Genus", 2,"Geometridae",3125)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15661,"Colotois","Colotois",	180,"Genus", 2,"Geometridae",3358)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8162,"Colydiidae","Colydiidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8176,"Colydium","Colydium",	180,"Genus", 2,"Colydiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7195,"Colymbetes","Colymbetes",	180,"Genus", 2,"Dytiscidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15698,"Comibaena","Comibaena",	180,"Genus", 2,"Geometridae",3452)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9066,"Compsidolon","Compsidolon",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15824,"Condica","Condica",	180,"Genus", 2,"Noctuidae",3876)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229676,"Coniocleonus","Coniocleonus",	180,"Genus", 2,"Lixini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15921,"Conisania","Conisania",	180,"Genus", 2,"Noctuidae",4224)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15884,"Conistra","Conistra",	180,"Genus", 2,"Noctuidae",4081)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19026,"Conobathra","Conobathra",	180,"Genus", 2,"Pyralidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7400,"Conopalpus","Conopalpus",	180,"Genus", 2,"Serropalpidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9028,"Conostethus","Conostethus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7149,"Copelatus","Copelatus",	180,"Genus", 2,"Dytiscidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6814,"Copris","Copris",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15017,"Coptotriche","Coptotriche",	180,"Genus", 2,"Tischeriidae",223)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15911,"Coranarta","Coranarta",	180,"Genus", 2,"Noctuidae",4184)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15418,"Corcyra","Corcyra",	180,"Genus", 2,"Pyralidae",2439)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229731,"Corylophidae","Corylophidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7243,"Corylophus","Corylophus",	180,"Genus", 2,"Orthoperidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15751,"Coscinia","Coscinia",	180,"Genus", 2,"Erebidae",3617)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15890,"Cosmia","Cosmia",	180,"Genus", 2,"Noctuidae",4112)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14950,"Cosmopterigidae","Cosmopterigidae",	140,"Family", 2,"Lepidoptera",856)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15134,"Cosmopterix","Cosmopterix",	180,"Genus", 2,"Cosmopterigidae",865)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15595,"Cosmorhoe","Cosmorhoe",	180,"Genus", 2,"Geometridae",3104)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14967,"Cossidae","Cossidae",	140,"Family", 2,"Lepidoptera",2137)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15331,"Cossus","Cossus",	180,"Genus", 2,"Cossidae",2139)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15577,"Costaconvexa","Costaconvexa",	180,"Genus", 2,"Geometridae",3053)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7418,"Costae","Costae",	180,"Genus", 2,"Anaspidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(233974,"Crabro","Crabro",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14752,"Crabronidae","Crabronidae",	140,"Family", 2,"Apoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14977,"Crambidae","Crambidae",	140,"Family", 2,"Lepidoptera",2599)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15507,"Crambus","Crambus",	180,"Genus", 2,"Crambidae",2762)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18816,"Crambus","Crambus",	180,"Genus", 2,"Pyralidae",2762)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15810,"Craniophora","Craniophora",	180,"Genus", 2,"Noctuidae",3816)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15109,"Crassa","Crassa",	180,"Genus", 2,"Oecophoridae",734)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14809,"Cremastinae","Cremastinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7769,"Creophilus","Creophilus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6949,"Criocephalus","Criocephalus",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9030,"Criocoris","Criocoris",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8799,"Criorhina","Criorhina",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15659,"Crocallis","Crocallis",	180,"Genus", 2,"Geometridae",3354)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15313,"Crocidosema","Crocidosema",	180,"Genus", 2,"Tortricidae",1958)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15217,"Crombrugghia","Crombrugghia",	180,"Genus", 2,"Pterophoridae",1472)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(233978,"Crossocerus","Crossocerus",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15827,"Cryphia","Cryphia",	180,"Genus", 2,"Noctuidae",3887)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15848,"Crypsedra","Crypsedra",	180,"Genus", 2,"Noctuidae",3951)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7304,"Crypticus","Crypticus",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14801,"Cryptinae","Cryptinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15422,"Cryptoblabes","Cryptoblabes",	180,"Genus", 2,"Pyralidae",2449)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14869,"Cryptocephalus","Cryptocephalus",	180,"Genus", 2,"Chrysomelidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229725,"Cryptophagidae","Cryptophagidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6701,"Cryptopleurum","Cryptopleurum",	180,"Genus", 2,"Hydrophilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7367,"Cteniopus","Cteniopus",	180,"Genus", 2,"Alleculidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14810,"Ctenopelmatinae","Ctenopelmatinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15791,"Ctenoplusia","Ctenoplusia",	180,"Genus", 2,"Noctuidae",3746)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14703,"Cucujiformia","Cucujiformia",	120,"Infraorder", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15812,"Cucullia","Cucullia",	180,"Genus", 2,"Noctuidae",3824)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15406,"Cupido","Cupido",	180,"Genus", 2,"Lycaenidae",2402)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14729,"Curculionidae","Curculionidae",	140,"Family", 2,"Curculionoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14735,"Curculioninae","Curculioninae",	150,"Subfamily", 2,"Curculionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229671,"Curculionoidea","Curculionoidea",	130,"Superfamily", 2,"Cucujiformia",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15414,"Cyaniris","Cyaniris",	180,"Genus", 2,"Lycaenidae",2425)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7220,"Cybister","Cybister",	180,"Genus", 2,"Dytiscidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15758,"Cybosia","Cybosia",	180,"Genus", 2,"Erebidae",3633)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6166,"Cychrus","Cychrus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15569,"Cyclophora","Cyclophora",	180,"Genus", 2,"Geometridae",3009)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18860,"Cydalima","Cydalima",	180,"Genus", 2,"Crambidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15325,"Cydia","Cydia",	180,"Genus", 2,"Tortricidae",2056)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8920,"Cyllecoris","Cyllecoris",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14811,"Cyllocerinae","Cyllocerinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15530,"Cymatophorina","Cymatophorina",	180,"Genus", 2,"Drepanidae",2859)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6731,"Cymbiodyta","Cymbiodyta",	180,"Genus", 2,"Hydrophilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6648,"Cymindis","Cymindis",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15294,"Cymolomia","Cymolomia",	180,"Genus", 2,"Tortricidae",1827)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15494,"Cynaeda","Cynaeda",	180,"Genus", 2,"Crambidae",2702)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8204,"Cynegetis","Cynegetis",	180,"Genus", 2,"Coccinellidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14782,"Cynipidae","Cynipidae",	140,"Family", 2,"Cynipoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14781,"Cynipoidea","Cynipoidea",	120,"Infraorder", 2,"Apocrita",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229680,"Cyphocleonus","Cyphocleonus",	180,"Genus", 2,"Lixini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8970,"Cyrtorhinus","Cyrtorhinus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7445,"Cyrtusa","Cyrtusa",	180,"Genus", 2,"Liodidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15153,"Dactylotula","Dactylotula",	180,"Genus", 2,"Gelechiidae",942)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15020,"Dahlica","Dahlica",	180,"Genus", 2,"Psychidae",236)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15367,"Danaus","Danaus",	180,"Genus", 2,"Nymphalidae",2273)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15559,"Daphnis","Daphnis",	180,"Genus", 2,"Sphingidae",2946)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8311,"Dasypoda","Dasypoda",	180,"Genus", 2,"Melittidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15901,"Dasypolia","Dasypolia",	180,"Genus", 2,"Noctuidae",4141)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15053,"Dasyses","Dasyses",	180,"Genus", 2,"Tineidae",375)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15116,"Dasystoma","Dasystoma",	180,"Genus", 2,"Chimabachidae",756)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8570,"Dasysyrphus","Dasysyrphus",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15562,"Deilephila","Deilephila",	180,"Genus", 2,"Sphingidae",2956)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15672,"Deileptenia","Deileptenia",	180,"Genus", 2,"Geometridae",3389)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7974,"Deliphrum","Deliphrum",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15428,"Delplanqueia","Delplanqueia",	180,"Genus", 2,"Pyralidae",2467)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15800,"Deltote","Deltote",	180,"Genus", 2,"Noctuidae",3777)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6644,"Demetrias","Demetrias",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15539,"Dendrolimus","Dendrolimus",	180,"Genus", 2,"Lasiocampidae",2886)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15103,"Denisia","Denisia",	180,"Genus", 2,"Oecophoridae",713)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15868,"Denticucullus","Denticucullus",	180,"Genus", 2,"Noctuidae",4000)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15126,"Depressaria","Depressaria",	180,"Genus", 2,"Depressariidae",818)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14948,"Depressariidae","Depressariidae",	140,"Family", 2,"Lepidoptera",772)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8866,"Deraeocoris","Deraeocoris",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229694,"Derephysia","Derephysia",	180,"Genus", 2,"Tingidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229724,"Dermestidae","Dermestidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7140,"Deronectes","Deronectes",	180,"Genus", 2,"Dytiscidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6595,"Diachromus","Diachromus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15794,"Diachrysia","Diachrysia",	180,"Genus", 2,"Noctuidae",3753)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15741,"Diacrisia","Diacrisia",	180,"Genus", 2,"Erebidae",3597)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14812,"Diacritinae","Diacritinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15066,"Dialectica","Dialectica",	180,"Genus", 2,"Gracillariidae",439)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7312,"Diaperis","Diaperis",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15488,"Diaphania","Diaphania",	180,"Genus", 2,"Crambidae",2689)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15739,"Diaphora","Diaphora",	180,"Genus", 2,"Erebidae",3592)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14772,"Diapriidae","Diapriidae",	140,"Family", 2,"Proctrupoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14837,"Diapriinae","Diapriinae",	150,"Subfamily", 2,"Diapriidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15936,"Diarsia","Diarsia",	180,"Genus", 2,"Noctuidae",4311)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15482,"Diasemia","Diasemia",	180,"Genus", 2,"Crambidae",2674)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15483,"Diasemiopsis","Diasemiopsis",	180,"Genus", 2,"Crambidae",2677)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6882,"Diastictus","Diastictus",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18844,"Dicallomera","Dicallomera",	180,"Genus", 2,"Erebidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15931,"Dichagyris","Dichagyris",	180,"Genus", 2,"Noctuidae",4280)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15258,"Dichelia","Dichelia",	180,"Genus", 2,"Tortricidae",1608)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6597,"Dichirotrichus","Dichirotrichus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15145,"Dichomeris","Dichomeris",	180,"Genus", 2,"Gelechiidae",911)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18997,"Dichonia","Dichonia",	180,"Genus", 2,"Noctuidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8972,"Dichrooscytus","Dichrooscytus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15324,"Dichrorampha","Dichrorampha",	180,"Genus", 2,"Tortricidae",2035)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229689,"Dictyla","Dictyla",	180,"Genus", 2,"Tingidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229696,"Dictyonota","Dictyonota",	180,"Genus", 2,"Tingidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15891,"Dicycla","Dicycla",	180,"Genus", 2,"Noctuidae",4117)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8849,"Dicyphus","Dicyphus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8605,"Didea","Didea",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15087,"Digitivalva","Digitivalva",	180,"Genus", 2,"Glyphipterigidae",620)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15806,"Diloba","Diloba",	180,"Genus", 2,"Noctuidae",3795)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7613,"Dinoderus","Dinoderus",	180,"Genus", 2,"Bostrychidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7750,"Dinothenarus","Dinothenarus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(233998,"Diodontus","Diodontus",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15438,"Dioryctria","Dioryctria",	180,"Genus", 2,"Pyralidae",2495)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14813,"Diplazontinae","Diplazontinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18846,"Dipleurina","Dipleurina",	180,"Genus", 2,"Pyralidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15018,"Diplodoma","Diplodoma",	180,"Genus", 2,"Psychidae",230)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15481,"Diplopseustis","Diplopseustis",	180,"Genus", 2,"Crambidae",2672)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14719,"Diprionidae","Diprionidae",	140,"Family", 2,"Symphyta",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8503,"Diptera","Diptera",	100,"Order", 2,"Insecta",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18960,"Discestra","Discestra",	180,"Genus", 2,"Noctuidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8174,"Ditoma","Ditoma",	180,"Genus", 2,"Colydiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15241,"Ditula","Ditula",	180,"Genus", 2,"Tortricidae",1558)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15115,"Diurnea","Diurnea",	180,"Genus", 2,"Chimabachidae",751)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15394,"Doleschallia","Doleschallia",	180,"Genus", 2,"Nymphalidae",2361)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15489,"Dolicharthria","Dolicharthria",	180,"Genus", 2,"Crambidae",2691)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(234002,"Dolichurus","Dolichurus",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6318,"Dolichus","Dolichus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15519,"Donacaula","Donacaula",	180,"Genus", 2,"Crambidae",2828)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6766,"Donacia","Donacia",	180,"Genus", 2,"Chrysomelidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7602,"Dorcatoma","Dorcatoma",	180,"Genus", 2,"Anobiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6930,"Dorcus","Dorcus",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14942,"Douglasiidae","Douglasiidae",	140,"Family", 2,"Lepidoptera",693)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15522,"Drepana","Drepana",	180,"Genus", 2,"Drepanidae",2839)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14978,"Drepanidae","Drepanidae",	140,"Family", 2,"Lepidoptera",2832)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8112,"Dreposcia","Dreposcia",	180,"Genus", 2,"Silphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6630,"Dromius","Dromius",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15038,"Dryadaula","Dryadaula",	180,"Genus", 2,"Tineidae",297)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14788,"Dryinidae","Dryinidae",	140,"Family", 2,"Chrysidoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15711,"Drymonia","Drymonia",	180,"Genus", 2,"Notodontidae",3491)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15897,"Dryobotodes","Dryobotodes",	180,"Genus", 2,"Noctuidae",4130)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(234004,"Dryodella","Dryodella",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8924,"Dryophilocoris","Dryophilocoris",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7566,"Dryophilus","Dryophilus",	180,"Genus", 2,"Anobiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8336,"Dufourea","Dufourea",	180,"Genus", 2,"Halictidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15485,"Duponchelia","Duponchelia",	180,"Genus", 2,"Crambidae",2682)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19156,"Dycacla","Dycacla",	180,"Genus", 2,"Noctuidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15838,"Dypterygia","Dypterygia",	180,"Genus", 2,"Noctuidae",3930)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15764,"Dysauxes","Dysauxes",	180,"Genus", 2,"Erebidae",3654)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6193,"Dyschirius","Dyschirius",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15692,"Dyscia","Dyscia",	180,"Genus", 2,"Geometridae",3438)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14992,"Dyseriocrania","Dyseriocrania",	180,"Genus", 2,"Eriocraniidae",13)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15787,"Dysgonia","Dysgonia",	180,"Genus", 2,"Erebidae",3731)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15601,"Dysstroma","Dysstroma",	180,"Genus", 2,"Geometridae",3121)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15200,"Dystebenna","Dystebenna",	180,"Genus", 2,"Parametriotidae",1375)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7085,"Dytiscidae","Dytiscidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7212,"Dytiscus","Dytiscus",	180,"Genus", 2,"Dytiscidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15267,"Eana","Eana",	180,"Genus", 2,"Tortricidae",1639)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18610,"Earias","Earias",	180,"Genus", 2,"Nolidae",4408)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15581,"Earophila","Earophila",	180,"Genus", 2,"Geometridae",3067)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18863,"Ebulea","Ebulea",	180,"Genus", 2,"Crambidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15449,"Eccopisa","Eccopisa",	180,"Genus", 2,"Pyralidae",2540)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15599,"Ecliptopera","Ecliptopera",	180,"Genus", 2,"Geometridae",3115)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15467,"Ecpyrrhorrhoe","Ecpyrrhorrhoe",	180,"Genus", 2,"Crambidae",2604)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(234007,"Ectemnius","Ectemnius",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15003,"Ectoedemia","Ectoedemia",	180,"Genus", 2,"Nepticulidae",121)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15677,"Ectropis","Ectropis",	180,"Genus", 2,"Geometridae",3402)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15085,"Eidophasia","Eidophasia",	180,"Genus", 2,"Plutellidae",613)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15762,"Eilema","Eilema",	180,"Genus", 2,"Erebidae",3642)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15197,"Elachista","Elachista",	180,"Genus", 2,"Elachistidae",1311)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14954,"Elachistidae","Elachistidae",	140,"Family", 2,"Lepidoptera",1303)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15831,"Elaphria","Elaphria",	180,"Genus", 2,"Noctuidae",3903)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6170,"Elaphrus","Elaphrus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14764,"Elasmidae","Elasmidae",	140,"Family", 2,"Chalcidoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229721,"Elateridae","Elateridae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15594,"Electrophaes","Electrophaes",	180,"Genus", 2,"Geometridae",3102)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7310,"Eledona","Eledona",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7308,"Eledonoprius","Eledonoprius",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15424,"Elegia","Elegia",	180,"Genus", 2,"Pyralidae",2454)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15513,"Elophila","Elophila",	180,"Genus", 2,"Crambidae",2806)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15681,"Ematurga","Ematurga",	180,"Genus", 2,"Geometridae",3414)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14789,"Embolemidae","Embolemidae",	140,"Family", 2,"Chrysidoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19103,"Emmelia","Emmelia",	180,"Genus", 2,"Noctuidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15228,"Emmelina","Emmelina",	180,"Genus", 2,"Pterophoridae",1507)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18885,"Emmetia","Emmetia",	180,"Genus", 2,"Tischeriidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7743,"Emus","Emus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15888,"Enargia","Enargia",	180,"Genus", 2,"Noctuidae",4107)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15304,"Enarmonia","Enarmonia",	180,"Genus", 2,"Tortricidae",1872)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14765,"Encyrtidae","Encyrtidae",	140,"Family", 2,"Chalcidoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8186,"Endomychidae","Endomychidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8187,"Endomychus","Endomychus",	180,"Genus", 2,"Endomychidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15301,"Endothenia","Endothenia",	180,"Genus", 2,"Tortricidae",1851)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15465,"Endotricha","Endotricha",	180,"Genus", 2,"Pyralidae",2597)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14981,"Endromidae","Endromidae",	140,"Family", 2,"Lepidoptera",2902)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15545,"Endromis","Endromis",	180,"Genus", 2,"Endromidae",2903)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15106,"Endrosis","Endrosis",	180,"Genus", 2,"Oecophoridae",725)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7644,"Ennearthron","Ennearthron",	180,"Genus", 2,"Cisidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15656,"Ennomos","Ennomos",	180,"Genus", 2,"Geometridae",3340)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6714,"Enochrus","Enochrus",	180,"Genus", 2,"Hydrophilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15586,"Entephria","Entephria",	180,"Genus", 2,"Geometridae",3077)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14999,"Enteucha","Enteucha",	180,"Genus", 2,"Nepticulidae",41)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14696,"Entognatha","Entognatha",	60,"Class", 2,"Arthropoda",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(234017,"Entomognathus","Entomognathus",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15504,"Eodiatraea","Eodiatraea",	180,"Genus", 2,"Crambidae",2755)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8776,"Eoseristalis","Eoseristalis",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15242,"Epagoge","Epagoge",	180,"Genus", 2,"Tortricidae",1560)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15738,"Epatolmis","Epatolmis",	180,"Genus", 2,"Erebidae",3589)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8344,"Epeolus","Epeolus",	180,"Genus", 2,"Apidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15231,"Epermenia","Epermenia",	180,"Genus", 2,"Epermeniidae",1522)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14963,"Epermeniidae","Epermeniidae",	140,"Family", 2,"Lepidoptera",1516)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15458,"Ephestia","Ephestia",	180,"Genus", 2,"Pyralidae",2573)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15317,"Epiblema","Epiblema",	180,"Genus", 2,"Tortricidae",1997)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15027,"Epichnopterix","Epichnopterix",	180,"Genus", 2,"Psychidae",261)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19133,"Epichnopteryx","Epichnopteryx",	180,"Genus", 2,"Psychidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15262,"Epichoristodes","Epichoristodes",	180,"Genus", 2,"Tortricidae",1628)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15944,"Epilecta","Epilecta",	180,"Genus", 2,"Noctuidae",4341)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15311,"Epinotia","Epinotia",	180,"Genus", 2,"Tortricidae",1914)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15652,"Epione","Epione",	180,"Genus", 2,"Geometridae",3330)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15939,"Epipsilia","Epipsilia",	180,"Genus", 2,"Noctuidae",4324)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15579,"Epirrhoe","Epirrhoe",	180,"Genus", 2,"Geometridae",3057)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15605,"Epirrita","Epirrita",	180,"Genus", 2,"Geometridae",3133)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8551,"Epistrophe","Epistrophe",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8556,"Epistrophella","Epistrophella",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8616,"Episyrphus","Episyrphus",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19114,"Eppirrita","Eppirrita",	180,"Genus", 2,"Geometridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15668,"Erannis","Erannis",	180,"Genus", 2,"Geometridae",3378)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15104,"Eratophyes","Eratophyes",	180,"Genus", 2,"Oecophoridae",721)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15373,"Erebia","Erebia",	180,"Genus", 2,"Nymphalidae",2291)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14988,"Erebidae","Erebidae",	140,"Family", 2,"Lepidoptera",3538)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15852,"Eremobia","Eremobia",	180,"Genus", 2,"Noctuidae",3959)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19203,"Eremobina","Eremobina",	180,"Genus", 2,"Noctuidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7669,"Erichsonius","Erichsonius",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14994,"Eriocrania","Eriocrania",	180,"Genus", 2,"Eriocraniidae",17)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14919,"Eriocraniidae","Eriocraniidae",	140,"Family", 2,"Lepidoptera",12)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15536,"Eriogaster","Eriogaster",	180,"Genus", 2,"Lasiocampidae",2878)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15306,"Eriopsela","Eriopsela",	180,"Genus", 2,"Tortricidae",1897)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15928,"Eriopygodes","Eriopygodes",	180,"Genus", 2,"Noctuidae",4271)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8609,"Eriozona","Eriozona",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8795,"Eristalinus","Eristalinus",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8781,"Eristalis","Eristalis",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7571,"Ernobius","Ernobius",	180,"Genus", 2,"Anobiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15352,"Erynnis","Erynnis",	180,"Genus", 2,"Hesperiidae",2220)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15131,"Ethmia","Ethmia",	180,"Genus", 2,"Ethmiidae",847)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14949,"Ethmiidae","Ethmiidae",	140,"Family", 2,"Lepidoptera",843)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15432,"Etiella","Etiella",	180,"Genus", 2,"Pyralidae",2482)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15782,"Eublemma","Eublemma",	180,"Genus", 2,"Erebidae",3706)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18914,"Eublemma","Eublemma",	180,"Genus", 2,"Noctuidae",3706)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18869,"Eucalybites","Eucalybites",	180,"Genus", 2,"Gracillariidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15825,"Eucarta","Eucarta",	180,"Genus", 2,"Noctuidae",3879)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8313,"Eucera","Eucera",	180,"Genus", 2,"Apidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14814,"Eucerotinae","Eucerotinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15607,"Euchoeca","Euchoeca",	180,"Genus", 2,"Geometridae",3141)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15754,"Euchromia","Euchromia",	180,"Genus", 2,"Erebidae",3624)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15501,"Euchromius","Euchromius",	180,"Genus", 2,"Crambidae",2748)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19086,"Euchromius","Euchromius",	180,"Genus", 2,"Pyralidae",2748)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15785,"Euclidia","Euclidia",	180,"Genus", 2,"Erebidae",3726)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7272,"Euconnus","Euconnus",	180,"Genus", 2,"Scydmaenidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15315,"Eucosma","Eucosma",	180,"Genus", 2,"Tortricidae",1964)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15303,"Eucosmomorpha","Eucosmomorpha",	180,"Genus", 2,"Tortricidae",1870)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15285,"Eudemis","Eudemis",	180,"Genus", 2,"Tortricidae",1767)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15765,"Eudocima","Eudocima",	180,"Genus", 2,"Erebidae",3657)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15499,"Eudonia","Eudonia",	180,"Genus", 2,"Crambidae",2730)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19076,"Eudonia","Eudonia",	180,"Genus", 2,"Pyralidae",2730)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15953,"Eugnorisma","Eugnorisma",	180,"Genus", 2,"Noctuidae",4377)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15951,"Eugraphe","Eugraphe",	180,"Genus", 2,"Noctuidae",4373)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15076,"Euhyponomeutoides","Euhyponomeutoides",	180,"Genus", 2,"Yponomeutidae",549)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15164,"Eulamprotes","Eulamprotes",	180,"Genus", 2,"Gelechiidae",1013)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15273,"Eulia","Eulia",	180,"Genus", 2,"Tortricidae",1695)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15597,"Eulithis","Eulithis",	180,"Genus", 2,"Geometridae",3108)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14766,"Eulophidae","Eulophidae",	140,"Family", 2,"Chalcidoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15412,"Eumedonia","Eumedonia",	180,"Genus", 2,"Lycaenidae",2419)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14834,"Eumeninae","Eumeninae",	150,"Subfamily", 2,"Vespidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8749,"Eumerus","Eumerus",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14798,"Eupelmidae","Eupelmidae",	140,"Family", 2,"Chalcidoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15395,"Euphydryas","Euphydryas",	180,"Genus", 2,"Nymphalidae",2363)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15580,"Euphyia","Euphyia",	180,"Genus", 2,"Geometridae",3063)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15626,"Eupithecia","Eupithecia",	180,"Genus", 2,"Geometridae",3200)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15748,"Euplagia","Euplagia",	180,"Genus", 2,"Erebidae",3611)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15846,"Euplexia","Euplexia",	180,"Genus", 2,"Noctuidae",3946)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15368,"Euploea","Euploea",	180,"Genus", 2,"Nymphalidae",2276)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15280,"Eupoecilia","Eupoecilia",	180,"Genus", 2,"Tortricidae",1727)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15730,"Euproctis","Euproctis",	180,"Genus", 2,"Erebidae",3562)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15887,"Eupsilia","Eupsilia",	180,"Genus", 2,"Noctuidae",4104)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15445,"Eurhodope","Eurhodope",	180,"Genus", 2,"Pyralidae",2530)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8767,"Eurimyia","Eurimyia",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15947,"Eurois","Eurois",	180,"Genus", 2,"Noctuidae",4350)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8858,"Europiella","Europiella",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18854,"Eurrhypara","Eurrhypara",	180,"Genus", 2,"Crambidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15495,"Eurrhypis","Eurrhypis",	180,"Genus", 2,"Crambidae",2704)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7779,"Euryporus","Euryporus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8014,"Euryptilium","Euryptilium",	180,"Genus", 2,"Ptiliidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14799,"Eurytomidae","Eurytomidae",	140,"Family", 2,"Chalcidoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7923,"Eusphalerum","Eusphalerum",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15337,"Eusphecia","Eusphecia",	180,"Genus", 2,"Sesiidae",2159)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15062,"Euspilapteryx","Euspilapteryx",	180,"Genus", 2,"Gracillariidae",429)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15596,"Eustroma","Eustroma",	180,"Genus", 2,"Geometridae",3106)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15723,"Eutelia","Eutelia",	180,"Genus", 2,"Euteliidae",3536)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14987,"Euteliidae","Euteliidae",	140,"Family", 2,"Lepidoptera",3534)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7252,"Euthia","Euthia",	180,"Genus", 2,"Scydmaenidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7250,"Euthiconus","Euthiconus",	180,"Genus", 2,"Scydmaenidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15540,"Euthrix","Euthrix",	180,"Genus", 2,"Lasiocampidae",2888)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15932,"Euxoa","Euxoa",	180,"Genus", 2,"Noctuidae",4283)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15451,"Euzophera","Euzophera",	180,"Genus", 2,"Pyralidae",2544)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14779,"Evaniidae","Evaniidae",	140,"Family", 2,"Evanioidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14777,"Evanioidea","Evanioidea",	120,"Infraorder", 2,"Apocrita",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15496,"Evergestis","Evergestis",	180,"Genus", 2,"Crambidae",2707)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15124,"Exaeretia","Exaeretia",	180,"Genus", 2,"Depressariidae",782)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15265,"Exapate","Exapate",	180,"Genus", 2,"Tortricidae",1634)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7052,"Exocentrus","Exocentrus",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8232,"Exochomus","Exochomus",	180,"Genus", 2,"Coccinellidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15189,"Exoteleia","Exoteleia",	180,"Genus", 2,"Gelechiidae",1151)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18593,"Fabriciana","Fabriciana",	180,"Genus", 2,"Nymphalidae",1539)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15857,"Fabula","Fabula",	180,"Genus", 2,"Noctuidae",3976)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8589,"Fagisyrphus","Fagisyrphus",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15676,"Fagivorina","Fagivorina",	180,"Genus", 2,"Geometridae",3400)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15520,"Falcaria","Falcaria",	180,"Genus", 2,"Drepanidae",2834)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15284,"Falseuncaria","Falseuncaria",	180,"Genus", 2,"Tortricidae",1762)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15400,"Favonius","Favonius",	180,"Genus", 2,"Lycaenidae",2388)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8693,"Ferdinandea","Ferdinandea",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8974,"Fieberocapsus","Fieberocapsus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14783,"Figitidae","Figitidae",	140,"Family", 2,"Cynipoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15172,"Filatima","Filatima",	180,"Genus", 2,"Gelechiidae",1046)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14767,"Formicidae","Formicidae",	140,"Family", 2,"Vespoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15708,"Furcula","Furcula",	180,"Genus", 2,"Notodontidae",3481)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7730,"Gabrius","Gabrius",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7728,"Gabronthus","Gabronthus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15622,"Gagitodes","Gagitodes",	180,"Genus", 2,"Geometridae",3187)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15420,"Galleria","Galleria",	180,"Genus", 2,"Pyralidae",2443)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15598,"Gandaritis","Gandaritis",	180,"Genus", 2,"Geometridae",3113)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14780,"Gasteruptiidae","Gasteruptiidae",	140,"Family", 2,"Evanioidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7581,"Gastraiius","Gastraiius",	180,"Genus", 2,"Anobiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15542,"Gastropacha","Gastropacha",	180,"Genus", 2,"Lasiocampidae",2892)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7833,"Gauropterus","Gauropterus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15218,"Geina","Geina",	180,"Genus", 2,"Pterophoridae",1475)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15174,"Gelechia","Gelechia",	180,"Genus", 2,"Gelechiidae",1058)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14951,"Gelechiidae","Gelechiidae",	140,"Family", 2,"Lepidoptera",877)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6982,"GenusMissing1","GenusMissing1",	180,"Genus", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7035,"GenusMissing2","GenusMissing2",	180,"Genus", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7065,"GenusMissing3","GenusMissing3",	180,"Genus", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15697,"Geometra","Geometra",	180,"Genus", 2,"Geometridae",3450)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14985,"Geometridae","Geometridae",	140,"Family", 2,"Lepidoptera",2964)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6828,"Geotrupes","Geotrupes",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229723,"Geotrupidae","Geotrupidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15310,"Gibberifera","Gibberifera",	180,"Genus", 2,"Tortricidae",1912)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7537,"Gibbium","Gibbium",	180,"Genus", 2,"Ptinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15211,"Gillmeria","Gillmeria",	180,"Genus", 2,"Pterophoridae",1448)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18887,"Gilmeria","Gilmeria",	180,"Genus", 2,"Pterophoridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15408,"Glaucopsyche","Glaucopsyche",	180,"Genus", 2,"Lycaenidae",2406)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15871,"Globia","Globia",	180,"Genus", 2,"Noctuidae",4012)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8976,"Globiceps","Globiceps",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15721,"Gluphisia","Gluphisia",	180,"Genus", 2,"Notodontidae",3527)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14936,"Glyphipterigidae","Glyphipterigidae",	140,"Family", 2,"Lepidoptera",615)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15090,"Glyphipterix","Glyphipterix",	180,"Genus", 2,"Glyphipterigidae",631)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7324,"Gnathocerus","Gnathocerus",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15176,"Gnorimoschema","Gnorimoschema",	180,"Genus", 2,"Gelechiidae",1075)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6919,"Gnorimus","Gnorimus",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15366,"Gonepteryx","Gonepteryx",	180,"Genus", 2,"Pieridae",2269)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7356,"Gonodera","Gonodera",	180,"Genus", 2,"Alleculidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15853,"Gortyna","Gortyna",	180,"Genus", 2,"Noctuidae",3961)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(234019,"Gorytes","Gorytes",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6968,"Gracilia","Gracilia",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15060,"Gracillaria","Gracillaria",	180,"Genus", 2,"Gracillariidae",425)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14932,"Gracillariidae","Gracillariidae",	140,"Family", 2,"Lepidoptera",406)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15788,"Grammodes","Grammodes",	180,"Genus", 2,"Erebidae",3733)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6959,"Grammoptera","Grammoptera",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15948,"Graphiphora","Graphiphora",	180,"Genus", 2,"Noctuidae",4352)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7204,"Graphoderes","Graphoderes",	180,"Genus", 2,"Dytiscidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15327,"Grapholita","Grapholita",	180,"Genus", 2,"Tortricidae",2090)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7135,"Graptodytes","Graptodytes",	180,"Genus", 2,"Dytiscidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15321,"Gravitarmata","Gravitarmata",	180,"Genus", 2,"Tortricidae",2024)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15896,"Griposia","Griposia",	180,"Genus", 2,"Noctuidae",4128)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7564,"Grynobius","Grynobius",	180,"Genus", 2,"Anobiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8934,"Grypocoris","Grypocoris",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15447,"Gymnancyla","Gymnancyla",	180,"Genus", 2,"Pyralidae",2535)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14844,"Gymnetron","Gymnetron",	180,"Genus", 2,"Mecinini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15623,"Gymnoscelis","Gymnoscelis",	180,"Genus", 2,"Geometridae",3189)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15733,"Gynaephora","Gynaephora",	180,"Genus", 2,"Erebidae",3570)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15278,"Gynnidomorpha","Gynnidomorpha",	180,"Genus", 2,"Tortricidae",1715)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15316,"Gypsonoma","Gypsonoma",	180,"Genus", 2,"Tortricidae",1988)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7071,"Gyrinidae","Gyrinidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7072,"Gyrinus","Gyrinus",	180,"Genus", 2,"Gyrinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7837,"Gyrohypnus","Gyrohypnus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15526,"Habrosyne","Habrosyne",	180,"Genus", 2,"Drepanidae",2849)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15918,"Hada","Hada",	180,"Genus", 2,"Noctuidae",4213)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15923,"Hadena","Hadena",	180,"Genus", 2,"Noctuidae",4233)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6763,"Haemonia","Haemonia",	180,"Genus", 2,"Chrysomelidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8319,"Halictidae","Halictidae",	140,"Family", 2,"Apoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8396,"Halictus","Halictus",	180,"Genus", 2,"Halictidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6116,"Haliplidae","Haliplidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6121,"Haliplus","Haliplus",	180,"Genus", 2,"Haliplidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9069,"Hallodapus","Hallodapus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7377,"Hallomenus","Hallomenus",	180,"Genus", 2,"Serropalpidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8978,"Halticus","Halticus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15397,"Hamearis","Hamearis",	180,"Genus", 2,"Riodinidae",2373)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7938,"Hapalarea","Hapalarea",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15052,"Haplotinea","Haplotinea",	180,"Genus", 2,"Tineidae",370)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(234022,"Harpactus","Harpactus",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6414,"Harpalus","Harpalus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15112,"Harpella","Harpella",	180,"Genus", 2,"Oecophoridae",743)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8911,"Harpocera","Harpocera",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15709,"Harpyia","Harpyia",	180,"Genus", 2,"Notodontidae",3486)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15922,"Hecatera","Hecatera",	180,"Genus", 2,"Noctuidae",4229)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7562,"Hedobia","Hedobia",	180,"Genus", 2,"Anobiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15290,"Hedya","Hedya",	180,"Genus", 2,"Tortricidae",1791)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15148,"Helcystogramma","Helcystogramma",	180,"Genus", 2,"Gelechiidae",928)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15823,"Helicoverpa","Helicoverpa",	180,"Genus", 2,"Noctuidae",3873)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15642,"Heliomata","Heliomata",	180,"Genus", 2,"Geometridae",3299)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18928,"Heliophobus","Heliophobus",	180,"Genus", 2,"Noctuidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15500,"Heliothela","Heliothela",	180,"Genus", 2,"Crambidae",2744)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19110,"Heliothela","Heliothela",	180,"Genus", 2,"Pyralidae",2744)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15822,"Heliothis","Heliothis",	180,"Genus", 2,"Noctuidae",3865)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15007,"Heliozela","Heliozela",	180,"Genus", 2,"Heliozelidae",158)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14923,"Heliozelidae","Heliozelidae",	140,"Family", 2,"Lepidoptera",154)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15226,"Hellinsia","Hellinsia",	180,"Genus", 2,"Pterophoridae",1495)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15497,"Hellula","Hellula",	180,"Genus", 2,"Crambidae",2715)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6711,"Helochares","Helochares",	180,"Genus", 2,"Hydrophilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8756,"Helophilus","Helophilus",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229736,"Helophoridae","Helophoridae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6745,"Helophorus","Helophorus",	180,"Genus", 2,"Hydrophilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14773,"Heloridae","Heloridae",	140,"Family", 2,"Proctrupoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15851,"Helotropha","Helotropha",	180,"Genus", 2,"Noctuidae",3957)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15557,"Hemaris","Hemaris",	180,"Genus", 2,"Sphingidae",2940)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8833,"Hemiptera","Hemiptera",	100,"Order", 2,"Insecta",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15700,"Hemistola","Hemistola",	180,"Genus", 2,"Geometridae",3457)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15703,"Hemithea","Hemithea",	180,"Genus", 2,"Geometridae",3465)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14920,"Hepialidae","Hepialidae",	140,"Family", 2,"Lepidoptera",27)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14998,"Hepialus","Hepialus",	180,"Genus", 2,"Hepialidae",36)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19017,"Hepiatus","Hepiatus",	180,"Genus", 2,"Hepialidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6874,"Heptaulacus","Heptaulacus",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8647,"Heringia","Heringia",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15769,"Herminia","Herminia",	180,"Genus", 2,"Erebidae",3668)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18917,"Herminia","Herminia",	180,"Genus", 2,"Noctuidae",3668)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15357,"Hesperia","Hesperia",	180,"Genus", 2,"Hesperiidae",2237)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14911,"Hesperiidae","Hesperiidae",	140,"Family", 2,"Lepidoptera",2218)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14728,"Heterarthrinae","Heterarthrinae",	150,"Subfamily", 2,"Tenthredinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8882,"Heterocordylus","Heterocordylus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15343,"Heterogenea","Heterogenea",	180,"Genus", 2,"Limacodidae",2182)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15354,"Heteropterus","Heteropterus",	180,"Genus", 2,"Hesperiidae",2227)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15589,"Heterothera","Heterothera",	180,"Genus", 2,"Geometridae",3086)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7771,"Heterothothops","Heterothothops",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8930,"Heterotoma","Heterotoma",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15378,"Hipparchia","Hipparchia",	180,"Genus", 2,"Nymphalidae",2301)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8260,"Hippodamia","Hippodamia",	180,"Genus", 2,"Coccinellidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15563,"Hippotion","Hippotion",	180,"Genus", 2,"Sphingidae",2959)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229734,"Histeridae","Histeridae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15107,"Hofmannophila","Hofmannophila",	180,"Genus", 2,"Oecophoridae",728)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6898,"Homaloplia","Homaloplia",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18949,"Homeoosoma","Homeoosoma",	180,"Genus", 2,"Pyralidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15454,"Homoeosoma","Homoeosoma",	180,"Genus", 2,"Pyralidae",2555)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6911,"Hoplia","Hoplia",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8386,"Hoplitis","Hoplitis",	180,"Genus", 2,"Megachilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7314,"Hoplocephala","Hoplocephala",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15833,"Hoplodrina","Hoplodrina",	180,"Genus", 2,"Noctuidae",3912)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8922,"Hoplomachus","Hoplomachus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15615,"Horisme","Horisme",	180,"Genus", 2,"Geometridae",3162)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7199,"Hydaticus","Hydaticus",	180,"Genus", 2,"Dytiscidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7422,"Hydnobius","Hydnobius",	180,"Genus", 2,"Liodidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15854,"Hydraecia","Hydraecia",	180,"Genus", 2,"Noctuidae",3964)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6665,"Hydraena","Hydraena",	180,"Genus", 2,"Hydrophilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15608,"Hydrelia","Hydrelia",	180,"Genus", 2,"Geometridae",3143)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15612,"Hydria","Hydria",	180,"Genus", 2,"Geometridae",3155)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15588,"Hydriomena","Hydriomena",	180,"Genus", 2,"Geometridae",3081)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6707,"Hydrobius","Hydrobius",	180,"Genus", 2,"Hydrophilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6657,"Hydrophilidae","Hydrophilidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6735,"Hydrophilus","Hydrophilus",	180,"Genus", 2,"Hydrophilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7108,"Hydroporus","Hydroporus",	180,"Genus", 2,"Dytiscidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6737,"Hydrous","Hydrous",	180,"Genus", 2,"Hydrophilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7103,"Hygrotus","Hygrotus",	180,"Genus", 2,"Dytiscidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15688,"Hylaea","Hylaea",	180,"Genus", 2,"Geometridae",3429)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8422,"Hylaeus","Hylaeus",	180,"Genus", 2,"Colletidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15561,"Hyles","Hyles",	180,"Genus", 2,"Sphingidae",2950)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18622,"Hylesinini","Hylesinini",	160,"Tribe", 2,"Scolytinae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18623,"Hylesinus","Hylesinus",	180,"Genus", 2,"Hylesinini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18597,"Hylobius","Hylobius",	180,"Genus", 2,"Molytini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7012,"Hylotrupes","Hylotrupes",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7354,"Hymenalia","Hymenalia",	180,"Genus", 2,"Alleculidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8269,"Hymenoptera","Hymenoptera",	100,"Order", 2,"Insecta",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15433,"Hypargyria","Hypargyria",	180,"Genus", 2,"Pyralidae",2484)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15143,"Hypatima","Hypatima",	180,"Genus", 2,"Gelechiidae",905)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15204,"Hypatopa","Hypatopa",	180,"Genus", 2,"Blastobasidae",1405)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15726,"Hypena","Hypena",	180,"Genus", 2,"Erebidae",3546)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18798,"Hypena","Hypena",	180,"Genus", 2,"Noctuidae",3546)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15773,"Hypenodes","Hypenodes",	180,"Genus", 2,"Erebidae",3682)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19054,"Hypenodes","Hypenodes",	180,"Genus", 2,"Noctuidae",3682)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14841,"Hypera","Hypera",	180,"Genus", 2,"Hyperoni",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8225,"Hyperaspis","Hyperaspis",	180,"Genus", 2,"Coccinellidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15128,"Hypercallia","Hypercallia",	180,"Genus", 2,"Depressariidae",839)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14840,"Hyperoni","Hyperoni",	160,"Tribe", 2,"Brachycerinae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15737,"Hyphantria","Hyphantria",	180,"Genus", 2,"Erebidae",3587)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15746,"Hyphoraia","Hyphoraia",	180,"Genus", 2,"Erebidae",3607)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7089,"Hyphydrus","Hyphydrus",	180,"Genus", 2,"Dytiscidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15440,"Hypochalcia","Hypochalcia",	180,"Genus", 2,"Pyralidae",2505)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15675,"Hypomecis","Hypomecis",	180,"Genus", 2,"Geometridae",3396)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7340,"Hypophloeus","Hypophloeus",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15842,"Hyppa","Hyppa",	180,"Genus", 2,"Noctuidae",3938)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15464,"Hypsopygia","Hypsopygia",	180,"Genus", 2,"Pyralidae",2594)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7393,"Hypulus","Hypulus",	180,"Genus", 2,"Serropalpidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14784,"Ibaliidae","Ibaliidae",	140,"Family", 2,"Cynipoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14708,"Ichneumonidae","Ichneumonidae",	140,"Family", 2,"Ichneumonidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14756,"Ichneumonidea","Ichneumonidea",	120,"Infraorder", 2,"Apocrita",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14800,"Ichneumoninae","Ichneumoninae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15565,"Idaea","Idaea",	180,"Genus", 2,"Geometridae",2966)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7175,"Ilybius","Ilybius",	180,"Genus", 2,"Dytiscidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19166,"Inachis","Inachis",	180,"Genus", 2,"Nymphalidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15013,"Incurvaria","Incurvaria",	180,"Genus", 2,"Incurvariidae",199)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14925,"Incurvariidae","Incurvariidae",	140,"Family", 2,"Lepidoptera",194)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15034,"Infurcitinea","Infurcitinea",	180,"Genus", 2,"Tineidae",281)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14695,"Insecta","Insecta",	60,"Class", 2,"Arthropoda",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15350,"Iphiclides","Iphiclides",	180,"Genus", 2,"Papilionidae",2214)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15889,"Ipimorpha","Ipimorpha",	180,"Genus", 2,"Noctuidae",4109)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8580,"Ischyrosyrphus","Ischyrosyrphus",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7360,"Isomira","Isomira",	180,"Genus", 2,"Alleculidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15159,"Isophrictis","Isophrictis",	180,"Genus", 2,"Gelechiidae",973)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15239,"Isotrias","Isotrias",	180,"Genus", 2,"Tortricidae",1553)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15381,"Issoria","Issoria",	180,"Genus", 2,"Nymphalidae",2314)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18958,"Itame","Itame",	180,"Genus", 2,"Geometridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15701,"Jodis","Jodis",	180,"Genus", 2,"Geometridae",3460)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6984,"Judolia","Judolia",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15393,"Junonia","Junonia",	180,"Genus", 2,"Nymphalidae",2359)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229709,"Kalama","Kalama",	180,"Genus", 2,"Tingidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15036,"Karsholtia","Karsholtia",	180,"Genus", 2,"Tineidae",290)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15099,"Klimeschia","Klimeschia",	180,"Genus", 2,"Douglasiidae",697)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14996,"Korscheltellus","Korscheltellus",	180,"Genus", 2,"Hepialidae",30)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15914,"Lacanobia","Lacanobia",	180,"Genus", 2,"Noctuidae",4195)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6724,"Laccobius","Laccobius",	180,"Genus", 2,"Hydrophilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7086,"Laccophilus","Laccophilus",	180,"Genus", 2,"Dytiscidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7147,"Laccornis","Laccornis",	180,"Genus", 2,"Dytiscidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15731,"Laelia","Laelia",	180,"Genus", 2,"Erebidae",3565)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7370,"Lagria","Lagria",	180,"Genus", 2,"Lagriidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7369,"Lagriidae","Lagriidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7021,"Lamia","Lamia",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15404,"Lampides","Lampides",	180,"Genus", 2,"Lycaenidae",2398)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15015,"Lampronia","Lampronia",	180,"Genus", 2,"Prodoxidae",208)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15603,"Lampropteryx","Lampropteryx",	180,"Genus", 2,"Geometridae",3128)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15796,"Lamprotes","Lamprotes",	180,"Genus", 2,"Noctuidae",3760)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15435,"Laodamia","Laodamia",	180,"Genus", 2,"Pyralidae",2488)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15553,"Laothoe","Laothoe",	180,"Genus", 2,"Sphingidae",2929)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8564,"Lappsyrphus","Lappsyrphus",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15585,"Larentia","Larentia",	180,"Genus", 2,"Geometridae",3075)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229717,"Larinus","Larinus",	180,"Genus", 2,"Lixini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15537,"Lasiocampa","Lasiocampa",	180,"Genus", 2,"Lasiocampidae",2880)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14979,"Lasiocampidae","Lasiocampidae",	140,"Family", 2,"Lepidoptera",2867)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7598,"Lasioderma","Lasioderma",	180,"Genus", 2,"Anobiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8402,"Lasioglossum","Lasioglossum",	180,"Genus", 2,"Halictidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15370,"Lasiommata","Lasiommata",	180,"Genus", 2,"Nymphalidae",2281)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15927,"Lasionhada","Lasionhada",	180,"Genus", 2,"Noctuidae",4268)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18963,"Lasionycta","Lasionycta",	180,"Genus", 2,"Noctuidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15780,"Laspeyria","Laspeyria",	180,"Genus", 2,"Erebidae",3702)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18906,"Laspeyria","Laspeyria",	180,"Genus", 2,"Noctuidae",3702)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15874,"Lateroligia","Lateroligia",	180,"Genus", 2,"Noctuidae",4041)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7326,"Latheticus","Latheticus",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7978,"Lathrimaeum","Lathrimaeum",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7892,"Lathrobium","Lathrobium",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15326,"Lathronympha","Lathronympha",	180,"Genus", 2,"Tortricidae",2088)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8797,"Lathyrophthalmus","Lathyrophthalmus",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229729,"Latridiidae","Latridiidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18904,"Laurentia","Laurentia",	180,"Genus", 2,"Geometridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6620,"Lebia","Lebia",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229732,"Leiodidae","Leiodidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7048,"Leiopus","Leiopus",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6174,"Leistus","Leistus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8744,"Lejogaster","Lejogaster",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8764,"Lejops","Lejops",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6799,"Lema","Lema",	180,"Genus", 2,"Chrysomelidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15544,"Lemonia","Lemonia",	180,"Genus", 2,"Brahmaeidae",2900)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15864,"Lenisa","Lenisa",	180,"Genus", 2,"Noctuidae",3991)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14699,"Lepidoptera","Lepidoptera",	100,"Order", 2,"Insecta",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7826,"Leptacinus","Leptacinus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7004,"Leptidea","Leptidea",	180,"Genus", 2,"Cerambycidae",2244)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15359,"Leptidea","Leptidea",	180,"Genus", 2,"Pieridae",2244)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8090,"Leptinus","Leptinus",	180,"Genus", 2,"Silphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8835,"Leptopterna","Leptopterna",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6975,"Leptura","Leptura",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(234025,"Lestica","Lestica",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15925,"Leucania","Leucania",	180,"Genus", 2,"Noctuidae",4262)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15493,"Leucinodes","Leucinodes",	180,"Genus", 2,"Crambidae",2699)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15715,"Leucodonta","Leucodonta",	180,"Genus", 2,"Notodontidae",3509)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15728,"Leucoma","Leucoma",	180,"Genus", 2,"Erebidae",3557)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15096,"Leucoptera","Leucoptera",	180,"Genus", 2,"Lyonetiidae",678)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15067,"Leucospilapteryx","Leucospilapteryx",	180,"Genus", 2,"Gracillariidae",441)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8578,"Leucozona","Leucozona",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15123,"Levipalpus","Levipalpus",	180,"Genus", 2,"Depressariidae",780)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6304,"Licinus","Licinus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15640,"Ligdia","Ligdia",	180,"Genus", 2,"Geometridae",3295)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14970,"Limacodidae","Limacodidae",	140,"Family", 2,"Lepidoptera",2179)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15384,"Limenitis","Limenitis",	180,"Genus", 2,"Nymphalidae",2326)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15133,"Limnaecia","Limnaecia",	180,"Genus", 2,"Cosmopterigidae",862)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6673,"Limnebius","Limnebius",	180,"Genus", 2,"Hydrophilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6709,"Limnoxenus","Limnoxenus",	180,"Genus", 2,"Hydrophilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(234027,"Lindenius","Lindenius",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15051,"Lindera","Lindera",	180,"Genus", 2,"Tineidae",367)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6926,"Liocola","Liocola",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8885,"Liocoris","Liocoris",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7426,"Liodes","Liodes",	180,"Genus", 2,"Liodidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7419,"Liodidae","Liodidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7501,"Lissodema","Lissodema",	180,"Genus", 2,"Salpingidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7882,"Lithocharis","Lithocharis",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19038,"Lithomoia","Lithomoia",	180,"Genus", 2,"Noctuidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15885,"Lithophane","Lithophane",	180,"Genus", 2,"Noctuidae",4088)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15760,"Lithosia","Lithosia",	180,"Genus", 2,"Erebidae",3638)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15630,"Lithostege","Lithostege",	180,"Genus", 2,"Geometridae",3269)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15876,"Litoligia","Litoligia",	180,"Genus", 2,"Noctuidae",4047)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229670,"Lixini","Lixini",	160,"Tribe", 2,"Curculioninae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229672,"Lixus","Lixus",	180,"Genus", 2,"Lixini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15300,"Lobesia","Lobesia",	180,"Genus", 2,"Tortricidae",1844)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15631,"Lobophora","Lobophora",	180,"Genus", 2,"Geometridae",3272)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15639,"Lomaspilis","Lomaspilis",	180,"Genus", 2,"Geometridae",3293)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15684,"Lomographa","Lomographa",	180,"Genus", 2,"Geometridae",3421)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15863,"Longalatedes","Longalatedes",	180,"Genus", 2,"Noctuidae",3989)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8913,"Lopus","Lopus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6191,"Loricera","Loricera",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15466,"Loxostege","Loxostege",	180,"Genus", 2,"Crambidae",2601)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15255,"Lozotaenia","Lozotaenia",	180,"Genus", 2,"Tortricidae",1600)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15260,"Lozotaeniodes","Lozotaeniodes",	180,"Genus", 2,"Tortricidae",1622)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6932,"Lucanus","Lucanus",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15856,"Luperina","Luperina",	180,"Genus", 2,"Noctuidae",3974)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15122,"Luquetia","Luquetia",	180,"Genus", 2,"Depressariidae",778)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15398,"Lycaena","Lycaena",	180,"Genus", 2,"Lycaenidae",2377)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14975,"Lycaenidae","Lycaenidae",	140,"Family", 2,"Lepidoptera",2375)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15665,"Lycia","Lycia",	180,"Genus", 2,"Geometridae",3367)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8189,"Lycoperdina","Lycoperdina",	180,"Genus", 2,"Endomychidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15938,"Lycophotia","Lycophotia",	180,"Genus", 2,"Noctuidae",4321)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14815,"Lycorininae","Lycorininae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7616,"Lyctidae","Lyctidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7617,"Lyctus","Lyctus",	180,"Genus", 2,"Lyctidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15775,"Lygephila","Lygephila",	180,"Genus", 2,"Erebidae",3689)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19142,"Lygephila","Lygephila",	180,"Genus", 2,"Noctuidae",3689)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8887,"Lygocoris","Lygocoris",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8853,"Lygus","Lygus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15729,"Lymantria","Lymantria",	180,"Genus", 2,"Erebidae",3559)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15097,"Lyonetia","Lyonetia",	180,"Genus", 2,"Lyonetiidae",688)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14941,"Lyonetiidae","Lyonetiidae",	140,"Family", 2,"Lepidoptera",676)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15117,"Lypusa","Lypusa",	180,"Genus", 2,"Lypusidae",760)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14946,"Lypusidae","Lypusidae",	140,"Family", 2,"Lepidoptera",758)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15571,"Lythria","Lythria",	180,"Genus", 2,"Geometridae",3023)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6803,"Lytta","Lytta",	180,"Genus", 2,"Meloidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15643,"Macaria","Macaria",	180,"Genus", 2,"Geometridae",3301)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15793,"Macdunnoughia","Macdunnoughia",	180,"Genus", 2,"Noctuidae",3751)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15768,"Macrochilo","Macrochilo",	180,"Genus", 2,"Erebidae",3666)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18921,"Macrochilo","Macrochilo",	180,"Genus", 2,"Noctuidae",3666)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15558,"Macroglossum","Macroglossum",	180,"Genus", 2,"Sphingidae",2943)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9071,"Macrolophus","Macrolophus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8324,"Macropis","Macropis",	180,"Genus", 2,"Melittidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15071,"Macrosaccus","Macrosaccus",	180,"Genus", 2,"Gracillariidae",519)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15538,"Macrothylacia","Macrothylacia",	180,"Genus", 2,"Lasiocampidae",2883)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8851,"Macrotylus","Macrotylus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15409,"Maculinea","Maculinea",	180,"Genus", 2,"Lycaenidae",2408)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8983,"Malacocoris","Malacocoris",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15535,"Malacosoma","Malacosoma",	180,"Genus", 2,"Lasiocampidae",2874)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6896,"Maladera","Maladera",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8778,"Mallota","Mallota",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15919,"Mamestra","Mamestra",	180,"Genus", 2,"Noctuidae",4216)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15375,"Maniola","Maniola",	180,"Genus", 2,"Nymphalidae",2295)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19042,"Manulea","Manulea",	180,"Genus", 2,"Erebidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15215,"Marasmarcha","Marasmarcha",	180,"Genus", 2,"Pterophoridae",1464)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15621,"Martania","Martania",	180,"Genus", 2,"Geometridae",3185)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15484,"Maruca","Maruca",	180,"Genus", 2,"Crambidae",2679)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6618,"Masoreus","Masoreus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15426,"Matilella","Matilella",	180,"Genus", 2,"Pyralidae",2461)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14843,"Mecinini","Mecinini",	160,"Tribe", 2,"Curculioninae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18599,"Mecinus","Mecinus",	180,"Genus", 2,"Mecinini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8985,"Mecomma","Mecomma",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15479,"Mecyna","Mecyna",	180,"Genus", 2,"Crambidae",2668)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7873,"Medon","Medon",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8388,"Megachile","Megachile",	180,"Genus", 2,"Megachilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8326,"Megachilidae","Megachilidae",	140,"Family", 2,"Apoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9121,"Megacoelum","Megacoelum",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9123,"Megaloceroea","Megaloceroea",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8889,"Megalocoleus","Megalocoleus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18636,"Meganola","Meganola",	180,"Genus", 2,"Nolidae",4386)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7915,"Megarthrus","Megarthrus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14760,"Megaspilidae","Megaspilidae",	140,"Family", 2,"Ceraphronoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6699,"Megasternum","Megasternum",	180,"Genus", 2,"Hydrophilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8611,"Megasyrphus","Megasyrphus",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15377,"Melanargia","Melanargia",	180,"Genus", 2,"Nymphalidae",2299)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15915,"Melanchra","Melanchra",	180,"Genus", 2,"Noctuidae",4206)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7396,"Meland","Meland",	180,"Genus", 2,"Serropalpidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8583,"Melangyna","Melangyna",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7297,"Melanimon","Melanimon",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8742,"Melanogaster","Melanogaster",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8517,"Melanostoma","Melanostoma",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15616,"Melanthia","Melanthia",	180,"Genus", 2,"Geometridae",3167)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8322,"Melecta","Melecta",	180,"Genus", 2,"Apidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8591,"Meligramma","Meligramma",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8613,"Meliscaeva","Meliscaeva",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15396,"Melitaea","Melitaea",	180,"Genus", 2,"Nymphalidae",2366)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8341,"Melitta","Melitta",	180,"Genus", 2,"Melittidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8310,"Melittidae","Melittidae",	140,"Family", 2,"Apoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(234029,"Mellinus","Mellinus",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6805,"Meloë","Meloë",	180,"Genus", 2,"Meloidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6802,"Meloidae","Meloidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6903,"Melolontha","Melolontha",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229727,"Melyridae","Melyridae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9125,"Mermitelocerus","Mermitelocerus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8754,"Merodon","Merodon",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15223,"Merrifieldia","Merrifieldia",	180,"Genus", 2,"Pterophoridae",1485)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15875,"Mesapamea","Mesapamea",	180,"Genus", 2,"Noctuidae",4043)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19120,"Mesoacidalia","Mesoacidalia",	180,"Genus", 2,"Nymphalidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14816,"Mesocorinae","Mesocorinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15882,"Mesogona","Mesogona",	180,"Genus", 2,"Noctuidae",4068)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15583,"Mesoleuca","Mesoleuca",	180,"Genus", 2,"Geometridae",3071)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15877,"Mesoligia","Mesoligia",	180,"Genus", 2,"Noctuidae",4049)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15140,"Mesophleps","Mesophleps",	180,"Genus", 2,"Gelechiidae",897)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7037,"Mesosa","Mesosa",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15619,"Mesotype","Mesotype",	180,"Genus", 2,"Geometridae",3173)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6624,"Metabletus","Metabletus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15105,"Metalampra","Metalampra",	180,"Genus", 2,"Oecophoridae",723)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8558,"Metasyrphus","Metasyrphus",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18794,"Metendothenia","Metendothenia",	180,"Genus", 2,"Tortricidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7475,"Metoecus","Metoecus",	180,"Genus", 2,"Rhipiphoridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14817,"Metopiinae","Metopiinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7913,"Metopsia","Metopsia",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15160,"Metzneria","Metzneria",	180,"Genus", 2,"Gelechiidae",976)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7539,"Mezium","Mezium",	180,"Genus", 2,"Ptinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18606,"Miarus","Miarus",	180,"Genus", 2,"Mecinini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8010,"Micridium","Micridium",	180,"Genus", 2,"Ptiliidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8629,"Microdon","Microdon",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14818,"Microleptinae","Microleptinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6627,"Microlestes","Microlestes",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7986,"Micropeplidae","Micropeplidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7987,"Micropeplus","Micropeplus",	180,"Genus", 2,"Micropeplidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18625,"Microplontus","Microplontus",	180,"Genus", 2,"Ceutorhynchini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14918,"Micropterigidae","Micropterigidae",	140,"Family", 2,"Lepidoptera",2)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14991,"Micropterix","Micropterix",	180,"Genus", 2,"Micropterigidae",3)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8026,"Microptilium","Microptilium",	180,"Genus", 2,"Ptiliidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8002,"Millidium","Millidium",	180,"Genus", 2,"Ptiliidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19140,"Milochrista","Milochrista",	180,"Genus", 2,"Erebidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15755,"Miltochrista","Miltochrista",	180,"Genus", 2,"Erebidae",3626)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15551,"Mimas","Mimas",	180,"Genus", 2,"Sphingidae",2925)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(234032,"Mimesa","Mimesa",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(234036,"Mimumesa","Mimumesa",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15786,"Minucia","Minucia",	180,"Genus", 2,"Erebidae",3729)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8834,"Miridae","Miridae",	140,"Family", 2,"Hemiptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15170,"Mirificarma","Mirificarma",	180,"Genus", 2,"Gelechiidae",1041)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8916,"Miris","Miris",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(234039,"Miscophus","Miscophus",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15904,"Mniotype","Mniotype",	180,"Genus", 2,"Noctuidae",4150)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7001,"Molorchus","Molorchus",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14854,"Molytini","Molytini",	160,"Tribe", 2,"Curculioninae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15807,"Moma","Moma",	180,"Genus", 2,"Noctuidae",3798)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15202,"Mompha","Mompha",	180,"Genus", 2,"Momphidae",1382)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14956,"Momphidae","Momphidae",	140,"Family", 2,"Lepidoptera",1381)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8987,"Monalocoris","Monalocoris",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7033,"Monochamus","Monochamus",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15163,"Monochroa","Monochroa",	180,"Genus", 2,"Gelechiidae",989)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15050,"Monopis","Monopis",	180,"Genus", 2,"Tineidae",356)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9033,"Monosynamma","Monosynamma",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7225,"Mordella","Mordella",	180,"Genus", 2,"Mordellidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7222,"Mordellidae","Mordellidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7228,"Mordellistena","Mordellistena",	180,"Genus", 2,"Mordellidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15840,"Mormo","Mormo",	180,"Genus", 2,"Noctuidae",3934)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15039,"Morophaga","Morophaga",	180,"Genus", 2,"Tineidae",300)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15444,"Mussidia","Mussidia",	180,"Genus", 2,"Pyralidae",2527)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14770,"Mutillidae","Mutillidae",	140,"Family", 2,"Vespoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8774,"Myathropa","Myathropa",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8192,"Mycetaea","Mycetaea",	180,"Genus", 2,"Endomychidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8194,"Mycetina","Mycetina",	180,"Genus", 2,"Endomychidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7362,"Mycetochara","Mycetochara",	180,"Genus", 2,"Alleculidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8154,"Mycetophagidae","Mycetophagidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8155,"Mycetophagus","Mycetophagus",	180,"Genus", 2,"Mycetophagidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15446,"Myelois","Myelois",	180,"Genus", 2,"Pyralidae",2532)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14797,"Mymaridae","Mymaridae",	140,"Family", 2,"Chalcidoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8747,"Myolepta","Myolepta",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9095,"Myrmecoris","Myrmecoris",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8163,"Myrmecoxenus","Myrmecoxenus",	180,"Genus", 2,"Colydiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15033,"Myrmecozela","Myrmecozela",	180,"Genus", 2,"Tineidae",278)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15924,"Mythimna","Mythimna",	180,"Genus", 2,"Noctuidae",4246)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7520,"Nacerda","Nacerda",	180,"Genus", 2,"Oedemeridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15955,"Naenia","Naenia",	180,"Genus", 2,"Noctuidae",4382)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8098,"Nargus","Nargus",	180,"Genus", 2,"Silphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15644,"Narraga","Narraga",	180,"Genus", 2,"Geometridae",3313)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7193,"Nartus","Nartus",	180,"Genus", 2,"Dytiscidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15019,"Narycia","Narycia",	180,"Genus", 2,"Psychidae",233)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15470,"Nascia","Nascia",	180,"Genus", 2,"Crambidae",2621)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6178,"Nebria","Nebria",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8072,"Necrodes","Necrodes",	180,"Genus", 2,"Silphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8062,"Necrophorus","Necrophorus",	180,"Genus", 2,"Silphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6999,"Necydalis","Necydalis",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8092,"Nemadus","Nemadus",	180,"Genus", 2,"Silphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15043,"Nemapogon","Nemapogon",	180,"Genus", 2,"Tineidae",313)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14723,"Nematinae","Nematinae",	150,"Subfamily", 2,"Tenthredinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15011,"Nematopogon","Nematopogon",	180,"Genus", 2,"Adelidae",184)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15042,"Nemaxera","Nemaxera",	180,"Genus", 2,"Tineidae",310)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15008,"Nemophora","Nemophora",	180,"Genus", 2,"Adelidae",164)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8713,"Neoascia","Neoascia",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7663,"Neobisnius","Neobisnius",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8643,"Neocnemodon","Neocnemodon",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15142,"Neofaculta","Neofaculta",	180,"Genus", 2,"Gelechiidae",902)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15167,"Neofriseria","Neofriseria",	180,"Genus", 2,"Gelechiidae",1028)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8891,"Neolygus","Neolygus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8237,"Neomysia","Neomysia",	180,"Genus", 2,"Coccinellidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14819,"Neorhacodinae","Neorhacodinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15264,"Neosphaleroptera","Neosphaleroptera",	180,"Genus", 2,"Tortricidae",1632)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8028,"Nephanes","Nephanes",	180,"Genus", 2,"Ptiliidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15441,"Nephopterix","Nephopterix",	180,"Genus", 2,"Pyralidae",2507)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14921,"Nepticulidae","Nepticulidae",	140,"Family", 2,"Lepidoptera",39)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7261,"Neurapes","Neurapes",	180,"Genus", 2,"Scydmaenidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15045,"Neurothaumasia","Neurothaumasia",	180,"Genus", 2,"Tineidae",331)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15049,"Niditinea","Niditinea",	180,"Genus", 2,"Tineidae",351)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7543,"Niptus","Niptus",	180,"Genus", 2,"Ptinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229733,"Nitidulidae","Nitidulidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15943,"Noctua","Noctua",	180,"Genus", 2,"Noctuidae",4332)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14989,"Noctuidae","Noctuidae",	140,"Family", 2,"Lepidoptera",3736)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18633,"Nola","Nola",	180,"Genus", 2,"Nolidae",4389)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14990,"Nolidae","Nolidae",	140,"Family", 2,"Lepidoptera",4384)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8431,"Nomada","Nomada",	180,"Genus", 2,"Apidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15492,"Nomophila","Nomophila",	180,"Genus", 2,"Crambidae",2697)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15860,"Nonagria","Nonagria",	180,"Genus", 2,"Noctuidae",3982)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6138,"Noterus","Noterus",	180,"Genus", 2,"Haliplidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15633,"Nothocasis","Nothocasis",	180,"Genus", 2,"Geometridae",3276)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15141,"Nothris","Nothris",	180,"Genus", 2,"Gelechiidae",899)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6182,"Notiophilus","Notiophilus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15318,"Notocelia","Notocelia",	180,"Genus", 2,"Tortricidae",2010)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15712,"Notodonta","Notodonta",	180,"Genus", 2,"Notodontidae",3498)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14986,"Notodontidae","Notodontidae",	140,"Family", 2,"Lepidoptera",3472)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8839,"Notostira","Notostira",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7478,"Notoxus","Notoxus",	180,"Genus", 2,"Anthicidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15756,"Nudaria","Nudaria",	180,"Genus", 2,"Erebidae",3628)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7835,"Nudobius","Nudobius",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15452,"Nyctegretis","Nyctegretis",	180,"Genus", 2,"Pyralidae",2550)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18616,"Nycteola","Nycteola",	180,"Genus", 2,"Nolidae",4402)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14973,"Nymphalidae","Nymphalidae",	140,"Family", 2,"Lepidoptera",2271)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15390,"Nymphalis","Nymphalis",	180,"Genus", 2,"Nymphalidae",2349)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15517,"Nymphula","Nymphula",	180,"Genus", 2,"Crambidae",2822)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(234043,"Nysson","Nysson",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7060,"Oberea","Oberea",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6970,"Obrium","Obrium",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7600,"Ochina","Ochina",	180,"Genus", 2,"Anobiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15358,"Ochlodes","Ochlodes",	180,"Genus", 2,"Hesperiidae",2239)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15232,"Ochromolopis","Ochromolopis",	180,"Genus", 2,"Epermeniidae",1529)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15529,"Ochropacha","Ochropacha",	180,"Genus", 2,"Drepanidae",2857)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15935,"Ochropleura","Ochropleura",	180,"Genus", 2,"Noctuidae",4309)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15092,"Ochsenheimeria","Ochsenheimeria",	180,"Genus", 2,"Ypsolophidae",660)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6658,"Ochthebius","Ochthebius",	180,"Genus", 2,"Hydrophilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7910,"Ochthephilum","Ochthephilum",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15081,"Ocnerostoma","Ocnerostoma",	180,"Genus", 2,"Yponomeutidae",569)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7647,"Octotemnus","Octotemnus",	180,"Genus", 2,"Cisidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7756,"Ocypus","Ocypus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6653,"Odacantha","Odacantha",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19145,"Odentopera","Odentopera",	180,"Genus", 2,"Geometridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15618,"Odezia","Odezia",	180,"Genus", 2,"Geometridae",3171)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15543,"Odonestis","Odonestis",	180,"Genus", 2,"Lasiocampidae",2895)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6824,"Odontaeus","Odontaeus",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15658,"Odontopera","Odontopera",	180,"Genus", 2,"Geometridae",3352)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15718,"Odontosia","Odontosia",	180,"Genus", 2,"Notodontidae",3519)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8078,"Oeceoptoma","Oeceoptoma",	180,"Genus", 2,"Silphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15111,"Oecophora","Oecophora",	180,"Genus", 2,"Oecophoridae",741)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14944,"Oecophoridae","Oecophoridae",	140,"Family", 2,"Lepidoptera",707)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7528,"Oedemera","Oedemera",	180,"Genus", 2,"Oedemeridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7519,"Oedemeridae","Oedemeridae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15100,"Oegoconia","Oegoconia",	180,"Genus", 2,"Autostichidae",703)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15225,"Oidaematophorus","Oidaematophorus",	180,"Genus", 2,"Pterophoridae",1493)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15055,"Oinophila","Oinophila",	180,"Genus", 2,"Tineidae",382)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7318,"Olatydema","Olatydema",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15297,"Olethreutes","Olethreutes",	180,"Genus", 2,"Tortricidae",1836)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8012,"Oligella","Oligella",	180,"Genus", 2,"Ptiliidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15878,"Oligia","Oligia",	180,"Genus", 2,"Noctuidae",4052)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15238,"Olindia","Olindia",	180,"Genus", 2,"Tortricidae",1551)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6322,"Olisthopus","Olisthopus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7982,"Olophrum","Olophrum",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7949,"Omalium","Omalium",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6189,"Omophron","Omophron",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19159,"Omphaloscelis","Omphaloscelis",	180,"Genus", 2,"Noctuidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15434,"Oncocera","Oncocera",	180,"Genus", 2,"Pyralidae",2486)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8946,"Oncotylus","Oncotylus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7740,"Ontholestes","Ontholestes",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6818,"Onthophagus","Onthophagus",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6293,"Oodes","Oodes",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7299,"Opatrum","Opatrum",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15604,"Operophtera","Operophtera",	180,"Genus", 2,"Geometridae",3130)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18999,"Operopthera","Operopthera",	180,"Genus", 2,"Geometridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14820,"Ophioninae","Ophioninae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15946,"Opigena","Opigena",	180,"Genus", 2,"Noctuidae",4348)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15651,"Opisthograptis","Opisthograptis",	180,"Genus", 2,"Geometridae",3328)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7039,"Oplosia","Oplosia",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15054,"Opogona","Opogona",	180,"Genus", 2,"Tineidae",378)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15004,"Opostega","Opostega",	180,"Genus", 2,"Opostegidae",148)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14922,"Opostegidae","Opostegidae",	140,"Family", 2,"Lepidoptera",146)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18942,"Opsibotys","Opsibotys",	180,"Genus", 2,"Crambidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15369,"Opsiphanes","Opsiphanes",	180,"Genus", 2,"Nymphalidae",2279)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7380,"Orchesia","Orchesia",	180,"Genus", 2,"Serropalpidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7083,"Orechtochilus","Orechtochilus",	180,"Genus", 2,"Gyrinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15734,"Orgyia","Orgyia",	180,"Genus", 2,"Erebidae",3573)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15867,"Oria","Oria",	180,"Genus", 2,"Noctuidae",3998)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14796,"Ormyridae","Ormyridae",	140,"Family", 2,"Chalcidoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7972,"Orochares","Orochares",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15130,"Orophia","Orophia",	180,"Genus", 2,"Ethmiidae",844)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6791,"Orsodacne","Orsodacne",	180,"Genus", 2,"Chrysomelidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14821,"Orthocentrinae","Orthocentrinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8948,"Orthocephalus","Orthocephalus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8168,"Orthocerus","Orthocerus",	180,"Genus", 2,"Colydiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15425,"Ortholepis","Ortholepis",	180,"Genus", 2,"Pyralidae",2457)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15574,"Orthonama","Orthonama",	180,"Genus", 2,"Geometridae",3035)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8729,"Orthonevra","Orthonevra",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8992,"Orthonotus","Orthonotus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14822,"Orthopelmatinae","Orthopelmatinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7240,"Orthoperidae","Orthoperidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7245,"Orthoperus","Orthoperus",	180,"Genus", 2,"Orthoperidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8893,"Orthops","Orthops",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18952,"Orthopygia","Orthopygia",	180,"Genus", 2,"Pyralidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15906,"Orthosia","Orthosia",	180,"Genus", 2,"Noctuidae",4159)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15289,"Orthotaenia","Orthotaenia",	180,"Genus", 2,"Tortricidae",1788)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15086,"Orthotelia","Orthotelia",	180,"Genus", 2,"Glyphipterigidae",617)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8932,"Orthotylus","Orthotylus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6913,"Oryctes","Oryctes",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8379,"Osmia","Osmia",	180,"Genus", 2,"Megachilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6917,"Osmoderma","Osmoderma",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7402,"Osphya","Osphya",	180,"Genus", 2,"Serropalpidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15475,"Ostrinia","Ostrinia",	180,"Genus", 2,"Crambidae",2650)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7853,"Othius","Othius",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14742,"Otiorhynchini","Otiorhynchini",	160,"Tribe", 2,"Brachycerinae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14743,"Otiorhynchus","Otiorhynchus",	180,"Genus", 2,"Otiorhynchini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15660,"Ourapteryx","Ourapteryx",	180,"Genus", 2,"Geometridae",3356)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(234050,"Oxybelus","Oxybelus",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6878,"Oxyomus","Oxyomus",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15216,"Oxyptilus","Oxyptilus",	180,"Genus", 2,"Pterophoridae",1466)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14823,"Oxytorinae","Oxytorinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15872,"Pabulatrix","Pabulatrix",	180,"Genus", 2,"Noctuidae",4015)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15913,"Pachetra","Pachetra",	180,"Genus", 2,"Noctuidae",4192)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15650,"Pachycnemia","Pachycnemia",	180,"Genus", 2,"Geometridae",3326)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8520,"Pachysphyria","Pachysphyria",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6954,"Pachyta","Pachyta",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15031,"Pachythelia","Pachythelia",	180,"Genus", 2,"Psychidae",272)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7857,"Paederus","Paederus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19196,"Palaeodrepana","Palaeodrepana",	180,"Genus", 2,"Drepanidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7332,"Palorus","Palorus",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15487,"Palpita","Palpita",	180,"Genus", 2,"Crambidae",2686)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15329,"Pammene","Pammene",	180,"Genus", 2,"Tortricidae",2108)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14720,"Pamphilidae","Pamphilidae",	140,"Family", 2,"Symphyta",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6283,"Panagaeus","Panagaeus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15132,"Pancalia","Pancalia",	180,"Genus", 2,"Cosmopterigidae",858)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15253,"Pandemis","Pandemis",	180,"Genus", 2,"Tortricidae",1592)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15811,"Panemeria","Panemeria",	180,"Genus", 2,"Noctuidae",3819)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15905,"Panolis","Panolis",	180,"Genus", 2,"Noctuidae",4156)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15804,"Panthea","Panthea",	180,"Genus", 2,"Noctuidae",3790)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8843,"Pantilius","Pantilius",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8316,"Panurgus","Panurgus",	180,"Genus", 2,"Andrenidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15917,"Papestra","Papestra",	180,"Genus", 2,"Noctuidae",4210)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15351,"Papilio","Papilio",	180,"Genus", 2,"Papilionidae",2216)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14914,"Papilionidae","Papilionidae",	140,"Family", 2,"Lepidoptera",2208)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15191,"Parachronistis","Parachronistis",	180,"Genus", 2,"Gelechiidae",1155)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15767,"Paracolax","Paracolax",	180,"Genus", 2,"Erebidae",3663)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19162,"Paracolax","Paracolax",	180,"Genus", 2,"Noctuidae",3663)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14993,"Paracrania","Paracrania",	180,"Genus", 2,"Eriocraniidae",15)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6705,"Paracymus","Paracymus",	180,"Genus", 2,"Hydrophilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15678,"Paradarisa","Paradarisa",	180,"Genus", 2,"Geometridae",3407)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19108,"Paradiarsia","Paradiarsia",	180,"Genus", 2,"Noctuidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19044,"Paradrina","Paradrina",	180,"Genus", 2,"Noctuidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8505,"Paragus","Paragus",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15417,"Paralipsa","Paralipsa",	180,"Genus", 2,"Pyralidae",2437)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15243,"Paramesia","Paramesia",	180,"Genus", 2,"Tortricidae",1562)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14955,"Parametriotidae","Parametriotidae",	140,"Family", 2,"Lepidoptera",1368)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15338,"Paranthrene","Paranthrene",	180,"Genus", 2,"Sesiidae",2161)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15516,"Parapoynx","Parapoynx",	180,"Genus", 2,"Crambidae",2816)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9056,"Parapsallus","Parapsallus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15371,"Pararge","Pararge",	180,"Genus", 2,"Nymphalidae",2285)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15777,"Parascotia","Parascotia",	180,"Genus", 2,"Erebidae",3696)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19093,"Parascotia","Parascotia",	180,"Genus", 2,"Noctuidae",3696)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15744,"Parasemia","Parasemia",	180,"Genus", 2,"Erebidae",3603)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15894,"Parastichtis","Parastichtis",	180,"Genus", 2,"Noctuidae",4123)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15079,"Paraswammerdamia","Paraswammerdamia",	180,"Genus", 2,"Yponomeutidae",559)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8594,"Parasyrphus","Parasyrphus",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15476,"Paratalanta","Paratalanta",	180,"Genus", 2,"Crambidae",2653)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15058,"Parectopa","Parectopa",	180,"Genus", 2,"Gracillariidae",408)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15679,"Parectropis","Parectropis",	180,"Genus", 2,"Geometridae",3409)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15614,"Pareulype","Pareulype",	180,"Genus", 2,"Geometridae",3160)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8761,"Parhelophilus","Parhelophilus",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14916,"Parnassius","Parnassius",	180,"Genus", 2,"Papilionidae",2210)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15069,"Parornix","Parornix",	180,"Genus", 2,"Gracillariidae",445)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15385,"Parthenos","Parthenos",	180,"Genus", 2,"Nymphalidae",2330)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15625,"Pasiphila","Pasiphila",	180,"Genus", 2,"Geometridae",3195)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(234056,"Passaloecus","Passaloecus",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6278,"Patrobus","Patrobus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15334,"Paysandisia","Paysandisia",	180,"Genus", 2,"Castniidae",2148)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15771,"Pechipogo","Pechipogo",	180,"Genus", 2,"Erebidae",3675)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18910,"Pechipogo","Pechipogo",	180,"Genus", 2,"Noctuidae",3675)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15149,"Pectinophora","Pectinophora",	180,"Genus", 2,"Gelechiidae",933)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15511,"Pediasia","Pediasia",	180,"Genus", 2,"Crambidae",2797)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8699,"Pelecocera","Pelecocera",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18602,"Pelenomus","Pelenomus",	180,"Genus", 2,"Ceutorhynchini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14947,"Peleopodidae","Peleopodidae",	140,"Family", 2,"Lepidoptera",769)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15314,"Pelochrista","Pelochrista",	180,"Genus", 2,"Tortricidae",1960)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15759,"Pelosia","Pelosia",	180,"Genus", 2,"Erebidae",3635)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6117,"Peltodytes","Peltodytes",	180,"Genus", 2,"Haliplidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15584,"Pelurga","Pelurga",	180,"Genus", 2,"Geometridae",3073)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15436,"Pempelia","Pempelia",	180,"Genus", 2,"Pyralidae",2490)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15427,"Pempeliella","Pempeliella",	180,"Genus", 2,"Pyralidae",2464)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18835,"Pempelliella","Pempelliella",	180,"Genus", 2,"Pyralidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(234063,"Pemphredon","Pemphredon",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15335,"Pennisetia","Pennisetia",	180,"Genus", 2,"Sesiidae",2152)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15590,"Pennithera","Pennithera",	180,"Genus", 2,"Geometridae",3088)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7322,"Pentaphyllus","Pentaphyllus",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14831,"Pepsinae","Pepsinae",	150,"Subfamily", 2,"Pompilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15694,"Perconia","Perconia",	180,"Genus", 2,"Geometridae",3443)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15669,"Peribatodes","Peribatodes",	180,"Genus", 2,"Geometridae",3380)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15244,"Periclepsis","Periclepsis",	180,"Genus", 2,"Tortricidae",1564)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15713,"Peridea","Peridea",	180,"Genus", 2,"Notodontidae",3504)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15929,"Peridroma","Peridroma",	180,"Genus", 2,"Noctuidae",4274)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6372,"Perigona","Perigona",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14795,"Perilampidae","Perilampidae",	140,"Family", 2,"Chalcidoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19019,"Perinephela","Perinephela",	180,"Genus", 2,"Crambidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15195,"Perittia","Perittia",	180,"Genus", 2,"Elachistidae",1304)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15620,"Perizoma","Perizoma",	180,"Genus", 2,"Geometridae",3176)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18979,"Perluga","Perluga",	180,"Genus", 2,"Geometridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15647,"Petrophora","Petrophora",	180,"Genus", 2,"Geometridae",3319)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15150,"Pexicopia","Pexicopia",	180,"Genus", 2,"Gelechiidae",935)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7831,"Phacophallus","Phacophallus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15705,"Phaiogramma","Phaiogramma",	180,"Genus", 2,"Geometridae",3469)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229730,"Phalacridae","Phalacridae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15032,"Phalacropterix","Phalacropterix",	180,"Genus", 2,"Psychidae",274)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15720,"Phalera","Phalera",	180,"Genus", 2,"Notodontidae",3524)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7302,"Phaleria","Phaleria",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15277,"Phalonidia","Phalonidia",	180,"Genus", 2,"Tortricidae",1709)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15230,"Phaulernis","Phaulernis",	180,"Genus", 2,"Epermeniidae",1518)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15714,"Pheosia","Pheosia",	180,"Genus", 2,"Notodontidae",3506)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15292,"Phiaris","Phiaris",	180,"Genus", 2,"Tortricidae",1814)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15572,"Phibalapteryx","Phibalapteryx",	180,"Genus", 2,"Geometridae",3027)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15664,"Phigalia","Phigalia",	180,"Genus", 2,"Geometridae",3364)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(234072,"Philanthus","Philanthus",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15245,"Philedone","Philedone",	180,"Genus", 2,"Tortricidae",1566)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15247,"Philedonides","Philedonides",	180,"Genus", 2,"Tortricidae",1571)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15610,"Philereme","Philereme",	180,"Genus", 2,"Geometridae",3149)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7673,"Philonthus","Philonthus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14864,"Philopedon","Philopedon",	180,"Genus", 2,"Brachyderini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7962,"Phloeonomus","Phloeonomus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15845,"Phlogophora","Phlogophora",	180,"Genus", 2,"Noctuidae",3944)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18995,"Phlyctaenia","Phlyctaenia",	180,"Genus", 2,"Crambidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15344,"Phobetron","Phobetron",	180,"Genus", 2,"Limacodidae",2184)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8928,"Phoenicocoris","Phoenicocoris",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8152,"Phosphuga","Phosphuga",	180,"Genus", 2,"Silphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15869,"Photedes","Photedes",	180,"Genus", 2,"Noctuidae",4002)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15333,"Phragmataecia","Phragmataecia",	180,"Genus", 2,"Cossidae",2144)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15861,"Phragmatiphila","Phragmatiphila",	180,"Genus", 2,"Noctuidae",3984)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15743,"Phragmatobia","Phragmatobia",	180,"Genus", 2,"Erebidae",3601)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15275,"Phtheochroa","Phtheochroa",	180,"Genus", 2,"Tortricidae",1699)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15179,"Phthorimaea","Phthorimaea",	180,"Genus", 2,"Gelechiidae",1099)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15439,"Phycita","Phycita",	180,"Genus", 2,"Pyralidae",2502)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15455,"Phycitodes","Phycitodes",	180,"Genus", 2,"Pyralidae",2559)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7295,"Phylan","Phylan",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14867,"Phyllobius","Phyllobius",	180,"Genus", 2,"Otiorhynchini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15073,"Phyllocnistis","Phyllocnistis",	180,"Genus", 2,"Gracillariidae",524)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15541,"Phyllodesma","Phyllodesma",	180,"Genus", 2,"Lasiocampidae",2890)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15070,"Phyllonorycter","Phyllonorycter",	180,"Genus", 2,"Gracillariidae",458)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6909,"Phyllopertha","Phyllopertha",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15014,"Phylloporia","Phylloporia",	180,"Genus", 2,"Incurvariidae",205)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8952,"Phylus","Phylus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7016,"Phymatodes","Phymatodes",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14997,"Phymatopus","Phymatopus",	180,"Genus", 2,"Hepialidae",34)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229691,"Physatocheila","Physatocheila",	180,"Genus", 2,"Tingidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8868,"Phytocoris","Phytocoris",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7067,"Phytoecia","Phytoecia",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15778,"Phytometra","Phytometra",	180,"Genus", 2,"Erebidae",3698)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19051,"Phytometra","Phytometra",	180,"Genus", 2,"Noctuidae",3698)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14972,"Pieridae","Pieridae",	140,"Family", 2,"Lepidoptera",2242)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15362,"Pieris","Pieris",	180,"Genus", 2,"Pieridae",2253)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8870,"Pilophorus","Pilophorus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15431,"Pima","Pima",	180,"Genus", 2,"Pyralidae",2480)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14824,"Pimplinae","Pimplinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9003,"Pinalitus","Pinalitus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18970,"Piniohilia","Piniohilia",	180,"Genus", 2,"Tortricidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15298,"Piniphila","Piniphila",	180,"Genus", 2,"Tortricidae",1838)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8632,"Pipiza","Pipiza",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8639,"Pipizella","Pipizella",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9006,"Pithanus","Pithanus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8954,"Placochilus","Placochilus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8896,"Plagiognathus","Plagiognathus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7023,"Plagionotus","Plagionotus",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15648,"Plagodis","Plagodis",	180,"Genus", 2,"Geometridae",3321)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7151,"Platambus","Platambus",	180,"Genus", 2,"Dytiscidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6784,"Plateumaris","Plateumaris",	180,"Genus", 2,"Chrysomelidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8522,"Platycheirus","Platycheirus",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7745,"Platydracus","Platydracus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15151,"Platyedra","Platyedra",	180,"Genus", 2,"Gelechiidae",937)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14776,"Platygastridae","Platygastridae",	140,"Family", 2,"Platygastroidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14775,"Platygastroidea","Platygastroidea",	120,"Infraorder", 2,"Apocrita",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8227,"Platynaspis","Platynaspis",	180,"Genus", 2,"Coccinellidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15209,"Platyptilia","Platyptilia",	180,"Genus", 2,"Pterophoridae",1439)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15512,"Platytes","Platytes",	180,"Genus", 2,"Crambidae",2802)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15410,"Plebejus","Plebejus",	180,"Genus", 2,"Lycaenidae",2413)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15592,"Plemyria","Plemyria",	180,"Genus", 2,"Geometridae",3097)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9109,"Plesiodema","Plesiodema",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15478,"Pleuroptya","Pleuroptya",	180,"Genus", 2,"Crambidae",2666)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15113,"Pleurota","Pleurota",	180,"Genus", 2,"Oecophoridae",745)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15457,"Plodia","Plodia",	180,"Genus", 2,"Pyralidae",2571)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15799,"Plusia","Plusia",	180,"Genus", 2,"Noctuidae",3773)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15083,"Plutella","Plutella",	180,"Genus", 2,"Plutellidae",604)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14935,"Plutellidae","Plutellidae",	140,"Family", 2,"Lepidoptera",603)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8828,"Pocota","Pocota",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14876,"Podalonia","Podalonia",	180,"Genus", 2,"Sphecidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15533,"Poecilocampa","Poecilocampa",	180,"Genus", 2,"Lasiocampidae",2869)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14825,"Poemeninae","Poemeninae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7041,"Pogonocherus","Pogonocherus",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6275,"Pogonus","Pogonus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15912,"Polia","Polia",	180,"Genus", 2,"Noctuidae",4186)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14835,"Polistinae","Polistinae",	150,"Subfamily", 2,"Vespidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15795,"Polychrysia","Polychrysia",	180,"Genus", 2,"Noctuidae",3758)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14879,"Polydrusus","Polydrusus",	180,"Genus", 2,"Brachyderini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15391,"Polygonia","Polygonia",	180,"Genus", 2,"Nymphalidae",2355)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8899,"Polymerus","Polymerus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15902,"Polymixis","Polymixis",	180,"Genus", 2,"Noctuidae",4143)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15415,"Polyommatus","Polyommatus",	180,"Genus", 2,"Lycaenidae",2427)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15531,"Polyploca","Polyploca",	180,"Genus", 2,"Drepanidae",2862)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15770,"Polypogon","Polypogon",	180,"Genus", 2,"Erebidae",3673)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18899,"Polypogon","Polypogon",	180,"Genus", 2,"Noctuidae",3673)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14710,"Pompilidae","Pompilidae",	140,"Family", 2,"Vespoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14832,"Pompilinae","Pompilinae",	150,"Subfamily", 2,"Pompilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15363,"Pontia","Pontia",	180,"Genus", 2,"Pieridae",2257)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15222,"Porrittia","Porrittia",	180,"Genus", 2,"Pterophoridae",1483)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8655,"Portevinia","Portevinia",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6924,"Potonia","Potonia",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6928,"Potosia","Potosia",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15064,"Povolnya","Povolnya",	180,"Genus", 2,"Gracillariidae",434)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14938,"Praydidae","Praydidae",	140,"Family", 2,"Lepidoptera",666)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15093,"Prays","Prays",	180,"Genus", 2,"Praydidae",667)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7590,"Priobium","Priobium",	180,"Genus", 2,"Anobiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14889,"Priocnemis","Priocnemis",	180,"Genus", 2,"Pepsinae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6939,"Prionus","Prionus",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7352,"Prionychus","Prionychus",	180,"Genus", 2,"Alleculidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15293,"Pristerognatha","Pristerognatha",	180,"Genus", 2,"Tortricidae",1824)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6306,"Pristonychus","Pristonychus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15235,"Prochoreutis","Prochoreutis",	180,"Genus", 2,"Choreutidae",1540)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14774,"Proctrupidae","Proctrupidae",	140,"Family", 2,"Proctrupoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14771,"Proctrupoidea","Proctrupoidea",	120,"Infraorder", 2,"Apocrita",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19198,"Prodotis","Prodotis",	180,"Genus", 2,"Noctuidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14926,"Prodoxidae","Prodoxidae",	140,"Family", 2,"Lepidoptera",207)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15168,"Prolita","Prolita",	180,"Genus", 2,"Gelechiidae",1031)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15560,"Proserpinus","Proserpinus",	180,"Genus", 2,"Sphingidae",2948)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15403,"Prosotas","Prosotas",	180,"Genus", 2,"Lycaenidae",2397)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15870,"Protarchanara","Protarchanara",	180,"Genus", 2,"Noctuidae",4010)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7919,"Proteinus","Proteinus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18926,"Protodeltote","Protodeltote",	180,"Genus", 2,"Noctuidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15954,"Protolampra","Protolampra",	180,"Genus", 2,"Noctuidae",4380)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15821,"Protoschinia","Protoschinia",	180,"Genus", 2,"Noctuidae",3863)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15025,"Proutia","Proutia",	180,"Genus", 2,"Psychidae",254)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19186,"Proxenus","Proxenus",	180,"Genus", 2,"Noctuidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9075,"Psallodema","Psallodema",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8908,"Psallus","Psallus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6880,"Psammobius","Psammobius",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15474,"Psammotis","Psammotis",	180,"Genus", 2,"Crambidae",2648)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15224,"Pselnophorus","Pselnophorus",	180,"Genus", 2,"Pterophoridae",1491)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(234074,"Psenulus","Psenulus",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15274,"Pseudargyrotoza","Pseudargyrotoza",	180,"Genus", 2,"Tortricidae",1697)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15118,"Pseudatemelia","Pseudatemelia",	180,"Genus", 2,"Lypusidae",762)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15829,"Pseudeustrotia","Pseudeustrotia",	180,"Genus", 2,"Noctuidae",3894)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15503,"Pseudobissetia","Pseudobissetia",	180,"Genus", 2,"Crambidae",2753)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7358,"Pseudocistela","Pseudocistela",	180,"Genus", 2,"Alleculidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15319,"Pseudococcyx","Pseudococcyx",	180,"Genus", 2,"Tortricidae",2019)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15299,"Pseudohermenias","Pseudohermenias",	180,"Genus", 2,"Tortricidae",1841)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18614,"Pseudoips","Pseudoips",	180,"Genus", 2,"Nolidae",4399)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9017,"Pseudoloxops","Pseudoloxops",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15653,"Pseudopanthera","Pseudopanthera",	180,"Genus", 2,"Geometridae",3334)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15005,"Pseudopostega","Pseudopostega",	180,"Genus", 2,"Opostegidae",150)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15287,"Pseudosciaphila","Pseudosciaphila",	180,"Genus", 2,"Tortricidae",1773)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15077,"Pseudoswammerdamia","Pseudoswammerdamia",	180,"Genus", 2,"Yponomeutidae",552)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15185,"Pseudotelphusa","Pseudotelphusa",	180,"Genus", 2,"Gelechiidae",1140)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15696,"Pseudoterpna","Pseudoterpna",	180,"Genus", 2,"Geometridae",3448)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15175,"Psoricoptera","Psoricoptera",	180,"Genus", 2,"Gelechiidae",1072)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18857,"Psuedosciaphila","Psuedosciaphila",	180,"Genus", 2,"Tortricidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15026,"Psyche","Psyche",	180,"Genus", 2,"Psychidae",257)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14928,"Psychidae","Psychidae",	140,"Family", 2,"Lepidoptera",228)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7992,"Ptenidium","Ptenidium",	180,"Genus", 2,"Ptiliidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15632,"Pterapherapteryx","Pterapherapteryx",	180,"Genus", 2,"Geometridae",3274)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14791,"Pteromalidae","Pteromalidae",	140,"Family", 2,"Chalcidoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14961,"Pterophoridae","Pterophoridae",	140,"Family", 2,"Lepidoptera",1433)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15221,"Pterophorus","Pterophorus",	180,"Genus", 2,"Pterophoridae",1481)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6348,"Pterostichus","Pterostichus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15716,"Pterostoma","Pterostoma",	180,"Genus", 2,"Notodontidae",3512)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8033,"Pteryx","Pteryx",	180,"Genus", 2,"Ptiliidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7991,"Ptiliidae","Ptiliidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7592,"Ptilinus","Ptilinus",	180,"Genus", 2,"Anobiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8017,"Ptiliolum","Ptiliolum",	180,"Genus", 2,"Ptiliidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8004,"Ptilium","Ptilium",	180,"Genus", 2,"Ptiliidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15717,"Ptilodon","Ptilodon",	180,"Genus", 2,"Notodontidae",3514)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15719,"Ptilophora","Ptilophora",	180,"Genus", 2,"Notodontidae",3521)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8030,"Ptinella","Ptinella",	180,"Genus", 2,"Ptiliidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7534,"Ptinidae","Ptinidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7547,"Ptinus","Ptinus",	180,"Genus", 2,"Ptinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15161,"Ptocheuusa","Ptocheuusa",	180,"Genus", 2,"Gelechiidae",985)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8094,"Ptomaphagus","Ptomaphagus",	180,"Genus", 2,"Silphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15252,"Ptycholoma","Ptycholoma",	180,"Genus", 2,"Tortricidae",1590)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15251,"Ptycholomoides","Ptycholomoides",	180,"Genus", 2,"Tortricidae",1588)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7932,"Pycnoglypta","Pycnoglypta",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19033,"Pyla","Pyla",	180,"Genus", 2,"Pyralidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14976,"Pyralidae","Pyralidae",	140,"Family", 2,"Lepidoptera",2431)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15462,"Pyralis","Pyralis",	180,"Genus", 2,"Pyralidae",2588)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15468,"Pyrausta","Pyrausta",	180,"Genus", 2,"Crambidae",2606)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15353,"Pyrgus","Pyrgus",	180,"Genus", 2,"Hesperiidae",2222)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15376,"Pyronia","Pyronia",	180,"Genus", 2,"Nymphalidae",2297)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8538,"Pyrophaena","Pyrophaena",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15341,"Pyropteron","Pyropteron",	180,"Genus", 2,"Sesiidae",2175)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15820,"Pyrrhia","Pyrrhia",	180,"Genus", 2,"Noctuidae",3861)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7008,"Pyrrhidium","Pyrrhidium",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7516,"Pythidae","Pythidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7517,"Pytho","Pytho",	180,"Genus", 2,"Pythidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7781,"Quedius","Quedius",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7504,"Rabocerus","Rabocerus",	180,"Genus", 2,"Salpingidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7186,"Rantus","Rantus",	180,"Genus", 2,"Dytiscidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15188,"Recurvaria","Recurvaria",	180,"Genus", 2,"Gelechiidae",1148)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7667,"Remus","Remus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15320,"Retinia","Retinia",	180,"Genus", 2,"Tortricidae",2022)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9144,"Reuteria","Reuteria",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8902,"Rhabdomiris","Rhabdomiris",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15346,"Rhagades","Rhagades",	180,"Genus", 2,"Zygaenidae",2190)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6964,"Rhagium","Rhagium",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14736,"Rhamphini","Rhamphini",	160,"Tribe", 2,"Curculioninae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15611,"Rheumaptera","Rheumaptera",	180,"Genus", 2,"Geometridae",3152)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15084,"Rhigognostis","Rhigognostis",	180,"Genus", 2,"Plutellidae",608)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8696,"Rhingia","Rhingia",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14885,"Rhinoncus","Rhinoncus",	180,"Genus", 2,"Ceutorhynchini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18837,"Rhinoprora","Rhinoprora",	180,"Genus", 2,"Geometridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7513,"Rhinosimus","Rhinosimus",	180,"Genus", 2,"Salpingidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7474,"Rhipiphoridae","Rhipiphoridae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15858,"Rhizedra","Rhizedra",	180,"Genus", 2,"Noctuidae",3978)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8209,"Rhizobius","Rhizobius",	180,"Genus", 2,"Coccinellidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15570,"Rhodometra","Rhodometra",	180,"Genus", 2,"Geometridae",3021)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15437,"Rhodophaea","Rhodophaea",	180,"Genus", 2,"Pyralidae",2493)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15567,"Rhodostrophia","Rhodostrophia",	180,"Genus", 2,"Geometridae",3003)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7642,"Rhopalodontus","Rhopalodontus",	180,"Genus", 2,"Cisidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(234077,"Rhopalum","Rhopalum",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15308,"Rhopobota","Rhopobota",	180,"Genus", 2,"Tortricidae",1901)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15940,"Rhyacia","Rhyacia",	180,"Genus", 2,"Noctuidae",4326)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15323,"Rhyacionia","Rhyacionia",	180,"Genus", 2,"Tortricidae",2029)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14737,"Rhynchaenus","Rhynchaenus",	180,"Genus", 2,"Rhamphini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18630,"Rhynchitidae","Rhynchitidae",	140,"Family", 2,"Curculionoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18631,"Rhynchitinae","Rhynchitinae",	150,"Subfamily", 2,"Rhynchitidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18632,"Rhynchitini","Rhynchitini",	160,"Tribe", 2,"Rhynchitinae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15742,"Rhyparia","Rhyparia",	180,"Genus", 2,"Erebidae",3599)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6884,"Rhyssemus","Rhyssemus",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14826,"Rhyssinae","Rhyssinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14974,"Riodinidae","Riodinidae",	140,"Family", 2,"Lepidoptera",2371)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15725,"Rivula","Rivula",	180,"Genus", 2,"Erebidae",3543)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18908,"Rivula","Rivula",	180,"Genus", 2,"Noctuidae",3543)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7611,"Rizopertha","Rizopertha",	180,"Genus", 2,"Bostrychidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15056,"Roeslerstammia","Roeslerstammia",	180,"Genus", 2,"Roeslerstammiidae",386)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14930,"Roeslerstammiidae","Roeslerstammiidae",	140,"Family", 2,"Lepidoptera",385)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7014,"Ropalopus","Ropalopus",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8320,"Rophites","Rophites",	180,"Genus", 2,"Halictidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7868,"Rugilus","Rugilus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15836,"Rusina","Rusina",	180,"Genus", 2,"Noctuidae",3922)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15523,"Sabra","Sabra",	180,"Genus", 2,"Drepanidae",2842)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15423,"Salebriopsis","Salebriopsis",	180,"Genus", 2,"Pyralidae",2452)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9111,"Salicarus","Salicarus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7500,"Salpingidae","Salpingidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7507,"Salpingus","Salpingus",	180,"Genus", 2,"Salpingidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15491,"Sameodes","Sameodes",	180,"Genus", 2,"Crambidae",2695)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7056,"Saperda","Saperda",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14768,"Sapygidae","Sapygidae",	140,"Family", 2,"Vespoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15548,"Saturnia","Saturnia",	180,"Genus", 2,"Saturniidae",2913)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14983,"Saturniidae","Saturniidae",	140,"Family", 2,"Lepidoptera",2908)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15402,"Satyrium","Satyrium",	180,"Genus", 2,"Lycaenidae",2393)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8567,"scaeva","scaeva",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7316,"Scaphidema","Scaphidema",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7655,"Scaphidiidae","Scaphidiidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7656,"Scaphidium","Scaphidium",	180,"Genus", 2,"Scaphidiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7658,"Scaphosoma","Scaphosoma",	180,"Genus", 2,"Scaphidiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8106,"Scaphosoma","Scaphosoma",	180,"Genus", 2,"Silphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6813,"Scarabaeidae","Scarabaeidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14751,"Scelionidae","Scelionidae",	140,"Family", 2,"Platygastroidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15102,"Schiffermuelleria","Schiffermuelleria",	180,"Genus", 2,"Oecophoridae",710)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19173,"Schinia","Schinia",	180,"Genus", 2,"Noctuidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15518,"Schoenobius","Schoenobius",	180,"Genus", 2,"Crambidae",2826)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15774,"Schrankia","Schrankia",	180,"Genus", 2,"Erebidae",3685)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19059,"Schrankia","Schrankia",	180,"Genus", 2,"Noctuidae",3685)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15229,"Schreckensteinia","Schreckensteinia",	180,"Genus", 2,"Schreckensteiniidae",1513)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14962,"Schreckensteiniidae","Schreckensteiniidae",	140,"Family", 2,"Lepidoptera",1512)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8109,"Sciodrepa","Sciodrepa",	180,"Genus", 2,"Silphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15429,"Sciota","Sciota",	180,"Genus", 2,"Pyralidae",2469)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15473,"Sclerocona","Sclerocona",	180,"Genus", 2,"Crambidae",2646)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15724,"Scoliopteryx","Scoliopteryx",	180,"Genus", 2,"Erebidae",3540)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19091,"Scoliopteryx","Scoliopteryx",	180,"Genus", 2,"Noctuidae",3540)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18621,"Scolytinae","Scolytinae",	150,"Subfamily", 2,"Curculionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7887,"Scopaeus","Scopaeus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15498,"Scoparia","Scoparia",	180,"Genus", 2,"Crambidae",2718)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18889,"Scoparia","Scoparia",	180,"Genus", 2,"Pyralidae",2718)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15566,"Scopula","Scopula",	180,"Genus", 2,"Geometridae",2987)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15573,"Scotopteryx","Scotopteryx",	180,"Genus", 2,"Geometridae",3029)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7498,"Scraptia","Scraptia",	180,"Genus", 2,"Scraptiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7497,"Scraptiidae","Scraptiidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15177,"Scrobipalpa","Scrobipalpa",	180,"Genus", 2,"Gelechiidae",1079)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15178,"Scrobipalpula","Scrobipalpula",	180,"Genus", 2,"Gelechiidae",1095)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7249,"Scydmaenidae","Scydmaenidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7281,"Scydmaenus","Scydmaenus",	180,"Genus", 2,"Scydmaenidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8211,"Scymnus","Scymnus",	180,"Genus", 2,"Coccinellidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14959,"Scythrididae","Scythrididae",	140,"Family", 2,"Lepidoptera",1412)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15206,"Scythris","Scythris",	180,"Genus", 2,"Scythrididae",1413)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15094,"Scythropia","Scythropia",	180,"Genus", 2,"Praydidae",672)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18877,"Scythropia","Scythropia",	180,"Genus", 2,"Scythropiidae",672)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14939,"Scythropiidae","Scythropiidae",	140,"Family", 2,"Lepidoptera",672)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15859,"Sedina","Sedina",	180,"Genus", 2,"Noctuidae",3980)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15430,"Selagia","Selagia",	180,"Genus", 2,"Pyralidae",2477)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14724,"Selandriinae","Selandriinae",	150,"Subfamily", 2,"Tenthredinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15657,"Selenia","Selenia",	180,"Genus", 2,"Geometridae",3346)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15286,"Selenodes","Selenodes",	180,"Genus", 2,"Tortricidae",1770)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19137,"Selidoema","Selidoema",	180,"Genus", 2,"Geometridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15670,"Selidosema","Selidosema",	180,"Genus", 2,"Geometridae",3385)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7010,"Semanotus","Semanotus",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15121,"Semioscopis","Semioscopis",	180,"Genus", 2,"Depressariidae",773)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15926,"Senta","Senta",	180,"Genus", 2,"Noctuidae",4266)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6894,"Serica","Serica",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7241,"Sericoderus","Sericoderus",	180,"Genus", 2,"Orthoperidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8707,"Sericomyia","Sericomyia",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7372,"Serropalpidae","Serropalpidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15336,"Sesia","Sesia",	180,"Genus", 2,"Sesiidae",2155)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14969,"Sesiidae","Sesiidae",	140,"Family", 2,"Lepidoptera",2150)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15763,"Setina","Setina",	180,"Genus", 2,"Erebidae",3652)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15813,"Shargacucullia","Shargacucullia",	180,"Genus", 2,"Noctuidae",3837)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15920,"Sideridis","Sideridis",	180,"Genus", 2,"Noctuidae",4218)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15021,"Siederia","Siederia",	180,"Genus", 2,"Psychidae",241)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14794,"Signiphoridae","Signiphoridae",	140,"Family", 2,"Chalcidoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8085,"Silpha","Silpha",	180,"Genus", 2,"Silphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8061,"Silphidae","Silphidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15766,"Simplicia","Simplicia",	180,"Genus", 2,"Erebidae",3661)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15808,"Simyra","Simyra",	180,"Genus", 2,"Noctuidae",3800)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6934,"Sinodendron","Sinodendron",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15691,"Siona","Siona",	180,"Genus", 2,"Geometridae",3436)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14714,"Siricidae","Siricidae",	140,"Family", 2,"Symphyta",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15471,"Sitochroa","Sitochroa",	180,"Genus", 2,"Crambidae",2623)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14740,"Sitona","Sitona",	180,"Genus", 2,"Sitonini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14739,"Sitonini","Sitonini",	160,"Tribe", 2,"Brachycerinae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15152,"Sitotroga","Sitotroga",	180,"Genus", 2,"Gelechiidae",940)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15552,"Smerinthus","Smerinthus",	180,"Genus", 2,"Sphingidae",2927)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8035,"Smicrus","Smicrus",	180,"Genus", 2,"Ptiliidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15169,"Sophronia","Sophronia",	180,"Genus", 2,"Gelechiidae",1036)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15135,"Sorhagenia","Sorhagenia",	180,"Genus", 2,"Cosmopterigidae",873)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15945,"Spaelotis","Spaelotis",	180,"Genus", 2,"Noctuidae",4343)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15587,"Spargania","Spargania",	180,"Genus", 2,"Geometridae",3079)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15240,"Sparganothis","Sparganothis",	180,"Genus", 2,"Tortricidae",1556)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15269,"Spatalistis","Spatalistis",	180,"Genus", 2,"Tortricidae",1653)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18592,"Speyeria","Speyeria",	180,"Genus", 2,"Nymphalidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7535,"Sphaericus","Sphaericus",	180,"Genus", 2,"Ptinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6675,"Sphaeridium","Sphaeridium",	180,"Genus", 2,"Hydrophilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7237,"Sphaeriidae","Sphaeriidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7238,"Sphaerius","Sphaerius",	180,"Genus", 2,"Sphaeriidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8618,"Sphaerophoria","Sphaerophoria",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8196,"Sphaerosoma","Sphaerosoma",	180,"Genus", 2,"Endomychidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14753,"Sphecidae","Sphecidae",	140,"Family", 2,"Apoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8354,"Sphecodes","Sphecodes",	180,"Genus", 2,"Halictidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8721,"Sphegina","Sphegina",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7652,"Sphindidae","Sphindidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7653,"Sphindus","Sphindus",	180,"Genus", 2,"Sphindidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14984,"Sphingidae","Sphingidae",	140,"Family", 2,"Lepidoptera",2923)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15556,"Sphinx","Sphinx",	180,"Genus", 2,"Sphingidae",2936)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6308,"Sphodrus","Sphodrus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19061,"Sphrageidus","Sphrageidus",	180,"Genus", 2,"Erebidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15735,"Spilarctia","Spilarctia",	180,"Genus", 2,"Erebidae",3581)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15309,"Spilonota","Spilonota",	180,"Genus", 2,"Tortricidae",1909)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15736,"Spilosoma","Spilosoma",	180,"Genus", 2,"Erebidae",3583)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15750,"Spiris","Spiris",	180,"Genus", 2,"Erebidae",3615)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15830,"Spodoptera","Spodoptera",	180,"Genus", 2,"Noctuidae",3896)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15486,"Spoladea","Spoladea",	180,"Genus", 2,"Crambidae",2684)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6941,"Spondylis","Spondylis",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15199,"Spuleria","Spuleria",	180,"Genus", 2,"Parametriotidae",1373)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15942,"Standfussiana","Standfussiana",	180,"Genus", 2,"Noctuidae",4330)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7662,"Staphylinidae","Staphylinidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7752,"Staphylinus","Staphylinus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15205,"Stathmopoda","Stathmopoda",	180,"Genus", 2,"Stathmopodidae",1410)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14958,"Stathmopodidae","Stathmopodidae",	140,"Family", 2,"Lepidoptera",1409)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15849,"Staurophora","Staurophora",	180,"Genus", 2,"Noctuidae",3953)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15710,"Stauropus","Stauropus",	180,"Genus", 2,"Notodontidae",3488)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19153,"Steboptilia","Steboptilia",	180,"Genus", 2,"Pterophoridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15641,"Stegania","Stegania",	180,"Genus", 2,"Geometridae",3297)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7579,"Stegobium","Stegobium",	180,"Genus", 2,"Anobiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8339,"Stelis","Stelis",	180,"Genus", 2,"Megachilidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7259,"Stenichnus","Stenichnus",	180,"Genus", 2,"Scydmaenidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6952,"Stenocorus","Stenocorus",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8837,"Stenodema","Stenodema",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15190,"Stenolechia","Stenolechia",	180,"Genus", 2,"Gelechiidae",1153)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6607,"Stenolophus","Stenolophus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15213,"Stenoptilia","Stenoptilia",	180,"Genus", 2,"Pterophoridae",1456)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15035,"Stenoptinea","Stenoptinea",	180,"Genus", 2,"Tineidae",286)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7063,"Stenostola","Stenostola",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8904,"Stenotus","Stenotus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229702,"Stephanitis","Stephanitis",	180,"Genus", 2,"Tingidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15196,"Stephensia","Stephensia",	180,"Genus", 2,"Elachistidae",1309)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9060,"Sthenarus","Sthenarus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15296,"Stictea","Stictea",	180,"Genus", 2,"Tortricidae",1834)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15000,"Stigmella","Stigmella",	180,"Genus", 2,"Nepticulidae",43)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(234081,"Stigmus","Stigmus",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14827,"Stilbopinae","Stilbopinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6370,"Stomis","Stomis",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15136,"Stomopteryx","Stomopteryx",	180,"Genus", 2,"Gelechiidae",879)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6991,"Strangalia","Strangalia",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14887,"Strombocerus","Strombocerus",	180,"Genus", 2,"Selandriinae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9042,"Strongylocoris","Strongylocoris",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15330,"Strophedra","Strophedra",	180,"Genus", 2,"Tortricidae",2133)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14733,"Strophosoma","Strophosoma",	180,"Genus", 2,"Brachyderini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8202,"Subcoccinella","Subcoccinella",	180,"Genus", 2,"Coccinellidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7878,"Sunius","Sunius",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15078,"Swammerdamia","Swammerdamia",	180,"Genus", 2,"Yponomeutidae",554)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18824,"Swatschek","Swatschek",	180,"Genus", 2,"Tortricidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8198,"Symbiotes","Symbiotes",	180,"Genus", 2,"Endomychidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14711,"Symphyta","Symphyta",	110,"Suborder", 2,"Hymenoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15339,"Synanthedon","Synanthedon",	180,"Genus", 2,"Sesiidae",2163)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15461,"Synaphe","Synaphe",	180,"Genus", 2,"Pyralidae",2586)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8170,"Synchita","Synchita",	180,"Genus", 2,"Colydiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15137,"Syncopacma","Syncopacma",	180,"Genus", 2,"Gelechiidae",881)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15254,"Syndemis","Syndemis",	180,"Genus", 2,"Tortricidae",1598)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15798,"Syngrapha","Syngrapha",	180,"Genus", 2,"Noctuidae",3770)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6320,"Synuchus","Synuchus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8810,"Syritta","Syritta",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8504,"Syrphidae","Syrphidae",	140,"Family", 2,"Diptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(220743,"Syrphidae","Syrphidae",	140,"Family", 2,"Diptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8547,"Syrphus","Syrphus",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9044,"Systellonotus","Systellonotus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6936,"Systenocerus","Systenocerus",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6265,"Tachys","Tachys",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(234085,"Tachysphex","Tachysphex",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15022,"Taleporia","Taleporia",	180,"Genus", 2,"Psychidae",245)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15236,"Tebenna","Tebenna",	180,"Genus", 2,"Choreutidae",1543)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15127,"Telechrysis","Telechrysis",	180,"Genus", 2,"Depressariidae",837)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15182,"Teleiodes","Teleiodes",	180,"Genus", 2,"Gelechiidae",1126)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15183,"Teleiopsis","Teleiopsis",	180,"Genus", 2,"Gelechiidae",1132)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8805,"Temnostoma","Temnostoma",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7344,"Tenebrio","Tenebrio",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7291,"Tenebrionidae","Tenebrionidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14715,"Tenthredinidae","Tenthredinidae",	140,"Family", 2,"Symphyta",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14725,"Tenthredininae","Tenthredininae",	150,"Subfamily", 2,"Tenthredinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9019,"Teratocoris","Teratocoris",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8178,"Teredus","Teredus",	180,"Genus", 2,"Colydiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14828,"Tersilochinae","Tersilochinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15527,"Tethea","Tethea",	180,"Genus", 2,"Drepanidae",2852)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15528,"Tetheella","Tetheella",	180,"Genus", 2,"Drepanidae",2855)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14793,"Tetracampidae","Tetracampidae",	140,"Family", 2,"Chalcidoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7373,"Tetratoma","Tetratoma",	180,"Genus", 2,"Serropalpidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6945,"Tetropium","Tetropium",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7069,"Tetrops","Tetrops",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15702,"Thalera","Thalera",	180,"Genus", 2,"Geometridae",3463)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15841,"Thalpophila","Thalpophila",	180,"Genus", 2,"Noctuidae",3936)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8074,"Thanatophilus","Thanatophilus",	180,"Genus", 2,"Silphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15328,"Thaumatotibia","Thaumatotibia",	180,"Genus", 2,"Tortricidae",2105)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15706,"Thaumetopoea","Thaumetopoea",	180,"Genus", 2,"Notodontidae",3474)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15399,"Thecla","Thecla",	180,"Genus", 2,"Lycaenidae",2386)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15591,"Thera","Thera",	180,"Genus", 2,"Geometridae",3090)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15564,"Theretra","Theretra",	180,"Genus", 2,"Sphingidae",2961)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15686,"Theria","Theria",	180,"Genus", 2,"Geometridae",3424)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15699,"Thetidia","Thetidia",	180,"Genus", 2,"Geometridae",3455)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15307,"Thiodia","Thiodia",	180,"Genus", 2,"Tortricidae",1899)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15155,"Thiotricha","Thiotricha",	180,"Genus", 2,"Gelechiidae",952)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19169,"Thisanootia","Thisanootia",	180,"Genus", 2,"Crambidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15510,"Thisanotia","Thisanotia",	180,"Genus", 2,"Crambidae",2795)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15908,"Tholera","Tholera",	180,"Genus", 2,"Noctuidae",4173)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229737,"Throscidae","Throscidae",	140,"Family", 2,"Coleoptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15757,"Thumatha","Thumatha",	180,"Genus", 2,"Erebidae",3630)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15525,"Thyatira","Thyatira",	180,"Genus", 2,"Drepanidae",2847)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15356,"Thymelicus","Thymelicus",	180,"Genus", 2,"Hesperiidae",2232)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15879,"Tiliacea","Tiliacea",	180,"Genus", 2,"Noctuidae",4057)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15568,"Timandra","Timandra",	180,"Genus", 2,"Geometridae",3005)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15098,"Tinagma","Tinagma",	180,"Genus", 2,"Douglasiidae",694)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15048,"Tinea","Tinea",	180,"Genus", 2,"Tineidae",339)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14929,"Tineidae","Tineidae",	140,"Family", 2,"Lepidoptera",276)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15047,"Tineola","Tineola",	180,"Genus", 2,"Tineidae",337)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229683,"Tingidae","Tingidae",	140,"Family", 2,"Hemiptera",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(229684,"Tingis","Tingis",	180,"Genus", 2,"Tingidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14769,"Tiphiidae","Tiphiidae",	140,"Family", 2,"Vespoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7545,"Tipnus","Tipnus",	180,"Genus", 2,"Ptinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15016,"Tischeria","Tischeria",	180,"Genus", 2,"Tischeriidae",219)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14927,"Tischeriidae","Tischeriidae",	140,"Family", 2,"Lepidoptera",218)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7223,"Tomoxia","Tomoxia",	180,"Genus", 2,"Mordellidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14966,"Tortricidae","Tortricidae",	140,"Family", 2,"Lepidoptera",1549)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15266,"Tortricodes","Tortricodes",	180,"Genus", 2,"Tortricidae",1636)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15270,"Tortrix","Tortrix",	180,"Genus", 2,"Tortricidae",1655)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14792,"Torymidae","Torymidae",	140,"Family", 2,"Chalcidoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6973,"Toxotus","Toxotus",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15839,"Trachea","Trachea",	180,"Genus", 2,"Noctuidae",3932)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14855,"Trachodes","Trachodes",	180,"Genus", 2,"Molytini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18822,"Trachycera","Trachycera",	180,"Genus", 2,"Pyralidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14846,"Trachyphloeus","Trachyphloeus",	180,"Genus", 2,"Otiorhynchini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6267,"Trechus","Trechus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7420,"Triarthron","Triarthron",	180,"Genus", 2,"Liodidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15044,"Triaxomasia","Triaxomasia",	180,"Genus", 2,"Tineidae",329)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15040,"Triaxomera","Triaxomera",	180,"Genus", 2,"Tineidae",304)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7328,"Tribolium","Tribolium",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15534,"Trichiura","Trichiura",	180,"Genus", 2,"Lasiocampidae",2871)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6599,"Trichocellus","Trichocellus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14790,"Trichogrammatidae","Trichogrammatidae",	140,"Family", 2,"Chalcidoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15046,"Trichophaga","Trichophaga",	180,"Genus", 2,"Tineidae",334)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15790,"Trichoplusia","Trichoplusia",	180,"Genus", 2,"Noctuidae",3744)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8641,"Trichopsomyia","Trichopsomyia",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15635,"Trichopteryx","Trichopteryx",	180,"Genus", 2,"Geometridae",3280)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14860,"Trichosirocalus","Trichosirocalus",	180,"Genus", 2,"Ceutorhynchini",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15001,"Trifurcula","Trifurcula",	180,"Genus", 2,"Nepticulidae",107)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8649,"Triglyphus","Triglyphus",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7541,"Trigonogenius","Trigonogenius",	180,"Genus", 2,"Ptinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8942,"Trigonotylus","Trigonotylus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14995,"Triodia","Triodia",	180,"Genus", 2,"Hepialidae",28)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15613,"Triphosa","Triphosa",	180,"Genus", 2,"Geometridae",3158)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19191,"Triphose","Triphose",	180,"Genus", 2,"Geometridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15781,"Trisateles","Trisateles",	180,"Genus", 2,"Erebidae",3704)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19129,"Trisateles","Trisateles",	180,"Genus", 2,"Noctuidae",3704)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7621,"Trogoxylon","Trogoxylon",	180,"Genus", 2,"Lyctidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8808,"Tropidia","Tropidia",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6890,"Trox","Trox",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14829,"Tryphoninae","Tryphoninae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14873,"Trypoxylon","Trypoxylon",	180,"Genus", 2,"Crabronidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9138,"Tupiocoris","Tupiocoris",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15180,"Tuta","Tuta",	180,"Genus", 2,"Gelechiidae",1101)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8160,"Typhaea","Typhaea",	180,"Genus", 2,"Mycetophagidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6826,"Typhoeus","Typhoeus",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15749,"Tyria","Tyria",	180,"Genus", 2,"Erebidae",3613)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15803,"Tyta","Tyta",	180,"Genus", 2,"Noctuidae",3788)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8235,"Tytthaspis","Tytthaspis",	180,"Genus", 2,"Coccinellidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(9083,"Tytthus","Tytthus",	180,"Genus", 2,"Miridae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15477,"Udea","Udea",	180,"Genus", 2,"Crambidae",2658)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7335,"Uloma","Uloma",	180,"Genus", 2,"Tenebrionidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18986,"Unknown","Unknown",	180,"Genus", 2,"Tortricidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15469,"Uresiphita","Uresiphita",	180,"Genus", 2,"Crambidae",2618)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14964,"Urodidae","Urodidae",	140,"Family", 2,"Lepidoptera",1532)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15752,"Utetheisa","Utetheisa",	180,"Genus", 2,"Erebidae",3619)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6915,"Valgus","Valgus",	180,"Genus", 2,"Scarabaeidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15388,"Vanessa","Vanessa",	180,"Genus", 2,"Nymphalidae",2340)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7777,"Velleius","Velleius",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15609,"Venusia","Venusia",	180,"Genus", 2,"Geometridae",3147)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14709,"Vespidae","Vespidae",	140,"Family", 2,"Vespoidea",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14836,"Vespinae","Vespinae",	150,"Subfamily", 2,"Vespidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14757,"Vespoidea","Vespoidea",	120,"Infraorder", 2,"Apocrita",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7511,"Vinzencellus","Vinzencellus",	180,"Genus", 2,"Salpingidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15456,"Vitula","Vitula",	180,"Genus", 2,"Pyralidae",2567)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8703,"Volucella","Volucella",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15521,"Watsonalla","Watsonalla",	180,"Genus", 2,"Drepanidae",2836)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15028,"Whittleia","Whittleia",	180,"Genus", 2,"Psychidae",264)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19029,"Witlesia","Witlesia",	180,"Genus", 2,"Pyralidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15233,"Wockia","Wockia",	180,"Genus", 2,"Urodidae",1533)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8515,"Xanthandrus","Xanthandrus",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15880,"Xanthia","Xanthia",	180,"Genus", 2,"Noctuidae",4060)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8602,"Xanthogramma","Xanthogramma",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7842,"Xantholinus","Xantholinus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15575,"Xanthorhoe","Xanthorhoe",	180,"Genus", 2,"Geometridae",3040)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15186,"Xenolechia","Xenolechia",	180,"Genus", 2,"Gelechiidae",1144)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15263,"Xerocnephasia","Xerocnephasia",	180,"Genus", 2,"Tortricidae",1630)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15950,"Xestia","Xestia",	180,"Genus", 2,"Noctuidae",4356)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7568,"Xestobium","Xestobium",	180,"Genus", 2,"Anobiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(18865,"Xetrocnephasia","Xetrocnephasia",	180,"Genus", 2,"Tortricidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14721,"Xiphydriidae","Xiphydriidae",	140,"Family", 2,"Symphyta",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14830,"Xoridinae","Xoridinae",	150,"Subfamily", 2,"Ichneumonidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14722,"Xyelidae","Xyelidae",	140,"Family", 2,"Symphyta",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15886,"Xylena","Xylena",	180,"Genus", 2,"Noctuidae",4099)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7594,"Xyletinus","Xyletinus",	180,"Genus", 2,"Anobiidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15819,"Xylocampa","Xylocampa",	180,"Genus", 2,"Noctuidae",3858)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8308,"Xylocopa","Xylocopa",	180,"Genus", 2,"Apidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8083,"Xylodrepa","Xylodrepa",	180,"Genus", 2,"Silphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7967,"Xylodromus","Xylodromus",	180,"Genus", 2,"Staphylinidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7624,"Xylographus","Xylographus",	180,"Genus", 2,"Cisidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(8812,"Xylota","Xylota",	180,"Genus", 2,"Syrphidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(7029,"Xylotrechus","Xylotrechus",	180,"Genus", 2,"Cerambycidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15165,"Xystophora","Xystophora",	180,"Genus", 2,"Gelechiidae",1022)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15074,"Yponomeuta","Yponomeuta",	180,"Genus", 2,"Yponomeutidae",536)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14933,"Yponomeutidae","Yponomeutidae",	140,"Family", 2,"Lepidoptera",531)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15091,"Ypsolopha","Ypsolopha",	180,"Genus", 2,"Ypsolophidae",643)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14937,"Ypsolophidae","Ypsolophidae",	140,"Family", 2,"Lepidoptera",641)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6412,"Zabrus","Zabrus",	180,"Genus", 2,"Carabidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15772,"Zanclognatha","Zanclognatha",	180,"Genus", 2,"Erebidae",3678)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(19015,"Zanclognatha","Zanclognatha",	180,"Genus", 2,"Noctuidae",3678)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15312,"Zeiraphera","Zeiraphera",	180,"Genus", 2,"Tortricidae",1952)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15075,"Zelleria","Zelleria",	180,"Genus", 2,"Yponomeutidae",546)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(6793,"Zeugophora","Zeugophora",	180,"Genus", 2,"Chrysomelidae",)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15332,"Zeuzera","Zeuzera",	180,"Genus", 2,"Cossidae",2142)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15448,"Zophodia","Zophodia",	180,"Genus", 2,"Pyralidae",2537)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(15348,"Zygaena","Zygaena",	180,"Genus", 2,"Zygaenidae",2196)');
-INSERT INTO `taxon` (`sqlstatement`) VALUES (',(14971,"Zygaenidae","Zygaenidae",	140,"Family", 2,"Lepidoptera",2188)');
+INSERT INTO taxonname ("spid","name","fullname","rankid","taxonRank", "treedefid","parentfullname") VALUES 
+
+(14692,"Animalia","Animalia",10,"Kingdom", 2,"Life"),
+(14693,"Arthropoda","Arthropoda",30,"Phylum", 2,"Animalia"),
+(14702,"Chordata","Chordata",30,"Phylum", 2,"Animalia"),
+(14694,"Arachnida","Arachnida",60,"Class", 2,"Arthropoda"),
+(14696,"Entognatha","Entognatha",60,"Class", 2,"Arthropoda"),
+(14695,"Insecta","Insecta",60,"Class", 2,"Arthropoda"),
+(14697,"Acari","Acari",80,"Infraclass", 2,"Arachnida"),
+(6115,"Coleoptera","Coleoptera",100,"Order", 2,"Insecta"),
+(14698,"Collembola","Collembola",100,"Order", 2,"Entognatha"),
+(8503,"Diptera","Diptera",100,"Order", 2,"Insecta"),
+(8833,"Hemiptera","Hemiptera",100,"Order", 2,"Insecta"),
+(8269,"Hymenoptera","Hymenoptera",100,"Order", 2,"Insecta"),
+(14699,"Lepidoptera","Lepidoptera",100,"Order", 2,"Insecta"),
+(14712,"Apocrita","Apocrita",110,"Suborder", 2,"Hymenoptera"),
+(14711,"Symphyta","Symphyta",110,"Suborder", 2,"Hymenoptera"),
+(14755,"Apoidea","Apoidea",120,"Infraorder", 2,"Apocrita"),
+(14758,"Ceraphronoidea","Ceraphronoidea",120,"Infraorder", 2,"Apocrita"),
+(14761,"Chalcidoidea","Chalcidoidea",120,"Infraorder", 2,"Apocrita"),
+(14785,"Chrysidoidea","Chrysidoidea",120,"Infraorder", 2,"Apocrita"),
+(14703,"Cucujiformia","Cucujiformia",120,"Infraorder", 2,"Coleoptera"),
+(14781,"Cynipoidea","Cynipoidea",120,"Infraorder", 2,"Apocrita"),
+(14777,"Evanioidea","Evanioidea",120,"Infraorder", 2,"Apocrita"),
+(14756,"Ichneumonidea","Ichneumonidea",120,"Infraorder", 2,"Apocrita"),
+(14775,"Platygastroidea","Platygastroidea",120,"Infraorder", 2,"Apocrita"),
+(14771,"Proctrupoidea","Proctrupoidea",120,"Infraorder", 2,"Apocrita"),
+(14757,"Vespoidea","Vespoidea",120,"Infraorder", 2,"Apocrita"),
+(229671,"Curculionoidea","Curculionoidea",130,"Superfamily", 2,"Cucujiformia"),
+(14924,"Adelidae","Adelidae",140,"Family", 2,"Lepidoptera"),
+(7491,"Aderidae","Aderidae",140,"Family", 2,"Coleoptera"),
+(7348,"Alleculidae","Alleculidae",140,"Family", 2,"Coleoptera"),
+(14960,"Alucitidae","Alucitidae",140,"Family", 2,"Lepidoptera"),
+(14754,"Ampulicidae","Ampulicidae",140,"Family", 2,"Apoidea"),
+(7404,"Anaspidae","Anaspidae",140,"Family", 2,"Coleoptera"),
+(8315,"Andrenidae","Andrenidae",140,"Family", 2,"Apoidea"),
+(7561,"Anobiidae","Anobiidae",140,"Family", 2,"Coleoptera"),
+(7477,"Anthicidae","Anthicidae",140,"Family", 2,"Coleoptera"),
+(14762,"Aphelinidae","Aphelinidae",140,"Family", 2,"Chalcidoidea"),
+(8270,"Apidae","Apidae",140,"Family", 2,"Apoidea"),
+(14713,"Argidae","Argidae",140,"Family", 2,"Symphyta"),
+(14934,"Argyresthiidae","Argyresthiidae",140,"Family", 2,"Lepidoptera"),
+(7649,"Aspidiphoridae","Aspidiphoridae",140,"Family", 2,"Coleoptera"),
+(14778,"Aulacidae","Aulacidae",140,"Family", 2,"Evanioidea"),
+(14943,"Autostichidae","Autostichidae",140,"Family", 2,"Lepidoptera"),
+(14952,"Batrachedridae","Batrachedridae",140,"Family", 2,"Lepidoptera"),
+(14940,"Bedelliidae","Bedelliidae",140,"Family", 2,"Lepidoptera"),
+(14787,"Bethylidae","Bethylidae",140,"Family", 2,"Chrysidoidea"),
+(14716,"Blasticotomidae","Blasticotomidae",140,"Family", 2,"Symphyta"),
+(14957,"Blastobasidae","Blastobasidae",140,"Family", 2,"Lepidoptera"),
+(14982,"Bombycidae","Bombycidae",140,"Family", 2,"Lepidoptera"),
+(229728,"Bostrichidae","Bostrichidae",140,"Family", 2,"Coleoptera"),
+(7610,"Bostrychidae","Bostrychidae",140,"Family", 2,"Coleoptera"),
+(14750,"Braconidae","Braconidae",140,"Family", 2,"Ichneumonidea"),
+(14980,"Brahmaeidae","Brahmaeidae",140,"Family", 2,"Lepidoptera"),
+(14730,"Brentidae","Brentidae",140,"Family", 2,"Curculionoidea"),
+(14931,"Bucculatricidae","Bucculatricidae",140,"Family", 2,"Lepidoptera"),
+(229735,"Buprestidae","Buprestidae",140,"Family", 2,"Coleoptera"),
+(229726,"Byrrhidae","Byrrhidae",140,"Family", 2,"Coleoptera"),
+(229722,"Cantharidae","Cantharidae",140,"Family", 2,"Coleoptera"),
+(6147,"Carabidae","Carabidae",140,"Family", 2,"Coleoptera"),
+(14968,"Castniidae","Castniidae",140,"Family", 2,"Lepidoptera"),
+(14717,"Cephidae","Cephidae",140,"Family", 2,"Symphyta"),
+(6938,"Cerambycidae","Cerambycidae",140,"Family", 2,"Coleoptera"),
+(14759,"Ceraphronidae","Ceraphronidae",140,"Family", 2,"Ceraphronoidea"),
+(14763,"Chalcididae","Chalcididae",140,"Family", 2,"Chalcidoidea"),
+(14945,"Chimabachidae","Chimabachidae",140,"Family", 2,"Lepidoptera"),
+(14965,"Choreutidae","Choreutidae",140,"Family", 2,"Lepidoptera"),
+(14786,"Chrysididae","Chrysididae",140,"Family", 2,"Chrysidoidea"),
+(6762,"Chrysomelidae","Chrysomelidae",140,"Family", 2,"Cucujiformia"),
+(6141,"Cicindelidae","Cicindelidae",140,"Family", 2,"Coleoptera"),
+(14718,"Cimbicidae","Cimbicidae",140,"Family", 2,"Symphyta"),
+(7623,"Cisidae","Cisidae",140,"Family", 2,"Coleoptera"),
+(7284,"Clambidae","Clambidae",140,"Family", 2,"Coleoptera"),
+(8201,"Coccinellidae","Coccinellidae",140,"Family", 2,"Coleoptera"),
+(14953,"Coleophoridae","Coleophoridae",140,"Family", 2,"Lepidoptera"),
+(8366,"Colletidae","Colletidae",140,"Family", 2,"Apoidea"),
+(8162,"Colydiidae","Colydiidae",140,"Family", 2,"Coleoptera"),
+(229731,"Corylophidae","Corylophidae",140,"Family", 2,"Coleoptera"),
+(14950,"Cosmopterigidae","Cosmopterigidae",140,"Family", 2,"Lepidoptera"),
+(14967,"Cossidae","Cossidae",140,"Family", 2,"Lepidoptera"),
+(14752,"Crabronidae","Crabronidae",140,"Family", 2,"Apoidea"),
+(14977,"Crambidae","Crambidae",140,"Family", 2,"Lepidoptera"),
+(229725,"Cryptophagidae","Cryptophagidae",140,"Family", 2,"Coleoptera"),
+(14729,"Curculionidae","Curculionidae",140,"Family", 2,"Curculionoidea"),
+(14782,"Cynipidae","Cynipidae",140,"Family", 2,"Cynipoidea"),
+(14948,"Depressariidae","Depressariidae",140,"Family", 2,"Lepidoptera"),
+(229724,"Dermestidae","Dermestidae",140,"Family", 2,"Coleoptera"),
+(14772,"Diapriidae","Diapriidae",140,"Family", 2,"Proctrupoidea"),
+(14719,"Diprionidae","Diprionidae",140,"Family", 2,"Symphyta"),
+(14942,"Douglasiidae","Douglasiidae",140,"Family", 2,"Lepidoptera"),
+(14978,"Drepanidae","Drepanidae",140,"Family", 2,"Lepidoptera"),
+(14788,"Dryinidae","Dryinidae",140,"Family", 2,"Chrysidoidea"),
+(7085,"Dytiscidae","Dytiscidae",140,"Family", 2,"Coleoptera"),
+(14954,"Elachistidae","Elachistidae",140,"Family", 2,"Lepidoptera"),
+(14764,"Elasmidae","Elasmidae",140,"Family", 2,"Chalcidoidea"),
+(229721,"Elateridae","Elateridae",140,"Family", 2,"Coleoptera"),
+(14789,"Embolemidae","Embolemidae",140,"Family", 2,"Chrysidoidea"),
+(14765,"Encyrtidae","Encyrtidae",140,"Family", 2,"Chalcidoidea"),
+(8186,"Endomychidae","Endomychidae",140,"Family", 2,"Coleoptera"),
+(14981,"Endromidae","Endromidae",140,"Family", 2,"Lepidoptera"),
+(14963,"Epermeniidae","Epermeniidae",140,"Family", 2,"Lepidoptera"),
+(14988,"Erebidae","Erebidae",140,"Family", 2,"Lepidoptera"),
+(14919,"Eriocraniidae","Eriocraniidae",140,"Family", 2,"Lepidoptera"),
+(14949,"Ethmiidae","Ethmiidae",140,"Family", 2,"Lepidoptera"),
+(14766,"Eulophidae","Eulophidae",140,"Family", 2,"Chalcidoidea"),
+(14798,"Eupelmidae","Eupelmidae",140,"Family", 2,"Chalcidoidea"),
+(14799,"Eurytomidae","Eurytomidae",140,"Family", 2,"Chalcidoidea"),
+(14987,"Euteliidae","Euteliidae",140,"Family", 2,"Lepidoptera"),
+(14779,"Evaniidae","Evaniidae",140,"Family", 2,"Evanioidea"),
+(14783,"Figitidae","Figitidae",140,"Family", 2,"Cynipoidea"),
+(14767,"Formicidae","Formicidae",140,"Family", 2,"Vespoidea"),
+(14780,"Gasteruptiidae","Gasteruptiidae",140,"Family", 2,"Evanioidea"),
+(14951,"Gelechiidae","Gelechiidae",140,"Family", 2,"Lepidoptera"),
+(14985,"Geometridae","Geometridae",140,"Family", 2,"Lepidoptera"),
+(229723,"Geotrupidae","Geotrupidae",140,"Family", 2,"Coleoptera"),
+(14936,"Glyphipterigidae","Glyphipterigidae",140,"Family", 2,"Lepidoptera"),
+(14932,"Gracillariidae","Gracillariidae",140,"Family", 2,"Lepidoptera"),
+(7071,"Gyrinidae","Gyrinidae",140,"Family", 2,"Coleoptera"),
+(8319,"Halictidae","Halictidae",140,"Family", 2,"Apoidea"),
+(6116,"Haliplidae","Haliplidae",140,"Family", 2,"Coleoptera"),
+(14923,"Heliozelidae","Heliozelidae",140,"Family", 2,"Lepidoptera"),
+(229736,"Helophoridae","Helophoridae",140,"Family", 2,"Coleoptera"),
+(14773,"Heloridae","Heloridae",140,"Family", 2,"Proctrupoidea"),
+(14920,"Hepialidae","Hepialidae",140,"Family", 2,"Lepidoptera"),
+(14911,"Hesperiidae","Hesperiidae",140,"Family", 2,"Lepidoptera"),
+(229734,"Histeridae","Histeridae",140,"Family", 2,"Coleoptera"),
+(6657,"Hydrophilidae","Hydrophilidae",140,"Family", 2,"Coleoptera"),
+(14784,"Ibaliidae","Ibaliidae",140,"Family", 2,"Cynipoidea"),
+(14708,"Ichneumonidae","Ichneumonidae",140,"Family", 2,"Ichneumonidea"),
+(14925,"Incurvariidae","Incurvariidae",140,"Family", 2,"Lepidoptera"),
+(7369,"Lagriidae","Lagriidae",140,"Family", 2,"Coleoptera"),
+(14979,"Lasiocampidae","Lasiocampidae",140,"Family", 2,"Lepidoptera"),
+(229729,"Latridiidae","Latridiidae",140,"Family", 2,"Coleoptera"),
+(229732,"Leiodidae","Leiodidae",140,"Family", 2,"Coleoptera"),
+(14970,"Limacodidae","Limacodidae",140,"Family", 2,"Lepidoptera"),
+(7419,"Liodidae","Liodidae",140,"Family", 2,"Coleoptera"),
+(14975,"Lycaenidae","Lycaenidae",140,"Family", 2,"Lepidoptera"),
+(7616,"Lyctidae","Lyctidae",140,"Family", 2,"Coleoptera"),
+(14941,"Lyonetiidae","Lyonetiidae",140,"Family", 2,"Lepidoptera"),
+(14946,"Lypusidae","Lypusidae",140,"Family", 2,"Lepidoptera"),
+(8326,"Megachilidae","Megachilidae",140,"Family", 2,"Apoidea"),
+(14760,"Megaspilidae","Megaspilidae",140,"Family", 2,"Ceraphronoidea"),
+(8310,"Melittidae","Melittidae",140,"Family", 2,"Apoidea"),
+(6802,"Meloidae","Meloidae",140,"Family", 2,"Coleoptera"),
+(229727,"Melyridae","Melyridae",140,"Family", 2,"Coleoptera"),
+(7986,"Micropeplidae","Micropeplidae",140,"Family", 2,"Coleoptera"),
+(14918,"Micropterigidae","Micropterigidae",140,"Family", 2,"Lepidoptera"),
+(8834,"Miridae","Miridae",140,"Family", 2,"Hemiptera"),
+(14956,"Momphidae","Momphidae",140,"Family", 2,"Lepidoptera"),
+(7222,"Mordellidae","Mordellidae",140,"Family", 2,"Coleoptera"),
+(14770,"Mutillidae","Mutillidae",140,"Family", 2,"Vespoidea"),
+(8154,"Mycetophagidae","Mycetophagidae",140,"Family", 2,"Coleoptera"),
+(14797,"Mymaridae","Mymaridae",140,"Family", 2,"Chalcidoidea"),
+(14921,"Nepticulidae","Nepticulidae",140,"Family", 2,"Lepidoptera"),
+(229733,"Nitidulidae","Nitidulidae",140,"Family", 2,"Coleoptera"),
+(14989,"Noctuidae","Noctuidae",140,"Family", 2,"Lepidoptera"),
+(14990,"Nolidae","Nolidae",140,"Family", 2,"Lepidoptera"),
+(14986,"Notodontidae","Notodontidae",140,"Family", 2,"Lepidoptera"),
+(14973,"Nymphalidae","Nymphalidae",140,"Family", 2,"Lepidoptera"),
+(14944,"Oecophoridae","Oecophoridae",140,"Family", 2,"Lepidoptera"),
+(7519,"Oedemeridae","Oedemeridae",140,"Family", 2,"Coleoptera"),
+(14922,"Opostegidae","Opostegidae",140,"Family", 2,"Lepidoptera"),
+(14796,"Ormyridae","Ormyridae",140,"Family", 2,"Chalcidoidea"),
+(7240,"Orthoperidae","Orthoperidae",140,"Family", 2,"Coleoptera"),
+(14720,"Pamphilidae","Pamphilidae",140,"Family", 2,"Symphyta"),
+(14914,"Papilionidae","Papilionidae",140,"Family", 2,"Lepidoptera"),
+(14955,"Parametriotidae","Parametriotidae",140,"Family", 2,"Lepidoptera"),
+(14947,"Peleopodidae","Peleopodidae",140,"Family", 2,"Lepidoptera"),
+(14795,"Perilampidae","Perilampidae",140,"Family", 2,"Chalcidoidea"),
+(229730,"Phalacridae","Phalacridae",140,"Family", 2,"Coleoptera"),
+(14972,"Pieridae","Pieridae",140,"Family", 2,"Lepidoptera"),
+(14776,"Platygastridae","Platygastridae",140,"Family", 2,"Platygastroidea"),
+(14935,"Plutellidae","Plutellidae",140,"Family", 2,"Lepidoptera"),
+(14710,"Pompilidae","Pompilidae",140,"Family", 2,"Vespoidea"),
+(14938,"Praydidae","Praydidae",140,"Family", 2,"Lepidoptera"),
+(14774,"Proctrupidae","Proctrupidae",140,"Family", 2,"Proctrupoidea"),
+(14926,"Prodoxidae","Prodoxidae",140,"Family", 2,"Lepidoptera"),
+(14928,"Psychidae","Psychidae",140,"Family", 2,"Lepidoptera"),
+(14791,"Pteromalidae","Pteromalidae",140,"Family", 2,"Chalcidoidea"),
+(14961,"Pterophoridae","Pterophoridae",140,"Family", 2,"Lepidoptera"),
+(7991,"Ptiliidae","Ptiliidae",140,"Family", 2,"Coleoptera"),
+(7534,"Ptinidae","Ptinidae",140,"Family", 2,"Coleoptera"),
+(14976,"Pyralidae","Pyralidae",140,"Family", 2,"Lepidoptera"),
+(7516,"Pythidae","Pythidae",140,"Family", 2,"Coleoptera"),
+(7474,"Rhipiphoridae","Rhipiphoridae",140,"Family", 2,"Coleoptera"),
+(18630,"Rhynchitidae","Rhynchitidae",140,"Family", 2,"Curculionoidea"),
+(14974,"Riodinidae","Riodinidae",140,"Family", 2,"Lepidoptera"),
+(14930,"Roeslerstammiidae","Roeslerstammiidae",140,"Family", 2,"Lepidoptera"),
+(7500,"Salpingidae","Salpingidae",140,"Family", 2,"Coleoptera"),
+(14768,"Sapygidae","Sapygidae",140,"Family", 2,"Vespoidea"),
+(14983,"Saturniidae","Saturniidae",140,"Family", 2,"Lepidoptera"),
+(7655,"Scaphidiidae","Scaphidiidae",140,"Family", 2,"Coleoptera"),
+(6813,"Scarabaeidae","Scarabaeidae",140,"Family", 2,"Coleoptera"),
+(14751,"Scelionidae","Scelionidae",140,"Family", 2,"Platygastroidea"),
+(14962,"Schreckensteiniidae","Schreckensteiniidae",140,"Family", 2,"Lepidoptera"),
+(7497,"Scraptiidae","Scraptiidae",140,"Family", 2,"Coleoptera"),
+(7249,"Scydmaenidae","Scydmaenidae",140,"Family", 2,"Coleoptera"),
+(14959,"Scythrididae","Scythrididae",140,"Family", 2,"Lepidoptera"),
+(14939,"Scythropiidae","Scythropiidae",140,"Family", 2,"Lepidoptera"),
+(7372,"Serropalpidae","Serropalpidae",140,"Family", 2,"Coleoptera"),
+(14969,"Sesiidae","Sesiidae",140,"Family", 2,"Lepidoptera"),
+(14794,"Signiphoridae","Signiphoridae",140,"Family", 2,"Chalcidoidea"),
+(8061,"Silphidae","Silphidae",140,"Family", 2,"Coleoptera"),
+(14714,"Siricidae","Siricidae",140,"Family", 2,"Symphyta"),
+(7237,"Sphaeriidae","Sphaeriidae",140,"Family", 2,"Coleoptera"),
+(14753,"Sphecidae","Sphecidae",140,"Family", 2,"Apoidea"),
+(7652,"Sphindidae","Sphindidae",140,"Family", 2,"Coleoptera"),
+(14984,"Sphingidae","Sphingidae",140,"Family", 2,"Lepidoptera"),
+(7662,"Staphylinidae","Staphylinidae",140,"Family", 2,"Coleoptera"),
+(14958,"Stathmopodidae","Stathmopodidae",140,"Family", 2,"Lepidoptera"),
+(8504,"Syrphidae","Syrphidae",140,"Family", 2,"Diptera"),
+(220743,"Syrphidae","Syrphidae",140,"Family", 2,"Diptera"),
+(7291,"Tenebrionidae","Tenebrionidae",140,"Family", 2,"Coleoptera"),
+(14715,"Tenthredinidae","Tenthredinidae",140,"Family", 2,"Symphyta"),
+(14793,"Tetracampidae","Tetracampidae",140,"Family", 2,"Chalcidoidea"),
+(229737,"Throscidae","Throscidae",140,"Family", 2,"Coleoptera"),
+(14929,"Tineidae","Tineidae",140,"Family", 2,"Lepidoptera"),
+(229683,"Tingidae","Tingidae",140,"Family", 2,"Hemiptera"),
+(14769,"Tiphiidae","Tiphiidae",140,"Family", 2,"Vespoidea"),
+(14927,"Tischeriidae","Tischeriidae",140,"Family", 2,"Lepidoptera"),
+(14966,"Tortricidae","Tortricidae",140,"Family", 2,"Lepidoptera"),
+(14792,"Torymidae","Torymidae",140,"Family", 2,"Chalcidoidea"),
+(14790,"Trichogrammatidae","Trichogrammatidae",140,"Family", 2,"Chalcidoidea"),
+(14964,"Urodidae","Urodidae",140,"Family", 2,"Lepidoptera"),
+(14709,"Vespidae","Vespidae",140,"Family", 2,"Vespoidea"),
+(14721,"Xiphydriidae","Xiphydriidae",140,"Family", 2,"Symphyta"),
+(14722,"Xyelidae","Xyelidae",140,"Family", 2,"Symphyta"),
+(14933,"Yponomeutidae","Yponomeutidae",140,"Family", 2,"Lepidoptera"),
+(14937,"Ypsolophidae","Ypsolophidae",140,"Family", 2,"Lepidoptera"),
+(14971,"Zygaenidae","Zygaenidae",140,"Family", 2,"Lepidoptera"),
+(14802,"Acaenitinae","Acaenitinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14803,"Adelognathinae","Adelognathinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14804,"Agriotypinae","Agriotypinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14726,"Allantinae","Allantinae",150,"Subfamily", 2,"Tenthredinidae"),
+(14805,"Anomaloninae","Anomaloninae",150,"Subfamily", 2,"Ichneumonidae"),
+(14745,"Apioninae","Apioninae",150,"Subfamily", 2,"Brentidae"),
+(14806,"Banchinae","Banchinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14838,"Belytinae","Belytinae",150,"Subfamily", 2,"Diapriidae"),
+(14727,"Blennocampinae","Blennocampinae",150,"Subfamily", 2,"Tenthredinidae"),
+(14731,"Brachycerinae","Brachycerinae",150,"Subfamily", 2,"Curculionidae"),
+(14807,"Campopleginae","Campopleginae",150,"Subfamily", 2,"Ichneumonidae"),
+(14833,"Ceropalinae","Ceropalinae",150,"Subfamily", 2,"Pompilidae"),
+(14808,"Collyrinae","Collyrinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14809,"Cremastinae","Cremastinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14801,"Cryptinae","Cryptinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14810,"Ctenopelmatinae","Ctenopelmatinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14735,"Curculioninae","Curculioninae",150,"Subfamily", 2,"Curculionidae"),
+(14811,"Cyllocerinae","Cyllocerinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14812,"Diacritinae","Diacritinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14837,"Diapriinae","Diapriinae",150,"Subfamily", 2,"Diapriidae"),
+(14813,"Diplazontinae","Diplazontinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14814,"Eucerotinae","Eucerotinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14834,"Eumeninae","Eumeninae",150,"Subfamily", 2,"Vespidae"),
+(14728,"Heterarthrinae","Heterarthrinae",150,"Subfamily", 2,"Tenthredinidae"),
+(14800,"Ichneumoninae","Ichneumoninae",150,"Subfamily", 2,"Ichneumonidae"),
+(14815,"Lycorininae","Lycorininae",150,"Subfamily", 2,"Ichneumonidae"),
+(14816,"Mesocorinae","Mesocorinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14817,"Metopiinae","Metopiinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14818,"Microleptinae","Microleptinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14723,"Nematinae","Nematinae",150,"Subfamily", 2,"Tenthredinidae"),
+(14819,"Neorhacodinae","Neorhacodinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14820,"Ophioninae","Ophioninae",150,"Subfamily", 2,"Ichneumonidae"),
+(14821,"Orthocentrinae","Orthocentrinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14822,"Orthopelmatinae","Orthopelmatinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14823,"Oxytorinae","Oxytorinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14831,"Pepsinae","Pepsinae",150,"Subfamily", 2,"Pompilidae"),
+(14824,"Pimplinae","Pimplinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14825,"Poemeninae","Poemeninae",150,"Subfamily", 2,"Ichneumonidae"),
+(14835,"Polistinae","Polistinae",150,"Subfamily", 2,"Vespidae"),
+(14832,"Pompilinae","Pompilinae",150,"Subfamily", 2,"Pompilidae"),
+(18631,"Rhynchitinae","Rhynchitinae",150,"Subfamily", 2,"Rhynchitidae"),
+(14826,"Rhyssinae","Rhyssinae",150,"Subfamily", 2,"Ichneumonidae"),
+(18621,"Scolytinae","Scolytinae",150,"Subfamily", 2,"Curculionidae"),
+(14724,"Selandriinae","Selandriinae",150,"Subfamily", 2,"Tenthredinidae"),
+(14827,"Stilbopinae","Stilbopinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14725,"Tenthredininae","Tenthredininae",150,"Subfamily", 2,"Tenthredinidae"),
+(14828,"Tersilochinae","Tersilochinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14829,"Tryphoninae","Tryphoninae",150,"Subfamily", 2,"Ichneumonidae"),
+(14836,"Vespinae","Vespinae",150,"Subfamily", 2,"Vespidae"),
+(14830,"Xoridinae","Xoridinae",150,"Subfamily", 2,"Ichneumonidae"),
+(14746,"Apionini","Apionini",160,"Tribe", 2,"Apioninae"),
+(14732,"Brachyderini","Brachyderini",160,"Tribe", 2,"Brachycerinae"),
+(14859,"Ceutorhynchini","Ceutorhynchini",160,"Tribe", 2,"Curculioninae"),
+(18622,"Hylesinini","Hylesinini",160,"Tribe", 2,"Scolytinae"),
+(14840,"Hyperoni","Hyperoni",160,"Tribe", 2,"Brachycerinae"),
+(229670,"Lixini","Lixini",160,"Tribe", 2,"Curculioninae"),
+(14843,"Mecinini","Mecinini",160,"Tribe", 2,"Curculioninae"),
+(14854,"Molytini","Molytini",160,"Tribe", 2,"Curculioninae"),
+(14742,"Otiorhynchini","Otiorhynchini",160,"Tribe", 2,"Brachycerinae"),
+(14736,"Rhamphini","Rhamphini",160,"Tribe", 2,"Curculioninae"),
+(18632,"Rhynchitini","Rhynchitini",160,"Tribe", 2,"Rhynchitinae"),
+(14739,"Sitonini","Sitonini",160,"Tribe", 2,"Brachycerinae"),
+(6368,"Abax","Abax",180,"Genus", 2,"Carabidae"),
+(7387,"Abdera","Abdera",180,"Genus", 2,"Serropalpidae"),
+(15638,"Abraxas","Abraxas",180,"Genus", 2,"Geometridae"),
+(15789,"Abrostola","Abrostola",180,"Genus", 2,"Noctuidae"),
+(229687,"Acalypta","Acalypta",180,"Genus", 2,"Tingidae"),
+(7050,"Acanthocinus","Acanthocinus",180,"Genus", 2,"Cerambycidae"),
+(7046,"Acanthoderes","Acanthoderes",180,"Genus", 2,"Cerambycidae"),
+(15029,"Acanthopsyche","Acanthopsyche",180,"Genus", 2,"Psychidae"),
+(15634,"Acasis","Acasis",180,"Genus", 2,"Geometridae"),
+(15514,"Acentria","Acentria",180,"Genus", 2,"Crambidae"),
+(9023,"Acetropis","Acetropis",180,"Genus", 2,"Miridae"),
+(15345,"Acharia","Acharia",180,"Genus", 2,"Limacodidae"),
+(7908,"Achenium","Achenium",180,"Genus", 2,"Staphylinidae"),
+(15555,"Acherontia","Acherontia",180,"Genus", 2,"Sphingidae"),
+(15532,"Achlya","Achlya",180,"Genus", 2,"Drepanidae"),
+(15419,"Achroia","Achroia",180,"Genus", 2,"Pyralidae"),
+(15649,"Achrosis","Achrosis",180,"Genus", 2,"Geometridae"),
+(7209,"Acilius","Acilius",180,"Genus", 2,"Dytiscidae"),
+(15272,"Acleris","Acleris",180,"Genus", 2,"Tortricidae"),
+(6957,"Acmaeops","Acmaeops",180,"Genus", 2,"Cerambycidae"),
+(15146,"Acompsia","Acompsia",180,"Genus", 2,"Gelechiidae"),
+(15801,"Acontia","Acontia",180,"Genus", 2,"Noctuidae"),
+(18989,"Acrabasis","Acrabasis",180,"Genus", 2,"Pyralidae"),
+(15442,"Acrobasis","Acrobasis",180,"Genus", 2,"Pyralidae"),
+(15065,"Acrocercops","Acrocercops",180,"Genus", 2,"Gracillariidae"),
+(15089,"Acrolepia","Acrolepia",180,"Genus", 2,"Glyphipterigidae"),
+(15088,"Acrolepiopsis","Acrolepiopsis",180,"Genus", 2,"Glyphipterigidae"),
+(7934,"Acrolocha","Acrolocha",180,"Genus", 2,"Staphylinidae"),
+(15809,"Acronicta","Acronicta",180,"Genus", 2,"Noctuidae"),
+(8039,"Acrotrichis","Acrotrichis",180,"Genus", 2,"Ptiliidae"),
+(7930,"Acrulia","Acrulia",180,"Genus", 2,"Staphylinidae"),
+(15930,"Actebia","Actebia",180,"Genus", 2,"Noctuidae"),
+(15550,"Actias","Actias",180,"Genus", 2,"Saturniidae"),
+(8023,"Actidium","Actidium",180,"Genus", 2,"Ptiliidae"),
+(8059,"Actinopteryx","Actinopteryx",180,"Genus", 2,"Ptiliidae"),
+(15843,"Actinotia","Actinotia",180,"Genus", 2,"Noctuidae"),
+(6611,"Acupalpus","Acupalpus",180,"Genus", 2,"Carabidae"),
+(7823,"Acylophorus","Acylophorus",180,"Genus", 2,"Staphylinidae"),
+(15227,"Adaina","Adaina",180,"Genus", 2,"Pterophoridae"),
+(15009,"Adela","Adela",180,"Genus", 2,"Adelidae"),
+(8845,"Adelphocoris","Adelphocoris",180,"Genus", 2,"Miridae"),
+(7492,"Aderus","Aderus",180,"Genus", 2,"Aderidae"),
+(19023,"Adosophyes","Adosophyes",180,"Genus", 2,"Tortricidae"),
+(15261,"Adoxophyes","Adoxophyes",180,"Genus", 2,"Tortricidae"),
+(15347,"Adscita","Adscita",180,"Genus", 2,"Zygaenidae"),
+(15802,"Aedia","Aedia",180,"Genus", 2,"Noctuidae"),
+(6886,"Aegialia","Aegialia",180,"Genus", 2,"Scarabaeidae"),
+(15680,"Aethalura","Aethalura",180,"Genus", 2,"Geometridae"),
+(15281,"Aethes","Aethes",180,"Genus", 2,"Tortricidae"),
+(7153,"Agabus","Agabus",180,"Genus", 2,"Dytiscidae"),
+(7054,"Agapanthia","Agapanthia",180,"Genus", 2,"Cerambycidae"),
+(15279,"Agapeta","Agapeta",180,"Genus", 2,"Tortricidae"),
+(7450,"Agaricophagus","Agaricophagus",180,"Genus", 2,"Liodidae"),
+(7461,"Agathidium","Agathidium",180,"Genus", 2,"Liodidae"),
+(15208,"Agdistis","Agdistis",180,"Genus", 2,"Pterophoridae"),
+(15389,"Aglais","Aglais",180,"Genus", 2,"Nymphalidae"),
+(8166,"Aglenus","Aglenus",180,"Genus", 2,"Colydiidae"),
+(15547,"Aglia","Aglia",180,"Genus", 2,"Saturniidae"),
+(15463,"Aglossa","Aglossa",180,"Genus", 2,"Pyralidae"),
+(15037,"Agnathosia","Agnathosia",180,"Genus", 2,"Tineidae"),
+(8863,"Agnocoris","Agnocoris",180,"Genus", 2,"Miridae"),
+(15125,"Agonopterix","Agonopterix",180,"Genus", 2,"Depressariidae"),
+(6324,"Agonum","Agonum",180,"Genus", 2,"Carabidae"),
+(229699,"Agramma","Agramma",180,"Genus", 2,"Tingidae"),
+(15379,"Agraulis","Agraulis",180,"Genus", 2,"Nymphalidae"),
+(15411,"Agriades","Agriades",180,"Genus", 2,"Lycaenidae"),
+(15667,"Agriopis","Agriopis",180,"Genus", 2,"Geometridae"),
+(15508,"Agriphila","Agriphila",180,"Genus", 2,"Crambidae"),
+(18867,"Agriphila","Agriphila",180,"Genus", 2,"Pyralidae"),
+(15554,"Agrius","Agrius",180,"Genus", 2,"Sphingidae"),
+(15883,"Agrochola","Agrochola",180,"Genus", 2,"Noctuidae"),
+(15480,"Agrotera","Agrotera",180,"Genus", 2,"Crambidae"),
+(15933,"Agrotis","Agrotis",180,"Genus", 2,"Noctuidae"),
+(8088,"Agyrtes","Agyrtes",180,"Genus", 2,"Silphidae"),
+(15673,"Alcis","Alcis",180,"Genus", 2,"Geometridae"),
+(15271,"Aleimma","Aleimma",180,"Genus", 2,"Tortricidae"),
+(15685,"Aleucis","Aleucis",180,"Genus", 2,"Geometridae"),
+(19074,"Algedonia","Algedonia",180,"Genus", 2,"Crambidae"),
+(7349,"Allecula","Allecula",180,"Genus", 2,"Alleculidae"),
+(15012,"Alloclemensia","Alloclemensia",180,"Genus", 2,"Incurvariidae"),
+(9063,"Alloeotomus","Alloeotomus",180,"Genus", 2,"Miridae"),
+(15818,"Allophyes","Allophyes",180,"Genus", 2,"Noctuidae"),
+(15740,"Aloa","Aloa",180,"Genus", 2,"Erebidae"),
+(6989,"Alosterna","Alosterna",180,"Genus", 2,"Cerambycidae"),
+(7337,"Alphitobius","Alphitobius",180,"Genus", 2,"Tenebrionidae"),
+(7320,"Alphitophagus","Alphitophagus",180,"Genus", 2,"Tenebrionidae"),
+(15662,"Alsophila","Alsophila",180,"Genus", 2,"Geometridae"),
+(15187,"Altenia","Altenia",180,"Genus", 2,"Gelechiidae"),
+(15207,"Alucita","Alucita",180,"Genus", 2,"Alucitidae"),
+(233961,"Alysson","Alysson",180,"Genus", 2,"Crabronidae"),
+(6374,"Amara","Amara",180,"Genus", 2,"Carabidae"),
+(15212,"Amblyptilia","Amblyptilia",180,"Genus", 2,"Pterophoridae"),
+(8847,"Amblytylus","Amblytylus",180,"Genus", 2,"Miridae"),
+(15899,"Ammoconia","Ammoconia",180,"Genus", 2,"Noctuidae"),
+(14875,"Ammophila","Ammophila",180,"Genus", 2,"Sphecidae"),
+(7458,"Amphicyllis","Amphicyllis",180,"Genus", 2,"Liodidae"),
+(6900,"Amphimallon","Amphimallon",180,"Genus", 2,"Scarabaeidae"),
+(15855,"Amphipoea","Amphipoea",180,"Genus", 2,"Noctuidae"),
+(15815,"Amphipyra","Amphipyra",180,"Genus", 2,"Noctuidae"),
+(15119,"Amphisbatis","Amphisbatis",180,"Genus", 2,"Lypusidae"),
+(6721,"Anacaena","Anacaena",180,"Genus", 2,"Hydrophilidae"),
+(15139,"Anacampsis","Anacampsis",180,"Genus", 2,"Gelechiidae"),
+(7026,"Anaglyptus","Anaglyptus",180,"Genus", 2,"Cerambycidae"),
+(15472,"Anania","Anania",180,"Genus", 2,"Crambidae"),
+(15949,"Anaplectoides","Anaplectoides",180,"Genus", 2,"Noctuidae"),
+(15144,"Anarsia","Anarsia",180,"Genus", 2,"Gelechiidae"),
+(15910,"Anarta","Anarta",180,"Genus", 2,"Noctuidae"),
+(15392,"Anartia","Anartia",180,"Genus", 2,"Nymphalidae"),
+(8769,"Anasimyia","Anasimyia",180,"Genus", 2,"Syrphidae"),
+(7405,"Anaspis","Anaspis",180,"Genus", 2,"Anaspidae"),
+(8239,"Anatis","Anatis",180,"Genus", 2,"Coccinellidae"),
+(15129,"Anchinia","Anchinia",180,"Genus", 2,"Depressariidae"),
+(15305,"Ancylis","Ancylis",180,"Genus", 2,"Tortricidae"),
+(18788,"Ancylis ","Ancylis ",180,"Genus", 2,"Tortricidae"),
+(15453,"Ancylosis","Ancylosis",180,"Genus", 2,"Pyralidae"),
+(8457,"Andrena","Andrena",180,"Genus", 2,"Andrenidae"),
+(18609,"Andrion","Andrion",180,"Genus", 2,"Sitonini"),
+(15460,"Anerastia","Anerastia",180,"Genus", 2,"Pyralidae"),
+(15654,"Angerona","Angerona",180,"Genus", 2,"Geometridae"),
+(6590,"Anisodactylus","Anisodactylus",180,"Genus", 2,"Carabidae"),
+(7452,"Anisomata","Anisomata",180,"Genus", 2,"Liodidae"),
+(8264,"Anisosticta","Anisosticta",180,"Genus", 2,"Coccinellidae"),
+(7385,"Anisoxya","Anisoxya",180,"Genus", 2,"Serropalpidae"),
+(7608,"Anitys","Anitys",180,"Genus", 2,"Anobiidae"),
+(7583,"Anobium","Anobium",180,"Genus", 2,"Anobiidae"),
+(6907,"Anomala","Anomala",180,"Genus", 2,"Scarabaeidae"),
+(8180,"Anommatus","Anommatus",180,"Genus", 2,"Colydiidae"),
+(15907,"Anorthoa","Anorthoa",180,"Genus", 2,"Noctuidae"),
+(15549,"Antheraea","Antheraea",180,"Genus", 2,"Saturniidae"),
+(7480,"Anthicus","Anthicus",180,"Genus", 2,"Anthicidae"),
+(8327,"Anthidium","Anthidium",180,"Genus", 2,"Megachilidae"),
+(7976,"Anthobium","Anthobium",180,"Genus", 2,"Staphylinidae"),
+(15360,"Anthocharis","Anthocharis",180,"Genus", 2,"Pieridae"),
+(15234,"Anthophila","Anthophila",180,"Genus", 2,"Choreutidae"),
+(8330,"Anthophora","Anthophora",180,"Genus", 2,"Apidae"),
+(15753,"Antichloris","Antichloris",180,"Genus", 2,"Erebidae"),
+(15582,"Anticlea","Anticlea",180,"Genus", 2,"Geometridae"),
+(15617,"Anticollix","Anticollix",180,"Genus", 2,"Geometridae"),
+(15490,"Antigastra","Antigastra",180,"Genus", 2,"Crambidae"),
+(15006,"Antispila","Antispila",180,"Genus", 2,"Heliozelidae"),
+(15898,"Antitype","Antitype",180,"Genus", 2,"Noctuidae"),
+(6811,"Apalus","Apalus",180,"Genus", 2,"Meloidae"),
+(15873,"Apamea","Apamea",180,"Genus", 2,"Noctuidae"),
+(15386,"Apatura","Apatura",180,"Genus", 2,"Nymphalidae"),
+(15655,"Apeira","Apeira",180,"Genus", 2,"Geometridae"),
+(15374,"Aphantopus","Aphantopus",180,"Genus", 2,"Nymphalidae"),
+(15257,"Aphelia","Aphelia",180,"Genus", 2,"Tortricidae"),
+(6833,"Aphodius","Aphodius",180,"Genus", 2,"Scarabaeidae"),
+(15416,"Aphomia","Aphomia",180,"Genus", 2,"Pyralidae"),
+(14747,"Apion","Apion",180,"Genus", 2,"Apionini"),
+(8306,"Apis","Apis",180,"Genus", 2,"Apidae"),
+(15695,"Aplasta","Aplasta",180,"Genus", 2,"Geometridae"),
+(15628,"Aplocera","Aplocera",180,"Genus", 2,"Geometridae"),
+(15114,"Aplota","Aplota",180,"Genus", 2,"Oecophoridae"),
+(15663,"Apocheima","Apocheima",180,"Genus", 2,"Geometridae"),
+(15342,"Apoda","Apoda",180,"Genus", 2,"Limacodidae"),
+(8856,"Apolygus","Apolygus",180,"Genus", 2,"Miridae"),
+(15443,"Apomyelois","Apomyelois",180,"Genus", 2,"Pyralidae"),
+(15776,"Apopestes","Apopestes",180,"Genus", 2,"Erebidae"),
+(15361,"Aporia","Aporia",180,"Genus", 2,"Pieridae"),
+(15900,"Aporophyla","Aporophyla",180,"Genus", 2,"Noctuidae"),
+(15288,"Apotomis","Apotomis",180,"Genus", 2,"Tortricidae"),
+(15138,"Aproaerema","Aproaerema",180,"Genus", 2,"Gelechiidae"),
+(15895,"Apterogenum","Apterogenum",180,"Genus", 2,"Noctuidae"),
+(14890,"Arachnospila","Arachnospila",180,"Genus", 2,"Pompilinae"),
+(15387,"Araschnia","Araschnia",180,"Genus", 2,"Nymphalidae"),
+(15865,"Archanara","Archanara",180,"Genus", 2,"Noctuidae"),
+(15636,"Archiearis","Archiearis",180,"Genus", 2,"Geometridae"),
+(15041,"Archinemapogon","Archinemapogon",180,"Genus", 2,"Tineidae"),
+(15248,"Archips","Archips",180,"Genus", 2,"Tortricidae"),
+(15745,"Arctia","Arctia",180,"Genus", 2,"Erebidae"),
+(8710,"Arctophila","Arctophila",180,"Genus", 2,"Syrphidae"),
+(15727,"Arctornis","Arctornis",180,"Genus", 2,"Erebidae"),
+(15862,"Arenostola","Arenostola",180,"Genus", 2,"Noctuidae"),
+(233963,"Argogorytes","Argogorytes",180,"Genus", 2,"Crabronidae"),
+(15162,"Argolamprotes","Argolamprotes",180,"Genus", 2,"Gelechiidae"),
+(15383,"Argynnis","Argynnis",180,"Genus", 2,"Nymphalidae"),
+(15082,"Argyresthia","Argyresthia",180,"Genus", 2,"Argyresthiidae"),
+(15295,"Argyroploce","Argyroploce",180,"Genus", 2,"Tortricidae"),
+(15250,"Argyrotaenia","Argyrotaenia",180,"Genus", 2,"Tortricidae"),
+(15674,"Arichanna","Arichanna",180,"Genus", 2,"Geometridae"),
+(15413,"Aricia","Aricia",180,"Genus", 2,"Lycaenidae"),
+(15157,"Aristotelia","Aristotelia",180,"Genus", 2,"Gelechiidae"),
+(15171,"Aroga","Aroga",180,"Genus", 2,"Gelechiidae"),
+(7019,"Aromia","Aromia",180,"Genus", 2,"Cerambycidae"),
+(6210,"Asaphidion","Asaphidion",180,"Genus", 2,"Carabidae"),
+(15783,"Ascalapha","Ascalapha",180,"Genus", 2,"Erebidae"),
+(9079,"Asciodema","Asciodema",180,"Genus", 2,"Miridae"),
+(7522,"Asclera","Asclera",180,"Genus", 2,"Oedemeridae"),
+(6943,"Asemum","Asemum",180,"Genus", 2,"Cerambycidae"),
+(7650,"Aspidiphorus","Aspidiphorus",180,"Genus", 2,"Aspidiphoridae"),
+(15061,"Aspilapteryx","Aspilapteryx",180,"Genus", 2,"Gracillariidae"),
+(15693,"Aspitates","Aspitates",180,"Genus", 2,"Geometridae"),
+(15450,"Assara","Assara",180,"Genus", 2,"Pyralidae"),
+(15816,"Asteroscopus","Asteroscopus",180,"Genus", 2,"Noctuidae"),
+(15606,"Asthena","Asthena",180,"Genus", 2,"Geometridae"),
+(15892,"Atethmia","Atethmia",180,"Genus", 2,"Noctuidae"),
+(15837,"Athetis","Athetis",180,"Genus", 2,"Noctuidae"),
+(15166,"Athrips","Athrips",180,"Genus", 2,"Gelechiidae"),
+(15761,"Atolmis","Atolmis",180,"Genus", 2,"Erebidae"),
+(8962,"Atractotomus","Atractotomus",180,"Genus", 2,"Miridae"),
+(7850,"Atrecus","Atrecus",180,"Genus", 2,"Staphylinidae"),
+(15158,"Atremaea","Atremaea",180,"Genus", 2,"Gelechiidae"),
+(15193,"Augasma","Augasma",180,"Genus", 2,"Coleophoridae"),
+(15797,"Autographa","Autographa",180,"Genus", 2,"Noctuidae"),
+(15934,"Axylia","Axylia",180,"Genus", 2,"Noctuidae"),
+(8512,"Baccha","Baccha",180,"Genus", 2,"Syrphidae"),
+(15024,"Bacotia","Bacotia",180,"Genus", 2,"Psychidae"),
+(15302,"Bactra","Bactra",180,"Genus", 2,"Tortricidae"),
+(6295,"Badister","Badister",180,"Genus", 2,"Carabidae"),
+(8037,"Baeocrara","Baeocrara",180,"Genus", 2,"Ptiliidae"),
+(15023,"Bankesia","Bankesia",180,"Genus", 2,"Psychidae"),
+(14848,"Barynotus","Barynotus",180,"Genus", 2,"Brachyderini"),
+(15110,"Batia","Batia",180,"Genus", 2,"Oecophoridae"),
+(15192,"Batrachedra","Batrachedra",180,"Genus", 2,"Batrachedridae"),
+(15095,"Bedellia","Bedellia",180,"Genus", 2,"Bedelliidae"),
+(15340,"Bembecia","Bembecia",180,"Genus", 2,"Sesiidae"),
+(6214,"Bembidion","Bembidion",180,"Genus", 2,"Carabidae"),
+(233966,"Bembix","Bembix",180,"Genus", 2,"Crabronidae"),
+(18612,"Bena","Bena",180,"Genus", 2,"Nolidae"),
+(6740,"Berosus","Berosus",180,"Genus", 2,"Hydrophilidae"),
+(7091,"Bidessus","Bidessus",180,"Genus", 2,"Dytiscidae"),
+(15101,"Bisigna","Bisigna",180,"Genus", 2,"Oecophoridae"),
+(15666,"Biston","Biston",180,"Genus", 2,"Geometridae"),
+(7292,"Blaps","Blaps",180,"Genus", 2,"Tenebrionidae"),
+(15203,"Blastobasis","Blastobasis",180,"Genus", 2,"Blastobasidae"),
+(15198,"Blastodacna","Blastodacna",180,"Genus", 2,"Parametriotidae"),
+(8944,"Blepharidopterus","Blepharidopterus",180,"Genus", 2,"Miridae"),
+(15903,"Blepharita","Blepharita",180,"Genus", 2,"Noctuidae"),
+(8803,"Blera","Blera",180,"Genus", 2,"Syrphidae"),
+(6168,"Blethisa","Blethisa",180,"Genus", 2,"Carabidae"),
+(8080,"Blitophaga","Blitophaga",180,"Genus", 2,"Silphidae"),
+(15002,"Bohemannia","Bohemannia",180,"Genus", 2,"Nepticulidae"),
+(7306,"Bolitophagus","Bolitophagus",180,"Genus", 2,"Tenebrionidae"),
+(15380,"Boloria","Boloria",180,"Genus", 2,"Nymphalidae"),
+(8271,"Bombus","Bombus",180,"Genus", 2,"Apidae"),
+(15546,"Bombyx","Bombyx",180,"Genus", 2,"Bombycidae"),
+(15108,"Borkhausenia","Borkhausenia",180,"Genus", 2,"Oecophoridae"),
+(229715,"Bothynoderes","Bothynoderes",180,"Genus", 2,"Lixini"),
+(15637,"Boudinotiana","Boudinotiana",180,"Genus", 2,"Geometridae"),
+(15817,"Brachionycha","Brachionycha",180,"Genus", 2,"Noctuidae"),
+(15147,"Brachmia","Brachmia",180,"Genus", 2,"Gelechiidae"),
+(9046,"Brachyarthrum","Brachyarthrum",180,"Genus", 2,"Miridae"),
+(15893,"Brachylomia","Brachylomia",180,"Genus", 2,"Noctuidae"),
+(6655,"Brachynus","Brachynus",180,"Genus", 2,"Carabidae"),
+(8725,"Brachyopa","Brachyopa",180,"Genus", 2,"Syrphidae"),
+(8820,"Brachypalpoides","Brachypalpoides",180,"Genus", 2,"Syrphidae"),
+(8826,"Brachypalpus","Brachypalpus",180,"Genus", 2,"Syrphidae"),
+(14881,"Brachysomus","Brachysomus",180,"Genus", 2,"Brachyderini"),
+(6602,"Bradycellus","Bradycellus",180,"Genus", 2,"Carabidae"),
+(15382,"Brenthis","Brenthis",180,"Genus", 2,"Nymphalidae"),
+(6208,"Broscus","Broscus",180,"Genus", 2,"Carabidae"),
+(6119,"Brychius","Brychius",180,"Genus", 2,"Haliplidae"),
+(8966,"Bryocoris","Bryocoris",180,"Genus", 2,"Miridae"),
+(15828,"Bryophila","Bryophila",180,"Genus", 2,"Noctuidae"),
+(15156,"Bryotropha","Bryotropha",180,"Genus", 2,"Gelechiidae"),
+(15057,"Bucculatrix","Bucculatrix",180,"Genus", 2,"Bucculatricidae"),
+(15220,"Buckleria","Buckleria",180,"Genus", 2,"Pterophoridae"),
+(15682,"Bupalus","Bupalus",180,"Genus", 2,"Geometridae"),
+(15210,"Buszkoiana","Buszkoiana",180,"Genus", 2,"Pterophoridae"),
+(15683,"Cabera","Cabera",180,"Genus", 2,"Geometridae"),
+(6816,"Caccobius","Caccobius",180,"Genus", 2,"Scarabaeidae"),
+(15256,"Cacoecimorpha","Cacoecimorpha",180,"Genus", 2,"Tortricidae"),
+(15405,"Cacyreus","Cacyreus",180,"Genus", 2,"Lycaenidae"),
+(15459,"Cadra","Cadra",180,"Genus", 2,"Pyralidae"),
+(7606,"Caenocara","Caenocara",180,"Genus", 2,"Anobiidae"),
+(7671,"Cafius","Cafius",180,"Genus", 2,"Staphylinidae"),
+(15847,"Calamia","Calamia",180,"Genus", 2,"Noctuidae"),
+(15505,"Calamotropha","Calamotropha",180,"Genus", 2,"Crambidae"),
+(18972,"Calamotropha","Calamotropha",180,"Genus", 2,"Pyralidae"),
+(6310,"Calathus","Calathus",180,"Genus", 2,"Carabidae"),
+(7006,"Callidium","Callidium",180,"Genus", 2,"Cerambycidae"),
+(15747,"Callimorpha","Callimorpha",180,"Genus", 2,"Erebidae"),
+(19013,"Callistege","Callistege",180,"Genus", 2,"Erebidae"),
+(15068,"Callisto","Callisto",180,"Genus", 2,"Gracillariidae"),
+(15732,"Calliteara","Calliteara",180,"Genus", 2,"Erebidae"),
+(15401,"Callophrys","Callophrys",180,"Genus", 2,"Lycaenidae"),
+(15826,"Callopistria","Callopistria",180,"Genus", 2,"Noctuidae"),
+(8841,"Calocoris","Calocoris",180,"Genus", 2,"Miridae"),
+(15814,"Calophasia","Calophasia",180,"Genus", 2,"Noctuidae"),
+(15059,"Caloptilia","Caloptilia",180,"Genus", 2,"Gracillariidae"),
+(6148,"Calosoma","Calosoma",180,"Genus", 2,"Carabidae"),
+(18931,"Calospilos","Calospilos",180,"Genus", 2,"Geometridae"),
+(15063,"Calybites","Calybites",180,"Genus", 2,"Gracillariidae"),
+(7285,"Calyptomerus","Calyptomerus",180,"Genus", 2,"Clambidae"),
+(15072,"Cameraria","Cameraria",180,"Genus", 2,"Gracillariidae"),
+(15687,"Campaea","Campaea",180,"Genus", 2,"Geometridae"),
+(15578,"Camptogramma","Camptogramma",180,"Genus", 2,"Geometridae"),
+(8937,"Camptozygum","Camptozygum",180,"Genus", 2,"Miridae"),
+(9119,"Campylomma","Campylomma",180,"Genus", 2,"Miridae"),
+(8918,"Campyloneura","Campyloneura",180,"Genus", 2,"Miridae"),
+(229711,"Campylosteira","Campylosteira",180,"Genus", 2,"Tingidae"),
+(15030,"Canephora","Canephora",180,"Genus", 2,"Psychidae"),
+(15421,"Caphys","Caphys",180,"Genus", 2,"Pyralidae"),
+(15219,"Capperia","Capperia",180,"Genus", 2,"Pterophoridae"),
+(8959,"Capsodes","Capsodes",180,"Genus", 2,"Miridae"),
+(8876,"Capsus","Capsus",180,"Genus", 2,"Miridae"),
+(15246,"Capua","Capua",180,"Genus", 2,"Tortricidae"),
+(6152,"Carabus","Carabus",180,"Genus", 2,"Carabidae"),
+(15832,"Caradrina","Caradrina",180,"Genus", 2,"Noctuidae"),
+(19135,"Caradrina (Paradrina)","Caradrina (Paradrina)",180,"Genus", 2,"Noctuidae"),
+(19127,"Caradrina (Platyperigea)","Caradrina (Platyperigea)",180,"Genus", 2,"Noctuidae"),
+(15120,"Carcina","Carcina",180,"Genus", 2,"Peleopodidae"),
+(7390,"Caridina","Caridina",180,"Genus", 2,"Serropalpidae"),
+(15184,"Carpatolechia","Carpatolechia",180,"Genus", 2,"Gelechiidae"),
+(15627,"Carsia","Carsia",180,"Genus", 2,"Geometridae"),
+(14912,"Carterocephalus","Carterocephalus",180,"Genus", 2,"Hesperiidae"),
+(15181,"Caryocolum","Caryocolum",180,"Genus", 2,"Gelechiidae"),
+(15515,"Cataclysta","Cataclysta",180,"Genus", 2,"Crambidae"),
+(15576,"Catarhoe","Catarhoe",180,"Genus", 2,"Geometridae"),
+(15784,"Catocala","Catocala",180,"Genus", 2,"Erebidae"),
+(8102,"Catops","Catops",180,"Genus", 2,"Silphidae"),
+(15365,"Catopsilia","Catopsilia",180,"Genus", 2,"Pieridae"),
+(15509,"Catoptria","Catoptria",180,"Genus", 2,"Crambidae"),
+(15010,"Cauchas","Cauchas",180,"Genus", 2,"Adelidae"),
+(15080,"Cedestis","Cedestis",180,"Genus", 2,"Yponomeutidae"),
+(15850,"Celaena","Celaena",180,"Genus", 2,"Noctuidae"),
+(15407,"Celastrina","Celastrina",180,"Genus", 2,"Lycaenidae"),
+(15291,"Celypha","Celypha",180,"Genus", 2,"Tortricidae"),
+(7256,"Cephennium","Cephennium",180,"Genus", 2,"Scydmaenidae"),
+(15646,"Cepphis","Cepphis",180,"Genus", 2,"Geometridae"),
+(6961,"Cerambyx","Cerambyx",180,"Genus", 2,"Cerambycidae"),
+(15916,"Ceramica","Ceramica",180,"Genus", 2,"Noctuidae"),
+(15909,"Cerapteryx","Cerapteryx",180,"Genus", 2,"Noctuidae"),
+(15937,"Cerastis","Cerastis",180,"Genus", 2,"Noctuidae"),
+(233968,"Cerceris","Cerceris",180,"Genus", 2,"Crabronidae"),
+(6677,"Cercyon","Cercyon",180,"Genus", 2,"Hydrophilidae"),
+(15707,"Cerura","Cerura",180,"Genus", 2,"Notodontidae"),
+(8182,"Cerylon","Cerylon",180,"Genus", 2,"Colydiidae"),
+(6922,"Cetonia","Cetonia",180,"Genus", 2,"Scarabaeidae"),
+(14871,"Ceutorhynchus","Ceutorhynchus",180,"Genus", 2,"Ceutorhynchini"),
+(6733,"Chaetarthria","Chaetarthria",180,"Genus", 2,"Hydrophilidae"),
+(8822,"Chalcosyrphus","Chalcosyrphus",180,"Genus", 2,"Syrphidae"),
+(8701,"Chamaesyrphus","Chamaesyrphus",180,"Genus", 2,"Syrphidae"),
+(18608,"Charagmus","Charagmus",180,"Genus", 2,"Sitonini"),
+(8878,"Charagochilus","Charagochilus",180,"Genus", 2,"Miridae"),
+(15835,"Charanyca","Charanyca",180,"Genus", 2,"Noctuidae"),
+(15689,"Charissa","Charissa",180,"Genus", 2,"Geometridae"),
+(8652,"Cheilosia","Cheilosia",180,"Genus", 2,"Syrphidae"),
+(8674,"Cheliosia","Cheliosia",180,"Genus", 2,"Syrphidae"),
+(8375,"Chelostoma","Chelostoma",180,"Genus", 2,"Megachilidae"),
+(15941,"Chersotis","Chersotis",180,"Genus", 2,"Noctuidae"),
+(15629,"Chesias","Chesias",180,"Genus", 2,"Geometridae"),
+(15645,"Chiasmia","Chiasmia",180,"Genus", 2,"Geometridae"),
+(15502,"Chilo","Chilo",180,"Genus", 2,"Crambidae"),
+(18883,"Chilo","Chilo",180,"Genus", 2,"Pyralidae"),
+(8229,"Chilocorus","Chilocorus",180,"Genus", 2,"Coccinellidae"),
+(15834,"Chilodes","Chilodes",180,"Genus", 2,"Noctuidae"),
+(15173,"Chionodes","Chionodes",180,"Genus", 2,"Gelechiidae"),
+(6286,"Chlaenius","Chlaenius",180,"Genus", 2,"Carabidae"),
+(8968,"Chlamydatus","Chlamydatus",180,"Genus", 2,"Miridae"),
+(15844,"Chloantha","Chloantha",180,"Genus", 2,"Noctuidae"),
+(15704,"Chlorissa","Chlorissa",180,"Genus", 2,"Geometridae"),
+(18983,"Chloroclysis","Chloroclysis",180,"Genus", 2,"Geometridae"),
+(15600,"Chloroclysta","Chloroclysta",180,"Genus", 2,"Geometridae"),
+(15624,"Chloroclystis","Chloroclystis",180,"Genus", 2,"Geometridae"),
+(8126,"Choleva","Choleva",180,"Genus", 2,"Silphidae"),
+(15237,"Choreutis","Choreutis",180,"Genus", 2,"Choreutidae"),
+(15249,"Choristoneura","Choristoneura",180,"Genus", 2,"Tortricidae"),
+(19040,"Chortodes","Chortodes",180,"Genus", 2,"Noctuidae"),
+(7526,"Chrysanthia","Chrysanthia",180,"Genus", 2,"Oedemeridae"),
+(15201,"Chrysoclista","Chrysoclista",180,"Genus", 2,"Parametriotidae"),
+(15792,"Chrysodeixis","Chrysodeixis",180,"Genus", 2,"Noctuidae"),
+(15154,"Chrysoesthia","Chrysoesthia",180,"Genus", 2,"Gelechiidae"),
+(8735,"Chrysogaster","Chrysogaster",180,"Genus", 2,"Syrphidae"),
+(15506,"Chrysoteuchia","Chrysoteuchia",180,"Genus", 2,"Crambidae"),
+(18792,"Chrysoteuchia","Chrysoteuchia",180,"Genus", 2,"Pyralidae"),
+(8541,"Chrysotoxum","Chrysotoxum",180,"Genus", 2,"Syrphidae"),
+(6142,"Cicindela","Cicindela",180,"Genus", 2,"Cicindelidae"),
+(8172,"Cicones","Cicones",180,"Genus", 2,"Colydiidae"),
+(15593,"Cidaria","Cidaria",180,"Genus", 2,"Geometridae"),
+(15524,"Cilix","Cilix",180,"Genus", 2,"Drepanidae"),
+(15881,"Cirrhia","Cirrhia",180,"Genus", 2,"Noctuidae"),
+(7626,"Cis","Cis",180,"Genus", 2,"Cisidae"),
+(7287,"Clambus","Clambus",180,"Genus", 2,"Clambidae"),
+(15322,"Clavigesta","Clavigesta",180,"Genus", 2,"Tortricidae"),
+(229713,"Cleonis","Cleonis",180,"Genus", 2,"Lixini"),
+(18646,"Cleopomiarus","Cleopomiarus",180,"Genus", 2,"Mecinini"),
+(15671,"Cleora","Cleora",180,"Genus", 2,"Geometridae"),
+(15690,"Cleorodes","Cleorodes",180,"Genus", 2,"Geometridae"),
+(15259,"Clepsis","Clepsis",180,"Genus", 2,"Tortricidae"),
+(6205,"Clivina","Clivina",180,"Genus", 2,"Carabidae"),
+(15722,"Clostera","Clostera",180,"Genus", 2,"Notodontidae"),
+(8880,"Closterotomus","Closterotomus",180,"Genus", 2,"Miridae"),
+(7031,"Clytus","Clytus",180,"Genus", 2,"Cerambycidae"),
+(15214,"Cnaemidophorus","Cnaemidophorus",180,"Genus", 2,"Pterophoridae"),
+(15268,"Cnephasia","Cnephasia",180,"Genus", 2,"Tortricidae"),
+(8206,"Coccidula","Coccidula",180,"Genus", 2,"Coccinellidae"),
+(8241,"Coccinella","Coccinella",180,"Genus", 2,"Coccinellidae"),
+(15282,"Cochylidia","Cochylidia",180,"Genus", 2,"Tortricidae"),
+(15276,"Cochylimorpha","Cochylimorpha",180,"Genus", 2,"Tortricidae"),
+(15283,"Cochylis","Cochylis",180,"Genus", 2,"Tortricidae"),
+(7096,"Coelambus","Coelambus",180,"Genus", 2,"Dytiscidae"),
+(18595,"Coeliodes","Coeliodes",180,"Genus", 2,"Ceutorhynchini"),
+(8348,"Coelioxys","Coelioxys",180,"Genus", 2,"Megachilidae"),
+(15866,"Coenobia","Coenobia",180,"Genus", 2,"Noctuidae"),
+(15372,"Coenonympha","Coenonympha",180,"Genus", 2,"Nymphalidae"),
+(15952,"Coenophila","Coenophila",180,"Genus", 2,"Noctuidae"),
+(7448,"Colenis","Colenis",180,"Genus", 2,"Liodidae"),
+(15194,"Coleophora","Coleophora",180,"Genus", 2,"Coleophoridae"),
+(15364,"Colias","Colias",180,"Genus", 2,"Pieridae"),
+(8367,"Colletes","Colletes",180,"Genus", 2,"Colletidae"),
+(15779,"Colobochyla","Colobochyla",180,"Genus", 2,"Erebidae"),
+(19150,"Colobochyla","Colobochyla",180,"Genus", 2,"Noctuidae"),
+(15805,"Colocasia","Colocasia",180,"Genus", 2,"Noctuidae"),
+(8114,"Colon","Colon",180,"Genus", 2,"Silphidae"),
+(15602,"Colostygia","Colostygia",180,"Genus", 2,"Geometridae"),
+(15661,"Colotois","Colotois",180,"Genus", 2,"Geometridae"),
+(8176,"Colydium","Colydium",180,"Genus", 2,"Colydiidae"),
+(7195,"Colymbetes","Colymbetes",180,"Genus", 2,"Dytiscidae"),
+(15698,"Comibaena","Comibaena",180,"Genus", 2,"Geometridae"),
+(9066,"Compsidolon","Compsidolon",180,"Genus", 2,"Miridae"),
+(15824,"Condica","Condica",180,"Genus", 2,"Noctuidae"),
+(229676,"Coniocleonus","Coniocleonus",180,"Genus", 2,"Lixini"),
+(15921,"Conisania","Conisania",180,"Genus", 2,"Noctuidae"),
+(15884,"Conistra","Conistra",180,"Genus", 2,"Noctuidae"),
+(19026,"Conobathra","Conobathra",180,"Genus", 2,"Pyralidae"),
+(7400,"Conopalpus","Conopalpus",180,"Genus", 2,"Serropalpidae"),
+(9028,"Conostethus","Conostethus",180,"Genus", 2,"Miridae"),
+(7149,"Copelatus","Copelatus",180,"Genus", 2,"Dytiscidae"),
+(6814,"Copris","Copris",180,"Genus", 2,"Scarabaeidae"),
+(15017,"Coptotriche","Coptotriche",180,"Genus", 2,"Tischeriidae"),
+(15911,"Coranarta","Coranarta",180,"Genus", 2,"Noctuidae"),
+(15418,"Corcyra","Corcyra",180,"Genus", 2,"Pyralidae"),
+(7243,"Corylophus","Corylophus",180,"Genus", 2,"Orthoperidae"),
+(15751,"Coscinia","Coscinia",180,"Genus", 2,"Erebidae"),
+(15890,"Cosmia","Cosmia",180,"Genus", 2,"Noctuidae"),
+(15134,"Cosmopterix","Cosmopterix",180,"Genus", 2,"Cosmopterigidae"),
+(15595,"Cosmorhoe","Cosmorhoe",180,"Genus", 2,"Geometridae"),
+(15331,"Cossus","Cossus",180,"Genus", 2,"Cossidae"),
+(15577,"Costaconvexa","Costaconvexa",180,"Genus", 2,"Geometridae"),
+(7418,"Costae","Costae",180,"Genus", 2,"Anaspidae"),
+(233974,"Crabro","Crabro",180,"Genus", 2,"Crabronidae"),
+(15507,"Crambus","Crambus",180,"Genus", 2,"Crambidae"),
+(18816,"Crambus","Crambus",180,"Genus", 2,"Pyralidae"),
+(15810,"Craniophora","Craniophora",180,"Genus", 2,"Noctuidae"),
+(15109,"Crassa","Crassa",180,"Genus", 2,"Oecophoridae"),
+(7769,"Creophilus","Creophilus",180,"Genus", 2,"Staphylinidae"),
+(6949,"Criocephalus","Criocephalus",180,"Genus", 2,"Cerambycidae"),
+(9030,"Criocoris","Criocoris",180,"Genus", 2,"Miridae"),
+(8799,"Criorhina","Criorhina",180,"Genus", 2,"Syrphidae"),
+(15659,"Crocallis","Crocallis",180,"Genus", 2,"Geometridae"),
+(15313,"Crocidosema","Crocidosema",180,"Genus", 2,"Tortricidae"),
+(15217,"Crombrugghia","Crombrugghia",180,"Genus", 2,"Pterophoridae"),
+(233978,"Crossocerus","Crossocerus",180,"Genus", 2,"Crabronidae"),
+(15827,"Cryphia","Cryphia",180,"Genus", 2,"Noctuidae"),
+(15848,"Crypsedra","Crypsedra",180,"Genus", 2,"Noctuidae"),
+(7304,"Crypticus","Crypticus",180,"Genus", 2,"Tenebrionidae"),
+(15422,"Cryptoblabes","Cryptoblabes",180,"Genus", 2,"Pyralidae"),
+(14869,"Cryptocephalus","Cryptocephalus",180,"Genus", 2,"Chrysomelidae"),
+(6701,"Cryptopleurum","Cryptopleurum",180,"Genus", 2,"Hydrophilidae"),
+(7367,"Cteniopus","Cteniopus",180,"Genus", 2,"Alleculidae"),
+(15791,"Ctenoplusia","Ctenoplusia",180,"Genus", 2,"Noctuidae"),
+(15812,"Cucullia","Cucullia",180,"Genus", 2,"Noctuidae"),
+(15406,"Cupido","Cupido",180,"Genus", 2,"Lycaenidae"),
+(15414,"Cyaniris","Cyaniris",180,"Genus", 2,"Lycaenidae"),
+(7220,"Cybister","Cybister",180,"Genus", 2,"Dytiscidae"),
+(15758,"Cybosia","Cybosia",180,"Genus", 2,"Erebidae"),
+(6166,"Cychrus","Cychrus",180,"Genus", 2,"Carabidae"),
+(15569,"Cyclophora","Cyclophora",180,"Genus", 2,"Geometridae"),
+(18860,"Cydalima","Cydalima",180,"Genus", 2,"Crambidae"),
+(15325,"Cydia","Cydia",180,"Genus", 2,"Tortricidae"),
+(8920,"Cyllecoris","Cyllecoris",180,"Genus", 2,"Miridae"),
+(15530,"Cymatophorina","Cymatophorina",180,"Genus", 2,"Drepanidae"),
+(6731,"Cymbiodyta","Cymbiodyta",180,"Genus", 2,"Hydrophilidae"),
+(6648,"Cymindis","Cymindis",180,"Genus", 2,"Carabidae"),
+(15294,"Cymolomia","Cymolomia",180,"Genus", 2,"Tortricidae"),
+(15494,"Cynaeda","Cynaeda",180,"Genus", 2,"Crambidae"),
+(8204,"Cynegetis","Cynegetis",180,"Genus", 2,"Coccinellidae"),
+(229680,"Cyphocleonus","Cyphocleonus",180,"Genus", 2,"Lixini"),
+(8970,"Cyrtorhinus","Cyrtorhinus",180,"Genus", 2,"Miridae"),
+(7445,"Cyrtusa","Cyrtusa",180,"Genus", 2,"Liodidae"),
+(15153,"Dactylotula","Dactylotula",180,"Genus", 2,"Gelechiidae"),
+(15020,"Dahlica","Dahlica",180,"Genus", 2,"Psychidae"),
+(15367,"Danaus","Danaus",180,"Genus", 2,"Nymphalidae"),
+(15559,"Daphnis","Daphnis",180,"Genus", 2,"Sphingidae"),
+(8311,"Dasypoda","Dasypoda",180,"Genus", 2,"Melittidae"),
+(15901,"Dasypolia","Dasypolia",180,"Genus", 2,"Noctuidae"),
+(15053,"Dasyses","Dasyses",180,"Genus", 2,"Tineidae"),
+(15116,"Dasystoma","Dasystoma",180,"Genus", 2,"Chimabachidae"),
+(8570,"Dasysyrphus","Dasysyrphus",180,"Genus", 2,"Syrphidae"),
+(15562,"Deilephila","Deilephila",180,"Genus", 2,"Sphingidae"),
+(15672,"Deileptenia","Deileptenia",180,"Genus", 2,"Geometridae"),
+(7974,"Deliphrum","Deliphrum",180,"Genus", 2,"Staphylinidae"),
+(15428,"Delplanqueia","Delplanqueia",180,"Genus", 2,"Pyralidae"),
+(15800,"Deltote","Deltote",180,"Genus", 2,"Noctuidae"),
+(6644,"Demetrias","Demetrias",180,"Genus", 2,"Carabidae"),
+(15539,"Dendrolimus","Dendrolimus",180,"Genus", 2,"Lasiocampidae"),
+(15103,"Denisia","Denisia",180,"Genus", 2,"Oecophoridae"),
+(15868,"Denticucullus","Denticucullus",180,"Genus", 2,"Noctuidae"),
+(15126,"Depressaria","Depressaria",180,"Genus", 2,"Depressariidae"),
+(8866,"Deraeocoris","Deraeocoris",180,"Genus", 2,"Miridae"),
+(229694,"Derephysia","Derephysia",180,"Genus", 2,"Tingidae"),
+(7140,"Deronectes","Deronectes",180,"Genus", 2,"Dytiscidae"),
+(6595,"Diachromus","Diachromus",180,"Genus", 2,"Carabidae"),
+(15794,"Diachrysia","Diachrysia",180,"Genus", 2,"Noctuidae"),
+(15741,"Diacrisia","Diacrisia",180,"Genus", 2,"Erebidae"),
+(15066,"Dialectica","Dialectica",180,"Genus", 2,"Gracillariidae"),
+(7312,"Diaperis","Diaperis",180,"Genus", 2,"Tenebrionidae"),
+(15488,"Diaphania","Diaphania",180,"Genus", 2,"Crambidae"),
+(15739,"Diaphora","Diaphora",180,"Genus", 2,"Erebidae"),
+(15936,"Diarsia","Diarsia",180,"Genus", 2,"Noctuidae"),
+(15482,"Diasemia","Diasemia",180,"Genus", 2,"Crambidae"),
+(15483,"Diasemiopsis","Diasemiopsis",180,"Genus", 2,"Crambidae"),
+(6882,"Diastictus","Diastictus",180,"Genus", 2,"Scarabaeidae"),
+(18844,"Dicallomera","Dicallomera",180,"Genus", 2,"Erebidae"),
+(15931,"Dichagyris","Dichagyris",180,"Genus", 2,"Noctuidae"),
+(15258,"Dichelia","Dichelia",180,"Genus", 2,"Tortricidae"),
+(6597,"Dichirotrichus","Dichirotrichus",180,"Genus", 2,"Carabidae"),
+(15145,"Dichomeris","Dichomeris",180,"Genus", 2,"Gelechiidae"),
+(18997,"Dichonia","Dichonia",180,"Genus", 2,"Noctuidae"),
+(8972,"Dichrooscytus","Dichrooscytus",180,"Genus", 2,"Miridae"),
+(15324,"Dichrorampha","Dichrorampha",180,"Genus", 2,"Tortricidae"),
+(229689,"Dictyla","Dictyla",180,"Genus", 2,"Tingidae"),
+(229696,"Dictyonota","Dictyonota",180,"Genus", 2,"Tingidae"),
+(15891,"Dicycla","Dicycla",180,"Genus", 2,"Noctuidae"),
+(8849,"Dicyphus","Dicyphus",180,"Genus", 2,"Miridae"),
+(8605,"Didea","Didea",180,"Genus", 2,"Syrphidae"),
+(15087,"Digitivalva","Digitivalva",180,"Genus", 2,"Glyphipterigidae"),
+(15806,"Diloba","Diloba",180,"Genus", 2,"Noctuidae"),
+(7613,"Dinoderus","Dinoderus",180,"Genus", 2,"Bostrychidae"),
+(7750,"Dinothenarus","Dinothenarus",180,"Genus", 2,"Staphylinidae"),
+(233998,"Diodontus","Diodontus",180,"Genus", 2,"Crabronidae"),
+(15438,"Dioryctria","Dioryctria",180,"Genus", 2,"Pyralidae"),
+(18846,"Dipleurina","Dipleurina",180,"Genus", 2,"Pyralidae"),
+(15018,"Diplodoma","Diplodoma",180,"Genus", 2,"Psychidae"),
+(15481,"Diplopseustis","Diplopseustis",180,"Genus", 2,"Crambidae"),
+(18960,"Discestra","Discestra",180,"Genus", 2,"Noctuidae"),
+(8174,"Ditoma","Ditoma",180,"Genus", 2,"Colydiidae"),
+(15241,"Ditula","Ditula",180,"Genus", 2,"Tortricidae"),
+(15115,"Diurnea","Diurnea",180,"Genus", 2,"Chimabachidae"),
+(15394,"Doleschallia","Doleschallia",180,"Genus", 2,"Nymphalidae"),
+(15489,"Dolicharthria","Dolicharthria",180,"Genus", 2,"Crambidae"),
+(234002,"Dolichurus","Dolichurus",180,"Genus", 2,"Crabronidae"),
+(6318,"Dolichus","Dolichus",180,"Genus", 2,"Carabidae"),
+(15519,"Donacaula","Donacaula",180,"Genus", 2,"Crambidae"),
+(6766,"Donacia","Donacia",180,"Genus", 2,"Chrysomelidae"),
+(7602,"Dorcatoma","Dorcatoma",180,"Genus", 2,"Anobiidae"),
+(6930,"Dorcus","Dorcus",180,"Genus", 2,"Scarabaeidae"),
+(15522,"Drepana","Drepana",180,"Genus", 2,"Drepanidae"),
+(8112,"Dreposcia","Dreposcia",180,"Genus", 2,"Silphidae"),
+(6630,"Dromius","Dromius",180,"Genus", 2,"Carabidae"),
+(15038,"Dryadaula","Dryadaula",180,"Genus", 2,"Tineidae"),
+(15711,"Drymonia","Drymonia",180,"Genus", 2,"Notodontidae"),
+(15897,"Dryobotodes","Dryobotodes",180,"Genus", 2,"Noctuidae"),
+(234004,"Dryodella","Dryodella",180,"Genus", 2,"Crabronidae"),
+(8924,"Dryophilocoris","Dryophilocoris",180,"Genus", 2,"Miridae"),
+(7566,"Dryophilus","Dryophilus",180,"Genus", 2,"Anobiidae"),
+(8336,"Dufourea","Dufourea",180,"Genus", 2,"Halictidae"),
+(15485,"Duponchelia","Duponchelia",180,"Genus", 2,"Crambidae"),
+(19156,"Dycacla","Dycacla",180,"Genus", 2,"Noctuidae"),
+(15838,"Dypterygia","Dypterygia",180,"Genus", 2,"Noctuidae"),
+(15764,"Dysauxes","Dysauxes",180,"Genus", 2,"Erebidae"),
+(6193,"Dyschirius","Dyschirius",180,"Genus", 2,"Carabidae"),
+(15692,"Dyscia","Dyscia",180,"Genus", 2,"Geometridae"),
+(14992,"Dyseriocrania","Dyseriocrania",180,"Genus", 2,"Eriocraniidae"),
+(15787,"Dysgonia","Dysgonia",180,"Genus", 2,"Erebidae"),
+(15601,"Dysstroma","Dysstroma",180,"Genus", 2,"Geometridae"),
+(15200,"Dystebenna","Dystebenna",180,"Genus", 2,"Parametriotidae"),
+(7212,"Dytiscus","Dytiscus",180,"Genus", 2,"Dytiscidae"),
+(15267,"Eana","Eana",180,"Genus", 2,"Tortricidae"),
+(18610,"Earias","Earias",180,"Genus", 2,"Nolidae"),
+(15581,"Earophila","Earophila",180,"Genus", 2,"Geometridae"),
+(18863,"Ebulea","Ebulea",180,"Genus", 2,"Crambidae"),
+(15449,"Eccopisa","Eccopisa",180,"Genus", 2,"Pyralidae"),
+(15599,"Ecliptopera","Ecliptopera",180,"Genus", 2,"Geometridae"),
+(15467,"Ecpyrrhorrhoe","Ecpyrrhorrhoe",180,"Genus", 2,"Crambidae"),
+(234007,"Ectemnius","Ectemnius",180,"Genus", 2,"Crabronidae"),
+(15003,"Ectoedemia","Ectoedemia",180,"Genus", 2,"Nepticulidae"),
+(15677,"Ectropis","Ectropis",180,"Genus", 2,"Geometridae"),
+(15085,"Eidophasia","Eidophasia",180,"Genus", 2,"Plutellidae"),
+(15762,"Eilema","Eilema",180,"Genus", 2,"Erebidae"),
+(15197,"Elachista","Elachista",180,"Genus", 2,"Elachistidae"),
+(15831,"Elaphria","Elaphria",180,"Genus", 2,"Noctuidae"),
+(6170,"Elaphrus","Elaphrus",180,"Genus", 2,"Carabidae"),
+(15594,"Electrophaes","Electrophaes",180,"Genus", 2,"Geometridae"),
+(7310,"Eledona","Eledona",180,"Genus", 2,"Tenebrionidae"),
+(7308,"Eledonoprius","Eledonoprius",180,"Genus", 2,"Tenebrionidae"),
+(15424,"Elegia","Elegia",180,"Genus", 2,"Pyralidae"),
+(15513,"Elophila","Elophila",180,"Genus", 2,"Crambidae"),
+(15681,"Ematurga","Ematurga",180,"Genus", 2,"Geometridae"),
+(19103,"Emmelia","Emmelia",180,"Genus", 2,"Noctuidae"),
+(15228,"Emmelina","Emmelina",180,"Genus", 2,"Pterophoridae"),
+(18885,"Emmetia","Emmetia",180,"Genus", 2,"Tischeriidae"),
+(7743,"Emus","Emus",180,"Genus", 2,"Staphylinidae"),
+(15888,"Enargia","Enargia",180,"Genus", 2,"Noctuidae"),
+(15304,"Enarmonia","Enarmonia",180,"Genus", 2,"Tortricidae"),
+(8187,"Endomychus","Endomychus",180,"Genus", 2,"Endomychidae"),
+(15301,"Endothenia","Endothenia",180,"Genus", 2,"Tortricidae"),
+(15465,"Endotricha","Endotricha",180,"Genus", 2,"Pyralidae"),
+(15545,"Endromis","Endromis",180,"Genus", 2,"Endromidae"),
+(15106,"Endrosis","Endrosis",180,"Genus", 2,"Oecophoridae"),
+(7644,"Ennearthron","Ennearthron",180,"Genus", 2,"Cisidae"),
+(15656,"Ennomos","Ennomos",180,"Genus", 2,"Geometridae"),
+(6714,"Enochrus","Enochrus",180,"Genus", 2,"Hydrophilidae"),
+(15586,"Entephria","Entephria",180,"Genus", 2,"Geometridae"),
+(14999,"Enteucha","Enteucha",180,"Genus", 2,"Nepticulidae"),
+(234017,"Entomognathus","Entomognathus",180,"Genus", 2,"Crabronidae"),
+(15504,"Eodiatraea","Eodiatraea",180,"Genus", 2,"Crambidae"),
+(8776,"Eoseristalis","Eoseristalis",180,"Genus", 2,"Syrphidae"),
+(15242,"Epagoge","Epagoge",180,"Genus", 2,"Tortricidae"),
+(15738,"Epatolmis","Epatolmis",180,"Genus", 2,"Erebidae"),
+(8344,"Epeolus","Epeolus",180,"Genus", 2,"Apidae"),
+(15231,"Epermenia","Epermenia",180,"Genus", 2,"Epermeniidae"),
+(15458,"Ephestia","Ephestia",180,"Genus", 2,"Pyralidae"),
+(15317,"Epiblema","Epiblema",180,"Genus", 2,"Tortricidae"),
+(15027,"Epichnopterix","Epichnopterix",180,"Genus", 2,"Psychidae"),
+(19133,"Epichnopteryx","Epichnopteryx",180,"Genus", 2,"Psychidae"),
+(15262,"Epichoristodes","Epichoristodes",180,"Genus", 2,"Tortricidae"),
+(15944,"Epilecta","Epilecta",180,"Genus", 2,"Noctuidae"),
+(15311,"Epinotia","Epinotia",180,"Genus", 2,"Tortricidae"),
+(15652,"Epione","Epione",180,"Genus", 2,"Geometridae"),
+(15939,"Epipsilia","Epipsilia",180,"Genus", 2,"Noctuidae"),
+(15579,"Epirrhoe","Epirrhoe",180,"Genus", 2,"Geometridae"),
+(15605,"Epirrita","Epirrita",180,"Genus", 2,"Geometridae"),
+(8551,"Epistrophe","Epistrophe",180,"Genus", 2,"Syrphidae"),
+(8556,"Epistrophella","Epistrophella",180,"Genus", 2,"Syrphidae"),
+(8616,"Episyrphus","Episyrphus",180,"Genus", 2,"Syrphidae"),
+(19114,"Eppirrita","Eppirrita",180,"Genus", 2,"Geometridae"),
+(15668,"Erannis","Erannis",180,"Genus", 2,"Geometridae"),
+(15104,"Eratophyes","Eratophyes",180,"Genus", 2,"Oecophoridae"),
+(15373,"Erebia","Erebia",180,"Genus", 2,"Nymphalidae"),
+(15852,"Eremobia","Eremobia",180,"Genus", 2,"Noctuidae"),
+(19203,"Eremobina","Eremobina",180,"Genus", 2,"Noctuidae"),
+(7669,"Erichsonius","Erichsonius",180,"Genus", 2,"Staphylinidae"),
+(14994,"Eriocrania","Eriocrania",180,"Genus", 2,"Eriocraniidae"),
+(15536,"Eriogaster","Eriogaster",180,"Genus", 2,"Lasiocampidae"),
+(15306,"Eriopsela","Eriopsela",180,"Genus", 2,"Tortricidae"),
+(15928,"Eriopygodes","Eriopygodes",180,"Genus", 2,"Noctuidae"),
+(8609,"Eriozona","Eriozona",180,"Genus", 2,"Syrphidae"),
+(8795,"Eristalinus","Eristalinus",180,"Genus", 2,"Syrphidae"),
+(8781,"Eristalis","Eristalis",180,"Genus", 2,"Syrphidae"),
+(7571,"Ernobius","Ernobius",180,"Genus", 2,"Anobiidae"),
+(15352,"Erynnis","Erynnis",180,"Genus", 2,"Hesperiidae"),
+(15131,"Ethmia","Ethmia",180,"Genus", 2,"Ethmiidae"),
+(15432,"Etiella","Etiella",180,"Genus", 2,"Pyralidae"),
+(15782,"Eublemma","Eublemma",180,"Genus", 2,"Erebidae"),
+(18914,"Eublemma","Eublemma",180,"Genus", 2,"Noctuidae"),
+(18869,"Eucalybites","Eucalybites",180,"Genus", 2,"Gracillariidae"),
+(15825,"Eucarta","Eucarta",180,"Genus", 2,"Noctuidae"),
+(8313,"Eucera","Eucera",180,"Genus", 2,"Apidae"),
+(15607,"Euchoeca","Euchoeca",180,"Genus", 2,"Geometridae"),
+(15754,"Euchromia","Euchromia",180,"Genus", 2,"Erebidae"),
+(15501,"Euchromius","Euchromius",180,"Genus", 2,"Crambidae"),
+(19086,"Euchromius","Euchromius",180,"Genus", 2,"Pyralidae"),
+(15785,"Euclidia","Euclidia",180,"Genus", 2,"Erebidae"),
+(7272,"Euconnus","Euconnus",180,"Genus", 2,"Scydmaenidae"),
+(15315,"Eucosma","Eucosma",180,"Genus", 2,"Tortricidae"),
+(15303,"Eucosmomorpha","Eucosmomorpha",180,"Genus", 2,"Tortricidae"),
+(15285,"Eudemis","Eudemis",180,"Genus", 2,"Tortricidae"),
+(15765,"Eudocima","Eudocima",180,"Genus", 2,"Erebidae"),
+(15499,"Eudonia","Eudonia",180,"Genus", 2,"Crambidae"),
+(19076,"Eudonia","Eudonia",180,"Genus", 2,"Pyralidae"),
+(15953,"Eugnorisma","Eugnorisma",180,"Genus", 2,"Noctuidae"),
+(15951,"Eugraphe","Eugraphe",180,"Genus", 2,"Noctuidae"),
+(15076,"Euhyponomeutoides","Euhyponomeutoides",180,"Genus", 2,"Yponomeutidae"),
+(15164,"Eulamprotes","Eulamprotes",180,"Genus", 2,"Gelechiidae"),
+(15273,"Eulia","Eulia",180,"Genus", 2,"Tortricidae"),
+(15597,"Eulithis","Eulithis",180,"Genus", 2,"Geometridae"),
+(15412,"Eumedonia","Eumedonia",180,"Genus", 2,"Lycaenidae"),
+(8749,"Eumerus","Eumerus",180,"Genus", 2,"Syrphidae"),
+(15395,"Euphydryas","Euphydryas",180,"Genus", 2,"Nymphalidae"),
+(15580,"Euphyia","Euphyia",180,"Genus", 2,"Geometridae"),
+(15626,"Eupithecia","Eupithecia",180,"Genus", 2,"Geometridae"),
+(15748,"Euplagia","Euplagia",180,"Genus", 2,"Erebidae"),
+(15846,"Euplexia","Euplexia",180,"Genus", 2,"Noctuidae"),
+(15368,"Euploea","Euploea",180,"Genus", 2,"Nymphalidae"),
+(15280,"Eupoecilia","Eupoecilia",180,"Genus", 2,"Tortricidae"),
+(15730,"Euproctis","Euproctis",180,"Genus", 2,"Erebidae"),
+(15887,"Eupsilia","Eupsilia",180,"Genus", 2,"Noctuidae"),
+(15445,"Eurhodope","Eurhodope",180,"Genus", 2,"Pyralidae"),
+(8767,"Eurimyia","Eurimyia",180,"Genus", 2,"Syrphidae"),
+(15947,"Eurois","Eurois",180,"Genus", 2,"Noctuidae"),
+(8858,"Europiella","Europiella",180,"Genus", 2,"Miridae"),
+(18854,"Eurrhypara","Eurrhypara",180,"Genus", 2,"Crambidae"),
+(15495,"Eurrhypis","Eurrhypis",180,"Genus", 2,"Crambidae"),
+(7779,"Euryporus","Euryporus",180,"Genus", 2,"Staphylinidae"),
+(8014,"Euryptilium","Euryptilium",180,"Genus", 2,"Ptiliidae"),
+(7923,"Eusphalerum","Eusphalerum",180,"Genus", 2,"Staphylinidae"),
+(15337,"Eusphecia","Eusphecia",180,"Genus", 2,"Sesiidae"),
+(15062,"Euspilapteryx","Euspilapteryx",180,"Genus", 2,"Gracillariidae"),
+(15596,"Eustroma","Eustroma",180,"Genus", 2,"Geometridae"),
+(15723,"Eutelia","Eutelia",180,"Genus", 2,"Euteliidae"),
+(7252,"Euthia","Euthia",180,"Genus", 2,"Scydmaenidae"),
+(7250,"Euthiconus","Euthiconus",180,"Genus", 2,"Scydmaenidae"),
+(15540,"Euthrix","Euthrix",180,"Genus", 2,"Lasiocampidae"),
+(15932,"Euxoa","Euxoa",180,"Genus", 2,"Noctuidae"),
+(15451,"Euzophera","Euzophera",180,"Genus", 2,"Pyralidae"),
+(15496,"Evergestis","Evergestis",180,"Genus", 2,"Crambidae"),
+(15124,"Exaeretia","Exaeretia",180,"Genus", 2,"Depressariidae"),
+(15265,"Exapate","Exapate",180,"Genus", 2,"Tortricidae"),
+(7052,"Exocentrus","Exocentrus",180,"Genus", 2,"Cerambycidae"),
+(8232,"Exochomus","Exochomus",180,"Genus", 2,"Coccinellidae"),
+(15189,"Exoteleia","Exoteleia",180,"Genus", 2,"Gelechiidae"),
+(18593,"Fabriciana","Fabriciana",180,"Genus", 2,"Nymphalidae"),
+(15857,"Fabula","Fabula",180,"Genus", 2,"Noctuidae"),
+(8589,"Fagisyrphus","Fagisyrphus",180,"Genus", 2,"Syrphidae"),
+(15676,"Fagivorina","Fagivorina",180,"Genus", 2,"Geometridae"),
+(15520,"Falcaria","Falcaria",180,"Genus", 2,"Drepanidae"),
+(15284,"Falseuncaria","Falseuncaria",180,"Genus", 2,"Tortricidae"),
+(15400,"Favonius","Favonius",180,"Genus", 2,"Lycaenidae"),
+(8693,"Ferdinandea","Ferdinandea",180,"Genus", 2,"Syrphidae"),
+(8974,"Fieberocapsus","Fieberocapsus",180,"Genus", 2,"Miridae"),
+(15172,"Filatima","Filatima",180,"Genus", 2,"Gelechiidae"),
+(15708,"Furcula","Furcula",180,"Genus", 2,"Notodontidae"),
+(7730,"Gabrius","Gabrius",180,"Genus", 2,"Staphylinidae"),
+(7728,"Gabronthus","Gabronthus",180,"Genus", 2,"Staphylinidae"),
+(15622,"Gagitodes","Gagitodes",180,"Genus", 2,"Geometridae"),
+(15420,"Galleria","Galleria",180,"Genus", 2,"Pyralidae"),
+(15598,"Gandaritis","Gandaritis",180,"Genus", 2,"Geometridae"),
+(7581,"Gastraiius","Gastraiius",180,"Genus", 2,"Anobiidae"),
+(15542,"Gastropacha","Gastropacha",180,"Genus", 2,"Lasiocampidae"),
+(7833,"Gauropterus","Gauropterus",180,"Genus", 2,"Staphylinidae"),
+(15218,"Geina","Geina",180,"Genus", 2,"Pterophoridae"),
+(15174,"Gelechia","Gelechia",180,"Genus", 2,"Gelechiidae"),
+(6982,"GenusMissing1","GenusMissing1",180,"Genus", 2,"Coleoptera"),
+(7035,"GenusMissing2","GenusMissing2",180,"Genus", 2,"Coleoptera"),
+(7065,"GenusMissing3","GenusMissing3",180,"Genus", 2,"Coleoptera"),
+(15697,"Geometra","Geometra",180,"Genus", 2,"Geometridae"),
+(6828,"Geotrupes","Geotrupes",180,"Genus", 2,"Scarabaeidae"),
+(15310,"Gibberifera","Gibberifera",180,"Genus", 2,"Tortricidae"),
+(7537,"Gibbium","Gibbium",180,"Genus", 2,"Ptinidae"),
+(15211,"Gillmeria","Gillmeria",180,"Genus", 2,"Pterophoridae"),
+(18887,"Gilmeria","Gilmeria",180,"Genus", 2,"Pterophoridae"),
+(15408,"Glaucopsyche","Glaucopsyche",180,"Genus", 2,"Lycaenidae"),
+(15871,"Globia","Globia",180,"Genus", 2,"Noctuidae"),
+(8976,"Globiceps","Globiceps",180,"Genus", 2,"Miridae"),
+(15721,"Gluphisia","Gluphisia",180,"Genus", 2,"Notodontidae"),
+(15090,"Glyphipterix","Glyphipterix",180,"Genus", 2,"Glyphipterigidae"),
+(7324,"Gnathocerus","Gnathocerus",180,"Genus", 2,"Tenebrionidae"),
+(15176,"Gnorimoschema","Gnorimoschema",180,"Genus", 2,"Gelechiidae"),
+(6919,"Gnorimus","Gnorimus",180,"Genus", 2,"Scarabaeidae"),
+(15366,"Gonepteryx","Gonepteryx",180,"Genus", 2,"Pieridae"),
+(7356,"Gonodera","Gonodera",180,"Genus", 2,"Alleculidae"),
+(15853,"Gortyna","Gortyna",180,"Genus", 2,"Noctuidae"),
+(234019,"Gorytes","Gorytes",180,"Genus", 2,"Crabronidae"),
+(6968,"Gracilia","Gracilia",180,"Genus", 2,"Cerambycidae"),
+(15060,"Gracillaria","Gracillaria",180,"Genus", 2,"Gracillariidae"),
+(15788,"Grammodes","Grammodes",180,"Genus", 2,"Erebidae"),
+(6959,"Grammoptera","Grammoptera",180,"Genus", 2,"Cerambycidae"),
+(15948,"Graphiphora","Graphiphora",180,"Genus", 2,"Noctuidae"),
+(7204,"Graphoderes","Graphoderes",180,"Genus", 2,"Dytiscidae"),
+(15327,"Grapholita","Grapholita",180,"Genus", 2,"Tortricidae"),
+(7135,"Graptodytes","Graptodytes",180,"Genus", 2,"Dytiscidae"),
+(15321,"Gravitarmata","Gravitarmata",180,"Genus", 2,"Tortricidae"),
+(15896,"Griposia","Griposia",180,"Genus", 2,"Noctuidae"),
+(7564,"Grynobius","Grynobius",180,"Genus", 2,"Anobiidae"),
+(8934,"Grypocoris","Grypocoris",180,"Genus", 2,"Miridae"),
+(15447,"Gymnancyla","Gymnancyla",180,"Genus", 2,"Pyralidae"),
+(14844,"Gymnetron","Gymnetron",180,"Genus", 2,"Mecinini"),
+(15623,"Gymnoscelis","Gymnoscelis",180,"Genus", 2,"Geometridae"),
+(15733,"Gynaephora","Gynaephora",180,"Genus", 2,"Erebidae"),
+(15278,"Gynnidomorpha","Gynnidomorpha",180,"Genus", 2,"Tortricidae"),
+(15316,"Gypsonoma","Gypsonoma",180,"Genus", 2,"Tortricidae"),
+(7072,"Gyrinus","Gyrinus",180,"Genus", 2,"Gyrinidae"),
+(7837,"Gyrohypnus","Gyrohypnus",180,"Genus", 2,"Staphylinidae"),
+(15526,"Habrosyne","Habrosyne",180,"Genus", 2,"Drepanidae"),
+(15918,"Hada","Hada",180,"Genus", 2,"Noctuidae"),
+(15923,"Hadena","Hadena",180,"Genus", 2,"Noctuidae"),
+(6763,"Haemonia","Haemonia",180,"Genus", 2,"Chrysomelidae"),
+(8396,"Halictus","Halictus",180,"Genus", 2,"Halictidae"),
+(6121,"Haliplus","Haliplus",180,"Genus", 2,"Haliplidae"),
+(9069,"Hallodapus","Hallodapus",180,"Genus", 2,"Miridae"),
+(7377,"Hallomenus","Hallomenus",180,"Genus", 2,"Serropalpidae"),
+(8978,"Halticus","Halticus",180,"Genus", 2,"Miridae"),
+(15397,"Hamearis","Hamearis",180,"Genus", 2,"Riodinidae"),
+(7938,"Hapalarea","Hapalarea",180,"Genus", 2,"Staphylinidae"),
+(15052,"Haplotinea","Haplotinea",180,"Genus", 2,"Tineidae"),
+(234022,"Harpactus","Harpactus",180,"Genus", 2,"Crabronidae"),
+(6414,"Harpalus","Harpalus",180,"Genus", 2,"Carabidae"),
+(15112,"Harpella","Harpella",180,"Genus", 2,"Oecophoridae"),
+(8911,"Harpocera","Harpocera",180,"Genus", 2,"Miridae"),
+(15709,"Harpyia","Harpyia",180,"Genus", 2,"Notodontidae"),
+(15922,"Hecatera","Hecatera",180,"Genus", 2,"Noctuidae"),
+(7562,"Hedobia","Hedobia",180,"Genus", 2,"Anobiidae"),
+(15290,"Hedya","Hedya",180,"Genus", 2,"Tortricidae"),
+(15148,"Helcystogramma","Helcystogramma",180,"Genus", 2,"Gelechiidae"),
+(15823,"Helicoverpa","Helicoverpa",180,"Genus", 2,"Noctuidae"),
+(15642,"Heliomata","Heliomata",180,"Genus", 2,"Geometridae"),
+(18928,"Heliophobus","Heliophobus",180,"Genus", 2,"Noctuidae"),
+(15500,"Heliothela","Heliothela",180,"Genus", 2,"Crambidae"),
+(19110,"Heliothela","Heliothela",180,"Genus", 2,"Pyralidae"),
+(15822,"Heliothis","Heliothis",180,"Genus", 2,"Noctuidae"),
+(15007,"Heliozela","Heliozela",180,"Genus", 2,"Heliozelidae"),
+(15226,"Hellinsia","Hellinsia",180,"Genus", 2,"Pterophoridae"),
+(15497,"Hellula","Hellula",180,"Genus", 2,"Crambidae"),
+(6711,"Helochares","Helochares",180,"Genus", 2,"Hydrophilidae"),
+(8756,"Helophilus","Helophilus",180,"Genus", 2,"Syrphidae"),
+(6745,"Helophorus","Helophorus",180,"Genus", 2,"Hydrophilidae"),
+(15851,"Helotropha","Helotropha",180,"Genus", 2,"Noctuidae"),
+(15557,"Hemaris","Hemaris",180,"Genus", 2,"Sphingidae"),
+(15700,"Hemistola","Hemistola",180,"Genus", 2,"Geometridae"),
+(15703,"Hemithea","Hemithea",180,"Genus", 2,"Geometridae"),
+(14998,"Hepialus","Hepialus",180,"Genus", 2,"Hepialidae"),
+(19017,"Hepiatus","Hepiatus",180,"Genus", 2,"Hepialidae"),
+(6874,"Heptaulacus","Heptaulacus",180,"Genus", 2,"Scarabaeidae"),
+(8647,"Heringia","Heringia",180,"Genus", 2,"Syrphidae"),
+(15769,"Herminia","Herminia",180,"Genus", 2,"Erebidae"),
+(18917,"Herminia","Herminia",180,"Genus", 2,"Noctuidae"),
+(15357,"Hesperia","Hesperia",180,"Genus", 2,"Hesperiidae"),
+(8882,"Heterocordylus","Heterocordylus",180,"Genus", 2,"Miridae"),
+(15343,"Heterogenea","Heterogenea",180,"Genus", 2,"Limacodidae"),
+(15354,"Heteropterus","Heteropterus",180,"Genus", 2,"Hesperiidae"),
+(15589,"Heterothera","Heterothera",180,"Genus", 2,"Geometridae"),
+(7771,"Heterothothops","Heterothothops",180,"Genus", 2,"Staphylinidae"),
+(8930,"Heterotoma","Heterotoma",180,"Genus", 2,"Miridae"),
+(15378,"Hipparchia","Hipparchia",180,"Genus", 2,"Nymphalidae"),
+(8260,"Hippodamia","Hippodamia",180,"Genus", 2,"Coccinellidae"),
+(15563,"Hippotion","Hippotion",180,"Genus", 2,"Sphingidae"),
+(15107,"Hofmannophila","Hofmannophila",180,"Genus", 2,"Oecophoridae"),
+(6898,"Homaloplia","Homaloplia",180,"Genus", 2,"Scarabaeidae"),
+(18949,"Homeoosoma","Homeoosoma",180,"Genus", 2,"Pyralidae"),
+(15454,"Homoeosoma","Homoeosoma",180,"Genus", 2,"Pyralidae"),
+(6911,"Hoplia","Hoplia",180,"Genus", 2,"Scarabaeidae"),
+(8386,"Hoplitis","Hoplitis",180,"Genus", 2,"Megachilidae"),
+(7314,"Hoplocephala","Hoplocephala",180,"Genus", 2,"Tenebrionidae"),
+(15833,"Hoplodrina","Hoplodrina",180,"Genus", 2,"Noctuidae"),
+(8922,"Hoplomachus","Hoplomachus",180,"Genus", 2,"Miridae"),
+(15615,"Horisme","Horisme",180,"Genus", 2,"Geometridae"),
+(7199,"Hydaticus","Hydaticus",180,"Genus", 2,"Dytiscidae"),
+(7422,"Hydnobius","Hydnobius",180,"Genus", 2,"Liodidae"),
+(15854,"Hydraecia","Hydraecia",180,"Genus", 2,"Noctuidae"),
+(6665,"Hydraena","Hydraena",180,"Genus", 2,"Hydrophilidae"),
+(15608,"Hydrelia","Hydrelia",180,"Genus", 2,"Geometridae"),
+(15612,"Hydria","Hydria",180,"Genus", 2,"Geometridae"),
+(15588,"Hydriomena","Hydriomena",180,"Genus", 2,"Geometridae"),
+(6707,"Hydrobius","Hydrobius",180,"Genus", 2,"Hydrophilidae"),
+(6735,"Hydrophilus","Hydrophilus",180,"Genus", 2,"Hydrophilidae"),
+(7108,"Hydroporus","Hydroporus",180,"Genus", 2,"Dytiscidae"),
+(6737,"Hydrous","Hydrous",180,"Genus", 2,"Hydrophilidae"),
+(7103,"Hygrotus","Hygrotus",180,"Genus", 2,"Dytiscidae"),
+(15688,"Hylaea","Hylaea",180,"Genus", 2,"Geometridae"),
+(8422,"Hylaeus","Hylaeus",180,"Genus", 2,"Colletidae"),
+(15561,"Hyles","Hyles",180,"Genus", 2,"Sphingidae"),
+(18623,"Hylesinus","Hylesinus",180,"Genus", 2,"Hylesinini"),
+(18597,"Hylobius","Hylobius",180,"Genus", 2,"Molytini"),
+(7012,"Hylotrupes","Hylotrupes",180,"Genus", 2,"Cerambycidae"),
+(7354,"Hymenalia","Hymenalia",180,"Genus", 2,"Alleculidae"),
+(15433,"Hypargyria","Hypargyria",180,"Genus", 2,"Pyralidae"),
+(15143,"Hypatima","Hypatima",180,"Genus", 2,"Gelechiidae"),
+(15204,"Hypatopa","Hypatopa",180,"Genus", 2,"Blastobasidae"),
+(15726,"Hypena","Hypena",180,"Genus", 2,"Erebidae"),
+(18798,"Hypena","Hypena",180,"Genus", 2,"Noctuidae"),
+(15773,"Hypenodes","Hypenodes",180,"Genus", 2,"Erebidae"),
+(19054,"Hypenodes","Hypenodes",180,"Genus", 2,"Noctuidae"),
+(14841,"Hypera","Hypera",180,"Genus", 2,"Hyperoni"),
+(8225,"Hyperaspis","Hyperaspis",180,"Genus", 2,"Coccinellidae"),
+(15128,"Hypercallia","Hypercallia",180,"Genus", 2,"Depressariidae"),
+(15737,"Hyphantria","Hyphantria",180,"Genus", 2,"Erebidae"),
+(15746,"Hyphoraia","Hyphoraia",180,"Genus", 2,"Erebidae"),
+(7089,"Hyphydrus","Hyphydrus",180,"Genus", 2,"Dytiscidae"),
+(15440,"Hypochalcia","Hypochalcia",180,"Genus", 2,"Pyralidae"),
+(15675,"Hypomecis","Hypomecis",180,"Genus", 2,"Geometridae"),
+(7340,"Hypophloeus","Hypophloeus",180,"Genus", 2,"Tenebrionidae"),
+(15842,"Hyppa","Hyppa",180,"Genus", 2,"Noctuidae"),
+(15464,"Hypsopygia","Hypsopygia",180,"Genus", 2,"Pyralidae"),
+(7393,"Hypulus","Hypulus",180,"Genus", 2,"Serropalpidae"),
+(15565,"Idaea","Idaea",180,"Genus", 2,"Geometridae"),
+(7175,"Ilybius","Ilybius",180,"Genus", 2,"Dytiscidae"),
+(19166,"Inachis","Inachis",180,"Genus", 2,"Nymphalidae"),
+(15013,"Incurvaria","Incurvaria",180,"Genus", 2,"Incurvariidae"),
+(15034,"Infurcitinea","Infurcitinea",180,"Genus", 2,"Tineidae"),
+(15350,"Iphiclides","Iphiclides",180,"Genus", 2,"Papilionidae"),
+(15889,"Ipimorpha","Ipimorpha",180,"Genus", 2,"Noctuidae"),
+(8580,"Ischyrosyrphus","Ischyrosyrphus",180,"Genus", 2,"Syrphidae"),
+(7360,"Isomira","Isomira",180,"Genus", 2,"Alleculidae"),
+(15159,"Isophrictis","Isophrictis",180,"Genus", 2,"Gelechiidae"),
+(15239,"Isotrias","Isotrias",180,"Genus", 2,"Tortricidae"),
+(15381,"Issoria","Issoria",180,"Genus", 2,"Nymphalidae"),
+(18958,"Itame","Itame",180,"Genus", 2,"Geometridae"),
+(15701,"Jodis","Jodis",180,"Genus", 2,"Geometridae"),
+(6984,"Judolia","Judolia",180,"Genus", 2,"Cerambycidae"),
+(15393,"Junonia","Junonia",180,"Genus", 2,"Nymphalidae"),
+(229709,"Kalama","Kalama",180,"Genus", 2,"Tingidae"),
+(15036,"Karsholtia","Karsholtia",180,"Genus", 2,"Tineidae"),
+(15099,"Klimeschia","Klimeschia",180,"Genus", 2,"Douglasiidae"),
+(14996,"Korscheltellus","Korscheltellus",180,"Genus", 2,"Hepialidae"),
+(15914,"Lacanobia","Lacanobia",180,"Genus", 2,"Noctuidae"),
+(6724,"Laccobius","Laccobius",180,"Genus", 2,"Hydrophilidae"),
+(7086,"Laccophilus","Laccophilus",180,"Genus", 2,"Dytiscidae"),
+(7147,"Laccornis","Laccornis",180,"Genus", 2,"Dytiscidae"),
+(15731,"Laelia","Laelia",180,"Genus", 2,"Erebidae"),
+(7370,"Lagria","Lagria",180,"Genus", 2,"Lagriidae"),
+(7021,"Lamia","Lamia",180,"Genus", 2,"Cerambycidae"),
+(15404,"Lampides","Lampides",180,"Genus", 2,"Lycaenidae"),
+(15015,"Lampronia","Lampronia",180,"Genus", 2,"Prodoxidae"),
+(15603,"Lampropteryx","Lampropteryx",180,"Genus", 2,"Geometridae"),
+(15796,"Lamprotes","Lamprotes",180,"Genus", 2,"Noctuidae"),
+(15435,"Laodamia","Laodamia",180,"Genus", 2,"Pyralidae"),
+(15553,"Laothoe","Laothoe",180,"Genus", 2,"Sphingidae"),
+(8564,"Lappsyrphus","Lappsyrphus",180,"Genus", 2,"Syrphidae"),
+(15585,"Larentia","Larentia",180,"Genus", 2,"Geometridae"),
+(229717,"Larinus","Larinus",180,"Genus", 2,"Lixini"),
+(15537,"Lasiocampa","Lasiocampa",180,"Genus", 2,"Lasiocampidae"),
+(7598,"Lasioderma","Lasioderma",180,"Genus", 2,"Anobiidae"),
+(8402,"Lasioglossum","Lasioglossum",180,"Genus", 2,"Halictidae"),
+(15370,"Lasiommata","Lasiommata",180,"Genus", 2,"Nymphalidae"),
+(15927,"Lasionhada","Lasionhada",180,"Genus", 2,"Noctuidae"),
+(18963,"Lasionycta","Lasionycta",180,"Genus", 2,"Noctuidae"),
+(15780,"Laspeyria","Laspeyria",180,"Genus", 2,"Erebidae"),
+(18906,"Laspeyria","Laspeyria",180,"Genus", 2,"Noctuidae"),
+(15874,"Lateroligia","Lateroligia",180,"Genus", 2,"Noctuidae"),
+(7326,"Latheticus","Latheticus",180,"Genus", 2,"Tenebrionidae"),
+(7978,"Lathrimaeum","Lathrimaeum",180,"Genus", 2,"Staphylinidae"),
+(7892,"Lathrobium","Lathrobium",180,"Genus", 2,"Staphylinidae"),
+(15326,"Lathronympha","Lathronympha",180,"Genus", 2,"Tortricidae"),
+(8797,"Lathyrophthalmus","Lathyrophthalmus",180,"Genus", 2,"Syrphidae"),
+(18904,"Laurentia","Laurentia",180,"Genus", 2,"Geometridae"),
+(6620,"Lebia","Lebia",180,"Genus", 2,"Carabidae"),
+(7048,"Leiopus","Leiopus",180,"Genus", 2,"Cerambycidae"),
+(6174,"Leistus","Leistus",180,"Genus", 2,"Carabidae"),
+(8744,"Lejogaster","Lejogaster",180,"Genus", 2,"Syrphidae"),
+(8764,"Lejops","Lejops",180,"Genus", 2,"Syrphidae"),
+(6799,"Lema","Lema",180,"Genus", 2,"Chrysomelidae"),
+(15544,"Lemonia","Lemonia",180,"Genus", 2,"Brahmaeidae"),
+(15864,"Lenisa","Lenisa",180,"Genus", 2,"Noctuidae"),
+(7826,"Leptacinus","Leptacinus",180,"Genus", 2,"Staphylinidae"),
+(7004,"Leptidea","Leptidea",180,"Genus", 2,"Cerambycidae"),
+(15359,"Leptidea","Leptidea",180,"Genus", 2,"Pieridae"),
+(8090,"Leptinus","Leptinus",180,"Genus", 2,"Silphidae"),
+(8835,"Leptopterna","Leptopterna",180,"Genus", 2,"Miridae"),
+(6975,"Leptura","Leptura",180,"Genus", 2,"Cerambycidae"),
+(234025,"Lestica","Lestica",180,"Genus", 2,"Crabronidae"),
+(15925,"Leucania","Leucania",180,"Genus", 2,"Noctuidae"),
+(15493,"Leucinodes","Leucinodes",180,"Genus", 2,"Crambidae"),
+(15715,"Leucodonta","Leucodonta",180,"Genus", 2,"Notodontidae"),
+(15728,"Leucoma","Leucoma",180,"Genus", 2,"Erebidae"),
+(15096,"Leucoptera","Leucoptera",180,"Genus", 2,"Lyonetiidae"),
+(15067,"Leucospilapteryx","Leucospilapteryx",180,"Genus", 2,"Gracillariidae"),
+(8578,"Leucozona","Leucozona",180,"Genus", 2,"Syrphidae"),
+(15123,"Levipalpus","Levipalpus",180,"Genus", 2,"Depressariidae"),
+(6304,"Licinus","Licinus",180,"Genus", 2,"Carabidae"),
+(15640,"Ligdia","Ligdia",180,"Genus", 2,"Geometridae"),
+(15384,"Limenitis","Limenitis",180,"Genus", 2,"Nymphalidae"),
+(15133,"Limnaecia","Limnaecia",180,"Genus", 2,"Cosmopterigidae"),
+(6673,"Limnebius","Limnebius",180,"Genus", 2,"Hydrophilidae"),
+(6709,"Limnoxenus","Limnoxenus",180,"Genus", 2,"Hydrophilidae"),
+(234027,"Lindenius","Lindenius",180,"Genus", 2,"Crabronidae"),
+(15051,"Lindera","Lindera",180,"Genus", 2,"Tineidae"),
+(6926,"Liocola","Liocola",180,"Genus", 2,"Scarabaeidae"),
+(8885,"Liocoris","Liocoris",180,"Genus", 2,"Miridae"),
+(7426,"Liodes","Liodes",180,"Genus", 2,"Liodidae"),
+(7501,"Lissodema","Lissodema",180,"Genus", 2,"Salpingidae"),
+(7882,"Lithocharis","Lithocharis",180,"Genus", 2,"Staphylinidae"),
+(19038,"Lithomoia","Lithomoia",180,"Genus", 2,"Noctuidae"),
+(15885,"Lithophane","Lithophane",180,"Genus", 2,"Noctuidae"),
+(15760,"Lithosia","Lithosia",180,"Genus", 2,"Erebidae"),
+(15630,"Lithostege","Lithostege",180,"Genus", 2,"Geometridae"),
+(15876,"Litoligia","Litoligia",180,"Genus", 2,"Noctuidae"),
+(229672,"Lixus","Lixus",180,"Genus", 2,"Lixini"),
+(15300,"Lobesia","Lobesia",180,"Genus", 2,"Tortricidae"),
+(15631,"Lobophora","Lobophora",180,"Genus", 2,"Geometridae"),
+(15639,"Lomaspilis","Lomaspilis",180,"Genus", 2,"Geometridae"),
+(15684,"Lomographa","Lomographa",180,"Genus", 2,"Geometridae"),
+(15863,"Longalatedes","Longalatedes",180,"Genus", 2,"Noctuidae"),
+(8913,"Lopus","Lopus",180,"Genus", 2,"Miridae"),
+(6191,"Loricera","Loricera",180,"Genus", 2,"Carabidae"),
+(15466,"Loxostege","Loxostege",180,"Genus", 2,"Crambidae"),
+(15255,"Lozotaenia","Lozotaenia",180,"Genus", 2,"Tortricidae"),
+(15260,"Lozotaeniodes","Lozotaeniodes",180,"Genus", 2,"Tortricidae"),
+(6932,"Lucanus","Lucanus",180,"Genus", 2,"Scarabaeidae"),
+(15856,"Luperina","Luperina",180,"Genus", 2,"Noctuidae"),
+(15122,"Luquetia","Luquetia",180,"Genus", 2,"Depressariidae"),
+(15398,"Lycaena","Lycaena",180,"Genus", 2,"Lycaenidae"),
+(15665,"Lycia","Lycia",180,"Genus", 2,"Geometridae"),
+(8189,"Lycoperdina","Lycoperdina",180,"Genus", 2,"Endomychidae"),
+(15938,"Lycophotia","Lycophotia",180,"Genus", 2,"Noctuidae"),
+(7617,"Lyctus","Lyctus",180,"Genus", 2,"Lyctidae"),
+(15775,"Lygephila","Lygephila",180,"Genus", 2,"Erebidae"),
+(19142,"Lygephila","Lygephila",180,"Genus", 2,"Noctuidae"),
+(8887,"Lygocoris","Lygocoris",180,"Genus", 2,"Miridae"),
+(8853,"Lygus","Lygus",180,"Genus", 2,"Miridae"),
+(15729,"Lymantria","Lymantria",180,"Genus", 2,"Erebidae"),
+(15097,"Lyonetia","Lyonetia",180,"Genus", 2,"Lyonetiidae"),
+(15117,"Lypusa","Lypusa",180,"Genus", 2,"Lypusidae"),
+(15571,"Lythria","Lythria",180,"Genus", 2,"Geometridae"),
+(6803,"Lytta","Lytta",180,"Genus", 2,"Meloidae"),
+(15643,"Macaria","Macaria",180,"Genus", 2,"Geometridae"),
+(15793,"Macdunnoughia","Macdunnoughia",180,"Genus", 2,"Noctuidae"),
+(15768,"Macrochilo","Macrochilo",180,"Genus", 2,"Erebidae"),
+(18921,"Macrochilo","Macrochilo",180,"Genus", 2,"Noctuidae"),
+(15558,"Macroglossum","Macroglossum",180,"Genus", 2,"Sphingidae"),
+(9071,"Macrolophus","Macrolophus",180,"Genus", 2,"Miridae"),
+(8324,"Macropis","Macropis",180,"Genus", 2,"Melittidae"),
+(15071,"Macrosaccus","Macrosaccus",180,"Genus", 2,"Gracillariidae"),
+(15538,"Macrothylacia","Macrothylacia",180,"Genus", 2,"Lasiocampidae"),
+(8851,"Macrotylus","Macrotylus",180,"Genus", 2,"Miridae"),
+(15409,"Maculinea","Maculinea",180,"Genus", 2,"Lycaenidae"),
+(8983,"Malacocoris","Malacocoris",180,"Genus", 2,"Miridae"),
+(15535,"Malacosoma","Malacosoma",180,"Genus", 2,"Lasiocampidae"),
+(6896,"Maladera","Maladera",180,"Genus", 2,"Scarabaeidae"),
+(8778,"Mallota","Mallota",180,"Genus", 2,"Syrphidae"),
+(15919,"Mamestra","Mamestra",180,"Genus", 2,"Noctuidae"),
+(15375,"Maniola","Maniola",180,"Genus", 2,"Nymphalidae"),
+(19042,"Manulea","Manulea",180,"Genus", 2,"Erebidae"),
+(15215,"Marasmarcha","Marasmarcha",180,"Genus", 2,"Pterophoridae"),
+(15621,"Martania","Martania",180,"Genus", 2,"Geometridae"),
+(15484,"Maruca","Maruca",180,"Genus", 2,"Crambidae"),
+(6618,"Masoreus","Masoreus",180,"Genus", 2,"Carabidae"),
+(15426,"Matilella","Matilella",180,"Genus", 2,"Pyralidae"),
+(18599,"Mecinus","Mecinus",180,"Genus", 2,"Mecinini"),
+(8985,"Mecomma","Mecomma",180,"Genus", 2,"Miridae"),
+(15479,"Mecyna","Mecyna",180,"Genus", 2,"Crambidae"),
+(7873,"Medon","Medon",180,"Genus", 2,"Staphylinidae"),
+(8388,"Megachile","Megachile",180,"Genus", 2,"Megachilidae"),
+(9121,"Megacoelum","Megacoelum",180,"Genus", 2,"Miridae"),
+(9123,"Megaloceroea","Megaloceroea",180,"Genus", 2,"Miridae"),
+(8889,"Megalocoleus","Megalocoleus",180,"Genus", 2,"Miridae"),
+(18636,"Meganola","Meganola",180,"Genus", 2,"Nolidae"),
+(7915,"Megarthrus","Megarthrus",180,"Genus", 2,"Staphylinidae"),
+(6699,"Megasternum","Megasternum",180,"Genus", 2,"Hydrophilidae"),
+(8611,"Megasyrphus","Megasyrphus",180,"Genus", 2,"Syrphidae"),
+(15377,"Melanargia","Melanargia",180,"Genus", 2,"Nymphalidae"),
+(15915,"Melanchra","Melanchra",180,"Genus", 2,"Noctuidae"),
+(7396,"Meland","Meland",180,"Genus", 2,"Serropalpidae"),
+(8583,"Melangyna","Melangyna",180,"Genus", 2,"Syrphidae"),
+(7297,"Melanimon","Melanimon",180,"Genus", 2,"Tenebrionidae"),
+(8742,"Melanogaster","Melanogaster",180,"Genus", 2,"Syrphidae"),
+(8517,"Melanostoma","Melanostoma",180,"Genus", 2,"Syrphidae"),
+(15616,"Melanthia","Melanthia",180,"Genus", 2,"Geometridae"),
+(8322,"Melecta","Melecta",180,"Genus", 2,"Apidae"),
+(8591,"Meligramma","Meligramma",180,"Genus", 2,"Syrphidae"),
+(8613,"Meliscaeva","Meliscaeva",180,"Genus", 2,"Syrphidae"),
+(15396,"Melitaea","Melitaea",180,"Genus", 2,"Nymphalidae"),
+(8341,"Melitta","Melitta",180,"Genus", 2,"Melittidae"),
+(234029,"Mellinus","Mellinus",180,"Genus", 2,"Crabronidae"),
+(6805,"Meloë","Meloë",180,"Genus", 2,"Meloidae"),
+(6903,"Melolontha","Melolontha",180,"Genus", 2,"Scarabaeidae"),
+(9125,"Mermitelocerus","Mermitelocerus",180,"Genus", 2,"Miridae"),
+(8754,"Merodon","Merodon",180,"Genus", 2,"Syrphidae"),
+(15223,"Merrifieldia","Merrifieldia",180,"Genus", 2,"Pterophoridae"),
+(15875,"Mesapamea","Mesapamea",180,"Genus", 2,"Noctuidae"),
+(19120,"Mesoacidalia","Mesoacidalia",180,"Genus", 2,"Nymphalidae"),
+(15882,"Mesogona","Mesogona",180,"Genus", 2,"Noctuidae"),
+(15583,"Mesoleuca","Mesoleuca",180,"Genus", 2,"Geometridae"),
+(15877,"Mesoligia","Mesoligia",180,"Genus", 2,"Noctuidae"),
+(15140,"Mesophleps","Mesophleps",180,"Genus", 2,"Gelechiidae"),
+(7037,"Mesosa","Mesosa",180,"Genus", 2,"Cerambycidae"),
+(15619,"Mesotype","Mesotype",180,"Genus", 2,"Geometridae"),
+(6624,"Metabletus","Metabletus",180,"Genus", 2,"Carabidae"),
+(15105,"Metalampra","Metalampra",180,"Genus", 2,"Oecophoridae"),
+(8558,"Metasyrphus","Metasyrphus",180,"Genus", 2,"Syrphidae"),
+(18794,"Metendothenia","Metendothenia",180,"Genus", 2,"Tortricidae"),
+(7475,"Metoecus","Metoecus",180,"Genus", 2,"Rhipiphoridae"),
+(7913,"Metopsia","Metopsia",180,"Genus", 2,"Staphylinidae"),
+(15160,"Metzneria","Metzneria",180,"Genus", 2,"Gelechiidae"),
+(7539,"Mezium","Mezium",180,"Genus", 2,"Ptinidae"),
+(18606,"Miarus","Miarus",180,"Genus", 2,"Mecinini"),
+(8010,"Micridium","Micridium",180,"Genus", 2,"Ptiliidae"),
+(8629,"Microdon","Microdon",180,"Genus", 2,"Syrphidae"),
+(6627,"Microlestes","Microlestes",180,"Genus", 2,"Carabidae"),
+(7987,"Micropeplus","Micropeplus",180,"Genus", 2,"Micropeplidae"),
+(18625,"Microplontus","Microplontus",180,"Genus", 2,"Ceutorhynchini"),
+(14991,"Micropterix","Micropterix",180,"Genus", 2,"Micropterigidae"),
+(8026,"Microptilium","Microptilium",180,"Genus", 2,"Ptiliidae"),
+(8002,"Millidium","Millidium",180,"Genus", 2,"Ptiliidae"),
+(19140,"Milochrista","Milochrista",180,"Genus", 2,"Erebidae"),
+(15755,"Miltochrista","Miltochrista",180,"Genus", 2,"Erebidae"),
+(15551,"Mimas","Mimas",180,"Genus", 2,"Sphingidae"),
+(234032,"Mimesa","Mimesa",180,"Genus", 2,"Crabronidae"),
+(234036,"Mimumesa","Mimumesa",180,"Genus", 2,"Crabronidae"),
+(15786,"Minucia","Minucia",180,"Genus", 2,"Erebidae"),
+(15170,"Mirificarma","Mirificarma",180,"Genus", 2,"Gelechiidae"),
+(8916,"Miris","Miris",180,"Genus", 2,"Miridae"),
+(234039,"Miscophus","Miscophus",180,"Genus", 2,"Crabronidae"),
+(15904,"Mniotype","Mniotype",180,"Genus", 2,"Noctuidae"),
+(7001,"Molorchus","Molorchus",180,"Genus", 2,"Cerambycidae"),
+(15807,"Moma","Moma",180,"Genus", 2,"Noctuidae"),
+(15202,"Mompha","Mompha",180,"Genus", 2,"Momphidae"),
+(8987,"Monalocoris","Monalocoris",180,"Genus", 2,"Miridae"),
+(7033,"Monochamus","Monochamus",180,"Genus", 2,"Cerambycidae"),
+(15163,"Monochroa","Monochroa",180,"Genus", 2,"Gelechiidae"),
+(15050,"Monopis","Monopis",180,"Genus", 2,"Tineidae"),
+(9033,"Monosynamma","Monosynamma",180,"Genus", 2,"Miridae"),
+(7225,"Mordella","Mordella",180,"Genus", 2,"Mordellidae"),
+(7228,"Mordellistena","Mordellistena",180,"Genus", 2,"Mordellidae"),
+(15840,"Mormo","Mormo",180,"Genus", 2,"Noctuidae"),
+(15039,"Morophaga","Morophaga",180,"Genus", 2,"Tineidae"),
+(15444,"Mussidia","Mussidia",180,"Genus", 2,"Pyralidae"),
+(8774,"Myathropa","Myathropa",180,"Genus", 2,"Syrphidae"),
+(8192,"Mycetaea","Mycetaea",180,"Genus", 2,"Endomychidae"),
+(8194,"Mycetina","Mycetina",180,"Genus", 2,"Endomychidae"),
+(7362,"Mycetochara","Mycetochara",180,"Genus", 2,"Alleculidae"),
+(8155,"Mycetophagus","Mycetophagus",180,"Genus", 2,"Mycetophagidae"),
+(15446,"Myelois","Myelois",180,"Genus", 2,"Pyralidae"),
+(8747,"Myolepta","Myolepta",180,"Genus", 2,"Syrphidae"),
+(9095,"Myrmecoris","Myrmecoris",180,"Genus", 2,"Miridae"),
+(8163,"Myrmecoxenus","Myrmecoxenus",180,"Genus", 2,"Colydiidae"),
+(15033,"Myrmecozela","Myrmecozela",180,"Genus", 2,"Tineidae"),
+(15924,"Mythimna","Mythimna",180,"Genus", 2,"Noctuidae"),
+(7520,"Nacerda","Nacerda",180,"Genus", 2,"Oedemeridae"),
+(15955,"Naenia","Naenia",180,"Genus", 2,"Noctuidae"),
+(8098,"Nargus","Nargus",180,"Genus", 2,"Silphidae"),
+(15644,"Narraga","Narraga",180,"Genus", 2,"Geometridae"),
+(7193,"Nartus","Nartus",180,"Genus", 2,"Dytiscidae"),
+(15019,"Narycia","Narycia",180,"Genus", 2,"Psychidae"),
+(15470,"Nascia","Nascia",180,"Genus", 2,"Crambidae"),
+(6178,"Nebria","Nebria",180,"Genus", 2,"Carabidae"),
+(8072,"Necrodes","Necrodes",180,"Genus", 2,"Silphidae"),
+(8062,"Necrophorus","Necrophorus",180,"Genus", 2,"Silphidae"),
+(6999,"Necydalis","Necydalis",180,"Genus", 2,"Cerambycidae"),
+(8092,"Nemadus","Nemadus",180,"Genus", 2,"Silphidae"),
+(15043,"Nemapogon","Nemapogon",180,"Genus", 2,"Tineidae"),
+(15011,"Nematopogon","Nematopogon",180,"Genus", 2,"Adelidae"),
+(15042,"Nemaxera","Nemaxera",180,"Genus", 2,"Tineidae"),
+(15008,"Nemophora","Nemophora",180,"Genus", 2,"Adelidae"),
+(8713,"Neoascia","Neoascia",180,"Genus", 2,"Syrphidae"),
+(7663,"Neobisnius","Neobisnius",180,"Genus", 2,"Staphylinidae"),
+(8643,"Neocnemodon","Neocnemodon",180,"Genus", 2,"Syrphidae"),
+(15142,"Neofaculta","Neofaculta",180,"Genus", 2,"Gelechiidae"),
+(15167,"Neofriseria","Neofriseria",180,"Genus", 2,"Gelechiidae"),
+(8891,"Neolygus","Neolygus",180,"Genus", 2,"Miridae"),
+(8237,"Neomysia","Neomysia",180,"Genus", 2,"Coccinellidae"),
+(15264,"Neosphaleroptera","Neosphaleroptera",180,"Genus", 2,"Tortricidae"),
+(8028,"Nephanes","Nephanes",180,"Genus", 2,"Ptiliidae"),
+(15441,"Nephopterix","Nephopterix",180,"Genus", 2,"Pyralidae"),
+(7261,"Neurapes","Neurapes",180,"Genus", 2,"Scydmaenidae"),
+(15045,"Neurothaumasia","Neurothaumasia",180,"Genus", 2,"Tineidae"),
+(15049,"Niditinea","Niditinea",180,"Genus", 2,"Tineidae"),
+(7543,"Niptus","Niptus",180,"Genus", 2,"Ptinidae"),
+(15943,"Noctua","Noctua",180,"Genus", 2,"Noctuidae"),
+(18633,"Nola","Nola",180,"Genus", 2,"Nolidae"),
+(8431,"Nomada","Nomada",180,"Genus", 2,"Apidae"),
+(15492,"Nomophila","Nomophila",180,"Genus", 2,"Crambidae"),
+(15860,"Nonagria","Nonagria",180,"Genus", 2,"Noctuidae"),
+(6138,"Noterus","Noterus",180,"Genus", 2,"Haliplidae"),
+(15633,"Nothocasis","Nothocasis",180,"Genus", 2,"Geometridae"),
+(15141,"Nothris","Nothris",180,"Genus", 2,"Gelechiidae"),
+(6182,"Notiophilus","Notiophilus",180,"Genus", 2,"Carabidae"),
+(15318,"Notocelia","Notocelia",180,"Genus", 2,"Tortricidae"),
+(15712,"Notodonta","Notodonta",180,"Genus", 2,"Notodontidae"),
+(8839,"Notostira","Notostira",180,"Genus", 2,"Miridae"),
+(7478,"Notoxus","Notoxus",180,"Genus", 2,"Anthicidae"),
+(15756,"Nudaria","Nudaria",180,"Genus", 2,"Erebidae"),
+(7835,"Nudobius","Nudobius",180,"Genus", 2,"Staphylinidae"),
+(15452,"Nyctegretis","Nyctegretis",180,"Genus", 2,"Pyralidae"),
+(18616,"Nycteola","Nycteola",180,"Genus", 2,"Nolidae"),
+(15390,"Nymphalis","Nymphalis",180,"Genus", 2,"Nymphalidae"),
+(15517,"Nymphula","Nymphula",180,"Genus", 2,"Crambidae"),
+(234043,"Nysson","Nysson",180,"Genus", 2,"Crabronidae"),
+(7060,"Oberea","Oberea",180,"Genus", 2,"Cerambycidae"),
+(6970,"Obrium","Obrium",180,"Genus", 2,"Cerambycidae"),
+(7600,"Ochina","Ochina",180,"Genus", 2,"Anobiidae"),
+(15358,"Ochlodes","Ochlodes",180,"Genus", 2,"Hesperiidae"),
+(15232,"Ochromolopis","Ochromolopis",180,"Genus", 2,"Epermeniidae"),
+(15529,"Ochropacha","Ochropacha",180,"Genus", 2,"Drepanidae"),
+(15935,"Ochropleura","Ochropleura",180,"Genus", 2,"Noctuidae"),
+(15092,"Ochsenheimeria","Ochsenheimeria",180,"Genus", 2,"Ypsolophidae"),
+(6658,"Ochthebius","Ochthebius",180,"Genus", 2,"Hydrophilidae"),
+(7910,"Ochthephilum","Ochthephilum",180,"Genus", 2,"Staphylinidae"),
+(15081,"Ocnerostoma","Ocnerostoma",180,"Genus", 2,"Yponomeutidae"),
+(7647,"Octotemnus","Octotemnus",180,"Genus", 2,"Cisidae"),
+(7756,"Ocypus","Ocypus",180,"Genus", 2,"Staphylinidae"),
+(6653,"Odacantha","Odacantha",180,"Genus", 2,"Carabidae"),
+(19145,"Odentopera","Odentopera",180,"Genus", 2,"Geometridae"),
+(15618,"Odezia","Odezia",180,"Genus", 2,"Geometridae"),
+(15543,"Odonestis","Odonestis",180,"Genus", 2,"Lasiocampidae"),
+(6824,"Odontaeus","Odontaeus",180,"Genus", 2,"Scarabaeidae"),
+(15658,"Odontopera","Odontopera",180,"Genus", 2,"Geometridae"),
+(15718,"Odontosia","Odontosia",180,"Genus", 2,"Notodontidae"),
+(8078,"Oeceoptoma","Oeceoptoma",180,"Genus", 2,"Silphidae"),
+(15111,"Oecophora","Oecophora",180,"Genus", 2,"Oecophoridae"),
+(7528,"Oedemera","Oedemera",180,"Genus", 2,"Oedemeridae"),
+(15100,"Oegoconia","Oegoconia",180,"Genus", 2,"Autostichidae"),
+(15225,"Oidaematophorus","Oidaematophorus",180,"Genus", 2,"Pterophoridae"),
+(15055,"Oinophila","Oinophila",180,"Genus", 2,"Tineidae"),
+(7318,"Olatydema","Olatydema",180,"Genus", 2,"Tenebrionidae"),
+(15297,"Olethreutes","Olethreutes",180,"Genus", 2,"Tortricidae"),
+(8012,"Oligella","Oligella",180,"Genus", 2,"Ptiliidae"),
+(15878,"Oligia","Oligia",180,"Genus", 2,"Noctuidae"),
+(15238,"Olindia","Olindia",180,"Genus", 2,"Tortricidae"),
+(6322,"Olisthopus","Olisthopus",180,"Genus", 2,"Carabidae"),
+(7982,"Olophrum","Olophrum",180,"Genus", 2,"Staphylinidae"),
+(7949,"Omalium","Omalium",180,"Genus", 2,"Staphylinidae"),
+(6189,"Omophron","Omophron",180,"Genus", 2,"Carabidae"),
+(19159,"Omphaloscelis","Omphaloscelis",180,"Genus", 2,"Noctuidae"),
+(15434,"Oncocera","Oncocera",180,"Genus", 2,"Pyralidae"),
+(8946,"Oncotylus","Oncotylus",180,"Genus", 2,"Miridae"),
+(7740,"Ontholestes","Ontholestes",180,"Genus", 2,"Staphylinidae"),
+(6818,"Onthophagus","Onthophagus",180,"Genus", 2,"Scarabaeidae"),
+(6293,"Oodes","Oodes",180,"Genus", 2,"Carabidae"),
+(7299,"Opatrum","Opatrum",180,"Genus", 2,"Tenebrionidae"),
+(15604,"Operophtera","Operophtera",180,"Genus", 2,"Geometridae"),
+(18999,"Operopthera","Operopthera",180,"Genus", 2,"Geometridae"),
+(15946,"Opigena","Opigena",180,"Genus", 2,"Noctuidae"),
+(15651,"Opisthograptis","Opisthograptis",180,"Genus", 2,"Geometridae"),
+(7039,"Oplosia","Oplosia",180,"Genus", 2,"Cerambycidae"),
+(15054,"Opogona","Opogona",180,"Genus", 2,"Tineidae"),
+(15004,"Opostega","Opostega",180,"Genus", 2,"Opostegidae"),
+(18942,"Opsibotys","Opsibotys",180,"Genus", 2,"Crambidae"),
+(15369,"Opsiphanes","Opsiphanes",180,"Genus", 2,"Nymphalidae"),
+(7380,"Orchesia","Orchesia",180,"Genus", 2,"Serropalpidae"),
+(7083,"Orechtochilus","Orechtochilus",180,"Genus", 2,"Gyrinidae"),
+(15734,"Orgyia","Orgyia",180,"Genus", 2,"Erebidae"),
+(15867,"Oria","Oria",180,"Genus", 2,"Noctuidae"),
+(7972,"Orochares","Orochares",180,"Genus", 2,"Staphylinidae"),
+(15130,"Orophia","Orophia",180,"Genus", 2,"Ethmiidae"),
+(6791,"Orsodacne","Orsodacne",180,"Genus", 2,"Chrysomelidae"),
+(8948,"Orthocephalus","Orthocephalus",180,"Genus", 2,"Miridae"),
+(8168,"Orthocerus","Orthocerus",180,"Genus", 2,"Colydiidae"),
+(15425,"Ortholepis","Ortholepis",180,"Genus", 2,"Pyralidae"),
+(15574,"Orthonama","Orthonama",180,"Genus", 2,"Geometridae"),
+(8729,"Orthonevra","Orthonevra",180,"Genus", 2,"Syrphidae"),
+(8992,"Orthonotus","Orthonotus",180,"Genus", 2,"Miridae"),
+(7245,"Orthoperus","Orthoperus",180,"Genus", 2,"Orthoperidae"),
+(8893,"Orthops","Orthops",180,"Genus", 2,"Miridae"),
+(18952,"Orthopygia","Orthopygia",180,"Genus", 2,"Pyralidae"),
+(15906,"Orthosia","Orthosia",180,"Genus", 2,"Noctuidae"),
+(15289,"Orthotaenia","Orthotaenia",180,"Genus", 2,"Tortricidae"),
+(15086,"Orthotelia","Orthotelia",180,"Genus", 2,"Glyphipterigidae"),
+(8932,"Orthotylus","Orthotylus",180,"Genus", 2,"Miridae"),
+(6913,"Oryctes","Oryctes",180,"Genus", 2,"Scarabaeidae"),
+(8379,"Osmia","Osmia",180,"Genus", 2,"Megachilidae"),
+(6917,"Osmoderma","Osmoderma",180,"Genus", 2,"Scarabaeidae"),
+(7402,"Osphya","Osphya",180,"Genus", 2,"Serropalpidae"),
+(15475,"Ostrinia","Ostrinia",180,"Genus", 2,"Crambidae"),
+(7853,"Othius","Othius",180,"Genus", 2,"Staphylinidae"),
+(14743,"Otiorhynchus","Otiorhynchus",180,"Genus", 2,"Otiorhynchini"),
+(15660,"Ourapteryx","Ourapteryx",180,"Genus", 2,"Geometridae"),
+(234050,"Oxybelus","Oxybelus",180,"Genus", 2,"Crabronidae"),
+(6878,"Oxyomus","Oxyomus",180,"Genus", 2,"Scarabaeidae"),
+(15216,"Oxyptilus","Oxyptilus",180,"Genus", 2,"Pterophoridae"),
+(15872,"Pabulatrix","Pabulatrix",180,"Genus", 2,"Noctuidae"),
+(15913,"Pachetra","Pachetra",180,"Genus", 2,"Noctuidae"),
+(15650,"Pachycnemia","Pachycnemia",180,"Genus", 2,"Geometridae"),
+(8520,"Pachysphyria","Pachysphyria",180,"Genus", 2,"Syrphidae"),
+(6954,"Pachyta","Pachyta",180,"Genus", 2,"Cerambycidae"),
+(15031,"Pachythelia","Pachythelia",180,"Genus", 2,"Psychidae"),
+(7857,"Paederus","Paederus",180,"Genus", 2,"Staphylinidae"),
+(19196,"Palaeodrepana","Palaeodrepana",180,"Genus", 2,"Drepanidae"),
+(7332,"Palorus","Palorus",180,"Genus", 2,"Tenebrionidae"),
+(15487,"Palpita","Palpita",180,"Genus", 2,"Crambidae"),
+(15329,"Pammene","Pammene",180,"Genus", 2,"Tortricidae"),
+(6283,"Panagaeus","Panagaeus",180,"Genus", 2,"Carabidae"),
+(15132,"Pancalia","Pancalia",180,"Genus", 2,"Cosmopterigidae"),
+(15253,"Pandemis","Pandemis",180,"Genus", 2,"Tortricidae"),
+(15811,"Panemeria","Panemeria",180,"Genus", 2,"Noctuidae"),
+(15905,"Panolis","Panolis",180,"Genus", 2,"Noctuidae"),
+(15804,"Panthea","Panthea",180,"Genus", 2,"Noctuidae"),
+(8843,"Pantilius","Pantilius",180,"Genus", 2,"Miridae"),
+(8316,"Panurgus","Panurgus",180,"Genus", 2,"Andrenidae"),
+(15917,"Papestra","Papestra",180,"Genus", 2,"Noctuidae"),
+(15351,"Papilio","Papilio",180,"Genus", 2,"Papilionidae"),
+(15191,"Parachronistis","Parachronistis",180,"Genus", 2,"Gelechiidae"),
+(15767,"Paracolax","Paracolax",180,"Genus", 2,"Erebidae"),
+(19162,"Paracolax","Paracolax",180,"Genus", 2,"Noctuidae"),
+(14993,"Paracrania","Paracrania",180,"Genus", 2,"Eriocraniidae"),
+(6705,"Paracymus","Paracymus",180,"Genus", 2,"Hydrophilidae"),
+(15678,"Paradarisa","Paradarisa",180,"Genus", 2,"Geometridae"),
+(19108,"Paradiarsia","Paradiarsia",180,"Genus", 2,"Noctuidae"),
+(19044,"Paradrina","Paradrina",180,"Genus", 2,"Noctuidae"),
+(8505,"Paragus","Paragus",180,"Genus", 2,"Syrphidae"),
+(15417,"Paralipsa","Paralipsa",180,"Genus", 2,"Pyralidae"),
+(15243,"Paramesia","Paramesia",180,"Genus", 2,"Tortricidae"),
+(15338,"Paranthrene","Paranthrene",180,"Genus", 2,"Sesiidae"),
+(15516,"Parapoynx","Parapoynx",180,"Genus", 2,"Crambidae"),
+(9056,"Parapsallus","Parapsallus",180,"Genus", 2,"Miridae"),
+(15371,"Pararge","Pararge",180,"Genus", 2,"Nymphalidae"),
+(15777,"Parascotia","Parascotia",180,"Genus", 2,"Erebidae"),
+(19093,"Parascotia","Parascotia",180,"Genus", 2,"Noctuidae"),
+(15744,"Parasemia","Parasemia",180,"Genus", 2,"Erebidae"),
+(15894,"Parastichtis","Parastichtis",180,"Genus", 2,"Noctuidae"),
+(15079,"Paraswammerdamia","Paraswammerdamia",180,"Genus", 2,"Yponomeutidae"),
+(8594,"Parasyrphus","Parasyrphus",180,"Genus", 2,"Syrphidae"),
+(15476,"Paratalanta","Paratalanta",180,"Genus", 2,"Crambidae"),
+(15058,"Parectopa","Parectopa",180,"Genus", 2,"Gracillariidae"),
+(15679,"Parectropis","Parectropis",180,"Genus", 2,"Geometridae"),
+(15614,"Pareulype","Pareulype",180,"Genus", 2,"Geometridae"),
+(8761,"Parhelophilus","Parhelophilus",180,"Genus", 2,"Syrphidae"),
+(14916,"Parnassius","Parnassius",180,"Genus", 2,"Papilionidae"),
+(15069,"Parornix","Parornix",180,"Genus", 2,"Gracillariidae"),
+(15385,"Parthenos","Parthenos",180,"Genus", 2,"Nymphalidae"),
+(15625,"Pasiphila","Pasiphila",180,"Genus", 2,"Geometridae"),
+(234056,"Passaloecus","Passaloecus",180,"Genus", 2,"Crabronidae"),
+(6278,"Patrobus","Patrobus",180,"Genus", 2,"Carabidae"),
+(15334,"Paysandisia","Paysandisia",180,"Genus", 2,"Castniidae"),
+(15771,"Pechipogo","Pechipogo",180,"Genus", 2,"Erebidae"),
+(18910,"Pechipogo","Pechipogo",180,"Genus", 2,"Noctuidae"),
+(15149,"Pectinophora","Pectinophora",180,"Genus", 2,"Gelechiidae"),
+(15511,"Pediasia","Pediasia",180,"Genus", 2,"Crambidae"),
+(8699,"Pelecocera","Pelecocera",180,"Genus", 2,"Syrphidae"),
+(18602,"Pelenomus","Pelenomus",180,"Genus", 2,"Ceutorhynchini"),
+(15314,"Pelochrista","Pelochrista",180,"Genus", 2,"Tortricidae"),
+(15759,"Pelosia","Pelosia",180,"Genus", 2,"Erebidae"),
+(6117,"Peltodytes","Peltodytes",180,"Genus", 2,"Haliplidae"),
+(15584,"Pelurga","Pelurga",180,"Genus", 2,"Geometridae"),
+(15436,"Pempelia","Pempelia",180,"Genus", 2,"Pyralidae"),
+(15427,"Pempeliella","Pempeliella",180,"Genus", 2,"Pyralidae"),
+(18835,"Pempelliella","Pempelliella",180,"Genus", 2,"Pyralidae"),
+(234063,"Pemphredon","Pemphredon",180,"Genus", 2,"Crabronidae"),
+(15335,"Pennisetia","Pennisetia",180,"Genus", 2,"Sesiidae"),
+(15590,"Pennithera","Pennithera",180,"Genus", 2,"Geometridae"),
+(7322,"Pentaphyllus","Pentaphyllus",180,"Genus", 2,"Tenebrionidae"),
+(15694,"Perconia","Perconia",180,"Genus", 2,"Geometridae"),
+(15669,"Peribatodes","Peribatodes",180,"Genus", 2,"Geometridae"),
+(15244,"Periclepsis","Periclepsis",180,"Genus", 2,"Tortricidae"),
+(15713,"Peridea","Peridea",180,"Genus", 2,"Notodontidae"),
+(15929,"Peridroma","Peridroma",180,"Genus", 2,"Noctuidae"),
+(6372,"Perigona","Perigona",180,"Genus", 2,"Carabidae"),
+(19019,"Perinephela","Perinephela",180,"Genus", 2,"Crambidae"),
+(15195,"Perittia","Perittia",180,"Genus", 2,"Elachistidae"),
+(15620,"Perizoma","Perizoma",180,"Genus", 2,"Geometridae"),
+(18979,"Perluga","Perluga",180,"Genus", 2,"Geometridae"),
+(15647,"Petrophora","Petrophora",180,"Genus", 2,"Geometridae"),
+(15150,"Pexicopia","Pexicopia",180,"Genus", 2,"Gelechiidae"),
+(7831,"Phacophallus","Phacophallus",180,"Genus", 2,"Staphylinidae"),
+(15705,"Phaiogramma","Phaiogramma",180,"Genus", 2,"Geometridae"),
+(15032,"Phalacropterix","Phalacropterix",180,"Genus", 2,"Psychidae"),
+(15720,"Phalera","Phalera",180,"Genus", 2,"Notodontidae"),
+(7302,"Phaleria","Phaleria",180,"Genus", 2,"Tenebrionidae"),
+(15277,"Phalonidia","Phalonidia",180,"Genus", 2,"Tortricidae"),
+(15230,"Phaulernis","Phaulernis",180,"Genus", 2,"Epermeniidae"),
+(15714,"Pheosia","Pheosia",180,"Genus", 2,"Notodontidae"),
+(15292,"Phiaris","Phiaris",180,"Genus", 2,"Tortricidae"),
+(15572,"Phibalapteryx","Phibalapteryx",180,"Genus", 2,"Geometridae"),
+(15664,"Phigalia","Phigalia",180,"Genus", 2,"Geometridae"),
+(234072,"Philanthus","Philanthus",180,"Genus", 2,"Crabronidae"),
+(15245,"Philedone","Philedone",180,"Genus", 2,"Tortricidae"),
+(15247,"Philedonides","Philedonides",180,"Genus", 2,"Tortricidae"),
+(15610,"Philereme","Philereme",180,"Genus", 2,"Geometridae"),
+(7673,"Philonthus","Philonthus",180,"Genus", 2,"Staphylinidae"),
+(14864,"Philopedon","Philopedon",180,"Genus", 2,"Brachyderini"),
+(7962,"Phloeonomus","Phloeonomus",180,"Genus", 2,"Staphylinidae"),
+(15845,"Phlogophora","Phlogophora",180,"Genus", 2,"Noctuidae"),
+(18995,"Phlyctaenia","Phlyctaenia",180,"Genus", 2,"Crambidae"),
+(15344,"Phobetron","Phobetron",180,"Genus", 2,"Limacodidae"),
+(8928,"Phoenicocoris","Phoenicocoris",180,"Genus", 2,"Miridae"),
+(8152,"Phosphuga","Phosphuga",180,"Genus", 2,"Silphidae"),
+(15869,"Photedes","Photedes",180,"Genus", 2,"Noctuidae"),
+(15333,"Phragmataecia","Phragmataecia",180,"Genus", 2,"Cossidae"),
+(15861,"Phragmatiphila","Phragmatiphila",180,"Genus", 2,"Noctuidae"),
+(15743,"Phragmatobia","Phragmatobia",180,"Genus", 2,"Erebidae"),
+(15275,"Phtheochroa","Phtheochroa",180,"Genus", 2,"Tortricidae"),
+(15179,"Phthorimaea","Phthorimaea",180,"Genus", 2,"Gelechiidae"),
+(15439,"Phycita","Phycita",180,"Genus", 2,"Pyralidae"),
+(15455,"Phycitodes","Phycitodes",180,"Genus", 2,"Pyralidae"),
+(7295,"Phylan","Phylan",180,"Genus", 2,"Tenebrionidae"),
+(14867,"Phyllobius","Phyllobius",180,"Genus", 2,"Otiorhynchini"),
+(15073,"Phyllocnistis","Phyllocnistis",180,"Genus", 2,"Gracillariidae"),
+(15541,"Phyllodesma","Phyllodesma",180,"Genus", 2,"Lasiocampidae"),
+(15070,"Phyllonorycter","Phyllonorycter",180,"Genus", 2,"Gracillariidae"),
+(6909,"Phyllopertha","Phyllopertha",180,"Genus", 2,"Scarabaeidae"),
+(15014,"Phylloporia","Phylloporia",180,"Genus", 2,"Incurvariidae"),
+(8952,"Phylus","Phylus",180,"Genus", 2,"Miridae"),
+(7016,"Phymatodes","Phymatodes",180,"Genus", 2,"Cerambycidae"),
+(14997,"Phymatopus","Phymatopus",180,"Genus", 2,"Hepialidae"),
+(229691,"Physatocheila","Physatocheila",180,"Genus", 2,"Tingidae"),
+(8868,"Phytocoris","Phytocoris",180,"Genus", 2,"Miridae"),
+(7067,"Phytoecia","Phytoecia",180,"Genus", 2,"Cerambycidae"),
+(15778,"Phytometra","Phytometra",180,"Genus", 2,"Erebidae"),
+(19051,"Phytometra","Phytometra",180,"Genus", 2,"Noctuidae"),
+(15362,"Pieris","Pieris",180,"Genus", 2,"Pieridae"),
+(8870,"Pilophorus","Pilophorus",180,"Genus", 2,"Miridae"),
+(15431,"Pima","Pima",180,"Genus", 2,"Pyralidae"),
+(9003,"Pinalitus","Pinalitus",180,"Genus", 2,"Miridae"),
+(18970,"Piniohilia","Piniohilia",180,"Genus", 2,"Tortricidae"),
+(15298,"Piniphila","Piniphila",180,"Genus", 2,"Tortricidae"),
+(8632,"Pipiza","Pipiza",180,"Genus", 2,"Syrphidae"),
+(8639,"Pipizella","Pipizella",180,"Genus", 2,"Syrphidae"),
+(9006,"Pithanus","Pithanus",180,"Genus", 2,"Miridae"),
+(8954,"Placochilus","Placochilus",180,"Genus", 2,"Miridae"),
+(8896,"Plagiognathus","Plagiognathus",180,"Genus", 2,"Miridae"),
+(7023,"Plagionotus","Plagionotus",180,"Genus", 2,"Cerambycidae"),
+(15648,"Plagodis","Plagodis",180,"Genus", 2,"Geometridae"),
+(7151,"Platambus","Platambus",180,"Genus", 2,"Dytiscidae"),
+(6784,"Plateumaris","Plateumaris",180,"Genus", 2,"Chrysomelidae"),
+(8522,"Platycheirus","Platycheirus",180,"Genus", 2,"Syrphidae"),
+(7745,"Platydracus","Platydracus",180,"Genus", 2,"Staphylinidae"),
+(15151,"Platyedra","Platyedra",180,"Genus", 2,"Gelechiidae"),
+(8227,"Platynaspis","Platynaspis",180,"Genus", 2,"Coccinellidae"),
+(15209,"Platyptilia","Platyptilia",180,"Genus", 2,"Pterophoridae"),
+(15512,"Platytes","Platytes",180,"Genus", 2,"Crambidae"),
+(15410,"Plebejus","Plebejus",180,"Genus", 2,"Lycaenidae"),
+(15592,"Plemyria","Plemyria",180,"Genus", 2,"Geometridae"),
+(9109,"Plesiodema","Plesiodema",180,"Genus", 2,"Miridae"),
+(15478,"Pleuroptya","Pleuroptya",180,"Genus", 2,"Crambidae"),
+(15113,"Pleurota","Pleurota",180,"Genus", 2,"Oecophoridae"),
+(15457,"Plodia","Plodia",180,"Genus", 2,"Pyralidae"),
+(15799,"Plusia","Plusia",180,"Genus", 2,"Noctuidae"),
+(15083,"Plutella","Plutella",180,"Genus", 2,"Plutellidae"),
+(8828,"Pocota","Pocota",180,"Genus", 2,"Syrphidae"),
+(14876,"Podalonia","Podalonia",180,"Genus", 2,"Sphecidae"),
+(15533,"Poecilocampa","Poecilocampa",180,"Genus", 2,"Lasiocampidae"),
+(7041,"Pogonocherus","Pogonocherus",180,"Genus", 2,"Cerambycidae"),
+(6275,"Pogonus","Pogonus",180,"Genus", 2,"Carabidae"),
+(15912,"Polia","Polia",180,"Genus", 2,"Noctuidae"),
+(15795,"Polychrysia","Polychrysia",180,"Genus", 2,"Noctuidae"),
+(14879,"Polydrusus","Polydrusus",180,"Genus", 2,"Brachyderini"),
+(15391,"Polygonia","Polygonia",180,"Genus", 2,"Nymphalidae"),
+(8899,"Polymerus","Polymerus",180,"Genus", 2,"Miridae"),
+(15902,"Polymixis","Polymixis",180,"Genus", 2,"Noctuidae"),
+(15415,"Polyommatus","Polyommatus",180,"Genus", 2,"Lycaenidae"),
+(15531,"Polyploca","Polyploca",180,"Genus", 2,"Drepanidae"),
+(15770,"Polypogon","Polypogon",180,"Genus", 2,"Erebidae"),
+(18899,"Polypogon","Polypogon",180,"Genus", 2,"Noctuidae"),
+(15363,"Pontia","Pontia",180,"Genus", 2,"Pieridae"),
+(15222,"Porrittia","Porrittia",180,"Genus", 2,"Pterophoridae"),
+(8655,"Portevinia","Portevinia",180,"Genus", 2,"Syrphidae"),
+(6924,"Potonia","Potonia",180,"Genus", 2,"Scarabaeidae"),
+(6928,"Potosia","Potosia",180,"Genus", 2,"Scarabaeidae"),
+(15064,"Povolnya","Povolnya",180,"Genus", 2,"Gracillariidae"),
+(15093,"Prays","Prays",180,"Genus", 2,"Praydidae"),
+(7590,"Priobium","Priobium",180,"Genus", 2,"Anobiidae"),
+(14889,"Priocnemis","Priocnemis",180,"Genus", 2,"Pepsinae"),
+(6939,"Prionus","Prionus",180,"Genus", 2,"Cerambycidae"),
+(7352,"Prionychus","Prionychus",180,"Genus", 2,"Alleculidae"),
+(15293,"Pristerognatha","Pristerognatha",180,"Genus", 2,"Tortricidae"),
+(6306,"Pristonychus","Pristonychus",180,"Genus", 2,"Carabidae"),
+(15235,"Prochoreutis","Prochoreutis",180,"Genus", 2,"Choreutidae"),
+(19198,"Prodotis","Prodotis",180,"Genus", 2,"Noctuidae"),
+(15168,"Prolita","Prolita",180,"Genus", 2,"Gelechiidae"),
+(15560,"Proserpinus","Proserpinus",180,"Genus", 2,"Sphingidae"),
+(15403,"Prosotas","Prosotas",180,"Genus", 2,"Lycaenidae"),
+(15870,"Protarchanara","Protarchanara",180,"Genus", 2,"Noctuidae"),
+(7919,"Proteinus","Proteinus",180,"Genus", 2,"Staphylinidae"),
+(18926,"Protodeltote","Protodeltote",180,"Genus", 2,"Noctuidae"),
+(15954,"Protolampra","Protolampra",180,"Genus", 2,"Noctuidae"),
+(15821,"Protoschinia","Protoschinia",180,"Genus", 2,"Noctuidae"),
+(15025,"Proutia","Proutia",180,"Genus", 2,"Psychidae"),
+(19186,"Proxenus","Proxenus",180,"Genus", 2,"Noctuidae"),
+(9075,"Psallodema","Psallodema",180,"Genus", 2,"Miridae"),
+(8908,"Psallus","Psallus",180,"Genus", 2,"Miridae"),
+(6880,"Psammobius","Psammobius",180,"Genus", 2,"Scarabaeidae"),
+(15474,"Psammotis","Psammotis",180,"Genus", 2,"Crambidae"),
+(15224,"Pselnophorus","Pselnophorus",180,"Genus", 2,"Pterophoridae"),
+(234074,"Psenulus","Psenulus",180,"Genus", 2,"Crabronidae"),
+(15274,"Pseudargyrotoza","Pseudargyrotoza",180,"Genus", 2,"Tortricidae"),
+(15118,"Pseudatemelia","Pseudatemelia",180,"Genus", 2,"Lypusidae"),
+(15829,"Pseudeustrotia","Pseudeustrotia",180,"Genus", 2,"Noctuidae"),
+(15503,"Pseudobissetia","Pseudobissetia",180,"Genus", 2,"Crambidae"),
+(7358,"Pseudocistela","Pseudocistela",180,"Genus", 2,"Alleculidae"),
+(15319,"Pseudococcyx","Pseudococcyx",180,"Genus", 2,"Tortricidae"),
+(15299,"Pseudohermenias","Pseudohermenias",180,"Genus", 2,"Tortricidae"),
+(18614,"Pseudoips","Pseudoips",180,"Genus", 2,"Nolidae"),
+(9017,"Pseudoloxops","Pseudoloxops",180,"Genus", 2,"Miridae"),
+(15653,"Pseudopanthera","Pseudopanthera",180,"Genus", 2,"Geometridae"),
+(15005,"Pseudopostega","Pseudopostega",180,"Genus", 2,"Opostegidae"),
+(15287,"Pseudosciaphila","Pseudosciaphila",180,"Genus", 2,"Tortricidae"),
+(15077,"Pseudoswammerdamia","Pseudoswammerdamia",180,"Genus", 2,"Yponomeutidae"),
+(15185,"Pseudotelphusa","Pseudotelphusa",180,"Genus", 2,"Gelechiidae"),
+(15696,"Pseudoterpna","Pseudoterpna",180,"Genus", 2,"Geometridae"),
+(15175,"Psoricoptera","Psoricoptera",180,"Genus", 2,"Gelechiidae"),
+(18857,"Psuedosciaphila","Psuedosciaphila",180,"Genus", 2,"Tortricidae"),
+(15026,"Psyche","Psyche",180,"Genus", 2,"Psychidae"),
+(7992,"Ptenidium","Ptenidium",180,"Genus", 2,"Ptiliidae"),
+(15632,"Pterapherapteryx","Pterapherapteryx",180,"Genus", 2,"Geometridae"),
+(15221,"Pterophorus","Pterophorus",180,"Genus", 2,"Pterophoridae"),
+(6348,"Pterostichus","Pterostichus",180,"Genus", 2,"Carabidae"),
+(15716,"Pterostoma","Pterostoma",180,"Genus", 2,"Notodontidae"),
+(8033,"Pteryx","Pteryx",180,"Genus", 2,"Ptiliidae"),
+(7592,"Ptilinus","Ptilinus",180,"Genus", 2,"Anobiidae"),
+(8017,"Ptiliolum","Ptiliolum",180,"Genus", 2,"Ptiliidae"),
+(8004,"Ptilium","Ptilium",180,"Genus", 2,"Ptiliidae"),
+(15717,"Ptilodon","Ptilodon",180,"Genus", 2,"Notodontidae"),
+(15719,"Ptilophora","Ptilophora",180,"Genus", 2,"Notodontidae"),
+(8030,"Ptinella","Ptinella",180,"Genus", 2,"Ptiliidae"),
+(7547,"Ptinus","Ptinus",180,"Genus", 2,"Ptinidae"),
+(15161,"Ptocheuusa","Ptocheuusa",180,"Genus", 2,"Gelechiidae"),
+(8094,"Ptomaphagus","Ptomaphagus",180,"Genus", 2,"Silphidae"),
+(15252,"Ptycholoma","Ptycholoma",180,"Genus", 2,"Tortricidae"),
+(15251,"Ptycholomoides","Ptycholomoides",180,"Genus", 2,"Tortricidae"),
+(7932,"Pycnoglypta","Pycnoglypta",180,"Genus", 2,"Staphylinidae"),
+(19033,"Pyla","Pyla",180,"Genus", 2,"Pyralidae"),
+(15462,"Pyralis","Pyralis",180,"Genus", 2,"Pyralidae"),
+(15468,"Pyrausta","Pyrausta",180,"Genus", 2,"Crambidae"),
+(15353,"Pyrgus","Pyrgus",180,"Genus", 2,"Hesperiidae"),
+(15376,"Pyronia","Pyronia",180,"Genus", 2,"Nymphalidae"),
+(8538,"Pyrophaena","Pyrophaena",180,"Genus", 2,"Syrphidae"),
+(15341,"Pyropteron","Pyropteron",180,"Genus", 2,"Sesiidae"),
+(15820,"Pyrrhia","Pyrrhia",180,"Genus", 2,"Noctuidae"),
+(7008,"Pyrrhidium","Pyrrhidium",180,"Genus", 2,"Cerambycidae"),
+(7517,"Pytho","Pytho",180,"Genus", 2,"Pythidae"),
+(7781,"Quedius","Quedius",180,"Genus", 2,"Staphylinidae"),
+(7504,"Rabocerus","Rabocerus",180,"Genus", 2,"Salpingidae"),
+(7186,"Rantus","Rantus",180,"Genus", 2,"Dytiscidae"),
+(15188,"Recurvaria","Recurvaria",180,"Genus", 2,"Gelechiidae"),
+(7667,"Remus","Remus",180,"Genus", 2,"Staphylinidae"),
+(15320,"Retinia","Retinia",180,"Genus", 2,"Tortricidae"),
+(9144,"Reuteria","Reuteria",180,"Genus", 2,"Miridae"),
+(8902,"Rhabdomiris","Rhabdomiris",180,"Genus", 2,"Miridae"),
+(15346,"Rhagades","Rhagades",180,"Genus", 2,"Zygaenidae"),
+(6964,"Rhagium","Rhagium",180,"Genus", 2,"Cerambycidae"),
+(15611,"Rheumaptera","Rheumaptera",180,"Genus", 2,"Geometridae"),
+(15084,"Rhigognostis","Rhigognostis",180,"Genus", 2,"Plutellidae"),
+(8696,"Rhingia","Rhingia",180,"Genus", 2,"Syrphidae"),
+(14885,"Rhinoncus","Rhinoncus",180,"Genus", 2,"Ceutorhynchini"),
+(18837,"Rhinoprora","Rhinoprora",180,"Genus", 2,"Geometridae"),
+(7513,"Rhinosimus","Rhinosimus",180,"Genus", 2,"Salpingidae"),
+(15858,"Rhizedra","Rhizedra",180,"Genus", 2,"Noctuidae"),
+(8209,"Rhizobius","Rhizobius",180,"Genus", 2,"Coccinellidae"),
+(15570,"Rhodometra","Rhodometra",180,"Genus", 2,"Geometridae"),
+(15437,"Rhodophaea","Rhodophaea",180,"Genus", 2,"Pyralidae"),
+(15567,"Rhodostrophia","Rhodostrophia",180,"Genus", 2,"Geometridae"),
+(7642,"Rhopalodontus","Rhopalodontus",180,"Genus", 2,"Cisidae"),
+(234077,"Rhopalum","Rhopalum",180,"Genus", 2,"Crabronidae"),
+(15308,"Rhopobota","Rhopobota",180,"Genus", 2,"Tortricidae"),
+(15940,"Rhyacia","Rhyacia",180,"Genus", 2,"Noctuidae"),
+(15323,"Rhyacionia","Rhyacionia",180,"Genus", 2,"Tortricidae"),
+(14737,"Rhynchaenus","Rhynchaenus",180,"Genus", 2,"Rhamphini"),
+(15742,"Rhyparia","Rhyparia",180,"Genus", 2,"Erebidae"),
+(6884,"Rhyssemus","Rhyssemus",180,"Genus", 2,"Scarabaeidae"),
+(15725,"Rivula","Rivula",180,"Genus", 2,"Erebidae"),
+(18908,"Rivula","Rivula",180,"Genus", 2,"Noctuidae"),
+(7611,"Rizopertha","Rizopertha",180,"Genus", 2,"Bostrychidae"),
+(15056,"Roeslerstammia","Roeslerstammia",180,"Genus", 2,"Roeslerstammiidae"),
+(7014,"Ropalopus","Ropalopus",180,"Genus", 2,"Cerambycidae"),
+(8320,"Rophites","Rophites",180,"Genus", 2,"Halictidae"),
+(7868,"Rugilus","Rugilus",180,"Genus", 2,"Staphylinidae"),
+(15836,"Rusina","Rusina",180,"Genus", 2,"Noctuidae"),
+(15523,"Sabra","Sabra",180,"Genus", 2,"Drepanidae"),
+(15423,"Salebriopsis","Salebriopsis",180,"Genus", 2,"Pyralidae"),
+(9111,"Salicarus","Salicarus",180,"Genus", 2,"Miridae"),
+(7507,"Salpingus","Salpingus",180,"Genus", 2,"Salpingidae"),
+(15491,"Sameodes","Sameodes",180,"Genus", 2,"Crambidae"),
+(7056,"Saperda","Saperda",180,"Genus", 2,"Cerambycidae"),
+(15548,"Saturnia","Saturnia",180,"Genus", 2,"Saturniidae"),
+(15402,"Satyrium","Satyrium",180,"Genus", 2,"Lycaenidae"),
+(8567,"scaeva","scaeva",180,"Genus", 2,"Syrphidae"),
+(7316,"Scaphidema","Scaphidema",180,"Genus", 2,"Tenebrionidae"),
+(7656,"Scaphidium","Scaphidium",180,"Genus", 2,"Scaphidiidae"),
+(7658,"Scaphosoma","Scaphosoma",180,"Genus", 2,"Scaphidiidae"),
+(8106,"Scaphosoma","Scaphosoma",180,"Genus", 2,"Silphidae"),
+(15102,"Schiffermuelleria","Schiffermuelleria",180,"Genus", 2,"Oecophoridae"),
+(19173,"Schinia","Schinia",180,"Genus", 2,"Noctuidae"),
+(15518,"Schoenobius","Schoenobius",180,"Genus", 2,"Crambidae"),
+(15774,"Schrankia","Schrankia",180,"Genus", 2,"Erebidae"),
+(19059,"Schrankia","Schrankia",180,"Genus", 2,"Noctuidae"),
+(15229,"Schreckensteinia","Schreckensteinia",180,"Genus", 2,"Schreckensteiniidae"),
+(8109,"Sciodrepa","Sciodrepa",180,"Genus", 2,"Silphidae"),
+(15429,"Sciota","Sciota",180,"Genus", 2,"Pyralidae"),
+(15473,"Sclerocona","Sclerocona",180,"Genus", 2,"Crambidae"),
+(15724,"Scoliopteryx","Scoliopteryx",180,"Genus", 2,"Erebidae"),
+(19091,"Scoliopteryx","Scoliopteryx",180,"Genus", 2,"Noctuidae"),
+(7887,"Scopaeus","Scopaeus",180,"Genus", 2,"Staphylinidae"),
+(15498,"Scoparia","Scoparia",180,"Genus", 2,"Crambidae"),
+(18889,"Scoparia","Scoparia",180,"Genus", 2,"Pyralidae"),
+(15566,"Scopula","Scopula",180,"Genus", 2,"Geometridae"),
+(15573,"Scotopteryx","Scotopteryx",180,"Genus", 2,"Geometridae"),
+(7498,"Scraptia","Scraptia",180,"Genus", 2,"Scraptiidae"),
+(15177,"Scrobipalpa","Scrobipalpa",180,"Genus", 2,"Gelechiidae"),
+(15178,"Scrobipalpula","Scrobipalpula",180,"Genus", 2,"Gelechiidae"),
+(7281,"Scydmaenus","Scydmaenus",180,"Genus", 2,"Scydmaenidae"),
+(8211,"Scymnus","Scymnus",180,"Genus", 2,"Coccinellidae"),
+(15206,"Scythris","Scythris",180,"Genus", 2,"Scythrididae"),
+(15094,"Scythropia","Scythropia",180,"Genus", 2,"Praydidae"),
+(18877,"Scythropia","Scythropia",180,"Genus", 2,"Scythropiidae"),
+(15859,"Sedina","Sedina",180,"Genus", 2,"Noctuidae"),
+(15430,"Selagia","Selagia",180,"Genus", 2,"Pyralidae"),
+(15657,"Selenia","Selenia",180,"Genus", 2,"Geometridae"),
+(15286,"Selenodes","Selenodes",180,"Genus", 2,"Tortricidae"),
+(19137,"Selidoema","Selidoema",180,"Genus", 2,"Geometridae"),
+(15670,"Selidosema","Selidosema",180,"Genus", 2,"Geometridae"),
+(7010,"Semanotus","Semanotus",180,"Genus", 2,"Cerambycidae"),
+(15121,"Semioscopis","Semioscopis",180,"Genus", 2,"Depressariidae"),
+(15926,"Senta","Senta",180,"Genus", 2,"Noctuidae"),
+(6894,"Serica","Serica",180,"Genus", 2,"Scarabaeidae"),
+(7241,"Sericoderus","Sericoderus",180,"Genus", 2,"Orthoperidae"),
+(8707,"Sericomyia","Sericomyia",180,"Genus", 2,"Syrphidae"),
+(15336,"Sesia","Sesia",180,"Genus", 2,"Sesiidae"),
+(15763,"Setina","Setina",180,"Genus", 2,"Erebidae"),
+(15813,"Shargacucullia","Shargacucullia",180,"Genus", 2,"Noctuidae"),
+(15920,"Sideridis","Sideridis",180,"Genus", 2,"Noctuidae"),
+(15021,"Siederia","Siederia",180,"Genus", 2,"Psychidae"),
+(8085,"Silpha","Silpha",180,"Genus", 2,"Silphidae"),
+(15766,"Simplicia","Simplicia",180,"Genus", 2,"Erebidae"),
+(15808,"Simyra","Simyra",180,"Genus", 2,"Noctuidae"),
+(6934,"Sinodendron","Sinodendron",180,"Genus", 2,"Scarabaeidae"),
+(15691,"Siona","Siona",180,"Genus", 2,"Geometridae"),
+(15471,"Sitochroa","Sitochroa",180,"Genus", 2,"Crambidae"),
+(14740,"Sitona","Sitona",180,"Genus", 2,"Sitonini"),
+(15152,"Sitotroga","Sitotroga",180,"Genus", 2,"Gelechiidae"),
+(15552,"Smerinthus","Smerinthus",180,"Genus", 2,"Sphingidae"),
+(8035,"Smicrus","Smicrus",180,"Genus", 2,"Ptiliidae"),
+(15169,"Sophronia","Sophronia",180,"Genus", 2,"Gelechiidae"),
+(15135,"Sorhagenia","Sorhagenia",180,"Genus", 2,"Cosmopterigidae"),
+(15945,"Spaelotis","Spaelotis",180,"Genus", 2,"Noctuidae"),
+(15587,"Spargania","Spargania",180,"Genus", 2,"Geometridae"),
+(15240,"Sparganothis","Sparganothis",180,"Genus", 2,"Tortricidae"),
+(15269,"Spatalistis","Spatalistis",180,"Genus", 2,"Tortricidae"),
+(18592,"Speyeria","Speyeria",180,"Genus", 2,"Nymphalidae"),
+(7535,"Sphaericus","Sphaericus",180,"Genus", 2,"Ptinidae"),
+(6675,"Sphaeridium","Sphaeridium",180,"Genus", 2,"Hydrophilidae"),
+(7238,"Sphaerius","Sphaerius",180,"Genus", 2,"Sphaeriidae"),
+(8618,"Sphaerophoria","Sphaerophoria",180,"Genus", 2,"Syrphidae"),
+(8196,"Sphaerosoma","Sphaerosoma",180,"Genus", 2,"Endomychidae"),
+(8354,"Sphecodes","Sphecodes",180,"Genus", 2,"Halictidae"),
+(8721,"Sphegina","Sphegina",180,"Genus", 2,"Syrphidae"),
+(7653,"Sphindus","Sphindus",180,"Genus", 2,"Sphindidae"),
+(15556,"Sphinx","Sphinx",180,"Genus", 2,"Sphingidae"),
+(6308,"Sphodrus","Sphodrus",180,"Genus", 2,"Carabidae"),
+(19061,"Sphrageidus","Sphrageidus",180,"Genus", 2,"Erebidae"),
+(15735,"Spilarctia","Spilarctia",180,"Genus", 2,"Erebidae"),
+(15309,"Spilonota","Spilonota",180,"Genus", 2,"Tortricidae"),
+(15736,"Spilosoma","Spilosoma",180,"Genus", 2,"Erebidae"),
+(15750,"Spiris","Spiris",180,"Genus", 2,"Erebidae"),
+(15830,"Spodoptera","Spodoptera",180,"Genus", 2,"Noctuidae"),
+(15486,"Spoladea","Spoladea",180,"Genus", 2,"Crambidae"),
+(6941,"Spondylis","Spondylis",180,"Genus", 2,"Cerambycidae"),
+(15199,"Spuleria","Spuleria",180,"Genus", 2,"Parametriotidae"),
+(15942,"Standfussiana","Standfussiana",180,"Genus", 2,"Noctuidae"),
+(7752,"Staphylinus","Staphylinus",180,"Genus", 2,"Staphylinidae"),
+(15205,"Stathmopoda","Stathmopoda",180,"Genus", 2,"Stathmopodidae"),
+(15849,"Staurophora","Staurophora",180,"Genus", 2,"Noctuidae"),
+(15710,"Stauropus","Stauropus",180,"Genus", 2,"Notodontidae"),
+(19153,"Steboptilia","Steboptilia",180,"Genus", 2,"Pterophoridae"),
+(15641,"Stegania","Stegania",180,"Genus", 2,"Geometridae"),
+(7579,"Stegobium","Stegobium",180,"Genus", 2,"Anobiidae"),
+(8339,"Stelis","Stelis",180,"Genus", 2,"Megachilidae"),
+(7259,"Stenichnus","Stenichnus",180,"Genus", 2,"Scydmaenidae"),
+(6952,"Stenocorus","Stenocorus",180,"Genus", 2,"Cerambycidae"),
+(8837,"Stenodema","Stenodema",180,"Genus", 2,"Miridae"),
+(15190,"Stenolechia","Stenolechia",180,"Genus", 2,"Gelechiidae"),
+(6607,"Stenolophus","Stenolophus",180,"Genus", 2,"Carabidae"),
+(15213,"Stenoptilia","Stenoptilia",180,"Genus", 2,"Pterophoridae"),
+(15035,"Stenoptinea","Stenoptinea",180,"Genus", 2,"Tineidae"),
+(7063,"Stenostola","Stenostola",180,"Genus", 2,"Cerambycidae"),
+(8904,"Stenotus","Stenotus",180,"Genus", 2,"Miridae"),
+(229702,"Stephanitis","Stephanitis",180,"Genus", 2,"Tingidae"),
+(15196,"Stephensia","Stephensia",180,"Genus", 2,"Elachistidae"),
+(9060,"Sthenarus","Sthenarus",180,"Genus", 2,"Miridae"),
+(15296,"Stictea","Stictea",180,"Genus", 2,"Tortricidae"),
+(15000,"Stigmella","Stigmella",180,"Genus", 2,"Nepticulidae"),
+(234081,"Stigmus","Stigmus",180,"Genus", 2,"Crabronidae"),
+(6370,"Stomis","Stomis",180,"Genus", 2,"Carabidae"),
+(15136,"Stomopteryx","Stomopteryx",180,"Genus", 2,"Gelechiidae"),
+(6991,"Strangalia","Strangalia",180,"Genus", 2,"Cerambycidae"),
+(14887,"Strombocerus","Strombocerus",180,"Genus", 2,"Selandriinae"),
+(9042,"Strongylocoris","Strongylocoris",180,"Genus", 2,"Miridae"),
+(15330,"Strophedra","Strophedra",180,"Genus", 2,"Tortricidae"),
+(14733,"Strophosoma","Strophosoma",180,"Genus", 2,"Brachyderini"),
+(8202,"Subcoccinella","Subcoccinella",180,"Genus", 2,"Coccinellidae"),
+(7878,"Sunius","Sunius",180,"Genus", 2,"Staphylinidae"),
+(15078,"Swammerdamia","Swammerdamia",180,"Genus", 2,"Yponomeutidae"),
+(18824,"Swatschek","Swatschek",180,"Genus", 2,"Tortricidae"),
+(8198,"Symbiotes","Symbiotes",180,"Genus", 2,"Endomychidae"),
+(15339,"Synanthedon","Synanthedon",180,"Genus", 2,"Sesiidae"),
+(15461,"Synaphe","Synaphe",180,"Genus", 2,"Pyralidae"),
+(8170,"Synchita","Synchita",180,"Genus", 2,"Colydiidae"),
+(15137,"Syncopacma","Syncopacma",180,"Genus", 2,"Gelechiidae"),
+(15254,"Syndemis","Syndemis",180,"Genus", 2,"Tortricidae"),
+(15798,"Syngrapha","Syngrapha",180,"Genus", 2,"Noctuidae"),
+(6320,"Synuchus","Synuchus",180,"Genus", 2,"Carabidae"),
+(8810,"Syritta","Syritta",180,"Genus", 2,"Syrphidae"),
+(8547,"Syrphus","Syrphus",180,"Genus", 2,"Syrphidae"),
+(9044,"Systellonotus","Systellonotus",180,"Genus", 2,"Miridae"),
+(6936,"Systenocerus","Systenocerus",180,"Genus", 2,"Scarabaeidae"),
+(6265,"Tachys","Tachys",180,"Genus", 2,"Carabidae"),
+(234085,"Tachysphex","Tachysphex",180,"Genus", 2,"Crabronidae"),
+(15022,"Taleporia","Taleporia",180,"Genus", 2,"Psychidae"),
+(15236,"Tebenna","Tebenna",180,"Genus", 2,"Choreutidae"),
+(15127,"Telechrysis","Telechrysis",180,"Genus", 2,"Depressariidae"),
+(15182,"Teleiodes","Teleiodes",180,"Genus", 2,"Gelechiidae"),
+(15183,"Teleiopsis","Teleiopsis",180,"Genus", 2,"Gelechiidae"),
+(8805,"Temnostoma","Temnostoma",180,"Genus", 2,"Syrphidae"),
+(7344,"Tenebrio","Tenebrio",180,"Genus", 2,"Tenebrionidae"),
+(9019,"Teratocoris","Teratocoris",180,"Genus", 2,"Miridae"),
+(8178,"Teredus","Teredus",180,"Genus", 2,"Colydiidae"),
+(15527,"Tethea","Tethea",180,"Genus", 2,"Drepanidae"),
+(15528,"Tetheella","Tetheella",180,"Genus", 2,"Drepanidae"),
+(7373,"Tetratoma","Tetratoma",180,"Genus", 2,"Serropalpidae"),
+(6945,"Tetropium","Tetropium",180,"Genus", 2,"Cerambycidae"),
+(7069,"Tetrops","Tetrops",180,"Genus", 2,"Cerambycidae"),
+(15702,"Thalera","Thalera",180,"Genus", 2,"Geometridae"),
+(15841,"Thalpophila","Thalpophila",180,"Genus", 2,"Noctuidae"),
+(8074,"Thanatophilus","Thanatophilus",180,"Genus", 2,"Silphidae"),
+(15328,"Thaumatotibia","Thaumatotibia",180,"Genus", 2,"Tortricidae"),
+(15706,"Thaumetopoea","Thaumetopoea",180,"Genus", 2,"Notodontidae"),
+(15399,"Thecla","Thecla",180,"Genus", 2,"Lycaenidae"),
+(15591,"Thera","Thera",180,"Genus", 2,"Geometridae"),
+(15564,"Theretra","Theretra",180,"Genus", 2,"Sphingidae"),
+(15686,"Theria","Theria",180,"Genus", 2,"Geometridae"),
+(15699,"Thetidia","Thetidia",180,"Genus", 2,"Geometridae"),
+(15307,"Thiodia","Thiodia",180,"Genus", 2,"Tortricidae"),
+(15155,"Thiotricha","Thiotricha",180,"Genus", 2,"Gelechiidae"),
+(19169,"Thisanootia","Thisanootia",180,"Genus", 2,"Crambidae"),
+(15510,"Thisanotia","Thisanotia",180,"Genus", 2,"Crambidae"),
+(15908,"Tholera","Tholera",180,"Genus", 2,"Noctuidae"),
+(15757,"Thumatha","Thumatha",180,"Genus", 2,"Erebidae"),
+(15525,"Thyatira","Thyatira",180,"Genus", 2,"Drepanidae"),
+(15356,"Thymelicus","Thymelicus",180,"Genus", 2,"Hesperiidae"),
+(15879,"Tiliacea","Tiliacea",180,"Genus", 2,"Noctuidae"),
+(15568,"Timandra","Timandra",180,"Genus", 2,"Geometridae"),
+(15098,"Tinagma","Tinagma",180,"Genus", 2,"Douglasiidae"),
+(15048,"Tinea","Tinea",180,"Genus", 2,"Tineidae"),
+(15047,"Tineola","Tineola",180,"Genus", 2,"Tineidae"),
+(229684,"Tingis","Tingis",180,"Genus", 2,"Tingidae"),
+(7545,"Tipnus","Tipnus",180,"Genus", 2,"Ptinidae"),
+(15016,"Tischeria","Tischeria",180,"Genus", 2,"Tischeriidae"),
+(7223,"Tomoxia","Tomoxia",180,"Genus", 2,"Mordellidae"),
+(15266,"Tortricodes","Tortricodes",180,"Genus", 2,"Tortricidae"),
+(15270,"Tortrix","Tortrix",180,"Genus", 2,"Tortricidae"),
+(6973,"Toxotus","Toxotus",180,"Genus", 2,"Cerambycidae"),
+(15839,"Trachea","Trachea",180,"Genus", 2,"Noctuidae"),
+(14855,"Trachodes","Trachodes",180,"Genus", 2,"Molytini"),
+(18822,"Trachycera","Trachycera",180,"Genus", 2,"Pyralidae"),
+(14846,"Trachyphloeus","Trachyphloeus",180,"Genus", 2,"Otiorhynchini"),
+(6267,"Trechus","Trechus",180,"Genus", 2,"Carabidae"),
+(7420,"Triarthron","Triarthron",180,"Genus", 2,"Liodidae"),
+(15044,"Triaxomasia","Triaxomasia",180,"Genus", 2,"Tineidae"),
+(15040,"Triaxomera","Triaxomera",180,"Genus", 2,"Tineidae"),
+(7328,"Tribolium","Tribolium",180,"Genus", 2,"Tenebrionidae"),
+(15534,"Trichiura","Trichiura",180,"Genus", 2,"Lasiocampidae"),
+(6599,"Trichocellus","Trichocellus",180,"Genus", 2,"Carabidae"),
+(15046,"Trichophaga","Trichophaga",180,"Genus", 2,"Tineidae"),
+(15790,"Trichoplusia","Trichoplusia",180,"Genus", 2,"Noctuidae"),
+(8641,"Trichopsomyia","Trichopsomyia",180,"Genus", 2,"Syrphidae"),
+(15635,"Trichopteryx","Trichopteryx",180,"Genus", 2,"Geometridae"),
+(14860,"Trichosirocalus","Trichosirocalus",180,"Genus", 2,"Ceutorhynchini"),
+(15001,"Trifurcula","Trifurcula",180,"Genus", 2,"Nepticulidae"),
+(8649,"Triglyphus","Triglyphus",180,"Genus", 2,"Syrphidae"),
+(7541,"Trigonogenius","Trigonogenius",180,"Genus", 2,"Ptinidae"),
+(8942,"Trigonotylus","Trigonotylus",180,"Genus", 2,"Miridae"),
+(14995,"Triodia","Triodia",180,"Genus", 2,"Hepialidae"),
+(15613,"Triphosa","Triphosa",180,"Genus", 2,"Geometridae"),
+(19191,"Triphose","Triphose",180,"Genus", 2,"Geometridae"),
+(15781,"Trisateles","Trisateles",180,"Genus", 2,"Erebidae"),
+(19129,"Trisateles","Trisateles",180,"Genus", 2,"Noctuidae"),
+(7621,"Trogoxylon","Trogoxylon",180,"Genus", 2,"Lyctidae"),
+(8808,"Tropidia","Tropidia",180,"Genus", 2,"Syrphidae"),
+(6890,"Trox","Trox",180,"Genus", 2,"Scarabaeidae"),
+(14873,"Trypoxylon","Trypoxylon",180,"Genus", 2,"Crabronidae"),
+(9138,"Tupiocoris","Tupiocoris",180,"Genus", 2,"Miridae"),
+(15180,"Tuta","Tuta",180,"Genus", 2,"Gelechiidae"),
+(8160,"Typhaea","Typhaea",180,"Genus", 2,"Mycetophagidae"),
+(6826,"Typhoeus","Typhoeus",180,"Genus", 2,"Scarabaeidae"),
+(15749,"Tyria","Tyria",180,"Genus", 2,"Erebidae"),
+(15803,"Tyta","Tyta",180,"Genus", 2,"Noctuidae"),
+(8235,"Tytthaspis","Tytthaspis",180,"Genus", 2,"Coccinellidae"),
+(9083,"Tytthus","Tytthus",180,"Genus", 2,"Miridae"),
+(15477,"Udea","Udea",180,"Genus", 2,"Crambidae"),
+(7335,"Uloma","Uloma",180,"Genus", 2,"Tenebrionidae"),
+(18986,"Unknown","Unknown",180,"Genus", 2,"Tortricidae"),
+(15469,"Uresiphita","Uresiphita",180,"Genus", 2,"Crambidae"),
+(15752,"Utetheisa","Utetheisa",180,"Genus", 2,"Erebidae"),
+(6915,"Valgus","Valgus",180,"Genus", 2,"Scarabaeidae"),
+(15388,"Vanessa","Vanessa",180,"Genus", 2,"Nymphalidae"),
+(7777,"Velleius","Velleius",180,"Genus", 2,"Staphylinidae"),
+(15609,"Venusia","Venusia",180,"Genus", 2,"Geometridae"),
+(7511,"Vinzencellus","Vinzencellus",180,"Genus", 2,"Salpingidae"),
+(15456,"Vitula","Vitula",180,"Genus", 2,"Pyralidae"),
+(8703,"Volucella","Volucella",180,"Genus", 2,"Syrphidae"),
+(15521,"Watsonalla","Watsonalla",180,"Genus", 2,"Drepanidae"),
+(15028,"Whittleia","Whittleia",180,"Genus", 2,"Psychidae"),
+(19029,"Witlesia","Witlesia",180,"Genus", 2,"Pyralidae"),
+(15233,"Wockia","Wockia",180,"Genus", 2,"Urodidae"),
+(8515,"Xanthandrus","Xanthandrus",180,"Genus", 2,"Syrphidae"),
+(15880,"Xanthia","Xanthia",180,"Genus", 2,"Noctuidae"),
+(8602,"Xanthogramma","Xanthogramma",180,"Genus", 2,"Syrphidae"),
+(7842,"Xantholinus","Xantholinus",180,"Genus", 2,"Staphylinidae"),
+(15575,"Xanthorhoe","Xanthorhoe",180,"Genus", 2,"Geometridae"),
+(15186,"Xenolechia","Xenolechia",180,"Genus", 2,"Gelechiidae"),
+(15263,"Xerocnephasia","Xerocnephasia",180,"Genus", 2,"Tortricidae"),
+(15950,"Xestia","Xestia",180,"Genus", 2,"Noctuidae"),
+(7568,"Xestobium","Xestobium",180,"Genus", 2,"Anobiidae"),
+(18865,"Xetrocnephasia","Xetrocnephasia",180,"Genus", 2,"Tortricidae"),
+(15886,"Xylena","Xylena",180,"Genus", 2,"Noctuidae"),
+(7594,"Xyletinus","Xyletinus",180,"Genus", 2,"Anobiidae"),
+(15819,"Xylocampa","Xylocampa",180,"Genus", 2,"Noctuidae"),
+(8308,"Xylocopa","Xylocopa",180,"Genus", 2,"Apidae"),
+(8083,"Xylodrepa","Xylodrepa",180,"Genus", 2,"Silphidae"),
+(7967,"Xylodromus","Xylodromus",180,"Genus", 2,"Staphylinidae"),
+(7624,"Xylographus","Xylographus",180,"Genus", 2,"Cisidae"),
+(8812,"Xylota","Xylota",180,"Genus", 2,"Syrphidae"),
+(7029,"Xylotrechus","Xylotrechus",180,"Genus", 2,"Cerambycidae"),
+(15165,"Xystophora","Xystophora",180,"Genus", 2,"Gelechiidae"),
+(15074,"Yponomeuta","Yponomeuta",180,"Genus", 2,"Yponomeutidae"),
+(15091,"Ypsolopha","Ypsolopha",180,"Genus", 2,"Ypsolophidae"),
+(6412,"Zabrus","Zabrus",180,"Genus", 2,"Carabidae"),
+(15772,"Zanclognatha","Zanclognatha",180,"Genus", 2,"Erebidae"),
+(19015,"Zanclognatha","Zanclognatha",180,"Genus", 2,"Noctuidae"),
+(15312,"Zeiraphera","Zeiraphera",180,"Genus", 2,"Tortricidae"),
+(15075,"Zelleria","Zelleria",180,"Genus", 2,"Yponomeutidae"),
+(6793,"Zeugophora","Zeugophora",180,"Genus", 2,"Chrysomelidae"),
+(15332,"Zeuzera","Zeuzera",180,"Genus", 2,"Cossidae"),
+(15448,"Zophodia","Zophodia",180,"Genus", 2,"Pyralidae"),
+(15348,"Zygaena","Zygaena",180,"Genus", 2,"Zygaenidae")
+;
