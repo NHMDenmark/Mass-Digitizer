@@ -21,7 +21,7 @@ import global_settings as gs
 
 db = data_access.DataAccess()
 cur = db.getDbCursor()
-collobj = specimen.Specimen(gs.collectionId)
+collobj = specimen.Specimen(gs.collection.Id)
 aaDF = pd.read_excel('Aarhus.xls', index_col=None, na_filter=False) #Original NHMA Entomologi taxonomy
 
 specimen = {'alttaxonid': 0, 'rankid': 0, 'rankname': '', 'superfamily':'', 'family':'', 'genus': '', 'species': '', 'parent': '', 'author':'', 'source':'NHMA Entomology'}

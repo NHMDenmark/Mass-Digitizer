@@ -13,6 +13,7 @@
 """
 
 # Internal dependencies
+import util
 from models import model
 import data_access
 import global_settings as gs
@@ -40,7 +41,7 @@ class Taxon(model.Model):
         
         self.merge          = None
 
-        self.institutionId   = gs.institutionId #db.getRowOnId('collection',collection_id)['institutionid']
+        self.institutionId   = gs.institution.Id #db.getRowOnId('collection',collection_id)['institutionid']
         self.collectionId    = collection_id
 
         self.taxonRanks = {
@@ -140,7 +141,7 @@ class Taxon(model.Model):
             parentTaxonObj = specify_interface.getSpecifyObject(self.sptype, self.parentId)
             self.parent.fill(parentTaxonObj)
         except:
-            print("ERROR: Failed to retrieve parent taxon.")
+            util.logLine("ERROR: Failed to retrieve parent taxon.",'error')
             
         return self.parent 
 

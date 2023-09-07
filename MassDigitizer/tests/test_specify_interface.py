@@ -67,7 +67,6 @@ class Test_specify_interface():
         # In this case collectionobject, but could be 'attachment', 'author' etc.
 
         res = sp.getSpecifyObject('collectionobject', 411590, self.token)
-        print('--------------', res, '--------------')
 
         res = self.sp.getSpecifyObject('collectionobject', 411590, self.token)
 

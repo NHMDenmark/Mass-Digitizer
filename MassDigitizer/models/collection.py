@@ -23,12 +23,13 @@ class Collection(model.Model):
     def __init__(self, collection_id) -> None:
         # Set up blank record 
         model.Model.__init__(self, collection_id)
-        self.table          = 'collection'
-        self.sptype         = 'collection'
-        self.institutionId  = 0
-        self.taxonTreeDefId = 0
-        self.disciplineId   = 0
-        self.discipline     = None 
+        self.table           = 'collection'
+        self.sptype          = 'collection'
+        self.institutionId   = 0
+        self.taxonTreeDefId  = 0
+        self.disciplineId    = 0
+        self.discipline      = None 
+        self.catalogNrLength = 9
 
         # Predefined data fields
         self.storageLocations = None 
@@ -67,6 +68,7 @@ class Collection(model.Model):
                 'institutionid':    f'{self.institutionId}', 
                 'taxontreedefid':   f'{self.taxonTreeDefId}', 
                 'visible':          f'{self.visible}', 
+                'catalognrlength':  f'{self.catalogNrLength}'
                 }
         
         return fieldsDict
@@ -78,12 +80,13 @@ class Collection(model.Model):
            record: sqliterow object containing record data 
         """
 
-        self.id             = record['id']
-        self.spid           = record['spid']
-        self.name           = record['name']
-        self.institutionId  = record['institutionid']
-        self.taxonTreeDefId = record['taxontreedefid']
-        self.visible        = record['visible']      
+        self.id              = record['id']
+        self.spid            = record['spid']
+        self.name            = record['name']
+        self.institutionId   = record['institutionid']
+        self.taxonTreeDefId  = record['taxontreedefid']
+        self.visible         = record['visible']      
+        self.catalogNrLength = record['catalognrlength']
 
 # Specify Interfacing functions 
 

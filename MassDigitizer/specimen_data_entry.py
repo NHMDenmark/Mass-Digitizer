@@ -35,6 +35,7 @@ from models import specimen
 from models import recordset
 from models import collection as coll
 from models import model
+import NHMA_lookup as lookup                
 
 class SpecimenDataEntry():
     """
@@ -529,7 +530,6 @@ class SpecimenDataEntry():
 
             elif event == 'inpNHMAid_Enter':
 
-                import try_lookup as lookup
                 taxonomicFullName = self.window['inpNHMAid'].get()
                 fullName = lookup.getFullName(taxonomicFullName)
                 self.window['inpTaxonName'].update(fullName)
@@ -720,51 +720,38 @@ class SpecimenDataEntry():
         """
 
         try:
-            catalogNumberClean = record['catalognumber'].replace('"', '')
-            if util.validateBarCode(catalogNumberClean) != True:
-                sg.popup_error(util.validateBarCode(catalogNumberClean))
+            result = ''
+            catalogNumber = record['catalognumber'].replace('"', '')
+            self.collobj.catalogNumber = catalogNumber
+            
             # Make sure everything is read on immediate barcode scan
+
             taxonFullName = self.window['inpTaxonName'].get()
             taxonFullName = taxonFullName.rstrip()  # barcode scanner adds newline
-            mdl = model.Model(self.collectionId)
             self.collobj.taxonFullName = taxonFullName
-            taxonTableRecord = self.getTaxonNameRecord(taxonFullName)
-            # [j for j in taxonTableRecord[0]])
+            taxonTableRecord = self.getTaxonNameRecord(taxonFullName)            
+            if taxonTableRecord:
+                self.collobj.taxonName = taxonTableRecord['name']
+                self.collobj.taxonRankName = taxonTableRecord['taxonrank']
+                self.collobj.familyName = self.collobj.searchParentTaxon(taxonTableRecord['name'], 140, self.collection.taxonTreeDefId)
+                self.collobj.higherTaxonName = taxonTableRecord['name'].split(' ')[0]
+                self.collobj.rankid = taxonTableRecord['rankid']
+                self.collobj.taxonNameId = taxonTableRecord['id']
+                self.collobj.taxonSpid = taxonTableRecord['spid']
+                self.collobj.parentFullName = taxonTableRecord['parentfullname']
 
-            mdl.id = self.collobj.id
-            self.collobj.catalogNumber = catalogNumberClean
-            taxonName = taxonTableRecord['name']
-            self.collobj.taxonName = taxonName
-            taxonNameId = taxonTableRecord['id']
-            taxonRank = taxonTableRecord['taxonrank']
-            self.collobj.taxonRankName = taxonRank
-            self.collobj.familyName = self.collobj.searchParentTaxon(taxonName, 140, gs.taxonTreeDefId)
-            self.collobj.rankName = taxonRank
-            higherTaxonName = taxonName.split(' ')[0]
-            self.collobj.higherTaxonName = higherTaxonName
-            self.collobj.rankid = taxonTableRecord['rankid']
-            self.collobj.taxonNameId = taxonNameId
-            spid = taxonTableRecord['spid']
-            self.collobj.taxonSpid = spid
-            needsRepair = self.window['chkdamage'].get()
-            self.collobj.needsRepair = needsRepair
-            parent = taxonTableRecord['parentfullname']
-            self.collobj.parentFullName = parent
-            # nameRecord = self.collobj.
+            self.collobj.needsRepair = self.window['chkdamage'].get()
 
-            recID = self.collobj.setTaxonNameFieldsFromModel(taxonTableRecord)
-            recordDict = self.collobj.getFieldsAsDict()
-            # Ensure that container properties are picked up on go-back operations.
-            # currentSpecimen = self.collobj.getFieldsAsDict()
+            # Ensure that container properties are picked up on go-back operations
             containerType = record['containertype']
             containerName = record['containername']
-
-            # Ensure  contents of notes input field are transferred to specimen object instance
-            self.collobj.notes = self.window['inpNotes'].Get()
             # Below ensures that the value in the container ID field is persisted from MSO to MSO record.
             self.collobj.containertype = containerType
             self.collobj.containername = containerName
             # CONTAINER values are already taken care of in the radio button events.
+
+            # Ensure  contents of notes input field are transferred to specimen object instance
+            self.collobj.notes = self.window['inpNotes'].Get()
 
             recordIdFromForm = self.window['txtRecordID'].get()
             self.collobj.id
@@ -786,29 +773,40 @@ class SpecimenDataEntry():
                 self.setSpecimenFields()
                 # Prepare form for next new record
                 self.clearNonStickyFields(record)
-            savedRecord = self.collobj.save()
-            recs3 = self.recordSet.getAdjacentRecordList(self.tableHeaders)
-            self.window['tblPrevious'].update(recs3)
-            # Remember id of record just save and prepare for blank record
-            previousRecordId = savedRecord['id']  # Id to be used for refreshing the previous rows table.
 
-            # Refresh adjacent record set
-            self.recordSet.reload(savedRecord)
-            self.window['tblPrevious'].update(self.recordSet.getAdjacentRecordList(self.tableHeaders))
+            validation = self.validateBarCode(catalogNumber)
+            
+            if validation:
+                savedRecord = self.collobj.save()
+                recs3 = self.recordSet.getAdjacentRecordList(self.tableHeaders)
+                self.window['tblPrevious'].update(recs3)
+                # Remember id of record just save and prepare for blank record
+                previousRecordId = savedRecord['id']  # Id to be used for refreshing the previous rows table.
 
-            result = "Successfully saved specimen record."
+                # Refresh adjacent record set
+                self.recordSet.reload(savedRecord)
+                self.window['tblPrevious'].update(self.recordSet.getAdjacentRecordList(self.tableHeaders))
 
-            util.logger.info(f'{result} : {previousRecordId} - {savedRecord}')
-            self.clearNonStickyFields(self.nonStickyFields)
+                result = "Successfully saved specimen record."
+
+                util.logger.info(f'{result} : {previousRecordId} - {savedRecord}')
+                self.clearNonStickyFields(self.nonStickyFields)
+            else:
+                result = 'validation error'
+                #sg.popup_error("Did not save due to validation error(s)!")
 
         except Exception as e:
             errorMessage = f"Error occurred attempting to save specimen: {e}"
+            traceBack = traceback.format_exc()
             util.logger.error(errorMessage)
-            sg.PopupError(e)
+            sg.PopupError(f'{e} \n\n {traceBack}', title='Error handle storage input', )
             result = errorMessage
 
         # self.initialStep = False
         self.window['inpCatalogNumber'].set_focus()
+
+        util.logger.info(f'{result}')
+                         
         return result
 
     def validationFeedback(self, validationMessage):
@@ -1119,22 +1117,13 @@ class SpecimenDataEntry():
     def validateBarCode(self, barcode):
         # Ensuring that the barcode has the correct length according to collection.
         validation = None
-        if gs.collectionName == "NHMD Vascular Plants":
-            gs.lengthCatalogNumber = 8
-            if len(barcode) == gs.lengthCatalogNumber:
-                validation = True
-        elif gs.collectionName == "NHMD Entomology":
-            if len(barcode) == 9:
-                validation = True
-        elif gs.collectionName == "NHMA Entomology":
-            gs.lengthCatalogNumber = 9
-            if len(barcode) == gs.lengthCatalogNumber:
-                validation = True
-        if validation:
-            self.saveForm(self.collobj.getFieldsAsDict())
+        
+        if len(barcode) == self.collection.catalogNrLength:
+            validation = True
         else:
-            err = "catalog number has the wrong format!"
-            return err
+            validation = False 
+            sg.popup_error("Catalog number has the wrong format!")
+
         return validation
 
     def verifyCatalogNumber(self, catalogNumber):

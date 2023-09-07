@@ -51,7 +51,7 @@ class SpecifyInterface():
     CONTRACT
        Returns csrftoken (String)
     """   
-    util.logger.debug('Get CSRF token from ', gs.baseURL)
+    #util.logger.debug('Get CSRF token from ', gs.baseURL)
     response = self.spSession.get(gs.baseURL + 'context/login/', verify=False)
     self.csrfToken = response.cookies.get('csrftoken')
     util.logger.debug(' - Response: %s %s' %(str(response.status_code), response.reason))
@@ -165,7 +165,6 @@ class SpecifyInterface():
     for key in filters:
       filterString += f"&{key}={filters[key]}"
     apiCallString = f'{gs.baseURL}api/specify/{objectName}/?limit={limit}&offset={offset}{filterString}'
-    #if limit == 1000: print("" + apiCallString)
     response = self.spSession.get(apiCallString, headers=headers)
     util.logger.debug(f' - Response: {str(response.status_code)} {response.reason}')
     if response.status_code < 299:

@@ -16,16 +16,15 @@ import os
 import sys
 
 # Internal dependencies
-current = os.path.dirname(os.path.realpath(__file__))
-parent = os.path.dirname(current)
-sys.path.append(parent)
-# from .. import *
-# import
 import global_settings as gs
 import specify_interface
 import util
 import data_access
 
+# TODO Explain reason for below code
+current = os.path.dirname(os.path.realpath(__file__))
+parent = os.path.dirname(current)
+sys.path.append(parent)
 
 class Model:
     """
@@ -75,15 +74,11 @@ class Model:
         """
 
         # Checking if Save is a novel record, or if it is updating existing record.
-        print('SELF ID =', self.id)
-        rec = self.getFieldsAsDict()
-        print('In Model record:', rec)
         if self.id > 0:
             # Record Id is not 0 therefore existing record to be updated
             record = self.db.updateRow(self.table, self.id, self.getFieldsAsDict())
         else:
             # Record Id is 0 therefore existing record to be created
-            print('CREATING NEEEW RECORD :DDDDDDD', self.getFieldsAsDict())
             record = self.db.insertRow(self.table, self.getFieldsAsDict())
             self.id = record['id']
 
@@ -132,8 +127,6 @@ class Model:
             id = 0
         else:
             id = int(id)
-        print('loading prev. for collection id:', self.collectionId)
-        print('initial rec id=', id)
         # Construct query for extracting the previous record
         # sql = f'''SELECT * FROM specimen s JOIN
         #        (SELECT max(id) as mx FROM specimen s WHERE collectionid={cid})t1
@@ -152,12 +145,9 @@ class Model:
         # sql = sql + "LIMIT 1; "
 
         record = self.db.loadSingleRecordFromSql(sql)
-        # print("loadPrev ID:", record[0], '\n', [j for j in record])
         if record is not None:
             self.setFields(record)
             return record
-        else:
-            print('No older records!')
 
     def loadNext(self, id):
         """
@@ -174,19 +164,16 @@ class Model:
             sql = sql + f"WHERE s.id > {id} "
         else:
             # Blank record: No going forward
-            print('Attempt to forward on blank record')
             util.logger.debug('Attempt to forward on blank record')
             return None
 
         sql = sql + f" AND s.collectionid = {self.collectionId}"  # Filter on current collection
         # Sort on ID to get the latest record out
         sql = sql + " ORDER BY s.id LIMIT 1 "
-        print('forwardbutton sql:', sql)
         record = self.db.loadSingleRecordFromSql(sql)
         record
         if record is not None:
             self.setFields(record)
-            print(self.getFieldsAsDict())
         return record
 
     def loadOnFullname(self, fullname, collection_id):

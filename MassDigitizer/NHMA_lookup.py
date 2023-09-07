@@ -6,7 +6,6 @@ def NHMAlookup(id, table='NHMAjoin'):
     #Returns : taxonRow
     taxonRow = {'taxonid': 0, 'rankid': 0, 'family':'', 'genus':'', 'species':'', 'name': '','fullname':'', 'parent':'', 'spid': '' }
     sql = f"SELECT taxonid, superfamily, family, genus, species, coalesce as name, genus || ' ' || species as fullname, spid FROM {table} t WHERE t.taxonid = {id};"
-    print('NHMA sql:', sql)
     row = db.executeSqlStatement(sql)
     #Code block below assigns variables based on row position
     taxonId = row[0][0]
