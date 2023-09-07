@@ -26,7 +26,6 @@ def test_institutions():
     #In def init() there is an important institutions list var.
     # hs = home_screen.init()
     institutionList = util.convert_dbrow_list(db.getRows('institution'))
-    print('""""""""', institutionList)
     assert len(institutionList) > 1
 
 """

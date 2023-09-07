@@ -17,6 +17,7 @@ import PySimpleGUI as sg
 # Internal dependencies
 import util
 import global_settings as gs
+import models.collection as coll
 import data_access
 import specify_interface
 import specimen_data_entry as sde
@@ -116,9 +117,8 @@ class HomeScreen():
                                 # Login was successfull
 
                                 gs.userName = username
-                                gs.collectionId = collection_id
-                                print(f"COLLECTION IIIIDDDD:--{collection_id}--")
-                                gs.collectionName = selected_collection
+                                gs.collection = coll.Collection(collection_id)
+                                #gs.collectionName = selected_collection
                                 gs.institutionId = institution_id
                                 gs.institutionName = selected_institution 
 

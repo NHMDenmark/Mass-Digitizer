@@ -35,13 +35,10 @@ gs.databaseName = 'db'
 #    assert aspTaxonNames.tableName == 'taxonname'
 
 def test_taxonname_auto_suggest():
-    print('test_taxonname_auto_suggest()')
     found = False 
     
     choices = aspTaxonNames.handleSuggestions('pra')
-    print(len(choices))
     if(choices):
-      print(f'Got {len(choices)} taxon suggestions. ')
       for c in choices:
         if c == 'Poa pratensis': 
           found = True 
@@ -50,13 +47,11 @@ def test_taxonname_auto_suggest():
     assert found
 
 """ def test_storage_auto_suggest():
-    print('test_storage_auto_suggest()')
     found = False 
     
     choices = aspStorage.handleSuggestions('Box')
 
     if choices:
-      print(f'Got {len(choices)} storage suggestions. ')
       for c in choices:
         if c['fullname'] == 'Natural History Museum of Denmark | Priorparken | Herbarium C: Danish Vascular Plant Collection | Box 1': 
           found = True 

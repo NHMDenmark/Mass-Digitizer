@@ -398,7 +398,6 @@ class Specimen(Model):
         else:
             # Empty record
             self.taxonNameId = 0
-        print(f'family name:_:{self.familyName}--', self.familyName)
         return self.taxonNameId
 
     def getTaxonRankname(self, rankid):
@@ -551,7 +550,6 @@ class Specimen(Model):
     #         containerType = self.containername
     #         containerType = containerType.replace(" ", "")
     #         concatMultispecimen = f"{containerType}{self.multiSpecimen}"
-    #         print('-----spec multispec. :', concatMultispecimen)
     #         return concatMultispecimen
 
     def __str__(self):

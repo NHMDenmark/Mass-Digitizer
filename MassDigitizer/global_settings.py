@@ -22,6 +22,7 @@ db_in_memory = False
 # session 
 institutionId = 0
 institutionName = ''
+collection = None
 collectionId = 0
 collectionName = ''
 firstName = ''

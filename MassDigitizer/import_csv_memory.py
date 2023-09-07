@@ -46,7 +46,6 @@ def make_taxonomylite(hc):
         cur.executemany(insert_records, to_table)
         con.commit()
         end = time.time()
-        print('exe time for SQLite "botany" taxonomy build is= ', end - start)
         select = "SELECT * FROM botany LIMIT 10;"
         rows = cur.execute(select).fetchall()
 
