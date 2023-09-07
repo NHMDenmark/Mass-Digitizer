@@ -60,6 +60,7 @@ def buildLogger():  # moduleName):
     logger.setLevel(logging.DEBUG)
 
     logger.debug('Logging set up')
+    logger.debug('--------------')
 
 
 def getLogsPath():

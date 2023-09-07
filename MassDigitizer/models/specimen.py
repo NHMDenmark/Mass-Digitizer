@@ -56,7 +56,7 @@ class Specimen(Model):
         self.higherTaxonName = ''
         self.typeStatusName = ''
         self.typeStatusId = 0
-        self.needsRepair = False
+        self.objectCondition = False
         self.geoRegionName = ''
         self.geoRegionId = 0
         self.storageFullName = ''
@@ -134,7 +134,7 @@ class Specimen(Model):
             'storagerankName': f'"{self.storageRankName}"',
             'preptypename': f'"{self.prepTypeName}"',
             'preptypeid': f'"{self.prepTypeId}"',
-            'needsrepair': f'{self.needsRepair}',
+            'objectcondition': f'{self.objectCondition}',
             'notes': f'"{self.notes}"',
             'institutionid': f'"{self.institutionId}"',
             'institutionname': f'"{self.institutionName}"',
@@ -179,7 +179,7 @@ class Specimen(Model):
             self.taxonRankName = record['taxonrankname']
             self.typeStatusName = record['typestatusname']
             self.typeStatusId = record['typestatusid']
-            self.needsRepair = record['needsrepair']
+            self.objectCondition = record['objectcondition']
             self.geoRegionName = record['georegionname']
             self.geoRegionId = record['georegionid']
             self.storageFullName = record['storagefullname']

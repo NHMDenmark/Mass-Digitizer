@@ -62,11 +62,11 @@ class SpecimenDataEntry():
 
         # Various lists of fields to be cleared on command
         # Needs radio in the input field list
-        self.inputFieldList = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'chkdamage', 'inpNotes', 'radRadioSSO',
+        self.inputFieldList = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'chkDamage', 'inpNotes', 'radRadioSSO',
                                'radRadioMSO', 'radRadioMOS', 'inpContainerID', 'cbxGeoRegion', 'inpTaxonName',
                                'inpNHMAid', 'inpCatalogNumber', 'btnSave']
         self.inputFieldListSSO = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'inpNotes', 'inpCatalogNumber']
-        self.focusIconList = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrdamage', 'inrNotes', 'inrRadioSSO',
+        self.focusIconList = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrDamage', 'inrNotes', 'inrRadioSSO',
                               'inrRadioMSO', 'inrRadioMOS', 'inrContainerID', 'inrGeoRegion',
                               'inrTaxonName', 'inrNHMAid', 'inrCatalogNumber', 'inrSave']
         self.focusIconListSSO = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrNotes', 'inrCatalogNumber']
@@ -87,6 +87,7 @@ class SpecimenDataEntry():
         self.currentRecord = None
         self.fieldname = ''
         self.input_list = None
+        self.needsrepair = False
 
         # Create auto-suggest popup windows
         self.autoStorage = ''  # global for storage locations
@@ -157,8 +158,8 @@ class SpecimenDataEntry():
 
         damaged_specimen = [
             sg.Text('Damaged specimen:', size=(21, 1), background_color=greenArea, font=captionFont),
-            sg.Checkbox('', key="chkdamage", background_color=greenArea),
-            sg.Text(indicatorRight, pad=(7, 0), key='inrdamage', background_color=greenArea, visible=False, font=wingdingFont)
+            sg.Checkbox('', key="chkDamage", background_color=greenArea, enable_events=True),
+            sg.Text(indicatorRight, pad=(7, 0), key='inrDamage', background_color=greenArea, visible=False, font=wingdingFont)
         ]
         notes = [
             sg.Text('Notes', size=captionSize, background_color=greenArea, font=captionFont),
@@ -444,7 +445,15 @@ class SpecimenDataEntry():
                 # TypeStatus is preloaded in the Class
                 self.collobj.setTypeStatusFields(self.window[event].widget.current())
                 self.collobj.typeStatusName = self.window['cbxTypeStatus'].get()
-                self.setFieldFocus('chkdamage')
+                self.setFieldFocus('chkDamage')
+
+            elif event == "chkDamage":
+                self.needsrepair = self.window['chkDamage'].get()
+                if self.needsrepair: 
+                    self.collobj.objectCondition = "Needs repair"
+                else: 
+                    self.collobj.objectCondition = ""
+                self.setFieldFocus('inpNotes')
 
             elif (event == 'inpNotes_Edit' or event == 'inpNotes_Enter'):
                 self.collobj.notes = values['inpNotes']
@@ -464,6 +473,7 @@ class SpecimenDataEntry():
                 # self.radioSelector(values)
                 self.window['cbxGeoRegion'].set_focus()
                 self.window['inrGeoRegion'].update(visible=True)
+
             elif event == 'radRadioMOS':
                 mKey = util.getRandomNumberString()
                 MOSkey = 'MOS' + str(mKey)
@@ -474,6 +484,7 @@ class SpecimenDataEntry():
                 # self.radioSelector(values)
                 self.window['cbxGeoRegion'].set_focus()
                 self.window['inrGeoRegion'].update(visible=True)
+
             elif event == 'radRadioSSO':
                 self.window['inpContainerID'].update(value='')
                 self.collobj.containername = ''
@@ -510,7 +521,6 @@ class SpecimenDataEntry():
                 self.setFieldFocus('inpTaxonName')
 
             elif event == 'inpTaxonName':
-
                 keyStrokes = values['inpTaxonName'].rstrip("\n")
                 if "\t" in keyStrokes:
                     # self.autoTrigger = 'Done'
@@ -529,16 +539,12 @@ class SpecimenDataEntry():
                     self.window['inpCatalogNumber'].set_focus()
 
             elif event == 'inpNHMAid_Enter':
-
                 taxonomicFullName = self.window['inpNHMAid'].get()
                 fullName = lookup.getFullName(taxonomicFullName)
                 self.window['inpTaxonName'].update(fullName)
 
             elif event == 'inpCatalogNumber_Enter':
                 # Respond to barcode being entered or scanned by setting corresponding field value
-
-                validation = ''
-                formRecId = self.window['txtRecordID']
                 barcode = values['inpCatalogNumber']
                 self.collobj.catalogNumber = barcode
 
@@ -721,7 +727,7 @@ class SpecimenDataEntry():
 
         try:
             result = ''
-            catalogNumber = record['catalognumber'].replace('"', '')
+            catalogNumber = record['catalognumber'].replace('"', '') # TODO Explain necessity of this
             self.collobj.catalogNumber = catalogNumber
             
             # Make sure everything is read on immediate barcode scan
@@ -740,7 +746,7 @@ class SpecimenDataEntry():
                 self.collobj.taxonSpid = taxonTableRecord['spid']
                 self.collobj.parentFullName = taxonTableRecord['parentfullname']
 
-            self.collobj.needsRepair = self.window['chkdamage'].get()
+            self.needsrepair = self.window['chkDamage'].get()
 
             # Ensure that container properties are picked up on go-back operations
             containerType = record['containertype']
@@ -793,7 +799,7 @@ class SpecimenDataEntry():
                 self.clearNonStickyFields(self.nonStickyFields)
             else:
                 result = 'validation error'
-                #sg.popup_error("Did not save due to validation error(s)!")
+                sg.popup_error("Did not save due to validation error(s)!")
 
         except Exception as e:
             errorMessage = f"Error occurred attempting to save specimen: {e}"
@@ -993,8 +999,6 @@ class SpecimenDataEntry():
             self.collobj.id = record['id']
             self.collobj.catalogNumber = record['catalognumber']
 
-    needsrepair = None
-
     def fillFormFields(self, record):
         """
         Function for setting form fields from specimen data record
@@ -1005,13 +1009,11 @@ class SpecimenDataEntry():
         self.window['cbxPrepType'].update(record['preptypename'])
         self.window['cbxTypeStatus'].update(record['typestatusname'])
 
-        if record['needsrepair'] == 'False':
-            needsrepair = False
-        elif record['needsrepair'] == 'True':
-            needsrepair = True
+        if record['objectcondition'] == 'Needs repair':
+            self.needsrepair = True
         else:
-            needsrepair = False
-        self.window['chkdamage'].update(needsrepair)
+            self.needsrepair = False
+        self.window['chkDamage'].update(self.needsrepair)
         self.window['inpNotes'].update(record['notes'])
         if record['containername']:  # If not strip() is applied to none
             self.window['inpContainerID'].update(record['containername'].strip())
@@ -1122,7 +1124,7 @@ class SpecimenDataEntry():
             validation = True
         else:
             validation = False 
-            sg.popup_error("Catalog number has the wrong format!")
+            #sg.popup_error("Catalog number has the wrong format!")
 
         return validation
 
