@@ -25,6 +25,13 @@ The barcode is now ready for scanning. From there the record is ready to be 'sav
 Should the case be that a taxon name is inputted which is *not* contained in the taxonomic spine - a pop-up window appears in which the novel name can be inputted. There follows a similar event where the higher taxonomic name is asked for. If a higher taxon name returns suggestions (must be family rank or higher) then arrow down to the desired name and press enter.  
 If the higher taxon name is also novel, then finish typing it and tab into the Cancel button. Press the spacebar to commit and the record will be registered with a taxonomic comment in the record notes field.  
 
+##### Alternative taxonomic identifiers
+Certain collection will be using a different taxonomic name input system. For these specific cases a field "Taxonomic ID" will appear next to the main Taxonomic name input field. In this field you can add an identifier and press enter which populates the Taxonomic name field with the name corresponding to the identifier. 
+
+##### Specimen needs repair
+A checkbox for damaged specimens has been addded to the app. Label = "Damaged specimen:". This should be checked if the specimen being digitized needs repair in any way.
+
+
 #### Navigation between records  
 The "Back" and the "Forward" buttons are for paging through already entered records. You can follow the progress in the "Previous records table" near the bottom of the app. Once you go all the way back to the beginning of the records, you can press the Back-button again and the table will shoot to the top. The form will be populated by the latest (top) record. The app has a cyclical behavior in this regard.
 
