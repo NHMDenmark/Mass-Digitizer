@@ -243,9 +243,7 @@ class SpecimenDataEntry():
         lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
         adjacentRecords = self.recordSet.getAdjacentRecordList(self.tableHeaders)
         previousRecordsTable = [
-            sg.Table(values=adjacentRecords, key='tblPrevious', enable_events=False, hide_vertical_scroll=True,
-                     headings=self.tableHeaders, font=('Arial', 13), justification='left', auto_size_columns=True,
-                     max_col_width=28)]
+            sg.Table(values=adjacentRecords, key='tblPrevious', enable_events=False, hide_vertical_scroll=True,headings=self.tableHeaders, font=('Arial', 13), justification='left', auto_size_columns=True, max_col_width=28)]
 
         layout_bluearea = [broadGeo, taxonInput, barcode, [  # taxonomicPicklist,
             sg.Text('Record ID: ', key='lblRecordID', background_color='#99dcff', visible=True, size=(9, 1)),
@@ -383,10 +381,12 @@ class SpecimenDataEntry():
 
             if event is None: break  # Empty event indicates user closing window
 
+            self.window['lblError'].update('Validation error',visible=False)
+
             if self.window['radRadioSSO']:
                 self.window['inpContainerID'].update(disabled=True)
 
-            if event == 'inpStorage':
+            elif event == 'inpStorage':
                 keyStrokes = values['inpStorage']
                 # Activate autosuggest box, when more than 3 characters entered:
                 if len(keyStrokes) >= 3 and keyStrokes != 'None':
@@ -543,7 +543,7 @@ class SpecimenDataEntry():
                 # Respond to barcode being entered or scanned by setting corresponding field value
                 self.collobj.catalogNumber = values['inpCatalogNumber']
 
-                self.saveForm(self.collobj.getFieldsAsDict())
+                self.saveForm()
 
             # **** Focus Events ****
 
@@ -593,7 +593,7 @@ class SpecimenDataEntry():
                 if not record:
                     # No further record: Prepare for blank record
                     self.collobj = specimen.Specimen(self.collectionId)
-                    self.clearNonStickyFields(values)
+                    self.clearNonStickyFields()
                     self.collobj.containername = self.window['inpContainerID'].get()
                     # if current: # TODO Unsure what this line was intended for, but it caused sticky fields not being transferred when btnForwards was pressed once more than necessary
                     # Transfer data in sticky fields to new record:
@@ -626,12 +626,12 @@ class SpecimenDataEntry():
                 # Hide any error and other messages
                 self.window['lblExport'].update(visible=False)
                 self.window['lblRecordEnd'].update(visible=False)
-                self.window['lblError'].update(visible=False)
+                self.window['lblError'].update('Validation error',visible=False)
 
             elif event == 'btnSave' or event == 'btnSave_Enter':  # Should btnSave_Enter be removed?
                 # Save current specimen record to app database
                 self.collobj.catalogNumber = values['inpCatalogNumber']
-                self.saveForm(self.collobj.getFieldsAsDict())
+                self.saveForm()
 
 
             elif event == 'btnFirst':
@@ -685,7 +685,7 @@ class SpecimenDataEntry():
             if field[0:3] == 'inp':
                 self.window[field].update(background_color='#ffffff')
                 if self.window[field] == '\t':
-                    sg.popup_error('Tab characters not allowed in this field.')
+                    sg.popup_error('Tab characters not allowed in this field: ' + field)
 
         # If field name has been specified shift focus:
         if fieldName != '':
@@ -696,12 +696,10 @@ class SpecimenDataEntry():
                 indicatorName = 'inr' + fieldName[3:]
             self.window[indicatorName].update(visible=True)  # Unhide focus indicator
             if fieldName[0:3] == 'inp':
-                self.window[fieldName].update(
-                    background_color='#ffffff')  # self.highlight) # TODO Disabled until we get comboboxes to work
+                self.window[fieldName].update(background_color='#ffffff')  # self.highlight) # TODO Disabled until we get comboboxes to work
             # TODO Comboboxes won't play nice and also allow for changing background colour
             elif fieldName[0:3] == 'cbx':
-                self.window[fieldName].ttk_style.configure(self.window[fieldName].ttk_style_name,
-                                                           fieldbackground=self.highlight)
+                self.window[fieldName].ttk_style.configure(self.window[fieldName].ttk_style_name,fieldbackground=self.highlight)
 
             self.fieldInFocus = fieldName  # (Re)set name of field in focus
             self.fieldInFocusIndex = self.inputFieldList.index(fieldName)
@@ -709,7 +707,7 @@ class SpecimenDataEntry():
 
         util.logger.debug(f'Shifted focus on input field: "{fieldName}"')
 
-    def saveForm(self, record):
+    def saveForm(self):
         """
         Saving specimen data to database including validation of form input fields.
         The contents of the form input fields should have been immediately been transferred to the fields of the specimen object instance.
@@ -739,11 +737,11 @@ class SpecimenDataEntry():
             self.needsrepair = self.window['chkDamage'].get()
 
             # Ensure that container properties are picked up on go-back operations
-            containerType = record['containertype']
-            containerName = record['containername']
+            #containerType = record['containertype']
+            #containerName = record['containername']
             # Below ensures that the value in the container ID field is persisted from MSO to MSO record.
-            self.collobj.containertype = containerType
-            self.collobj.containername = containerName
+            #self.collobj.containertype = containerType
+            #self.collobj.containername = containerName
             # CONTAINER values are already taken care of in the radio button events.
 
             # Ensure  contents of notes input field are transferred to specimen object instance
@@ -768,7 +766,7 @@ class SpecimenDataEntry():
                 # Transfer data in sticky fields to new record:
                 self.setSpecimenFields()
                 # Prepare form for next new record
-                self.clearNonStickyFields(record)
+                self.clearNonStickyFields()
 
             validation = self.validateBarCode(self.collobj.catalogNumber)
             
@@ -789,7 +787,8 @@ class SpecimenDataEntry():
                 self.clearNonStickyFields(self.nonStickyFields)
             else:
                 result = 'validation error'
-                sg.popup_error("Did not save due to validation error(s)!")
+                #sg.popup_error("Did not save due to validation error(s)!")
+
 
         except Exception as e:
             errorMessage = f"Error occurred attempting to save specimen: {e}"
@@ -1029,7 +1028,7 @@ class SpecimenDataEntry():
         else:
             return storageNameValue
 
-    def clearNonStickyFields(self, values):
+    def clearNonStickyFields(self):
         """
         Function for clearing all fields that are non-sticky
         """
@@ -1038,7 +1037,7 @@ class SpecimenDataEntry():
             field.update('')
 
         # Storage location is set to "None" to represent a blank entry in the UI
-        # self.window['inpStorage'].update('None')
+        self.window['inpStorage'].update('None')
 
     def clearForm(self):
         """
@@ -1115,7 +1114,7 @@ class SpecimenDataEntry():
         else:
             validation = False 
             #sg.popup_error("Catalog number has the wrong format!")
-
+            self.window['lblError'].update('Validation error: Barcode wrong length!',visible=True)
 
         return validation
 
