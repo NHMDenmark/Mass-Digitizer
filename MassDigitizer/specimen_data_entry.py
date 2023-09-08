@@ -77,7 +77,7 @@ class SpecimenDataEntry():
         self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'inpNotes'},
                              {'inpContainerID'},
                              {'cbxGeoRegion'}, {'inpTaxonName'}, {'inpNHMAid'}]
-        self.nonStickyFields = ['inpCatalogNumber', 'txtRecordID']
+        self.nonStickyFields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage']
 
         # Global variables
         self.barcodeList = []
@@ -574,12 +574,11 @@ class SpecimenDataEntry():
                     # Otherwise get latest record, if any
                     else:
                         record = self.db.getLastRow('specimen', self.collectionId)
-                        if record:
-                            self.collobj.setFields(record)
                         # If no records at all, this may indicate an empty table
 
                 # If a record has finally been retrieved, present content in data fields
                 if record:
+                    self.collobj.setFields(record)
                     self.fillFormFields(record)
 
                     # Reload recordset and repopulate table of adjacent records
@@ -589,6 +588,8 @@ class SpecimenDataEntry():
                 # Reset focus back to first field (Storage)
                 self.setFieldFocus('inpStorage')
                 self.window['inpStorage'].update(select=True)  # Select all characters in field
+                if record['id'] != self.collobj.id:
+                    util.logLine('Record id does not match specimen id!')
 
             elif event == 'btnForward':
                 # First get current instance as record
