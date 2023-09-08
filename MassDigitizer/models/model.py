@@ -116,21 +116,20 @@ class Model:
 
         record = self.db.deleteRowOnId(self.table, self.id)
 
-    def loadPrevious(self, id):
+    def loadPrevious(self):
         """
         Function for loading previous object record data
+        on the basis of the current primary key, if any.
         CONTRACT
-           id: Primary key of current record; If 0 then latest record
            RETURNS record or None, if none retrieved
         """
+        id = self.id # primary key is encapsulated by model itself 
         if not id:
             id = 0
         else:
             id = int(id)
+
         # Construct query for extracting the previous record
-        # sql = f'''SELECT * FROM specimen s JOIN
-        #        (SELECT max(id) as mx FROM specimen s WHERE collectionid={cid})t1
-        #        ON t1.mx = s.id;'''
         sql = f'SELECT * FROM {self.table} s '
 
         # If existing record (id > 0) then fetch the one that has the highest lower id than current
@@ -140,26 +139,27 @@ class Model:
             # Blank record: Fetch the one with the highest id
             sql = sql + f"WHERE s.id = (SELECT MAX(id) FROM {self.table} WHERE s.collectionid = {self.collectionId}) "
 
-        # sql = sql + f"AND s.collectionid = {self.collectionId}" # Filter on current collection
-        sql = sql + f"AND s.collectionid = {self.collectionId}"  # Filter on current collection
-        # sql = sql + "LIMIT 1; "
+        sql = sql + f"AND s.collectionid = {self.collectionId} "  # Filter on current collection
+        #sql = sql + "LIMIT 1; "
 
         record = self.db.loadSingleRecordFromSql(sql)
         if record is not None:
             self.setFields(record)
-            return record
+        
+        return record
 
-    def loadNext(self, id):
+    def loadNext(self):
         """
         Function for loading next object record data, if any
         CONTRACT
-           id: Primary key of current record; If 0 then latest record
            RETURNS record or None, if none retrieved
         """
+        id = self.id # primary key is encapsulated by model itself
+        
+        # If existing record (id > 0) then fetch the one that has the lowest higher id than current
 
         # Construct query for extracting the previous record
         sql = f"SELECT * FROM {self.table} s "
-        # If existing record (id > 0) then fetch the one that has the lowest higher id than current
         if id > 0:
             sql = sql + f"WHERE s.id > {id} "
         else:
@@ -169,7 +169,7 @@ class Model:
 
         sql = sql + f" AND s.collectionid = {self.collectionId}"  # Filter on current collection
         # Sort on ID to get the latest record out
-        sql = sql + " ORDER BY s.id LIMIT 1 "
+        sql = sql + " ORDER BY s.id LIMIT 1;"
         record = self.db.loadSingleRecordFromSql(sql)
         record
         if record is not None:
@@ -183,8 +183,7 @@ class Model:
             fullname (String)   : fullname field to searched on
             collection_id (Int) : primary key of collection to be filtered on
         """
-        records = self.db.getRowsOnFilters(self.table, {'fullname': f'={fullname}', 'collectionid': f'{collection_id}'},
-                                           1)
+        records = self.db.getRowsOnFilters(self.table, {'fullname': f'={fullname}', 'collectionid': f'{collection_id}'},1)
         if len(records) > 0:
             record = records[0]
             self.setFields(record)

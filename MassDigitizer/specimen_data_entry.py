@@ -207,9 +207,7 @@ class SpecimenDataEntry():
             sg.Text('Taxonomic name:     ', size=captionSize, background_color=blueArea, text_color='black',
                     font=captionFont),
             # sg.Text(indicatorLeft, key='inlTaxonName', text_color='black', background_color=blueArea, visible=True, font=wingdingFont),
-            sg.Multiline('', size=blueSize, key='inpTaxonName', rstrip=False, no_scrollbar=True, text_color='black',
-                         background_color='white',
-                         font=fieldFont, enable_events=True, pad=((5, 0), (0, 0))),
+            sg.Multiline('', size=blueSize, key='inpTaxonName', rstrip=False, no_scrollbar=True, text_color='black', background_color='white',font=fieldFont, enable_events=True, pad=((5, 0), (0, 0))),
 
             sg.Text(indicatorRight, key='inrTaxonName', background_color=blueArea, visible=True, font=wingdingFont),
             sg.Text('Taxonomic ID:', key='txtNHMAid', font=captionFont, background_color=blueArea, text_color='black',
@@ -217,8 +215,7 @@ class SpecimenDataEntry():
             sg.InputText('', size=(7, 1), key='inpNHMAid', text_color='black', background_color='white', font=fieldFont,
                          enable_events=True, visible=False),
             sg.Text(indicatorRight, key='inrNHMAid', background_color=blueArea, visible=True, font=wingdingFont),
-            sg.Text('No further record to go back to!', key='lblRecordEnd', visible=False, background_color="#ff5588",
-                    border_width=3)
+            sg.Text('No further record to go back to!', key='lblRecordEnd', visible=False, background_color="#ff5588", border_width=3)
         ]
 
         barcode = [
@@ -227,8 +224,8 @@ class SpecimenDataEntry():
             # sg.Text(indicatorLeft, key='inlCatalogNumber', text_color='black', background_color=blueArea, visible=True, font=wingdingFont),
             sg.InputText('', key='inpCatalogNumber', size=blueSize, text_color='black', background_color='white',
                          font=fieldFont, enable_events=True),
-            sg.Text(indicatorRight, key='inrCatalogNumber', background_color=blueArea, visible=False,
-                    font=wingdingFont),
+            sg.Text(indicatorRight, key='inrCatalogNumber', background_color=blueArea, visible=False,font=wingdingFont),
+            sg.Text('Validation Error', key='lblError', visible=False, background_color="#ff5588", border_width=3)
         ]
 
         # statusLabel = [sg.Text('Specimen record has been saved', font=('Arial',20),size=(20,10),justification='center',background_color='#4f280a',text_color= 'yellow',key='texto')]
@@ -257,13 +254,13 @@ class SpecimenDataEntry():
             sg.Button('SAVE', key="btnSave", button_color='seagreen', size=9),
             sg.Text('', key='inrSave', background_color=blueArea, visible=True),
             sg.StatusBar('', relief=None, size=(5, 1), background_color=blueArea),
-            # sg.Button('First record', key="btnFirst", button_color='white on black',  font=('Arial', 8)),
-            # sg.Button('Last record',  key="btnLast",  button_color='black on yellow', font=('Arial', 8)),
+            #sg.Button('First record', key="btnFirst", button_color='white on black',  font=('Arial', 8)),
+            #sg.Button('Last record',  key="btnLast",  button_color='black on yellow', font=('Arial', 8)),
             sg.Button('GO BACK', key="btnBack", button_color='#8b0000'),
             sg.Button('GO FORWARDS', key='btnForward', button_color=('black', 'LemonChiffon2')),
             sg.Button('CLEAR FORM', key='btnClear', button_color='black on white'),
-            # sg.Button('Export data', key='btnExport', button_color='royal blue'),  # Export data should be a backend feature says Pip
-            # sg.Button('Dismiss', key='btnDismiss', button_color='white on black'), # Notifications not needed says Pip
+            #sg.Button('Export data', key='btnExport', button_color='royal blue'),  # Export data should be a backend feature says Pip
+            #sg.Button('Dismiss', key='btnDismiss', button_color='white on black'), # Notifications not needed says Pip
         ], lblExport, previousRecordsTable]
 
         # Grey Area (Header) elements
@@ -364,8 +361,7 @@ class SpecimenDataEntry():
                 eventName = '<FocusIn>'
             elif Name[0:3] == 'cbx':
                 eventName = '<Click>'
-            else:
-                break
+            else: break
             self.window[Name].bind(eventName, '_FocusIn')
         self.window['inpNotes'].bind('<FocusOut>', '_FocusOut')
 
@@ -545,8 +541,7 @@ class SpecimenDataEntry():
 
             elif event == 'inpCatalogNumber_Enter':
                 # Respond to barcode being entered or scanned by setting corresponding field value
-                barcode = values['inpCatalogNumber']
-                self.collobj.catalogNumber = barcode
+                self.collobj.catalogNumber = values['inpCatalogNumber']
 
                 self.saveForm(self.collobj.getFieldsAsDict())
 
@@ -563,8 +558,8 @@ class SpecimenDataEntry():
 
             elif event == 'btnBack':
                 # Fetch previous specimen record data on basis of current record ID, if any
-                recID = self.window['txtRecordID'].get()
-                record = self.collobj.loadPrevious(recID)
+                #recID = self.window['txtRecordID'].get()
+                record = self.collobj.loadPrevious()
 
                 # If no further record back, retrieve current record (if any) or last record (if any)
                 if not record:
@@ -593,26 +588,8 @@ class SpecimenDataEntry():
 
             elif event == 'btnForward':
                 # First get current instance as record
-                currentRecordId = 0
-                self.window['inpContainerID'].update(disabled=True)
-                if len(self.window['txtRecordID'].get()) > 1:
-                    # Fetch next specimen record data on basis of current record ID, if any
-                    currentRecordId = int(self.window['txtRecordID'].get())
-                if currentRecordId:
-                    record = self.collobj.loadNext(currentRecordId)
-                if record:
-                    if record['containername']:
-                        # containerName = util.readMultispecimenID(record).strip()
-                        containerName = record['containername']
-                        if containerName == 'Multiple specimens on one object':
-                            self.window.Element('radRadioMSO').Update(value=True)
-                            self.window['inpContainerID'].update(disabled=False)
-                        elif containerName == 'One specimen covering multiple objects':
-                            self.window.Element('radRadioMOS').update(value=True)
-                            self.window['inpContainerID'].update(disabled=False)
-                    else:
-                        self.window.Element('radRadioSSO').update(value=True)
-                # If a record has finally been retrieved, present content in data fields
+                record = self.collobj.loadNext()
+                
                 if not record:
                     # No further record: Prepare for blank record
                     self.collobj = specimen.Specimen(self.collectionId)
@@ -622,9 +599,11 @@ class SpecimenDataEntry():
                     # Transfer data in sticky fields to new record:
                     self.setSpecimenFields()
                 else:
-                    # Fill form from record data
+                    # If a record has finally been retrieved, present content in data fields
+                    self.collobj.setFields(record)
                     self.fillFormFields(record)
-                    self.recordSet = recordset.RecordSet(self.collectionId, 3, specimen_id=currentRecordId)
+                    self.setContainerFields(record)
+                    self.recordSet = recordset.RecordSet(self.collectionId, 3, specimen_id=self.collobj.id)
                     self.recordSet.reload(record)
                     self.window['tblPrevious'].update(self.recordSet.getAdjacentRecordList(self.tableHeaders))
 
@@ -647,13 +626,11 @@ class SpecimenDataEntry():
                 # Hide any error and other messages
                 self.window['lblExport'].update(visible=False)
                 self.window['lblRecordEnd'].update(visible=False)
+                self.window['lblError'].update(visible=False)
 
             elif event == 'btnSave' or event == 'btnSave_Enter':  # Should btnSave_Enter be removed?
                 # Save current specimen record to app database
-                catalognumber = self.window['inpCatalogNumber'].get()
-                formRecId = self.window['txtRecordID']
-                # Validation follows
-
+                self.collobj.catalogNumber = values['inpCatalogNumber']
                 self.saveForm(self.collobj.getFieldsAsDict())
 
 
@@ -678,6 +655,19 @@ class SpecimenDataEntry():
                 break
 
         self.window.close()
+
+    def setContainerFields(self, record):
+        if record['containername']:
+                        # containerName = util.readMultispecimenID(record).strip()
+            containerName = record['containername']
+            if containerName == 'Multiple specimens on one object':
+                self.window.Element('radRadioMSO').Update(value=True)
+                self.window['inpContainerID'].update(disabled=False)
+            elif containerName == 'One specimen covering multiple objects':
+                self.window.Element('radRadioMOS').update(value=True)
+                self.window['inpContainerID'].update(disabled=False)
+        else:
+            self.window.Element('radRadioSSO').update(value=True)
 
     def setFieldFocus(self, fieldName):
         """
@@ -728,11 +718,10 @@ class SpecimenDataEntry():
 
         try:
             result = ''
-            catalogNumber = record['catalognumber'].replace('"', '') # TODO Explain necessity of this
-            self.collobj.catalogNumber = catalogNumber
+            #catalogNumber = record['catalognumber'].replace('"', '') # TODO Explain necessity of this
+            #self.collobj.catalogNumber = catalogNumber
             
             # Make sure everything is read on immediate barcode scan
-
             taxonFullName = self.window['inpTaxonName'].get()
             taxonFullName = taxonFullName.rstrip()  # barcode scanner adds newline
             self.collobj.taxonFullName = taxonFullName
@@ -781,7 +770,7 @@ class SpecimenDataEntry():
                 # Prepare form for next new record
                 self.clearNonStickyFields(record)
 
-            validation = self.validateBarCode(catalogNumber)
+            validation = self.validateBarCode(self.collobj.catalogNumber)
             
             if validation:
                 savedRecord = self.collobj.save()
@@ -1127,6 +1116,7 @@ class SpecimenDataEntry():
             validation = False 
             #sg.popup_error("Catalog number has the wrong format!")
 
+
         return validation
 
     def verifyCatalogNumber(self, catalogNumber):
@@ -1136,3 +1126,4 @@ class SpecimenDataEntry():
         else:
             e = "Barcode/catalog number contains non numeric symbols."
             sg.PopupError(e)
+            
