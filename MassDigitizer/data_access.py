@@ -417,18 +417,16 @@ class DataAccess():
         """
         Retrieve single record from database based on sql query
         """
-            
+        record = None
         util.logger.debug(sql)
         try:
             results = self.executeSqlStatement(sql)
         except Exception as e:
             util.logger.error(f"The SQL could not be executed - {e}\n Please check the Statement: \n{sql}")
-            return None
 
         # If results returned then pick first one, otherwise set record to nothing 
         if len(results) > 0:
             record = results.pop()
-            self.id = record[0]
         else: 
             record = None
         
