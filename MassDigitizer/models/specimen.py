@@ -56,7 +56,7 @@ class Specimen(Model):
         self.higherTaxonName = ''
         self.typeStatusName = ''
         self.typeStatusId = 0
-        self.objectCondition = False
+        self.objectCondition = ''
         self.geoRegionName = ''
         self.geoRegionId = 0
         self.storageFullName = ''
