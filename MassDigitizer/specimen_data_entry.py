@@ -51,7 +51,6 @@ class SpecimenDataEntry():
         self.collectionId = collection_id  # Set collection Id
         self.collection = coll.Collection(collection_id)
         self.window = None  # Create class level instance of window object
-        self.values_reuse = None
         self.db = data_access.DataAccess(gs.databaseName)  # Instantiate database access module
         self.collobj = specimen.Specimen(collection_id)  # Create blank specimen record instance
 
@@ -62,21 +61,12 @@ class SpecimenDataEntry():
 
         # Various lists of fields to be cleared on command
         # Needs radio in the input field list
-        self.inputFieldList = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'chkDamage', 'inpNotes', 'radRadioSSO',
-                               'radRadioMSO', 'radRadioMOS', 'inpContainerID', 'cbxGeoRegion', 'inpTaxonName',
-                               'inpNHMAid', 'inpCatalogNumber', 'btnSave']
+        self.inputFieldList = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'chkDamage', 'inpNotes', 'radRadioSSO', 'radRadioMSO', 'radRadioMOS', 'inpContainerID', 'cbxGeoRegion', 'inpTaxonName', 'inpNHMAid', 'inpCatalogNumber', 'btnSave']
         self.inputFieldListSSO = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'inpNotes', 'inpCatalogNumber']
-        self.focusIconList = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrDamage', 'inrNotes', 'inrRadioSSO',
-                              'inrRadioMSO', 'inrRadioMOS', 'inrContainerID', 'inrGeoRegion',
-                              'inrTaxonName', 'inrNHMAid', 'inrCatalogNumber', 'inrSave']
+        self.focusIconList = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrDamage', 'inrNotes', 'inrRadioSSO', 'inrRadioMSO', 'inrRadioMOS', 'inrContainerID', 'inrGeoRegion', 'inrTaxonName', 'inrNHMAid', 'inrCatalogNumber', 'inrSave']
         self.focusIconListSSO = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrNotes', 'inrCatalogNumber']
-        self.clearingList = ['inpStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'inpNotes',
-                             'inpContainerID', 'cbxGeoRegion', 'inpTaxonName', 'inpNHMAid', 'inpCatalogNumber',
-                             'txtRecordID'
-                             ]
-        self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'inpNotes'},
-                             {'inpContainerID'},
-                             {'cbxGeoRegion'}, {'inpTaxonName'}, {'inpNHMAid'}]
+        self.clearingList = ['inpStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'inpNotes','inpContainerID', 'cbxGeoRegion', 'inpTaxonName', 'inpNHMAid', 'inpCatalogNumber','txtRecordID']
+        self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'inpNotes'},{'inpContainerID'},{'cbxGeoRegion'}, {'inpTaxonName'}, {'inpNHMAid'}]
         self.nonStickyFields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage']
 
         # Global variables
@@ -84,7 +74,6 @@ class SpecimenDataEntry():
         self.notes = ''  # Notes for access in autoSuggest_popup
         self.fieldInFocus = ''  # Stores name of field currently in focus
         self.fieldInFocusIndex = -1  # Stores list index of field currently in focus
-        self.currentRecord = None
         self.fieldname = ''
         self.input_list = None
         self.needsrepair = False
@@ -195,55 +184,42 @@ class SpecimenDataEntry():
 
         # Blue Area elements
         broadGeo = [
-            sg.Text('Broad geographic region:', size=captionSize, background_color=blueArea, text_color='black',
-                    font=captionFont),
+            sg.Text('Broad geographic region:', size=captionSize, background_color=blueArea, text_color='black', font=captionFont),
             # sg.Text(indicatorLeft, key='inlGeoRegion', text_color='black', background_color=blueArea, visible=True, font=wingdingFont),
-            sg.Combo(util.convert_dbrow_list(self.collobj.geoRegions), key='cbxGeoRegion', size=blueSize,
-                     text_color='black', background_color='white', font=fieldFont, readonly=True, enable_events=True),
+            sg.Combo(util.convert_dbrow_list(self.collobj.geoRegions), key='cbxGeoRegion', size=blueSize, text_color='black', background_color='white', font=fieldFont, readonly=True, enable_events=True),
             sg.Text(indicatorRight, key='inrGeoRegion', background_color=blueArea, visible=False, font=wingdingFont)
         ]
 
         taxonInput = [
-            sg.Text('Taxonomic name:     ', size=captionSize, background_color=blueArea, text_color='black',
-                    font=captionFont),
+            sg.Text('Taxonomic name:     ', size=captionSize, background_color=blueArea, text_color='black',font=captionFont),
             # sg.Text(indicatorLeft, key='inlTaxonName', text_color='black', background_color=blueArea, visible=True, font=wingdingFont),
             sg.Multiline('', size=blueSize, key='inpTaxonName', rstrip=False, no_scrollbar=True, text_color='black', background_color='white',font=fieldFont, enable_events=True, pad=((5, 0), (0, 0))),
 
             sg.Text(indicatorRight, key='inrTaxonName', background_color=blueArea, visible=True, font=wingdingFont),
-            sg.Text('Taxonomic ID:', key='txtNHMAid', font=captionFont, background_color=blueArea, text_color='black',
-                    visible=False),
-            sg.InputText('', size=(7, 1), key='inpNHMAid', text_color='black', background_color='white', font=fieldFont,
-                         enable_events=True, visible=False),
+            sg.Text('Taxonomic ID:', key='txtNHMAid', font=captionFont, background_color=blueArea, text_color='black', visible=False),
+            sg.InputText('', size=(7, 1), key='inpNHMAid', text_color='black', background_color='white', font=fieldFont, enable_events=True, visible=False),
             sg.Text(indicatorRight, key='inrNHMAid', background_color=blueArea, visible=True, font=wingdingFont),
             sg.Text('No further record to go back to!', key='lblRecordEnd', visible=False, background_color="#ff5588", border_width=3)
         ]
 
         barcode = [
-            sg.Text('Barcode:', size=captionSize, background_color=blueArea, enable_events=True, text_color='black',
-                    font=captionFont),
+            sg.Text('Barcode:', size=captionSize, background_color=blueArea, enable_events=True, text_color='black', font=captionFont),
             # sg.Text(indicatorLeft, key='inlCatalogNumber', text_color='black', background_color=blueArea, visible=True, font=wingdingFont),
-            sg.InputText('', key='inpCatalogNumber', size=blueSize, text_color='black', background_color='white',
-                         font=fieldFont, enable_events=True),
+            sg.InputText('', key='inpCatalogNumber', size=blueSize, text_color='black', background_color='white', font=fieldFont, enable_events=True),
             sg.Text(indicatorRight, key='inrCatalogNumber', background_color=blueArea, visible=False,font=wingdingFont),
             sg.Text('Validation Error', key='lblError', visible=False, background_color="#ff5588", border_width=3)
         ]
 
         # statusLabel = [sg.Text('Specimen record has been saved', font=('Arial',20),size=(20,10),justification='center',background_color='#4f280a',text_color= 'yellow',key='texto')]
 
-        self.headers = ['id', 'spid', 'catalognumber', 'containertype', 'containername', 'taxonfullname', 'taxonname',
-                        'taxonnameid',
-                        'taxonspid', 'highertaxonname', 'preptypename', 'typestatusname', 'typestatusid',
-                        'georegionname',
-                        'georegionid', 'storagefullname', 'storagename']  # TODO Not currently used
-        self.tableHeaders = ['id', 'catalognumber', 'taxonfullname', 'containertype', 'georegionname',
-                             'storagename']  # Headers for previousRecordsTable
+        self.tableHeaders = ['id', 'catalognumber', 'taxonfullname', 'containertype', 'georegionname','storagename']  # Headers for previousRecordsTable
 
         lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
 
         lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
         adjacentRecords = self.recordSet.getAdjacentRecordList(self.tableHeaders)
         previousRecordsTable = [
-            sg.Table(values=adjacentRecords, key='tblPrevious', enable_events=False, hide_vertical_scroll=True,headings=self.tableHeaders, font=('Arial', 13), justification='left', auto_size_columns=True, max_col_width=28)]
+            sg.Table(values=adjacentRecords, key='tblPrevious', enable_events=False, hide_vertical_scroll=True,headings=self.tableHeaders, font=('Arial', 13), justification='left', auto_size_columns=True, max_col_width=28, select_mode=sg.TABLE_SELECT_MODE_NONE)]
 
         layout_bluearea = [broadGeo, taxonInput, barcode, [  # taxonomicPicklist,
             sg.Text('Record ID: ', key='lblRecordID', background_color='#99dcff', visible=True, size=(9, 1)),
@@ -365,8 +341,7 @@ class SpecimenDataEntry():
 
     def main(self):
 
-        self.window['inpStorage'].update(
-            select=True)  # Select all on field to enable overwriting pre-filled "None" placeholder
+        self.window['inpStorage'].update(select=True)  # Select all on field to enable overwriting pre-filled "None" placeholder
         self.setFieldFocus('inpStorage')  # Set focus on storage field
         previous3records = self.recordSet.getAdjacentRecordList(self.tableHeaders)
         self.window['tblPrevious'].update(values=previous3records)  
@@ -375,63 +350,17 @@ class SpecimenDataEntry():
             # Main loop going through User Interface (UI) events
 
             event, values = self.window.Read()  # Get UI event values
-            self.values_reuse = values
-
             util.logger.debug(f'events: {event} | {values}')
 
             if event is None: break  # Empty event indicates user closing window
 
             self.window['lblError'].update('Validation error',visible=False)
 
-            if self.window['radRadioSSO']:
-                self.window['inpContainerID'].update(disabled=True)
-
-            elif event == 'inpStorage':
+            if event == 'inpStorage':
                 keyStrokes = values['inpStorage']
                 # Activate autosuggest box, when more than 3 characters entered:
                 if len(keyStrokes) >= 3 and keyStrokes != 'None':
                     self.handleStorageInput(values['inpStorage'])
-
-            elif event == 'Tab':
-
-                # When tabbing, find the next field in the sequence and set focus on that field
-
-                if (self.fieldInFocusIndex >= 0):
-                    # Increment index of field in focus unless it reached the end
-
-                    if self.fieldInFocusIndex < len(self.inputFieldList) - 1:
-                        fieldIndex = self.fieldInFocusIndex + 1
-
-                    else:
-                        fieldIndex = 0  # End of sequence: Loop around to first field
-
-                    fieldName = self.inputFieldList[fieldIndex]
-                    # if len(self.window[fieldName].get()) < 1: TODO for version with optimized behavior for tabbing.
-                self.setFieldFocus(fieldName)
-
-                # self.tabToInputField(1) # Move to next input field  # TODO common method for the above lines?
-
-            elif event == 'Shift-Tab':
-                # When tabbing, find the next field in the sequence and set focus on that field
-
-                if self.fieldInFocusIndex >= 0:
-                    # Increment index of field in focus unless it reached the end
-
-                    if self.fieldInFocusIndex > 0:
-                        fieldIndex = self.fieldInFocusIndex - 1
-
-                    else:
-                        fieldIndex = len(self.inputFieldList) - 1  # Beginning of sequence: Loop around to last field
-
-                    fieldName = self.inputFieldList[fieldIndex]
-
-                    self.setFieldFocus(fieldName)
-
-                # self.tabToInputField(-1) # Move to preceding input field # TODO common method for the above lines?
-
-            elif event.endswith('_Tab'):
-                # TODO Re-evaluate the need for this event originally set for inpTaxonName and inpNotes
-                util.logger.debug(f'field {event[0:-4]} tabbed')
 
             elif event == 'cbxPrepType':
                 self.collobj.setPrepTypeFields(self.window[event].widget.current())
@@ -458,7 +387,7 @@ class SpecimenDataEntry():
             elif event == 'inpNotes_FocusOut':
                 self.collobj.notes = values['inpNotes']
 
-            if event == 'radRadioMSO':
+            elif event == 'radRadioMSO':
                 mKey = util.getRandomNumberString()
 
                 MSOkey = 'MSO' + str(mKey)
@@ -594,8 +523,6 @@ class SpecimenDataEntry():
                     # No further record: Prepare for blank record
                     self.collobj = specimen.Specimen(self.collectionId)
                     self.clearNonStickyFields()
-                    self.collobj.containername = self.window['inpContainerID'].get()
-                    # if current: # TODO Unsure what this line was intended for, but it caused sticky fields not being transferred when btnForwards was pressed once more than necessary
                     # Transfer data in sticky fields to new record:
                     self.setSpecimenFields()
                 else:
@@ -633,7 +560,6 @@ class SpecimenDataEntry():
                 self.collobj.catalogNumber = values['inpCatalogNumber']
                 self.saveForm()
 
-
             elif event == 'btnFirst':
                 # Go to first record in db table
                 #     self.getFirstOrLastRecord(position='first')
@@ -649,16 +575,59 @@ class SpecimenDataEntry():
                 #     self.getFirstOrLastRecord(position='newest')
                 pass
 
-            # *** Close window Event
+            elif event == 'Tab':
 
+                # When tabbing, find the next field in the sequence and set focus on that field
+
+                if (self.fieldInFocusIndex >= 0):
+                    # Increment index of field in focus unless it reached the end
+
+                    if self.fieldInFocusIndex < len(self.inputFieldList) - 1:
+                        fieldIndex = self.fieldInFocusIndex + 1
+
+                    else:
+                        fieldIndex = 0  # End of sequence: Loop around to first field
+
+                    fieldName = self.inputFieldList[fieldIndex]
+                    # if len(self.window[fieldName].get()) < 1: TODO for version with optimized behavior for tabbing.
+                self.setFieldFocus(fieldName)
+
+                # self.tabToInputField(1) # Move to next input field  # TODO common method for the above lines?
+
+            elif event == 'Shift-Tab':
+                # When tabbing, find the next field in the sequence and set focus on that field
+
+                if self.fieldInFocusIndex >= 0:
+                    # Increment index of field in focus unless it reached the end
+
+                    if self.fieldInFocusIndex > 0:
+                        fieldIndex = self.fieldInFocusIndex - 1
+                    else:
+                        fieldIndex = len(self.inputFieldList) - 1  # Beginning of sequence: Loop around to last field
+
+                    fieldName = self.inputFieldList[fieldIndex]
+
+                    self.setFieldFocus(fieldName)
+
+                # self.tabToInputField(-1) # Move to preceding input field # TODO common method for the above lines?
+
+            #elif event.endswith('_Tab'):
+                # TODO Re-evaluate the need for this event originally set for inpTaxonName and inpNotes
+            #    util.logger.debug(f'field {event[0:-4]} tabbed')
+
+            # *** Close window Event
             elif event == sg.WINDOW_CLOSED:
                 break
+            
+            # TODO Explain or remove below: 
+            #if self.window['radRadioSSO']:
+            #    self.window['inpContainerID'].update(disabled=True)
 
         self.window.close()
 
     def setContainerFields(self, record):
         if record['containername']:
-                        # containerName = util.readMultispecimenID(record).strip()
+            #containerName = util.readMultispecimenID(record).strip()
             containerName = record['containername']
             if containerName == 'Multiple specimens on one object':
                 self.window.Element('radRadioMSO').Update(value=True)
@@ -717,8 +686,7 @@ class SpecimenDataEntry():
         try:
             result = ''
             #catalogNumber = record['catalognumber'].replace('"', '') # TODO Explain necessity of this
-            #self.collobj.catalogNumber = catalogNumber
-            
+
             # Make sure everything is read on immediate barcode scan
             taxonFullName = self.window['inpTaxonName'].get()
             taxonFullName = taxonFullName.rstrip()  # barcode scanner adds newline
@@ -734,19 +702,6 @@ class SpecimenDataEntry():
                 self.collobj.taxonSpid = taxonTableRecord['spid']
                 self.collobj.parentFullName = taxonTableRecord['parentfullname']
 
-            self.needsrepair = self.window['chkDamage'].get()
-
-            # Ensure that container properties are picked up on go-back operations
-            #containerType = record['containertype']
-            #containerName = record['containername']
-            # Below ensures that the value in the container ID field is persisted from MSO to MSO record.
-            #self.collobj.containertype = containerType
-            #self.collobj.containername = containerName
-            # CONTAINER values are already taken care of in the radio button events.
-
-            # Ensure  contents of notes input field are transferred to specimen object instance
-            self.collobj.notes = self.window['inpNotes'].Get()
-
             recordIdFromForm = self.window['txtRecordID'].get()
             self.collobj.id
 
@@ -754,7 +709,6 @@ class SpecimenDataEntry():
                 newRecord = False
             else:
                 newRecord = True
-            # All checks out; Save specimen
 
             # self.window['radRadioMOS'].reset_group()
             # self.window['radRadioSSO'].update(value=False)
@@ -768,9 +722,8 @@ class SpecimenDataEntry():
                 # Prepare form for next new record
                 self.clearNonStickyFields()
 
-            validation = self.validateBarCode(self.collobj.catalogNumber)
-            
-            if validation:
+            if self.validateBarCode(self.collobj.catalogNumber):
+                # All checks out; Save specimen
                 savedRecord = self.collobj.save()
                 recs3 = self.recordSet.getAdjacentRecordList(self.tableHeaders)
                 self.window['tblPrevious'].update(recs3)
@@ -784,11 +737,10 @@ class SpecimenDataEntry():
                 result = "Successfully saved specimen record."
 
                 util.logger.info(f'{result} : {previousRecordId} - {savedRecord}')
-                self.clearNonStickyFields(self.nonStickyFields)
+                self.clearNonStickyFields()
             else:
                 result = 'validation error'
                 #sg.popup_error("Did not save due to validation error(s)!")
-
 
         except Exception as e:
             errorMessage = f"Error occurred attempting to save specimen: {e}"
@@ -916,11 +868,12 @@ class SpecimenDataEntry():
         self.collobj.setPrepTypeFields(self.window['cbxPrepType'].widget.current())
         self.collobj.setTypeStatusFields(self.window['cbxTypeStatus'].widget.current())
         self.collobj.notes = self.window['inpNotes'].get()
-        # self.collobj.multiSpecimen = self.window['inpMultiSpecimen'].get()
+        self.collobj.containername = self.window['inpContainerID'].get()
         self.collobj.setGeoRegionFields(self.window['cbxGeoRegion'].widget.current())
         taxonFullName = self.window['inpTaxonName'].get()
         taxonFullName = taxonFullName.rstrip()
         self.collobj.setTaxonNameFields(self.getTaxonNameRecord(taxonFullName))
+        
         # Include non-sticky fields usually in case of synchronizing an existing record
         if not stickyFieldsOnly:
             txtRecordId = self.window['txtRecordID'].get()
