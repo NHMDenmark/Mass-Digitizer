@@ -45,8 +45,6 @@ class Specimen(Model):
         self.apiname = 'collectionobject'
         self.id = 0
         self.catalogNumber = ''
-        self.containername = ''
-        self.containertype = ''
         self.taxonFullName = ''
         self.taxonName = ''
         self.taxonNameId = 0
@@ -66,6 +64,8 @@ class Specimen(Model):
         self.prepTypeName = ''
         self.prepTypeId = 0
         self.notes = ''
+        self.containername = ''
+        self.containertype = ''
         self.institutionId = gs.institutionId  # self.db.getRowOnId('collection',collection_id)['institutionid']
         self.institutionName = gs.institutionName
         self.collectionId = collection_id
@@ -73,11 +73,9 @@ class Specimen(Model):
         self.collection = coll.Collection(collection_id)
         self.userName = gs.userName
         self.userId = gs.spUserId
-        # self.agentfullname   = gs.agentFullName
         self.firstName = gs.firstName
         self.middleInitial = gs.middleInitial
         self.lastName = gs.lastName
-        # self.workStation     = ''
         self.recordDateTime = str(datetime.now())
         self.exported = 0
         self.exportDateTime = ''
@@ -114,8 +112,6 @@ class Specimen(Model):
             self.containername = self.containername.strip()
         fieldsDict = {
             'catalognumber': f'{self.catalogNumber}',
-            'containername': f'"{self.containername}"',
-            'containertype': f'"{self.containertype}"',
             'taxonfullname': f'"{self.taxonFullName}"',
             'taxonname': f'"{self.taxonName}"',
             'taxonnameid': f'"{self.taxonNameId}"',
@@ -136,6 +132,8 @@ class Specimen(Model):
             'preptypeid': f'"{self.prepTypeId}"',
             'objectcondition': f'{self.objectCondition}',
             'notes': f'"{self.notes}"',
+            'containername': f'"{self.containername}"',
+            'containertype': f'"{self.containertype}"',
             'institutionid': f'"{self.institutionId}"',
             'institutionname': f'"{self.institutionName}"',
             'collectionid': f'"{self.collectionId}"',
@@ -189,6 +187,8 @@ class Specimen(Model):
             self.prepTypeName = record['preptypename']
             self.prepTypeId = record['preptypeid']
             self.notes = record['notes']
+            self.notes = record['containername']
+            self.notes = record['containertype']
             self.institutionId = record['institutionid']
             self.institutionName = record['institutionname']
             self.collectionId = record['collectionid']

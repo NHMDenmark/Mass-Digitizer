@@ -77,6 +77,8 @@ class SpecimenDataEntry():
         self.fieldname = ''
         self.input_list = None
         self.needsrepair = False
+        self.MSOterm = 'Multiple specimens on one object'
+        self.MOSterm = 'One specimen on multiple objects'
 
         # Create auto-suggest popup windows
         self.autoStorage = ''  # global for storage locations
@@ -157,22 +159,16 @@ class SpecimenDataEntry():
             sg.Text(indicatorRight, key='inrNotes', background_color=greenArea, visible=False, font=wingdingFont)
         ]
 
+        # Radio buttons for the three different container types
         r_title = sg.Text('Container type', size=captionSize, background_color=greenArea, font=captionFont)
         r_singleSpecimenObject = sg.Radio('Single specimen object', 'multi', default=True, enable_events=True, key="radRadioSSO", background_color=greenArea)
-        r_multiSpecimenObject = sg.Radio('Multiple specimens on one object', 'multi', enable_events=True, key="radRadioMSO", background_color=greenArea)
-        r_multiObjectSpecimen = sg.Radio('One specimen on multiple objects', 'multi', enable_events=True, key="radRadioMOS", background_color=greenArea)
-
-        # multispecimenIdInput = [sg.InputText(size=(35,5), key='inpMultiSpecimen', background_color='white', text_color='black', pad=(3, 0), enable_events=True, font=fieldFont, visible=False)]
-        #     sg.Text(indicatorRight,   key='inrMultiSpecimen', background_color=greenArea, visible=False, font=wingdingFont)]
-
-        # Radio buttons for the three different container types
-
+        r_multiSpecimenObject = sg.Radio(self.MSOterm, 'multi', enable_events=True, key="radRadioMSO", background_color=greenArea)
+        r_multiObjectSpecimen = sg.Radio(self.MOSterm, 'multi', enable_events=True, key="radRadioMOS", background_color=greenArea)
+        
         multiRadio = [r_title,
                       r_singleSpecimenObject,
-                      sg.Text(indicatorRight, key='inrRadioSSO', background_color=greenArea, visible=False, font=wingdingFont),
-                      r_multiSpecimenObject,
-                      sg.Text(indicatorRight, key='inrRadioMSO', background_color=greenArea, visible=False, font=wingdingFont),
-                      r_multiObjectSpecimen,
+                      sg.Text(indicatorRight, key='inrRadioSSO', background_color=greenArea, visible=False, font=wingdingFont), r_multiSpecimenObject,
+                      sg.Text(indicatorRight, key='inrRadioMSO', background_color=greenArea, visible=False, font=wingdingFont), r_multiObjectSpecimen,
                       sg.Text(indicatorRight, key='inrRadioMOS', background_color=greenArea, visible=False, font=wingdingFont)
                       ]
 
@@ -215,11 +211,10 @@ class SpecimenDataEntry():
         self.tableHeaders = ['id', 'catalognumber', 'taxonfullname', 'containertype', 'georegionname','storagename']  # Headers for previousRecordsTable
 
         lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
-
-        lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
+        
+        # Get data to populate previous records table:
         adjacentRecords = self.recordSet.getAdjacentRecordList(self.tableHeaders)
-        previousRecordsTable = [
-            sg.Table(values=adjacentRecords, key='tblPrevious', enable_events=False, hide_vertical_scroll=True,headings=self.tableHeaders, font=('Arial', 13), justification='left', auto_size_columns=True, max_col_width=28, select_mode=sg.TABLE_SELECT_MODE_NONE)]
+        previousRecordsTable = [sg.Table(values=adjacentRecords, key='tblPrevious', enable_events=False, hide_vertical_scroll=True,headings=self.tableHeaders, font=('Arial', 13), justification='left', auto_size_columns=True, max_col_width=28, select_mode=sg.TABLE_SELECT_MODE_NONE)]
 
         layout_bluearea = [broadGeo, taxonInput, barcode, [  # taxonomicPicklist,
             sg.Text('Record ID: ', key='lblRecordID', background_color='#99dcff', visible=True, size=(9, 1)),
@@ -240,25 +235,21 @@ class SpecimenDataEntry():
         # Grey Area (Header) elements
         loggedIn = [
             sg.Text('Logged in as:', size=sessionInfoSize, background_color=greyArea, font=sessionInfoFont),
-            sg.Text(gs.userName, key='txtUserName', size=(25, 1), background_color=greyArea, text_color='black',
-                    font=smallLabelFont), ]
+            sg.Text(gs.userName, key='txtUserName', size=(25, 1), background_color=greyArea, text_color='black', font=smallLabelFont), ]
 
         institution_ = [
             sg.Text('Institution: ', size=sessionInfoSize, background_color=greyArea, font=sessionInfoFont),
-            sg.Text(gs.institutionName, key='txtInstitution', size=(29, 1), background_color=greyArea,
-                    font=smallLabelFont)]
+            sg.Text(gs.institutionName, key='txtInstitution', size=(29, 1), background_color=greyArea, font=smallLabelFont)]
 
         collection = [
             sg.Text('Collection:', size=sessionInfoSize, background_color=greyArea, text_color='black',
                     font=sessionInfoFont),
-            sg.Text(gs.collectionName, key='txtCollection', size=(25, 1), background_color=greyArea,
-                    font=smallLabelFont)]
+            sg.Text(gs.collectionName, key='txtCollection', size=(25, 1), background_color=greyArea, font=smallLabelFont)]
 
         version = [
             sg.Text(f"Version number: ", size=sessionInfoSize, background_color=greyArea, text_color='black',
                     font=sessionInfoFont),
-            sg.Text(util.getVersionNumber(), size=(20, 1), background_color=greyArea, font=smallLabelFont,
-                    text_color='black')]
+            sg.Text(util.getVersionNumber(), size=(20, 1), background_color=greyArea, font=smallLabelFont, text_color='black')]
 
         # Header section
         appTitle = sg.Text('Mass Annotated Digitization Desk', size=(34, 3), background_color=greyArea, font=titleFont)
@@ -272,20 +263,16 @@ class SpecimenDataEntry():
         layout = [[
             sg.Frame('', layoutTitle, size=(550, 100), pad=(0, 0), background_color=greyArea, border_width=0),
             sg.Frame('', layoutMeta, size=(500, 120), pad=(0, 0), border_width=0, background_color=greyArea)],
-            [sg.Frame('', [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(250, 240),
-                      background_color=greenArea, expand_x=True, ), ],  # expand_y=True,
-            [sg.Frame('', [[sg.Column(layout_bluearea, background_color=blueArea)]],
-                      title_location=sg.TITLE_LOCATION_TOP, background_color=blueArea, expand_x=True,
-                      expand_y=True, )], ]
+            [sg.Frame('', [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(250, 240), background_color=greenArea, expand_x=True, ), ],  # expand_y=True,
+            [sg.Frame('', [[sg.Column(layout_bluearea, background_color=blueArea)]], title_location=sg.TITLE_LOCATION_TOP, background_color=blueArea, expand_x=True, expand_y=True, )], ]
 
         # Launch window
-        self.window = sg.Window("Mass Annotated Digitization Desk (MADD)", layout, margins=(2, 2), size=(1048, 640),
-                                resizable=True, return_keyboard_events=True, finalize=True, background_color=greyArea)
+        self.window = sg.Window("Mass Annotated Digitization Desk (MADD)", layout, margins=(2, 2), size=(1048, 640), resizable=True, return_keyboard_events=True, finalize=True, background_color=greyArea)
         self.window.TKroot.focus_force()  # Forces the app to be in focus.
 
         # Set session fields
-        # self.winInpTaxon = self.window['inpTaxonName']
-        # self.winInpTaxon.bind('<FocusOut>', 'Focus Out')
+        #self.winInpTaxon = self.window['inpTaxonName']
+        #self.winInpTaxon.bind('<FocusOut>', 'Focus Out')
         self.window.Element('txtUserName').Update(value=gs.userName)
         collection = self.db.getRowOnId('collection', collection_id)
         if collection is not None:
@@ -341,10 +328,8 @@ class SpecimenDataEntry():
 
     def main(self):
 
-        self.window['inpStorage'].update(select=True)  # Select all on field to enable overwriting pre-filled "None" placeholder
         self.setFieldFocus('inpStorage')  # Set focus on storage field
-        previous3records = self.recordSet.getAdjacentRecordList(self.tableHeaders)
-        self.window['tblPrevious'].update(values=previous3records)  
+        self.window['inpStorage'].update(select=True)  # Select all on field to enable overwriting pre-filled "None" placeholder
 
         while True:
             # Main loop going through User Interface (UI) events
@@ -354,7 +339,7 @@ class SpecimenDataEntry():
 
             if event is None: break  # Empty event indicates user closing window
 
-            self.window['lblError'].update('Validation error',visible=False)
+            self.window['lblError'].update('Validation error',visible=False) # Clear error message label 
 
             if event == 'inpStorage':
                 keyStrokes = values['inpStorage']
@@ -367,7 +352,6 @@ class SpecimenDataEntry():
                 self.setFieldFocus('cbxTypeStatus')
 
             elif event == 'cbxTypeStatus':
-                # TypeStatus is preloaded in the Class
                 self.collobj.setTypeStatusFields(self.window[event].widget.current())
                 self.collobj.typeStatusName = self.window['cbxTypeStatus'].get()
                 self.setFieldFocus('chkDamage')
@@ -391,7 +375,7 @@ class SpecimenDataEntry():
                 mKey = util.getRandomNumberString()
 
                 MSOkey = 'MSO' + str(mKey)
-                self.collobj.containertype = 'Multiple specimens on one object'
+                self.collobj.containertype = self.MSOterm
                 self.collobj.containername = MSOkey.strip()
                 self.window['inpContainerID'].update(value=MSOkey, disabled=False)
                 #
@@ -402,7 +386,7 @@ class SpecimenDataEntry():
             elif event == 'radRadioMOS':
                 mKey = util.getRandomNumberString()
                 MOSkey = 'MOS' + str(mKey)
-                self.collobj.containertype = 'One specimen on multiple objects'
+                self.collobj.containertype = self.MOSterm
                 self.collobj.containername = MOSkey.strip()
                 self.window['inpContainerID'].update(value=MOSkey, disabled=False)
 
@@ -411,7 +395,7 @@ class SpecimenDataEntry():
                 self.window['inrGeoRegion'].update(visible=True)
 
             elif event == 'radRadioSSO':
-                self.window['inpContainerID'].update(value='')
+                self.window['inpContainerID'].update(value='', disabled=True)
                 self.collobj.containername = ''
                 self.collobj.containertype = ''
 
@@ -529,7 +513,7 @@ class SpecimenDataEntry():
                     # If a record has finally been retrieved, present content in data fields
                     self.collobj.setFields(record)
                     self.fillFormFields(record)
-                    self.setContainerFields(record)
+                    
                     self.recordSet = recordset.RecordSet(self.collectionId, 3, specimen_id=self.collobj.id)
                     self.recordSet.reload(record)
                     self.window['tblPrevious'].update(self.recordSet.getAdjacentRecordList(self.tableHeaders))
@@ -626,17 +610,31 @@ class SpecimenDataEntry():
         self.window.close()
 
     def setContainerFields(self, record):
-        if record['containername']:
-            #containerName = util.readMultispecimenID(record).strip()
-            containerName = record['containername']
-            if containerName == 'Multiple specimens on one object':
-                self.window.Element('radRadioMSO').Update(value=True)
-                self.window['inpContainerID'].update(disabled=False)
-            elif containerName == 'One specimen covering multiple objects':
-                self.window.Element('radRadioMOS').update(value=True)
-                self.window['inpContainerID'].update(disabled=False)
+        """
+        Method for setting container-related input fields on the basis of the record passed to it. 
+        CONTRACT
+            record (SQLite Row) : Specimen record with the container-related fields
+        """
+
+        if record['containername'] and record['containername'] != '':
+            # Container name set; multi-specimen assumed
+            containerName = record['containername'] # Get container name 
+            containerType = record['containertype'] # Get container type 
+
+            if containerType == self.MSOterm:
+                self.window.Element('radRadioMSO').update(value=True) # Set MSO radiobutton  
+            elif containerType == self.MOSterm:
+                self.window.Element('radRadioMOS').update(value=True) # Set MOS radiobutton
+            else:
+                self.window['lblError'].update('Something went wrong!',visible=True)
+            
+            self.window['inpContainerID'].update(containerName)
+            self.window['inpContainerID'].update(disabled=False)
         else:
-            self.window.Element('radRadioSSO').update(value=True)
+            # No container name set; single specimen assumed
+            self.window.Element('radRadioSSO').update(value=True) # Set SSO radiobutton            
+            self.window['inpContainerID'].update('')              # Clear container name input field 
+            self.window['inpContainerID'].update(disabled=True)   # Disable container name input field 
 
     def setFieldFocus(self, fieldName):
         """
@@ -869,6 +867,7 @@ class SpecimenDataEntry():
         self.collobj.setTypeStatusFields(self.window['cbxTypeStatus'].widget.current())
         self.collobj.notes = self.window['inpNotes'].get()
         self.collobj.containername = self.window['inpContainerID'].get()
+        self.collobj.containertype = self.getContainerTypeFromInput()
         self.collobj.setGeoRegionFields(self.window['cbxGeoRegion'].widget.current())
         taxonFullName = self.window['inpTaxonName'].get()
         taxonFullName = taxonFullName.rstrip()
@@ -883,6 +882,20 @@ class SpecimenDataEntry():
                 recordId = 0
             self.collobj.id = recordId
             self.collobj.catalogNumber = self.window['inpCatalogNumber'].get()
+    
+    def getContainerTypeFromInput(self):
+        """
+        TODO
+        """
+        containerType = '' #  'radRadioSSO'
+        test1 = self.window['radRadioMSO'].get() #+ '|' + self.window[''].get()
+        test2 = self.window['radRadioMOS'].get()
+        if self.window['radRadioMSO'].get():
+            containerType = self.MSOterm
+        elif self.window['radRadioMOS'].get():
+            containerType = self.MOSterm
+
+        return containerType
 
     def getStorageRecord(self):
         """
@@ -891,8 +904,7 @@ class SpecimenDataEntry():
         """
         storageFullName = self.window['txtStorageFullname'].get()
         try:
-            storageRecords = self.db.getRowsOnFilters('storage', {'fullname': f'="{storageFullName}"',
-                                                                  'collectionid': f'={self.collectionId}'}, 1)
+            storageRecords = self.db.getRowsOnFilters('storage', {'fullname': f'="{storageFullName}"', 'collectionid': f'={self.collectionId}'}, 1)
         except:
             e = sys.exc_info()[0] + ' from getStorageRecord'
             util.logger.error(e)
@@ -956,9 +968,13 @@ class SpecimenDataEntry():
         else:
             self.needsrepair = False
         self.window['chkDamage'].update(self.needsrepair)
+
         self.window['inpNotes'].update(record['notes'])
+
         if record['containername']:  # If not strip() is applied to none
             self.window['inpContainerID'].update(record['containername'].strip())
+
+        self.setContainerFields(record)
 
         # multispecimen = record['multispecimen']
         # if multispecimen != '' and multispecimen is not None:
@@ -992,6 +1008,8 @@ class SpecimenDataEntry():
         # Storage location is set to "None" to represent a blank entry in the UI
         self.window['inpStorage'].update('None')
 
+        # TODO Reset containers? 
+
     def clearForm(self):
         """
         Function for clearing all fields listed in clearing list and setting up for a blank record
@@ -1017,38 +1035,19 @@ class SpecimenDataEntry():
         # Storage location is set to "None" to represent a blank entry in the UI
         # self.window['inpStorage'].update('None')
 
-    def getFirstOrLastRecord(self, position='first'):
-
-        if position == 'first':
-            sql = "SELECT min(id), * FROM specimen;"
-
-            # lastRecord = db.getLastRow(tableName='specimen')
-            firstRecord = self.db.executeSqlStatement(sql)
-            self.window['tblPrevious'].update(firstRecord)
-            self.fillFormFields(firstRecord[0])
-
-        elif position == 'newest':
-            newestRecord = self.db.getLastRow('specimen', self.collectionId)
-            self.fillFormFields(newestRecord)
-        else:
-            util.logger.debug(f"Illegal argument in parameter 'position': {position} !")
-
-        # Create new empty record accordingly
-        self.collobj = specimen.Specimen(self.collectionId)
-
     def radioSelector(self, containerKey):
         # Takes a list of radio values and selects the true one for the collobj.
 
         mKey = util.getRandomNumberString()
         if containerKey['radRadioMSO']:
             MSOkey = 'MSO' + str(mKey)
-            self.collobj.containertype = 'Multiple specimens on one object'
+            self.collobj.containertype = self.MSOterm
             self.collobj.containername = MSOkey.strip()
             self.window['inpContainerID'].update(value=MSOkey, disabled=False)
             # return self.collobj.containertype
         elif containerKey['radRadioMOS']:
             MOSkey = 'MOS' + str(mKey)
-            self.collobj.containertype = 'One specimen on multiple objects'
+            self.collobj.containertype = self.MOSterm
             self.collobj.containername = MOSkey.strip()
             self.window['inpContainerID'].update(value=MOSkey, disabled=False)
         elif containerKey['radRadioSSO']:
