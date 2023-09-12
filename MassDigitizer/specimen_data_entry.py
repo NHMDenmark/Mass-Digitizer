@@ -190,10 +190,10 @@ class SpecimenDataEntry():
             sg.Multiline('', size=blueSize, key='inpTaxonName', rstrip=False, no_scrollbar=True, text_color='black', background_color='white',font=fieldFont, enable_events=True, pad=((5, 0), (0, 0))),
 
             sg.Text(indicatorRight, key='inrTaxonName', background_color=blueArea, visible=True, font=wingdingFont),
-            sg.Text('Taxon Number:', key='txtTaxonNr', font=captionFont, background_color=blueArea, text_color='black', visible=False),
-            sg.InputText('', size=(7, 1), key='inpTaxonNr', text_color='black', background_color='white', font=fieldFont, enable_events=True, visible=False),
+            sg.Text('Taxon Number:', key='txtTaxonNr', font=captionFont, background_color=blueArea, text_color='black', visible=True),
+            sg.InputText('', size=(7, 1), key='inpTaxonNr', text_color='black', background_color='white', font=fieldFont, enable_events=True, visible=True),
             sg.Text(indicatorRight, key='inrTaxonNr', background_color=blueArea, visible=True, font=wingdingFont),
-            sg.Text('No further record to go back to!', key='lblRecordEnd', visible=False, background_color="#ff5588", border_width=3)
+            #sg.Text('No further record to go back to!', key='lblRecordEnd', visible=False, background_color="#ff5588", border_width=3)
         ]
 
         barcode = [
@@ -281,6 +281,9 @@ class SpecimenDataEntry():
         if self.collection.useTaxonNumbers == True:
             self.window.Element('txtTaxonNr').Update(visible=True)
             self.window.Element('inpTaxonNr').Update(visible=True)
+        else:
+            self.window.Element('txtTaxonNr').Update(visible=False)
+            self.window.Element('inpTaxonNr').Update(visible=False)     
 
         # Set triggers for the different controls on the UI form
         self.setControlEvents()
@@ -376,10 +379,7 @@ class SpecimenDataEntry():
                 self.collobj.containertype = self.MSOterm
                 self.collobj.containername = MSOkey.strip()
                 self.window['inpContainerID'].update(value=MSOkey, disabled=False)
-                #
-                # self.radioSelector(values)
-                self.window['cbxGeoRegion'].set_focus()
-                self.window['inrGeoRegion'].update(visible=True)
+                self.setFieldFocus('cbxGeoRegion')
 
             elif event == 'radRadioMOS':
                 mKey = util.getRandomNumberString()
@@ -387,18 +387,16 @@ class SpecimenDataEntry():
                 self.collobj.containertype = self.MOSterm
                 self.collobj.containername = MOSkey.strip()
                 self.window['inpContainerID'].update(value=MOSkey, disabled=False)
-
-                # self.radioSelector(values)
-                self.window['cbxGeoRegion'].set_focus()
-                self.window['inrGeoRegion'].update(visible=True)
+                self.setFieldFocus('cbxGeoRegion')
 
             elif event == 'radRadioSSO':
                 self.window['inpContainerID'].update(value='', disabled=True)
                 self.collobj.containername = ''
                 self.collobj.containertype = ''
-
                 self.window['radRadioMOS'].reset_group()
                 self.window['radRadioSSO'].update(value=True)
+                self.window['inpContainerID'].update('')
+                self.setFieldFocus('cbxGeoRegion')
 
             # elif event == 'chkMultiSpecimen' or event == 'chkMultiSpecimen_Enter':
             #     # When multispecimen checkbox is checked or enter is pressed while in focus:
@@ -433,8 +431,8 @@ class SpecimenDataEntry():
                 if "\t" in keyStrokes:
                     cleanName = keyStrokes.replace("\t", '')
                     self.window['inpTaxonName'].update(cleanName)
-                    self.window['inpCatalogNumber'].set_focus()
-                    self.window['inpTaxonName'].Update('')
+                    #self.window['inpCatalogNumber'].set _focus()
+                    #self.window['inpTaxonName'].Update('')
                     self.setFieldFocus('inpTaxonNr')
                 self.taxonNameList.append(keyStrokes) 
                 
@@ -446,7 +444,7 @@ class SpecimenDataEntry():
                     # Artifact from barcode reader produces an appended "\n"
                 
                 if result == 'Done':
-                    self.window['inpCatalogNumber'].set_focus()
+                    self.setFieldFocus('inpCatalogNumber')
 
             elif event == 'inpTaxonNr_Enter':
                 # 
@@ -454,6 +452,7 @@ class SpecimenDataEntry():
                 taxonRecord = self.getTaxonNameRecordOnNumber(taxonNumber)
                 if taxonRecord:
                     self.window['inpTaxonName'].update(taxonRecord['fullname'])
+                    self.setFieldFocus('inpCatalogNumber')
                 else:
                     self.validationFeedback('Could not find taxon with this number! (' + taxonNumber + ')')
                     self.window['inpTaxonNr'].update('')
@@ -542,7 +541,7 @@ class SpecimenDataEntry():
             elif event == 'btnDismiss':
                 # Hide any error and other messages
                 self.window['lblExport'].update(visible=False)
-                self.window['lblRecordEnd'].update(visible=False)
+                #self.window['lblRecordEnd'].update(visible=False)
                 self.window['lblError'].update('Validation error',visible=False)
 
             elif event == 'btnSave' or event == 'btnSave_Enter':  # Should btnSave_Enter be removed?
@@ -653,26 +652,29 @@ class SpecimenDataEntry():
         for field in self.focusIconList:
             self.window[field].update(visible=False)
 
-        # Iterate input fields and reset background colour
-        for field in self.inputFieldList:
-            if field[0:3] == 'inp':
-                self.window[field].update(background_color='#ffffff')
-                if self.window[field] == '\t':
-                    sg.popup_error('Tab characters not allowed in this field: ' + field)
+        # Iterate input fields and reset background colour | TODO Disabled until we can get comboboxes to work
+        #for field in self.inputFieldList:
+        #    if field[0:3] == 'inp':
+        #        self.window[field].update(background_color='#ffffff')
 
         # If field name has been specified shift focus:
         if fieldName != '':
             self.window[fieldName].set_focus()  # Set focus on field
             # self.window[fieldName].update(select=True)     # Select all contents of field (TODO Doesn't work for combo lists)
+            
             indicatorName = 'inr' + fieldName[3:]  # Derive focus indicator name
-            if fieldName[3:] == 'btn':  # In case we are on the Save-button
-                indicatorName = 'inr' + fieldName[3:]
+
+            #if fieldName[3:] == 'btn':  # In case we are on the Save-button
+            #    indicatorName = 'inr' + fieldName[3:]
+            
             self.window[indicatorName].update(visible=True)  # Unhide focus indicator
-            if fieldName[0:3] == 'inp':
-                self.window[fieldName].update(background_color='#ffffff')  # self.highlight) # TODO Disabled until we get comboboxes to work
+
+            # Change field background colour | TODO Disabled until we get comboboxes to work
+            #if fieldName[0:3] == 'inp':
+            #    self.window[fieldName].update(background_color='#ffffff')  # self.highlight) # 
             # TODO Comboboxes won't play nice and also allow for changing background colour
-            elif fieldName[0:3] == 'cbx':
-                self.window[fieldName].ttk_style.configure(self.window[fieldName].ttk_style_name,fieldbackground=self.highlight)
+            #elif fieldName[0:3] == 'cbx':
+            #    self.window[fieldName].ttk_style.configure(self.window[fieldName].ttk_style_name,fieldbackground=self.highlight)
 
             self.fieldInFocus = fieldName  # (Re)set name of field in focus
             self.fieldInFocusIndex = self.inputFieldList.index(fieldName)
@@ -757,7 +759,7 @@ class SpecimenDataEntry():
             result = errorMessage
 
         # self.initialStep = False
-        self.window['inpCatalogNumber'].set_focus()
+        self.setFieldFocus('inpCatalogNumber')
 
         util.logger.info(f'{result}')
                          
@@ -1043,7 +1045,7 @@ class SpecimenDataEntry():
 
         # Reset any information labels and radio buttons
         self.window['lblExport'].update(visible=False)
-        self.window['lblRecordEnd'].update(visible=False)
+        #self.window['lblRecordEnd'].update(visible=False)
         self.window['radRadioMOS'].update(value=False)
         self.window['radRadioMSO'].update(value=False)
         self.window['radRadioSSO'].update(value=True)
