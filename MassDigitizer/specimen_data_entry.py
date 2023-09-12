@@ -708,8 +708,8 @@ class SpecimenDataEntry():
             else:
                 newRecord = True
 
-            # self.window['radRadioMOS'].reset_group()
-            # self.window['radRadioSSO'].update(value=False)
+            #self.window['radRadioMOS'].reset_group()
+            #self.window['radRadioSSO'].update(value=False)
 
             if newRecord:
                 # Create a new, blank specimen record (id pre-set to 0)
@@ -720,7 +720,10 @@ class SpecimenDataEntry():
                 # Prepare form for next new record
                 self.clearNonStickyFields()
 
-            if self.validateBarCode(self.collobj.catalogNumber):
+            # Run validations 
+            validated = self.validateBarCodeDigits(self.collobj.catalogNumber) and self.validateBarCodeLength(self.collobj.catalogNumber)
+
+            if validated:
                 # All checks out; Save specimen
                 savedRecord = self.collobj.save()
                 recs3 = self.recordSet.getAdjacentRecordList(self.tableHeaders)
@@ -744,7 +747,7 @@ class SpecimenDataEntry():
             errorMessage = f"Error occurred attempting to save specimen: {e}"
             traceBack = traceback.format_exc()
             util.logger.error(errorMessage)
-            sg.PopupError(f'{e} \n\n {traceBack}', title='Error handle storage input', )
+            sg.PopupTimed(f'{e} \n\n {traceBack}', title='Error handle storage input', )
             result = errorMessage
 
         # self.initialStep = False
@@ -753,11 +756,6 @@ class SpecimenDataEntry():
         util.logger.info(f'{result}')
                          
         return result
-
-    def validationFeedback(self, validationMessage):
-        """Gives a validation feedback message to the user"""
-        util.logger.error(validationMessage)
-        sg.PopupTimed(validationMessage)
 
     def handleStorageInput(self, keyStrokes):
         """
@@ -1006,7 +1004,7 @@ class SpecimenDataEntry():
             field.update('')
 
         # Storage location is set to "None" to represent a blank entry in the UI
-        self.window['inpStorage'].update('None')
+        #self.window['inpStorage'].update('None')
 
         # TODO Reset containers? 
 
@@ -1057,24 +1055,32 @@ class SpecimenDataEntry():
 
         return self.collobj.containertype
 
-    def validateBarCode(self, barcode):
-        # Ensuring that the barcode has the correct length according to collection.
+    def validateBarCodeLength(self, barcode):
+        # Ensure that the barcode has the correct length according to collection.
         validation = None
         
         if len(barcode) == self.collection.catalogNrLength:
             validation = True
         else:
             validation = False 
-            #sg.popup_error("Catalog number has the wrong format!")
-            self.window['lblError'].update('Validation error: Barcode wrong length!',visible=True)
+            self.validationFeedback('Validation error: Barcode wrong length!')
 
         return validation
 
-    def verifyCatalogNumber(self, catalogNumber):
+    def validateBarCodeDigits(self, catalogNumber):
         # Validates if barcode is digits
+        validation = None
+        
         if catalogNumber.isdigit():
-            return 'valid'
+            validation = True
         else:
-            e = "Barcode/catalog number contains non numeric symbols."
-            sg.PopupError(e)
+            validation = False
+            self.validationFeedback("Barcode/catalog number contains non numeric symbols.")
+        
+        return validation 
+
+    def validationFeedback(self, validationMessage):
+        """Gives a validation feedback message to the user"""
+        util.logger.error(validationMessage)
+        sg.PopupTimed(validationMessage)
             
