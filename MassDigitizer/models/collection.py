@@ -30,6 +30,7 @@ class Collection(model.Model):
         self.disciplineId    = 0
         self.discipline      = None 
         self.catalogNrLength = 9
+        self.useTaxonNumbers  = None
 
         # Predefined data fields
         self.storageLocations = None 
@@ -68,7 +69,8 @@ class Collection(model.Model):
                 'institutionid':    f'{self.institutionId}', 
                 'taxontreedefid':   f'{self.taxonTreeDefId}', 
                 'visible':          f'{self.visible}', 
-                'catalognrlength':  f'{self.catalogNrLength}'
+                'catalognrlength':  f'{self.catalogNrLength}',
+                'usetaxonnumbers':  f'{self.useTaxonNumbers}'
                 }
         
         return fieldsDict
@@ -86,7 +88,9 @@ class Collection(model.Model):
         self.institutionId   = record['institutionid']
         self.taxonTreeDefId  = record['taxontreedefid']
         self.visible         = record['visible']      
-        self.catalogNrLength = record['catalognrlength']
+        self.catalogNrLength = record['catalognrlength']   
+        self.useTaxonNumbers = record['usetaxonnumbers']
+        pass 
 
 # Specify Interfacing functions 
 
