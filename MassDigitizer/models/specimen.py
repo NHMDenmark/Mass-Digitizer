@@ -69,7 +69,7 @@ class Specimen(Model):
         self.institutionId = gs.institutionId  # self.db.getRowOnId('collection',collection_id)['institutionid']
         self.institutionName = gs.institutionName
         self.collectionId = collection_id
-        self.collectionName = gs.collectionName
+        self.collectionName = gs.collection.name
         self.collection = coll.Collection(collection_id)
         self.userName = gs.userName
         self.userId = gs.spUserId
