@@ -694,39 +694,30 @@ class SpecimenDataEntry():
             #catalogNumber = record['catalognumber'].replace('"', '') # TODO Explain necessity of this
 
             # Make sure everything is read on immediate barcode scan
-            taxonFullName = self.window['inpTaxonName'].get()
-            taxonFullName = taxonFullName.rstrip()  # barcode scanner adds newline
-            self.collobj.taxonFullName = taxonFullName
-            taxonTableRecord = self.getTaxonNameRecord(taxonFullName)            
-            if taxonTableRecord:
-                self.collobj.taxonName = taxonTableRecord['name']
-                self.collobj.taxonRankName = taxonTableRecord['taxonrank']
-                self.collobj.familyName = self.collobj.searchParentTaxon(taxonTableRecord['name'], 140, self.collection.taxonTreeDefId)
-                self.collobj.higherTaxonName = taxonTableRecord['name'].split(' ')[0]
-                self.collobj.rankid = taxonTableRecord['rankid']
-                self.collobj.taxonNameId = taxonTableRecord['id']
-                self.collobj.taxonSpid = taxonTableRecord['spid']
-                self.collobj.parentFullName = taxonTableRecord['parentfullname']
+            # TODO Disabled, because this shouldn't have to be necessary to ensure here.  
+            #taxonFullName = self.window['inpTaxonName'].get()
+            #taxonFullName = taxonFullName.rstrip()  # barcode scanner adds newline
+            #self.collobj.taxonFullName = taxonFullName
+            #taxonTableRecord = self.getTaxonNameRecord(taxonFullName)            
+            #if taxonTableRecord:
+            #    self.collobj.taxonName = taxonTableRecord['name']
+            #    self.collobj.taxonRankName = taxonTableRecord['taxonrank']
+            #    self.collobj.familyName = self.collobj.searchParentTaxon(taxonTableRecord['name'], 140, self.collection.taxonTreeDefId)
+            #    self.collobj.higherTaxonName = taxonTableRecord['name'].split(' ')[0]
+            #    self.collobj.rankid = taxonTableRecord['rankid']
+            #    self.collobj.taxonNameId = taxonTableRecord['id']
+            #    self.collobj.taxonSpid = taxonTableRecord['spid']
+            #    self.collobj.parentFullName = taxonTableRecord['parentfullname']
 
-            recordIdFromForm = self.window['txtRecordID'].get()
-            self.collobj.id
-
-            if recordIdFromForm:
-                newRecord = False
-            else:
-                newRecord = True
+            # TODO Below violates the MVC pattern: Object ID should be retrieved from model instance, not form (view)! 
+            #recordIdFromForm = self.window['txtRecordID'].get()
+            #if recordIdFromForm:
+            #    newRecord = False
+            #else:
+            #    newRecord = True
 
             #self.window['radRadioMOS'].reset_group()
             #self.window['radRadioSSO'].update(value=False)
-
-            if newRecord:
-                # Create a new, blank specimen record (id pre-set to 0)
-                self.collobj.rankid = 0
-                self.collobj.id = 0
-                # Transfer data in sticky fields to new record:
-                self.setSpecimenFields()
-                # Prepare form for next new record
-                self.clearNonStickyFields()
 
             # Run validations 
             validated = self.validateBarCodeDigits(self.collobj.catalogNumber) and self.validateBarCodeLength(self.collobj.catalogNumber)
@@ -746,10 +737,18 @@ class SpecimenDataEntry():
                 result = "Successfully saved specimen record."
 
                 util.logger.info(f'{result} : {previousRecordId} - {savedRecord}')
-                self.clearNonStickyFields()
+
+                # Check if saving a new record (id = 0); If so, prepare for new blank record
+                if self.collobj.id == 0:
+                    # Create a new, blank specimen record (id pre-set to 0)
+                    self.collobj.rankid = 0
+                    self.collobj.id = 0
+                    # Transfer data in sticky fields to new record:
+                    self.setSpecimenFields()
+                    # Prepare form for next new record
+                    self.clearNonStickyFields()
             else:
                 result = 'validation error'
-                #sg.popup_error("Did not save due to validation error(s)!")
 
         except Exception as e:
             errorMessage = f"Error occurred attempting to save specimen: {e}"
@@ -813,7 +812,7 @@ class SpecimenDataEntry():
 
             if selectedTaxonName is not None:
                 # Set specimen record taxon name fields using record retrieved
-                self.collobj.setTaxonNameFieldsUsingFullName(selectedTaxonName)
+                self.collobj.setTaxonNameFieldsFromModel(selectedTaxonName)
 
                 # Update UI to indicate selected taxon name record
                 self.window['inpTaxonName'].update(selectedTaxonName.fullName)
