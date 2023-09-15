@@ -954,7 +954,7 @@ class SpecimenDataEntry():
     def setRecordFields(self, record, stickyFieldsOnly=False):
         """
         Function for transferring information to fields of newly created record.
-        CONTRACT:
+        CONTRACT:record['notes']
             record : New record that should have its fields set
             stickyFieldsOnly : Flag for indicating whether only sticky fields should be set
         """
