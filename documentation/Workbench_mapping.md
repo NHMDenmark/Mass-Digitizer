@@ -18,9 +18,6 @@ publish->
 Publish
 
 
-container->
-Container->
-Name
 
 
 family->
@@ -165,5 +162,9 @@ Middle Initial
 agentlastname ->
 Cataloger ->
 Last Name
+
+containertype -> Container -> Type
+
+containername -> Container -> Name
  
 
