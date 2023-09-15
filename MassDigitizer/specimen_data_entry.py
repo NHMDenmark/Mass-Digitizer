@@ -68,13 +68,8 @@ class SpecimenDataEntry():
         self.nonStickyFields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage']
 
         # Global variables
-        self.barcodeList = []
-        self.notes = ''  # Notes for access in autoSuggest_popup
         self.fieldInFocus = ''  # Stores name of field currently in focus
         self.fieldInFocusIndex = -1  # Stores list index of field currently in focus
-        self.fieldname = ''
-        self.input_list = None
-        self.needsrepair = False
         self.MSOterm = 'Multiple specimens on one object'
         self.MOSterm = 'One specimen on multiple objects'
 
@@ -358,8 +353,8 @@ class SpecimenDataEntry():
                 self.setFieldFocus('chkDamage')
 
             elif event == "chkDamage":
-                self.needsrepair = self.window['chkDamage'].get()
-                if self.needsrepair: 
+                needsrepair = self.window['chkDamage'].get()
+                if needsrepair: 
                     self.collobj.objectCondition = "Needs repair"
                 else: 
                     self.collobj.objectCondition = ""
@@ -748,7 +743,7 @@ class SpecimenDataEntry():
 
                     # Transfer data in sticky fields to new record:
                     self.setSpecimenFields()
-                    
+
                     # Prepare form for next new record
                     self.clearNonStickyFields()
             else:
@@ -758,7 +753,7 @@ class SpecimenDataEntry():
             errorMessage = f"Error occurred attempting to save specimen: {e}"
             traceBack = traceback.format_exc()
             util.logger.error(errorMessage)
-            sg.PopupTimed(f'{e} \n\n {traceBack}', title='Error handle storage input', )
+            sg.Popup(f'{e} \n\n {traceBack}', title='Error handle storage input', )
             result = errorMessage
 
         # self.initialStep = False
@@ -897,8 +892,7 @@ class SpecimenDataEntry():
         TODO
         """
         containerType = '' #  'radRadioSSO'
-        test1 = self.window['radRadioMSO'].get() #+ '|' + self.window[''].get()
-        test2 = self.window['radRadioMOS'].get()
+
         if self.window['radRadioMSO'].get():
             containerType = self.MSOterm
         elif self.window['radRadioMOS'].get():
@@ -989,10 +983,9 @@ class SpecimenDataEntry():
         self.window['cbxTypeStatus'].update(record['typestatusname'])
 
         if record['objectcondition'] == 'Needs repair':
-            self.needsrepair = True
+            self.window['chkDamage'].update(True)
         else:
-            self.needsrepair = False
-        self.window['chkDamage'].update(self.needsrepair)
+            self.window['chkDamage'].update(False)
 
         self.window['inpNotes'].update(record['notes'])
 
@@ -1109,5 +1102,5 @@ class SpecimenDataEntry():
     def validationFeedback(self, validationMessage):
         """Gives a validation feedback message to the user"""
         util.logger.error(validationMessage)
-        sg.PopupTimed(validationMessage)
+        sg.Popup(validationMessage)
             
