@@ -288,6 +288,7 @@ class SpecimenDataEntry():
 
         self.window.bind("<Tab>", "Tab")  # Catchall handler for [tab] key
         self.window.bind("<Shift-KeyPress-Tab>", "Shift-Tab")  # Same for [shift]+[tab]
+        self.window.bind("<Click>", "Click")  # Catchall handler for [Enter] event
 
         # HEADER AREA
         self.window.Element('btnSettings').Widget.config(takefocus=0)  # TODO explain
@@ -299,17 +300,19 @@ class SpecimenDataEntry():
         # cbxTypeStatus # Combobox therefore already triggered
         # self.window['inpNotes'].bind('<Tab>', '_Tab')
         # self.window['inpNotes'].bind('<Leave>', '_Edit') # Disabled because it would randomly activate the multispecimen checkbox when hovering over inpNotes
-        self.window['inpNotes'].bind('<Return>', '_Enter')
+        self.window['inpNotes'].bind('<Return>', '_Return')
         # self.window['radRadioSSO'].bind("<FocusOut>", "FocusOut")
 
         # BLUE AREA
         # cbxGeoRegion  # Combobox therefore already triggered
         # self.window['inpTaxonName'].bind("<Tab>", "_Tab")
         self.window['inpCatalogNumber'].bind('<Leave>', '_Edit')
-        self.window['inpCatalogNumber'].bind("<Return>", "_Enter")
-        self.window['inpTaxonNr'].bind("<Return>", "_Enter")
-        self.window['btnSave'].bind("<Return>", "_Enter")
-        self.window['inpTaxonName'].bind('<FocusOut>', '_FocusOutTax')
+        self.window['inpCatalogNumber'].bind("<Return>", "_Return")
+        #self.window['inpTaxonNr'].bind("<Leave>", "_Edit")
+        self.window['inpTaxonNr'].bind("<Return>", "_Edit")
+        self.window['inpTaxonNr'].bind("<Tab>", "_Edit")
+        self.window['inpTaxonNr'].bind("<FocusOut>", "_Edit")
+        self.window['btnSave'].bind("<Return>", "_Return")
 
         # Input field focus events
         for Name in self.inputFieldList:
@@ -318,8 +321,10 @@ class SpecimenDataEntry():
                 eventName = '<FocusIn>'
             elif Name[0:3] == 'cbx':
                 eventName = '<Click>'
-            else: break
+            elif Name[0:3] == 'chk':
+                eventName = '<Click>'
             self.window[Name].bind(eventName, '_FocusIn')
+            print(Name, eventName)
         self.window['inpNotes'].bind('<FocusOut>', '_FocusOut')
 
     def main(self):
@@ -360,7 +365,7 @@ class SpecimenDataEntry():
                     self.collobj.objectCondition = ""
                 self.setFieldFocus('inpNotes')
 
-            elif (event == 'inpNotes_Edit' or event == 'inpNotes_Enter'):
+            elif (event == 'inpNotes_Edit' or event == 'inpNotes_Return'):
                 self.collobj.notes = values['inpNotes']
                 # self.setFieldFocus('radioSingle')
 
@@ -393,7 +398,7 @@ class SpecimenDataEntry():
                 self.window['inpContainerID'].update('')
                 self.setFieldFocus('cbxGeoRegion')
 
-            # elif event == 'chkMultiSpecimen' or event == 'chkMultiSpecimen_Enter':
+            # elif event == 'chkMultiSpecimen' or event == 'chkMultiSpecimen_Return':
             #     # When multispecimen checkbox is checked or enter is pressed while in focus:
             #     inpMultiSpecimenNewValue = ''
             #     if self.collobj.multiSpecimen == '':
@@ -441,18 +446,19 @@ class SpecimenDataEntry():
                 if result == 'Done':
                     self.setFieldFocus('inpCatalogNumber')
 
-            elif event == 'inpTaxonNr_Enter':
+            elif event == 'inpTaxonNr_Edit':
                 # 
                 taxonNumber = self.window['inpTaxonNr'].get()
-                taxonRecord = self.getTaxonNameRecordOnNumber(taxonNumber)
-                if taxonRecord:
-                    self.window['inpTaxonName'].update(taxonRecord['fullname'])
-                    self.setFieldFocus('inpCatalogNumber')
-                else:
-                    self.validationFeedback('Could not find taxon with this number! (' + taxonNumber + ')')
-                    self.window['inpTaxonNr'].update('')
+                if taxonNumber != '':
+                    taxonRecord = self.getTaxonNameRecordOnNumber(taxonNumber)
+                    if taxonRecord:
+                        self.window['inpTaxonName'].update(taxonRecord['fullname'])
+                        self.setFieldFocus('inpCatalogNumber')
+                    else:
+                        self.validationFeedback('Could not find taxon with this number! (' + taxonNumber + ')')
+                        self.window['inpTaxonNr'].update('')
 
-            elif event == 'inpCatalogNumber_Enter':
+            elif event == 'inpCatalogNumber_Return':
                 # Respond to barcode being entered or scanned by setting corresponding field value
                 self.collobj.catalogNumber = values['inpCatalogNumber']
 
@@ -461,6 +467,7 @@ class SpecimenDataEntry():
             # **** Focus Events ****
 
             elif event.endswith('_FocusIn'):
+                # A field is activated: Set new field focus
                 self.setFieldFocus(event[0:-8])  # Remove "_FocusIn" from event so we get the actual fieldname
 
             # **** Button Events ****
@@ -539,7 +546,7 @@ class SpecimenDataEntry():
                 #self.window['lblRecordEnd'].update(visible=False)
                 self.window['lblError'].update('Validation error',visible=False)
 
-            elif event == 'btnSave' or event == 'btnSave_Enter':  # Should btnSave_Enter be removed?
+            elif event == 'btnSave' or event == 'btnSave_Return':  # Should btnSave_Return be removed?
                 # Save current specimen record to app database
                 self.collobj.catalogNumber = values['inpCatalogNumber']
                 self.saveForm()
@@ -598,6 +605,10 @@ class SpecimenDataEntry():
             #elif event.endswith('_Tab'):
                 # TODO Re-evaluate the need for this event originally set for inpTaxonName and inpNotes
             #    util.logger.debug(f'field {event[0:-4]} tabbed')
+
+            elif event == 'Click':
+                print(event,values)
+                pass
 
             # *** Close window Event
             elif event == sg.WINDOW_CLOSED:
