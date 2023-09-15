@@ -267,12 +267,6 @@
   },
   {
     "op": "core/column-rename",
-    "oldColumnName": "multispecimen",
-    "newColumnName": "container",
-    "description": "Rename column multispecimen to container"
-  },
-  {
-    "op": "core/column-rename",
     "oldColumnName": "georegionname",
     "newColumnName": "broadgeographicalregion",
     "description": "Rename column georegionname to broadgeographicalregion"
@@ -420,42 +414,6 @@
     "oldColumnName": "storagefullname 3",
     "newColumnName": "collection",
     "description": "Rename column storagefullname 3 to collection"
-  },
-  {
-    "op": "core/column-reorder",
-    "columnNames": [
-      "catalognumber",
-      "catalogeddate",
-      "notes",
-      "project",
-      "publish",
-      "container",
-      "family",
-      "genus",
-      "species",
-      "subspecies",
-      "variety",
-      "forma",
-      "qualifier",
-      "site",
-      "collection",
-      "newgenusflag",
-      "newspeciesflag",
-      "newsubspeciesflag",
-      "newvarietyflag",
-      "newformaflag",
-      "box",
-      "shelf",
-      "typestatusname",
-      "preptypename",
-      "broadgeographicalregion",
-      "localityname",
-      "recorddatetime",
-      "agentfirstname",
-      "agentmiddleinitial",
-      "agentlastname"
-    ],
-    "description": "Reorder columns"
   },
   {
     "op": "core/text-transform",
