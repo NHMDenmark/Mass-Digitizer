@@ -716,6 +716,9 @@ class SpecimenDataEntry():
             #else:
             #    newRecord = True
 
+            #Check if saving a new record (id = 0); 
+            newRecord = self.collobj.id == 0
+
             #self.window['radRadioMOS'].reset_group()
             #self.window['radRadioSSO'].update(value=False)
 
@@ -738,13 +741,14 @@ class SpecimenDataEntry():
 
                 util.logger.info(f'{result} : {previousRecordId} - {savedRecord}')
 
-                # Check if saving a new record (id = 0); If so, prepare for new blank record
-                if self.collobj.id == 0:
+                # If so, prepare for new blank record
+                if newRecord:
                     # Create a new, blank specimen record (id pre-set to 0)
-                    self.collobj.rankid = 0
-                    self.collobj.id = 0
+                    self.collobj = specimen.Specimen(self.collectionId)                    
+
                     # Transfer data in sticky fields to new record:
                     self.setSpecimenFields()
+                    
                     # Prepare form for next new record
                     self.clearNonStickyFields()
             else:
