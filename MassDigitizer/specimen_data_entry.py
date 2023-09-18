@@ -32,6 +32,7 @@ import data_access
 import global_settings as gs
 import autoSuggest_popup
 from models import specimen
+from models import model
 from models import recordset
 from models import collection as coll
 
@@ -324,7 +325,6 @@ class SpecimenDataEntry():
             elif Name[0:3] == 'chk':
                 eventName = '<Click>'
             self.window[Name].bind(eventName, '_FocusIn')
-            print(Name, eventName)
         self.window['inpNotes'].bind('<FocusOut>', '_FocusOut')
 
     def main(self):
@@ -346,7 +346,7 @@ class SpecimenDataEntry():
                 keyStrokes = values['inpStorage']
                 # Activate autosuggest box, when more than 3 characters entered:
                 if len(keyStrokes) >= 3 and keyStrokes != 'None':
-                    self.handleStorageInput(values['inpStorage'])
+                    self.autoSuggestStorage(values['inpStorage'])
 
             elif event == 'cbxPrepType':
                 self.collobj.setPrepTypeFields(self.window[event].widget.current())
@@ -433,26 +433,33 @@ class SpecimenDataEntry():
                     self.window['inpTaxonName'].update(cleanName)
                     #self.window['inpCatalogNumber'].set _focus()
                     #self.window['inpTaxonName'].Update('')
-                    self.setFieldFocus('inpTaxonNr')
+                
                 self.taxonNameList.append(keyStrokes) 
                 
                 result = None # 
                 
                 # Activate autosuggest box, when three characters or more are entered.
                 if len(keyStrokes) >= 3 and keyStrokes != 'None':
-                    result = self.handleTaxonNameInput(values['inpTaxonName'].rstrip("\n"))
+                    result = self.autoSuggestTaxonName(values['inpTaxonName'].rstrip("\n"))
                     # Artifact from barcode reader produces an appended "\n"
                 
                 if result == 'Done':
-                    self.setFieldFocus('inpCatalogNumber')
+                    # Taxon name retrieved move to next field depending on collection
+                    if self.collection.useTaxonNumbers == True:
+                        self.setFieldFocus('inpTaxonNr')
+                    else:
+                        self.setFieldFocus('inpCatalogNumber')
 
             elif event == 'inpTaxonNr_Edit':
                 # 
                 taxonNumber = self.window['inpTaxonNr'].get()
                 if taxonNumber != '':
-                    taxonRecord = self.getTaxonNameRecordOnNumber(taxonNumber)
+                    taxonRecord = self.db.getRowsOnFilters('taxonname', {'taxonnumber':f'={taxonNumber}'}, 1)
                     if taxonRecord:
-                        self.window['inpTaxonName'].update(taxonRecord['fullname'])
+                        taxonName = model.Model(self.collectionId)
+                        taxonName.setFields(taxonRecord[0])
+                        self.window['inpTaxonName'].update(taxonName.fullName)
+                        self.handleTaxonNameInput(taxonName)
                         self.setFieldFocus('inpCatalogNumber')
                     else:
                         self.validationFeedback('Could not find taxon with this number! (' + taxonNumber + ')')
@@ -607,7 +614,6 @@ class SpecimenDataEntry():
             #    util.logger.debug(f'field {event[0:-4]} tabbed')
 
             elif event == 'Click':
-                print(event,values)
                 pass
 
             # *** Close window Event
@@ -774,7 +780,7 @@ class SpecimenDataEntry():
                          
         return result
 
-    def handleStorageInput(self, keyStrokes):
+    def autoSuggestStorage(self, keyStrokes):
         """
         Show autosuggest popup for Storage selection and handle input from that window.
         """
@@ -788,16 +794,7 @@ class SpecimenDataEntry():
 
             # Set storage fields using record retrieved
             if selectedStorage is not None:
-                # Set specimen record storage fields
-                self.collobj.setStorageFieldsFromModel(selectedStorage)
-
-                # Update UI to indicate selected storage record
-                self.window['txtStorageFullname'].update(selectedStorage.fullName)
-                self.window['inpStorage'].update(selectedStorage.name)
-                self.window['inpStorage'].update(select=True)  # Select all characters in field
-                self.collobj.storageFullName = selectedStorage.fullName
-                # Move focus to next field (PrepTypes list).
-                self.setFieldFocus('cbxPrepType')
+                self.handleStorageInput(selectedStorage)
 
         except Exception as e:
             util.logger.error(str(e))
@@ -806,8 +803,23 @@ class SpecimenDataEntry():
             sg.popup_error(f'{e} \n\n {traceBack}', title='Error handle storage input', )
 
         return ''
+    
+    def handleStorageInput(self, storageRecord):
+        """
+        Handle selection of storage record by setting relevant fields, both in model and UI
+        """
+        # Set specimen record storage fields
+        self.collobj.setStorageFieldsFromModel(storageRecord)
 
-    def handleTaxonNameInput(self, keyStrokes):
+        # Update UI to indicate selected storage record
+        self.window['txtStorageFullname'].update(storageRecord.fullName)
+        self.window['inpStorage'].update(storageRecord.name)
+        self.window['inpStorage'].update(select=True)  # Select all characters in field
+        self.collobj.storageFullName = storageRecord.fullName
+        # Move focus to next field (PrepTypes list).
+        self.setFieldFocus('cbxPrepType')
+
+    def autoSuggestTaxonName(self, keyStrokes):
         """
         Show autosuggest popup for Taxon Name selection and handle input from that window.
         """
@@ -820,35 +832,39 @@ class SpecimenDataEntry():
 
             self.autoTaxonName = None  # Reset autosuggest box
 
-            if selectedTaxonName is not None:
-                # Set specimen record taxon name fields using record retrieved
-                self.collobj.setTaxonNameFieldsFromModel(selectedTaxonName)
-
-                # Update UI to indicate selected taxon name record
-                self.window['inpTaxonName'].update(selectedTaxonName.fullName)
-
-                # Add taxon name verbatim note to notes field and update UI field accordingly
-                # if selectedTaxonName.notes != '':
-                currentNotes = self.window['inpNotes'].get()
-
-                # First strip off any previous new taxonomy notes
-                if ' | Verbatim_taxon:' in currentNotes:
-                    currentNotes = currentNotes.split(' | Verbatim_taxon:', 1)[0]
-                # Add new taxonomy notes, if any
-                self.collobj.notes = currentNotes + selectedTaxonName.notes
-
-                self.window['inpNotes'].Update(self.collobj.notes)
-
-                # Move focus further to next field (Barcode textbox)
-                # self.setFieldFocus('inpCatalogNumber')
+            if selectedTaxonName is not None: 
+                self.handleTaxonNameInput(selectedTaxonName)
 
         except Exception as e:
             util.logger.error(str(e))
             traceBack = traceback.format_exc()
             util.logger.error(traceBack)
-            sg.popup_error(f'{e} \n\n {traceBack}', title='Error handleTaxonNameInput', )
+            sg.popup_error(f'{e} \n\n {traceBack}', title='Error autoSuggestTaxonName', )
 
         return 'Done'
+
+    def handleTaxonNameInput(self, taxonName):
+        """
+        Handle selection of taxon name record by setting relevant fields, both in model and UI
+        """
+        # Set specimen record taxon name fields using record retrieved
+        self.collobj.setTaxonNameFieldsFromModel(taxonName)
+
+        # Update UI to indicate selected taxon name record
+        self.window['inpTaxonName'].update(taxonName.fullName)
+
+        # Add taxon name verbatim note to notes field and update UI field accordingly
+        # if selectedTaxonName.notes != '':
+        currentNotes = self.window['inpNotes'].get()
+
+        # First strip off any previous new taxonomy notes
+        if ' | Verbatim_taxon:' in currentNotes:
+            currentNotes = currentNotes.split(' | Verbatim_taxon:', 1)[0]
+        # Add new taxonomy notes, if any
+        self.collobj.notes = currentNotes + taxonName.notes
+
+        self.window['inpNotes'].Update(self.collobj.notes)
+
 
     # def handleMultiSpecimenCheck(self, value):
     #     """
@@ -939,22 +955,6 @@ class SpecimenDataEntry():
         # taxonRecords = self.db.getRowsOnFilters('taxonname', {'fullname': f'="{taxonFullName}"',
         #                                                       'treedefid': f'={self.collection.taxonTreeDefId}'}, 1)
         sql = f"SELECT * FROM taxonname WHERE fullname = '{taxonFullName}' AND treedefid = {self.collection.taxonTreeDefId} LIMIT 1;"
-        taxonRecords = self.db.executeSqlStatement(sql)
-        if len(taxonRecords) > 0:
-            taxonRecord = taxonRecords[0]
-        else:
-            taxonRecord = None
-        return taxonRecord
-    
-    def getTaxonNameRecordOnNumber(self, taxonNumber):
-        """
-        Retrieve taxon name record based on taxon name input field contents.
-        Search is to be done on taxon fullname and taxon tree definition derived from collection.
-        """
-        # taxonFullName = self.window['inpTaxonName'].get()
-        # taxonRecords = self.db.getRowsOnFilters('taxonname', {'fullname': f'="{taxonFullName}"',
-        #                                                       'treedefid': f'={self.collection.taxonTreeDefId}'}, 1)
-        sql = f"SELECT * FROM taxonname WHERE taxonnumber = '{taxonNumber}' AND treedefid = {self.collection.taxonTreeDefId} LIMIT 1;"
         taxonRecords = self.db.executeSqlStatement(sql)
         if len(taxonRecords) > 0:
             taxonRecord = taxonRecords[0]
