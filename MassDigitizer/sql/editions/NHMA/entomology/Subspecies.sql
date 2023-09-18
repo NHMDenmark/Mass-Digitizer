@@ -1,5 +1,5 @@
 INSERT INTO taxonname ("spid","name","fullname","rankid","taxonRank", "treedefid","parentfullname", "taxonnumber", "taxonnrsource") VALUES
-(6392,"silvicola","Amara quenseli silvicola",230,"Subspecies", 2,"Amara quenseli","2230","Checklist of Danish Lepidoptera"),
+(6392,"silvicola","Amara quenseli silvicola",230,"Subspecies", 2,"Amara quenseli","",""),
 (7028,"albofasciatus","Anaglyptus mysticus albofasciatus",230,"Subspecies", 2,"Anaglyptus mysticus","",""),
 (7413,"latipalpes","Anaspis thoracica latipalpes",230,"Subspecies", 2,"Anaspis thoracica","",""),
 (6237,"polonicum","Bembidion andreae polonicum",230,"Subspecies", 2,"Bembidion andreae","",""),
