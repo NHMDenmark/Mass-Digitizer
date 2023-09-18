@@ -41,7 +41,7 @@ class Taxon(model.Model):
         
         self.merge          = None
 
-        self.institutionId   = gs.institution.Id #db.getRowOnId('collection',collection_id)['institutionid']
+        self.institutionId   = gs.institutionId #db.getRowOnId('collection',collection_id)['institutionid']
         self.collectionId    = collection_id
 
         self.taxonRanks = {

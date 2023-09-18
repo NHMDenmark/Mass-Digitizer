@@ -1,6 +1,7 @@
 -- SQL Script for extracting storage locations from Specify db for insertion into local app db
 --
 -- To be run on Specify database for each collection 
+-- NOTE Currently only working for NHMD Vascular plants collections 
 -- The generated lines should be added below the statement:
 --     INSERT INTO storage (name, fullname, rankname, collectionid) VALUES 
 
