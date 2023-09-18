@@ -152,7 +152,7 @@ class DataAccess():
             util.logger.debug(sqlString)
             util.logger.error(e)
             records = None
-
+    
         self.currentCursor.connection.close()
 
         return records

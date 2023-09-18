@@ -353,11 +353,34 @@ class Specimen(Model):
 
         return self.storageId
 
+    def setTaxonNameFieldsFromRecord(self, record):
+        """
+        Set taxon name fields from selected name record
+        CONTRACT
+          record (sqliterow) : SQLite Row holding taxon name record
+        RETURNS taxonNameId (int) :
+        """
+
+        if record is not None:
+            self.taxonNameId = record['id']
+            self.taxonSpid = record['spid']
+            self.taxonName = record['name']
+            self.taxonFullName = record['fullName']
+            self.rankid = record['rankid']  # TODO: taxonrankid
+            self.taxonRankName = self.getTaxonRankname(record['rankid'])
+            self.higherTaxonName = record['parentFullName']
+            self.familyName = record['familyName']
+
+        else:
+            # Empty record
+            self.taxonNameId = 0
+        return self.taxonNameId
+
     def setTaxonNameFieldsFromModel(self, object):
         """
         Set taxon name fields from selected name record
         CONTRACT
-          taxonNameRecord (sqliterow) : SQLite Row holding taxon name record
+          object (Model) : Taxon name model object instance 
         RETURNS taxonNameId (int) :
         """
 
