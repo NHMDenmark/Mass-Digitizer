@@ -1,4 +1,4 @@
-INSERT INTO taxonname ("spid","name","fullname","rankid","taxonRank", "treedefid","parentfullname", "taxonnumber", "taxonnrsource") VALUES (6369,"ater","Abax ater",220,"Species", 2,"Abax","",""),
+INSERT INTO taxonname ("spid","name","fullname","rankid","taxonRank", "treedefid","parentfullname", "idnumber", "taxonnrsource") VALUES (6369,"ater","Abax ater",220,"Species", 2,"Abax","",""),
 (6369,"ater","Abax ater",220,"Species", 2,"Abax","",""),
 (7388,"affinis","Abdera affinis",220,"Species", 2,"Abdera","",""),
 (7392,"biflexuosa","Abdera biflexuosa",220,"Species", 2,"Abdera","",""),
