@@ -326,6 +326,14 @@ class Specimen(Model):
         else:
             # Empty record
             self.taxonNameId = 0
+            self.taxonSpid = 0
+            self.taxonName = ''
+            self.taxonFullName = ''
+            self.higherTaxonName = ''
+            self.rankid = ''
+            self.taxonNumber = ''
+            self.taxonRankName = ''
+            self.familyName = ''
 
         return self.taxonNameId
 
@@ -382,7 +390,7 @@ class Specimen(Model):
 
     def setTaxonNameFieldsFromModel(self, object):
         """
-        Set taxon name fields from selected name record
+        Set taxon name fields from selected taxon name mode instance
         CONTRACT
           object (Model) : Taxon name model object instance 
         RETURNS taxonNameId (int) :
