@@ -52,6 +52,7 @@ class Specimen(Model):
         self.taxonRankName = ''  # TODO
         self.familyName = ''  # TODO
         self.higherTaxonName = ''
+        self.taxonNumber = ''
         self.typeStatusName = ''
         self.typeStatusId = 0
         self.objectCondition = ''
@@ -120,6 +121,7 @@ class Specimen(Model):
             'highertaxonname': f'"{self.higherTaxonName}"',
             'rankid': f'"{self.rankid}"',
             'taxonrankname': f'"{self.taxonRankName}"',
+            'taxonnumber': f'"{self.taxonNumber}"',
             'typestatusname': f'"{self.typeStatusName}"',
             'typestatusid': f'"{self.typeStatusId}"',
             'georegionname': f'"{self.geoRegionName}"',
@@ -175,6 +177,7 @@ class Specimen(Model):
             self.higherTaxonName = record['highertaxonname']
             self.rankid = record['rankid']
             self.taxonRankName = record['taxonrankname']
+            self.taxonNumber = record['taxonnumber']
             self.typeStatusName = record['typestatusname']
             self.typeStatusId = record['typestatusid']
             self.objectCondition = record['objectcondition']
@@ -315,6 +318,7 @@ class Specimen(Model):
             self.taxonFullName = record['fullname']
             self.higherTaxonName = record['parentfullname']
             self.rankid = record['rankid']  # TODO
+            self.taxonNumber = record['idnumber']
             self.taxonRankName = self.getTaxonRankname(self.rankid)
             self.familyName = self.searchParentTaxon(self.taxonFullName, 140, self.collection.taxonTreeDefId)
 
@@ -393,6 +397,7 @@ class Specimen(Model):
             self.taxonRankName = self.getTaxonRankname(object.rankid)
             self.higherTaxonName = object.parentFullName
             self.familyName = object.familyName
+            self.taxonNumber = object.idNumber
 
         else:
             # Empty record

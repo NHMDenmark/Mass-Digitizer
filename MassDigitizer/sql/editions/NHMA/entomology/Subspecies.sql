@@ -1,4 +1,4 @@
-INSERT INTO taxonname ("spid","name","fullname","rankid","taxonRank", "treedefid","parentfullname", "taxonnumber", "taxonnrsource") VALUES
+INSERT INTO taxonname ("spid","name","fullname","rankid","taxonRank", "treedefid","parentfullname", "idnumber", "taxonnrsource") VALUES
 (6392,"silvicola","Amara quenseli silvicola",230,"Subspecies", 2,"Amara quenseli","",""),
 (7028,"albofasciatus","Anaglyptus mysticus albofasciatus",230,"Subspecies", 2,"Anaglyptus mysticus","",""),
 (7413,"latipalpes","Anaspis thoracica latipalpes",230,"Subspecies", 2,"Anaspis thoracica","",""),

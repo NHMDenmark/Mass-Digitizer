@@ -60,12 +60,12 @@ class SpecimenDataEntry():
 
         # Various lists of fields to be cleared on command
         # Needs radio in the input field list
-        self.inputFieldList = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'chkDamage', 'inpNotes', 'radRadioSSO', 'radRadioMSO', 'radRadioMOS', 'inpContainerID', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNr', 'inpCatalogNumber', 'btnSave']
+        self.inputFieldList = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'chkDamage', 'inpNotes', 'radRadioSSO', 'radRadioMSO', 'radRadioMOS', 'inpContainerID', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'inpCatalogNumber', 'btnSave']
         self.inputFieldListSSO = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'inpNotes', 'inpCatalogNumber']
-        self.focusIconList = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrDamage', 'inrNotes', 'inrRadioSSO', 'inrRadioMSO', 'inrRadioMOS', 'inrContainerID', 'inrGeoRegion', 'inrTaxonName', 'inrTaxonNr', 'inrCatalogNumber', 'inrSave']
+        self.focusIconList = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrDamage', 'inrNotes', 'inrRadioSSO', 'inrRadioMSO', 'inrRadioMOS', 'inrContainerID', 'inrGeoRegion', 'inrTaxonName', 'inrTaxonNumber', 'inrCatalogNumber', 'inrSave']
         self.focusIconListSSO = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrNotes', 'inrCatalogNumber']
-        self.clearingList = ['inpStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'inpNotes','inpContainerID', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNr', 'inpCatalogNumber','txtRecordID']
-        self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'inpNotes'},{'inpContainerID'},{'cbxGeoRegion'}, {'inpTaxonName'}, {'inpTaxonNr'}]
+        self.clearingList = ['inpStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'inpNotes','inpContainerID', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'inpCatalogNumber','txtRecordID']
+        self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'inpNotes'},{'inpContainerID'},{'cbxGeoRegion'}, {'inpTaxonName'}, {'inpTaxonNumber'}]
         self.nonStickyFields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage']
 
         # Global variables
@@ -185,9 +185,9 @@ class SpecimenDataEntry():
             sg.Multiline('', size=blueSize, key='inpTaxonName', rstrip=False, no_scrollbar=True, text_color='black', background_color='white',font=fieldFont, enable_events=True, pad=((5, 0), (0, 0))),
 
             sg.Text(indicatorRight, key='inrTaxonName', background_color=blueArea, visible=True, font=wingdingFont),
-            sg.Text('Taxon Number:', key='txtTaxonNr', font=captionFont, background_color=blueArea, text_color='black', visible=True),
-            sg.InputText('', size=(7, 1), key='inpTaxonNr', text_color='black', background_color='white', font=fieldFont, enable_events=True, visible=True),
-            sg.Text(indicatorRight, key='inrTaxonNr', background_color=blueArea, visible=True, font=wingdingFont),
+            sg.Text('Taxon Number:', key='txtTaxonNumber', font=captionFont, background_color=blueArea, text_color='black', visible=True),
+            sg.InputText('', size=(7, 1), key='inpTaxonNumber', text_color='black', background_color='white', font=fieldFont, enable_events=True, visible=True),
+            sg.Text(indicatorRight, key='inrTaxonNumber', background_color=blueArea, visible=True, font=wingdingFont),
             #sg.Text('No further record to go back to!', key='lblRecordEnd', visible=False, background_color="#ff5588", border_width=3)
         ]
 
@@ -274,11 +274,11 @@ class SpecimenDataEntry():
             self.window.Element('txtInstitution').Update(value=institution[2])
 
         if self.collection.useTaxonNumbers == True:
-            self.window.Element('txtTaxonNr').Update(visible=True)
-            self.window.Element('inpTaxonNr').Update(visible=True)
+            self.window.Element('txtTaxonNumber').Update(visible=True)
+            self.window.Element('inpTaxonNumber').Update(visible=True)
         else:
-            self.window.Element('txtTaxonNr').Update(visible=False)
-            self.window.Element('inpTaxonNr').Update(visible=False)     
+            self.window.Element('txtTaxonNumber').Update(visible=False)
+            self.window.Element('inpTaxonNumber').Update(visible=False)     
 
         # Set triggers for the different controls on the UI form
         self.setControlEvents()
@@ -308,10 +308,10 @@ class SpecimenDataEntry():
         # self.window['inpTaxonName'].bind("<Tab>", "_Tab")
         self.window['inpCatalogNumber'].bind('<Leave>', '_Edit')
         self.window['inpCatalogNumber'].bind("<Return>", "_Return")
-        #self.window['inpTaxonNr'].bind("<Leave>", "_Edit")
-        self.window['inpTaxonNr'].bind("<Return>", "_Edit")
-        self.window['inpTaxonNr'].bind("<Tab>", "_Edit")
-        self.window['inpTaxonNr'].bind("<FocusOut>", "_Edit")
+        #self.window['inpTaxonNumber'].bind("<Leave>", "_Edit")
+        self.window['inpTaxonNumber'].bind("<Return>", "_Edit")
+        self.window['inpTaxonNumber'].bind("<Tab>", "_Edit")
+        self.window['inpTaxonNumber'].bind("<FocusOut>", "_Edit")
         self.window['btnSave'].bind("<Return>", "_Return")
 
         # Input field focus events
@@ -402,31 +402,31 @@ class SpecimenDataEntry():
                 self.setFieldFocus('inpTaxonName')
 
             elif event == 'inpTaxonName':
-                
+
+                keyStrokes = values['inpTaxonName'].rstrip("\n") # NOTE Artifact from barcode reader produces an appended "\n"
+                                
                 # Ensure any tabs are kept from creeping into the taxon name entered 
                 if "\t" in keyStrokes:
                     cleanName = keyStrokes.replace("\t", '')
                     self.window['inpTaxonName'].update(cleanName)
-                
-                result = None # Prepare for receiving new autosuggest results
-                
+                                
                 # Activate autosuggest box, when three characters or more are entered.
                 if len(keyStrokes) >= 3 and keyStrokes != 'None':
-                    result = self.autoSuggestTaxonName(values['inpTaxonName'].rstrip("\n"))
-                    # NOTE Artifact from barcode reader produces an appended "\n"
+                    result = self.autoSuggestTaxonName(keyStrokes) 
                 
-                if result == 'Done':
-                    # Taxon name retrieved move to next field depending on collection
-                    if self.collection.useTaxonNumbers == True:
-                        self.setFieldFocus('inpTaxonNr')
-                    else:
+                    if result == 'Done':
+                        # Taxon name retrieved move to next field depending on collection
+                        # NOTE Disabled, because we'd just synchronize both taxon fields and move on to barcode field 
+                        #if self.collection.useTaxonNumbers == True:
+                        #    self.setFieldFocus('inpTaxonNumber')
+                        #else:
                         self.setFieldFocus('inpCatalogNumber')                
 
-            elif event == 'inpTaxonNr_Edit':
+            elif event == 'inpTaxonNumber_Edit':
                 # 
-                taxonNumber = self.window['inpTaxonNr'].get()
+                taxonNumber = self.window['inpTaxonNumber'].get()
                 if taxonNumber != '':
-                    taxonRecord = self.db.getRowsOnFilters('taxonname', {'taxonnumber':f'={taxonNumber}'}, 1)
+                    taxonRecord = self.db.getRowsOnFilters('taxonname', {'idnumber':f'={taxonNumber}'}, 1)
                     if taxonRecord:
                         taxonName = model.Model(self.collectionId)
                         taxonName.setFields(taxonRecord[0])
@@ -435,12 +435,12 @@ class SpecimenDataEntry():
                         self.setFieldFocus('inpCatalogNumber')
                     else:
                         self.validationFeedback('Could not find taxon with this number! (' + taxonNumber + ')')
-                        self.window['inpTaxonNr'].update('')
+                        self.window['inpTaxonNumber'].update('')
 
             elif event == 'inpCatalogNumber_Return':
                 # Respond to barcode being entered or scanned by setting corresponding field value
                 self.collobj.catalogNumber = values['inpCatalogNumber']
-
+                # Save form fields to record
                 self.saveForm()
 
             # **** Focus Events ****
@@ -795,6 +795,7 @@ class SpecimenDataEntry():
 
         # Update UI to indicate selected taxon name record
         self.window['inpTaxonName'].update(taxonName.fullName)
+        self.window['inpTaxonNumber'].update(taxonName.idNumber)
 
         # Add taxon name verbatim note to notes field and update UI field accordingly
         # if selectedTaxonName.notes != '':
@@ -845,6 +846,8 @@ class SpecimenDataEntry():
         self.collobj.setGeoRegionFields(self.window['cbxGeoRegion'].widget.current())
         taxonFullName = self.window['inpTaxonName'].get()
         taxonFullName = taxonFullName.rstrip()
+        if self.collection.useTaxonNumbers:
+            self.collobj.taxonNumber = self.window['inpTaxonNumber'].get()
         self.collobj.setTaxonNameFields(self.getTaxonNameRecord(taxonFullName))
         
         # Include non-sticky fields usually in case of synchronizing an existing record
@@ -948,19 +951,10 @@ class SpecimenDataEntry():
 
         self.setContainerFields(record)
 
-        # multispecimen = record['multispecimen']
-        # if multispecimen != '' and multispecimen is not None:
-        #     # If multispecimen field has contents, set & unhide respective fields
-        #     self.multiSpecimen = True
-        #     self.window['chkMultiSpecimen'].update(True)
-        #     self.window['inpMultiSpecimen'].update(visible=True)
-        # else:
-        #     # Multispecimen field is empty, clear & unhide respective fields
-        #     self.multiSpecimen = False
-        #     self.window['chkMultiSpecimen'].update(False)
-        #     self.window['inpMultiSpecimen'].update(visible=False)
         self.window['cbxGeoRegion'].update(record['georegionname'])
         self.window['inpTaxonName'].update(record['taxonfullname'])
+        if self.collection.useTaxonNumbers:
+            self.window['inpTaxonNumber'].update(record['taxonnumber'])
         self.window['inpCatalogNumber'].update(record['catalognumber'])
 
     def displayStorage(self, storageNameValue):

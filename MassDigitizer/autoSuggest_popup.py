@@ -202,9 +202,9 @@ class AutoSuggest_popup():
                         self.rankId = self.selected_row['rankid']
                         self.autoSuggestObject.rankid = self.rankId
                         self.autoSuggestObject.treedefid = self.collection.taxonTreeDefId
-                        self.familyName = self.specimen.searchParentTaxon(self.selected_row['fullname'], 140,
-                                                                          self.collection.taxonTreeDefId)
-                        self.autoSuggestObject.familyName = self.familyName
+                        self.familyName = self.specimen.searchParentTaxon(self.selected_row['fullname'], 140,self.collection.taxonTreeDefId)
+                        self.autoSuggestObject.familyName = self.familyName                        
+                        self.autoSuggestObject.idNumber = self.selected_row['idnumber']
                         self.currentRecord = self.autoSuggestObject.getFieldsAsDict()
                         # The above family name will be picked up by the specimen-data-entry class
 
@@ -224,6 +224,7 @@ class AutoSuggest_popup():
                         self.autoSuggestObject.name = self.selected_row['name']
                         self.autoSuggestObject.fullName = self.selected_row['fullname']
                         self.autoSuggestObject.parentFullName = self.selected_row['parentfullname']
+                        self.autoSuggestObject.idNumber = self.selected_row['idnumber']
                         # Transfer any novel taxon verbatim notes
                         if self.autoSuggestObject.spid == 0 or self.autoSuggestObject.spid is None:
                             self.autoSuggestObject.notes = f" | Verbatim_taxon:{self.autoSuggestObject.fullName}"
