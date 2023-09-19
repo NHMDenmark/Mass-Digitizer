@@ -402,7 +402,7 @@ class SpecimenDataEntry():
                 self.setFieldFocus('inpTaxonName')
 
             elif event == 'inpTaxonName':
-
+                # 
                 keyStrokes = values['inpTaxonName'].rstrip("\n") # NOTE Artifact from barcode reader produces an appended "\n"
                                 
                 # Ensure any tabs are kept from creeping into the taxon name entered 
@@ -420,7 +420,14 @@ class SpecimenDataEntry():
                         #if self.collection.useTaxonNumbers == True:
                         #    self.setFieldFocus('inpTaxonNumber')
                         #else:
-                        self.setFieldFocus('inpCatalogNumber')                
+                        self.setFieldFocus('inpCatalogNumber')
+                
+                if self.window['inpTaxonName'].get().strip() == '':
+                    # taxon input field empty: Clear all taxon related fields
+                    self.collobj.setTaxonNameFieldsFromModel(model.Model(self.collectionId))
+                    self.setSpecimenFields(False)
+                    self.window['inpTaxonNumber'].update('') # Clear taxon number input field
+                    self.setFieldFocus('inpCatalogNumber')
 
             elif event == 'inpTaxonNumber_Edit':
                 # 
