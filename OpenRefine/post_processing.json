@@ -298,19 +298,6 @@
     "description": "Text transform on cells in column genus using expression grel:if(cells['taxonfullname'].value.contains(' x '), cells['genus'].value, value)"
   },
   {
-    "op": "core/text-transform",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "columnName": "container",
-    "expression": "grel:if(value.startsWith(\"'\"), value.replace(\"'\", ''), value)",
-    "onError": "keep-original",
-    "repeat": false,
-    "repeatCount": 10,
-    "description": "Text transform on cells in column container using expression grel:if(value.startsWith(\"'\"), value.replace(\"'\", ''), value)"
-  },
-  {
     "op": "core/column-addition",
     "engineConfig": {
       "facets": [],
@@ -453,5 +440,36 @@
     "repeat": false,
     "repeatCount": 10,
     "description": "Text transform on cells in column catalogeddate using expression grel:value.toString('yyyy-MM-dd')"
+  },
+  {
+    "op": "core/fill-down",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "collection",
+    "description": "Fill down cells in column collection"
+  },
+  {
+    "op": "core/fill-down",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "collection",
+    "description": "Fill down cells in column collection"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "collection",
+    "expression": "grel:value.replace('Herbarium C: Danish Vascular Plant Collection', 'Herbarium C: Danish Herbarium')",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Text transform on cells in column collection using expression grel:value.replace('Herbarium C: Danish Vascular Plant Collection', 'Herbarium C: Danish Herbarium')"
   }
 ]
