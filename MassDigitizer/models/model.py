@@ -48,6 +48,7 @@ class Model:
         self.parentFullName = ''
         self.parentId = 0
         self.familyName = ''  # TODO Too specific! Solve in a different way ...
+        self.idNumber = '' # TODO Too specific! Solve in a different way ...
         self.remarks = ' '
         self.notes = ''
         self.collectionId = collection_id
@@ -234,6 +235,7 @@ class Model:
         self.collectionId = record['collectionid']
         self.treedefid = record['treedefid']
         self.rankid = record['rankid']
+        self.idNumber = record['idnumber']
 
     # Specify Interfacing functions
 
