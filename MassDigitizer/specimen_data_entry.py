@@ -77,7 +77,6 @@ class SpecimenDataEntry():
         # Create auto-suggest popup windows
         self.autoStorage = ''  # global for storage locations
         self.autoTaxonName = None  # global for taxon names
-        self.taxonNameList = []
 
         # Set up user interface
         self.setup(collection_id)
@@ -398,57 +397,30 @@ class SpecimenDataEntry():
                 self.window['inpContainerID'].update('')
                 self.setFieldFocus('cbxGeoRegion')
 
-            # elif event == 'chkMultiSpecimen' or event == 'chkMultiSpecimen_Return':
-            #     # When multispecimen checkbox is checked or enter is pressed while in focus:
-            #     inpMultiSpecimenNewValue = ''
-            #     if self.collobj.multiSpecimen == '':
-            #         # Multispecimen field not yet set: Unhide field, check field and generate random name
-            #         self.window['inpMultiSpecimen'].update(visible=True)
-            #         self.window['chkMultiSpecimen'].update(True)  # Check
-            #         inpMultiSpecimenNewValue = util.getRandomNumberString()
-            #     else:
-            #         # Multispecimen field already set: Reset and hide text field
-            #         self.window['chkMultiSpecimen'].update(False)  # Uncheck
-            #         self.window['inpMultiSpecimen'].update(visible=False)
-            #         inpMultiSpecimenNewValue = ''
-            #
-            #         # Update field with new value and reflect on specimen record
-            #     self.window['inpMultiSpecimen'].update(value=inpMultiSpecimenNewValue)
-            #     self.collobj.multiSpecimen = inpMultiSpecimenNewValue
-            #     self.setFieldFocus('cbxGeoRegion')
-
-            # elif event == 'inpMultiSpecimen_Edit':
-            #     self.collobj.multiSpecimen = values['inpMultiSpecimen']
-            #     self.setFieldFocus('cbxGeoRegion')
-
             elif event == 'cbxGeoRegion':
                 self.collobj.setGeoRegionFields(self.window[event].widget.current())
                 self.setFieldFocus('inpTaxonName')
 
             elif event == 'inpTaxonName':
-                # 
-                keyStrokes = values['inpTaxonName'].rstrip("\n")
+                
+                # Ensure any tabs are kept from creeping into the taxon name entered 
                 if "\t" in keyStrokes:
                     cleanName = keyStrokes.replace("\t", '')
                     self.window['inpTaxonName'].update(cleanName)
-                    #self.window['inpCatalogNumber'].set _focus()
-                    #self.window['inpTaxonName'].Update('')
                 
-                self.taxonNameList.append(keyStrokes) 
-                
-                result = None # 
+                result = None # Prepare for receiving new autosuggest results
                 
                 # Activate autosuggest box, when three characters or more are entered.
                 if len(keyStrokes) >= 3 and keyStrokes != 'None':
                     result = self.autoSuggestTaxonName(values['inpTaxonName'].rstrip("\n"))
-                    # Artifact from barcode reader produces an appended "\n"
+                    # NOTE Artifact from barcode reader produces an appended "\n"
                 
                 if result == 'Done':
                     # Taxon name retrieved move to next field depending on collection
                     if self.collection.useTaxonNumbers == True:
                         self.setFieldFocus('inpTaxonNr')
                     else:
-                        self.setFieldFocus('inpCatalogNumber')
+                        self.setFieldFocus('inpCatalogNumber')                
 
             elif event == 'inpTaxonNr_Edit':
                 # 
@@ -485,7 +457,6 @@ class SpecimenDataEntry():
 
             elif event == 'btnBack':
                 # Fetch previous specimen record data on basis of current record ID, if any
-                #recID = self.window['txtRecordID'].get()
                 record = self.collobj.loadPrevious()
 
                 # If no further record back, retrieve current record (if any) or last record (if any)
@@ -533,9 +504,9 @@ class SpecimenDataEntry():
                     self.window['tblPrevious'].update(self.recordSet.getAdjacentRecordList(self.tableHeaders))
 
                 # Reload recordset and repopulate table of adjacent records
-                # self.window['tblPrevious'].update(self.recordSet.getAdjacentRecordList(self.tableHeaders))
-                # self.recordSet.reload(record)
-                # self.window['tblPrevious'].update(self.recordSet.getAdjacentRecordList(self.tableHeaders))
+                #self.window['tblPrevious'].update(self.recordSet.getAdjacentRecordList(self.tableHeaders))
+                #self.recordSet.reload(record)
+                #self.window['tblPrevious'].update(self.recordSet.getAdjacentRecordList(self.tableHeaders))
 
                 # Reset focus back to first field (Storage)
                 self.setFieldFocus('inpStorage')
@@ -702,37 +673,9 @@ class SpecimenDataEntry():
         """
 
         try:
+            # Prepare for saving (new) record 
             result = ''
-            #catalogNumber = record['catalognumber'].replace('"', '') # TODO Explain necessity of this
-
-            # Make sure everything is read on immediate barcode scan
-            # TODO Disabled, because this shouldn't have to be necessary to ensure here.  
-            #taxonFullName = self.window['inpTaxonName'].get()
-            #taxonFullName = taxonFullName.rstrip()  # barcode scanner adds newline
-            #self.collobj.taxonFullName = taxonFullName
-            #taxonTableRecord = self.getTaxonNameRecord(taxonFullName)            
-            #if taxonTableRecord:
-            #    self.collobj.taxonName = taxonTableRecord['name']
-            #    self.collobj.taxonRankName = taxonTableRecord['taxonrank']
-            #    self.collobj.familyName = self.collobj.searchParentTaxon(taxonTableRecord['name'], 140, self.collection.taxonTreeDefId)
-            #    self.collobj.higherTaxonName = taxonTableRecord['name'].split(' ')[0]
-            #    self.collobj.rankid = taxonTableRecord['rankid']
-            #    self.collobj.taxonNameId = taxonTableRecord['id']
-            #    self.collobj.taxonSpid = taxonTableRecord['spid']
-            #    self.collobj.parentFullName = taxonTableRecord['parentfullname']
-
-            # TODO Below violates the MVC pattern: Object ID should be retrieved from model instance, not form (view)! 
-            #recordIdFromForm = self.window['txtRecordID'].get()
-            #if recordIdFromForm:
-            #    newRecord = False
-            #else:
-            #    newRecord = True
-
-            #Check if saving a new record (id = 0); 
             newRecord = self.collobj.id == 0
-
-            #self.window['radRadioMOS'].reset_group()
-            #self.window['radRadioSSO'].update(value=False)
 
             # Run validations 
             validated = self.validateBarCodeDigits(self.collobj.catalogNumber) and self.validateBarCodeLength(self.collobj.catalogNumber)
