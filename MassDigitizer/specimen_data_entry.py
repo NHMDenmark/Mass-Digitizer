@@ -332,16 +332,17 @@ class SpecimenDataEntry():
 
     def main(self):
 
-        self.setFieldFocus('inpStorage')  # Set focus on storage field
-        self.window['inpStorage'].update(select=True)  # Select all on field to enable overwriting pre-filled "None" placeholder
+        self.setFieldFocus('inpStorage')  # Set focus on storage field 
+        self.window['inpStorage'].update(select=True)  # Select all on field to enable overwriting pre-filled "None" placeholder 
 
         while True:
-            # Main loop going through User Interface (UI) events
+            # Main loop going through User Interface (UI) events 
 
-            event, values = self.window.Read()  # Get UI event values
+            event, values = self.window.Read()  # Get UI event values 
+            print(event)
             util.logger.debug(f'events: {event} | {values}')
 
-            if event is None: break  # Empty event indicates user closing window
+            if event is None: break  # Empty event indicates user closing window 
 
             self.window['lblError'].update('Validation error',visible=False) # Clear error message label 
 
@@ -439,6 +440,9 @@ class SpecimenDataEntry():
                     self.setSpecimenFields(values, False)
                     self.window['inpTaxonNumber'].update('') # Clear taxon number input field
                     #self.setFieldFocus('inpCatalogNumber')
+
+            elif event == 'inpTaxonName_Shift-Tab':                
+                self.setFieldFocus('cbxGeoRegion')
 
             elif event == 'inpTaxonNumber_Tab':
                 pass
