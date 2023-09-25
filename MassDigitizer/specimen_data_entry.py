@@ -23,9 +23,11 @@ CONVENTION :
 'inp' in the element key means 'input field'
 """
 
+import sys
+import time 
 import traceback
 import PySimpleGUI as sg
-import sys
+
 # Internal dependencies
 import util
 import data_access
@@ -61,11 +63,9 @@ class SpecimenDataEntry():
         # Various lists of fields to be cleared on command
         # Needs radio in the input field list
         self.inputFieldList = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'chkDamage', 'inpNotes', 'radRadioSSO', 'radRadioMSO', 'radRadioMOS', 'inpContainerID', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'inpCatalogNumber', 'btnSave']
-        self.inputFieldListSSO = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'inpNotes', 'inpCatalogNumber']
-        self.focusIconList = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrDamage', 'inrNotes', 'inrRadioSSO', 'inrRadioMSO', 'inrRadioMOS', 'inrContainerID', 'inrGeoRegion', 'inrTaxonName', 'inrTaxonNumber', 'inrCatalogNumber', 'inrSave']
-        self.focusIconListSSO = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrNotes', 'inrCatalogNumber']
+        self.focusIconList =  ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrDamage', 'inrNotes', 'inrRadioSSO', 'inrRadioMSO', 'inrRadioMOS', 'inrContainerID', 'inrGeoRegion', 'inrTaxonName', 'inrTaxonNumber', 'inrCatalogNumber', 'inrSave']
         self.clearingList = ['inpStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'inpNotes','inpContainerID', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'inpCatalogNumber','txtRecordID']
-        self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'inpNotes'},{'inpContainerID'},{'cbxGeoRegion'}, {'inpTaxonName'}, {'inpTaxonNumber'}]
+        #self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'inpNotes'},{'inpContainerID'},{'cbxGeoRegion'}, {'inpTaxonName'}, {'inpTaxonNumber'}]
         self.nonStickyFields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage']
 
         # Global variables
@@ -73,13 +73,15 @@ class SpecimenDataEntry():
         self.fieldInFocusIndex = -1  # Stores list index of field currently in focus
         self.MSOterm = 'Multiple specimens on one object'
         self.MOSterm = 'One specimen on multiple objects'
+        self.timer = time.time() # Used to measure time elapsed since last event to prevent infinite loops 
 
-        # Create auto-suggest popup windows
-        self.autoStorage = ''  # global for storage locations
+        # Auto-suggest popup windows
+        self.autoStorage = None    # global for storage locations
         self.autoTaxonName = None  # global for taxon names
 
         # Set up user interface
         self.setup(collection_id)
+
         # Run
         self.main()
 
@@ -183,12 +185,14 @@ class SpecimenDataEntry():
             sg.Text('Taxonomic name:     ', size=captionSize, background_color=blueArea, text_color='black',font=captionFont),
             # sg.Text(indicatorLeft, key='inlTaxonName', text_color='black', background_color=blueArea, visible=True, font=wingdingFont),
             sg.Multiline('', size=blueSize, key='inpTaxonName', rstrip=False, no_scrollbar=True, text_color='black', background_color='white',font=fieldFont, enable_events=True, pad=((5, 0), (0, 0))),
-
             sg.Text(indicatorRight, key='inrTaxonName', background_color=blueArea, visible=True, font=wingdingFont),
+
+        ]
+
+        taxonNr = [
             sg.Text('Taxon Number:', key='txtTaxonNumber', font=captionFont, background_color=blueArea, text_color='black', visible=True),
             sg.InputText('', size=(7, 1), key='inpTaxonNumber', text_color='black', background_color='white', font=fieldFont, enable_events=True, visible=True),
             sg.Text(indicatorRight, key='inrTaxonNumber', background_color=blueArea, visible=True, font=wingdingFont),
-            #sg.Text('No further record to go back to!', key='lblRecordEnd', visible=False, background_color="#ff5588", border_width=3)
         ]
 
         barcode = [
@@ -209,21 +213,25 @@ class SpecimenDataEntry():
         adjacentRecords = self.recordSet.getAdjacentRecordList(self.tableHeaders)
         previousRecordsTable = [sg.Table(values=adjacentRecords, key='tblPrevious', enable_events=False, hide_vertical_scroll=True,headings=self.tableHeaders, font=('Arial', 13), justification='left', auto_size_columns=True, max_col_width=28, select_mode=sg.TABLE_SELECT_MODE_NONE)]
 
-        layout_bluearea = [broadGeo, taxonInput, barcode, [  # taxonomicPicklist,
+        # 
+        controlArea = [
             sg.Text('Record ID: ', key='lblRecordID', background_color='#99dcff', visible=True, size=(9, 1)),
             sg.Text('', key='txtRecordID', size=(4, 1), background_color=blueArea),
             sg.StatusBar('', relief=None, size=(7, 1), background_color=blueArea),
             sg.Button('SAVE', key="btnSave", button_color='seagreen', size=9),
             sg.Text('', key='inrSave', background_color=blueArea, visible=True),
             sg.StatusBar('', relief=None, size=(5, 1), background_color=blueArea),
-            #sg.Button('First record', key="btnFirst", button_color='white on black',  font=('Arial', 8)),
-            #sg.Button('Last record',  key="btnLast",  button_color='black on yellow', font=('Arial', 8)),
             sg.Button('GO BACK', key="btnBack", button_color='#8b0000'),
             sg.Button('GO FORWARDS', key='btnForward', button_color=('black', 'LemonChiffon2')),
             sg.Button('CLEAR FORM', key='btnClear', button_color='black on white'),
             #sg.Button('Export data', key='btnExport', button_color='royal blue'),  # Export data should be a backend feature says Pip
             #sg.Button('Dismiss', key='btnDismiss', button_color='white on black'), # Notifications not needed says Pip
-        ], lblExport, previousRecordsTable]
+        ]
+
+        bluearea_column1 = sg.Column([broadGeo, taxonInput, barcode], background_color=blueArea)
+        bluearea_column2 = sg.Column([taxonNr], background_color=blueArea)
+
+        layout_bluearea = [[bluearea_column1, bluearea_column2], controlArea, lblExport, previousRecordsTable]
 
         # Grey Area (Header) elements
         loggedIn = [
@@ -298,17 +306,13 @@ class SpecimenDataEntry():
         # GREEN AREA
         # cbxPrepType   # Combobox therefore already triggered
         # cbxTypeStatus # Combobox therefore already triggered
-        # self.window['inpNotes'].bind('<Tab>', '_Tab')
-        # self.window['inpNotes'].bind('<Leave>', '_Edit') # Disabled because it would randomly activate the multispecimen checkbox when hovering over inpNotes
         self.window['inpNotes'].bind('<Return>', '_Return')
-        # self.window['radRadioSSO'].bind("<FocusOut>", "FocusOut")
 
         # BLUE AREA
         # cbxGeoRegion  # Combobox therefore already triggered
-        # self.window['inpTaxonName'].bind("<Tab>", "_Tab")
-        self.window['inpCatalogNumber'].bind('<Leave>', '_Edit')
+        self.window['inpTaxonName'].bind("<Shift-KeyPress-Tab>", "_Shift-Tab")
+        #self.window['inpCatalogNumber'].bind('<Leave>', '_Edit')
         self.window['inpCatalogNumber'].bind("<Return>", "_Return")
-        #self.window['inpTaxonNumber'].bind("<Leave>", "_Edit")
         self.window['inpTaxonNumber'].bind("<Return>", "_Edit")
         self.window['inpTaxonNumber'].bind("<Tab>", "_Edit")
         self.window['inpTaxonNumber'].bind("<FocusOut>", "_Edit")
@@ -353,11 +357,11 @@ class SpecimenDataEntry():
 
             elif event == 'cbxTypeStatus':
                 self.collobj.setTypeStatusFields(self.window[event].widget.current())
-                self.collobj.typeStatusName = self.window['cbxTypeStatus'].get()
+                self.collobj.typeStatusName = values['cbxTypeStatus']
                 self.setFieldFocus('chkDamage')
 
             elif event == "chkDamage":
-                needsrepair = self.window['chkDamage'].get()
+                needsrepair = values['chkDamage']
                 if needsrepair: 
                     self.collobj.objectCondition = "Needs repair"
                 else: 
@@ -405,33 +409,46 @@ class SpecimenDataEntry():
                 # 
                 keyStrokes = values['inpTaxonName'].rstrip("\n") # NOTE Artifact from barcode reader produces an appended "\n"
                                 
-                # Ensure any tabs are kept from creeping into the taxon name entered 
+                # Catch any tabs when in field: 
                 if "\t" in keyStrokes:
+                    # First, ensure they are kept from creeping into the taxon name field
                     cleanName = keyStrokes.replace("\t", '')
                     self.window['inpTaxonName'].update(cleanName)
+                    # Then move on to next input field
+                    if self.collection.useTaxonNumbers == True:
+                        self.setFieldFocus('inpTaxonNumber')
+                    else:
+                        self.setFieldFocus('inpCatalogNumber')
                                 
                 # Activate autosuggest box, when three characters or more are entered.
+                result = ''
                 if len(keyStrokes) >= 3 and keyStrokes != 'None':
                     result = self.autoSuggestTaxonName(keyStrokes) 
                 
-                    if result == 'Done':
-                        # Taxon name retrieved move to next field depending on collection
-                        # NOTE Disabled, because we'd just synchronize both taxon fields and move on to barcode field 
-                        #if self.collection.useTaxonNumbers == True:
-                        #    self.setFieldFocus('inpTaxonNumber')
-                        #else:
+                if result == 'Done':
+                    # Taxon name retrieved                                
+                    # Move to next field depending on collection
+                    if self.collection.useTaxonNumbers == True and values['inpTaxonNumber'].strip() == "":
+                        self.setFieldFocus('inpTaxonNumber')
+                    else:
                         self.setFieldFocus('inpCatalogNumber')
                 
-                if self.window['inpTaxonName'].get().strip() == '':
+                if values['inpTaxonName'].strip() == '':
                     # taxon input field empty: Clear all taxon related fields
                     self.collobj.setTaxonNameFieldsFromModel(model.Model(self.collectionId))
-                    self.setSpecimenFields(False)
+                    self.setSpecimenFields(values, False)
                     self.window['inpTaxonNumber'].update('') # Clear taxon number input field
-                    self.setFieldFocus('inpCatalogNumber')
+                    #self.setFieldFocus('inpCatalogNumber')
+
+            elif event == 'inpTaxonNumber_Tab':
+                pass
+
+            elif event == 'inpTaxonNumber_Shift-Tab':
+                pass
 
             elif event == 'inpTaxonNumber_Edit':
                 # 
-                taxonNumber = self.window['inpTaxonNumber'].get()
+                taxonNumber = values['inpTaxonNumber']
                 if taxonNumber != '':
                     taxonRecord = self.db.getRowsOnFilters('taxonname', {'idnumber':f'={taxonNumber}'}, 1)
                     if taxonRecord:
@@ -443,12 +460,14 @@ class SpecimenDataEntry():
                     else:
                         self.validationFeedback('Could not find taxon with this number! (' + taxonNumber + ')')
                         self.window['inpTaxonNumber'].update('')
+                else:
+                    pass
 
             elif event == 'inpCatalogNumber_Return':
                 # Respond to barcode being entered or scanned by setting corresponding field value
                 self.collobj.catalogNumber = values['inpCatalogNumber']
                 # Save form fields to record
-                self.saveForm()
+                self.saveForm(values)
 
             # **** Focus Events ****
 
@@ -500,7 +519,7 @@ class SpecimenDataEntry():
                     self.collobj = specimen.Specimen(self.collectionId)
                     self.clearNonStickyFields()
                     # Transfer data in sticky fields to new record:
-                    self.setSpecimenFields()
+                    self.setSpecimenFields(values)
                 else:
                     # If a record has finally been retrieved, present content in data fields
                     self.collobj.setFields(record)
@@ -534,25 +553,9 @@ class SpecimenDataEntry():
             elif event == 'btnSave' or event == 'btnSave_Return':  # Should btnSave_Return be removed?
                 # Save current specimen record to app database
                 self.collobj.catalogNumber = values['inpCatalogNumber']
-                self.saveForm()
-
-            elif event == 'btnFirst':
-                # Go to first record in db table
-                #     self.getFirstOrLastRecord(position='first')
-                #     #self.collobj.previousRecordEdit = True
-
-                #     rowForTable = self.extractRowsInTwoFormats(record['id'])
-                #     rowsAdjacent = rowForTable['adjacentrows']
-                #     self.window['tblPrevious'].update(rowsAdjacent)
-                pass
-
-            elif event == 'btnLast':
-                # Go to last record in db table
-                #     self.getFirstOrLastRecord(position='newest')
-                pass
+                self.saveForm(values)
 
             elif event == 'Tab':
-
                 # When tabbing, find the next field in the sequence and set focus on that field
 
                 if (self.fieldInFocusIndex >= 0):
@@ -565,7 +568,7 @@ class SpecimenDataEntry():
                         fieldIndex = 0  # End of sequence: Loop around to first field
 
                     fieldName = self.inputFieldList[fieldIndex]
-                    # if len(self.window[fieldName].get()) < 1: TODO for version with optimized behavior for tabbing.
+                    # if len(values[fieldName]) < 1: TODO for version with optimized behavior for tabbing.
                 self.setFieldFocus(fieldName)
 
                 # self.tabToInputField(1) # Move to next input field  # TODO common method for the above lines?
@@ -586,6 +589,9 @@ class SpecimenDataEntry():
                     self.setFieldFocus(fieldName)
 
                 # self.tabToInputField(-1) # Move to preceding input field # TODO common method for the above lines?
+
+            elif event == 'Shift_L:16':
+                pass
 
             #elif event.endswith('_Tab'):
                 # TODO Re-evaluate the need for this event originally set for inpTaxonName and inpNotes
@@ -637,6 +643,13 @@ class SpecimenDataEntry():
         CONTRACT
             fieldName (String) : Name of the input field to receive focus
         """
+        
+        # Check time elapsed to prevent infinite loop 
+        timeElapsed = time.time() - self.timer
+        self.timer = time.time()
+        if timeElapsed < 0.05:
+            # abort method call as infinite loop is detected   
+            return
 
         # Iterate focus indicators and hide all
         for field in self.focusIconList:
@@ -669,10 +682,9 @@ class SpecimenDataEntry():
             self.fieldInFocus = fieldName  # (Re)set name of field in focus
             self.fieldInFocusIndex = self.inputFieldList.index(fieldName)
         # If fieldName is empty then all indicators are left unset
-
         util.logger.debug(f'Shifted focus on input field: "{fieldName}"')
 
-    def saveForm(self):
+    def saveForm(self, values):
         """
         Saving specimen data to database including validation of form input fields.
         The contents of the form input fields should have been immediately been transferred to the fields of the specimen object instance.
@@ -709,7 +721,7 @@ class SpecimenDataEntry():
                     self.collobj = specimen.Specimen(self.collectionId)                    
 
                     # Transfer data in sticky fields to new record:
-                    self.setSpecimenFields()
+                    self.setSpecimenFields(values)
 
                     # Prepare form for next new record
                     self.clearNonStickyFields()
@@ -805,9 +817,7 @@ class SpecimenDataEntry():
         self.window['inpTaxonNumber'].update(taxonName.idNumber)
 
         # Add taxon name verbatim note to notes field and update UI field accordingly
-        # if selectedTaxonName.notes != '':
         currentNotes = self.window['inpNotes'].get()
-
         # First strip off any previous new taxonomy notes
         if ' | Verbatim_taxon:' in currentNotes:
             currentNotes = currentNotes.split(' | Verbatim_taxon:', 1)[0]
@@ -836,7 +846,7 @@ class SpecimenDataEntry():
     #     self.collobj.multiSpecimen = inpMultiSpecimenNewValue
     #     self.setFieldFocus('cbxGeoRegion')
 
-    def setSpecimenFields(self, stickyFieldsOnly=True):
+    def setSpecimenFields(self, values, stickyFieldsOnly=True):
         """
         Method for synchronizing specimen data object instance (Model) with form input fields (View).
         CONTRACT
@@ -847,25 +857,26 @@ class SpecimenDataEntry():
         self.collobj.setStorageFieldsFromRecord(self.getStorageRecord())
         self.collobj.setPrepTypeFields(self.window['cbxPrepType'].widget.current())
         self.collobj.setTypeStatusFields(self.window['cbxTypeStatus'].widget.current())
-        self.collobj.notes = self.window['inpNotes'].get()
-        self.collobj.containername = self.window['inpContainerID'].get()
+        self.collobj.notes = values['inpNotes']
+        self.collobj.containername = values['inpContainerID']
         self.collobj.containertype = self.getContainerTypeFromInput()
         self.collobj.setGeoRegionFields(self.window['cbxGeoRegion'].widget.current())
-        taxonFullName = self.window['inpTaxonName'].get()
+        taxonFullName = values['inpTaxonName']
         taxonFullName = taxonFullName.rstrip()
         if self.collection.useTaxonNumbers:
-            self.collobj.taxonNumber = self.window['inpTaxonNumber'].get()
+            self.collobj.taxonNumber = values['inpTaxonNumber']
         self.collobj.setTaxonNameFields(self.getTaxonNameRecord(taxonFullName))
         
         # Include non-sticky fields usually in case of synchronizing an existing record
-        if not stickyFieldsOnly:
-            txtRecordId = self.window['txtRecordID'].get()
-            if txtRecordId != '':
-                recordId = int(txtRecordId)
-            else:
-                recordId = 0
-            self.collobj.id = recordId
-            self.collobj.catalogNumber = self.window['inpCatalogNumber'].get()
+        # TODO This seems to break the MVC pattern ! 
+        #if not stickyFieldsOnly:
+            #txtRecordId = values['txtRecordID']
+            #if txtRecordId != '':
+            #    recordId = int(txtRecordId)
+            #else:
+            #    recordId = 0
+            #self.collobj.id = recordId
+            #self.collobj.catalogNumber = values['inpCatalogNumber']
     
     def getContainerTypeFromInput(self):
         """
@@ -904,7 +915,6 @@ class SpecimenDataEntry():
         Retrieve taxon name record based on taxon name input field contents.
         Search is to be done on taxon fullname and taxon tree definition derived from collection.
         """
-        # taxonFullName = self.window['inpTaxonName'].get()
         # taxonRecords = self.db.getRowsOnFilters('taxonname', {'fullname': f'="{taxonFullName}"',
         #                                                       'treedefid': f'={self.collection.taxonTreeDefId}'}, 1)
         sql = f"SELECT * FROM taxonname WHERE fullname = '{taxonFullName}' AND treedefid = {self.collection.taxonTreeDefId} LIMIT 1;"
@@ -918,7 +928,7 @@ class SpecimenDataEntry():
     def setRecordFields(self, record, stickyFieldsOnly=False):
         """
         Function for transferring information to fields of newly created record.
-        CONTRACT:record['notes']
+        CONTRACT:
             record : New record that should have its fields set
             stickyFieldsOnly : Flag for indicating whether only sticky fields should be set
         """

@@ -935,7 +935,6 @@ UPDATE taxon t SET t.text1 = '933', t.text2 = 'Checklist of Danish Lepidoptera' 
 UPDATE taxon t SET t.text1 = '934', t.text2 = 'Checklist of Danish Lepidoptera' WHERE t.fullname = 'Scrobipalpa proclivella' AND t.taxontreedefid = 2;
 UPDATE taxon t SET t.text1 = '935', t.text2 = 'Checklist of Danish Lepidoptera' WHERE t.fullname = 'Scrobipalpa clintoni' AND t.taxontreedefid = 2;
 UPDATE taxon t SET t.text1 = '936', t.text2 = 'Checklist of Danish Lepidoptera' WHERE t.fullname = 'Scrobipalpa obsoletella' AND t.taxontreedefid = 2;
-UPDATE taxon t SET t.text1 = '936', t.text2 = 'Checklist of Danish Lepidoptera' WHERE t.fullname = 'Scrobipalpa obsoletella' AND t.taxontreedefid = 2;
 UPDATE taxon t SET t.text1 = '937', t.text2 = 'Checklist of Danish Lepidoptera' WHERE t.fullname = 'Scrobipalpa atriplicella' AND t.taxontreedefid = 2;
 UPDATE taxon t SET t.text1 = '938', t.text2 = 'Checklist of Danish Lepidoptera' WHERE t.fullname = 'Scrobipalpa artemisiella' AND t.taxontreedefid = 2;
 UPDATE taxon t SET t.text1 = '939', t.text2 = 'Checklist of Danish Lepidoptera' WHERE t.fullname = 'Scrobipalpa stangei' AND t.taxontreedefid = 2;
