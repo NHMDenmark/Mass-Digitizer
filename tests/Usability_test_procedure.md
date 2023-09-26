@@ -20,7 +20,7 @@ To quickly ascertain that the usability of the app is in place. Actions in the a
 ☐ Enter higher taxon name (level family or order)  
 ☐ Update the latest record  
 ☐ Set one of the multi-specimen/multi-object radio buttons  
-☐ Try setting the radio button to 'single specimen object' 
+☐ Try setting the radio button to 'single specimen object'  
 ☐ Try setting the radio button to 'single specimen object' for older records  
 ☐ Clear form - Update the latest record  
 ☐ Clear form – Create new record  
