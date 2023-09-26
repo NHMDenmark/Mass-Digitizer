@@ -24,7 +24,7 @@ To quickly ascertain that the usability of the app is in place. Actions in the a
 ☐ Try setting the radio button to 'single specimen object' for older records  
 ☐ Clear form - Update the latest record  
 ☐ Clear form – Create new record  
-☐ Check that sticky fields are carried over to the new record: StorageFullname, PrepType, TypeStatus, Notes, MultiSpecimen, MultiSpecimen serial, GeoRegion, TaxonName  
+☐ Check that sticky fields are carried over to the new record: StorageFullname, PrepType, TypeStatus, Notes, ContainerType, Container ID, GeoRegion, TaxonName  
 ☐ Create new record without green-area input  
 ☐ Create new record without Geo-region  
 ☐ Create new record with novel family name  
