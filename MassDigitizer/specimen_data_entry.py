@@ -62,10 +62,10 @@ class SpecimenDataEntry():
 
         # Various lists of fields to be cleared on command
         # Needs radio in the input field list
-        self.inputFieldList = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'chkDamage', 'inpNotes', 'radRadioSSO', 'radRadioMSO', 'radRadioMOS', 'inpContainerID', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'inpCatalogNumber', 'btnSave']
-        self.focusIconList =  ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrDamage', 'inrNotes', 'inrRadioSSO', 'inrRadioMSO', 'inrRadioMOS', 'inrContainerID', 'inrGeoRegion', 'inrTaxonName', 'inrTaxonNumber', 'inrCatalogNumber', 'inrSave']
-        self.clearingList = ['inpStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'inpNotes','inpContainerID', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'inpCatalogNumber','txtRecordID']
-        #self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'inpNotes'},{'inpContainerID'},{'cbxGeoRegion'}, {'inpTaxonName'}, {'inpTaxonNumber'}]
+        self.inputFieldList = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'chkDamage', 'inpNotes', 'radRadioSSO', 'radRadioMSO', 'radRadioMOS', 'inpContainerName', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'inpCatalogNumber', 'btnSave']
+        self.focusIconList =  ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrDamage', 'inrNotes', 'inrRadioSSO', 'inrRadioMSO', 'inrRadioMOS', 'inrContainerName', 'inrGeoRegion', 'inrTaxonName', 'inrTaxonNumber', 'inrCatalogNumber', 'inrSave']
+        self.clearingList = ['inpStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'inpNotes','inpContainerName', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'inpCatalogNumber','txtRecordID']
+        #self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'inpNotes'},{'inpContainerName'},{'cbxGeoRegion'}, {'inpTaxonName'}, {'inpTaxonNumber'}]
         self.nonStickyFields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage']
 
         # Global variables
@@ -168,8 +168,8 @@ class SpecimenDataEntry():
                       ]
 
         containerID = [sg.Text('Container ID ', font=sessionInfoFont, background_color=greenArea, size=captionSize),
-                       sg.InputText(size=(50, 5), key='inpContainerID', disabled=True, pad=(0, 0), enable_events=False, font=fieldFont, background_color='white', text_color='black'),
-                       sg.Text(indicatorRight, key='inrContainerID', background_color=greenArea, visible=False, font=wingdingFont), ]
+                       sg.InputText(size=(50, 5), key='inpContainerName', disabled=True, pad=(0, 0), enable_events=False, font=fieldFont, background_color='white', text_color='black'),
+                       sg.Text(indicatorRight, key='inrContainerName', background_color=greenArea, visible=False, font=wingdingFont), ]
 
         layout_greenarea = [storage, preparation, type_status, damaged_specimen, notes, multiRadio, containerID]
 
@@ -307,6 +307,9 @@ class SpecimenDataEntry():
         # cbxPrepType   # Combobox therefore already triggered
         # cbxTypeStatus # Combobox therefore already triggered
         self.window['inpNotes'].bind('<Return>', '_Return')
+        self.window['inpContainerName'].bind("<Return>", "_Edit")
+        self.window['inpContainerName'].bind("<Tab>", "_Edit")
+        self.window['inpContainerName'].bind("<FocusOut>", "_Edit")
 
         # BLUE AREA
         # cbxGeoRegion  # Combobox therefore already triggered
@@ -382,7 +385,7 @@ class SpecimenDataEntry():
                 MSOkey = 'MSO' + str(mKey)
                 self.collobj.containertype = self.MSOterm
                 self.collobj.containername = MSOkey.strip()
-                self.window['inpContainerID'].update(value=MSOkey, disabled=False)
+                self.window['inpContainerName'].update(value=MSOkey, disabled=False)
                 self.setFieldFocus('cbxGeoRegion')
 
             elif event == 'radRadioMOS':
@@ -390,16 +393,20 @@ class SpecimenDataEntry():
                 MOSkey = 'MOS' + str(mKey)
                 self.collobj.containertype = self.MOSterm
                 self.collobj.containername = MOSkey.strip()
-                self.window['inpContainerID'].update(value=MOSkey, disabled=False)
+                self.window['inpContainerName'].update(value=MOSkey, disabled=False)
                 self.setFieldFocus('cbxGeoRegion')
 
             elif event == 'radRadioSSO':
-                self.window['inpContainerID'].update(value='', disabled=True)
+                self.window['inpContainerName'].update(value='', disabled=True)
                 self.collobj.containername = ''
                 self.collobj.containertype = ''
                 self.window['radRadioMOS'].reset_group()
                 self.window['radRadioSSO'].update(value=True)
-                self.window['inpContainerID'].update('')
+                self.window['inpContainerName'].update('')
+                self.setFieldFocus('cbxGeoRegion')
+
+            elif event == 'inpContainerName_Edit':
+                self.collobj.containername = values['inpContainerName']
                 self.setFieldFocus('cbxGeoRegion')
 
             elif event == 'cbxGeoRegion':
@@ -610,7 +617,7 @@ class SpecimenDataEntry():
             
             # TODO Explain or remove below: 
             #if self.window['radRadioSSO']:
-            #    self.window['inpContainerID'].update(disabled=True)
+            #    self.window['inpContainerName'].update(disabled=True)
 
         self.window.close()
 
@@ -633,13 +640,13 @@ class SpecimenDataEntry():
             else:
                 self.window['lblError'].update('Something went wrong!',visible=True)
             
-            self.window['inpContainerID'].update(containerName)
-            self.window['inpContainerID'].update(disabled=False)
+            self.window['inpContainerName'].update(containerName)
+            self.window['inpContainerName'].update(disabled=False)
         else:
             # No container name set; single specimen assumed
             self.window.Element('radRadioSSO').update(value=True) # Set SSO radiobutton            
-            self.window['inpContainerID'].update('')              # Clear container name input field 
-            self.window['inpContainerID'].update(disabled=True)   # Disable container name input field 
+            self.window['inpContainerName'].update('')              # Clear container name input field 
+            self.window['inpContainerName'].update(disabled=True)   # Disable container name input field 
 
     def setFieldFocus(self, fieldName):
         """
@@ -862,7 +869,7 @@ class SpecimenDataEntry():
         self.collobj.setPrepTypeFields(self.window['cbxPrepType'].widget.current())
         self.collobj.setTypeStatusFields(self.window['cbxTypeStatus'].widget.current())
         self.collobj.notes = values['inpNotes']
-        self.collobj.containername = values['inpContainerID']
+        self.collobj.containername = values['inpContainerName']
         self.collobj.containertype = self.getContainerTypeFromInput()
         self.collobj.setGeoRegionFields(self.window['cbxGeoRegion'].widget.current())
         taxonFullName = values['inpTaxonName']
@@ -968,7 +975,7 @@ class SpecimenDataEntry():
         self.window['inpNotes'].update(record['notes'])
 
         if record['containername']:  # If not strip() is applied to none
-            self.window['inpContainerID'].update(record['containername'].strip())
+            self.window['inpContainerName'].update(record['containername'].strip())
 
         self.setContainerFields(record)
 
@@ -1030,15 +1037,15 @@ class SpecimenDataEntry():
             MSOkey = 'MSO' + str(mKey)
             self.collobj.containertype = self.MSOterm
             self.collobj.containername = MSOkey.strip()
-            self.window['inpContainerID'].update(value=MSOkey, disabled=False)
+            self.window['inpContainerName'].update(value=MSOkey, disabled=False)
             # return self.collobj.containertype
         elif containerKey['radRadioMOS']:
             MOSkey = 'MOS' + str(mKey)
             self.collobj.containertype = self.MOSterm
             self.collobj.containername = MOSkey.strip()
-            self.window['inpContainerID'].update(value=MOSkey, disabled=False)
+            self.window['inpContainerName'].update(value=MOSkey, disabled=False)
         elif containerKey['radRadioSSO']:
-            self.window['inpContainerID'].update(value='')
+            self.window['inpContainerName'].update(value='')
             self.collobj.containername = ''
             self.collobj.containertype = ''
 
