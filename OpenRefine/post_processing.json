@@ -466,10 +466,10 @@
       "mode": "row-based"
     },
     "columnName": "collection",
-    "expression": "grel:value.replace('Herbarium C: Danish Vascular Plant Collection', 'Herbarium C: Danish Herbarium')",
+    "expression": "grel:value.replace('Herbarium C: Danish Vascular Plant Collection', 'C-Danish Herbarium')",
     "onError": "keep-original",
     "repeat": false,
     "repeatCount": 10,
-    "description": "Text transform on cells in column collection using expression grel:value.replace('Herbarium C: Danish Vascular Plant Collection', 'Herbarium C: Danish Herbarium')"
+    "description": "Text transform on cells in column collection using expression grel:value.replace('Herbarium C: Danish Vascular Plant Collection', 'C-Danish Herbarium')"
   }
 ]
