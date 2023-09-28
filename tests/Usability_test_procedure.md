@@ -25,7 +25,7 @@ To quickly ascertain that the usability of the app is in place. Actions in the a
 ☐ Clear form – Create new record  
 ☐ Check that sticky fields are carried over to the new record: StorageFullname, PrepType, TypeStatus, Notes, ContainerType, Container ID, GeoRegion, TaxonName  
 ☐ Create new record without green-area input  
-☐ Create new record without Geo-region input 
+☐ Create new record without Geo-region input  
 ☐ Check to see if there is a meaningful error message when saving a record without a barcode  
 - At every step of the way you need to check to see if the action resulted in an expected change in the database, so please have the DB editor open.
 
