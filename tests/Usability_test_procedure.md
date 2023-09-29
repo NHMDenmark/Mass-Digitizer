@@ -20,6 +20,7 @@ To quickly ascertain that the usability of the app is in place. Actions in the a
 ☐ Enter higher taxon name (level family or order)  
 ☐ Update the latest record  
 ☐ Set the multi-specimen/multi-object radio buttons and check that their values are applied in the DB   
+☐ Try copying a newer container-name into a previous records Container ID field to simulate correcting an error   
 ☐ Try setting the radio button to 'single specimen object' for older records that have one of the multi- specimen or -object values set.  
 ☐ Clear form - Update the latest record  
 ☐ Clear form – Create new record  
