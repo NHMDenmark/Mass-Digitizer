@@ -111,6 +111,8 @@ localityname ->
 Collecting Information ->
 Locality ->
 Locality Name 
+
+Needs repair -> Collection object -> Object condition (hidden field)
  
 broadgeographicalregion ->
 Collecting Information ->
