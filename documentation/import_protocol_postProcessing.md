@@ -5,6 +5,7 @@
 - After a file comes into this directory and the dataset is picked up by the data manager, it needs to be post processed according to `https://github.com/NHMDenmark/Mass-Digitizer/blob/main/documentation/Postprocessing_openRefine_documentation.md`. It is desirable to have the Exported_from_app_data_files directory almost empty which tells us the datasets that were exported are being post-processed and imported into Specify.
 - Dataset is then moved to `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\2.PostProcessed_openRefine`
 - Upload dataset to OpenRefine
+- Identify the catalog number range of the dataset and ask the Specify team to delete those records since they are reserved. The account is: specify@snm.ku.dk
 - Map, save and validate in Workbench - then 'import'.  
 - After the post processed dataset is imported into Specify it is moved into `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\3.Imported specify`.
 - After the spreadsheets have been checked they should be moved to N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\4.Archive
