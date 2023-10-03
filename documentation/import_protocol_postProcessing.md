@@ -6,6 +6,7 @@
 - Dataset is then moved to `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\2.PostProcessed_openRefine`
 - Upload dataset to OpenRefine
 - Identify the catalog number range of the dataset and ask the Specify team to delete those records since they are reserved. The account is: specify@snm.ku.dk
+- Please mention that you are doing an import in the Specify chat in Slack.
 - Map, save and validate in Workbench - then 'import'.  
 - After the post processed dataset is imported into Specify it is moved into `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\3.Imported specify`.
 - After the spreadsheets have been checked they should be moved to N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\4.Archive
