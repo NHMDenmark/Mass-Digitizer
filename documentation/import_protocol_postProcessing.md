@@ -48,6 +48,7 @@ OpenRefine steps:
 - Make sure that the new column 'publish' which has the value "True" exists. This signifies that the records are to be published to GBIF. This is currently included in the GREL script.
 - Check that the new column 'project' has been added which has the value "DaSSCo".
 - It is imperative that taxonfullnames with qualifiers ('cf.', 'aff.', 'sp.') are handled, so that they won't automatically be interpreted as novel names. This means looking the Genus up in the taxonomy to determine if it is a known name or not. If known then determine the taxonspidID and add this manually.
+- Please MAKE SURE that names of rank variety have ' var. ' before the specific epithet. The same with subvariety having ' subvar. '. Forma must have ' f. ' in that place and subforma the same with ' subf. '. Example: _Capsicum_ annuum var. glabriusculum
 - Save the result as a CSV file.
 - The dataset records you are about to import into Specify have had their catalog numbers reserved for this task. Please identify the range of catalog numbers and submit this to specify@snm.ku.dk for deletion.
 
