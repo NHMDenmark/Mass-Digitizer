@@ -229,6 +229,7 @@ class Model:
         """
 
         self.id = record['id']
+        self.spid = record['spid']
         self.name = record['name']
         self.fullName = record['fullname']
         self.parentFullName = record['parentfullname']
