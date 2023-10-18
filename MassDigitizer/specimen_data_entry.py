@@ -342,7 +342,6 @@ class SpecimenDataEntry():
             # Main loop going through User Interface (UI) events 
 
             event, values = self.window.Read()  # Get UI event values 
-            print(event)
             util.logger.debug(f'events: {event} | {values}')
 
             if event is None: break  # Empty event indicates user closing window 
@@ -562,6 +561,8 @@ class SpecimenDataEntry():
                 self.window['lblError'].update('Validation error',visible=False)
 
             elif event == 'btnSave' or event == 'btnSave_Return':  # Should btnSave_Return be removed?
+                # Set specimen fields to make sure all values are updated
+                self.setSpecimenFields(values)
                 # Save current specimen record to app database
                 self.collobj.catalogNumber = values['inpCatalogNumber']
                 self.saveForm(values)
