@@ -98,11 +98,9 @@ class Specimen(Model):
 
         self.storageLocations = self.db.getRowsOnFilters('storage', {'collectionid =': f'{self.collectionId}'})
         self.prepTypes = self.db.getRowsOnFilters('preptype', {'collectionid =': f'{self.collectionId}'}, 100, 'name')
-        self.typeStatuses = self.db.getRowsOnFilters('typestatus', {'collectionid =': f'{self.collectionId}'}, 100,
-                                                     'ordinal')
+        self.typeStatuses = self.db.getRowsOnFilters('typestatus', {'collectionid =': f'{self.collectionId}'}, 100, 'ordinal')
         self.geoRegions = self.db.getRowsOnFilters('georegion', {'collectionid =': f'{self.collectionId}'})
         # self.geoRegionSources = self.db.getRowsOnFilters('georegionsource', {'collectionid =': f'{self.collectionId}'})
-        pass
 
     def getFieldsAsDict(self):
         """
@@ -321,7 +319,7 @@ class Specimen(Model):
             self.taxonNumber = record['idnumber']
             self.taxonRankName = self.getTaxonRankname(self.rankid)
             self.familyName = self.searchParentTaxon(self.taxonFullName, 140, self.collection.taxonTreeDefId)
-
+            pass
             # self.notes = f"{self.notes} | {record['notes']}"
         else:
             # Empty record
@@ -334,6 +332,7 @@ class Specimen(Model):
             self.taxonNumber = ''
             self.taxonRankName = ''
             self.familyName = ''
+            self.taxonNumber = ''
 
         return self.taxonNameId
 
@@ -381,7 +380,8 @@ class Specimen(Model):
             self.rankid = record['rankid']  # TODO: taxonrankid
             self.taxonRankName = self.getTaxonRankname(record['rankid'])
             self.higherTaxonName = record['parentFullName']
-            self.familyName = record['familyName']
+            self.familyName = self.searchParentTaxon(self.taxonFullName, 140, self.collection.taxonTreeDefId)
+            self.taxonNumber = record['idnumber']
 
         else:
             # Empty record
@@ -404,7 +404,7 @@ class Specimen(Model):
             self.rankid = object.rankid  # TODO: taxonrankid
             self.taxonRankName = self.getTaxonRankname(object.rankid)
             self.higherTaxonName = object.parentFullName
-            self.familyName = object.familyName
+            self.familyName = self.searchParentTaxon(self.taxonFullName, 140, self.collection.taxonTreeDefId)
             self.taxonNumber = object.idNumber
 
         else:
@@ -519,10 +519,11 @@ class Specimen(Model):
 
     def searchParentTaxon(self, taxonName, target_rankid, treedefid):
         """
-        Will traverse a given taxon's parental lineage until it hits the target rank
-        taxonName: is the desired name to acquire a family name for.
-        target_rankid: is the target rank
-        returns: target higher rank concept
+        Will recursively traverse a given taxon's parental lineage until it hits the target rank
+        CONTRACT
+            taxonName (string) : The taxon name to acquire the parent taxon name for
+            target_rankid: Target rank id of the parent taxon to be searched for
+        RETURNS taxonName (string) : Name of the parent taxon 
         """
 
         taxonRankId = 270  # Start with lowest possible rank
@@ -530,8 +531,7 @@ class Specimen(Model):
         # Keep on traversing parental branch until the specified rank level has been passed
         while (taxonRankId >= target_rankid):
             # Get current taxon record on fullname and taxon tree
-            taxonNameRecords = self.db.getRowsOnFilters('taxonname', filters={'fullname': f"='{taxonName}'",
-                                                                              'treedefid': f"= '{treedefid}'"})
+            taxonNameRecords = self.db.getRowsOnFilters('taxonname', filters={'fullname': f"='{taxonName}'",'treedefid': f"= '{treedefid}'"})
 
             if len(taxonNameRecords) > 0:
                 taxonRankId = taxonNameRecords[0]['rankid']
