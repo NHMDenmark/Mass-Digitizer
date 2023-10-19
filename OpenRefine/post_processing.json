@@ -251,7 +251,7 @@
         "to": ""
       }
     ],
-    "description": "Clear taxonnumber when 'None'"
+    "description": "Mass edit cells in column taxonnumber"
   },
   {
     "op": "core/column-rename",
@@ -421,5 +421,277 @@
     "newColumnName": "publish",
     "columnInsertIndex": 24,
     "description": "Create column publish at index 24 based on column id using expression grel:'yes'"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "rankid",
+          "expression": "value",
+          "columnName": "rankid",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": 140,
+                "l": "140"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonnumber",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "family_taxonnumber",
+    "columnInsertIndex": 28,
+    "description": "Create column family_taxonnumber at index 28 based on column taxonnumber using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "rankid",
+          "expression": "value",
+          "columnName": "rankid",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": 180,
+                "l": "180"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonnumber",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "genus_taxonnumber",
+    "columnInsertIndex": 28,
+    "description": "Create column genus_taxonnumber at index 28 based on column taxonnumber using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "rankid",
+          "expression": "value",
+          "columnName": "rankid",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": 220,
+                "l": "220"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonnumber",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "species_taxonnumber",
+    "columnInsertIndex": 28,
+    "description": "Create column species_taxonnumber at index 28 based on column taxonnumber using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "rankid",
+          "expression": "value",
+          "columnName": "rankid",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": 230,
+                "l": "230"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonnumber",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "subspecies_taxonnumber",
+    "columnInsertIndex": 28,
+    "description": "Create column subspecies_taxonnumber at index 28 based on column taxonnumber using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "rankid",
+          "expression": "value",
+          "columnName": "rankid",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": 240,
+                "l": "240"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonnumber",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "variety_taxonnumber",
+    "columnInsertIndex": 28,
+    "description": "Create column variety_taxonnumber at index 28 based on column taxonnumber using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "rankid",
+          "expression": "value",
+          "columnName": "rankid",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": 260,
+                "l": "260"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonnumber",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "forma_taxonnumber",
+    "columnInsertIndex": 28,
+    "description": "Create column forma_taxonnumber at index 28 based on column taxonnumber using expression grel:value"
+  },
+  {
+    "op": "core/column-reorder",
+    "columnNames": [
+      "catalognumber",
+      "catalogeddate",
+      "agentfirstname",
+      "agentmiddleinitial",
+      "agentlastname",
+      "project",
+      "notes",
+      "objectcondition",
+      "publish",
+      "containername",
+      "containertype",
+      "family",
+      "family_taxonnumber",
+      "genus",
+      "genus_taxonnumber",
+      "newgenusflag",
+      "species",
+      "species_taxonnumber",
+      "newspeciesflag",
+      "subspecies",
+      "subspecies_taxonnumber",
+      "newsubspeciesflag",
+      "variety",
+      "variety_taxonnumber",
+      "newvarietyflag",
+      "forma",
+      "forma_taxonnumber",
+      "newformaflag",
+      "qualifier",
+      "typestatusname",
+      "localityname",
+      "broadgeographicalregion",
+      "preptypename",
+      "site",
+      "collection",
+      "shelf",
+      "box"
+    ],
+    "description": "Reorder columns"
+  },
+  {
+    "op": "core/column-rename",
+    "oldColumnName": "agentfirstname",
+    "newColumnName": "cataloger firstname",
+    "description": "Rename column agentfirstname to cataloger firstname"
+  },
+  {
+    "op": "core/column-rename",
+    "oldColumnName": "agentmiddleinitial",
+    "newColumnName": "cataloger middle",
+    "description": "Rename column agentmiddleinitial to cataloger middle"
+  },
+  {
+    "op": "core/column-rename",
+    "oldColumnName": "agentlastname",
+    "newColumnName": "cataloger lastname",
+    "description": "Rename column agentlastname to cataloger lastname"
+  },
+  {
+    "op": "core/column-rename",
+    "oldColumnName": "project",
+    "newColumnName": "projectnumber",
+    "description": "Rename column project to projectnumber"
+  },
+  {
+    "op": "core/column-rename",
+    "oldColumnName": "notes",
+    "newColumnName": "remarks",
+    "description": "Rename column notes to remarks"
   }
+]
 ]
