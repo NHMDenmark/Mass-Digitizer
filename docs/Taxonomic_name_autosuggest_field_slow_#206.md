@@ -1,4 +1,4 @@
-## initial tests
+## Initial tests
 There are two database SQLite instances: One with index on the taxonname table, column fullname - and another without any indices on the taxonname table.
 The dev machine specs are as follows:
 
