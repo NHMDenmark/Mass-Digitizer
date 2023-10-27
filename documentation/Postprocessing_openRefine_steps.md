@@ -120,4 +120,4 @@ Remove the qualifiers aff. or cf. in the species field if any show up.
 * institutionname
 For collections that do not have 'box' or 'shelf' these two columns can also be removed.
 ## Final step: Export
-The refined file must be exported as "Windows 1252: Western European" encoded to allow for characters outside the ANSII spectrum.
+The refined file must be exported as "Windows 1252: Western European" encoded to allow for characters outside the ANSI spectrum.

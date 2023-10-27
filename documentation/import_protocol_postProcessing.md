@@ -72,6 +72,8 @@ OpenRefine steps:
 - Please MAKE SURE that names of rank variety have ' var. ' before the specific epithet. The same with subvariety having ' subvar. '. Forma must have ' f. ' in that place and subforma the same with ' subf. '. Example: _Capsicum_ annuum var. glabriusculum
 - In the 'Export drop down (top right) select "Custom tabular"
 - Move to the 'Download' tab and change the Charcter encoding to 'windows-1252', then press the Download button
+  The background for this is: Encoding disparity between post processing (openRefine) and Specify workbench. OpenRefine outputs utf-8 encoding by default while workbench expects win-1252 encoded input. This will corrupt many characters outside the ANSI range.
+There is an update to Specify integrating utf-8 in the works. When it lands and when it will be operational for DaSSCo is pending information.
 - The dataset records you are about to import into Specify have had their catalog numbers reserved for this task. Please identify the range of catalog numbers and submit this to specify@snm.ku.dk for deletion.
 
 Workbench steps
