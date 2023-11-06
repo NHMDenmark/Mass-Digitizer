@@ -71,37 +71,11 @@
       "mode": "row-based"
     },
     "baseColumnName": "taxonfullname",
-    "expression": "grel:if(cells['rankid'].value == 260, value.split(' ')[3], '')",
+    "expression": "grel:if(cells['rankid'].value >= 180, value.split(' ')[0], '')",
     "onError": "set-to-blank",
-    "newColumnName": "forma",
+    "newColumnName": "genus",
     "columnInsertIndex": 5,
-    "description": "Create column forma at index 5 based on column taxonfullname using expression grel:if(cells['rankid'].value == 260, value.split(' ')[3], '')"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "baseColumnName": "taxonfullname",
-    "expression": "grel:if(cells['rankid'].value == 240, cells['taxonfullname'].value.split(' ')[-1], '')",
-    "onError": "set-to-blank",
-    "newColumnName": "variety",
-    "columnInsertIndex": 5,
-    "description": "Create column variety at index 5 based on column taxonfullname using expression grel:if(cells['rankid'].value == 240, cells['taxonfullname'].value.split(' ')[-1], '')"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "baseColumnName": "taxonfullname",
-    "expression": "grel:if(cells['rankid'].value == 230, value.split(' ')[2], '')",
-    "onError": "set-to-blank",
-    "newColumnName": "subspecies",
-    "columnInsertIndex": 5,
-    "description": "Create column subspecies at index 5 based on column taxonfullname using expression grel:if(cells['rankid'].value == 230, value.split(' ')[2], '')"
+    "description": "Create column genus at index 5 based on column taxonfullname using expression grel:if(cells['rankid'].value >= 180, value.split(' ')[0], '')"
   },
   {
     "op": "core/column-addition",
@@ -123,11 +97,37 @@
       "mode": "row-based"
     },
     "baseColumnName": "taxonfullname",
-    "expression": "grel:if(cells['rankid'].value >= 180, value.split(' ')[0], '')",
+    "expression": "grel:if(cells['rankid'].value == 230, value.split(' ')[2], '')",
     "onError": "set-to-blank",
-    "newColumnName": "genus",
+    "newColumnName": "subspecies",
     "columnInsertIndex": 5,
-    "description": "Create column genus at index 5 based on column taxonfullname using expression grel:if(cells['rankid'].value >= 180, value.split(' ')[0], '')"
+    "description": "Create column subspecies at index 5 based on column taxonfullname using expression grel:if(cells['rankid'].value == 230, value.split(' ')[2], '')"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonfullname",
+    "expression": "grel:if(cells['rankid'].value == 240, cells['taxonfullname'].value.split(' ')[-1], '')",
+    "onError": "set-to-blank",
+    "newColumnName": "variety",
+    "columnInsertIndex": 5,
+    "description": "Create column variety at index 5 based on column taxonfullname using expression grel:if(cells['rankid'].value == 240, cells['taxonfullname'].value.split(' ')[-1], '')"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonfullname",
+    "expression": "grel:if(cells['rankid'].value == 260, value.split(' ')[3], '')",
+    "onError": "set-to-blank",
+    "newColumnName": "forma",
+    "columnInsertIndex": 5,
+    "description": "Create column forma at index 5 based on column taxonfullname using expression grel:if(cells['rankid'].value == 260, value.split(' ')[3], '')"
   },
   {
     "op": "core/text-transform",
