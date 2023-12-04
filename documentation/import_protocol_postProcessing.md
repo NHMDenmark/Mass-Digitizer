@@ -1,12 +1,13 @@
 # Import protocol
 
 - The datasets from the DigiApp come into Exported_from_app_data_files directory (N drive)
-- Path: `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\1.Exported files from App`
-- After a file comes into this directory and the dataset is picked up by the data manager, it needs to be post processed according to `https://github.com/NHMDenmark/Mass-Digitizer/blob/main/documentation/Postprocessing_openRefine_documentation.md`. It is desirable to have the Exported_from_app_data_files directory almost empty which tells us the datasets that were exported are being post-processed and imported into Specify.
-- Maker sure that the GREL script used in openRefine is the one which corresponds to the app release version used in the export as well as the correct date range.
-- Dataset is then moved to `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\2.PostProcessed_openRefine`
+- The exports go initially into `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\0.For checking` so that Chelsea to check.
+- If Chelsea needs to modify any of the spreadsheets, she saves them (so there is a copy) and changes "_original" to "_modified". She then moves the modified version or the original version if there have been no modifications to `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\1.Exported files from App` to be processed. 
+- After a file comes into the `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\1.Exported files from App` directory and the dataset is picked up by the data manager, it needs to be post processed according to `https://github.com/NHMDenmark/Mass-Digitizer/blob/main/documentation/Postprocessing_openRefine_documentation.md`.
+- Maker sure that the GREL script used in openRefine is the one which corresponds to the app release version used in the export.
+- When a spreadsheet from `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\1.Exported files from App` is ready to be processed, a copy is saved and the "_original" suffix is changed to "_processed" on the copy. It can be moved to the next folder `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\2.PostProcessed_openRefine`. The original files can now be put in `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\4.Archive`
 - Upload dataset to OpenRefine
-- Identify the catalog number range of the dataset and ask the Specify team to delete those records since they are reserved. The account is: specify@snm.ku.dk
+- Identify the catalog number range of the dataset and ask the Specify team to delete those records since they are reserved. Please mention which collection is to be deleted from. The account is: specify@snm.ku.dk
 - Please mention that you are doing an import in the Specify chat in Slack.
 - Map, save and validate in Workbench - then 'import'.  
 - After the post processed dataset is imported into Specify it is moved into `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\3.Imported specify`.
