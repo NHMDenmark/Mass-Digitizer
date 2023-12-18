@@ -109,7 +109,7 @@ class MergeDuplicates():
                     max_tries = 0
                     self.printLegend()
                     #self.handleQualifiedTaxa()
-                    self.checkPrecollectedTaxa()
+                    #self.checkPrecollectedTaxa()
                     self.scan()
                 else: 
                     # Login failed: Allow user another attempt out of the decremented maximum number of tries 
@@ -179,7 +179,10 @@ class MergeDuplicates():
 
                     # Iterate taxa in batch 
                     for specifyTaxon in batch:
-                        self.handleSpecifyTaxon(specifyTaxon)
+                        t = taxon.Taxon(self.collection.id)
+                        t.fill(specifyTaxon)
+                        self.resolveAuthorName(t)
+                        #self.handleSpecifyTaxon(specifyTaxon)                        
                     print(']', end='') 
                     
                     # Prepare for fetching next batch, by increasing offset with batchsize 
@@ -514,7 +517,7 @@ class MergeDuplicates():
         #print('[    = Start of batch ')
         #print(']    = End of batch ')
 
-gs.baseURL = 'https://specify-snm.science.ku.dk/' # Set target URL for Specify7 API instance 
+gs.baseURL = 'https://specify-test.science.ku.dk/' # Set target URL for Specify7 API instance 
 
 md = MergeDuplicates() # Instantiate class 
 
