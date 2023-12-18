@@ -248,12 +248,11 @@ class SpecimenDataEntry():
             sg.Text(self.collection.name, key='txtCollection', size=(25, 1), background_color=greyArea, font=smallLabelFont)]
 
         version = [
-            sg.Text(f"Version number: ", size=sessionInfoSize, background_color=greyArea, text_color='black',
-                    font=sessionInfoFont),
+            sg.Text(f"Version number: ", size=sessionInfoSize, background_color=greyArea, text_color='black', font=sessionInfoFont),
             sg.Text(util.getVersionNumber(), size=(20, 1), background_color=greyArea, font=smallLabelFont, text_color='black')]
 
         # Header section
-        appTitle = sg.Text('Mass Annotated Digitization Desk', size=(34, 3), background_color=greyArea, font=titleFont)
+        appTitle = sg.Text('DaSSCo Mass Digitization App', size=(34, 3), background_color=greyArea, font=titleFont)
         settingsButton = sg.Button('SETTINGS', key='btnSettings', button_color='grey30')
         logoutButton = sg.Button('LOG OUT', key='btnLogOut', button_color='grey10')
         layoutTitle = [[appTitle], ]
@@ -268,7 +267,7 @@ class SpecimenDataEntry():
             [sg.Frame('', [[sg.Column(layout_bluearea, background_color=blueArea)]], title_location=sg.TITLE_LOCATION_TOP, background_color=blueArea, expand_x=True, expand_y=True, )], ]
 
         # Launch window
-        self.window = sg.Window("Mass Annotated Digitization Desk (MADD)", layout, margins=(2, 2), size=(1048, 640), resizable=True, return_keyboard_events=True, finalize=True, background_color=greyArea)
+        self.window = sg.Window("DaSSCo Mass Digitization App", layout, margins=(2, 2), size=(1048, 640), resizable=True, return_keyboard_events=True, finalize=True, background_color=greyArea)
         self.window.TKroot.focus_force()  # Forces the app to be in focus.
 
         # Set session fields
