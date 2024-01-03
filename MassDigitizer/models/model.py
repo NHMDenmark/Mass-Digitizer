@@ -40,6 +40,7 @@ class Model:
         self.id = 0
         self.spid = 0
         self.gbifKey = 0
+        self.dasscoid = ''
         self.guid = ''
         self.code = ''
         self.name = ''

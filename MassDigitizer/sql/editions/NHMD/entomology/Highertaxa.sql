@@ -29206,5 +29206,5 @@ INSERT INTO taxonname ("spid","name", "author", "fullname","rankid","taxonRank",
 (151079,"Semisyndicus","","Syndicus Semisyndicus",190,"Subgenus", 5,"Syndicus"),
 (4032976,"(Helicophallus)","","Xantholinus (Helicophallus)",190,"Subgenus", 5,"Xantholinus"),
 (4032977,"(Typholinus)","","Xantholinus (Typholinus)",190,"Subgenus", 5,"Xantholinus"),
-(145468,"Xestia","","Xestia Xestia",190,"Subgenus", 5,"Xestia","","")
+(145468,"Xestia","","Xestia Xestia",190,"Subgenus", 5,"Xestia")
 ;

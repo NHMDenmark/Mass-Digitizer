@@ -12,7 +12,7 @@ cd temp\
 echo switched to temporary folder
 
 set editions=NHMD\tracheophyta\ NHMD\entomology\ NHMA\entomology\
-set sqlfiles=PrepTypes TypeStatuses GeoRegions Storage Highertaxa Species-Batch1 Species-Batch2 Species-Batch3 Species-Batch4 Subspecies VarForma
+set sqlfiles=PrepTypes TypeStatuses GeoRegions Storage Highertaxa Species-Batch1 Species-Batch2 Species-Batch3 Species-Batch4 Subspecies VarForma-Batch1 VarForma-Batch2 Hybrids
 
 (for %%e in (%editions%) do (
     echo
@@ -25,11 +25,11 @@ set sqlfiles=PrepTypes TypeStatuses GeoRegions Storage Highertaxa Species-Batch1
         rem echo Added %%s
         del /f %%s.sql
         echo Done.
-        echo **************************
+        rem echo **************************
         rem if !errorlevel! neq 0 exit /b !errorlevel!
     ))
 
-    echo Done with %%e ... 
+    rem echo Done with %%e ... 
     echo ***********************************
 
 ))
