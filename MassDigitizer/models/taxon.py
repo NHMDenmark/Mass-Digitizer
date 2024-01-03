@@ -31,12 +31,14 @@ class Taxon(model.Model):
         model.Model.__init__(self, collection_id)
         self.table          = 'taxon'
         self.sptype         = 'taxon'
+        self.dwcId          = 0
+        self.dasscoId       = 0
         self.author         = ''
         self.rankId         = 0
-        self.parentid       = 0
-        self.parentFullName = ''
         self.duplicateSpid  = 0
-        self.gbifKey        = 0
+        self.treedefId      = 0
+        self.idNumber       = 0
+        self.taxonNrSource  = ''
         self.parent         = None
         
         self.merge          = None
@@ -50,8 +52,13 @@ class Taxon(model.Model):
                     'ORDER':'100',
                     'FAMILY':'140',
                     'GENUS':'180',
+                    'SUBGENUS':'200',
                     'SPECIES':'220',
                     'SUBSPECIES':'230',
+                    'VARIETY':'240',
+                    'SUBVARIETY':'250',
+                    'FORMA':'260',
+                    'SUBFORMA':'270',
                     }
 
     def getFieldsAsDict(self):
@@ -65,10 +72,18 @@ class Taxon(model.Model):
                 'guid':f'"{self.guid}"',
                 'name':f'"{self.name}"',
                 'fullname':f'"{self.fullName}"',
+                'dwcId':f'"{self.dwcId}"',
+                'dasscoId':f'"{self.dasscoId}"',
                 'author':f'"{self.author}"',
-                'remarks':f'"{self.remarks}"',
                 'rankid':f'{self.rankId}',
+                'rankname':f'"{self.rankName}"',
                 'parentid':f'{self.parentId}',
+                'treedefid':f'"{self.treedefId}"',
+                'idnumber':f'"{self.idNumber}"',
+                'taxonNrSource':f'"{self.taxonNrSource}"',
+                'gbifKey':f'"{self.gbifKey}"',
+                'parent':f'"{self.parent}"',
+                'remarks':f'"{self.remarks}"',
                 'highertaxonname':f'{self.parentFullName}',
                 'duplicatespid':f'{self.duplicateSpid}',
                 }

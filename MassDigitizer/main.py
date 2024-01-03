@@ -12,10 +12,6 @@
   PURPOSE: Global class for holding main object instances  
 """
 
-import data_access
-import global_settings as gs
-import specify_interface
-
 class Main():
     """
     ...
