@@ -202,7 +202,10 @@ class AutoSuggest_popup():
                         self.rankId = self.selected_row['rankid']
                         self.autoSuggestObject.rankid = self.rankId
                         self.autoSuggestObject.treedefid = self.collection.taxonTreeDefId
-                        self.familyName = self.specimen.searchParentTaxon(self.selected_row['fullname'], 140,self.collection.taxonTreeDefId)
+                        self.taxonName = self.selected_row['fullname']
+                        self.familyName = self.specimen.searchParentTaxon(self.taxonName, 140,self.collection.taxonTreeDefId)
+                        if self.familyName == '': 
+                            util.logLine(f'Family name could not be retrieved for {self.taxonName} !')
                         self.autoSuggestObject.familyName = self.familyName                        
                         self.autoSuggestObject.idNumber = self.selected_row['idnumber']
                         self.currentRecord = self.autoSuggestObject.getFieldsAsDict()
@@ -221,13 +224,16 @@ class AutoSuggest_popup():
                         # self.autoSuggestObject.rankid   = selected_row['rankid']
                         self.autoSuggestObject.id = self.selected_row['id']
                         self.autoSuggestObject.spid = self.selected_row['spid']
+                        self.autoSuggestObject.gbifKey = self.selected_row['dwcid']
+                        self.autoSuggestObject.dasscoid = self.selected_row['dasscoid']
                         self.autoSuggestObject.name = self.selected_row['name']
                         self.autoSuggestObject.fullName = self.selected_row['fullname']
                         self.autoSuggestObject.parentFullName = self.selected_row['parentfullname']
                         self.autoSuggestObject.idNumber = self.selected_row['idnumber']
-                        # Transfer any novel taxon verbatim notes
-                        if self.autoSuggestObject.spid == 0 or self.autoSuggestObject.spid is None:
-                            self.autoSuggestObject.notes = f" | Verbatim_taxon:{self.autoSuggestObject.fullName}"
+                        # Transfer any novel taxon verbatim notes 
+                        # TODO This has been deactivated since this is already supposed to be a known taxon (???)
+                        #if self.autoSuggestObject.spid == 0 or self.autoSuggestObject.spid is None:
+                        #    self.autoSuggestObject.notes = f" | Verbatim_taxon:{self.autoSuggestObject.fullName}"
                         break
                     else:
                         # Inputting novel taxon name
@@ -239,7 +245,7 @@ class AutoSuggest_popup():
                         # window['frmHiTax'].update(visible=False)
                         window['btnOK'].SetFocus()
 
-                        # self.autoSuggestObject.save()
+                        # self.autoSuggestObject.save() # TODO Why was this line disabled? 
                     # break # Disabled as to stay for confirmation of higher taxon entry
                 else:
                     if self.tableName == 'taxonname':
@@ -270,6 +276,8 @@ class AutoSuggest_popup():
                 self.autoSuggestObject.table = self.tableName
                 self.autoSuggestObject.id = 0
                 self.autoSuggestObject.spid = 0
+                self.autoSuggestObject.gbifKey = 0
+                self.autoSuggestObject.dasscoid = ''
                 # self.autoSuggestObject.name = values['txtInput'].split(' ').pop()
                 # self.autoSuggestObject.name = values['txtInput']
                 # self.autoSuggestObject.fullName = f"{self.autoSuggestObject.name}".strip(' ')

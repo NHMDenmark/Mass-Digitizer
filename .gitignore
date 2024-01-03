@@ -63,3 +63,4 @@ MassDigitizer/temp/db.sqlite3
 MassDigitizer/DaSSCo.dist - Copy/_asyncio.pyd
 *.log
 MassDigitizer/sql/editions/temp/db.sqlite3
+MassDigitizer/db/test.sqlite3

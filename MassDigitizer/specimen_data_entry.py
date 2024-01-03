@@ -516,8 +516,12 @@ class SpecimenDataEntry():
                 # Reset focus back to first field (Storage)
                 self.setFieldFocus('inpStorage')
                 self.window['inpStorage'].update(select=True)  # Select all characters in field
-                if record['id'] != self.collobj.id:
-                    util.logLine('Record id does not match specimen id!')
+                
+                # TODO the following lines caused an error when record is None; These lines only seem to be there for debugging purposes and should be removed 
+                #if record: 
+                #    if record['id'] != self.collobj.id:
+                #        util.logLine('Record id does not match specimen id!')
+                #else: util.logLine('No current record')
 
             elif event == 'btnForward':
                 # First get current instance as record

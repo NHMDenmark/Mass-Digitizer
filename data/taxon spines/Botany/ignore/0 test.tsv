@@ -1,4 +1,0 @@
-dassco:taxonID	dassco:name	dassco:author	dassco:fullname	dassco:epithet	dassco:rankid	dassco:extinct	dwc:taxonID	dwc:scientificName	dwc:scientificNameAuthorship	dwc:parentNameUsageID	dwc:parentNameUsage	dwc:acceptedNameUsageID	dwc:acceptedNameUsage	dwc:taxonomicStatus	dwc:taxonRank	sp:taxonID	sp:fullname	sp:author	sp:rankid	sp:rankname	sp:parentname	sp:taxonnr	sp:taxonnrsource
-1d26bbd14fe045bd89ac0b024d4841f4	Dicksonia	L'Hér.	Dicksonia L'Hér.		180	false	9507928	Dicksonia	L'Hér.	6622	Dicksoniaceae			accepted	genus								
-c1804ee9fd08567b48b143a49f3f6974	Dipodium	Bosc d'Antic, 1812	Dipodium Bosc d'Antic, 1812		180		8766247	Dipodium	Bosc d'Antic, 1812	7689	Orchidaceae			provisionally accepted	genus								
-9dd62996ee9db40ac9684e5b913e3c02	Eclecticus	P.O'Byrne	Eclecticus P.O'Byrne		180	false	7978717	Eclecticus	P.O'Byrne	7689	Orchidaceae			accepted	genus								

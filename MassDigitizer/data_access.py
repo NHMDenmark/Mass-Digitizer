@@ -20,11 +20,12 @@ import util
 
 class DataAccess():
 
-    def __init__(self, databaseName='db', do_in_memory=False):
+    def __init__(self, databaseName='db', databasePath=None):
         """
         Initialize for database access
             CONTRACT
-               do_in_memory (boolean): Whether the database file should be run in-memory
+               databaseName (String): The name of the database file excluding its extension (*.sqlite3)
+               databasePath (String): Alternative path to the database; If not provided, then user documents' "DaSSCo" folder is assumed.
         NOTE Database file is installed into user documents folder otherwise it would be readonly on a Windows PC in any case
         """
         #util.logger.debug("Initializing Data Access module...")
@@ -32,8 +33,7 @@ class DataAccess():
             self.currentCursor = None  # Reset cursor pointer
             # Point to database file provided and connect
             self.filePath = util.getUserPath()
-
-            self.dbFilePath = str(Path(self.filePath).joinpath(f'{databaseName}.sqlite3'))
+            self.dbFilePath = databasePath or str(Path(self.filePath).joinpath(f'{databaseName}.sqlite3'))
         except Exception as e:
             util.logger.debug(e)
 
@@ -41,18 +41,13 @@ class DataAccess():
 
         try:
             self.connection = sqlite3.connect(self.dbFilePath)
+            self.connection.row_factory = sqlite3.Row
+            self.currentCursor = self.connection.cursor()
         except Exception as e:
-
             util.logger.debug("SQLite connection failed. Error: %s" % e)
             logError = f"The path {self.dbFilePath} may not exist."
             util.logger.debug(logError)
-            
-        self.connection.row_factory = sqlite3.Row
-
-        try:
-            self.currentCursor = self.connection.cursor()
-        except Exception as e:
-            util.logger.debug(e)
+            raise e 
 
     def setDatabase(self, dbFileName='db'):
         """

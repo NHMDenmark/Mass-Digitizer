@@ -517,13 +517,13 @@ class Specimen(Model):
 
         return rankid
 
-    def searchParentTaxon(self, taxonName, target_rankid, treedefid):
+    def searchParentTaxon(self, taxonFullName, target_rankid, treedefid):
         """
         Will recursively traverse a given taxon's parental lineage until it hits the target rank
         CONTRACT
-            taxonName (string) : The taxon name to acquire the parent taxon name for
+            taxonFullName (string) : The taxon name to acquire the parent taxon name for
             target_rankid: Target rank id of the parent taxon to be searched for
-        RETURNS taxonName (string) : Name of the parent taxon 
+        RETURNS taxonFullName (string) : Name of the parent taxon 
         """
 
         taxonRankId = 270  # Start with lowest possible rank
@@ -531,28 +531,38 @@ class Specimen(Model):
         # Keep on traversing parental branch until the specified rank level has been passed
         while (taxonRankId >= target_rankid):
             # Get current taxon record on fullname and taxon tree
-            taxonNameRecords = self.db.getRowsOnFilters('taxonname', filters={'fullname': f"='{taxonName}'",'treedefid': f"= '{treedefid}'"})
+            taxonNameRecords = self.db.getRowsOnFilters('taxonname', filters={'fullname': f"='{taxonFullName}'",'treedefid': f"= '{treedefid}'"})
 
             if len(taxonNameRecords) > 0:
-                taxonRankId = taxonNameRecords[0]['rankid']
-                taxonName = taxonNameRecords[0]['name']
-                parentName = taxonNameRecords[0]['parentfullname']  # TODO More secure with primary keys
+                # First check whether this is an accepted name or synonym; If the latter, use the accepted name instead as basis record
+                acceptedFullName = taxonNameRecords[0]['acceptedfullname']
+                if acceptedFullName != '':
+                    taxonNameRecords = self.db.getRowsOnFilters('taxonname', filters={'fullname': f"='{acceptedFullName}'",'treedefid': f"= '{treedefid}'"})                
+
+                if len(taxonNameRecords) > 0:
+                    taxonRankId = taxonNameRecords[0]['rankid']
+                    taxonFullName = taxonNameRecords[0]['fullname']
+                    parentName = taxonNameRecords[0]['parentfullname']  # TODO More secure with primary keys
+                else: 
+                    # Could not retrieved accepted taxonname: Abort 
+                    taxonFullName = ''
+                    break
 
                 # Return when given taxon already matches rank or is of higher rank
                 if taxonRankId <= target_rankid:
-                    if taxonRankId < target_rankid: taxonName = ''  # Clear taxon name if higher than target rank
-                    break  # return current
+                    if taxonRankId < target_rankid: taxonFullName = ''  # Clear taxon name if higher than target rank
+                    break 
                 else:
                     # Target rank not yet hit; check next parent in line
-                    return (self.searchParentTaxon(parentName, target_rankid, treedefid))
+                    return (self.searchParentTaxon(parentName, target_rankid, treedefid)) 
 
             else:
                 # Can't find (further) parent taxon
-                # taxonName = '-not found-'
+                # taxonFullName = '-not found-'
                 # raise Exception(f"Could not retrieve parent taxon of target rank: {target_rankid} !")
                 break  # return current
 
-        return taxonName
+        return taxonFullName
 
     # def assignPrefixContainerId(self):
     #     '''Simply concatenates the two fields containertype and multispecimen.
