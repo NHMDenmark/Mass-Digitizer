@@ -93,6 +93,8 @@ So the process for compilation are as follows:
 2. Run the batch file to prepare the database
 3. Run the Inno Setup script to create the installer
 
+The installer is then placed in folder Mass-Digitizer\MassDigitizer\Output ready for distribution. 
+
 Here follows a table for the different collections supported so far: 
 
 | **Institution**   | **Collection**  | **Path**          | **Remarks**                                                                  |
@@ -100,3 +102,8 @@ Here follows a table for the different collections supported so far:
 | NHMD (Copenhagen) | Vascular Plants | NHMD\tracheophyta |                                                                              | 
 | NHMD (Copenhagen) | Entomology      | NHMD\entomology   |Taxon spine restricted to selected taxa under Coleoptera & Lepidoptera        |
 | NHMA (Aarhus)     | Entomology      | NHMA\entomology   |                                                                              |
+
+NOTE: For NHMD Vascular Plants, the taxon spine is recorded as sets of csv files that are placed in folder ([Mass-Digitizer/tree/main/data/taxon spines/Botany](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/data/taxon%20spines/Botany)). The respective SQL statements have been generated on the basis of those files using the python script ([prepare-db.py](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/MassDigitizer/prepare-db.py)). If changes are made to the taxon spine files, this script will need to be rerun. This will take many hours and should therefore not be a part of the standard compilation process. 
+
+
+
