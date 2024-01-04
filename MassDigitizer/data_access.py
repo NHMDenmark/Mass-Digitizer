@@ -315,7 +315,7 @@ class DataAccess():
         valuesSql = f'"{valuesSql}")'
         sqlString = sqlString + valuesSql
         
-        util.logger.debug('Inserting record using SQL: ', sqlString)
+        util.logger.debug(f'Inserting record using SQL: {sqlString}')
         
         self.currentCursor.execute(sqlString)
         self.currentCursor.connection.commit()

@@ -96,7 +96,7 @@ class SpecifyInterface():
       csrftoken = response.cookies.get('csrftoken') # Keep and use new CSRF token after login
 
     util.logger.debug(' - Response: %s %s' %(str(response.status_code), response.reason))
-    util.logger.debug(' - New CSRF Token: ', csrftoken)
+    util.logger.debug(f' - New CSRF Token: {csrftoken}')
     util.logger.debug('------------------------------')
     return csrftoken
 
