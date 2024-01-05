@@ -197,6 +197,12 @@ class AutoSuggest_popup():
                     self.autoSuggestObject.table = self.tableName
                     self.autoSuggestObject.collectionId = self.collectionID
 
+                    if self.tableName == 'storage':  # STORAGE
+                        # Populate the object as storage location
+                        self.autoSuggestObject.name = self.selected_row['name']
+                        self.autoSuggestObject.fullName = self.selected_row['fullname']
+                        self.autoSuggestObject.rankName = self.selected_row['rankname']
+
                     if self.tableName == 'taxonname':
                         # Populate the object as taxon name
                         self.rankId = self.selected_row['rankid']
@@ -211,12 +217,6 @@ class AutoSuggest_popup():
                         self.currentRecord = self.autoSuggestObject.getFieldsAsDict()
                         # The above family name will be picked up by the specimen-data-entry class
 
-                    if self.tableName == 'storage':  # STORAGE
-                        # Populate the object as storage location
-                        self.autoSuggestObject.name = self.selected_row['name']
-                        self.autoSuggestObject.fullName = self.selected_row['fullname']
-                        self.autoSuggestObject.rankName = self.selected_row['rankname']
-
                     # If text input box for higher taxon is not available then a known taxon is selected
                     if window['frmHiTax'].visible == False:
 
@@ -224,12 +224,13 @@ class AutoSuggest_popup():
                         # self.autoSuggestObject.rankid   = selected_row['rankid']
                         self.autoSuggestObject.id = self.selected_row['id']
                         self.autoSuggestObject.spid = self.selected_row['spid']
-                        self.autoSuggestObject.gbifKey = self.selected_row['dwcid']
-                        self.autoSuggestObject.dasscoid = self.selected_row['dasscoid']
                         self.autoSuggestObject.name = self.selected_row['name']
                         self.autoSuggestObject.fullName = self.selected_row['fullname']
                         self.autoSuggestObject.parentFullName = self.selected_row['parentfullname']
                         self.autoSuggestObject.idNumber = self.selected_row['idnumber']
+                        if self.tableName == 'taxonname':
+                            self.autoSuggestObject.gbifKey = self.selected_row['dwcid']
+                            self.autoSuggestObject.dasscoid = self.selected_row['dasscoid']
                         # Transfer any novel taxon verbatim notes 
                         # TODO This has been deactivated since this is already supposed to be a known taxon (???)
                         #if self.autoSuggestObject.spid == 0 or self.autoSuggestObject.spid is None:
