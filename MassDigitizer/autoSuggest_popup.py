@@ -88,8 +88,7 @@ class AutoSuggest_popup():
                       key='frmHiTax', expand_x=True, visible=False)],
             [sg.pin(
                 sg.Col(
-                    [[sg.Listbox(values=[], key='lstSuggestions', size=(input_width, lines_to_show), enable_events=True,
-                                 bind_return_key=True, select_mode='extended')]],
+                    [[sg.Listbox(values=[], key='lstSuggestions', size=(input_width, lines_to_show), enable_events=True, bind_return_key=True, select_mode='extended')]],
                     key='lstSuggestionsContainer', pad=(0, 0), visible=True))], ]
 
         window = sg.Window('Auto Complete', layout, return_keyboard_events=True, finalize=True, modal=False,
@@ -141,16 +140,14 @@ class AutoSuggest_popup():
                 select_item = (select_item + 1) % len(
                     self.candidateNamesList)  # Increase selected item index within length of candidate name list
                 self.select_item_index = select_item  # Set class variable value of the selected item index
-                self.lstSuggestionsElement.update(values=self.candidateNamesList, set_to_index=select_item,
-                                                  scroll_to_index=select_item)  # select item in listbox and focus on it
+                self.lstSuggestionsElement.update(values=self.candidateNamesList, set_to_index=select_item, scroll_to_index=select_item)  # select item in listbox and focus on it
             # Up arrow is pressed: Move selection up
             elif event.startswith('Up') and len(self.candidateNamesList):
                 # When you arrow up and there are candidate names in the list, set new selected item:
                 select_item = (select_item + (len(self.candidateNamesList) - 1)) % len(
                     self.candidateNamesList)  # Decrease selected item index within length of candidate name list
                 self.select_item_index = select_item  # Set class variable value of the selected item index
-                self.lstSuggestionsElement.update(values=self.candidateNamesList, set_to_index=select_item,
-                                                  scroll_to_index=select_item)
+                self.lstSuggestionsElement.update(values=self.candidateNamesList, set_to_index=select_item, scroll_to_index=select_item)
 
             # If keystrokes are entered in the taxon name input box
             elif event == 'txtInput':
@@ -160,7 +157,7 @@ class AutoSuggest_popup():
                 # Minimum number of keystroke characters (default: 3) should be met in order to proceed
                 if int(len(keystrokes)) >= int(minimumCharacters):
                     # Filter suggestion list based on keystrokes
-                    self.handleSuggestions(keystrokes, 'rankid', '=')
+                    self.handleSuggestions(keystrokes)
                     # Focus back to text input field, to enable user to continue typing
                     self.window['txtInput'].set_focus()
 
@@ -170,8 +167,7 @@ class AutoSuggest_popup():
                 higherTaxonName = values['txtHiTax']
                 self.autoSuggestObject.familyName = higherTaxonName
                 if len(higherTaxonName) >= minimumCharacters:
-                    self.handleSuggestions(values['txtHiTax'].lower(), 140,
-                                           '=')  # Rank Family is assumed (rank id: 140)
+                    self.handleSuggestions(values['txtHiTax'].lower(), 140, '=')  # Rank Family is assumed (rank id: 140)
 
                 # If a suggestion is clicked in the listbox OR 'Enter' is pressed then handle suggested taxon name
                 # TODO| this is a mess of 'if' statements and should be simplified. There must be a split between
@@ -314,26 +310,32 @@ class AutoSuggest_popup():
         Fetch suggestions from database based on keystrokes
         TODO Function contract
         """
-
-        # self.suggestions = self.lookupSuggestions(keystrokes, 'fullname', minimumRank)
-
+        
         try:
             if self.tableName == 'storage':
                 fields = {'name': f'LIKE lower("%{keyStrokes}%")', 'collectionid': f'= {self.collection.collectionId}'}
-                self.suggestions = data_access.DataAccess(gs.databaseName).getRowsOnFilters('storage', fields, 200)
+                self.suggestions = self.db.getRowsOnFilters('storage', fields, 200)
 
             else:  # taxon
                 self.tableName = 'taxonname'
-                fields = {'fullname': f'LIKE lower("%{keyStrokes}%")',
-                          'treedefid': f'= {self.collection.taxonTreeDefId}', 'rankid': f'{rankSign}{rankId}'}
-                self.suggestions = data_access.DataAccess(gs.databaseName).getRowsOnFilters('taxonname', fields, 200)
+
+                if int(rankId) <= 140:
+                    fields = {'fullname': f'LIKE lower("%{keyStrokes}%")', 'treedefid': f'= {self.collection.taxonTreeDefId}', 'rankid': f'{rankSign}{rankId}'}
+                    self.suggestions = self.db.getRowsOnFilters('taxonname', fields, 200)
+                else: 
+                    keyStrokes = keyStrokes.replace('.', '')
+                    sqlString = f"SELECT * FROM taxonname WHERE id IN (SELECT id FROM taxonname_fts WHERE fullname MATCH '{keyStrokes}*' LIMIT 200);"
+                    self.suggestions = self.db.executeSqlStatement(sqlString)
 
         except Exception as e:
             util.logger.error(e)
             sg.PopupError(e)
-
+            
         # Convert records to list of fullnames
-        self.candidateNamesList = [row['fullname'] for row in self.suggestions]
+        if self.suggestions:
+            self.candidateNamesList = [row['fullname'] for row in self.suggestions]
+        else:
+            self.candidateNamesList = []
 
         if self.select_item_index:
             if self.select_item_index >= 0:
@@ -345,6 +347,7 @@ class AutoSuggest_popup():
 
         # Adjusts the listbox behavior to what is expected.
         # self.lstSuggestionsElement.update(values=self.candidateNamesList, set_to_index=[0])
+
         return self.candidateNamesList
 
     # def lookupSuggestions(self, keyStrokes, columnName='fullname', minimumRank=270, rowLimit=200):

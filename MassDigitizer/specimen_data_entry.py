@@ -337,6 +337,8 @@ class SpecimenDataEntry():
         self.setFieldFocus('inpStorage')  # Set focus on storage field 
         self.window['inpStorage'].update(select=True)  # Select all on field to enable overwriting pre-filled "None" placeholder 
 
+        minimumKeyStrokes = 3
+
         while True:
             # Main loop going through User Interface (UI) events 
 
@@ -350,7 +352,7 @@ class SpecimenDataEntry():
             if event == 'inpStorage':
                 keyStrokes = values['inpStorage']
                 # Activate autosuggest box, when more than 3 characters entered:
-                if len(keyStrokes) >= 3 and keyStrokes != 'None':
+                if len(keyStrokes) >= minimumKeyStrokes and keyStrokes != 'None':
                     self.autoSuggestStorage(values['inpStorage'])
 
             elif event == 'cbxPrepType':
@@ -428,7 +430,7 @@ class SpecimenDataEntry():
                                 
                 # Activate autosuggest box, when three characters or more are entered.
                 result = ''
-                if len(keyStrokes) >= 3 and keyStrokes != 'None':
+                if len(keyStrokes) >= minimumKeyStrokes and keyStrokes != 'None':
                     result = self.autoSuggestTaxonName(keyStrokes) 
                 
                 if result == 'Done':
