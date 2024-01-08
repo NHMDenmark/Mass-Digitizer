@@ -1,0 +1,1 @@
+INSERT INTO taxonname_fts SELECT id, name, fullname, rankid FROM taxonname;

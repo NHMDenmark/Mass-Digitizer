@@ -19,7 +19,7 @@ set sqlfiles=PrepTypes TypeStatuses GeoRegions Storage Highertaxa Species-Batch1
     echo ***** Preparing db edition %%e *****
 
     (for %%s in (%sqlfiles%) do ( 
-        echo Reading %%s
+        echo Handling %%s
         copy ..\%%e%%s.sql %%s.sql
         sqlite3 db.sqlite3 ".read %%s.sql"
         rem echo Added %%s
@@ -33,6 +33,12 @@ set sqlfiles=PrepTypes TypeStatuses GeoRegions Storage Highertaxa Species-Batch1
     echo ***********************************
 
 ))
+
+echo Running optimizations; One moment...
+copy ..\optimizations.sql optimizations.sql
+sqlite3 db.sqlite3 ".read optimizations.sql"
+del optimizations.sql
+echo Done
 
 exit /b 0 
 
