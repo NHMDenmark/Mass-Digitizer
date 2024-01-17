@@ -9,3 +9,8 @@ Initially a MAC workstation was selected as the device performing the monitoring
 Both the Automator utility and the FSWatch turned out to be unsuitable for the monitoring task, since they did not pick up events on the windows system and were not able to rename the added files.
 Later a linux workstation became available and the effort was switched to the linux environment.
 
+inotifywait -m /path -e create -e moved_to |
+    while read dir action file; do
+        echo "The file '$file' appeared in directory '$dir' via '$action'"
+        # do something with the file
+    done
