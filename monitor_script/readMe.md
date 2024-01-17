@@ -10,9 +10,9 @@ Both the Automator utility and the FSWatch turned out to be unsuitable for the m
 Later a linux workstation became available and the effort was switched to the linux environment.
 
 inotifywait -m /path -e create -e moved_to |  
-    while read dir action file; do  
-        echo "The file '$file' appeared in directory '$dir' via '$action'"  
-        # do something with the file  
-    done  
+       &emsp; while read dir action file; do  
+            &emsp;&emsp;&emsp;echo "The file '$file' appeared in directory '$dir' via '$action'"  
+            &emsp;# do something with the file  
+        &emsp;done  
 
     
