@@ -1,5 +1,5 @@
 # Monitoring a directory 
-We decided to monitor the "0.ForChecking" directory on Windows N drive for the sake of automating certain tasks. Automate was one of the keywords identified in the "DaSSCo Transcription Requirements workshop", so this effort could contribute nicely to speeding up the pipeline.  
+We decided to monitor the "0.ForChecking" directory on Windows N drive for the sake of automating certain tasks. Automate was one of the keywords identified in the "DaSSCo Transcription Requirements workshop", so this effort might contribute nicely to speeding up the pipeline.  
 The initial task is:
 * To monitor the directory for new csv files coming in and renaming the file name by appending "_original" followed by the extension.
    
