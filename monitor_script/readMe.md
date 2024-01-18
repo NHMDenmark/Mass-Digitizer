@@ -25,5 +25,5 @@ An attempt was made using the Watchdog library, but that was unable to read even
 I believe the problem is the gap between operating systems : MACOS vs windows & Linux(Ubuntu) vs. windows. There is also different filesystems to consider.
 
 ## Future developments
-I wish to implement the current code using the Watchdog library since it is a more elegant solution
+I wish to implement the current code using the Watchdog library since it is a more elegant solution. The Event monitor will be its own class and the events will trigger methods in a module depending on the type of event. 
     
