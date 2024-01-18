@@ -1,6 +1,6 @@
 # Monitoring a directory 
-We decided to monitor the "0.ForChecking" directory on Windows N drive for the sake of automating certain tasks.  
-THe initial task was to monitor the directory for new csv files coming in and renaming the file name by appending "_original" followed by the extension.
+We decided to monitor the "0.ForChecking" directory on Windows N drive for the sake of automating certain tasks. Automate was one of the keywords identified in the "DaSSCo Transcription Requirements workshop", so this effort could contribute nicely to speeding up the pipeline.  
+The initial task is to monitor the directory for new csv files coming in and renaming the file name by appending "_original" followed by the extension. 
 The current implementation relies on a Python solution:
 https://github.com/NHMDenmark/DigitalCollections/tree/main/monitor_scripts 
 This solution is hampered by the fact that it only works on a Windows machine. One of the reasons is that it relies on `win32file` and `win32con` libraries which are only available on the windows platform.
@@ -21,6 +21,9 @@ inotifywait -m /path -e create -e moved_to |
         &emsp;done  
 
 The part "do something with the file" was replaced with a call to a python script.  
+An attempt was made using the Watchdog library, but that was unable to read events from he N drive as well.
 I believe the problem is the gap between operating systems : MACOS vs windows & Linux(Ubuntu) vs. windows. There is also different filesystems to consider.
 
+## Future developments
+I wish to implement the current code using the Watchdog library since it is a more elegant solution
     
