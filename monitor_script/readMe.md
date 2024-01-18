@@ -5,8 +5,10 @@ The initial task is:
    
 The current implementation relies on a Python solution:
 https://github.com/NHMDenmark/DigitalCollections/tree/main/monitor_scripts 
+
 This solution is hampered by the fact that it only works on a Windows machine. One of the reasons is that it relies on `win32file` and `win32con` libraries which are only available on the windows platform.
 The current solution can form a base for further automation and since it created in the Python environment it is very flexible.
+
 
 
 ## History of the effort
