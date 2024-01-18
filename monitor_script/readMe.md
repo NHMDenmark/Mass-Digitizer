@@ -13,7 +13,7 @@ The current solution can form a base for further automation and since it created
 
 ## History of the effort
 This is largely  history of failed attempt to monitor a windows directory from different operating systems.  
-Initially a MAC workstation was selected as the device performing the monitoring. At the onset, the monitor was tasked with identifying a new event and renaming csv files coming in according to a certain schema.
+Initially a MAC workstation was selected as the device performing the monitoring. At the onset, the monitor was tasked with identifying a new event and renaming csv files coming in according to a certain rule.
 Both the MACOS Automator utility and the FSWatch turned out to be unsuitable for the monitoring task, since they did not pick up events on the windows system and were not able to rename the added files.  
 
 Later a linux workstation became available and the effort was switched to the linux environment using bash scripting.  
