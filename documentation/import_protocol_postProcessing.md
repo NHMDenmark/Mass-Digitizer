@@ -1,8 +1,9 @@
 # Import protocol
 
-- The datasets from the DigiApp come into Exported_from_app_data_files directory (N drive)
-- The exports go initially into `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\0.For checking` so that Chelsea to check.
-- If Chelsea needs to modify any of the spreadsheets, she saves them (so there is a copy) and changes "_original" to "_corrected". If modifications are NOT necessary, she moves the original version to `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\1.Exported files from App` to be processed. If modifications ARE necessary, she moves the original version of the file to `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\4.Archive` and the modified version of the file to `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\1.Exported files from App`.
+
+- The exports go initially into `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\0.ForChecking` so that they can be checked.
+- If the file requires modification, a new version is to be saved with the appended string changed from "_original" to "_corrected". If modifications ARE necessary, move the original version of the file to `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\4.Archive` and the modified version of the file to `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\1.Exported files from App`.
+- If modifications are NOT necessary, move the original version to `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\1.Exported files from App` to be processed. 
 - After a file comes into the `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\1.Exported files from App` directory and the dataset is picked up by the data manager, it needs to be post processed according to `https://github.com/NHMDenmark/Mass-Digitizer/blob/main/documentation/Postprocessing_openRefine_documentation.md`.
 - Maker sure that the GREL script used in openRefine is the one which corresponds to the app release version used in the export.
 - After a spreadsheet from `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\1.Exported files from App` has been processed in openRefine, a copy is saved and the "_original" suffix is changed to "_processed" on the copy. It can be moved to the next folder `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\2.PostProcessed_openRefine`. The original files must now be put in `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\4.Archive`
