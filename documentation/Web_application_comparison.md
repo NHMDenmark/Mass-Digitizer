@@ -39,4 +39,14 @@ Integration with SQLite | Seems to be a work in progress [2] | Yes (SQLite > 3.2
 - Complexity and steep learning curve. A term that regularly comes up is "clunky".
 - Is likely to be costly in terms of development time.
 - Monolithic which means that it might not lend itself well to micro-services type architecture. I would prefer a more modular approach.
-- 
+- Django's ORM is largely geared towards SQL databases and less so towards NOSQL/Document databases.
+
+### FastAPI
+#### Advantages
+- Performance bechmarks show FastAPI to have an advantage over other web frameworks.
+- Has seen a meteoric rise and adoption which has created a large community.
+- Tooled towards making API an easy effort and thereby facilitating modular code.
+
+#### Disadvantages
+- Fewer security features compared to Django.
+- Due to it being a slimmer framework, it is not quite as comprehensive and its core functionalities are thus minimal.
