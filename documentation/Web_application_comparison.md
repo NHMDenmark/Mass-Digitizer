@@ -27,4 +27,16 @@ Integration with SQLite | Seems to be a work in progress [2] | Yes (SQLite > 3.2
 - A very young framework. First released in late 2023.
 - Almost no documentation
 - Nextpy.org website is offline and has been so for a while.
+- In the table above NextPy has three questionmarks, because it is difficult to get sufficient information to be able to answer the question.
+
+### Django
+#### Advantages:
+- A very mature framework that has been adopted by large companies (Discus, Spotify, Instagram ...)
+- Has a reputation for excellent stability
+- Has a large community and a wealth of 3rd party packages.
+
+#### Disadvantages
+- Complexity and steep learning curve. A term that regularly comes up is "clunky".
+- Is likely to be costly in terms of development time.
+- Monolithic which means that it might not lend itself well to micro-services type architecture. I would prefer a more modular approach.
 - 
