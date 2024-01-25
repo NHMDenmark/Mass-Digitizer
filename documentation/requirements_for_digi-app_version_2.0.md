@@ -1,4 +1,5 @@
 # Digi app 2.0 requirements
+It has been decided that we need to move to a version two of the Digi app. 
 
 - Must be able to run off line
 - Must be suitable for packaging into an executable, so that clients are not forced to install Python and sundry stuff.
