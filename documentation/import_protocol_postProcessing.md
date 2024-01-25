@@ -1,7 +1,7 @@
 # Import protocol
 
 
-- The exports go initially into `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\0.ForChecking` so that they can be checked.
+- The exports initially go into `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\0.ForChecking` so that they can be checked.
 - If the file requires modification, a new version is to be saved with the appended string changed from "_original" to "_corrected". If modifications ARE necessary, move the original version of the file to `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\4.Archive` and the modified version of the file to `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\1.Exported files from App`.
 - If modifications are NOT necessary, move the original version to `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\1.Exported files from App` to be processed. 
 - After a file comes into the `N:\SCI-SNM-DigitalCollections\DaSSCo\Digi App\Data\1.Exported files from App` directory and the dataset is picked up by the data manager, it needs to be post processed according to `https://github.com/NHMDenmark/Mass-Digitizer/blob/main/documentation/Postprocessing_openRefine_documentation.md`.
