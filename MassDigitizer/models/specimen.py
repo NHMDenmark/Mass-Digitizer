@@ -47,6 +47,7 @@ class Specimen(Model):
         self.catalogNumber = ''
         self.taxonFullName = ''
         self.taxonName = ''
+        self.taxonAuthor = ''
         self.taxonNameId = 0
         self.taxonSpid = 0
         self.taxonRankName = ''  # TODO
@@ -113,6 +114,7 @@ class Specimen(Model):
             'catalognumber': f'{self.catalogNumber}',
             'taxonfullname': f'"{self.taxonFullName}"',
             'taxonname': f'"{self.taxonName}"',
+            'taxonauthor':f'"{self.taxonAuthor}"',
             'taxonnameid': f'"{self.taxonNameId}"',
             'familyname': f'"{self.familyName}"',
             'taxonspid': f'"{self.taxonSpid}"',
@@ -169,6 +171,7 @@ class Specimen(Model):
             self.containertype = record['containertype']
             self.taxonFullName = record['taxonfullname']
             self.taxonName = record['taxonname']
+            self.taxonAuthor = record['taxonauthor']
             self.taxonNameId = record['taxonnameid']
             self.familyName = record['familyname']
             self.taxonSpid = record['taxonspid']
@@ -313,6 +316,7 @@ class Specimen(Model):
             self.taxonNameId = record['id']
             self.taxonSpid = record['spid']
             self.taxonName = record['name']
+            self.taxonAuthor = record['author']
             self.taxonFullName = record['fullname']
             self.higherTaxonName = record['parentfullname']
             self.rankid = record['rankid']  # TODO
@@ -326,6 +330,7 @@ class Specimen(Model):
             self.taxonNameId = 0
             self.taxonSpid = 0
             self.taxonName = ''
+            self.taxonAuthor = ''
             self.taxonFullName = ''
             self.higherTaxonName = ''
             self.rankid = ''
@@ -376,6 +381,7 @@ class Specimen(Model):
             self.taxonNameId = record['id']
             self.taxonSpid = record['spid']
             self.taxonName = record['name']
+            self.taxonAuthor = record['author']
             self.taxonFullName = record['fullName']
             self.rankid = record['rankid']  # TODO: taxonrankid
             self.taxonRankName = self.getTaxonRankname(record['rankid'])
@@ -400,6 +406,7 @@ class Specimen(Model):
             self.taxonNameId = object.id
             self.taxonSpid = object.spid
             self.taxonName = object.name
+            self.taxonAuthor = object.author
             self.taxonFullName = object.fullName
             self.rankid = object.rankid  # TODO: taxonrankid
             self.taxonRankName = self.getTaxonRankname(object.rankid)
@@ -466,6 +473,7 @@ class Specimen(Model):
         if resultsRowCount == 1:
             self.taxonNameId = taxonNameRecord[0]['id']
             self.taxonName = taxonNameRecord[0]['name']
+            self.taxonAuthor = taxonNameRecord[0]['author']
             self.taxonFullName = taxonNameRecord[0]['fullname']
             self.higherTaxonName = taxonNameRecord[0]['highertaxonname']
         elif resultsRowCount == 0:
