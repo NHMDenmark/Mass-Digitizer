@@ -230,7 +230,8 @@ class AutoSuggest_popup():
                         self.autoSuggestObject.idNumber = self.selected_row['idnumber']
                         if self.tableName == 'taxonname':
                             self.autoSuggestObject.gbifKey = self.selected_row['dwcid']
-                            self.autoSuggestObject.dasscoid = self.selected_row['dasscoid']
+                            self.autoSuggestObject.dasscoid = self.selected_row['dasscoid']                   
+                            self.autoSuggestObject.author = self.selected_row['author']
                         # Transfer any novel taxon verbatim notes 
                         # TODO This has been deactivated since this is already supposed to be a known taxon (???)
                         #if self.autoSuggestObject.spid == 0 or self.autoSuggestObject.spid is None:

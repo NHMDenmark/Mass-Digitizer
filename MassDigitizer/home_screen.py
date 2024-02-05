@@ -66,7 +66,7 @@ class HomeScreen():
         col_side = [btn_exit]
 
         layout = [[[sg.Column(col_main, key='colMain', size=(580,128))]],
-                [[sg.Column(col_next, key='colNext', size=(512,220), visible=False)],
+                [[sg.Column(col_next, key='colNext', size=(512,212), visible=False)],
                 [sg.Column(col_side, key='colSide', size=(512,64))]], ]
 
         self.window = sg.Window('Start', layout, size=(640, 400))
