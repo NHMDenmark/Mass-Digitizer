@@ -127,11 +127,15 @@ class AutoSuggest_popup():
         while True:
             # As long as the loop isn't somehow exited , then continue checking events
             event, values = window.read()
-
+            
             # Escape loop & close window when exiting or otherwise done
-            if event is None: break
-            if event == sg.WIN_CLOSED or event == 'Exit': break
-            if event.startswith('Escape'): break
+            if event is None: 
+                break
+            if event == sg.WIN_CLOSED or event == 'Exit': 
+                break
+            if event.startswith('Escape'): 
+                self.autoSuggestObject.fullName = values['txtInput']
+                break
 
             # Handle up or down arrow press in family suggestion box
             # Down arrow is pressed: Move selection down
@@ -252,7 +256,8 @@ class AutoSuggest_popup():
 
                         # Store novel taxon name in autosuggest object
                         self.autoSuggestObject.name = values['txtInput'].strip().split(' ').pop()
-                        self.autoSuggestObject.fullName = values['txtInput'].strip()
+                        self.autoSuggestObject.fullName = values['txtInput'].strip().replace('*','')
+                        # NOTE Removes any asterisk that was intentionally added in order to force a new taxon name with no author indicated (ticket #466)
 
                         if values['lstSuggestions']:  # Asking for family name.
                             self.autoSuggestObject.parentFullName = values['lstSuggestions'][0]
@@ -284,7 +289,7 @@ class AutoSuggest_popup():
                 self.autoSuggestObject.familyName = values['txtHiTax'].strip()
                 self.autoSuggestObject.rankid = self.specimen.determineRank(self.autoSuggestObject.fullName)
 
-                # TODO Persist novel taxon so it will be auto-suggested next time around
+                # Persist novel taxon so it will be auto-suggested next time around
                 self.db.insertRow('taxonname', {"name": f'"{self.autoSuggestObject.name.strip()}"',
                                                 "fullname": f'"{self.autoSuggestObject.fullName.strip()}"',
                                                 "rankid": f'{self.autoSuggestObject.rankid}',
@@ -292,7 +297,7 @@ class AutoSuggest_popup():
                                                 "treedefid": f'{self.collection.taxonTreeDefId}',
                                                 "taxonrank": f'"{self.autoSuggestObject.rankName}"',
                                                 })
-
+                
                 window['frmHiTax'].update(visible=False)  # Hide family search panel for next taxon name entry
                 break
 

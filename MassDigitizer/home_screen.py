@@ -66,7 +66,7 @@ class HomeScreen():
         col_side = [btn_exit]
 
         layout = [[[sg.Column(col_main, key='colMain', size=(580,128))]],
-                [[sg.Column(col_next, key='colNext', size=(512,200), visible=False)],
+                [[sg.Column(col_next, key='colNext', size=(512,220), visible=False)],
                 [sg.Column(col_side, key='colSide', size=(512,64))]], ]
 
         self.window = sg.Window('Start', layout, size=(640, 400))
@@ -137,12 +137,12 @@ class HomeScreen():
                                 sde.SpecimenDataEntry(collection_id)
                             else:
                                 self.window['autherror'].Update(visible=True)
-                                #self.window['lstSelectCollection'].set_value([])
+                                self.window['lstSelectCollection'].update(set_to_index=0)
                         else:
                             self.window['collerror'].Update(visible=True)
                 else:
                     self.window['incomplete'].Update(visible=True)
-                    #self.window['lstSelectCollection'].set_value([])
+                    self.window['lstSelectCollection'].update(set_to_index=0)
 
             if event == 'btnExit':
                 break
