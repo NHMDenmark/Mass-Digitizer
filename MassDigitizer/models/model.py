@@ -44,6 +44,7 @@ class Model:
         self.guid = ''
         self.code = ''
         self.name = ''
+        self.author = ''
         self.fullName = ''
         self.rankName = ''
         self.parentFullName = ''
@@ -232,6 +233,7 @@ class Model:
         self.id = record['id']
         self.spid = record['spid']
         self.name = record['name']
+        self.author = record['author']
         self.fullName = record['fullname']
         self.parentFullName = record['parentfullname']
         self.collectionId = record['collectionid']
