@@ -236,7 +236,7 @@ class Model:
         self.author = record['author']
         self.fullName = record['fullname']
         self.parentFullName = record['parentfullname']
-        self.collectionId = record['collectionid']
+        #self.collectionId = record['collectionid'] # NOTE Can cause a crash (#474) and also unecessary since a model is always initiated with a collectionid 
         self.treedefid = record['treedefid']
         self.rankid = record['rankid']
         self.idNumber = record['idnumber']
