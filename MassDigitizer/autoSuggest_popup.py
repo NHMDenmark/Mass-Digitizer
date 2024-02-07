@@ -256,7 +256,7 @@ class AutoSuggest_popup():
                         window['txtHiTax'].SetFocus()  # Set focus on family name text input
 
                         # Store novel taxon name in autosuggest object
-                        self.autoSuggestObject.name = values['txtInput'].strip().split(' ').pop()
+                        self.autoSuggestObject.name = values['txtInput'].strip().split(' ').pop().replace('*','')
                         self.autoSuggestObject.fullName = values['txtInput'].strip().replace('*','')
                         # NOTE Removes any asterisk that was intentionally added in order to force a new taxon name with no author indicated (ticket #466)
 

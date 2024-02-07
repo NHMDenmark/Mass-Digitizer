@@ -433,20 +433,20 @@ class SpecimenDataEntry():
                 if len(keyStrokes) >= minimumKeyStrokes and keyStrokes != 'None':
                     result = self.autoSuggestTaxonName(keyStrokes) 
                 
-                if result == 'Done':
-                    # Taxon name retrieved                                
-                    # Move to next field depending on collection
-                    if self.collection.useTaxonNumbers == True and values['inpTaxonNumber'].strip() == "":
-                        self.setFieldFocus('inpTaxonNumber')
-                    else:
-                        self.setFieldFocus('inpCatalogNumber')
-                
-                if values['inpTaxonName'].strip() == '':
-                    # taxon input field empty: Clear all taxon related fields
-                    self.collobj.setTaxonNameFieldsFromModel(model.Model(self.collectionId))
-                    self.setSpecimenFields(values, False)
-                    self.window['inpTaxonNumber'].update('') # Clear taxon number input field
-                    #self.setFieldFocus('inpCatalogNumber')
+                    if result == 'Done':
+                        # Taxon name retrieved                                
+                        # Move to next field depending on collection
+                        if self.collection.useTaxonNumbers == True and values['inpTaxonNumber'].strip() == "":
+                            self.setFieldFocus('inpTaxonNumber')
+                        else:
+                            self.setFieldFocus('inpCatalogNumber')
+                    
+                    if values['inpTaxonName'].strip() == '':
+                        # taxon input field empty: Clear all taxon related fields
+                        self.collobj.setTaxonNameFieldsFromModel(model.Model(self.collectionId))
+                        self.setSpecimenFields(values, False)
+                        self.window['inpTaxonNumber'].update('') # Clear taxon number input field
+                        #self.setFieldFocus('inpCatalogNumber')
 
             elif event == 'inpTaxonName_Shift-Tab':                
                 self.setFieldFocus('cbxGeoRegion')
