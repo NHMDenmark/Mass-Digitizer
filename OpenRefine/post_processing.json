@@ -148,12 +148,12 @@
       "facets": [],
       "mode": "row-based"
     },
-    "columnName": "taxonspid",
+    "columnName": "taxondasscoid",
     "expression": "grel:if((value==null).or(value==0).or(value=='None').or(value==''), '', value)",
     "onError": "keep-original",
     "repeat": false,
     "repeatCount": 10,
-    "description": "Text transform on cells in column taxonspid using expression grel:if((value==null).or(value==0).or(value=='None').or(value==''), '', value)"
+    "description": "Text transform on cells in column taxondasscoid using expression grel:if((value==null).or(value==0).or(value=='None').or(value==''), '', value)"
   },
   {
     "op": "core/column-addition",
@@ -161,12 +161,12 @@
       "facets": [],
       "mode": "row-based"
     },
-    "baseColumnName": "taxonspid",
+    "baseColumnName": "taxondasscoid",
     "expression": "grel:if(value=='', 'True', 'False')",
     "onError": "set-to-blank",
     "newColumnName": "newtaxonflag",
     "columnInsertIndex": 10,
-    "description": "Create column newtaxonflag at index 10 based on column taxonspid using expression grel:if(value=='', 'True', 'False')"
+    "description": "Create column newtaxonflag at index 10 based on column taxondasscoid using expression grel:if(value=='', 'True', 'False')"
   },
   {
     "op": "core/column-addition",
@@ -621,49 +621,6 @@
     "description": "Create column forma_taxonnumber at index 28 based on column taxonnumber using expression grel:value"
   },
   {
-    "op": "core/column-reorder",
-    "columnNames": [
-      "catalognumber",
-      "catalogeddate",
-      "agentfirstname",
-      "agentmiddleinitial",
-      "agentlastname",
-      "project",
-      "notes",
-      "objectcondition",
-      "publish",
-      "containername",
-      "containertype",
-      "family",
-      "family_taxonnumber",
-      "genus",
-      "genus_taxonnumber",
-      "newgenusflag",
-      "species",
-      "species_taxonnumber",
-      "newspeciesflag",
-      "subspecies",
-      "subspecies_taxonnumber",
-      "newsubspeciesflag",
-      "variety",
-      "variety_taxonnumber",
-      "newvarietyflag",
-      "forma",
-      "forma_taxonnumber",
-      "newformaflag",
-      "qualifier",
-      "typestatusname",
-      "localityname",
-      "broadgeographicalregion",
-      "preptypename",
-      "site",
-      "collection",
-      "shelf",
-      "box"
-    ],
-    "description": "Reorder columns"
-  },
-  {
     "op": "core/column-rename",
     "oldColumnName": "agentfirstname",
     "newColumnName": "cataloger firstname",
@@ -692,5 +649,285 @@
     "oldColumnName": "notes",
     "newColumnName": "remarks",
     "description": "Rename column notes to remarks"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "rankid",
+          "expression": "value",
+          "columnName": "rankid",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": 270,
+                "l": "270"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonauthor",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "subforma_author",
+    "columnInsertIndex": 21,
+    "description": "Create column subforma_author at index 21 based on column taxonauthor using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "rankid",
+          "expression": "value",
+          "columnName": "rankid",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": 260,
+                "l": "260"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonauthor",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "forma_author",
+    "columnInsertIndex": 21,
+    "description": "Create column forma_author at index 21 based on column taxonauthor using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "rankid",
+          "expression": "value",
+          "columnName": "rankid",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": 250,
+                "l": "250"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonauthor",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "subvariety_author",
+    "columnInsertIndex": 21,
+    "description": "Create column subvariety_author at index 21 based on column taxonauthor using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "rankid",
+          "expression": "value",
+          "columnName": "rankid",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": 240,
+                "l": "240"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonauthor",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "variety_author",
+    "columnInsertIndex": 21,
+    "description": "Create column variety_author at index 21 based on column taxonauthor using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "rankid",
+          "expression": "value",
+          "columnName": "rankid",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": 230,
+                "l": "230"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonauthor",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "subspecies_author",
+    "columnInsertIndex": 21,
+    "description": "Create column subspecies_author at index 21 based on column taxonauthor using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "rankid",
+          "expression": "value",
+          "columnName": "rankid",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": 220,
+                "l": "220"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonauthor",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "species_author",
+    "columnInsertIndex": 21,
+    "description": "Create column species_author at index 21 based on column taxonauthor using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "rankid",
+          "expression": "value",
+          "columnName": "rankid",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": 180,
+                "l": "180"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonauthor",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "genus_author",
+    "columnInsertIndex": 21,
+    "description": "Create column genus_author at index 21 based on column taxonauthor using expression grel:value"
+  },
+  {
+    "op": "core/column-reorder",
+    "columnNames": [
+      "catalognumber",
+      "catalogeddate",
+      "cataloger firstname",
+      "cataloger middle",
+      "cataloger lastname",
+      "projectnumber",
+      "remarks",
+      "objectcondition",
+      "multispecimen",
+      "publish",
+      "containername",
+      "containertype",
+      "family",
+      "family_taxonnumber",
+      "genus",
+      "genus_author",
+      "genus_taxonnumber",
+      "newgenusflag",
+      "species",
+      "species_author",
+      "species_taxonnumber",
+      "newspeciesflag",
+      "subspecies",
+      "subspecies_author",
+      "subspecies_taxonnumber",
+      "newsubspeciesflag",
+      "variety",
+      "variety_author",
+      "variety_taxonnumber",
+      "newvarietyflag",
+      "forma",
+      "forma_author",
+      "forma_taxonnumber",
+      "newformaflag",
+      "qualifier",
+      "typestatusname",
+      "localityname",
+      "broadgeographicalregion",
+      "preptypename",
+      "site",
+      "collection",
+      "shelf",
+      "box"
+    ],
+    "description": "Reorder columns"
   }
 ]
