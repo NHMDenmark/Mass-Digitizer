@@ -148,12 +148,12 @@
       "facets": [],
       "mode": "row-based"
     },
-    "columnName": "taxonspid",
+    "columnName": "taxondasscoid",
     "expression": "grel:if((value==null).or(value==0).or(value=='None').or(value==''), '', value)",
     "onError": "keep-original",
     "repeat": false,
     "repeatCount": 10,
-    "description": "Text transform on cells in column taxonspid using expression grel:if((value==null).or(value==0).or(value=='None').or(value==''), '', value)"
+    "description": "Text transform on cells in column taxondasscoid using expression grel:if((value==null).or(value==0).or(value=='None').or(value==''), '', value)"
   },
   {
     "op": "core/column-addition",
