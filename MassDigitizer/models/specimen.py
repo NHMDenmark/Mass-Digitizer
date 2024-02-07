@@ -50,6 +50,7 @@ class Specimen(Model):
         self.taxonAuthor = ''
         self.taxonNameId = 0
         self.taxonSpid = 0
+        self.taxonDasscoId = 0
         self.taxonRankName = ''  # TODO
         self.familyName = ''  # TODO
         self.higherTaxonName = ''
@@ -118,6 +119,7 @@ class Specimen(Model):
             'taxonnameid': f'"{self.taxonNameId}"',
             'familyname': f'"{self.familyName}"',
             'taxonspid': f'"{self.taxonSpid}"',
+            'taxondasscoid': f'"{self.taxonDasscoId}"',
             'highertaxonname': f'"{self.higherTaxonName}"',
             'rankid': f'"{self.rankid}"',
             'taxonrankname': f'"{self.taxonRankName}"',
@@ -175,6 +177,7 @@ class Specimen(Model):
             self.taxonNameId = record['taxonnameid']
             self.familyName = record['familyname']
             self.taxonSpid = record['taxonspid']
+            self.taxonDasscoId = record['taxondasscoid']
             self.higherTaxonName = record['highertaxonname']
             self.rankid = record['rankid']
             self.taxonRankName = record['taxonrankname']
@@ -315,6 +318,7 @@ class Specimen(Model):
         if record is not None:
             self.taxonNameId = record['id']
             self.taxonSpid = record['spid']
+            self.taxonDasscoId = record['dasscoid']
             self.taxonName = record['name']
             self.taxonAuthor = record['author']
             self.taxonFullName = record['fullname']
@@ -329,6 +333,7 @@ class Specimen(Model):
             # Empty record
             self.taxonNameId = 0
             self.taxonSpid = 0
+            self.taxonDasscoId = ''
             self.taxonName = ''
             self.taxonAuthor = ''
             self.taxonFullName = ''
@@ -380,6 +385,7 @@ class Specimen(Model):
         if record is not None:
             self.taxonNameId = record['id']
             self.taxonSpid = record['spid']
+            self.taxonDasscoId = record['dasscoid']
             self.taxonName = record['name']
             self.taxonAuthor = record['author']
             self.taxonFullName = record['fullName']
@@ -405,6 +411,7 @@ class Specimen(Model):
         if object is not None:
             self.taxonNameId = object.id
             self.taxonSpid = object.spid
+            self.taxonDasscoId = object.dasscoid
             self.taxonName = object.name
             self.taxonAuthor = object.author
             self.taxonFullName = object.fullName
@@ -476,6 +483,8 @@ class Specimen(Model):
             self.taxonAuthor = taxonNameRecord[0]['author']
             self.taxonFullName = taxonNameRecord[0]['fullname']
             self.higherTaxonName = taxonNameRecord[0]['highertaxonname']
+            self.taxonSpid = taxonNameRecord[0]['spid']
+            self.taxonDasscoId = taxonNameRecord[0]['dasscoid']
         elif resultsRowCount == 0:
             # Unknown taxon name, add verbatim
             self.taxonFullName = taxonFullName
