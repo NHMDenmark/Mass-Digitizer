@@ -523,6 +523,8 @@ class Specimen(Model):
                 rankid = 260
             elif ' subf. ' in taxonNameEntry:
                 rankid = 270
+            elif ' x ' in taxonNameEntry:
+                rankid = 220 # Hybrid
             elif elementCount == 3 + subgenusCount:
                 rankid = 230
             elif elementCount == 2 + subgenusCount:
