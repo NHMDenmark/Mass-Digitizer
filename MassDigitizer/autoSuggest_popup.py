@@ -326,11 +326,11 @@ class AutoSuggest_popup():
                 self.tableName = 'taxonname'
 
                 if int(rankId) <= 140:
-                    fields = {'fullname': f'LIKE lower("%{keyStrokes}%")', 'treedefid': f'= {self.collection.taxonTreeDefId}', 'rankid': f'{rankSign}{rankId}'}
+                    fields = {'fullname': f'LIKE lower("%{keyStrokes}%")', 'treedefid': f'= {self.collection.taxonTreeDefId}', 'institutionid': f'= {self.collection.institutionId}', 'rankid': f'{rankSign}{rankId}'}
                     self.suggestions = self.db.getRowsOnFilters('taxonname', fields, 200)
                 else: 
                     keyStrokes = keyStrokes.replace('.', '')
-                    sqlString = f"SELECT * FROM taxonname WHERE id IN (SELECT id FROM taxonname_fts WHERE fullname MATCH '{keyStrokes}*' LIMIT 200);"
+                    sqlString = f"SELECT * FROM taxonname WHERE id IN (SELECT id FROM taxonname_fts WHERE fullname MATCH '{keyStrokes}*' AND institutionid = {self.collection.institutionId} AND taxontreedefid = {self.collection.taxonTreeDefId} LIMIT 200);"
                     self.suggestions = self.db.executeSqlStatement(sqlString)
 
         except Exception as e:
