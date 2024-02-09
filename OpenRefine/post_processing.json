@@ -148,12 +148,12 @@
       "facets": [],
       "mode": "row-based"
     },
-    "columnName": "taxondasscoid",
+    "columnName": "taxonspid",
     "expression": "grel:if((value==null).or(value==0).or(value=='None').or(value==''), '', value)",
     "onError": "keep-original",
     "repeat": false,
     "repeatCount": 10,
-    "description": "Text transform on cells in column taxondasscoid using expression grel:if((value==null).or(value==0).or(value=='None').or(value==''), '', value)"
+    "description": "Text transform on cells in column taxonspid using expression grel:if((value==null).or(value==0).or(value=='None').or(value==''), '', value)"
   },
   {
     "op": "core/column-addition",
@@ -162,11 +162,11 @@
       "mode": "row-based"
     },
     "baseColumnName": "taxondasscoid",
-    "expression": "grel:if(value=='', 'True', 'False')",
+    "expression": "grel:if((value==null).or(cells['taxonspid'].value==null), 'True', 'False')",
     "onError": "set-to-blank",
     "newColumnName": "newtaxonflag",
-    "columnInsertIndex": 10,
-    "description": "Create column newtaxonflag at index 10 based on column taxondasscoid using expression grel:if(value=='', 'True', 'False')"
+    "columnInsertIndex": 18,
+    "description": "Create column newtaxonflag at index 18 based on column taxondasscoid using expression grel:if((value==null).or(cells['taxonspid'].value==null), 'True', 'False')"
   },
   {
     "op": "core/column-addition",
