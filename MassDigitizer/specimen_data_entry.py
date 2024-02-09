@@ -66,7 +66,7 @@ class SpecimenDataEntry():
         self.focusIconList =  ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrDamage', 'inrNotes', 'inrRadioSSO', 'inrRadioMSO', 'inrRadioMOS', 'inrContainerName', 'inrGeoRegion', 'inrTaxonName', 'inrTaxonNumber', 'inrCatalogNumber', 'inrSave']
         self.clearingList = ['inpStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'inpNotes','inpContainerName', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'inpCatalogNumber','txtRecordID']
         #self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'inpNotes'},{'inpContainerName'},{'cbxGeoRegion'}, {'inpTaxonName'}, {'inpTaxonNumber'}]
-        self.nonStickyFields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage']
+        self.nonStickyFields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage', 'inpNotes']
 
         # Global variables
         self.fieldInFocus = ''  # Stores name of field currently in focus
