@@ -294,7 +294,7 @@ class AutoSuggest_popup():
                 # self.autoSuggestObject.name = values['txtInput']
                 # self.autoSuggestObject.fullName = f"{self.autoSuggestObject.name}".strip(' ')
                 self.autoSuggestObject.collectionId = self.collectionID
-                self.autoSuggestObject.notes = f" | Verbatim_taxon:{self.autoSuggestObject.fullName}"
+                #self.autoSuggestObject.notes = f" | Verbatim_taxon:{self.autoSuggestObject.fullName}"
                 self.autoSuggestObject.parentFullName = values['txtHiTax'].strip()
                 self.autoSuggestObject.familyName = values['txtHiTax'].strip()
                 self.autoSuggestObject.rankid = self.specimen.determineRank(self.autoSuggestObject.fullName)
