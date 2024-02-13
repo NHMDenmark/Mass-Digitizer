@@ -358,6 +358,39 @@
     "description": "Text transform on cells in column recorddatetime using expression grel:value.slice(0,10).replace('-', '/')"
   },
   {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "institutionid",
+          "expression": "value",
+          "columnName": "institutionid",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "2",
+                "l": "2"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "columnName": "recorddatetime",
+    "expression": "grel:value.split('/')[2] + '/' + value.split('/')[1] + '/' + value.split('/')[0]",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Change recorded date time format for NHMA (institution id: 2) to DD/MM/YYYY "
+  },
+  {
     "op": "core/column-addition",
     "engineConfig": {
       "facets": [],
@@ -373,7 +406,27 @@
   {
     "op": "core/text-transform",
     "engineConfig": {
-      "facets": [],
+      "facets": [
+        {
+          "type": "list",
+          "name": "institutionid",
+          "expression": "value",
+          "columnName": "institutionid",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "1",
+                "l": "1"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
       "mode": "row-based"
     },
     "columnName": "catalogeddate",
@@ -386,7 +439,27 @@
   {
     "op": "core/text-transform",
     "engineConfig": {
-      "facets": [],
+      "facets": [
+        {
+          "type": "list",
+          "name": "institutionid",
+          "expression": "value",
+          "columnName": "institutionid",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "1",
+                "l": "1"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
       "mode": "row-based"
     },
     "columnName": "catalogeddate",
@@ -399,7 +472,27 @@
   {
     "op": "core/column-addition",
     "engineConfig": {
-      "facets": [],
+      "facets": [
+        {
+          "type": "list",
+          "name": "institutionid",
+          "expression": "value",
+          "columnName": "institutionid",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "1",
+                "l": "1"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
       "mode": "row-based"
     },
     "baseColumnName": "id",
@@ -520,105 +613,6 @@
     "newColumnName": "species_taxonnumber",
     "columnInsertIndex": 28,
     "description": "Create column species_taxonnumber at index 28 based on column taxonnumber using expression grel:value"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [
-        {
-          "type": "list",
-          "name": "rankid",
-          "expression": "value",
-          "columnName": "rankid",
-          "invert": false,
-          "omitBlank": false,
-          "omitError": false,
-          "selection": [
-            {
-              "v": {
-                "v": 230,
-                "l": "230"
-              }
-            }
-          ],
-          "selectBlank": false,
-          "selectError": false
-        }
-      ],
-      "mode": "row-based"
-    },
-    "baseColumnName": "taxonnumber",
-    "expression": "grel:value",
-    "onError": "set-to-blank",
-    "newColumnName": "subspecies_taxonnumber",
-    "columnInsertIndex": 28,
-    "description": "Create column subspecies_taxonnumber at index 28 based on column taxonnumber using expression grel:value"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [
-        {
-          "type": "list",
-          "name": "rankid",
-          "expression": "value",
-          "columnName": "rankid",
-          "invert": false,
-          "omitBlank": false,
-          "omitError": false,
-          "selection": [
-            {
-              "v": {
-                "v": 240,
-                "l": "240"
-              }
-            }
-          ],
-          "selectBlank": false,
-          "selectError": false
-        }
-      ],
-      "mode": "row-based"
-    },
-    "baseColumnName": "taxonnumber",
-    "expression": "grel:value",
-    "onError": "set-to-blank",
-    "newColumnName": "variety_taxonnumber",
-    "columnInsertIndex": 28,
-    "description": "Create column variety_taxonnumber at index 28 based on column taxonnumber using expression grel:value"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [
-        {
-          "type": "list",
-          "name": "rankid",
-          "expression": "value",
-          "columnName": "rankid",
-          "invert": false,
-          "omitBlank": false,
-          "omitError": false,
-          "selection": [
-            {
-              "v": {
-                "v": 260,
-                "l": "260"
-              }
-            }
-          ],
-          "selectBlank": false,
-          "selectError": false
-        }
-      ],
-      "mode": "row-based"
-    },
-    "baseColumnName": "taxonnumber",
-    "expression": "grel:value",
-    "onError": "set-to-blank",
-    "newColumnName": "forma_taxonnumber",
-    "columnInsertIndex": 28,
-    "description": "Create column forma_taxonnumber at index 28 based on column taxonnumber using expression grel:value"
   },
   {
     "op": "core/column-rename",
@@ -908,15 +902,12 @@
       "newspeciesflag",
       "subspecies",
       "subspecies_author",
-      "subspecies_taxonnumber",
       "newsubspeciesflag",
       "variety",
       "variety_author",
-      "variety_taxonnumber",
       "newvarietyflag",
       "forma",
       "forma_author",
-      "forma_taxonnumber",
       "newformaflag",
       "qualifier",
       "typestatusname",
