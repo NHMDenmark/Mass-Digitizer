@@ -876,6 +876,32 @@
     "description": "Create column genus_author at index 21 based on column taxonauthor using expression grel:value"
   },
   {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "recorddatetime",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "remark date",
+    "columnInsertIndex": 63,
+    "description": "Create column remark date at index 63 based on column recorddatetime using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "remark date",
+    "expression": "grel:'DaSSCo digitisation'",
+    "onError": "set-to-blank",
+    "newColumnName": "remark source",
+    "columnInsertIndex": 64,
+    "description": "Create column remark source at index 64 based on column remark date using expression grel:'DaSSCo digitisation'"
+  },
+  {
     "op": "core/column-reorder",
     "columnNames": [
       "catalognumber",
@@ -884,12 +910,13 @@
       "cataloger middle",
       "cataloger lastname",
       "projectnumber",
-      "remarks",
       "objectcondition",
-      "multispecimen",
       "publish",
       "containername",
       "containertype",
+      "remarks",
+      "remark date",
+      "remark source",
       "family",
       "family_taxonnumber",
       "genus",
