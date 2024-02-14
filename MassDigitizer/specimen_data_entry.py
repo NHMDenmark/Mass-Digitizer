@@ -407,6 +407,9 @@ class SpecimenDataEntry():
 
             elif event == 'inpContainerName_Edit':
                 self.collobj.containername = values['inpContainerName']
+                if values['inpContainerName'] == '': 
+                    self.window['radRadioMOS'].reset_group()
+                    self.window['radRadioSSO'].update(value=True)
                 self.setFieldFocus('cbxGeoRegion')
 
             elif event == 'cbxGeoRegion':
