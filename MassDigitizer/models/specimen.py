@@ -60,6 +60,7 @@ class Specimen(Model):
         self.typeStatusId = 0
         self.objectCondition = ''
         self.geoRegionName = ''
+        self.geoRegionSource = ''
         self.geoRegionId = 0
         self.storageFullName = ''
         self.storageName = ''
@@ -129,6 +130,7 @@ class Specimen(Model):
             'typestatusname': f'"{self.typeStatusName}"',
             'typestatusid': f'"{self.typeStatusId}"',
             'georegionname': f'"{self.geoRegionName}"',
+            'georegionsource': f'"{self.geoRegionSource}"',
             'georegionid': f'"{self.geoRegionId}"',
             'storagefullname': f'"{self.storageFullName}"',
             'storagename': f'"{self.getStorageName()}"',
@@ -189,6 +191,7 @@ class Specimen(Model):
             self.typeStatusId = record['typestatusid']
             self.objectCondition = record['objectcondition']
             self.geoRegionName = record['georegionname']
+            self.geoRegionSource = record['georegionsource']
             self.geoRegionId = record['georegionid']
             self.storageFullName = record['storagefullname']
             self.storageName = record['storagename']
@@ -270,6 +273,7 @@ class Specimen(Model):
         if index >= 0:  # Apparently, index -1 selects the last item in the list
             self.geoRegionId = self.geoRegions[index]['id']
             self.geoRegionName = self.geoRegions[index]['name']
+            self.geoRegionSource = self.geoRegions[index]['source']
 
     def setStorageFields(self, index):
         """
