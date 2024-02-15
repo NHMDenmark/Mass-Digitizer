@@ -370,7 +370,7 @@ class DataAccess():
                 sqlStringFinal = ','.join(map(str, sqlStringAppend))
 
         
-        util.logger.debug('Update record using SQL: ', sqlStringFinal)
+        #util.logger.debug('Update record using SQL: ', sqlStringFinal)
 
         self.currentCursor.execute(sqlStringFinal)
         self.currentCursor.connection.commit()

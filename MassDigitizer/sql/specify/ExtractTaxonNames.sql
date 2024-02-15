@@ -1,10 +1,15 @@
   -- To be run on Specify database
   --    Add to top:
-  --       INSERT INTO taxonname ("spid","name","author","fullname","rankid","taxonRank", "treedefid","parentfullname", "taxonnumber", "taxonnrsource") VALUES 
+  --       INSERT INTO taxonname (spid,name,author,fullname,rankid,taxonRank,treedefid,institutionid,parentfullname,idnumber,taxonnrsource) VALUES 
   SELECT
-	 -- CONCAT('(', t.TaxonID, ',"', t.Name, '","', COALESCE(t.author,'') , '","', TRIM(CONCAT(t.FullName, ' ', COALESCE(t.author,''))), '",', t.RankID ,',"', ttd.Name ,'", ', t.TaxonTreeDefID, ',"', p1.FullName, '","', COALESCE(t.text1,''), '","', COALESCE(t.text2,''), '"),' ) 
-	 --   sqlstatement
-	  t.TaxonID, t.FullName, t.author, t.RankID rankid, ttd.Name rankname, p1.FullName parentname, t.text1 taxonnr, t.text2 taxonnrsource 
+	 CONCAT('(', t.TaxonID, ',"', t.Name, '","', COALESCE(t.author,'') , '","', 
+    TRIM(CONCAT(t.FullName, ' ', COALESCE(t.author,''))), 
+--	 t.FullName, -- For higher taxa: Don't include author name 
+	 '",', t.RankID ,',"', ttd.Name ,'",', 
+	 '2,', -- institutionid: '1' for NHMD, '2' for NHMA ... 
+	 t.TaxonTreeDefID, ',"', p1.FullName, '","', COALESCE(t.text1,''), '","', COALESCE(t.text2,''), '"),' ) 
+	 sqlstatement 
+    -- , t.TaxonID, t.Name, t.author, t.FullName, t.RankID rankid, ttd.Name rankname, t.TaxonTreeDefID treedefid, '2' institutionid, p1.FullName parentfullname, t.text1 taxonnr, t.text2 taxonnrsource 
  FROM taxon t
 	LEFT JOIN taxon p1 ON p1.TaxonID = t.ParentID
 	LEFT JOIN taxon p2 ON p2.TaxonID = p1.ParentID
@@ -13,9 +18,9 @@
 	LEFT JOIN taxontreedefitem ttd ON t.rankID = ttd.RankID AND t.TaxonTreeDefID = ttd.TaxonTreeDefID
 
 	WHERE
-		t.taxontreedefid = 13 -- 13 for NHMD Botany, 5 for NHMD Entomology, 2 for NHMA Entomology
+		t.taxontreedefid = 2 -- 13 for NHMD Botany, 5 for NHMD Entomology, 2 for NHMA Entomology
 -- The following lines filter on taxon rank and should be adjusted accordingly
-		-- AND t.RankID > 230 -- VarForma 
+		AND t.RankID > 230 -- VarForma 
 		-- AND t.RankID = 230 -- Subspecies
 		-- AND t.RankID = 220 -- Species
 		-- AND t.RankID <= 190   -- Highertaxa (including Subgenus). t.RankID >= 180 for Species-BatchN.sql - t.RankID <= 190 for Highertaxa.sql

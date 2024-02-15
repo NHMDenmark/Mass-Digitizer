@@ -563,6 +563,39 @@
           "selection": [
             {
               "v": {
+                "v": 140,
+                "l": "140"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonnrsource",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "family_taxonnrsource",
+    "columnInsertIndex": 28,
+    "description": "Create column family_taxonnrsource at index 28 based on column taxonnrsource using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "rankid",
+          "expression": "value",
+          "columnName": "rankid",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
                 "v": 180,
                 "l": "180"
               }
@@ -596,6 +629,39 @@
           "selection": [
             {
               "v": {
+                "v": 180,
+                "l": "180"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonnrsource",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "genus_taxonnrsource",
+    "columnInsertIndex": 28,
+    "description": "Create column genus_taxonnrsource at index 28 based on column taxonnrsource using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "rankid",
+          "expression": "value",
+          "columnName": "rankid",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
                 "v": 220,
                 "l": "220"
               }
@@ -613,6 +679,39 @@
     "newColumnName": "species_taxonnumber",
     "columnInsertIndex": 28,
     "description": "Create column species_taxonnumber at index 28 based on column taxonnumber using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "rankid",
+          "expression": "value",
+          "columnName": "rankid",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": 220,
+                "l": "220"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonnrsource",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "species_taxonnrsource",
+    "columnInsertIndex": 28,
+    "description": "Create column species_taxonnrsource at index 28 based on column taxonnrsource using expression grel:value"
   },
   {
     "op": "core/column-rename",
@@ -919,13 +1018,16 @@
       "remark source",
       "family",
       "family_taxonnumber",
+      "family_taxonnrsource",
       "genus",
       "genus_author",
       "genus_taxonnumber",
+      "genus_taxonnrsource",
       "newgenusflag",
       "species",
       "species_author",
       "species_taxonnumber",
+      "species_taxonnrsource",
       "newspeciesflag",
       "subspecies",
       "subspecies_author",

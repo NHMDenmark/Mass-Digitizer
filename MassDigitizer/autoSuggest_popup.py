@@ -216,6 +216,7 @@ class AutoSuggest_popup():
                             util.logLine(f'Family name could not be retrieved for {self.taxonName} !')
                         self.autoSuggestObject.familyName = self.familyName                        
                         self.autoSuggestObject.idNumber = self.selected_row['idnumber']
+                        self.autoSuggestObject.idSource = self.selected_row['taxonnrsource']
                         self.currentRecord = self.autoSuggestObject.getFieldsAsDict()
                         # The above family name will be picked up by the specimen-data-entry class
 
@@ -229,11 +230,12 @@ class AutoSuggest_popup():
                         self.autoSuggestObject.name = self.selected_row['name']
                         self.autoSuggestObject.fullName = self.selected_row['fullname']
                         self.autoSuggestObject.parentFullName = self.selected_row['parentfullname']
-                        self.autoSuggestObject.idNumber = self.selected_row['idnumber']
                         if self.tableName == 'taxonname':
                             self.autoSuggestObject.gbifKey = self.selected_row['dwcid']
                             self.autoSuggestObject.dasscoid = self.selected_row['dasscoid']                   
                             self.autoSuggestObject.author = self.selected_row['author']
+                            self.autoSuggestObject.idNumber = self.selected_row['idnumber']
+                            self.autoSuggestObject.idSource = self.selected_row['taxonnrsource']
                         # Transfer any novel taxon verbatim notes 
                         # TODO This has been deactivated since this is already supposed to be a known taxon (???)
                         #if self.autoSuggestObject.spid == 0 or self.autoSuggestObject.spid is None:

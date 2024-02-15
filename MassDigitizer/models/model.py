@@ -51,6 +51,7 @@ class Model:
         self.parentId = 0
         self.familyName = ''  # TODO Too specific! Solve in a different way ...
         self.idNumber = '' # TODO Too specific! Solve in a different way ...
+        self.idSource = '' # TODO Too specific! Solve in a different way ...
         self.remarks = ' '
         self.notes = ''
         self.collectionId = collection_id
@@ -240,6 +241,7 @@ class Model:
         self.treedefid = record['treedefid']
         self.rankid = record['rankid']
         self.idNumber = record['idnumber']
+        self.idSource = record['taxonnrsource']
 
     # Specify Interfacing functions
 

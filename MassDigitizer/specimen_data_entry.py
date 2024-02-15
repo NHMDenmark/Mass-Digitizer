@@ -475,9 +475,11 @@ class SpecimenDataEntry():
                         self.validationFeedback('Could not find taxon with this number! (' + taxonNumber + ')')
                         self.window['inpTaxonNumber'].update('')
                 else:
-                    # If the taxon number is clear then so should the current taxon 
-                    self.window['inpTaxonName'].update('')
-                    self.collobj.setTaxonNameFields(None)                    
+                    # If the taxon number is cleared then so should the current taxon 
+                    # NOTE: This only goes when the taxon number wasn't empty to begin with, otherwise we might just be tabbing through... 
+                    if self.collobj.taxonNumber != '':
+                        self.window['inpTaxonName'].update('')
+                        self.collobj.setTaxonNameFields(None)                    
 
             elif event == 'inpCatalogNumber_Return':
                 # Respond to barcode being entered or scanned by setting corresponding field value
