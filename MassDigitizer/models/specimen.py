@@ -55,6 +55,7 @@ class Specimen(Model):
         self.familyName = ''  # TODO
         self.higherTaxonName = ''
         self.taxonNumber = ''
+        self.taxonNrSource = ''
         self.typeStatusName = ''
         self.typeStatusId = 0
         self.objectCondition = ''
@@ -124,6 +125,7 @@ class Specimen(Model):
             'rankid': f'"{self.rankid}"',
             'taxonrankname': f'"{self.taxonRankName}"',
             'taxonnumber': f'"{self.taxonNumber}"',
+            'taxonnrsource': f'"{self.taxonNrSource}"',
             'typestatusname': f'"{self.typeStatusName}"',
             'typestatusid': f'"{self.typeStatusId}"',
             'georegionname': f'"{self.geoRegionName}"',
@@ -182,6 +184,7 @@ class Specimen(Model):
             self.rankid = record['rankid']
             self.taxonRankName = record['taxonrankname']
             self.taxonNumber = record['taxonnumber']
+            self.taxonNrSource = record['taxonnrsource']
             self.typeStatusName = record['typestatusname']
             self.typeStatusId = record['typestatusid']
             self.objectCondition = record['objectcondition']
@@ -325,6 +328,7 @@ class Specimen(Model):
             self.higherTaxonName = record['parentfullname']
             self.rankid = record['rankid']  # TODO
             self.taxonNumber = record['idnumber']
+            self.taxonNrSource = record['taxonnrsource']
             self.taxonRankName = self.getTaxonRankname(self.rankid)
             self.familyName = self.searchParentTaxon(self.taxonFullName, 140, self.collection.taxonTreeDefId)
             pass
@@ -340,9 +344,9 @@ class Specimen(Model):
             self.higherTaxonName = ''
             self.rankid = ''
             self.taxonNumber = ''
+            self.taxonNrSource = ''
             self.taxonRankName = ''
             self.familyName = ''
-            self.taxonNumber = ''
 
         return self.taxonNameId
 
@@ -393,7 +397,8 @@ class Specimen(Model):
             self.taxonRankName = self.getTaxonRankname(record['rankid'])
             self.higherTaxonName = record['parentFullName']
             self.familyName = self.searchParentTaxon(self.taxonFullName, 140, self.collection.taxonTreeDefId)
-            self.taxonNumber = record['idnumber']
+            self.taxonNumber = record['idnumber']            
+            self.taxonNrSource = record['taxonnrsource']
 
         else:
             # Empty record
@@ -420,6 +425,7 @@ class Specimen(Model):
             self.higherTaxonName = object.parentFullName
             self.familyName = self.searchParentTaxon(self.taxonFullName, 140, self.collection.taxonTreeDefId)
             self.taxonNumber = object.idNumber
+            self.taxonNrSource = object.idSource
 
         else:
             # Empty record
@@ -555,7 +561,7 @@ class Specimen(Model):
             if len(taxonNameRecords) > 0:
                 # First check whether this is an accepted name or synonym; If the latter, use the accepted name instead as basis record
                 acceptedFullName = taxonNameRecords[0]['acceptedfullname']
-                if acceptedFullName != '':
+                if acceptedFullName != '' and acceptedFullName is not None:
                     taxonNameRecords = self.db.getRowsOnFilters('taxonname', filters={'fullname': f"='{acceptedFullName}'",'treedefid': f"= '{treedefid}'"})                
 
                 if len(taxonNameRecords) > 0:
