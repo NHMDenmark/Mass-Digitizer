@@ -242,20 +242,8 @@ class AutoSuggest_popup():
                         #    self.autoSuggestObject.notes = f" | Verbatim_taxon:{self.autoSuggestObject.fullName}"
                         break
                     else:
-                        # Inputting novel taxon name
-                        # self.autoSuggestObject.rankid = selected_row['rankid']
-                        self.autoSuggestObject.id = 0
-                        self.autoSuggestObject.spid = 0
-                        self.autoSuggestObject.rankid = 0
-                        self.autoSuggestObject.idNumber = ''
-                        self.autoSuggestObject.gbifKey = ''
-                        self.autoSuggestObject.dasscoid = ''
-                        self.autoSuggestObject.author = ''
-
-                        # if not self.autoSuggestObject.parentFullName:
-                        #window['txtHiTax'].Update(self.autoSuggestObject.parentFullName)
+                        # Inputting novel taxon name: Show selected family taxon
                         window['txtHiTax'].Update(selectedSuggestion)
-                        # window['frmHiTax'].update(visible=False)
                         window['btnOK'].SetFocus()
 
                         # self.autoSuggestObject.save() # TODO Why was this line disabled? 
@@ -266,10 +254,36 @@ class AutoSuggest_popup():
                         window['frmHiTax'].update(visible=True)  # Reveal family name input fields
                         window['txtHiTax'].SetFocus()  # Set focus on family name text input
 
+                        # Clear taxon data fields: 
+                        self.autoSuggestObject.id = 0
+                        self.autoSuggestObject.spid = 0
+                        self.autoSuggestObject.rankid = 0
+                        self.autoSuggestObject.idNumber = ''
+                        self.autoSuggestObject.gbifKey = ''
+                        self.autoSuggestObject.dasscoid = ''
+                        self.autoSuggestObject.author = ''
+
+                        # if not self.autoSuggestObject.parentFullName:
+
+                        # Parse taxon name entry: 
+                        taxonNameEntry = values['txtInput'].strip().replace('*','')
+                        # NOTE The above removes any asterisk that was intentionally added in order to force a new taxon name with no author indicated (ticket #466)
+
                         # Store novel taxon name in autosuggest object
-                        self.autoSuggestObject.name = values['txtInput'].strip().split(' ').pop().replace('*','')
-                        self.autoSuggestObject.fullName = values['txtInput'].strip().replace('*','')
-                        # NOTE Removes any asterisk that was intentionally added in order to force a new taxon name with no author indicated (ticket #466)
+                        if '_' in taxonNameEntry: 
+                            # If an underscore is present this indicates the author name is added 
+                            self.autoSuggestObject.name = taxonNameEntry.strip().split('_')[0].split(' ').pop() # Atomic name is last element before author(s)
+                            self.autoSuggestObject.author = taxonNameEntry.strip().split('_')[1] 
+                            if ' x ' in taxonNameEntry: 
+                                # In case of hybrids, take the entire string following Genus 
+                                self.autoSuggestObject.name = taxonNameEntry[taxonNameEntry.index(' ')+1:len(taxonNameEntry)].strip().split('_')[0] 
+                        else:                            
+                            self.autoSuggestObject.name = taxonNameEntry.strip().split(' ').pop() # Atomic name is last element
+                            if ' x ' in taxonNameEntry: 
+                                # In case of hybrids, take the entire string following Genus 
+                                self.autoSuggestObject.name = taxonNameEntry[taxonNameEntry.index(' ')+1:len(taxonNameEntry)].strip()
+                        # Remove authorship separator from fullname
+                        self.autoSuggestObject.fullName = taxonNameEntry.replace('_',' ') # Remove authorship separator
 
                         if values['lstSuggestions']:  # Asking for family name.
                             self.autoSuggestObject.parentFullName = values['lstSuggestions'][0]
@@ -292,18 +306,18 @@ class AutoSuggest_popup():
                 self.autoSuggestObject.spid = 0
                 self.autoSuggestObject.gbifKey = 0
                 self.autoSuggestObject.dasscoid = ''
-                # self.autoSuggestObject.name = values['txtInput'].split(' ').pop()
-                # self.autoSuggestObject.name = values['txtInput']
-                # self.autoSuggestObject.fullName = f"{self.autoSuggestObject.name}".strip(' ')
                 self.autoSuggestObject.collectionId = self.collectionID
                 #self.autoSuggestObject.notes = f" | Verbatim_taxon:{self.autoSuggestObject.fullName}"
                 self.autoSuggestObject.parentFullName = values['txtHiTax'].strip()
                 self.autoSuggestObject.familyName = values['txtHiTax'].strip()
-                self.autoSuggestObject.rankid = self.specimen.determineRank(self.autoSuggestObject.fullName)
+                fullNameMinusAuthor = self.autoSuggestObject.fullName.replace(self.autoSuggestObject.author, '').strip()
+                self.autoSuggestObject.rankid = self.specimen.determineRank(fullNameMinusAuthor)
+                self.autoSuggestObject.rankName = self.specimen.getTaxonRankname(self.autoSuggestObject.rankid)
 
                 # Persist novel taxon so it will be auto-suggested next time around
                 newtaxon = self.db.insertRow('taxonname', {"name": f'"{self.autoSuggestObject.name.strip()}"',
                                                            "fullname": f'"{self.autoSuggestObject.fullName.strip()}"',
+                                                           "author": f'"{self.autoSuggestObject.author.strip()}"',
                                                            "rankid": f'{self.autoSuggestObject.rankid}',
                                                            "parentfullname": f'"{self.autoSuggestObject.parentFullName}"',
                                                            "taxonrank": f'"{self.autoSuggestObject.rankName}"',
