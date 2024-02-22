@@ -139,7 +139,7 @@ class DataAccess():
         if descending: sqlString += ' DESC'
         # Add range (row limit) if set 
         if limit > 0: sqlString += f' LIMIT {limit}'
-        util.logger.debug(sqlString)
+        #util.logger.debug(sqlString)
 
         try:
             records = self.currentCursor.execute(sqlString).fetchall()
@@ -164,7 +164,7 @@ class DataAccess():
         
         sqlString = f'SELECT * FROM {tableName} WHERE id = {str(id)};'
 
-        util.logger.debug(sqlString)
+        #util.logger.debug(sqlString)
 
         try:
             record = self.currentCursor.execute(sqlString).fetchone()
@@ -224,7 +224,7 @@ class DataAccess():
 
         sqlString = f'SELECT * FROM {table_name} WHERE id = (SELECT MAX(id) FROM {table_name} WHERE collectionid = {collection_id}) AND collectionid = {collection_id};'
         
-        util.logger.debug(sqlString)
+        #util.logger.debug(sqlString)
 
         try:
             record = self.currentCursor.execute(sqlString).fetchone()
