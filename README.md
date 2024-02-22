@@ -1,6 +1,11 @@
 ## DIRECTORY
 [DaSSCo Mass Digitization App ](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/README.md#dassco-mass-digitization-app)
 
+[Author backfill ](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/README.md#author-backfill)
+
+[Monitor_script ]()
+
+
 # DaSSCo Mass Digitization App 
 
 ## Purpose of the application
@@ -112,6 +117,8 @@ The installer is then placed in folder Mass-Digitizer\MassDigitizer\Output ready
 NOTE: For NHMD Vascular Plants, the taxon spine is recorded as sets of csv files that are placed in folder ([Mass-Digitizer/tree/main/data/taxon spines/Botany](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/data/taxon%20spines/Botany)). The respective SQL statements have been generated on the basis of those files using the python script ([prepare-db.py](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/MassDigitizer/prepare-db.py)). If changes are made to the taxon spine files, this script will need to be rerun. This will take many hours and should therefore not be a part of the standard compilation process. 
 
 # Author backfill
-## Adding authors to Digi app exports that were made pre 1.1.3
+### Adding authors to Digi app exports that were made pre 1.1.3
 
 
+# Monitor script
+### Detecting new files coming into the 2.PostProcessed_openRefine directory and adding the three new columns described here: [#461](https://github.com/NHMDenmark/Mass-Digitizer/issues/461)
