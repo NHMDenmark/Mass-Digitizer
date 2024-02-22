@@ -3,7 +3,8 @@
 
 [Author backfill ](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/README.md#author-backfill)
 
-[Monitor_script ]()
+[Monitor_script ](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/README.md#monitor-script)
+
 
 
 # DaSSCo Mass Digitization App 
