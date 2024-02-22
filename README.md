@@ -119,6 +119,12 @@ NOTE: For NHMD Vascular Plants, the taxon spine is recorded as sets of csv files
 
 # Author backfill
 ### Adding authors to Digi app exports that were made pre 1.1.3
+The module author_backfill_with_test.py can be run with only two changes. The path to the SQLite DB must be set, as well as the `xlsxwriter.Workbook` name.
+```
+con = sqlite3.connect(r'C:\DaSSCo\db.sqlite3') #Please set the connection to the operational database (SQLite assumed).
+
+workbook = xlsxwriter.Workbook("authorDropdown02.xlsx") # Output Excel sheet with the parameter name.
+```
 
 
 # Monitor script
