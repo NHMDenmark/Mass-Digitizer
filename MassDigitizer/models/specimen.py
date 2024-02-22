@@ -59,6 +59,8 @@ class Specimen(Model):
         self.typeStatusName = ''
         self.typeStatusId = 0
         self.objectCondition = ''
+        self.specimenObscured = False
+        self.labelObscured = False
         self.geoRegionName = ''
         self.geoRegionSource = ''
         self.geoRegionId = 0
@@ -139,6 +141,8 @@ class Specimen(Model):
             'preptypename': f'"{self.prepTypeName}"',
             'preptypeid': f'"{self.prepTypeId}"',
             'objectcondition': f'{self.objectCondition}',
+            'specimenobscured':f'{self.specimenObscured}',
+            'labelobscured':f'{self.labelObscured}',
             'notes': f'"{self.notes}"',
             'containername': f'"{self.containername}"',
             'containertype': f'"{self.containertype}"',
@@ -190,6 +194,8 @@ class Specimen(Model):
             self.typeStatusName = record['typestatusname']
             self.typeStatusId = record['typestatusid']
             self.objectCondition = record['objectcondition']
+            self.specimenObscured = record['specimenobscured']
+            self.labelObscured = record['labelobscured']
             self.geoRegionName = record['georegionname']
             self.geoRegionSource = record['georegionsource']
             self.geoRegionId = record['georegionid']
@@ -618,16 +624,6 @@ class Specimen(Model):
                 break  # return current
 
         return taxonFullName
-
-    # def assignPrefixContainerId(self):
-    #     '''Simply concatenates the two fields containertype and multispecimen.
-    #     Run this in specimen_data_entry.save_form() before the save() line'''
-    #
-    #     if self.containername:
-    #         containerType = self.containername
-    #         containerType = containerType.replace(" ", "")
-    #         concatMultispecimen = f"{containerType}{self.multiSpecimen}"
-    #         return concatMultispecimen
 
     def __str__(self):
         return f'[{self.table}] id:{self.id}, name:{self.name}, fullname = {self.fullName}, notes = {self.notes}'
