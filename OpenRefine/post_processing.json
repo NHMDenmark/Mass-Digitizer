@@ -1010,6 +1010,8 @@
       "cataloger lastname",
       "projectnumber",
       "objectcondition",
+      "specimenobscured",
+      "labelobscured",
       "publish",
       "containername",
       "containertype",

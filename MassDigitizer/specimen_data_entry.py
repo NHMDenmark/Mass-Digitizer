@@ -58,16 +58,13 @@ class SpecimenDataEntry():
         # Create recordset of last 3 saved records for the initial preview table
         self.recordSet = recordset.RecordSet(collection_id, 3,specimen_id=self.collobj.id) 
 
-        # A switch to place the process in a state of 'freshness'. If initial then tab behavior is affected to go araound all fields.
-
-        # Various lists of fields to be cleared on command
-        # Needs radio in the input field list
-        self.inputFieldList = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'chkDamage', 'inpNotes', 'radRadioSSO', 'radRadioMSO', 'radRadioMOS', 'inpContainerName', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'inpCatalogNumber', 'btnSave']
-        self.focusIconList =  ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrDamage', 'inrNotes', 'inrRadioSSO', 'inrRadioMSO', 'inrRadioMOS', 'inrContainerName', 'inrGeoRegion', 'inrTaxonName', 'inrTaxonNumber', 'inrCatalogNumber', 'inrSave']
-        self.clearingList = ['inpStorage', 'txtStorageFullname', 'cbxPrepType', 'cbxTypeStatus', 'inpNotes','inpContainerName', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'inpCatalogNumber','txtRecordID']
+        # Input field lists defining: Tabbing order, focus indicator, what fields to be cleared, and what fields are not 'sticky' i.e. not carrying their value over to the next record after saving current one 
+        self.inputFieldList =  ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured', 'radRadioSSO', 'radRadioMSO', 'radRadioMOS', 'inpContainerName', 'inpNotes', 'inpCatalogNumber', 'btnSave']
+        self.focusIconList =   ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrGeoRegion', 'inrTaxonName', 'inrTaxonNumber', 'inrDamage', 'inrSpecimenObscured', 'inrLabelObscured', 'inrRadioSSO', 'inrRadioMSO', 'inrRadioMOS', 'inrContainerName', 'inrNotes', 'inrCatalogNumber', 'inrSave']
+        self.clearingList =    ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured','inpContainerName', 'inpCatalogNumber','txtRecordID', 'txtStorageFullname', 'inpNotes']
+        self.nonStickyFields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured', 'inpNotes']
         #self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'inpNotes'},{'inpContainerName'},{'cbxGeoRegion'}, {'inpTaxonName'}, {'inpTaxonNumber'}]
-        self.nonStickyFields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage', 'inpNotes']
-
+        
         # Global variables
         self.fieldInFocus = ''  # Stores name of field currently in focus
         self.fieldInFocusIndex = -1  # Stores list index of field currently in focus
@@ -94,7 +91,7 @@ class SpecimenDataEntry():
         # Define UI areas
         sg.theme('SystemDefault')
         greenArea = '#E8F4EA'  # Stable fields   (?)
-        blueArea = '#99ccff'  # Variable fields (?)
+        blueArea = '#99CDFF'  # Variable fields (?)
         greyArea = '#BFD1DF'  # Session & Settings
 
         # Set standard element dimensions
@@ -118,14 +115,13 @@ class SpecimenDataEntry():
 
         # NOTE Elements are stored  in variables to make it easier to include and position in the frames
 
-        # Green Area elements
         storage = [
-            sg.Text("Storage location:", size=(21, 1), background_color=greenArea, font=captionFont),
+            sg.Text("Storage location:", size=captionSize, justification='l', background_color=greenArea, font=captionFont),
             # sg.Text(indicatorLeft, key='inlStorage', text_color='black', background_color=greenArea, visible=True, font=wingdingFont),
-            sg.InputText('None', key='inpStorage', focus=True, size=greenSize, text_color='black', pad=(10, 0), background_color='white', font=fieldFont, enable_events=True),
+            sg.InputText('None', key='inpStorage', focus=True, size=greenSize, text_color='black', pad=(0, 0), background_color='white', font=fieldFont, enable_events=True),
             sg.pin(sg.Text(indicatorRight, key='inrStorage', background_color=greenArea, visible=True, font=wingdingFont)),
             # 'Pin' because otherwise it's placed right of next element
-            sg.Text("", key='txtStorageFullname', size=(50, 2), background_color=greenArea, font=smallLabelFont)
+            #sg.Text("", key='txtStorageFullname', size=(50, 2), background_color=greenArea, font=smallLabelFont)
         ]
 
         preparation = [
@@ -142,63 +138,67 @@ class SpecimenDataEntry():
             sg.Text(indicatorRight, pad=(7, 0), key='inrTypeStatus', background_color=greenArea, visible=False, font=wingdingFont),
         ]
 
-        damaged_specimen = [
-            sg.Text('Damaged specimen:', size=(21, 1), background_color=greenArea, font=captionFont),
-            sg.Checkbox('', key="chkDamage", background_color=greenArea, enable_events=True),
-            sg.Text(indicatorRight, pad=(7, 0), key='inrDamage', background_color=greenArea, visible=False, font=wingdingFont)
-        ]
-        notes = [
-            sg.Text('Notes', size=captionSize, background_color=greenArea, font=captionFont),
-            # sg.Text(indicatorLeft, key='inlNotes', text_color='black', background_color=greenArea, visible=True, font=wingdingFont),
-            sg.InputText(size=(80, 5), key='inpNotes', pad=(0, 0), enable_events=False, font=fieldFont, background_color='white', text_color='black'),
-            sg.Text(indicatorRight, key='inrNotes', background_color=greenArea, visible=False, font=wingdingFont)
-        ]
-
-        # Radio buttons for the three different container types
-        r_title = sg.Text('Container type', size=captionSize, background_color=greenArea, font=captionFont)
-        r_singleSpecimenObject = sg.Radio('Single specimen object', 'multi', default=True, enable_events=True, key="radRadioSSO", background_color=greenArea)
-        r_multiSpecimenObject = sg.Radio(self.MSOterm, 'multi', enable_events=True, key="radRadioMSO", background_color=greenArea)
-        r_multiObjectSpecimen = sg.Radio(self.MOSterm, 'multi', enable_events=True, key="radRadioMOS", background_color=greenArea)
-        
-        multiRadio = [r_title,
-                      r_singleSpecimenObject,
-                      sg.Text(indicatorRight, key='inrRadioSSO', background_color=greenArea, visible=False, font=wingdingFont), r_multiSpecimenObject,
-                      sg.Text(indicatorRight, key='inrRadioMSO', background_color=greenArea, visible=False, font=wingdingFont), r_multiObjectSpecimen,
-                      sg.Text(indicatorRight, key='inrRadioMOS', background_color=greenArea, visible=False, font=wingdingFont)
-                      ]
-
-        containerID = [sg.Text('Container ID ', font=sessionInfoFont, background_color=greenArea, size=captionSize),
-                       sg.InputText(size=(50, 5), key='inpContainerName', disabled=True, pad=(0, 0), enable_events=False, font=fieldFont, background_color='white', text_color='black'),
-                       sg.Text(indicatorRight, key='inrContainerName', background_color=greenArea, visible=False, font=wingdingFont), ]
-
-        layout_greenarea = [storage, preparation, type_status, damaged_specimen, notes, multiRadio, containerID]
-
-        # Blue Area elements
         broadGeo = [
-            sg.Text('Broad geographic region:', size=captionSize, background_color=blueArea, text_color='black', font=captionFont),
-            # sg.Text(indicatorLeft, key='inlGeoRegion', text_color='black', background_color=blueArea, visible=True, font=wingdingFont),
-            sg.Combo(util.convert_dbrow_list(self.collobj.geoRegions), key='cbxGeoRegion', size=blueSize, text_color='black', background_color='white', font=fieldFont, readonly=True, enable_events=True),
-            sg.Text(indicatorRight, key='inrGeoRegion', background_color=blueArea, visible=False, font=wingdingFont)
+            sg.Text('Broad geographic region:', size=captionSize, background_color=greenArea, text_color='black', font=captionFont),
+            # sg.Text(indicatorLeft, key='inlGeoRegion', text_color='black', background_color=greenArea, visible=True, font=wingdingFont),
+            sg.Combo(util.convert_dbrow_list(self.collobj.geoRegions), key='cbxGeoRegion', size=blueSize, text_color='black', background_color='white', font=fieldFont, readonly=True, enable_events=True, pad=(0, 0)),
+            sg.Text(indicatorRight, key='inrGeoRegion', background_color=greenArea, visible=False, font=wingdingFont)
         ]
 
         taxonInput = [
-            sg.Text('Taxonomic name:     ', size=captionSize, background_color=blueArea, text_color='black',font=captionFont),
-            # sg.Text(indicatorLeft, key='inlTaxonName', text_color='black', background_color=blueArea, visible=True, font=wingdingFont),
-            sg.Multiline('', size=blueSize, key='inpTaxonName', rstrip=False, no_scrollbar=True, text_color='black', background_color='white',font=fieldFont, enable_events=True, pad=((5, 0), (0, 0))),
-            sg.Text(indicatorRight, key='inrTaxonName', background_color=blueArea, visible=True, font=wingdingFont),
-
+            sg.Text('Taxonomic name:', size=captionSize, background_color=greenArea, text_color='black',font=captionFont),
+            # sg.Text(indicatorLeft, key='inlTaxonName', text_color='black', background_color=greenArea, visible=True, font=wingdingFont),
+            sg.Multiline('', size=blueSize, key='inpTaxonName', rstrip=False, no_scrollbar=True, text_color='black', background_color='white',font=fieldFont, enable_events=True, pad=(0, 0)),
+            sg.Text(indicatorRight, key='inrTaxonName', background_color=greenArea, visible=True, font=wingdingFont),
         ]
 
         taxonNr = [
-            sg.Text('Taxon Number:', key='txtTaxonNumber', font=captionFont, background_color=blueArea, text_color='black', visible=True),
+            sg.Text('Taxon Number:', key='txtTaxonNumber', font=captionFont, background_color=greenArea, text_color='black', visible=True),
             sg.InputText('', size=(7, 1), key='inpTaxonNumber', text_color='black', background_color='white', font=fieldFont, enable_events=True, visible=True),
-            sg.Text(indicatorRight, key='inrTaxonNumber', background_color=blueArea, visible=True, font=wingdingFont),
+            sg.Text(indicatorRight, key='inrTaxonNumber', background_color=greenArea, visible=True, font=wingdingFont),
         ]
+
+        specimen_flags = [
+            sg.Text('Specimen flags', size=captionSize, background_color=blueArea, font=captionFont),
+            sg.Checkbox('Damaged specimen', key="chkDamage", background_color=blueArea, enable_events=True),
+            sg.Text('', pad=(0, 0), background_color=blueArea),
+            sg.Text(indicatorRight, pad=(0, 0), key='inrDamage', background_color=blueArea, visible=False, font=wingdingFont),
+            sg.Checkbox('Specimen obscured', key="chkSpecimenObscured", background_color=blueArea, enable_events=True),
+            sg.Text('', pad=(0, 0), background_color=blueArea),
+            sg.Text(indicatorRight, pad=(0, 0), key='inrSpecimenObscured', background_color=blueArea, visible=False, font=wingdingFont),
+            sg.Checkbox('Label obscured', key="chkLabelObscured", background_color=blueArea, enable_events=True),
+            sg.Text('', pad=(0, 0), background_color=blueArea),
+            sg.Text(indicatorRight, pad=(0, 0), key='inrLabelObscured', background_color=blueArea, visible=False, font=wingdingFont)
+        ]
+
+        notes = [
+            sg.Text('Notes', size=captionSize, background_color=blueArea, font=captionFont),
+            # sg.Text(indicatorLeft, key='inlNotes', text_color='black', background_color=blueArea, visible=True, font=wingdingFont),
+            sg.InputText(size=(70, 5), key='inpNotes', pad=(0, 0), enable_events=False, font=fieldFont, background_color='white', text_color='black'),
+            sg.Text(indicatorRight, key='inrNotes', background_color=blueArea, visible=False, font=wingdingFont)
+        ]
+
+        # Radio buttons for the three different container types
+        containertype_caption  = sg.Text('Container type', size=captionSize, background_color=blueArea, font=captionFont)
+        single_specimen_object = sg.Radio('Single specimen object', 'multi', default=True, enable_events=True, key="radRadioSSO", background_color=blueArea)
+        multi_specimen_object  = sg.Radio(self.MSOterm, 'multi', enable_events=True, key="radRadioMSO", background_color=blueArea)
+        multi_object_specimen  = sg.Radio(self.MOSterm, 'multi', enable_events=True, key="radRadioMOS", background_color=blueArea)
+        
+        container_types = [containertype_caption,
+                           single_specimen_object, sg.Text(indicatorRight, key='inrRadioSSO', background_color=blueArea, visible=False, font=wingdingFont), 
+                           multi_specimen_object,  sg.Text(indicatorRight, key='inrRadioMSO', background_color=blueArea, visible=False, font=wingdingFont), 
+                           multi_object_specimen,  sg.Text(indicatorRight, key='inrRadioMOS', background_color=blueArea, visible=False, font=wingdingFont)
+        ]
+
+        containerID = [sg.Text('Container ID ', font=sessionInfoFont, background_color=blueArea, size=captionSize),
+                       sg.InputText(size=blueSize, key='inpContainerName', disabled=True, pad=(0, 0), enable_events=False, font=fieldFont, background_color='white', text_color='black'),
+                       sg.Text(indicatorRight, key='inrContainerName', background_color=blueArea, visible=False, font=wingdingFont), 
+                       ]
 
         barcode = [
             sg.Text('Barcode:', size=captionSize, background_color=blueArea, enable_events=True, text_color='black', font=captionFont),
             # sg.Text(indicatorLeft, key='inlCatalogNumber', text_color='black', background_color=blueArea, visible=True, font=wingdingFont),
-            sg.InputText('', key='inpCatalogNumber', size=blueSize, text_color='black', background_color='white', font=fieldFont, enable_events=True),
+            sg.InputText('', key='inpCatalogNumber', size=blueSize, text_color='black', background_color='white', font=fieldFont,  pad=(0, 0), enable_events=True),
             sg.Text(indicatorRight, key='inrCatalogNumber', background_color=blueArea, visible=False,font=wingdingFont),
             sg.Text('Validation Error', key='lblError', visible=False, background_color="#ff5588", border_width=3)
         ]
@@ -207,7 +207,7 @@ class SpecimenDataEntry():
 
         self.tableHeaders = ['id', 'catalognumber', 'taxonfullname', 'containertype', 'georegionname','storagename']  # Headers for previousRecordsTable
 
-        lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
+        #lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
         
         # Get data to populate previous records table:
         adjacentRecords = self.recordSet.getAdjacentRecordList(self.tableHeaders)
@@ -217,21 +217,34 @@ class SpecimenDataEntry():
         controlArea = [
             sg.Text('Record ID: ', key='lblRecordID', background_color='#99dcff', visible=True, size=(9, 1)),
             sg.Text('', key='txtRecordID', size=(4, 1), background_color=blueArea),
-            sg.StatusBar('', relief=None, size=(7, 1), background_color=blueArea),
+            sg.Text(' ', size=(7,1), background_color=blueArea), # spacer 
             sg.Button('SAVE', key="btnSave", button_color='seagreen', size=9),
             sg.Text('', key='inrSave', background_color=blueArea, visible=True),
-            sg.StatusBar('', relief=None, size=(5, 1), background_color=blueArea),
+            #sg.StatusBar('', relief=None, size=(1, 1), background_color=blueArea),
+            sg.Text(' ', size=(4,1), background_color=blueArea), # spacer 
             sg.Button('GO BACK', key="btnBack", button_color='#8b0000'),
             sg.Button('GO FORWARDS', key='btnForward', button_color=('black', 'LemonChiffon2')),
             sg.Button('CLEAR FORM', key='btnClear', button_color='black on white'),
             #sg.Button('Export data', key='btnExport', button_color='royal blue'),  # Export data should be a backend feature says Pip
             #sg.Button('Dismiss', key='btnDismiss', button_color='white on black'), # Notifications not needed says Pip
         ]
+                
+        storage_fullname = [sg.Text("", key='txtStorageFullname', size=(50, 2), background_color=greenArea, font=smallLabelFont)]
+        
+        placeholder1 = [sg.Text("", background_color=greenArea)]
+        placeholder2 = [sg.Text("", background_color=greenArea)]
+        placeholder3 = [sg.Text("", background_color=greenArea)]
 
-        bluearea_column1 = sg.Column([broadGeo, taxonInput, barcode], background_color=blueArea)
-        bluearea_column2 = sg.Column([taxonNr], background_color=blueArea)
+        stickyFields_column1 = sg.Column([storage, preparation, type_status, broadGeo, taxonInput], background_color=greenArea, size=(560,200), expand_x=True) 
+        stickyFields_column2 = sg.Column([storage_fullname, placeholder1, placeholder2, placeholder3, taxonNr], background_color=greenArea) #,vertical_alignment='b')
 
-        layout_bluearea = [[bluearea_column1, bluearea_column2], controlArea, lblExport, previousRecordsTable]
+        layout_greenarea = [[stickyFields_column1, stickyFields_column2]]
+
+        warning_linkedrecord = [sg.Image('MassDigitizer/img/Warning_LinkedRecord.png',key="imgWarningLinkedRecord", visible=False, expand_x=True, expand_y=True, background_color=blueArea )] # [sg.Text("Test", background_color=blueArea)]
+
+        bluearea_maincol = sg.Column([specimen_flags, container_types, containerID, notes, barcode, controlArea], background_color=blueArea)
+        bluearea_sidecol = sg.Column([warning_linkedrecord], background_color=blueArea)
+        layout_bluearea  = [[bluearea_maincol, bluearea_sidecol],[sg.Column([previousRecordsTable])]]
 
         # Grey Area (Header) elements
         loggedIn = [
@@ -243,8 +256,7 @@ class SpecimenDataEntry():
             sg.Text(gs.institutionName, key='txtInstitution', size=(29, 1), background_color=greyArea, font=smallLabelFont)]
 
         collection = [
-            sg.Text('Collection:', size=sessionInfoSize, background_color=greyArea, text_color='black',
-                    font=sessionInfoFont),
+            sg.Text('Collection:', size=sessionInfoSize, background_color=greyArea, text_color='black', font=sessionInfoFont),
             sg.Text(self.collection.name, key='txtCollection', size=(25, 1), background_color=greyArea, font=smallLabelFont)]
 
         version = [
@@ -263,11 +275,11 @@ class SpecimenDataEntry():
         layout = [[
             sg.Frame('', layoutTitle, size=(550, 100), pad=(0, 0), background_color=greyArea, border_width=0),
             sg.Frame('', layoutMeta, size=(500, 120), pad=(0, 0), border_width=0, background_color=greyArea)],
-            [sg.Frame('', [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(250, 240), background_color=greenArea, expand_x=True, ), ],  # expand_y=True,
-            [sg.Frame('', [[sg.Column(layout_bluearea, background_color=blueArea)]], title_location=sg.TITLE_LOCATION_TOP, background_color=blueArea, expand_x=True, expand_y=True, )], ]
+            [sg.Frame('', [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(500, 185), background_color=greenArea, expand_x=True, ), ],  # expand_y=True, 
+            [sg.Frame('', [[sg.Column(layout_bluearea,  background_color=blueArea )]], title_location=sg.TITLE_LOCATION_TOP, background_color=blueArea, expand_x=True, expand_y=True, )], ]
 
         # Launch window
-        self.window = sg.Window("DaSSCo Mass Digitization App", layout, margins=(2, 2), size=(1048, 640), resizable=True, return_keyboard_events=True, finalize=True, background_color=greyArea)
+        self.window = sg.Window("DaSSCo Mass Digitization App", layout, margins=(2, 2), size=(1100, 640), resizable=True, return_keyboard_events=True, finalize=True, background_color=greyArea)
         self.window.TKroot.focus_force()  # Forces the app to be in focus.
 
         # Set session fields
@@ -362,7 +374,7 @@ class SpecimenDataEntry():
             elif event == 'cbxTypeStatus':
                 self.collobj.setTypeStatusFields(self.window[event].widget.current())
                 self.collobj.typeStatusName = values['cbxTypeStatus']
-                self.setFieldFocus('chkDamage')
+                self.setFieldFocus('cbxGeoRegion')
 
             elif event == "chkDamage":
                 needsrepair = values['chkDamage']
@@ -370,11 +382,19 @@ class SpecimenDataEntry():
                     self.collobj.objectCondition = "Needs repair"
                 else: 
                     self.collobj.objectCondition = ""
-                self.setFieldFocus('inpNotes')
+                self.setFieldFocus('chkSpecimenObscured')
+
+            elif event == "chkSpecimenObscured":
+                self.collobj.specimenObscured = values['chkSpecimenObscured']
+                self.setFieldFocus('chkLabelObscured')
+
+            elif event == "chkLabelObscured":
+                self.collobj.labelObscured = values['chkLabelObscured']
+                self.setFieldFocus('radRadioSSO')
 
             elif (event == 'inpNotes_Edit' or event == 'inpNotes_Return'):
                 self.collobj.notes = values['inpNotes']
-                # self.setFieldFocus('radioSingle')
+                self.setFieldFocus('inpCatalogNumber')
 
             elif event == 'inpNotes_FocusOut':
                 self.collobj.notes = values['inpNotes']
@@ -386,7 +406,8 @@ class SpecimenDataEntry():
                 self.collobj.containertype = self.MSOterm
                 self.collobj.containername = MSOkey.strip()
                 self.window['inpContainerName'].update(value=MSOkey, disabled=False)
-                self.setFieldFocus('cbxGeoRegion')
+                self.window['imgWarningLinkedRecord'].update(visible=True)
+                self.setFieldFocus('inpNotes')
 
             elif event == 'radRadioMOS':
                 mKey = util.getRandomNumberString()
@@ -394,7 +415,8 @@ class SpecimenDataEntry():
                 self.collobj.containertype = self.MOSterm
                 self.collobj.containername = MOSkey.strip()
                 self.window['inpContainerName'].update(value=MOSkey, disabled=False)
-                self.setFieldFocus('cbxGeoRegion')
+                self.window['imgWarningLinkedRecord'].update(visible=True)
+                self.setFieldFocus('inpNotes')
 
             elif event == 'radRadioSSO':
                 self.window['inpContainerName'].update(value='', disabled=True)
@@ -403,14 +425,15 @@ class SpecimenDataEntry():
                 self.window['radRadioMOS'].reset_group()
                 self.window['radRadioSSO'].update(value=True)
                 self.window['inpContainerName'].update('')
-                self.setFieldFocus('cbxGeoRegion')
+                self.window['imgWarningLinkedRecord'].update(visible=False)
+                self.setFieldFocus('inpNotes')
 
             elif event == 'inpContainerName_Edit':
                 self.collobj.containername = values['inpContainerName']
                 if values['inpContainerName'] == '': 
                     self.window['radRadioMOS'].reset_group()
                     self.window['radRadioSSO'].update(value=True)
-                self.setFieldFocus('cbxGeoRegion')
+                self.setFieldFocus('inpNotes')
 
             elif event == 'cbxGeoRegion':
                 self.collobj.setGeoRegionFields(self.window[event].widget.current())
@@ -429,27 +452,27 @@ class SpecimenDataEntry():
                     if self.collection.useTaxonNumbers == True:
                         self.setFieldFocus('inpTaxonNumber')
                     else:
-                        self.setFieldFocus('inpCatalogNumber')
-                                
-                # Activate autosuggest box, when three characters or more are entered.
-                result = ''
-                if len(keyStrokes) >= minimumKeyStrokes and keyStrokes != 'None':
-                    result = self.autoSuggestTaxonName(keyStrokes) 
-                
-                    if result == 'Done':
-                        # Taxon name retrieved                                
-                        # Move to next field depending on collection
-                        if self.collection.useTaxonNumbers == True and values['inpTaxonNumber'].strip() == "":
-                            self.setFieldFocus('inpTaxonNumber')
-                        else:
-                            self.setFieldFocus('inpCatalogNumber')
+                        self.setFieldFocus('chkDamage')
+                else:                
+                    # Activate autosuggest box, when three characters or more are entered.
+                    result = ''
+                    if len(keyStrokes) >= minimumKeyStrokes and keyStrokes != 'None':
+                        result = self.autoSuggestTaxonName(keyStrokes) 
                     
-                    if values['inpTaxonName'].strip() == '':
-                        # taxon input field empty: Clear all taxon related fields
-                        self.collobj.setTaxonNameFieldsFromModel(model.Model(self.collectionId))
-                        self.setSpecimenFields(values, False)
-                        self.window['inpTaxonNumber'].update('') # Clear taxon number input field
-                        #self.setFieldFocus('inpCatalogNumber')
+                        if result == 'Done':
+                            # Taxon name retrieved                                
+                            # Move to next field depending on collection
+                            if self.collection.useTaxonNumbers == True and values['inpTaxonNumber'].strip() == "":
+                                self.setFieldFocus('inpTaxonNumber')
+                            else:
+                                self.setFieldFocus('chkDamage')
+                        
+                        if values['inpTaxonName'].strip() == '':
+                            # taxon input field empty: Clear all taxon related fields
+                            self.collobj.setTaxonNameFieldsFromModel(model.Model(self.collectionId))
+                            self.setSpecimenFields(values, False)
+                            self.window['inpTaxonNumber'].update('') # Clear taxon number input field
+                            #self.setFieldFocus('inpCatalogNumber')
 
             elif event == 'inpTaxonName_Shift-Tab':                
                 self.setFieldFocus('cbxGeoRegion')
@@ -464,16 +487,22 @@ class SpecimenDataEntry():
                 # 
                 taxonNumber = values['inpTaxonNumber']
                 if taxonNumber != '':
-                    taxonRecord = self.db.getRowsOnFilters('taxonname', {'idnumber':f'={taxonNumber}'}, 1)
-                    if taxonRecord:
-                        taxonName = model.Model(self.collectionId)
-                        taxonName.setFields(taxonRecord[0])
-                        self.window['inpTaxonName'].update(taxonName.fullName)
-                        self.handleTaxonNameInput(taxonName)
-                        self.setFieldFocus('inpCatalogNumber')
+                    if taxonNumber != self.collobj.taxonNumber:
+                        # If the taxon number was changed from currently set value then look up corresponding taxon name record 
+                        taxonRecord = self.db.getRowsOnFilters('taxonname', {'idnumber':f'={taxonNumber}'}, 1)
+                        if taxonRecord:
+                            taxonName = model.Model(self.collectionId)
+                            taxonName.setFields(taxonRecord[0])
+                            self.window['inpTaxonName'].update(taxonName.fullName)
+                            self.handleTaxonNameInput(taxonName)
+                            self.setFieldFocus('chkDamage')
+                        else:
+                            self.validationFeedback('Could not find taxon with this number! (' + taxonNumber + ')')
+                            self.window['inpTaxonNumber'].update('')
                     else:
-                        self.validationFeedback('Could not find taxon with this number! (' + taxonNumber + ')')
-                        self.window['inpTaxonNumber'].update('')
+                        # If the taxon number was not changed from currently set value then evade taxon name field altogether (no change) 
+                        #self.setFieldFocus('cbxTypeStatus')
+                        pass
                 else:
                     # If the taxon number is cleared then so should the current taxon 
                     # NOTE: This only goes when the taxon number wasn't empty to begin with, otherwise we might just be tabbing through... 
@@ -568,7 +597,7 @@ class SpecimenDataEntry():
 
             elif event == 'btnDismiss':
                 # Hide any error and other messages
-                self.window['lblExport'].update(visible=False)
+                #self.window['lblExport'].update(visible=False)
                 #self.window['lblRecordEnd'].update(visible=False)
                 self.window['lblError'].update('Validation error',visible=False)
 
@@ -647,9 +676,11 @@ class SpecimenDataEntry():
             containerType = record['containertype'] # Get container type 
 
             if containerType == self.MSOterm:
-                self.window.Element('radRadioMSO').update(value=True) # Set MSO radiobutton  
+                self.window.Element('radRadioMSO').update(value=True) # Set MSO radiobutton 
+                self.window.Element('imgWarningLinkedRecord').update(visible=True)
             elif containerType == self.MOSterm:
                 self.window.Element('radRadioMOS').update(value=True) # Set MOS radiobutton
+                self.window.Element('imgWarningLinkedRecord').update(visible=True)
             else:
                 self.window['lblError'].update('Something went wrong!',visible=True)
             
@@ -657,9 +688,10 @@ class SpecimenDataEntry():
             self.window['inpContainerName'].update(disabled=False)
         else:
             # No container name set; single specimen assumed
-            self.window.Element('radRadioSSO').update(value=True) # Set SSO radiobutton            
-            self.window['inpContainerName'].update('')              # Clear container name input field 
-            self.window['inpContainerName'].update(disabled=True)   # Disable container name input field 
+            self.window.Element('radRadioSSO').update(value=True)               # Set SSO radiobutton        
+            self.window['inpContainerName'].update('')                          # Clear container name input field 
+            self.window['inpContainerName'].update(disabled=True)               # Disable container name input field 
+            self.window.Element('imgWarningLinkedRecord').update(visible=False) # Hide linked record warning
 
     def setFieldFocus(self, fieldName):
         """
@@ -984,6 +1016,8 @@ class SpecimenDataEntry():
             self.window['chkDamage'].update(True)
         else:
             self.window['chkDamage'].update(False)
+        self.window['chkSpecimenObscured'].update(record['specimenobscured'])
+        self.window['chkLabelObscured'].update(record['labelobscured'])
 
         self.window['inpNotes'].update(record['notes'])
 
@@ -1029,7 +1063,7 @@ class SpecimenDataEntry():
         # Reset radio buttons
 
         # Reset any information labels and radio buttons
-        self.window['lblExport'].update(visible=False)
+        #self.window['lblExport'].update(visible=False)
         #self.window['lblRecordEnd'].update(visible=False)
         self.window['radRadioMOS'].update(value=False)
         self.window['radRadioMSO'].update(value=False)

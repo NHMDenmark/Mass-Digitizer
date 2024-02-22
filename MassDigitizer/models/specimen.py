@@ -59,6 +59,8 @@ class Specimen(Model):
         self.typeStatusName = ''
         self.typeStatusId = 0
         self.objectCondition = ''
+        self.specimenObscured = False
+        self.labelObscured = False
         self.geoRegionName = ''
         self.geoRegionSource = ''
         self.geoRegionId = 0
@@ -139,6 +141,8 @@ class Specimen(Model):
             'preptypename': f'"{self.prepTypeName}"',
             'preptypeid': f'"{self.prepTypeId}"',
             'objectcondition': f'{self.objectCondition}',
+            'specimenobscured':f'{self.specimenObscured}',
+            'labelobscured':f'{self.labelObscured}',
             'notes': f'"{self.notes}"',
             'containername': f'"{self.containername}"',
             'containertype': f'"{self.containertype}"',
@@ -190,6 +194,8 @@ class Specimen(Model):
             self.typeStatusName = record['typestatusname']
             self.typeStatusId = record['typestatusid']
             self.objectCondition = record['objectcondition']
+            self.specimenObscured = record['specimenobscured']
+            self.labelObscured = record['labelobscured']
             self.geoRegionName = record['georegionname']
             self.geoRegionSource = record['georegionsource']
             self.geoRegionId = record['georegionid']
@@ -516,31 +522,57 @@ class Specimen(Model):
 
     def determineRank(self, taxonNameEntry):
         """
-        Determine rank of given taxon name entry
-        TODO Function contract
+        Determine rank of given taxon name entry by analysing string pattern. 
+        Typical patterns: 
+            Genus species 
+            Genus species subspecies 
+            Genus species var. variety 
+            Genus species f. forma 
+            Genus species x species 
+            Genus (Subgenus) species 
+            Genus (Subgenus) species subspecies 
+            etcetera 
+        CONTRACT
+          taxonNameEntry (string) : Full taxon name entry to be analysed
+        RETURNS rankid (int)      : Rank id number 
         """
-        rankid = 999
+        rankid = 999 # default rank id value corresponding to no rank at all in case the analysis fails. 
         try:
-            elementCount = len(taxonNameEntry.strip().split(' '))
-            subgenusCount = 0
-            if '(' in taxonNameEntry: subgenusCount = 1
+            # In case an author name is included in the full taxon name, this should be separated out by an underscore
+            #authorName = '' # Initialize author name string as blank 
+            #authorSplit = taxonNameEntry.split('_') # Split out author name part of entry, if it exists 
 
+            # If an underscore is detected, the second element of the split is assumed to be the author name
+            #if len(authorSplit) > 1: authorName = authorSplit[1]
+            #taxonName = authorSplit[0] # The first or only element is assumed to be the taxon name 
+
+            # Split taxon name in respective elements and get element count 
+            taxonNameSplit = taxonNameEntry.strip().split(' ')
+            elementCount = len(taxonNameSplit)
+
+            # Check for subgenus; If present, the subgenus is the second element enclosed by parentheses 
+            subgenusCount = 0
+            if taxonNameSplit[1][1] == '(': 
+                subgenusCount = 1 # The subgenus adds another element to the total count 
+
+            # Look for distinctive string patterns indicating rank 
             if ' var. ' in taxonNameEntry:
-                rankid = 240
+                rankid = 240 # Variety 
             elif ' subvar.  ' in taxonNameEntry:
-                rankid = 250
+                rankid = 250 # Subvariety 
             elif ' f. ' in taxonNameEntry:
-                rankid = 260
+                rankid = 260 # Forma 
             elif ' subf. ' in taxonNameEntry:
-                rankid = 270
+                rankid = 270 # Subforma
             elif ' x ' in taxonNameEntry:
-                rankid = 220 # Hybrid
+                rankid = 220 # Hybrids are always of rank species 
+            # Otherwise look for element count indicating rank:
             elif elementCount == 3 + subgenusCount:
-                rankid = 230
+                rankid = 230 # Subspecies 
             elif elementCount == 2 + subgenusCount:
-                rankid = 220
+                rankid = 220 # Species 
             elif elementCount == 1 + subgenusCount:
-                rankid = 180
+                rankid = 180 # Genus 
         except:
             util.logger.error(f'Could not determine rank of novel taxon: {taxonNameEntry}')
 
@@ -592,16 +624,6 @@ class Specimen(Model):
                 break  # return current
 
         return taxonFullName
-
-    # def assignPrefixContainerId(self):
-    #     '''Simply concatenates the two fields containertype and multispecimen.
-    #     Run this in specimen_data_entry.save_form() before the save() line'''
-    #
-    #     if self.containername:
-    #         containerType = self.containername
-    #         containerType = containerType.replace(" ", "")
-    #         concatMultispecimen = f"{containerType}{self.multiSpecimen}"
-    #         return concatMultispecimen
 
     def __str__(self):
         return f'[{self.table}] id:{self.id}, name:{self.name}, fullname = {self.fullName}, notes = {self.notes}'
