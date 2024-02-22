@@ -1,3 +1,6 @@
+## DIRECTORY
+[DaSSCo Mass Digitization App ](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/README.md#dassco-mass-digitization-app)
+
 # DaSSCo Mass Digitization App 
 
 ## Purpose of the application
