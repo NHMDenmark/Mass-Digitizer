@@ -53,6 +53,22 @@ def fileNameGetDate(filename):
     isoDate = f"{year}-{month}-{day}"
     return isoDate
 
+def addColumnsToDf(myDf, filename):
+    # myDf is generated from
+    dateString = fileNameGetDate(filename)
+    myDf['datafile_date'] = dateString
+    myDf['datafile_remark'] = filename
+    myDf['datafile_source'] = 'DaSSCo data file'
+    print(myDf.head(5).to_string())
+    return myDf
+
+def dfToFile(myDf, filename):
+    # Write the TSV processed file in place of the original
+    outputPath = f"{path_to_watch}/{filename}"
+    print(outputPath)
+    df.to_csv(outputPath, sep='\t', index=False, header=True, encoding='windows-1252')
+    return "TSV saved :)"
+
 #
 # Loop forever, listing any file changes. The WaitFor... will
 #  time out every half a second allowing for keyboard interrupts
@@ -74,22 +90,16 @@ try:
       added = [f for f in new_path_contents if not f in old_path_contents]
       deleted = [f for f in old_path_contents if not f in new_path_contents]
       if added:
-        print("Added: ", ", ".join (added))
+
         filename = ", ".join (added)
         try:
-            df = pd.read_csv(f"{path_to_watch}/{filename}", sep='\t')
-        except PermissionError:
+            df = pd.read_csv(f"{path_to_watch}/{filename}", sep='\t', encoding='iso-8859-1') # WARNING, currently Specify workbench expects cp-1252 encoded files. Might change in the future!
+            df = addColumnsToDf(df, filename)
+            res = dfToFile(df, filename)
+            print(res)
+        except PermissionError as e: # A silly error that does not affect the desired result, i.e. the end output file.
             continue
 
-        print(list(df.columns))
-        dateString = fileNameGetDate(filename)
-        df['datafile_date'] = dateString
-        df['datafile_remark'] = filename
-        df['datafile_source'] = 'DaSSCo data file'
-        print(df.head(5).to_string())
-        outputPath = f"{path_to_watch}/{filename}"
-        df.to_csv(outputPath, sep='\t', index=False, header=True)
-          
       if deleted: print("Deleted: ", ", ".join (deleted))
 
       old_path_contents = new_path_contents
