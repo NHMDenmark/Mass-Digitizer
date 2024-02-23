@@ -20,7 +20,7 @@ import string
 con = sqlite3.connect(r'C:\DaSSCo\db.sqlite3') #Please set the connection to the operational database (SQLite assumed).
 # Will like be this type of path: C:\Users\Swedish_license_plate\OneDrive - University of Copenhagen\Documents\DaSSCo\db.sqlite3
 # storagetxt = ''
-workbook = xlsxwriter.Workbook("authorDropdown01.xlsx") # Output Excel sheet and set name
+workbook = xlsxwriter.Workbook("authorDropdown02.xlsx") # Output Excel sheet and set name
 worksheet = workbook.add_worksheet() # Global worksheet used throughout
 
 
@@ -47,8 +47,6 @@ def commaReplace(element, replacement='٬'):
 def authorsToDropDowns(worksheet, author_List, columnPosition):
     #columnTitles must be a list of three
     #columnPosition should be G or later in the alphabet to make space for the new taxonomic group.
-    print(f"column position = {columnPosition}")
-    # worksheet.write(f"{columnLetter}1", 'Drop down author', header_format)
     def assignDropdowns(columnPosition, authors):
         counter = 1
         for j in authors:
@@ -77,11 +75,8 @@ def processSpeciesDf(speciesDf):
         return item[0].split(delimiter)
 
     speciesDf['authorlist'] = speciesDf['authorlist'].apply(changeDelimiter)
-    print('!!!!!!!!!!!!')
-    print(speciesDf['authorlist'].head(20).to_string())
     return speciesDf
-# authorsList = speciesDf['authorlist'].head(20).to_list()
-## END species DATA FRAME section /
+
 # Create species lists for populating the worksheet SECTION
 speciesDf = processSpeciesDf(speciesDf)
 
@@ -109,7 +104,6 @@ genusDF['authors'] = genusDF['authors'].apply(genusDelimiter)
 # genusDF['authorlist'] = genusDF.groupby(['box', 'name'])['authors'].transform(lambda x: [list(x) for v in x])
 genusDF['authorlist'] = genusDF['authors'].apply(uniquify_list)
 
-print("¤¤¤¤¤¤¤¤", genusDF['authorlist'].head(2).to_string())
 # END genus section /
 
 
@@ -136,19 +130,33 @@ header_format = workbook.add_format(
     }
 )
 
+genus_header = workbook.add_format(
+    {
+        "border": 1,
+        "bg_color": "#BBE2E4",
+        "bold": True,
+        "text_wrap": True,
+        "valign": "vcenter",
+        "indent": 1,
+    }
+)
+
 # Set up layout of the worksheet.
 worksheet.set_column("A:A", 10) #Size of columns
 worksheet.set_column("B:B", 25)
 worksheet.set_column("C:C", 25)
 worksheet.set_column("D:D", 10)
+worksheet.set_column("E:E", 25)
 worksheet.set_column("F:F", 15)
 worksheet.set_column("G:G", 25)
 worksheet.set_column("H:H", 25)
+worksheet.set_column("J:J", 25)
 # Species names section
 worksheet.write("A1", "Storage name", header_format)
 worksheet.write("B1", "Species name", header_format)
 worksheet.write("C1", "Author drop down", header_format)
 worksheet.write("D1", "Taxon ID", header_format)
+worksheet.write("E1", "Comments", header_format)
 worksheet.write_column(1, 0, speciesBoxList)
 worksheet.write_column(1, 1, speciesNameList)
 worksheet.write_column(1, 3, speciesTaxonidList)
@@ -158,14 +166,15 @@ genusNameColumn = 'G'
 genusAuthorColumn = 'H'
 genusBoxColumn = 'F'
 genusTaxonIDcolumn = 'I'
-worksheet.write("H1", "Author drop down", header_format)
-worksheet.write(f"{genusBoxColumn}1", "Storage name", header_format)
+worksheet.write("H1", "Author drop down", genus_header)
+worksheet.write(f"{genusBoxColumn}1", "Storage name", genus_header)
 worksheet.write_column(1, 5, genusBoxList)
-worksheet.write(f"{genusNameColumn}1", "Genus", header_format)
+worksheet.write(f"{genusNameColumn}1", "Genus", genus_header)
 worksheet.write_column(1, 6, genusNameList)
 authorsToDropDowns(worksheet, genusAuthor_list, genusAuthorColumn)
-worksheet.write(f"{genusTaxonIDcolumn}1", "Taxon ID", header_format)
+worksheet.write(f"{genusTaxonIDcolumn}1", "Taxon ID", genus_header)
 worksheet.write_column(1, 8, genusTaxonid_list)
+worksheet.write("J1", "Comments", genus_header)
 
 #  End Genus names section/
 
@@ -175,9 +184,7 @@ def lengthDataframe(a_dataframe):
     # Returns the number of rows in DF as int.
     # Shall pick several random names from the SQLite DB taxonname table and test if the authors attached to that name are present in the speciesDataframe.
     lenDF = len(a_dataframe.index)
-    print('len dataframe=', lenDF)
     return lenDF
-
 
 
 def run_testSuite(my_dataFrame, number_of_runs, rankid):
@@ -190,13 +197,11 @@ def run_testSuite(my_dataFrame, number_of_runs, rankid):
         taxonName_for_test = list(randRow['name'])
         tst_name = f"'{taxonName_for_test[0]}'"
         pandasAuthors = list(randRow['authorlist'])[0]
-        print(pandasAuthors)
 
         sql_for_test = f'SELECT author, t.name FROM taxonname t WHERE t.rankid = {rankid} AND t.name = {tst_name} AND length(author) > 0;'
         # Based on the random name the SQL query should yield author and name
         dfFromSQL = pd.read_sql_query(sql_for_test, con)
         print("---------------------")
-        # print(dfFromSQL.head(5).to_string())
         test_name = dfFromSQL['name'].to_list()[0]
         test_authors = dfFromSQL['author'].to_list()[0]
         test_authors = commaReplace(test_authors)
@@ -213,12 +218,10 @@ def run_testSuite(my_dataFrame, number_of_runs, rankid):
             import ctypes
             print(f"{test_authors} not in {spAuthorList}")
             ctypes.windll.user32.MessageBoxW(None, u"Error! Author NOT found--", u"Error", 0)
-            # print(f"{sp_authors} not in {test_authors}")
             sys.exit(1)
 run_testSuite(speciesDf, 10, 220) # rankid is either 180 (genus) or 220 (species)
-run_testSuite(genusDF, 10, 180)
-# sys.exit(0)
-
+run_testSuite(genusDF, 10, 180) # Testing genusDF
+# If test suite is successful then Excel sheet is created.
 workbook.close()
 
 
