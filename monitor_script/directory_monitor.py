@@ -35,14 +35,6 @@ change_handle = win32file.FindFirstChangeNotification (
   win32con.FILE_NOTIFY_CHANGE_FILE_NAME
 )
 
-
-def addColumnsToDataFrame(myDf, filename):
-    # Adds three specific columns see https://github.com/NHMDenmark/Mass-Digitizer/issues/461#issuecomment-1953535744
-    dateString = fileNameGetDate(filename) # Obtains the ISO date from the filename.
-    df['datafile_date'] = dateString
-    df['datafile_remark'] = filename
-    df['datafile_source'] = 'DaSSCo data file'
-
 def fileNameGetDate(filename):
     #A very specific function for extracting the date string as ISO date (yyyy-MM-dd) from the file name itself.
     tokens = filename.split('-')
@@ -54,6 +46,7 @@ def fileNameGetDate(filename):
     return isoDate
 
 def addColumnsToDf(myDf, filename):
+    # Adds three specific columns see https://github.com/NHMDenmark/Mass-Digitizer/issues/461#issuecomment-1953535744
     # myDf is generated from
     dateString = fileNameGetDate(filename)
     myDf['datafile_date'] = dateString
