@@ -129,3 +129,7 @@ workbook = xlsxwriter.Workbook("authorDropdown02.xlsx") # Output Excel sheet wit
 
 # Monitor script
 ### Detecting new files coming into the 2.PostProcessed_openRefine directory and adding the three new columns described here: [#461](https://github.com/NHMDenmark/Mass-Digitizer/issues/461)
+The structure of the new columns is this:
+- datafile_remark (the filename)
+- datafile_source (a description of the raison d'ëtre of the remark, e.g. "DaSSCo datafile" or some such)
+- datafile_date (I suppose this should be the date of export of the datafile)
