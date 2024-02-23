@@ -59,6 +59,8 @@ def addColumnsToDf(myDf, filename):
     myDf['datafile_date'] = dateString
     myDf['datafile_remark'] = filename
     myDf['datafile_source'] = 'DaSSCo data file'
+    myDf['remark_date'] = # get the date from the DF!!
+    myDf['remark_source'] = 'DaSSCo data file'
     print(myDf.head(5).to_string())
     return myDf
 
