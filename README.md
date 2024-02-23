@@ -1,3 +1,12 @@
+## DIRECTORY
+[DaSSCo Mass Digitization App ](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/README.md#dassco-mass-digitization-app)
+
+[Author backfill ](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/README.md#author-backfill)
+
+[Monitor_script ](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/README.md#monitor-script)
+
+
+
 # DaSSCo Mass Digitization App 
 
 ## Purpose of the application
@@ -108,5 +117,15 @@ So the process for compilation is as follows:
 The installer is then placed in folder Mass-Digitizer\MassDigitizer\Output ready for distribution. 
 NOTE: For NHMD Vascular Plants, the taxon spine is recorded as sets of csv files that are placed in folder ([Mass-Digitizer/tree/main/data/taxon spines/Botany](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/data/taxon%20spines/Botany)). The respective SQL statements have been generated on the basis of those files using the python script ([prepare-db.py](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/MassDigitizer/prepare-db.py)). If changes are made to the taxon spine files, this script will need to be rerun. This will take many hours and should therefore not be a part of the standard compilation process. 
 
+# Author backfill
+### Adding authors to Digi app exports that were made pre 1.1.3
+The module author_backfill_with_test.py can be run with only two changes. The path to the SQLite DB must be set, as well as the `xlsxwriter.Workbook` name.
+```
+con = sqlite3.connect(r'C:\DaSSCo\db.sqlite3') #Please set the connection to the operational database (SQLite assumed).
+
+workbook = xlsxwriter.Workbook("authorDropdown02.xlsx") # Output Excel sheet with the parameter name.
+```
 
 
+# Monitor script
+### Detecting new files coming into the 2.PostProcessed_openRefine directory and adding the three new columns described here: [#461](https://github.com/NHMDenmark/Mass-Digitizer/issues/461)
