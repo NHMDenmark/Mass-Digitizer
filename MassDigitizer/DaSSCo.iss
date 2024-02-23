@@ -40,6 +40,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "..\dist\DaSSCo\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\dist\DaSSCo\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "sql\editions\temp\db.sqlite3"; DestDir: "{userdocs}\DaSSCo"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "img\*.*"; DestDir: "{userdocs}\DaSSCo\img"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 

@@ -27,6 +27,7 @@ import sys
 import time 
 import traceback
 import PySimpleGUI as sg
+from pathlib import Path
 
 # Internal dependencies
 import util
@@ -240,7 +241,8 @@ class SpecimenDataEntry():
 
         layout_greenarea = [[stickyFields_column1, stickyFields_column2]]
 
-        warning_linkedrecord = [sg.Image('MassDigitizer/img/Warning_LinkedRecord.png',key="imgWarningLinkedRecord", visible=False, expand_x=True, expand_y=True, background_color=blueArea )] # [sg.Text("Test", background_color=blueArea)]
+        imgPath = str(Path(util.getUserPath()).joinpath(f'img/Warning_LinkedRecord.png'))
+        warning_linkedrecord = [sg.Image(imgPath,key="imgWarningLinkedRecord", visible=False, expand_x=True, expand_y=True, background_color=blueArea )] # [sg.Text("Test", background_color=blueArea)]
 
         bluearea_maincol = sg.Column([specimen_flags, container_types, containerID, notes, barcode, controlArea], background_color=blueArea)
         bluearea_sidecol = sg.Column([warning_linkedrecord], background_color=blueArea)
