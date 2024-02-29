@@ -11,6 +11,7 @@ Unless required by applicable law or agreed to in writing,
 software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 either express or implied. See the License for the specific language governing permissions and limitations under the License.
 - CAN ONLY RUN BE USED TO MONITOR A Windows Machine!!!
+- The code now adds three new required columns to Digi app files coming into the monitored directory.
 """
 import os
 import win32file
@@ -38,6 +39,7 @@ change_handle = win32file.FindFirstChangeNotification (
 def fileNameGetDate(filename):
     #A very specific function for extracting the date string as ISO date (yyyy-MM-dd) from the file name itself.
     tokens = filename.split('-')
+    print("TOKENS!!!!!!", tokens)
     fileDate = f"{tokens[2]}"
     year = fileDate[0:4]
     month = fileDate[4:6]
@@ -48,11 +50,14 @@ def fileNameGetDate(filename):
 def addColumnsToDf(myDf, filename):
     # Adds three specific columns see https://github.com/NHMDenmark/Mass-Digitizer/issues/461#issuecomment-1953535744
     # myDf is generated from
+    print(myDf.head(2).to_string())
     dateString = fileNameGetDate(filename)
+    # remark_date_list = myDf['recorddatetime'].to_list()
+    # remarkDate = remark_date_list[0][0:10]
     myDf['datafile_date'] = dateString
     myDf['datafile_remark'] = filename
     myDf['datafile_source'] = 'DaSSCo data file'
-    myDf['remark_date'] = # get the date from the DF!!
+    myDf['remark_date'] = myDf['catalogeddate'] # get the date from the DF!!
     myDf['remark_source'] = 'DaSSCo data file'
     print(myDf.head(5).to_string())
     return myDf
