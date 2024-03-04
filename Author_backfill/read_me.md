@@ -12,5 +12,6 @@ Workflow for producing the spreadsheet author name backfill utility:
 - Import this csv as a table into the SQLite database that the Mass Digitization App made and name it 'binomial'. The code for the utility is specifically written for this scenario.
 Create a new table 'binomial_identifier' by employing this SQL string:
 
-`CREATE TABLE binomial_identifier AS SELECT DISTINCT t.name, b.box,  t.author, t.dasscoid FROM binomial b JOIN taxonname t ON b.name = t.name WHERE length(t.author) > 0 ORDER BY 2;` 
+`CREATE TABLE binomial_identifier AS SELECT DISTINCT t.name, b.box,  t.author, t.dasscoid FROM binomial b JOIN taxonname t ON b.name = t.name WHERE length(t.author) > 0 ORDER BY 2;`   
+
 Now the basic elements are in place.
