@@ -3,7 +3,7 @@
 Workflow on producing the spreadsheet:
 
 Create a csv download from Specify UI. Mapping is as follows:
-author_util_mapping
+
 Make sure that 'project' is set to DaSSCo
 
 Import this csv as a table into the SQLite database that the Mass Digitization App made and name it 'binomial'. The code for the utility is specifically written for this scenario.
