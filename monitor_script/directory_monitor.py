@@ -19,6 +19,7 @@ import win32event
 import win32con
 
 import pandas as pd
+import csv # for the delimiter sniffer
 
 path_to_watch = os.path.abspath (r"N:\SCI-SNM-DigitalCollections\DaSSCo\DigiApp\Data\2.PostProcessed_openRefine\a_test_monitor") # 'a_test_monitor' should be removed to make the path operational.
 print(path_to_watch)
@@ -34,12 +35,16 @@ change_handle = win32file.FindFirstChangeNotification (
   path_to_watch,
   0,
   win32con.FILE_NOTIFY_CHANGE_FILE_NAME
-)
+) # change_handle is a global used later for determining the type of change occurring in a directory.
 
 def fileNameGetDate(filename):
-    #A very specific function for extracting the date string as ISO date (yyyy-MM-dd) from the file name itself.
-    tokens = filename.split('-')
-    print("TOKENS!!!!!!", tokens)
+    #A very specific function for extracting the date string as ISO date (yyyy-MM-dd) from the file name itself. Example: NHMD_Herba_20230913_15_55_RL.csv
+    tokens = None
+    if '-' in filename:
+        tokens = filename.split('-')
+    else:
+        tokens = filename.split('_')
+    print(f"TOKENS!!!!!! for {filename}", tokens)
     fileDate = f"{tokens[2]}"
     year = fileDate[0:4]
     month = fileDate[4:6]
@@ -47,26 +52,60 @@ def fileNameGetDate(filename):
     isoDate = f"{year}-{month}-{day}"
     return isoDate
 
+
+def getDelimiter(filePath):
+    '''
+    The file delimiter might not always be the same so a delimiter sniffer is useful.
+    :param filePath: Must be the absolute path
+    :return: the *sv delimiter
+    '''
+    with open(filePath, 'r') as f1:
+        dialect = csv.Sniffer().sniff(f1.read()) #### detect delimiters
+        f1.seek(0)
+        print(f"dialect.delimiter --{dialect.delimiter}--")
+
+        match dialect.delimiter:
+            case '\t':
+                print("Delimiter is TAB")
+                return "\t"
+            case ';':
+                return ";"
+            case ',':
+                return ','
+            case '|':
+                return '|'
+            case _: #This is the default case
+                return dialect.delimiter
+                print("Error, no recognized delimiter found!")
+
 def addColumnsToDf(myDf, filename):
-    # Adds three specific columns see https://github.com/NHMDenmark/Mass-Digitizer/issues/461#issuecomment-1953535744
-    # myDf is generated from
+    ''' Adds three specific columns see https://github.com/NHMDenmark/Mass-Digitizer/issues/461#issuecomment-1953535744
+    myDf is generated in the exe part of the code and comes from the file added to the monitored directory
+    :returns the df with the three added columns
+    '''
+    header = myDf.columns.to_list()
     print(myDf.head(2).to_string())
     dateString = fileNameGetDate(filename)
-    # remark_date_list = myDf['recorddatetime'].to_list()
-    # remarkDate = remark_date_list[0][0:10]
+
     myDf['datafile_date'] = dateString
     myDf['datafile_remark'] = filename
     myDf['datafile_source'] = 'DaSSCo data file'
-    myDf['remark_date'] = myDf['catalogeddate'] # get the date from the DF!!
+    if 'catalogeddate' in header:
+        print('CATALOGED DATE!!!')
+        myDf['remark_date'] = myDf['catalogeddate'] # get the date from the DF!!
+    elif 'recorddatetime' in header:
+        print('RECORD date time....')
+        myDf['remark_date'] = dateString
+
     myDf['remark_source'] = 'DaSSCo data file'
-    print(myDf.head(5).to_string())
     return myDf
 
 def dfToFile(myDf, filename):
-    # Write the TSV processed file in place of the original
+    # Write the *SV processed file in place of the original. This file will be ready to transfer into the 'PostProcessed' directory
     outputPath = f"{path_to_watch}/{filename}"
+    delimiter = getDelimiter(outputPath)
     print(outputPath)
-    df.to_csv(outputPath, sep='\t', index=False, header=True, encoding='windows-1252')
+    df.to_csv(outputPath, sep=delimiter, index=False, header=True, encoding='utf-8')
     return "TSV saved :)"
 
 #
@@ -87,18 +126,19 @@ try:
     #
     if result == win32con.WAIT_OBJECT_0:
       new_path_contents = dict ([(f, None) for f in os.listdir (path_to_watch)])
-      added = [f for f in new_path_contents if not f in old_path_contents]
-      deleted = [f for f in old_path_contents if not f in new_path_contents]
+      added = [f for f in new_path_contents if not f in old_path_contents] # compare old to new content
+      deleted = [f for f in old_path_contents if not f in new_path_contents] # the inverse of above
       if added:
+          try:
+            filename = ", ".join(added)
+            delimiter = getDelimiter(f"{path_to_watch}/{filename}")
 
-        filename = ", ".join (added)
-        try:
-            df = pd.read_csv(f"{path_to_watch}/{filename}", sep='\t', encoding='iso-8859-1') # WARNING, currently Specify workbench expects cp-1252 encoded files. Might change in the future!
+            df = pd.read_csv(f"{path_to_watch}/{filename}", sep=delimiter, encoding='windows-1252') # WARNING, currently Specify workbench expects cp-1252 encoded files. Might change in the future!
             df = addColumnsToDf(df, filename)
             res = dfToFile(df, filename)
             print(res)
-        except PermissionError as e: # A silly error that does not affect the desired result, i.e. the end output file.
-            continue
+          except PermissionError as e: # A silly error that does not affect the desired result, i.e. the end output file. I was not able to get to the root of this error
+             continue
 
       if deleted: print("Deleted: ", ", ".join (deleted))
 
