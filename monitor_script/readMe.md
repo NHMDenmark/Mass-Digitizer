@@ -36,4 +36,7 @@ I wish to implement the current code using the Watchdog library since it is a mo
 ## Current status
 Any attempts to monitor a windows server from Linux has been abandoned. The gap between Linux and the Windows systems is just too wide.
 I have implemented a windows to windows monitoring system instead: [Directory_monitor.py](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/monitor_script/directory_monitor.py)
+
+## TO DO
+There should be a encoding sniffer function implemented since we cannot rely on consistent encoding.
    
