@@ -10,8 +10,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing,
 software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 either express or implied. See the License for the specific language governing permissions and limitations under the License.
-- CAN ONLY RUN BE USED TO MONITOR A Windows Machine!!!
-- The code now adds three new required columns to Digi app files coming into the monitored directory.
+- CAN ONLY BE USED TO MONITOR A Windows Machine!!!
+- The code adds three new required columns to Digi app files coming into the monitored directory.
 """
 import os
 import win32file
@@ -21,6 +21,7 @@ import win32con
 import pandas as pd
 import csv # for the delimiter sniffer
 import cchardet as chardet # for file encoding sniffer
+import sys
 
 path_to_watch = os.path.abspath (r"N:\SCI-SNM-DigitalCollections\DaSSCo\DigiApp\Data\2.PostProcessed_openRefine\a_test_monitor") # 'a_test_monitor' should be removed to make the path operational.
 print(path_to_watch)
@@ -98,6 +99,7 @@ def encodingSniffer(fileName):
                 return 'UTF-8'
             case _:
                 print('unknown encoding')
+                return 'Windows-1252'
 
 def addColumnsToDf(myDf, filename):
     ''' Adds three specific columns see https://github.com/NHMDenmark/Mass-Digitizer/issues/461#issuecomment-1953535744
@@ -115,12 +117,17 @@ def addColumnsToDf(myDf, filename):
 
     return myDf
 
-def dfToFile(myDf, filename):
+def dfToFile(myDf, filename, name_extension=''):  # name_extension can be 'original'...
     # Write the *SV processed file in place of the original. This file will be ready to transfer into the 'PostProcessed' directory
     outputPath = f"{path_to_watch}/{filename}"
+    print('&&&&&&&', outputPath)
+    if name_extension:
+        tokenPath = outputPath.split('.')
+        print(tokenPath)
     delimiter = getDelimiter(outputPath)
-    print(outputPath)
-    df.to_csv(outputPath, sep=delimiter, index=False, header=True, encoding='utf-8')
+    coda = encodingSniffer(outputPath)
+
+    df.to_csv(outputPath, sep=delimiter, index=False, header=True, encoding=coda)
     return "TSV saved :)"
 
 #
@@ -149,9 +156,10 @@ try:
             filePath = f"{path_to_watch}/{filename}"
             delimiter = getDelimiter(f"{path_to_watch}/{filename}")
             fileEncoding = encodingSniffer(filePath)
-            df = pd.read_csv(filePath, sep=delimiter, encoding=fileEncoding) # WARNING, currently Specify workbench expects cp-1252 encoded files. Might change in the future!
+            df = pd.read_csv(filePath, sep=delimiter, encoding=fileEncoding, converters={'agentlastname':lambda x:x.replace('/r','')}) # the converter is there to prevent pandas read_csv() from including new lines in the lastname  
+            # WARNING, currently Specify workbench expects cp-1252 encoded files. Might change in the future!
             df = addColumnsToDf(df, filename)
-            res = dfToFile(df, filename)
+            res = dfToFile(df, filename, name_extension='_original')
             print(res)
           except PermissionError as e: # A silly error that does not affect the desired result, i.e. the end output file. I was not able to get to the root of this error
              continue
