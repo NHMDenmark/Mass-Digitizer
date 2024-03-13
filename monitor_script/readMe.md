@@ -37,4 +37,6 @@ I have implemented a windows to windows monitoring system instead: [Directory_mo
 ## Latest updates
 Encoding sniffer function implemented since we cannot rely on consistent encoding.
 Delimiter sniffer function implemented due to delimiters not being entirely consistent.
-   
+
+## To Do
+Enable file name to have values appended ('original' or 'checked') in the dfToFile() function.
