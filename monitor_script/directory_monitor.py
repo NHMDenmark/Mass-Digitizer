@@ -22,8 +22,7 @@ import pandas as pd
 import csv # for the delimiter sniffer
 import cchardet as chardet # for file encoding sniffer
 
-path_to_watch = os.path.abspath (r"N:\SCI-SNM-DigitalCollections\DaSSCo\DigiApp\Data\2.PostProcessed_openRefine\a_test_monitor") 
-# Once the operational environment (server) is ready, the path should be changed to f"N:\SCI-SNM-DigitalCollections\DaSSCo\DigiApp\Data\1.Exported files from App"
+path_to_watch = os.path.abspath (r"N:\SCI-SNM-DigitalCollections\DaSSCo\DigiApp\Data\2.PostProcessed_openRefine\a_test_monitor") # 'a_test_monitor' should be removed to make the path operational.
 print(path_to_watch)
 
 ''' FindFirstChangeNotification sets up a handle for watching
@@ -109,17 +108,11 @@ def addColumnsToDf(myDf, filename):
     print(myDf.head(2).to_string())
     dateString = fileNameGetDate(filename)
 
+    # Columns added to satisfy the tabular remarks requirements
     myDf['datafile_date'] = dateString
     myDf['datafile_remark'] = filename
     myDf['datafile_source'] = 'DaSSCo data file'
-    # if 'catalogeddate' in header:
-    #     print('CATALOGED DATE!!!')
-    #     myDf['remark_date'] = myDf['catalogeddate'] # get the date from the DF!!
-    # elif 'recorddatetime' in header:
-    #     print('RECORD date time....')
-    #     myDf['remark_date'] = dateString
-    #
-    # myDf['remark_source'] = 'DaSSCo data file'
+
     return myDf
 
 def dfToFile(myDf, filename):
