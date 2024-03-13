@@ -20,8 +20,10 @@ import win32con
 
 import pandas as pd
 import csv # for the delimiter sniffer
+import cchardet as chardet # for file encoding sniffer
 
-path_to_watch = os.path.abspath (r"N:\SCI-SNM-DigitalCollections\DaSSCo\DigiApp\Data\2.PostProcessed_openRefine\a_test_monitor") # 'a_test_monitor' should be removed to make the path operational.
+path_to_watch = os.path.abspath (r"N:\SCI-SNM-DigitalCollections\DaSSCo\DigiApp\Data\2.PostProcessed_openRefine\a_test_monitor") 
+# Once the operational environment (server) is ready, the path should be changed to f"N:\SCI-SNM-DigitalCollections\DaSSCo\DigiApp\Data\1.Exported files from App"
 print(path_to_watch)
 
 ''' FindFirstChangeNotification sets up a handle for watching
@@ -52,7 +54,6 @@ def fileNameGetDate(filename):
     isoDate = f"{year}-{month}-{day}"
     return isoDate
 
-
 def getDelimiter(filePath):
     '''
     The file delimiter might not always be the same so a delimiter sniffer is useful.
@@ -78,6 +79,27 @@ def getDelimiter(filePath):
                 return dialect.delimiter
                 print("Error, no recognized delimiter found!")
 
+def encodingSniffer(fileName):
+    '''
+     Made to check the file encoding. Will mainly be utf-8 or windows-1252 (ANSI)
+    :param fileName: Absolute file path
+    :return: the encoding as a string
+    '''
+    with open(f"{fileName}", "rb") as f:
+        msg = f.read()
+        result = chardet.detect(msg)
+        print('THE .result.:', result)
+        enc = result['encoding']
+        match enc:
+            case 'ASCII':
+                return 'Windows-1252'
+            case 'UTF-8':
+                return 'UTF-8'
+            case 'UTF-8-SIG':
+                return 'UTF-8'
+            case _:
+                print('unknown encoding')
+
 def addColumnsToDf(myDf, filename):
     ''' Adds three specific columns see https://github.com/NHMDenmark/Mass-Digitizer/issues/461#issuecomment-1953535744
     myDf is generated in the exe part of the code and comes from the file added to the monitored directory
@@ -90,14 +112,14 @@ def addColumnsToDf(myDf, filename):
     myDf['datafile_date'] = dateString
     myDf['datafile_remark'] = filename
     myDf['datafile_source'] = 'DaSSCo data file'
-    if 'catalogeddate' in header:
-        print('CATALOGED DATE!!!')
-        myDf['remark_date'] = myDf['catalogeddate'] # get the date from the DF!!
-    elif 'recorddatetime' in header:
-        print('RECORD date time....')
-        myDf['remark_date'] = dateString
-
-    myDf['remark_source'] = 'DaSSCo data file'
+    # if 'catalogeddate' in header:
+    #     print('CATALOGED DATE!!!')
+    #     myDf['remark_date'] = myDf['catalogeddate'] # get the date from the DF!!
+    # elif 'recorddatetime' in header:
+    #     print('RECORD date time....')
+    #     myDf['remark_date'] = dateString
+    #
+    # myDf['remark_source'] = 'DaSSCo data file'
     return myDf
 
 def dfToFile(myDf, filename):
@@ -131,9 +153,10 @@ try:
       if added:
           try:
             filename = ", ".join(added)
+            filePath = f"{path_to_watch}/{filename}"
             delimiter = getDelimiter(f"{path_to_watch}/{filename}")
-
-            df = pd.read_csv(f"{path_to_watch}/{filename}", sep=delimiter, encoding='windows-1252') # WARNING, currently Specify workbench expects cp-1252 encoded files. Might change in the future!
+            fileEncoding = encodingSniffer(filePath)
+            df = pd.read_csv(filePath, sep=delimiter, encoding=fileEncoding) # WARNING, currently Specify workbench expects cp-1252 encoded files. Might change in the future!
             df = addColumnsToDf(df, filename)
             res = dfToFile(df, filename)
             print(res)
