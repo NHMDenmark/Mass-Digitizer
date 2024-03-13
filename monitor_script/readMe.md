@@ -30,9 +30,6 @@ The part "do something with the file" was replaced with a call to a python scrip
 An attempt was made using the Watchdog library, but that was unable to read events from he N drive as well.
 I believe the problem is the gap between operating systems : MACOS vs windows & Linux(Ubuntu) vs. windows. There is also different filesystems to consider.
 
-## Future developments
-I wish to implement the current code using the Watchdog library since it is a more elegant solution. The Event monitor will be its own class and the events will trigger methods in a module depending on the type of event. 
-
 ## Current status
 Any attempts to monitor a windows server from Linux has been abandoned. The gap between Linux and the Windows systems is just too wide.
 I have implemented a windows to windows monitoring system instead: [Directory_monitor.py](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/monitor_script/directory_monitor.py)
