@@ -21,10 +21,10 @@ import win32con
 import pandas as pd
 import csv # for the delimiter sniffer
 import cchardet as chardet # for file encoding sniffer
-import sys
+import numpy as np
 
 path_to_watch = os.path.abspath (r"N:\SCI-SNM-DigitalCollections\DaSSCo\DigiApp\Data\2.PostProcessed_openRefine\a_test_monitor") # 'a_test_monitor' should be removed to make the path operational.
-print(path_to_watch)
+# Use this path to form the full path name by adding the filename to it.
 
 ''' FindFirstChangeNotification sets up a handle for watching
   file changes. The first parameter is the path to be
@@ -110,8 +110,11 @@ def addColumnsToDf(myDf, filename):
     print(myDf.head(2).to_string())
     dateString = fileNameGetDate(filename)
 
+    #CONDITION IN HERE
+    df['datefile_date'] = np.where(~df['remarks'].notnull(),df['remarks'], dateString)  # if remarks are not empty the date string is added to the 'datefile_date column.
+    df['datefile_date'] = np.where(~df['remarks'].notnull(), df['remarks'], dateString)
     # Columns added to satisfy the tabular remarks requirements
-    myDf['datafile_date'] = dateString
+
     myDf['datafile_remark'] = filename
     myDf['datafile_source'] = 'DaSSCo data file'
 
@@ -120,7 +123,7 @@ def addColumnsToDf(myDf, filename):
 def dfToFile(myDf, filename, name_extension=''):  # name_extension can be 'original'...
     # Write the *SV processed file in place of the original. This file will be ready to transfer into the 'PostProcessed' directory
     outputPath = f"{path_to_watch}/{filename}"
-    print('&&&&&&&', outputPath)
+
     if name_extension:
         tokenPath = outputPath.split('.')
         print(tokenPath)
@@ -130,6 +133,18 @@ def dfToFile(myDf, filename, name_extension=''):  # name_extension can be 'origi
     df.to_csv(outputPath, sep=delimiter, index=False, header=True, encoding=coda)
     return "TSV saved :)"
 
+def fileNameAppend(myString, fileName):
+    """
+    For adding a string value to the end of a filename prior to the extension.
+    :param myString: Could be 'original' or 'processed' or ...
+    :param fileName:  The file name that should be operated on.
+    :return: The tweaked filename
+    """
+    tokenized = fileName.split('.')
+    namePart = tokenized[0]
+    extension = tokenized[-1]
+    updatedName = f"{namePart}{myString}.{extension}"
+    return updatedName
 #
 # Loop forever, listing any file changes. The WaitFor... will
 #  time out every half a second allowing for keyboard interrupts
@@ -138,15 +153,19 @@ def dfToFile(myDf, filename, name_extension=''):  # name_extension can be 'origi
 try:
 
   old_path_contents = dict ([(f, None) for f in os.listdir (path_to_watch)])
+  print(f"Monitoring directory: {path_to_watch}")
+
   while 1:
-    result = win32event.WaitForSingleObject (change_handle, 500)
+    result = win32event.WaitForSingleObject(change_handle, 500)
 
     #
     # If the WaitFor... returned because of a notification (as
     #  opposed to timing out or some error) then look for the
     #  changes in the directory contents.
     #
+
     if result == win32con.WAIT_OBJECT_0:
+
       new_path_contents = dict ([(f, None) for f in os.listdir (path_to_watch)])
       added = [f for f in new_path_contents if not f in old_path_contents] # compare old to new content
       deleted = [f for f in old_path_contents if not f in new_path_contents] # the inverse of above
@@ -156,12 +175,13 @@ try:
             filePath = f"{path_to_watch}/{filename}"
             delimiter = getDelimiter(f"{path_to_watch}/{filename}")
             fileEncoding = encodingSniffer(filePath)
-            df = pd.read_csv(filePath, sep=delimiter, encoding=fileEncoding, converters={'agentlastname':lambda x:x.replace('/r','')}) # the converter is there to prevent pandas read_csv() from including new lines in the lastname  
+            df = pd.read_csv(filePath, sep=delimiter, encoding=fileEncoding, converters={'agentlastname':lambda x:x.replace('/r','')})
+            # the converter is there to prevent pandas read_csv() from including new lines in the lastname which is the last column in the *sv file.
             # WARNING, currently Specify workbench expects cp-1252 encoded files. Might change in the future!
             df = addColumnsToDf(df, filename)
             res = dfToFile(df, filename, name_extension='_original')
             print(res)
-          except PermissionError as e: # A silly error that does not affect the desired result, i.e. the end output file. I was not able to get to the root of this error
+          except PermissionError as e: # A silly error that does not affect the desired result, i.e. the end output file. Likely an issue with the directory being on the N drive.
              continue
 
       if deleted: print("Deleted: ", ", ".join (deleted))
