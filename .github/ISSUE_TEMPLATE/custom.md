@@ -14,23 +14,20 @@ assignees: ''
 ```
 # Detailed description of the issue. 
 # It could include examples,reference to similar issue and clear boundaries of the issue.
-
-
 ```
 
 ## Why is it needed/relevant ?
 ```
 # Explain the need, relevance.
 # Give scenario(s) of why and when this could be relevant. 
-
 ```
+
 ## Estimate level of effort required.
 
 ```
 # easy
 # difficult
 # hard
-
 ```
 
 ## What is the expected acceptable result.
@@ -40,7 +37,6 @@ assignees: ''
 #  Give a clear approach/potential solution on how to resolve it.
 #  What steps would be required to do this ?
 #  It might also be an idea to put some pseudocode if relevant.
-
 ```
 
 # What could be the challenges ? 
