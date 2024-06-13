@@ -294,18 +294,6 @@
     "description": "Split column storagefullname by separator"
   },
   {
-    "op": "core/column-rename",
-    "oldColumnName": "storagefullname 2",
-    "newColumnName": "site",
-    "description": "Rename column storagefullname 2 to site"
-  },
-  {
-    "op": "core/column-rename",
-    "oldColumnName": "storagefullname 3",
-    "newColumnName": "collection",
-    "description": "Rename column storagefullname 3 to collection"
-  },
-  {
     "op": "core/column-addition",
     "engineConfig": {
       "facets": [],
@@ -388,7 +376,7 @@
     "onError": "keep-original",
     "repeat": false,
     "repeatCount": 10,
-    "description": "Change recorded date time format for NHMA (institution id: 2) to DD/MM/YYYY "
+    "description": "Text transform on cells in column recorddatetime using expression grel:value.split('/')[2] + '/' + value.split('/')[1] + '/' + value.split('/')[0]"
   },
   {
     "op": "core/column-addition",
@@ -509,11 +497,11 @@
       "mode": "row-based"
     },
     "baseColumnName": "id",
-    "expression": "grel:'yes'",
+    "expression": "grel:'True'",
     "onError": "set-to-blank",
     "newColumnName": "publish",
     "columnInsertIndex": 24,
-    "description": "Create column publish at index 24 based on column id using expression grel:'yes'"
+    "description": "Create column publish at index 24 based on column id using expression grel:'True'"
   },
   {
     "op": "core/column-addition",
@@ -980,12 +968,12 @@
       "facets": [],
       "mode": "row-based"
     },
-    "baseColumnName": "recorddatetime",
-    "expression": "grel:value",
+    "baseColumnName": "remarks",
+    "expression": "grel:if(value != null,cells.catalogeddate.value,null)",
     "onError": "set-to-blank",
     "newColumnName": "remark date",
-    "columnInsertIndex": 63,
-    "description": "Create column remark date at index 63 based on column recorddatetime using expression grel:value"
+    "columnInsertIndex": 57,
+    "description": "Create column remark date at index 57 based on column remarks using expression grel:if(value != null,cells.catalogeddate.value,null)"
   },
   {
     "op": "core/column-addition",
@@ -993,12 +981,64 @@
       "facets": [],
       "mode": "row-based"
     },
-    "baseColumnName": "remark date",
-    "expression": "grel:'DaSSCo digitisation'",
+    "baseColumnName": "remarks",
+    "expression": "grel:if(value != null,\"DaSSCo digitisation\",null)",
     "onError": "set-to-blank",
     "newColumnName": "remark source",
-    "columnInsertIndex": 64,
-    "description": "Create column remark source at index 64 based on column remark date using expression grel:'DaSSCo digitisation'"
+    "columnInsertIndex": 57,
+    "description": "Create column remark source at index 57 based on column remarks using expression grel:if(value != null,\"DaSSCo digitisation\",null)"
+  },
+  {
+     "op": "core/column-addition",
+     "engineConfig": {
+       "facets": [],
+       "mode": "row-based"
+     },
+     "baseColumnName": "id",
+     "expression": "grel:\"True\"",
+     "onError": "set-to-blank",
+     "newColumnName": "storedunder",
+     "columnInsertIndex": 1,
+     "description": "Create column storedunder at index 1 based on column id using expression grel:\"True\""
+   },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "id",
+    "expression": "grel:\"insert filename\"",
+    "onError": "set-to-blank",
+    "newColumnName": "datafile_remark",
+    "columnInsertIndex": 1,
+    "description": "Create column datafile_remark at index 1 based on column id using expression grel:\"insert filename\""
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "id",
+    "expression": "grel:cells.catalogeddate.value",
+    "onError": "set-to-blank",
+    "newColumnName": "datafile_date",
+    "columnInsertIndex": 1,
+    "description": "Create column datafile_date at index 1 based on column id using expression grel:cells.catalogeddate.value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "id",
+    "expression": "grel:\"DaSSCo data file\"",
+    "onError": "set-to-blank",
+    "newColumnName": "datafile_source",
+    "columnInsertIndex": 1,
+    "description": "Create column datafile_source at index 1 based on column id using expression grel:\"DaSSCo data file\""
   },
   {
     "op": "core/column-reorder",
@@ -1042,13 +1082,17 @@
       "newformaflag",
       "qualifier",
       "typestatusname",
+	  "storedunder",
       "localityname",
       "broadgeographicalregion",
       "preptypename",
       "site",
       "collection",
       "shelf",
-      "box"
+      "box",
+      "datafile_remark",
+      "datafile_source",
+      "datafile_date"
     ],
     "description": "Reorder columns"
   }
