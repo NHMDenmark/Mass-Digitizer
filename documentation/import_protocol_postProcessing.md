@@ -1,7 +1,7 @@
 # Import protocol: from Digi App to Specify
 
 
-###Overview
+### Overview
 
 The import protocol consists of three steps:
 
@@ -15,13 +15,13 @@ In the "6.Archive" folder within each institution/collection subfolder, further 
 
 No automations are currently implemented as part of the import protocol. A folder has been added to the folder structure called "4.ReadyForScript". The plan is to have a monitoring script running on this directory in the future but currently the folder is not being used as part of the protocol.
 
-###Checking of export files from DigiApp
+### Checking of export files from DigiApp
 
 Exported files from the DigiApp are saved to the N-drive in the appropriate subfolder in the “1.FromDigiApp” folder. 
 
 As part of the new folder structure, subfolders have been implemented for the separate institutions/collections involved in DaSSCo. Files should always be placed in the appropriate subfolder according to the institution/collection that the digitised specimens belong to (will be clear from the filename).
 
-####Protocol:
+#### Protocol:
 
 1.	Go to the “1.FromDigiApp” folder, choose a subfolder, and choose a file to check (try to find the “next in line” file)
 2.	Once you have decided on a specific file, make a copy of that file
@@ -32,7 +32,7 @@ As part of the new folder structure, subfolders have been implemented for the se
 7.	Move the file to the appropriate subfolder in the “3.ReadyForOpenRefine” folder
 
 
-###Post-processing
+### Post-processing
 
 Post-processing is done in OpenRefine using a GREL script. The newest version of the GREL script can be found here:
 [Post-processing script](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/OpenRefine/post_processing.json)
@@ -40,8 +40,7 @@ Post-processing is done in OpenRefine using a GREL script. The newest version of
 Export files that are ready to be post-processed can be found in the "3.ReadyForOpenRefine" folder in the "Data" folder on the N-drive. There should be no need to check the data in detail before starting the post-processing since the export file should have been checked thoroughly before being moved to this folder.
 
 
-
-####Protocol:
+#### Protocol:
 
 1. Open OpenRefine
 1. Click “Choose files” and choose a file in one of the subfolders in “3.ReadyForOpenRefine” on the N-drive (try to find the “next in line” file)
@@ -73,7 +72,7 @@ ALSO! Before doing the import, please inform everyone in the "specify-specific" 
 
 Export files that are ready to be imported to Specify can be found in the "5.ReadyForSpecify" folder in the "Data" folder on the N-drive.
 
-####Protocol:
+#### Protocol:
 
 1. Log into the Specify7 site that corresponds to the institution that the data was generated at 
 1. Choose the relevant collection 
