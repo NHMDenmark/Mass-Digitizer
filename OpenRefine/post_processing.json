@@ -989,18 +989,18 @@
     "description": "Create column remark source at index 57 based on column remarks using expression grel:if(value != null,\"DaSSCo digitisation\",null)"
   },
   {
-     "op": "core/column-addition",
-     "engineConfig": {
-       "facets": [],
-       "mode": "row-based"
-     },
-     "baseColumnName": "id",
-     "expression": "grel:\"True\"",
-     "onError": "set-to-blank",
-     "newColumnName": "storedunder",
-     "columnInsertIndex": 1,
-     "description": "Create column storedunder at index 1 based on column id using expression grel:\"True\""
-   },
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "id",
+    "expression": "grel:\"True\"",
+    "onError": "set-to-blank",
+    "newColumnName": "storedunder",
+    "columnInsertIndex": 1,
+    "description": "Create column storedunder at index 1 based on column id using expression grel:\"True\""
+  },
   {
     "op": "core/column-addition",
     "engineConfig": {
@@ -1041,6 +1041,84 @@
     "description": "Create column datafile_source at index 1 based on column id using expression grel:\"DaSSCo data file\""
   },
   {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "labelobscured",
+    "expression": "grel:if(value.contains(\"True\"),\"Label obscured\",null)",
+    "onError": "set-to-blank",
+    "newColumnName": "labelobscured_remark",
+    "columnInsertIndex": 65,
+    "description": "Create column labelobscured_remark at index 65 based on column labelobscured using expression grel:if(value=True,\"Label obscured\",null)"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "labelobscured",
+    "expression": "grel:if(value.contains(\"True\"),\"DaSSCo digitisation\",null)",
+    "onError": "set-to-blank",
+    "newColumnName": "labelobscured_source",
+    "columnInsertIndex": 65,
+    "description": "Create column labelobscured_source at index 65 based on column labelobscured using expression grel:if(value=True,\"DaSSCo digitisation\",null)"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "labelobscured",
+    "expression": "grel:if(value.contains(\"True\"),cells.catalogeddate.value,null)",
+    "onError": "set-to-blank",
+    "newColumnName": "labelobscured_date",
+    "columnInsertIndex": 65,
+    "description": "Create column labelobscured_date at index 65 based on column labelobscured using expression grel:if(value=True,cells.catalogeddate.value,null)"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "specimenobscured",
+    "expression": "grel:if(value.contains(\"True\"),\"Specimen obscured\",null)",
+    "onError": "set-to-blank",
+    "newColumnName": "specimenobscured_remark",
+    "columnInsertIndex": 69,
+    "description": "Create column specimenobscured_remark at index 69 based on column specimenobscured using expression grel:if(value=True,\"Specimen obscured\",null)"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "specimenobscured",
+    "expression": "grel:if(value.contains(\"True\"),\"DaSSCo digitisation\",null)",
+    "onError": "set-to-blank",
+    "newColumnName": "specimenobscured_source",
+    "columnInsertIndex": 69,
+    "description": "Create column specimenobscured_source at index 69 based on column specimenobscured using expression grel:if(value=True,\"DaSSCo digitisation\",null)"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "specimenobscured",
+    "expression": "grel:if(value.contains(\"True\"),cells.catalogeddate.value,null)",
+    "onError": "set-to-blank",
+    "newColumnName": "specimenobscured_date",
+    "columnInsertIndex": 69,
+    "description": "Create column specimenobscured_date at index 69 based on column specimenobscured using expression grel:if(value=True,cells.catalogeddate.value,null)"
+  },
+  {
     "op": "core/column-reorder",
     "columnNames": [
       "catalognumber",
@@ -1051,7 +1129,13 @@
       "projectnumber",
       "objectcondition",
       "specimenobscured",
-      "labelobscured",
+	  "specimenobscured_remark",
+	  "specimenobscured_source",
+	  "specimenobscured_date",
+	  "labelobscured",
+	  "labelobscured_remark",
+	  "labelobscured_source",
+	  "labelobscured_date",
       "publish",
       "containername",
       "containertype",
