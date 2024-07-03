@@ -162,11 +162,11 @@
       "mode": "row-based"
     },
     "baseColumnName": "taxondasscoid",
-    "expression": "grel:if((value==null).or(cells['taxonspid'].value==null), 'True', 'False')",
+    "expression": "grel:if((value==null).or(cells['taxonspid'].value==''), 'True', 'False')",
     "onError": "set-to-blank",
     "newColumnName": "newtaxonflag",
     "columnInsertIndex": 18,
-    "description": "Create column newtaxonflag at index 18 based on column taxondasscoid using expression grel:if((value==null).or(cells['taxonspid'].value==null), 'True', 'False')"
+    "description": "Create column newtaxonflag at index 18 based on column taxondasscoid using expression grel:if((value==null).or(cells['taxonspid'].value==''), 'True', 'False')"
   },
   {
     "op": "core/column-addition",
@@ -188,11 +188,11 @@
       "mode": "row-based"
     },
     "baseColumnName": "taxonfullname",
-    "expression": "grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.split(' ').length()==2), 'True',  '')",
+    "expression": "grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value == 220), 'True',  '')",
     "onError": "set-to-blank",
     "newColumnName": "newspeciesflag",
     "columnInsertIndex": 5,
-    "description": "Create column newspeciesflag at index 5 based on column taxonfullname using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value.split(' ').length()==2), 'True',  '')"
+    "description": "Create column newspeciesflag at index 5 based on column taxonfullname using expression grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value == 220), 'True',  '')"
   },
   {
     "op": "core/column-addition",
