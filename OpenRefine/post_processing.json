@@ -1051,7 +1051,7 @@
     "onError": "set-to-blank",
     "newColumnName": "labelobscured_remark",
     "columnInsertIndex": 65,
-    "description": "Create column labelobscured_remark at index 65 based on column labelobscured using expression grel:if(value=True,\"Label obscured\",null)"
+    "description": "Create column labelobscured_remark at index 65 based on column labelobscured using expression grel:if(value.contains(\"True\"),\"Label obscured\",null)"
   },
   {
     "op": "core/column-addition",
@@ -1064,7 +1064,7 @@
     "onError": "set-to-blank",
     "newColumnName": "labelobscured_source",
     "columnInsertIndex": 65,
-    "description": "Create column labelobscured_source at index 65 based on column labelobscured using expression grel:if(value=True,\"DaSSCo digitisation\",null)"
+    "description": "Create column labelobscured_source at index 65 based on column labelobscured using expression grel:if(value.contains(\"True\"),\"DaSSCo digitisation\",null)"
   },
   {
     "op": "core/column-addition",
@@ -1077,7 +1077,7 @@
     "onError": "set-to-blank",
     "newColumnName": "labelobscured_date",
     "columnInsertIndex": 65,
-    "description": "Create column labelobscured_date at index 65 based on column labelobscured using expression grel:if(value=True,cells.catalogeddate.value,null)"
+    "description": "Create column labelobscured_date at index 65 based on column labelobscured using expression grel:if(value.contains(\"True\"),cells.catalogeddate.value,null)"
   },
   {
     "op": "core/column-addition",
@@ -1090,7 +1090,7 @@
     "onError": "set-to-blank",
     "newColumnName": "specimenobscured_remark",
     "columnInsertIndex": 69,
-    "description": "Create column specimenobscured_remark at index 69 based on column specimenobscured using expression grel:if(value=True,\"Specimen obscured\",null)"
+    "description": "Create column specimenobscured_remark at index 69 based on column specimenobscured using expression grel:if(value.contains(\"True\"),\"Specimen obscured\",null)"
   },
   {
     "op": "core/column-addition",
@@ -1103,7 +1103,7 @@
     "onError": "set-to-blank",
     "newColumnName": "specimenobscured_source",
     "columnInsertIndex": 69,
-    "description": "Create column specimenobscured_source at index 69 based on column specimenobscured using expression grel:if(value=True,\"DaSSCo digitisation\",null)"
+    "description": "Create column specimenobscured_source at index 69 based on column specimenobscured using expression grel:if(value.contains(\"True\"),\"DaSSCo digitisation\",null)"
   },
   {
     "op": "core/column-addition",
@@ -1116,7 +1116,7 @@
     "onError": "set-to-blank",
     "newColumnName": "specimenobscured_date",
     "columnInsertIndex": 69,
-    "description": "Create column specimenobscured_date at index 69 based on column specimenobscured using expression grel:if(value=True,cells.catalogeddate.value,null)"
+    "description": "Create column specimenobscured_date at index 69 based on column specimenobscured using expression grel:if(value.contains(\"True\"),cells.catalogeddate.value,null)"
   },
   {
     "op": "core/column-reorder",
@@ -1129,13 +1129,13 @@
       "projectnumber",
       "objectcondition",
       "specimenobscured",
-	  "specimenobscured_remark",
-	  "specimenobscured_source",
-	  "specimenobscured_date",
-	  "labelobscured",
-	  "labelobscured_remark",
-	  "labelobscured_source",
-	  "labelobscured_date",
+      "specimenobscured_remark",
+      "specimenobscured_source",
+      "specimenobscured_date",
+      "labelobscured",
+      "labelobscured_remark",
+      "labelobscured_source",
+      "labelobscured_date",
       "publish",
       "containername",
       "containertype",
@@ -1166,7 +1166,7 @@
       "newformaflag",
       "qualifier",
       "typestatusname",
-	  "storedunder",
+      "storedunder",
       "localityname",
       "broadgeographicalregion",
       "preptypename",
