@@ -1,123 +1,201 @@
-# Steps in the post processing script
-The refine tool used here is OpenRefine.
+# Post-processing of DaSSCo digitisation data
 
 
-The digitization files come in CSV format and they have to be imported into the Open Refine tool.
+Post-processing is done in OpenRefine using a GREL script.
 
- The following columns 'taxonspid' and 'rankid' are converted to numerical data columns that import as text formatted data, these need to be converted to numerical because there are GREL code that tests on the assumption that numbers are numbers. GREL code con be obtained here: https://github.com/NHMDenmark/Mass-Digitizer/blob/main/OpenRefine/post_processing.json   
+The post-processing protocol can be found here:
+[Post-processing protocol](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/documentation/import_protocol_postProcessing.md#post-processing)
+
+The newest version of the GREL script can be found here:
+[Post-processing script](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/OpenRefine/post_processing.json)
+
+Below you will find information on the steps performed by the GREL script.
+
+### GREL script steps
+
+1. Columns "taxonspid" and "rankid" are imported as text formatted data and need to be converted to numerical because there are GREL code that tests on the assumption that numbers are numbers:   
  
- - Text transform on cells in column rankid using expression `value.toNumber()`  
  - Text transform on cells in column taxonspid using expression `value.toNumber()`
-
-We check to see if the value "None" appears in taxonspid.
-- Text transform on cells in column taxonspid using expression `if((value==null).or(value==0).or(value=='None'), '', value)`
-
-A new column 'newtaxonflag' is created is derived from the 'taxonspid' field:  
-- Create column newtaxonflag at index 11 based on column taxonspid using expression 
-    - `if((value==null).or(value==0), 'True', 'False')`
  
+ - Text transform on cells in column rankid using expression `value.toNumber()`
 
-The storagefullname column is split by separator so that we can have the storage property in atomic units.  
-- `"Split column storagefullname by separator"` The separator here is " | " (notice the leading and trailing whitespace)  
-- `"Remove column storagefullname 1"` This is the institution column that we are not mapping.
-- `"Rename column storagefullname 2 to site"`  
-- `"Rename column storagefullname 3 to collection"` 
+1. For the taxonomy to be mapped correctly in Specify, the taxonomic information in column "taxonfullname" need to be split up into separat columns for qualifier, genus, species, subspecies, variety and forma:
+	
+	Column "qualifier" is created based on column "taxonfullname" and populated with qualifier specific values:
+	
+	- Create column qualifier at index 5 based on column taxonfullname using expression `grel:if(value.contains(' sp. '), 'sp.', '')`
+	
+	- Text transform on cells in column qualifier using expression `grel:if(cells['taxonfullname'].value.contains('aff.'), 'aff.', value)`
+	
+	- Text transform on cells in column qualifier using expression `grel:if(cells['taxonfullname'].value.contains('cf.'), 'cf.', value)` 
 
+	Columns for several taxonomic levels are created based on column "taxonfullname" and populated with values based on rankID:
+	
+	- Create column genus at index 5 based on column taxonfullname using expression `grel:if(cells['rankid'].value >= 180, value.split(' ')[0], '')`
+	
+	- Create column species at index 5 based on column taxonfullname using expression `grel:if(cells['rankid'].value >= 220, value.split(' ')[1], '')`
+	
+	- Create column subspecies at index 5 based on column taxonfullname using expression `grel:if(cells['rankid'].value == 230, value.split(' ')[2], '')`
+	
+	- Create column variety at index 5 based on column taxonfullname using expression `grel:if(cells['rankid'].value == 240, cells['taxonfullname'].value.split(' ')[-1], '')`
 
-At this point a 'shelf' column and a 'box' column is created. This is specific for NHMD Vascular Plants which has shelves and boxes. 
-- Create column shelf based on column storagename using expression `if(value.split(' ')[0] == 'Shelf', value.split(' ')[1], '')`  
-- Create column box based on column storagename using expression `if(value.split(' ')[0] == 'Box', value.split(' ')[1], '')`
+	- Create column forma at index 5 based on column taxonfullname using expression `grel:if(cells['rankid'].value == 260, value.split(' ')[3], '')`
 
-In case there are [name sp.] taxon values in fullname, then these need to be marked up in a qualifier column.
-- Create column qualifier at index 5 based on column taxonfullname using expression `if(value.contains(" sp. "), 'sp.', '')`
+	The term "sp." is removed from the "species" column:
+	
+	- Text transform on cells in column species using expression `grel:if(value=='sp.', '', value)`
 
-The following steps create the taxonomy levels and assign values to them based on the rank ID.  
+1. The different types of null values in column "taxonspid" need to be standardised because it is used as a condition in the creation of another column:
+	- Text transform on cells in column taxonspid using expression `grel:if((value==null).or(value==0).or(value=='None').or(value==''), '', value)`
 
-- Create column genus based on column taxonfullname using expression `if(cells['rankid'].value >= 180, value.split(' ')[0], '')`  
-- Create column species based on column taxonfullname using expression `if(cells['rankid'].value >= 220, value.split(' ')[1], '')`  
-- Create column subspecies based on column taxonfullname using expression `if(cells['rankid'].value == 230, value.split(' ')[2], '')`  
-- Create column variety based on column taxonfullname using expression `if(cells['rankid'].value == 240, value.split(' ')[3], '')`  
-- Create column forma at on column taxonfullname using expression `if(cells['rankid'].value == 260, value.split(' ')[3], '')`  
+1. We want to mark new taxon records that will be added to the taxon tree in Specify when importing so they can be checked.
+	
+	First, column "newtaxonflag" is created based on column "taxondasscoid"  and is populated with "True" or "False" depending on whether or not the taxon has a taxonspID or taxondasscoID:
 
+	- Create column newtaxonflag at index 18 based on column taxondasscoid using expression `grel:if((value==null).or(cells['taxonspid'].value==''), 'True', 'False')`
 
-In order to identify new taxon ranks we have to add new[ *taxonRank* ] flags to the code.  
-- Create column newgenusflag based on column genus using expression:
-    - `if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value == 180), 'True', '')`  
-- Create column newspeciesflag based on column taxonfullname using expression:
-    - `if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value == 220, 'True',  '')`  
-- Create column newsubspeciesflag based on column newtaxonflag using expression: 
-    - `if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value == 230), 'True',  '')`  
-- Create column newvarietyflag based on column newtaxonflag using expression:
-    - `if((cells['newtaxonflag'].value=='True').and(cells['taxonfullname'].value == 240), 'True',  '')`  
-- Create column newformaflag based on column taxonfullname using expression: 
-    - `if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==260), 'True',  '')`
+	Then individual newtaxonflag columns are created for all taxonomic levels based on the values in the newly created "newtaxonflag" column and the rankID:
 
+	- Create column newgenusflag at index 5 based on column taxonfullname using expression `grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value == 180), 'True', '')`
 
-- Rename column familyname to family
-- Rename column multispecimen to container  
-- Rename column georegionname to broadgeographicalregion  
+	- Create column newspeciesflag at index 5 based on column taxonfullname using expression `grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value == 220), 'True', '')`
 
+	- Create column newsubspeciesflag at index 5 based on column taxonfullname using expression `grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==230), 'True', '')
+`
+	- Create column newvarietyflag at index 5 based on column taxonfullname using expression `grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==240), 'True', '')`
 
-The broadgeographicalregion is duplicated into a column named 'localityname'.  
-- Create column localityname based on column georegionname using expression grel:value  
-Workbench will fail validation if this element is not here.
+	- Create column newformaflag at index 5 based on column taxonfullname using expression `grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==260), 'True', '')`
 
+1. **For NHMA:** The value "None" needs to be deleted from the column "taxonnumber":
+	- Mass edit cells in column taxonnumber
 
-The agentMiddleInitial is checked and corrected if the value is 'None'
+1. Columns "familyname" and "georegionname" are renamed:
+	- Rename column familyname to family
+	- Rename column georegionname to broadgeographicalregion
 
-The column 'catalogeddate' is needed and must be created from a timestamp column 'recordeddatetime' which requires these steps:  
-- Create column catalogeddate based on column recorddatetime using expression `value.slice(0,10)`  
-- Text transform on cells in column catalogeddate using expression `value.toDate()`  
-- Text transform on cells in column catalogeddate using expression `value.toString('dd/MM/yyyy')`  
+1. We need to create locality names for all locality records because you cannot create a locality record without it. Column "locality" is created and populated with the values from column "broadgeographicalregion":
+	- Create column localityname at index 28 based on column broadgeographicalregion using expression `grel:value`
 
-There will be two columns for ready-to-publish and project-name:
-- A novel column is made with the name 'publish' and the value 'True' signifying that the records are ready for publishing to GBIF.
-- Another column is needed: 'project' which contains the name 'DaSSCo'. This will make it easier to find records from the DaSSCo project.
+1. For the storage to be mapped correctly in Specify, the storage information in column "storagefullname" need to be split up into separat columns for shelf and box. Column "storagefullname" is split by separator and columns for box and shelf are created:
+	- Split column storagefullname by separator, the separator here is " | " (notice the leading and trailing whitespace) 
+	
+	- Create column box at index 35 based on column storagename using expression `grel:if(value.split(' ')[0]=='Box', value.split(' ')[1], '')`
+	
+	- Create column shelf at index 35 based on column storagename using expression `grel:if(value.split(' ')[0]=='Shelf', value.split(' ')[1], '')`
 
+1. Agent name fields should either be blank or have an actual name in them, so value "None" is deleted from column "agentmiddleinitial":
+	- Text transform on cells in column agentmiddleinitial using expression `grel:if(value=='None', '', value)`
 
+1. We need to create a column for catalogeddate. Column "catalogeddate" is created based on column "recorddatetime" with values in the correct format depending on the institution:
+	- Text transform on cells in column recorddatetime using expression `grel:value.slice(0,10).replace('-', '/')`
+	
+	**For NHMA:**
+	
+	- Text transform on cells in column recorddatetime using expression `grel:value.split('/')[2] + '/' + value.split('/')[1] + '/' + value.split('/')[0]`
 
-The hybrids will be caught:
-- Text transform on cells in column species using expression `if(cells['genus'].value.contains(\" x \"), cells['genus'].value, value)`
+	**For NHMD and NHMA:**
 
-Format container by removing the prepended apostrophe:
-- Text transform on cells in column container using expression `if(value.startsWith(\"'\"), value.replace(\"'\", ''), '')`
+	- Create column catalogeddate at index 31 based on column recorddatetime using expression `grel:value`
 
-The term "sp." is removed from the species column. 
-- `if(value.contains('sp.'), '', value)` 
+	**For NHMD:**
 
-Populate the qualifier column with qualifiers aff. or cf.
-- `if(value.contains("aff\."), 'aff.', value)`
-- `if((value.contains("cf\."), 'cf.', value)`
+	- Text transform on cells in column catalogeddate using expression `value.toDate()`
 
-Remove the qualifiers aff. or cf. in the species field if any show up.
-- `if((value.contains("aff\.").or(value.contains("cf\."))), '', value)`
+	- Text transform on cells in column catalogeddate using expression `grel:value.toString('yyyy-MM-dd')`
 
-#### Lastly reorder the column names to your liking
+1. **For NHMD:** All records need to be marked as DaSSCo records. Column "project" is created and populated with value "DaSSCo" for all records:
+	- Create column project at index 2 based on column id using expression `grel:'DaSSCo'`
 
-## Columns that are removed:
+1. It needs to be indicated for all records in Specify whether or not they are ready to be published to external portals, e.g. GBIF. All DaSSCo records are as default ready to be published. Column "publish" is created and populated with the value "True" for all records:
+	- Create column publish at index 24 based on column id using expression `grel:'True'`
 
-* ID
-* spid
-* taxonnameid  
-* taxonspid
-* rankid
-* Typestatusid
-* georegionid
-* storageid
-* institutionid
-* preptypeid
-* userid
-* username
-* exportuserid
-* export
-* taxonfullname
-* taxonname
-* taxonrankname
-* institution
-* recorddatetime
-* exportdatetime
-* collectionname
-* institutionname
-For collections that do not have 'box' or 'shelf' these two columns can also be removed.
-## Final step: Export
-The refined file must be exported as "Windows 1252: Western European" encoded to allow for characters outside the ANSI spectrum.
+1. **For NHMA:** Individual taxonnumber and taxonnrsource columns are created for family, genus, and species based on column "taxonnumber" and facets for rankID:
+	- Create column family_taxonnumber at index 28 based on column taxonnumber using expression `grel:value`
+
+	- Create column family_taxonnrsource at index 28 based on column taxonnrsource using expression `grel:value`
+
+	- Create column genus_taxonnumber at index 28 based on column taxonnumber using expression `grel:value`
+
+	- Create column genus_taxonnrsource at index 28 based on column taxonnrsource using expression `grel:value`
+
+	- Create column species_taxonnumber at index 28 based on column taxonnumber using expression `grel:value`
+
+	- Create column species_taxonnrsource at index 28 based on column taxonnrsource using expression `grel:value`
+
+1. Several columns are renamed to match the labels used in Specify:
+	- Rename column agentfirstname to cataloger firstname
+
+	- Rename column agentmiddleinitial to cataloger middle
+
+	- Rename column agentlastname to cataloger lastname
+
+	- Rename column project to projectnumber
+
+	- Rename column notes to remarks
+ 
+1. For the taxonomic author information to be mapped correctly in Specify, individual author columns are created for several taxonomic levels based on column "taxonauthor" and facets for rankID:
+	- Create column subforma_author at index 21 based on column taxonauthor using expression `grel:value`
+
+	- Create column forma_author at index 21 based on column taxonauthor using expression `grel:value`
+ 
+	- Create column subvariety_author at index 21 based on column taxonauthor using expression `grel:value`
+
+	- Create column variety_author at index 21 based on column taxonauthor using expression `grel:value`
+
+	- Create column subspecies_author at index 21 based on column taxonauthor using expression `grel:value`
+
+	- Create column species_author at index 21 based on column taxonauthor using expression `grel:value`
+ 
+	- Create column genus_author at index 21 based on column taxonauthor using expression `grel:value`
+
+1. The "remarks" column is mapped to the DaSSCo remarks table in Specify where it will be associated with specific date and source information. Associated "remark date" and "remark source" columns for DaSSCo remarks table are created for column "remarks": 
+	- Create column remark date at index 57 based on column remarks using expression `grel:if(value != null,cells.catalogeddate.value,null)`
+
+	- Create column remark source at index 57 based on column remarks using expression `grel:if(value != null,"DaSSCo digitisation",null)`
+
+1. We want to indicate in Specify which taxonomic determination the specimen is stored under in the collection. Column "storedunder" is created and populated with value "True" for all records:
+	- Create column storedunder at index 1 based on column id using expression `grel:"True"`
+
+1. We want to add metadata about the datafile to the datafile which is mapped to the DaSSCo remarks table in Specify. DaSSCo remarks table columns for "datafilename" and associated "datafile date" and "datafile source" are created:
+	- Create column datafile_remark at index 1 based on column id using expression `grel:"insert filename"`
+ 
+	- Create column datafile_date at index 1 based on column id using expression `grel:cells.catalogeddate.value`
+
+	- Create column datafile_source at index 1 based on column id using expression `grel:"DaSSCo data file"`
+ 
+1. We want the "labelobscured" and "specimenobscured" information mapped to the DaSSCo remarks table in Specify. DaSSCo remarks table columns for "labelobscured" and "specimenobscured" are created: 
+	- Create column labelobscured_remark at index 65 based on column labelobscured using expression `grel:if(value.contains("True"),"Label obscured",null)`
+ 
+	- Create column labelobscured_source at index 65 based on column labelobscured using expression `grel:if(value.contains("True"),"DaSSCo digitisation",null)`
+
+	- Create column labelobscured_date at index 65 based on column labelobscured using expression `grel:if(value.contains("True"),cells.catalogeddate.value,null)`
+	- Create column specimenobscured_remark at index 69 based on column specimenobscured using expression `grel:if(value.contains("True"),"Specimen obscured",null)`
+
+	- Create column specimenobscured_source at index 69 based on column specimenobscured using expression `grel:if(value.contains("True"),"DaSSCo digitisation",null)`
+ 
+	- Create column specimenobscured_date at index 69 based on column specimenobscured using expression `grel:if(value.contains("True"),cells.catalogeddate.value,null)`
+ 
+1. Columns are reordered and the following columns are removed:
+
+	* ID
+	* spid
+	* taxonnameid  
+	* taxonspid
+	* rankid
+	* Typestatusid
+	* georegionid
+	* storageid
+	* institutionid
+	* preptypeid
+	* userid
+	* username
+	* exportuserid
+	* export
+	* taxonfullname
+	* taxonname
+	* taxonrankname
+	* institution
+	* recorddatetime
+	* exportdatetime
+	* collectionname
+	* institutionname	
