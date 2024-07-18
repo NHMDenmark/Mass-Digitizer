@@ -15,9 +15,9 @@ Below you will find information on the steps performed by the GREL script.
 
 1. Columns "taxonspid" and "rankid" are imported as text formatted data and need to be converted to numerical because there are GREL code that tests on the assumption that numbers are numbers:   
  
- - Text transform on cells in column taxonspid using expression `value.toNumber()`
+	- Text transform on cells in column taxonspid using expression `value.toNumber()`
  
- - Text transform on cells in column rankid using expression `value.toNumber()`
+	- Text transform on cells in column rankid using expression `value.toNumber()`
 
 1. For the taxonomy to be mapped correctly in Specify, the taxonomic information in column "taxonfullname" need to be split up into separat columns for qualifier, genus, species, subspecies, variety and forma:
 	
