@@ -22,7 +22,7 @@ cataloger lastname ->
 Cataloger ->
 Last Name
 
-projectnumber->
+projectnumber ->
 Project Number
 
 objectcondition -> 
@@ -129,11 +129,11 @@ Taxon ->
 Genus ->
 Check Taxon 
 
-species->
-Determinations->
+species ->
+Determinations ->
  #1 ->
-Taxon->
-Species->
+Taxon ->
+Species ->
 Name
 
 species_author ->
