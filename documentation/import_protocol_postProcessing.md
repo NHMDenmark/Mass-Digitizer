@@ -80,7 +80,7 @@ Export files that are ready to be imported to Specify can be found in the "5.Rea
 1. Click on "Import File", then choose one of the files containing the reserved catalog numbers you had deleted from one of the subfolders in the "5.ReadyForSpecify" folder
 1. You will see a preview of the dataset. If the "Character encoding" is not set to "windows-1252", choose it from the dropdown menu 
 1. Check that everything looks as expected. If it does, click "Save"
-1. You need to define the mapping for the dataset. Click on "Create" and if you have imported DaSSCo export files before, click on "Choose Existing Plan" (if you do not have access to an existing plan, select "Collection Object" as a base table and find the mapping plan [here](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/documentation/Workbench_mapping.md))
+1. You need to define the mapping for the dataset. Click on "Create" and if you have imported DaSSCo export files before, click on "Choose Existing Plan" (if you do not have access to an existing plan, select "Collection Object" as a base table and find the mapping plan for the specific collection [here](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/documentation/Specify_workbench_mapping))
 1. Choose one of the previous imports to use the mapping plan from that import
 1. Check the mapping to see if everything looks as expected. If it does, click "Save"
 1. The data needs to go through a validation process before being imported. Click on "Validate" to validate the data
