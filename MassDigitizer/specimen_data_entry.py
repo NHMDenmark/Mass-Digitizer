@@ -4,7 +4,7 @@
 Created
 on Thu May 26 17:44:00 2022
 
-@authors: Jan K. Legind, NHMD; Fedor A. Steeman NHMD
+@authors: Fedor Alexander Steeman NHMD; Jan K. Legind, NHMD;
 
 Copyright 2022 Natural History Museum of Denmark (NHMD)
 
