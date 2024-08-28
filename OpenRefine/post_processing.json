@@ -97,11 +97,11 @@
       "mode": "row-based"
     },
     "baseColumnName": "taxonfullname",
-    "expression": "grel:if(cells['rankid'].value == 230, value.split(' ')[2], '')",
+    "expression": "grel:if(cells['rankid'].value == 230, value.split(' ')[3], '')",
     "onError": "set-to-blank",
     "newColumnName": "subspecies",
     "columnInsertIndex": 5,
-    "description": "Create column subspecies at index 5 based on column taxonfullname using expression grel:if(cells['rankid'].value == 230, value.split(' ')[2], '')"
+    "description": "Create column subspecies at index 5 based on column taxonfullname using expression grel:if(cells['rankid'].value == 230, value.split(' ')[3], '')"
   },
   {
     "op": "core/column-addition",
@@ -110,11 +110,11 @@
       "mode": "row-based"
     },
     "baseColumnName": "taxonfullname",
-    "expression": "grel:if(cells['rankid'].value == 240, cells['taxonfullname'].value.split(' ')[-1], '')",
+    "expression": "grel:if(cells['rankid'].value == 240, cells['taxonfullname'].value.split(' ')[3], '')",
     "onError": "set-to-blank",
     "newColumnName": "variety",
     "columnInsertIndex": 5,
-    "description": "Create column variety at index 5 based on column taxonfullname using expression grel:if(cells['rankid'].value == 240, cells['taxonfullname'].value.split(' ')[-1], '')"
+    "description": "Create column variety at index 5 based on column taxonfullname using expression grel:if(cells['rankid'].value == 240, cells['taxonfullname'].value.split(' ')[3], '')"
   },
   {
     "op": "core/column-addition",
