@@ -250,6 +250,11 @@ Preparations ->
 Prep Type ->
 Name 
 
+count ->
+Preparations ->
+ #1 ->
+Count
+
 shelf ->
 Preparations ->
  #1 ->
