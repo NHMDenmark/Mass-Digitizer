@@ -1119,6 +1119,19 @@
     "description": "Create column specimenobscured_date at index 69 based on column specimenobscured using expression grel:if(value.contains(\"True\"),cells.catalogeddate.value,null)"
   },
   {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "preptypename",
+    "expression": "grel:1",
+    "onError": "set-to-blank",
+    "newColumnName": "count",
+    "columnInsertIndex": 1,
+    "description": "Create column count at index 1 based on column preptypename using expression grel:1"
+  },
+  {
     "op": "core/column-reorder",
     "columnNames": [
       "catalognumber",
@@ -1170,6 +1183,7 @@
       "localityname",
       "broadgeographicalregion",
       "preptypename",
+      "count",
       "site",
       "collection",
       "shelf",
