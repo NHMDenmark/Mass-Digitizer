@@ -19,7 +19,7 @@ Below you will find information on the steps performed by the GREL script.
  
 	- Text transform on cells in column rankid using expression `value.toNumber()`
 
-1. For the taxonomy to be mapped correctly in Specify, the taxonomic information in column "taxonfullname" need to be split up into separat columns for qualifier, genus, species, subspecies, variety and forma:
+2. For the taxonomy to be mapped correctly in Specify, the taxonomic information in column "taxonfullname" need to be split up into separat columns for qualifier, genus, species, subspecies, variety and forma:
 	
 	Column "qualifier" is created based on column "taxonfullname" and populated with qualifier specific values:
 	
@@ -45,10 +45,10 @@ Below you will find information on the steps performed by the GREL script.
 	
 	- Text transform on cells in column species using expression `grel:if(value=='sp.', '', value)`
 
-1. The different types of null values in column "taxonspid" need to be standardised because it is used as a condition in the creation of another column:
+3. The different types of null values in column "taxonspid" need to be standardised because it is used as a condition in the creation of another column:
 	- Text transform on cells in column taxonspid using expression `grel:if((value==null).or(value==0).or(value=='None').or(value==''), '', value)`
 
-1. We want to mark new taxon records that will be added to the taxon tree in Specify when importing so they can be checked.
+4. We want to mark new taxon records that will be added to the taxon tree in Specify when importing so they can be checked.
 	
 	First, column "newtaxonflag" is created based on column "taxondasscoid"  and is populated with "True" or "False" depending on whether or not the taxon has a taxonspID or taxondasscoID:
 
@@ -66,27 +66,27 @@ Below you will find information on the steps performed by the GREL script.
 
 	- Create column newformaflag at index 5 based on column taxonfullname using expression `grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==260), 'True', '')`
 
-1. **For NHMA:** The value "None" needs to be deleted from the column "taxonnumber":
+5. **For NHMA:** The value "None" needs to be deleted from the column "taxonnumber":
 	- Mass edit cells in column taxonnumber
 
-1. Columns "familyname" and "georegionname" are renamed:
+6. Columns "familyname" and "georegionname" are renamed:
 	- Rename column familyname to family
 	- Rename column georegionname to broadgeographicalregion
 
-1. We need to create locality names for all locality records because you cannot create a locality record without it. Column "locality" is created and populated with the values from column "broadgeographicalregion":
+7. We need to create locality names for all locality records because you cannot create a locality record without it. Column "locality" is created and populated with the values from column "broadgeographicalregion":
 	- Create column localityname at index 28 based on column broadgeographicalregion using expression `grel:value`
 
-1. For the storage to be mapped correctly in Specify, the storage information in column "storagefullname" need to be split up into separat columns for shelf and box. Column "storagefullname" is split by separator and columns for box and shelf are created:
+8. For the storage to be mapped correctly in Specify, the storage information in column "storagefullname" need to be split up into separat columns for shelf and box. Column "storagefullname" is split by separator and columns for box and shelf are created:
 	- Split column storagefullname by separator, the separator here is " | " (notice the leading and trailing whitespace) 
 	
 	- Create column box at index 35 based on column storagename using expression `grel:if(value.split(' ')[0]=='Box', value.split(' ')[1], '')`
 	
 	- Create column shelf at index 35 based on column storagename using expression `grel:if(value.split(' ')[0]=='Shelf', value.split(' ')[1], '')`
 
-1. Agent name fields should either be blank or have an actual name in them, so value "None" is deleted from column "agentmiddleinitial":
+9. Agent name fields should either be blank or have an actual name in them, so value "None" is deleted from column "agentmiddleinitial":
 	- Text transform on cells in column agentmiddleinitial using expression `grel:if(value=='None', '', value)`
 
-1. We need to create a column for catalogeddate. Column "catalogeddate" is created based on column "recorddatetime" with values in the correct format depending on the institution:
+10. We need to create a column for catalogeddate. Column "catalogeddate" is created based on column "recorddatetime" with values in the correct format depending on the institution:
 	- Text transform on cells in column recorddatetime using expression `grel:value.slice(0,10).replace('-', '/')`
 	
 	**For NHMA:**
@@ -103,13 +103,13 @@ Below you will find information on the steps performed by the GREL script.
 
 	- Text transform on cells in column catalogeddate using expression `grel:value.toString('yyyy-MM-dd')`
 
-1. **For NHMD:** All records need to be marked as DaSSCo records. Column "project" is created and populated with value "DaSSCo" for all records:
+11. **For NHMD:** All records need to be marked as DaSSCo records. Column "project" is created and populated with value "DaSSCo" for all records:
 	- Create column project at index 2 based on column id using expression `grel:'DaSSCo'`
 
-1. It needs to be indicated for all records in Specify whether or not they are ready to be published to external portals, e.g. GBIF. All DaSSCo records are as default ready to be published. Column "publish" is created and populated with the value "True" for all records:
+12. It needs to be indicated for all records in Specify whether or not they are ready to be published to external portals, e.g. GBIF. All DaSSCo records are as default ready to be published. Column "publish" is created and populated with the value "True" for all records:
 	- Create column publish at index 24 based on column id using expression `grel:'True'`
 
-1. **For NHMA:** Individual taxonnumber and taxonnrsource columns are created for family, genus, and species based on column "taxonnumber" and facets for rankID:
+13. **For NHMA:** Individual taxonnumber and taxonnrsource columns are created for family, genus, and species based on column "taxonnumber" and facets for rankID:
 	- Create column family_taxonnumber at index 28 based on column taxonnumber using expression `grel:value`
 
 	- Create column family_taxonnrsource at index 28 based on column taxonnrsource using expression `grel:value`
@@ -122,7 +122,7 @@ Below you will find information on the steps performed by the GREL script.
 
 	- Create column species_taxonnrsource at index 28 based on column taxonnrsource using expression `grel:value`
 
-1. Several columns are renamed to match the labels used in Specify:
+14. Several columns are renamed to match the labels used in Specify:
 	- Rename column agentfirstname to cataloger firstname
 
 	- Rename column agentmiddleinitial to cataloger middle
@@ -133,7 +133,7 @@ Below you will find information on the steps performed by the GREL script.
 
 	- Rename column notes to remarks
  
-1. For the taxonomic author information to be mapped correctly in Specify, individual author columns are created for several taxonomic levels based on column "taxonauthor" and facets for rankID:
+15. For the taxonomic author information to be mapped correctly in Specify, individual author columns are created for several taxonomic levels based on column "taxonauthor" and facets for rankID:
 	- Create column subforma_author at index 21 based on column taxonauthor using expression `grel:value`
 
 	- Create column forma_author at index 21 based on column taxonauthor using expression `grel:value`
@@ -148,22 +148,22 @@ Below you will find information on the steps performed by the GREL script.
  
 	- Create column genus_author at index 21 based on column taxonauthor using expression `grel:value`
 
-1. The "remarks" column is mapped to the DaSSCo remarks table in Specify where it will be associated with specific date and source information. Associated "remark date" and "remark source" columns for DaSSCo remarks table are created for column "remarks": 
+16. The "remarks" column is mapped to the DaSSCo remarks table in Specify where it will be associated with specific date and source information. Associated "remark date" and "remark source" columns for DaSSCo remarks table are created for column "remarks": 
 	- Create column remark date at index 57 based on column remarks using expression `grel:if(value != null,cells.catalogeddate.value,null)`
 
 	- Create column remark source at index 57 based on column remarks using expression `grel:if(value != null,"DaSSCo digitisation",null)`
 
-1. We want to indicate in Specify which taxonomic determination the specimen is stored under in the collection. Column "storedunder" is created and populated with value "True" for all records:
+17. We want to indicate in Specify which taxonomic determination the specimen is stored under in the collection. Column "storedunder" is created and populated with value "True" for all records:
 	- Create column storedunder at index 1 based on column id using expression `grel:"True"`
 
-1. We want to add metadata about the datafile to the datafile which is mapped to the DaSSCo remarks table in Specify. DaSSCo remarks table columns for "datafilename" and associated "datafile date" and "datafile source" are created:
+18. We want to add metadata about the datafile to the datafile which is mapped to the DaSSCo remarks table in Specify. DaSSCo remarks table columns for "datafilename" and associated "datafile date" and "datafile source" are created:
 	- Create column datafile_remark at index 1 based on column id using expression `grel:"insert filename"`
  
 	- Create column datafile_date at index 1 based on column id using expression `grel:cells.catalogeddate.value`
 
 	- Create column datafile_source at index 1 based on column id using expression `grel:"DaSSCo data file"`
  
-1. We want the "labelobscured" and "specimenobscured" information mapped to the DaSSCo remarks table in Specify. DaSSCo remarks table columns for "labelobscured" and "specimenobscured" are created: 
+19. We want the "labelobscured" and "specimenobscured" information mapped to the DaSSCo remarks table in Specify. DaSSCo remarks table columns for "labelobscured" and "specimenobscured" are created: 
 	- Create column labelobscured_remark at index 65 based on column labelobscured using expression `grel:if(value.contains("True"),"Label obscured",null)`
  
 	- Create column labelobscured_source at index 65 based on column labelobscured using expression `grel:if(value.contains("True"),"DaSSCo digitisation",null)`
@@ -174,8 +174,11 @@ Below you will find information on the steps performed by the GREL script.
 	- Create column specimenobscured_source at index 69 based on column specimenobscured using expression `grel:if(value.contains("True"),"DaSSCo digitisation",null)`
  
 	- Create column specimenobscured_date at index 69 based on column specimenobscured using expression `grel:if(value.contains("True"),cells.catalogeddate.value,null)`
- 
-1. Columns are reordered and the following columns are removed:
+
+20. A column labeled "count" is added and auto-filled with a value of 1, so Specify recognizes there is at least one specimen in the record:
+	-  Create column count at index 1 based on column preptypename using expression `grel:1`
+
+21. Columns are reordered and the following columns are removed:
 
 	* ID
 	* spid
