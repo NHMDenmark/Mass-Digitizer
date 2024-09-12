@@ -217,6 +217,11 @@ Preparations ->
 Prep Type ->
 Name 
 
+count ->
+Preparations ->
+ #1 ->
+Count
+
 shelf -> NOT MAPPED
  
 box -> NOT MAPPED
