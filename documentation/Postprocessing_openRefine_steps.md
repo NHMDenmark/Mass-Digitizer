@@ -50,9 +50,9 @@ Below you will find information on the steps performed by the GREL script.
 
 4. We want to mark new taxon records that will be added to the taxon tree in Specify when importing so they can be checked.
 	
-	First, column "newtaxonflag" is created based on column "taxondasscoid"  and is populated with "True" or "False" depending on whether or not the taxon has a taxonspID or taxondasscoID:
+	First, column "newtaxonflag" is created based on column "taxonspid" and is populated with "True" or "False" depending on whether or not the taxon has a taxonspid:
 
-	- Create column newtaxonflag at index 18 based on column taxondasscoid using expression `grel:if((value==null).or(cells['taxonspid'].value==''), 'True', 'False')`
+	- Create column newtaxonflag at index 18 based on column taxonspid using expression `grel:if((value==null).or(cells['taxonspid'].value==''), 'True', 'False')`
 
 	Then individual newtaxonflag columns are created for all taxonomic levels based on the values in the newly created "newtaxonflag" column and the rankID:
 
