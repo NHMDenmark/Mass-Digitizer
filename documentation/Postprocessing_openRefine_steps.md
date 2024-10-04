@@ -178,8 +178,8 @@ Below you will find information on the steps performed by the GREL script.
 20. A column labeled "count" is added and auto-filled with a value of 1, so Specify recognizes there is at least one specimen in the record:
 	- Create column count at index 1 based on column preptypename using expression `grel:1`
 
-21. We need the string "loco ignoto vel cult." to be removed from the remarks column and added to a new column called localityremarks: 
-	- Create column localityremarks at index 27 based on column remarks using expression `grel:if(cells[\"remarks\"].value.contains(\"loco ignoto vel cult.\"), \"loco ignoto vel cult.\", cells[\"localityremarks\"].value)`
+21. We need the string "loco ignoto vel cult." to be removed from the remarks column and added to a new column called localitynotes: 
+	- Create column localitynotes at index 27 based on column remarks using expression `grel:if(cells[\"remarks\"].value.contains(\"loco ignoto vel cult.\"), \"loco ignoto vel cult.\", cells[\"localitynotes\"].value)`
 	- Text transform on cells in column remarks using expression `grel:if(cells[\"remarks\"].value.contains(\"loco ignoto vel cult.\"), \n    cells[\"remarks\"].value.replace(/\\s*;?\\s*loco ignoto vel cult\\.\\s*;?\\s*/, \"\"), \n    cells[\"remarks\"].value)`	
 
 22. Columns are reordered and the following columns are removed:

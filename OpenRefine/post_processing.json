@@ -1138,11 +1138,11 @@
       "mode": "row-based"
     },
     "baseColumnName": "remarks",
-    "expression": "grel:if(cells[\"remarks\"].value.contains(\"loco ignoto vel cult.\"), \"loco ignoto vel cult.\", cells[\"localityremarks\"].value)",
+    "expression": "grel:if(cells[\"remarks\"].value.contains(\"loco ignoto vel cult.\"), \"loco ignoto vel cult.\", cells[\"localitynotes\"].value)",
     "onError": "set-to-blank",
-    "newColumnName": "localityremarks",
+    "newColumnName": "localitynotes",
     "columnInsertIndex": 27,
-    "description": "Create column localityremarks at index 27 based on column remarks using expression grel:if(cells[\"remarks\"].value.contains(\"loco ignoto vel cult.\"), \"loco ignoto vel cult.\", cells[\"localityremarks\"].value)"
+    "description": "Create column localitynotes at index 27 based on column remarks using expression grel:if(cells[\"remarks\"].value.contains(\"loco ignoto vel cult.\"), \"loco ignoto vel cult.\", cells[\"localitynotes\"].value)"
   },
   {
     "op": "core/text-transform",
@@ -1208,7 +1208,7 @@
       "storedunder",
       "localityname",
       "broadgeographicalregion",
-      "localityremarks",
+      "localitynotes",
       "preptypename",
       "count",
       "site",

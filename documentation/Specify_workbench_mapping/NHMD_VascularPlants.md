@@ -243,6 +243,10 @@ broadgeographicalregion ->
 Collecting Information ->
 Locality ->
 Broad Geographical Region 
+
+localitynotes ->
+Collecting Information ->
+Locality and Habitat Notes
  
 preptypename ->
 Preparations ->
