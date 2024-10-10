@@ -210,6 +210,9 @@ broadgeographicalregion ->
 Collecting Information ->
 Locality ->
 Broad Geographical Region 
+
+localitynotes ->
+NOT MAPPED
  
 preptypename ->
 Preparations ->
