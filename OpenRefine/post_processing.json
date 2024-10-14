@@ -460,27 +460,7 @@
   {
     "op": "core/column-addition",
     "engineConfig": {
-      "facets": [
-        {
-          "type": "list",
-          "name": "institutionid",
-          "expression": "value",
-          "columnName": "institutionid",
-          "invert": false,
-          "omitBlank": false,
-          "omitError": false,
-          "selection": [
-            {
-              "v": {
-                "v": "1",
-                "l": "1"
-              }
-            }
-          ],
-          "selectBlank": false,
-          "selectError": false
-        }
-      ],
+      "facets": [],
       "mode": "row-based"
     },
     "baseColumnName": "id",
