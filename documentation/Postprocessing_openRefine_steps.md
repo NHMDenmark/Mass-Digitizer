@@ -19,7 +19,11 @@ Below you will find information on the steps performed by the GREL script.
  
 	- Text transform on cells in column rankid using expression `value.toNumber()`
 
-2. For the taxonomy to be mapped correctly in Specify, the taxonomic information in column "taxonfullname" need to be split up into separat columns for qualifier, genus, species, subspecies, variety and forma:
+2. To correctly work with hybrids, a new column called ishybrid is added and set to True for all rows where taxonfullname includes "x ":
+
+	- Create column ishybrid at index 4 based on column taxonfullname using expression `grel:if(value.contains(\"x \"), \"True\", \"False\")`
+
+3. For the taxonomy to be mapped correctly in Specify, the taxonomic information in column "taxonfullname" need to be split up into separate columns for qualifier, genus, species, subspecies, variety and forma:
 	
 	Column "qualifier" is created based on column "taxonfullname" and populated with qualifier specific values:
 	
@@ -33,7 +37,7 @@ Below you will find information on the steps performed by the GREL script.
 	
 	- Create column genus at index 5 based on column taxonfullname using expression `grel:if(cells['rankid'].value >= 180, value.split(' ')[0], '')`
 	
-	- Create column species at index 5 based on column taxonfullname using expression `grel:if(cells['rankid'].value >= 220, value.split(' ')[1], '')`
+	- Create column species at index 5 based on column taxonfullname using expression `grel:if(cells['rankid'].value >= 220, if(cells['ishybrid'].value == 'True', forEach(value.split(' '), w, if(startsWith(w, toLowercase(w)), w, '')).join(' ').trim(), value.split(' ')[1]), '')`
 	
 	- Create column subspecies at index 5 based on column taxonfullname using expression `grel:if(cells['rankid'].value == 230, value.split(' ')[2], '')`
 	
@@ -45,10 +49,10 @@ Below you will find information on the steps performed by the GREL script.
 	
 	- Text transform on cells in column species using expression `grel:if(value=='sp.', '', value)`
 
-3. The different types of null values in column "taxonspid" need to be standardised because it is used as a condition in the creation of another column:
+4. The different types of null values in column "taxonspid" need to be standardised because it is used as a condition in the creation of another column:
 	- Text transform on cells in column taxonspid using expression `grel:if((value==null).or(value==0).or(value=='None').or(value==''), '', value)`
 
-4. We want to mark new taxon records that will be added to the taxon tree in Specify when importing so they can be checked.
+5. We want to mark new taxon records that will be added to the taxon tree in Specify when importing so they can be checked.
 	
 	First, column "newtaxonflag" is created based on column "taxonspid" and is populated with "True" or "False" depending on whether or not the taxon has a taxonspid:
 
@@ -66,27 +70,27 @@ Below you will find information on the steps performed by the GREL script.
 
 	- Create column newformaflag at index 5 based on column taxonfullname using expression `grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==260), 'True', '')`
 
-5. **For NHMA:** The value "None" needs to be deleted from the column "taxonnumber":
+6. **For NHMA:** The value "None" needs to be deleted from the column "taxonnumber":
 	- Mass edit cells in column taxonnumber
 
-6. Columns "familyname" and "georegionname" are renamed:
+7. Columns "familyname" and "georegionname" are renamed:
 	- Rename column familyname to family
 	- Rename column georegionname to broadgeographicalregion
 
-7. We need to create locality names for all locality records because you cannot create a locality record without it. Column "locality" is created and populated with the values from column "broadgeographicalregion":
+8. We need to create locality names for all locality records because you cannot create a locality record without it. Column "locality" is created and populated with the values from column "broadgeographicalregion":
 	- Create column localityname at index 28 based on column broadgeographicalregion using expression `grel:value`
 
-8. For the storage to be mapped correctly in Specify, the storage information in column "storagefullname" need to be split up into separat columns for shelf and box. Column "storagefullname" is split by separator and columns for box and shelf are created:
+9. For the storage to be mapped correctly in Specify, the storage information in column "storagefullname" need to be split up into separat columns for shelf and box. Column "storagefullname" is split by separator and columns for box and shelf are created:
 	- Split column storagefullname by separator, the separator here is " | " (notice the leading and trailing whitespace) 
 	
 	- Create column box at index 35 based on column storagename using expression `grel:if(value.split(' ')[0]=='Box', value.split(' ')[1], '')`
 	
 	- Create column shelf at index 35 based on column storagename using expression `grel:if(value.split(' ')[0]=='Shelf', value.split(' ')[1], '')`
 
-9. Agent name fields should either be blank or have an actual name in them, so value "None" is deleted from column "agentmiddleinitial":
+10. Agent name fields should either be blank or have an actual name in them, so value "None" is deleted from column "agentmiddleinitial":
 	- Text transform on cells in column agentmiddleinitial using expression `grel:if(value=='None', '', value)`
 
-10. We need to create a column for catalogeddate. Column "catalogeddate" is created based on column "recorddatetime" with values in the correct format depending on the institution:
+11. We need to create a column for catalogeddate. Column "catalogeddate" is created based on column "recorddatetime" with values in the correct format depending on the institution:
 	- Text transform on cells in column recorddatetime using expression `grel:value.slice(0,10).replace('-', '/')`
 	
 	**For NHMA:**
@@ -103,13 +107,13 @@ Below you will find information on the steps performed by the GREL script.
 
 	- Text transform on cells in column catalogeddate using expression `grel:value.toString('yyyy-MM-dd')`
 
-11. **For NHMD:** All records need to be marked as DaSSCo records. Column "project" is created and populated with value "DaSSCo" for all records:
+12. **For NHMD:** All records need to be marked as DaSSCo records. Column "project" is created and populated with value "DaSSCo" for all records:
 	- Create column project at index 2 based on column id using expression `grel:'DaSSCo'`
 
-12. It needs to be indicated for all records in Specify whether or not they are ready to be published to external portals, e.g. GBIF. All DaSSCo records are as default ready to be published. Column "publish" is created and populated with the value "True" for all records:
+13. It needs to be indicated for all records in Specify whether or not they are ready to be published to external portals, e.g. GBIF. All DaSSCo records are as default ready to be published. Column "publish" is created and populated with the value "True" for all records:
 	- Create column publish at index 24 based on column id using expression `grel:'True'`
 
-13. **For NHMA:** Individual taxonnumber and taxonnrsource columns are created for family, genus, and species based on column "taxonnumber" and facets for rankID:
+14. **For NHMA:** Individual taxonnumber and taxonnrsource columns are created for family, genus, and species based on column "taxonnumber" and facets for rankID:
 	- Create column family_taxonnumber at index 28 based on column taxonnumber using expression `grel:value`
 
 	- Create column family_taxonnrsource at index 28 based on column taxonnrsource using expression `grel:value`
@@ -122,7 +126,7 @@ Below you will find information on the steps performed by the GREL script.
 
 	- Create column species_taxonnrsource at index 28 based on column taxonnrsource using expression `grel:value`
 
-14. Several columns are renamed to match the labels used in Specify:
+15. Several columns are renamed to match the labels used in Specify:
 	- Rename column agentfirstname to cataloger firstname
 
 	- Rename column agentmiddleinitial to cataloger middle
@@ -133,7 +137,7 @@ Below you will find information on the steps performed by the GREL script.
 
 	- Rename column notes to remarks
  
-15. For the taxonomic author information to be mapped correctly in Specify, individual author columns are created for several taxonomic levels based on column "taxonauthor" and facets for rankID:
+16. For the taxonomic author information to be mapped correctly in Specify, individual author columns are created for several taxonomic levels based on column "taxonauthor" and facets for rankID:
 	- Create column subforma_author at index 21 based on column taxonauthor using expression `grel:value`
 
 	- Create column forma_author at index 21 based on column taxonauthor using expression `grel:value`
@@ -147,11 +151,6 @@ Below you will find information on the steps performed by the GREL script.
 	- Create column species_author at index 21 based on column taxonauthor using expression `grel:value`
  
 	- Create column genus_author at index 21 based on column taxonauthor using expression `grel:value`
-
-16. The "remarks" column is mapped to the DaSSCo remarks table in Specify where it will be associated with specific date and source information. Associated "remark date" and "remark source" columns for DaSSCo remarks table are created for column "remarks": 
-	- Create column remark date at index 57 based on column remarks using expression `grel:if(value != null,cells.catalogeddate.value,null)`
-
-	- Create column remark source at index 57 based on column remarks using expression `grel:if(value != null,"DaSSCo digitisation",null)`
 
 17. We want to indicate in Specify which taxonomic determination the specimen is stored under in the collection. Column "storedunder" is created and populated with value "True" for all records:
 	- Create column storedunder at index 1 based on column id using expression `grel:"True"`
@@ -182,14 +181,23 @@ Below you will find information on the steps performed by the GREL script.
 	- Create column localitynotes at index 27 based on column remarks using expression `grel:if(cells[\"remarks\"].value.contains(\"loco ignoto vel cult.\"), \"loco ignoto vel cult.\", cells[\"localitynotes\"].value)`
 	- Text transform on cells in column remarks using expression `grel:if(cells[\"remarks\"].value.contains(\"loco ignoto vel cult.\"), \n    cells[\"remarks\"].value.replace(/\\s*;?\\s*loco ignoto vel cult\\.\\s*;?\\s*/, \"\"), \n    cells[\"remarks\"].value)`	
 
-22. Columns are reordered and the following columns are removed:
+22. If the strings "sensu lato" or "sensu stricto" are found in the remarks column, they are removed from remarks and added to a new column called addendum:
+	- Create column addendum at index 27 to include 'sensu lato' or 'sensu stricto' if they exist in remarks using expression `grel:if(cells['remarks'].value.contains('sensu lato'), 'sensu lato', if(cells['remarks'].value.contains('sensu stricto'), 'sensu stricto', cells['addendum'].value))`
+	- Remove 'sensu lato' and 'sensu stricto' from remarks using expression `grel:value.replace('sensu lato','').replace('sensu stricto','').trim()`
+
+23. The "remarks" column is mapped to the DaSSCo remarks table in Specify where it will be associated with specific date and source information. Associated "remark date" and "remark source" columns for DaSSCo remarks table are created for column "remarks": 
+	- Create column remark date at index 57 based on column remarks using expression `grel:if(value != null,cells.catalogeddate.value,null)`
+
+	- Create column remark source at index 57 based on column remarks using expression `grel:if(value != null,"DaSSCo digitisation",null)`
+
+24. Columns are reordered and the following columns are removed:
 
 	* ID
 	* spid
 	* taxonnameid  
 	* taxonspid
 	* rankid
-	* Typestatusid
+	* typestatusid
 	* georegionid
 	* storageid
 	* institutionid
