@@ -224,6 +224,18 @@ Determinations ->
  #1 ->
 Qualifier
 
+addendum ->
+Determinations ->
+  #1 ->
+Addendum
+
+ishybrid ->
+Determinations ->
+  #1 ->
+Taxon ->
+Species ->
+Is Hybrid
+
 typestatusname ->
 Determinations ->
  #1 ->

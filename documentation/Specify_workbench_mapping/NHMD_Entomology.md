@@ -194,6 +194,14 @@ Determinations ->
  #1 ->
 Qualifier
 
+addendum ->
+Determinations ->
+  #1 ->
+Addendum
+
+ishybrid ->
+NOT MAPPED
+
 typestatusname ->
 Determinations ->
   #1 ->
