@@ -365,6 +365,7 @@ class AutoSuggest_popup():
                     self.suggestions = self.db.getRowsOnFilters('taxonname', fields, 200)
                 else: 
                     keyStrokes = keyStrokes.replace('.', '')
+                    keyStrokes = keyStrokes.replace("'", "’")
                     sqlString = f"SELECT * FROM taxonname WHERE id IN (SELECT id FROM taxonname_fts WHERE fullname MATCH '{keyStrokes}*' AND institutionid = {self.collection.institutionId} AND taxontreedefid = {self.collection.taxonTreeDefId} LIMIT 200);"
                     self.suggestions = self.db.executeSqlStatement(sqlString)
 
