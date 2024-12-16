@@ -1,4 +1,3 @@
--- INSERT INTO taxonname (spid,dasscoid,name,author,fullname,rankid,taxonrank,parentfullname,treedefid,idnumber,taxonnrsource) VALUES 
 INSERT INTO taxonname (spid,name,author,fullname,rankid,taxonRank,treedefid,institutionid,parentfullname,idnumber,taxonnrsource) VALUES 
 (14692,"Animalia","","Animalia",10,"Kingdom",2,2,"Life","",""),
 (14693,"Arthropoda","","Arthropoda",30,"Phylum",2,2,"Animalia","",""),
