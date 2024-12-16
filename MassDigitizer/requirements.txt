@@ -4,3 +4,4 @@ pytest
 pytz
 pandas
 openpyxl
+pyinstaller
