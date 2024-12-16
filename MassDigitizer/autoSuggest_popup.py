@@ -178,7 +178,7 @@ class AutoSuggest_popup():
                 # If a suggestion is clicked in the listbox OR 'Enter' is pressed then handle suggested taxon name
                 # TODO This is a mess of 'if' statements and should be simplified. There must be a split between
                 #      the section dealing with novel names and the known name case.
-                taxonFullName = values['txtInput']
+                taxonFullName = values['txtInput'].replace('.', '').replace("'", "’")
                 self.autoSuggestObject.taxonFullName = taxonFullName
                 taxonName = taxonFullName.split(' ')[-1]
                 self.autoSuggestObject.taxonName = taxonName
@@ -266,7 +266,7 @@ class AutoSuggest_popup():
                         # if not self.autoSuggestObject.parentFullName:
 
                         # Parse taxon name entry: 
-                        taxonNameEntry = values['txtInput'].strip().replace('*','')
+                        taxonNameEntry = values['txtInput'].strip().replace('*','').replace('.', '').replace("'", "’")
                         # NOTE The above removes any asterisk that was intentionally added in order to force a new taxon name with no author indicated (ticket #466)
 
                         # Store novel taxon name in autosuggest object
@@ -284,7 +284,7 @@ class AutoSuggest_popup():
                                 self.autoSuggestObject.name = taxonNameEntry[taxonNameEntry.index(' ')+1:len(taxonNameEntry)].strip()
                         # Remove authorship separator from fullname
                         self.autoSuggestObject.fullName = taxonNameEntry.replace('_',' ') # Remove authorship separator
-
+                        
                         if values['lstSuggestions']:  # Asking for family name.
                             self.autoSuggestObject.parentFullName = values['lstSuggestions'][0]
                         else:  # family name submitted not recognized or empty.
@@ -366,6 +366,7 @@ class AutoSuggest_popup():
                 else: 
                     keyStrokes = keyStrokes.replace('.', '')
                     keyStrokes = keyStrokes.replace("'", "’")
+                    
                     sqlString = f"SELECT * FROM taxonname WHERE id IN (SELECT id FROM taxonname_fts WHERE fullname MATCH '{keyStrokes}*' AND institutionid = {self.collection.institutionId} AND taxontreedefid = {self.collection.taxonTreeDefId} LIMIT 200);"
                     self.suggestions = self.db.executeSqlStatement(sqlString)
 
