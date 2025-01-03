@@ -354,7 +354,7 @@ class AutoSuggest_popup():
         
         try:
             if self.tableName == 'storage':
-                fields = {'name': f'LIKE lower("%{keyStrokes}%")', 'collectionid': f'= {self.collection.collectionId}'}
+                fields = {'fullname': f'LIKE lower("%{keyStrokes}%")', 'collectionid': f'= {self.collection.collectionId}'}
                 self.suggestions = self.db.getRowsOnFilters('storage', fields, 200)
 
             else:  # taxon
