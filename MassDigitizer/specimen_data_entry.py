@@ -60,10 +60,11 @@ class SpecimenDataEntry():
         self.recordSet = recordset.RecordSet(collection_id, 3,specimen_id=self.collobj.id) 
 
         # Input field lists defining: Tabbing order, focus indicator, what fields to be cleared, and what fields are not 'sticky' i.e. not carrying their value over to the next record after saving current one 
-        self.inputFieldList =  ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured', 'radRadioSSO', 'radRadioMSO', 'radRadioMOS', 'inpContainerName', 'inpNotes', 'inpCatalogNumber', 'btnSave']
-        self.focusIconList =   ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrGeoRegion', 'inrTaxonName', 'inrTaxonNumber', 'inrDamage', 'inrSpecimenObscured', 'inrLabelObscured', 'inrRadioSSO', 'inrRadioMSO', 'inrRadioMOS', 'inrContainerName', 'inrNotes', 'inrCatalogNumber', 'inrSave']
-        self.clearingList =    ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured','inpContainerName', 'inpCatalogNumber','txtRecordID', 'txtStorageFullname', 'inpNotes']
+        self.inputFieldList  = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured', 'radRadioSSO', 'radRadioMSO', 'radRadioMOS', 'inpContainerName', 'inpNotes', 'inpCatalogNumber', 'btnSave']
+        self.focusIconList   = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrGeoRegion', 'inrTaxonName', 'inrTaxonNumber', 'inrDamage', 'inrSpecimenObscured', 'inrLabelObscured', 'inrRadioSSO', 'inrRadioMSO', 'inrRadioMOS', 'inrContainerName', 'inrNotes', 'inrCatalogNumber', 'inrSave']
+        self.clearingList    = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured','inpContainerName', 'inpCatalogNumber','txtRecordID', 'txtStorageFullname', 'inpNotes']
         self.nonStickyFields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured', 'inpNotes']
+        self.sessionMode     = 'Default'
         #self.stickyFields = [{'txtStorageFullname'}, {'cbxPrepType'}, {'cbxTypeStatus'}, {'inpNotes'},{'inpContainerName'},{'cbxGeoRegion'}, {'inpTaxonName'}, {'inpTaxonNumber'}]
         
         # Global variables
@@ -269,12 +270,17 @@ class SpecimenDataEntry():
         version = [
             sg.Text(f"Version number: ", size=sessionInfoSize, background_color=greyArea, text_color='black', font=sessionInfoFont),
             sg.Text(util.getVersionNumber(), size=(20, 1), background_color=greyArea, font=smallLabelFont, text_color='black')]
-
+        
+        # Session mode control 
+        default_mode    = sg.Radio('Default entry mode', 'session', default=True, enable_events=True, key="radModeDefault", background_color=greyArea)
+        fast_entry_mode = sg.Radio('Fast entry mode', 'session', enable_events=True, key="radModeFastEntry", background_color=greyArea)
+        session_modes   = [default_mode, fast_entry_mode]
+        
         # Header section
-        appTitle = sg.Text('DaSSCo Mass Digitization App', size=(34, 3), background_color=greyArea, font=titleFont)
+        appTitle       = sg.Text('DaSSCo Mass Digitization App', size=(34, 2), background_color=greyArea, font=titleFont)
         settingsButton = sg.Button('SETTINGS', key='btnSettings', button_color='grey30')
-        logoutButton = sg.Button('LOG OUT', key='btnLogOut', button_color='grey10')
-        layoutTitle = [[appTitle], ]
+        logoutButton   = sg.Button('LOG OUT', key='btnLogOut', button_color='grey10')
+        layoutTitle    = [[appTitle], [session_modes]]
         layoutSettingLogout = [sg.Push(background_color=greyArea), settingsButton, logoutButton]
         layoutMeta = [loggedIn, institution_, collection, version, layoutSettingLogout]
 
@@ -371,6 +377,14 @@ class SpecimenDataEntry():
 
             self.window['lblError'].update('Validation error',visible=False) # Clear error message label 
 
+            if event == 'radModeFastEntry':
+                self.sessionMode = 'FastEntry'
+            
+            if event == 'radModeDefault':
+                self.sessionMode = 'Default'
+            
+            # **** Data Entry Events ****
+
             if event == 'inpStorage':
                 keyStrokes = values['inpStorage']
                 # Activate autosuggest box, when more than 3 characters entered:
@@ -396,11 +410,17 @@ class SpecimenDataEntry():
 
             elif event == "chkSpecimenObscured":
                 self.collobj.specimenObscured = values['chkSpecimenObscured']
-                self.setFieldFocus('chkLabelObscured')
+                if self.sessionMode == 'FastEntry':
+                    self.setFieldFocus('inpCatalogNumber')
+                else:
+                    self.setFieldFocus('chkLabelObscured')
 
             elif event == "chkLabelObscured":
                 self.collobj.labelObscured = values['chkLabelObscured']
-                self.setFieldFocus('radRadioSSO')
+                if self.sessionMode == 'FastEntry':
+                    self.setFieldFocus('inpCatalogNumber')
+                else:
+                    self.setFieldFocus('radRadioSSO')
 
             elif (event == 'inpNotes_Edit' or event == 'inpNotes_Return'):
                 self.collobj.notes = values['inpNotes']
@@ -417,7 +437,10 @@ class SpecimenDataEntry():
                 self.collobj.containername = MSOkey.strip()
                 self.window['inpContainerName'].update(value=MSOkey, disabled=False)
                 self.window['imgWarningLinkedRecord'].update(visible=True)
-                self.setFieldFocus('inpNotes')
+                if self.sessionMode == 'FastEntry':
+                    self.setFieldFocus('inpCatalogNumber')
+                else:
+                    self.setFieldFocus('inpNotes')
 
             elif event == 'radRadioMOS':
                 mKey = util.getRandomNumberString()
@@ -426,7 +449,10 @@ class SpecimenDataEntry():
                 self.collobj.containername = MOSkey.strip()
                 self.window['inpContainerName'].update(value=MOSkey, disabled=False)
                 self.window['imgWarningLinkedRecord'].update(visible=True)
-                self.setFieldFocus('inpNotes')
+                if self.sessionMode == 'FastEntry':
+                    self.setFieldFocus('inpCatalogNumber')
+                else:
+                    self.setFieldFocus('inpNotes')
 
             elif event == 'radRadioSSO':
                 self.window['inpContainerName'].update(value='', disabled=True)
@@ -436,7 +462,10 @@ class SpecimenDataEntry():
                 self.window['radRadioSSO'].update(value=True)
                 self.window['inpContainerName'].update('')
                 self.window['imgWarningLinkedRecord'].update(visible=False)
-                self.setFieldFocus('inpNotes')
+                if self.sessionMode == 'FastEntry':
+                    self.setFieldFocus('inpCatalogNumber')
+                else:
+                    self.setFieldFocus('inpNotes')
 
             elif event == 'inpContainerName_Edit':
                 self.collobj.containername = values['inpContainerName']
@@ -462,7 +491,10 @@ class SpecimenDataEntry():
                     if self.collection.useTaxonNumbers == True:
                         self.setFieldFocus('inpTaxonNumber')
                     else:
-                        self.setFieldFocus('chkDamage')
+                        if self.sessionMode == 'FastEntry':
+                            self.setFieldFocus('inpCatalogNumber')
+                        else:
+                            self.setFieldFocus('chkDamage')
                 else:                
                     # Activate autosuggest box, when three characters or more are entered.
                     result = ''
@@ -475,7 +507,10 @@ class SpecimenDataEntry():
                             if self.collection.useTaxonNumbers == True and values['inpTaxonNumber'].strip() == "":
                                 self.setFieldFocus('inpTaxonNumber')
                             else:
-                                self.setFieldFocus('chkDamage')
+                                if self.sessionMode == 'FastEntry':
+                                    self.setFieldFocus('inpCatalogNumber')
+                                else:
+                                    self.setFieldFocus('chkDamage')
                         
                         if values['inpTaxonName'].strip() == '':
                             # taxon input field empty: Clear all taxon related fields
@@ -1146,3 +1181,4 @@ class SpecimenDataEntry():
         # Update record number counter 
         specimenCount = len(self.db.getRows('specimen', limit=9999))
         self.window['txtNumberCounter'].update(specimenCount)
+        
