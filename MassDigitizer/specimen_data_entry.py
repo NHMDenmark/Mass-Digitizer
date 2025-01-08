@@ -212,9 +212,14 @@ class SpecimenDataEntry():
         
         # Get data to populate previous records table:
         adjacentRecords = self.recordSet.getAdjacentRecordList(self.tableHeaders)
-        previousRecordsTable = [sg.Table(values=adjacentRecords, key='tblPrevious', enable_events=False, hide_vertical_scroll=True,headings=self.tableHeaders, font=('Arial', 13), justification='left', auto_size_columns=True, max_col_width=28, select_mode=sg.TABLE_SELECT_MODE_NONE)]
+        previousRecordsTable = [sg.Table(values=adjacentRecords, key='tblPrevious', enable_events=False, hide_vertical_scroll=True,headings=self.tableHeaders, num_rows=3, 
+                                         font=('Arial', 13), justification='left', auto_size_columns=True, max_col_width=28, select_mode=sg.TABLE_SELECT_MODE_NONE)]
 
-        # 
+        # Add number counter showing the number of records currently held by the database
+        numberCounter = [sg.Text('Records added: ', key='lblNumberCounter', background_color=blueArea, visible=True, size=(15, 1), text_color='black', font=sessionInfoFont), 
+                         sg.Text('', key='txtNumberCounter', size=(4, 1), background_color=blueArea)]
+
+        # Set up control Area i.e. buttons and status indicators
         controlArea = [
             sg.Text('Record ID: ', key='lblRecordID', background_color='#99dcff', visible=True, size=(9, 1)),
             sg.Text('', key='txtRecordID', size=(4, 1), background_color=blueArea),
@@ -246,7 +251,7 @@ class SpecimenDataEntry():
 
         bluearea_maincol = sg.Column([specimen_flags, container_types, containerID, notes, barcode, controlArea], background_color=blueArea)
         bluearea_sidecol = sg.Column([warning_linkedrecord], background_color=blueArea)
-        layout_bluearea  = [[bluearea_maincol, bluearea_sidecol],[sg.Column([previousRecordsTable])]]
+        layout_bluearea  = [[bluearea_maincol, bluearea_sidecol],[sg.Column([previousRecordsTable])], [sg.Column([numberCounter], background_color=blueArea)]]
 
         # Grey Area (Header) elements
         loggedIn = [
@@ -281,7 +286,7 @@ class SpecimenDataEntry():
             [sg.Frame('', [[sg.Column(layout_bluearea,  background_color=blueArea )]], title_location=sg.TITLE_LOCATION_TOP, background_color=blueArea, expand_x=True, expand_y=True, )], ]
 
         # Launch window
-        self.window = sg.Window("DaSSCo Mass Digitization App", layout, margins=(2, 2), size=(1100, 640), resizable=True, return_keyboard_events=True, finalize=True, background_color=greyArea)
+        self.window = sg.Window("DaSSCo Mass Digitization App", layout, margins=(2, 2), size=(1100, 666), resizable=True, return_keyboard_events=True, finalize=True, background_color=greyArea)
         self.window.TKroot.focus_force()  # Forces the app to be in focus.
 
         # Set session fields
@@ -303,6 +308,9 @@ class SpecimenDataEntry():
 
         # Set triggers for the different controls on the UI form
         self.setControlEvents()
+
+        # Get the latest record count and show in field
+        self.updateRecordCount() 
 
     def setControlEvents(self):
         # Set triggers for the different controls on the UI form
@@ -796,6 +804,8 @@ class SpecimenDataEntry():
         # self.initialStep = False
         self.setFieldFocus('inpCatalogNumber')
 
+        self.updateRecordCount()
+
         util.logger.info(f'{result}')
                          
         return result
@@ -1129,3 +1139,10 @@ class SpecimenDataEntry():
         util.logger.error(validationMessage)
         sg.Popup(validationMessage)
             
+    def updateRecordCount(self):
+        """
+        Simple method for retrieving and displaying record count
+        """
+        # Update record number counter 
+        specimenCount = len(self.db.getRows('specimen', limit=9999))
+        self.window['txtNumberCounter'].update(specimenCount)
