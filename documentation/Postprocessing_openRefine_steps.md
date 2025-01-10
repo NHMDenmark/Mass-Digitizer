@@ -80,12 +80,18 @@ Below you will find information on the steps performed by the GREL script.
 8. We need to create locality names for all locality records because you cannot create a locality record without it. Column "locality" is created and populated with the values from column "broadgeographicalregion":
 	- Create column localityname at index 28 based on column broadgeographicalregion using expression `grel:value`
 
-9. For the storage to be mapped correctly in Specify, the storage information in column "storagefullname" need to be split up into separat columns for shelf and box. Column "storagefullname" is split by separator and columns for box and shelf are created:
-	- Split column storagefullname by separator, the separator here is " | " (notice the leading and trailing whitespace) 
+9. For the storage to be mapped correctly in Specify, the storage information in column "storagefullname" needs to be split up into separate columns. Column "storagefullname" is split by separator and columns for collection, cabinet, box, and shelf are created:
+	- Split column storagefullname by separator, the separator here is "|" 
+
+	- Create column Collection at index 25 based on column storagefullname 4 using expression `grel:if(cells[\"storagefullname 1\"].value.contains(\"Aarhus\"), value, \"\")`
+
+	- Text transform on cells in column collection using expression `grel:if(cells[\"storagefullname 1\"].value.contains(\"Denmark\"), cells[\"storagefullname 3\"].value, value)`
 	
-	- Create column box at index 35 based on column storagename using expression `grel:if(value.split(' ')[0]=='Box', value.split(' ')[1], '')`
+	- Create column box at index 21 based on column storagefullname using expression `grel:if(value.contains(\"Box\"), value.replace(/.*?Box (\\d+).*/, \"$1\"), \"\")`
 	
-	- Create column shelf at index 35 based on column storagename using expression `grel:if(value.split(' ')[0]=='Shelf', value.split(' ')[1], '')`
+	- Create column shelf at index 21 based on column storagefullname using expression `grel:if(value.contains(\"Shelf\"), value.replace(/.*?Shelf (\\d+).*/, \"$1\"), \"\")`
+
+	- Create column cabinet at index 21 based on column storagefullname using expression `grel:if(value.contains(\"Cabinet\"), value.replace(/.*?Cabinet (\\d+).*/, \"$1\"), \"\")`
 
 10. Agent name fields should either be blank or have an actual name in them, so value "None" is deleted from column "agentmiddleinitial":
 	- Text transform on cells in column agentmiddleinitial using expression `grel:if(value=='None', '', value)`
@@ -199,6 +205,7 @@ Below you will find information on the steps performed by the GREL script.
 	* rankid
 	* typestatusid
 	* georegionid
+	* storagefullname
 	* storageid
 	* institutionid
 	* preptypeid

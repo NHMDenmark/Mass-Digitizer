@@ -271,6 +271,20 @@ Preparations ->
  #1 ->
 Count
 
+collection ->
+Preparations ->
+ #1 ->
+Storage ->
+Collection ->
+Name
+
+cabinet ->
+Preparations ->
+ #1 ->
+Storage ->
+Cabinet ->
+Name 
+
 shelf ->
 Preparations ->
  #1 ->
