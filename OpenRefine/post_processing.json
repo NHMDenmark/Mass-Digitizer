@@ -299,9 +299,9 @@
     },
     "columnName": "storagefullname",
     "guessCellType": true,
-    "removeOriginalColumn": true,
+    "removeOriginalColumn": false,
     "mode": "separator",
-    "separator": " | ",
+    "separator": "|",
     "regex": false,
     "maxColumns": 0,
     "description": "Split column storagefullname by separator"
@@ -312,12 +312,25 @@
       "facets": [],
       "mode": "row-based"
     },
-    "baseColumnName": "storagename",
-    "expression": "grel:if(value.split(' ')[0]=='Box', value.split(' ')[1], '')",
+    "baseColumnName": "storagefullname 4",
+    "expression": "grel:if(cells[\"storagefullname 1\"].value.contains(\"Aarhus\"), value, \"\")",
     "onError": "set-to-blank",
-    "newColumnName": "box",
-    "columnInsertIndex": 35,
-    "description": "Create column box at index 35 based on column storagename using expression grel:if(value.split(' ')[0]=='Box', value.split(' ')[1], '')"
+    "newColumnName": "collection",
+    "columnInsertIndex": 25,
+    "description": "Create column collection at index 25 based on column storagefullname 4 using expression grel:if(cells[\"storagefullname 1\"].value.contains(\"Aarhus\"), value, \"\")"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "collection",
+    "expression": "grel:if(cells[\"storagefullname 1\"].value.contains(\"Denmark\"), cells[\"storagefullname 3\"].value, value)",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Text transform on cells in column collection using expression grel:if(cells[\"storagefullname 1\"].value.contains(\"Denmark\"), cells[\"storagefullname 3\"].value, value)"
   },
   {
     "op": "core/column-addition",
@@ -325,12 +338,38 @@
       "facets": [],
       "mode": "row-based"
     },
-    "baseColumnName": "storagename",
-    "expression": "grel:if(value.split(' ')[0]=='Shelf', value.split(' ')[1], '')",
+    "baseColumnName": "storagefullname",
+    "expression": "grel:if(value.contains(\"Box\"), value.replace(/.*?Box (\\d+).*/, \"$1\"), \"\")",
+    "onError": "set-to-blank",
+    "newColumnName": "box",
+    "columnInsertIndex": 21,
+    "description": "Create column box at index 21 based on column storagefullname using expression grel:if(value.contains(\"Box\"), value.replace(/.*?Box (\\d+).*/, \"$1\"), \"\")"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "storagefullname",
+    "expression": "grel:if(value.contains(\"Shelf\"), value.replace(/.*?Shelf (\\d+).*/, \"$1\"), \"\")",
     "onError": "set-to-blank",
     "newColumnName": "shelf",
-    "columnInsertIndex": 35,
-    "description": "Create column shelf at index 35 based on column storagename using expression grel:if(value.split(' ')[0]=='Shelf', value.split(' ')[1], '')"
+    "columnInsertIndex": 21,
+    "description": "Create column shelf at index 21 based on column storagefullname using expression grel:if(value.contains(\"Shelf\"), value.replace(/.*?Shelf (\\d+).*/, \"$1\"), \"\")"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "storagefullname",
+    "expression": "grel:if(value.contains(\"Cabinet\"), value.replace(/.*?Cabinet (\\d+).*/, \"$1\"), \"\")",
+    "onError": "set-to-blank",
+    "newColumnName": "cabinet",
+    "columnInsertIndex": 21,
+    "description": "Create column cabinet at index 21 based on column storagefullname using expression grel:if(value.contains(\"Cabinet\"), value.replace(/.*?Cabinet (\\d+).*/, \"$1\"), \"\")"
   },
   {
     "op": "core/text-transform",
@@ -1234,6 +1273,7 @@
       "count",
       "site",
       "collection",
+      "cabinet",
       "shelf",
       "box",
       "datafile_remark",

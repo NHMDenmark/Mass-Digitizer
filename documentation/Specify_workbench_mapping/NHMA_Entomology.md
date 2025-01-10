@@ -260,6 +260,15 @@ Preparations ->
  #1 ->
 Count
 
+collection ->
+Preparations ->
+ #1 ->
+Storage ->
+Collection ->
+Name
+
+cabinet -> NOT MAPPED
+
 shelf -> NOT MAPPED
  
 box -> NOT MAPPED
