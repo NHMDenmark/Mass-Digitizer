@@ -4,7 +4,7 @@
 Post-processing is done in OpenRefine using a GREL script.
 
 The post-processing protocol can be found here:
-[Post-processing protocol](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/documentation/import_protocol_postProcessing.md#post-processing)
+[Post-processing protocol](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/documentation/postProcessing/import_protocol_postProcessing.md#post-processing)
 
 The newest version of the GREL script can be found here:
 [Post-processing script](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/OpenRefine/post_processing.json)
@@ -64,8 +64,8 @@ Below you will find information on the steps performed by the GREL script.
 
 	- Create column newspeciesflag at index 5 based on column taxonfullname using expression `grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value == 220), 'True', '')`
 
-	- Create column newsubspeciesflag at index 5 based on column taxonfullname using expression `grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==230), 'True', '')
-`
+	- Create column newsubspeciesflag at index 5 based on column taxonfullname using expression `grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==230), 'True', '')`
+	
 	- Create column newvarietyflag at index 5 based on column taxonfullname using expression `grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==240), 'True', '')`
 
 	- Create column newformaflag at index 5 based on column taxonfullname using expression `grel:if((cells['newtaxonflag'].value=='True').and(cells['rankid'].value==260), 'True', '')`
