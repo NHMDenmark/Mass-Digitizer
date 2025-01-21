@@ -12,7 +12,9 @@
   PURPOSE: The home screen or starting point of the application, where the user is asked to choose institution and log in.  
 """
 
-import PySimpleGUI as sg
+from PySide6.QtWidgets import QApplication, QMainWindow
+from PySide6.QtUiTools import QUiLoader
+from PySide6.QtCore import QFile
 
 # Internal dependencies
 import util
@@ -25,126 +27,89 @@ import specimen_data_entry as sde
 db = data_access.DataAccess(gs.databaseName)
 sp = specify_interface.SpecifyInterface()
 
-class HomeScreen():
+class HomeScreen(QMainWindow):
     # Get version number to set into the homeScreen welcome menu.
     version = util.getVersionNumber()
     
     util.logger.debug(f'Starting Mass Digitizer App version {version}')
-
     def __init__(self):
-        """
-        Constructor initializing GUI elements after fetching available institutions 
-        """
+        super(HomeScreen, self).__init__()
+        self.load_ui()
+        self.setup_connections()
 
-        self.institutions = util.convert_dbrow_list(db.getRowsOnFilters('institution',{'visible = ': 1}))
+    def load_ui(self):
+        loader = QUiLoader()
+        ui_file = QFile("ui/homescreen.ui")
+        ui_file.open(QFile.ReadOnly)
+        self.ui = loader.load(ui_file, self)
+        ui_file.close()
+
+    def setup_connections(self):
+        self.ui.lstSelectInstitution.currentIndexChanged.connect(self.on_institution_selected)
+        self.ui.lstSelectCollection.currentIndexChanged.connect(self.on_collection_selected)
+        self.ui.btnExit.clicked.connect(self.close)
+
+    def on_institution_selected(self):
+        self.selected_institution = self.ui.lstSelectInstitution.currentText()
+        institution = db.getRowsOnFilters('institution', {' name = ':'"%s"' % self.selected_institution}, 1)
+        self.institution_id = institution[0]['id']
+        self.institution_url = institution[0]['url']
+        gs.baseURL = self.institution_url
+        collections = util.convert_dbrow_list(db.getRowsOnFilters('collection', {' institutionid = ':'%s' % self.institution_id, 'visible = ': '1'}), True)
+        self.ui.lstSelectCollection.clear()
+        self.ui.lstSelectCollection.addItems(collections)
+        self.ui.colNext.setVisible(True)
+
+    def on_collection_selected(self):
+        username = self.ui.inpUsername.text()
+        password = self.ui.inpPassword.text()
         
-        header_font = ("Corbel, 17")
-        header = [sg.Text(f"DaSSCo Mass Digitizer App - Version {self.version}", size=(58,1), font=header_font, justification='left')]
+        if username and password:
+            # A username and password has been entered 
+            selected_collection = self.ui.lstSelectCollection.currentText()
 
-        separator_line = [sg.Text('_'  * 80)]
-
-        btn_exit = [sg.Button("Exit", key='btnExit')]
-
-        lblSelectInstitution = [sg.Text('Please choose your institution to proceed:')]
-        lstSelectInstitution = [sg.Combo(list(self.institutions), readonly=True, enable_events=True, key='institution')]
-
-        lblSelectCollection = [sg.Text('Choose a collection to log in:', key='lblSelectCollection')]
-        lstSelectCollection = [sg.Combo({'-select a collection-'}, key='lstSelectCollection', readonly=True, size=(28, 1), enable_events=True)]
-
-        col_main = [header, separator_line, lblSelectInstitution, lstSelectInstitution, ]
-
-        col_next = [[sg.Text('Enter your Specify username & password and then choose collection.')],
-                    [sg.Text('Specify username:')], 
-                    [sg.InputText(size=(24,1), background_color='white', text_color='black', key='inpUsername')],
-                    [sg.Text('Specify password:')], 
-                    [sg.InputText(size=(24,1), background_color='white', text_color='black', key='inpPassword', password_char='*')],
-                    lblSelectCollection, lstSelectCollection, 
-                    [sg.Text('Please fill in username/password!', text_color='red', visible=False, key='incomplete')], 
-                    [sg.Text('Authentication Error!', text_color='red', visible=False, key='autherror')], 
-                    [sg.Text('Please choose a collection!', text_color='red', visible=False, key='collerror')], ]
-
-        col_side = [btn_exit]
-
-        layout = [[[sg.Column(col_main, key='colMain', size=(580,128))]],
-                [[sg.Column(col_next, key='colNext', size=(512,212), visible=False)],
-                [sg.Column(col_side, key='colSide', size=(512,64))]], ]
-
-        self.window = sg.Window('Start', layout, size=(640, 400))
-
-        self.main()
-
-
-
-    def main(self):
-        """
-        Main loop of execution responding to user input 
-        """        
-
-        while True:
-            event, values = self.window.read()
+            collection = db.getRowsOnFilters('collection', {'name = ':'"%s"' % selected_collection, 'institutionid = ':'%s' % institution_id,})
             
-            if event == sg.WIN_CLOSED or event == 'Bye!':
-                break
-            
-            if event == 'institution':
-                selected_institution = values['institution']
-                institution = db.getRowsOnFilters('institution', {' name = ':'"%s"'%selected_institution},1)
-                institution_id = institution[0]['id']
-                institution_url = institution[0]['url']
-                gs.baseURL = institution_url
-                collections = util.convert_dbrow_list(db.getRowsOnFilters('collection', {' institutionid = ':'%s'%institution_id, 'visible = ': '1'}), True)
-                self.window['lstSelectCollection'].update(values=collections)
-                self.window['colNext'].update(visible=True)
+            if len(collection) > 0:
+                collection_id = collection[0]['id']
 
-            if event == 'lstSelectCollection':
-                username = values['inpUsername']
-                password = values['inpPassword']
-                
-                if username != '' and password != '':
-                    # A username and password has been entered 
-                    selected_collection = values['lstSelectCollection']
+                if collection_id > 0:
+                    gs.baseURL = self.institution_url
+                    gs.csrfToken = sp.specifyLogin(username, password, collection[0]['spid'])
 
-                    collection = db.getRowsOnFilters('collection', {'name = ':'"%s"'%selected_collection,'institutionid = ':'%s'%institution_id,})
-                    
-                    if len(collection) > 0:
-                        collection_id = collection[0]['id']
+                    if gs.csrfToken != '': # TODO Check token format for extra security 
+                        # Login was successfull
 
-                        if collection_id > 0:
-                            gs.baseURL = institution_url
-                            gs.csrfToken = sp.specifyLogin(username, password, collection[0]['spid'])
+                        gs.userName = username
+                        gs.collectionName = selected_collection
+                        gs.collection = coll.Collection(collection_id)
+                        gs.institutionId = self.institution_id
+                        gs.institutionName = self.selected_institution 
 
-                            if gs.csrfToken != '': # TODO Check token format for extra security 
-                                # Login was successfull
+                        # 1. Fetch SpecifyUser on username (/api/specify/specifyuser/?name=username)
+                        user = sp.getSpecifyObjects('specifyuser', filters={"name":f"{username}"})[0]
+                        gs.spUserId = user['id']
+                        # 2. Fetch Agent on specifyuser primary key (/api/specify/agent/?specifyuser=n)
+                        agent = sp.getSpecifyObjects('agent', filters={"specifyuser": gs.spUserId})[0]
+                        # 3. Store full name in global settings (as single, concatenated string of first, middle, last)
+                        gs.firstName = agent['firstname']
+                        gs.middleInitial = agent['middleinitial']
+                        gs.lastName = agent['lastname']
 
-                                gs.userName = username
-                                gs.collectionName = selected_collection
-                                gs.collection = coll.Collection(collection_id)
-                                gs.institutionId = institution_id
-                                gs.institutionName = selected_institution 
-
-                                # 1. Fetch SpecifyUser on username (/api/specify/specifyuser/?name=username)
-                                user = sp.getSpecifyObjects('specifyuser', filters={"name":f"{username}"})[0]
-                                gs.spUserId = user['id']
-                                # 2. Fetch Agent on specifyuser primary key (/api/specify/agent/?specifyuser=n)
-                                agent = sp.getSpecifyObjects('agent', filters={"specifyuser": gs.spUserId})[0]
-                                # 3. Store full name in global settings (as single, concatenated string of first, middle, last)
-                                gs.firstName = agent['firstname']
-                                gs.middleInitial = agent['middleinitial']
-                                gs.lastName = agent['lastname']
-
-                                self.window.close()
-                                
-                                sde.SpecimenDataEntry(collection_id)
-                            else:
-                                self.window['autherror'].Update(visible=True)
-                                self.window['lstSelectCollection'].update(set_to_index=0)
-                        else:
-                            self.window['collerror'].Update(visible=True)
+                        self.close()
+                        
+                        sde.SpecimenDataEntry(collection_id)
+                    else:
+                        self.ui.autherror.setVisible(True)
+                        self.ui.lstSelectCollection.setCurrentIndex(0)
                 else:
-                    self.window['incomplete'].Update(visible=True)
-                    self.window['lstSelectCollection'].update(set_to_index=0)
+                    self.ui.collerror.setVisible(True)
+        else:
+            self.ui.incomplete.setVisible(True)
+            self.ui.lstSelectCollection.setCurrentIndex(0)
 
-            if event == 'btnExit':
-                break
-            
-        self.window.close()
+if __name__ == "__main__":
+    app = QApplication([])
+    home_screen = HomeScreen()
+    home_screen.show()
+    app.exec()
