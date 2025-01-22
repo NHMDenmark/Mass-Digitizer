@@ -10,20 +10,53 @@
     <height>400</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>640</width>
+    <height>400</height>
+   </size>
+  </property>
   <property name="windowTitle">
-   <string>Start</string>
+   <string>DaSSCo Mass Digitizer</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget {
+    background-color: #BFD1DF;
+}
+QLineEdit {
+    background-color: white;
+    color: black;
+}</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="header">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>620</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="font">
       <font>
-       <family>Corbel</family>
-       <pointsize>17</pointsize>
+       <family>Bahnschrift</family>
+       <pointsize>20</pointsize>
       </font>
      </property>
      <property name="text">
-      <string>DaSSCo Mass Digitizer App - Version 1.0.0</string>
+      <string>DaSSCo Mass Digitizer App - Version 2.0.0</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignLeading</set>
@@ -42,6 +75,24 @@
    </item>
    <item>
     <widget class="QLabel" name="lblSelectInstitution">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>400</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Please choose your institution to proceed:</string>
      </property>
@@ -49,6 +100,12 @@
    </item>
    <item>
     <widget class="QComboBox" name="lstSelectInstitution">
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="editable">
       <bool>false</bool>
      </property>
@@ -56,16 +113,38 @@
    </item>
    <item>
     <widget class="QLabel" name="lblUsername">
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Specify username:</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QLineEdit" name="inpUsername"/>
+    <widget class="QLineEdit" name="inpUsername">
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="placeholderText">
+      <string>Username</string>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QLabel" name="lblPassword">
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Specify password:</string>
      </property>
@@ -73,24 +152,84 @@
    </item>
    <item>
     <widget class="QLineEdit" name="inpPassword">
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="echoMode">
       <enum>QLineEdit::EchoMode::Password</enum>
+     </property>
+     <property name="placeholderText">
+      <string>Password</string>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QLabel" name="lblSelectCollection">
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Choose a collection to log in:</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QComboBox" name="lstSelectCollection">
-     <property name="editable">
+    <widget class="QLabel" name="lblCollError">
+     <property name="visible">
       <bool>false</bool>
      </property>
+     <property name="styleSheet">
+      <string>color: red;</string>
+     </property>
+     <property name="text">
+      <string>Please choose a collection!</string>
+     </property>
     </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QComboBox" name="lstSelectCollection">
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="editable">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnLogin">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Login</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QLabel" name="lblIncomplete">
@@ -119,20 +258,19 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="lblCollError">
-     <property name="visible">
-      <bool>false</bool>
-     </property>
-     <property name="styleSheet">
-      <string>color: red;</string>
-     </property>
-     <property name="text">
-      <string>Please choose a collection!</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QPushButton" name="btnExit">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="locale">
       <locale language="English" country="Denmark"/>
      </property>
