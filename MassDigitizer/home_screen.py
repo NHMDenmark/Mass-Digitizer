@@ -53,6 +53,10 @@ class HomeScreen(QMainWindow):
         self.setWindowIcon(QIcon(imgPath))  # Update the path to icon file
         self.setWindowTitle("DaSSCo Mass Digitizer")
 
+        # Set version number
+        current_version = util.getVersionNumber()
+        self.ui.header.setText(f"DaSSCo Mass Digitizer App - Version {current_version}")
+
         # Preload the contents of lstSelectInstitution
         self.institutions = util.convert_dbrow_list(db.getRowsOnFilters('institution', {'visible = ': 1}))
         self.ui.lstSelectInstitution.addItem("-please select-")
