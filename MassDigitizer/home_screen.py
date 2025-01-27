@@ -26,7 +26,7 @@ import global_settings as gs
 import models.collection as coll
 import data_access
 import specify_interface
-import specimen_data_entry as sde
+import specimen_data_entry_ui as sde
 
 db = data_access.DataAccess(gs.databaseName)
 sp = specify_interface.SpecifyInterface()
@@ -135,7 +135,7 @@ class HomeScreen(QMainWindow):
 
                     self.close()
                     
-                    sde.SpecimenDataEntry(collection_id)
+                    sde.SpecimenDataEntryUI(collection_id)
                 else:
                     self.ui.lblAuthError.setVisible(True)
                     self.ui.lstSelectCollection.setCurrentIndex(0)

@@ -45,6 +45,9 @@
         background-color: white;
         color: black;
     }
+    QLineEdit:focus {
+    background-color: yellow; /* Background color when focused */
+    }
     QLabel {
         font-family: Bahnschrift;
         font-size: 13pt;
@@ -69,7 +72,7 @@
     }
     QPushButton {
         border: none;
-        padding: 10px 20px;
+        padding: 5px;
         text-align: center;
         text-decoration: none;
         font-size: 10pt;
@@ -91,6 +94,9 @@
         color: black;
         background-color:white
     }
+    QPushButton:focus {
+    border: 2px solid yellow; 
+    }
    QFrame#frmGreenArea {
        background-color: #E8F4EA;    
        border: 1px solid rgb(128, 128, 128);
@@ -101,7 +107,15 @@
        border: 1px solid rgb(128, 128, 128);
        padding: 10px;
    }
-    
+   QCheckBox:focus {
+    border: 2px solid yellow; 
+    }
+   QComboBox:focus {
+    border: 2px solid yellow; 
+    }
+   QRadioButton:focus {
+    border: 2px solid yellow; 
+    }
    </string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -554,6 +568,9 @@
           </item>
           <item row="2" column="1">
            <widget class="QLineEdit" name="inpContainerName">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="maximumSize">
              <size>
               <width>450</width>
@@ -792,7 +809,7 @@
           <property name="font">
            <font>
             <family>Arial</family>
-            <pointsize>12</pointsize>
+            <pointsize>10</pointsize>
            </font>
           </property>
           <property name="styleSheet">
@@ -805,6 +822,9 @@
               border: 1px solid grey;
               padding: 1px;
           }
+            QTableWidget::item {
+                height: 20px;
+            }
           </string>
           </property>
           <attribute name="horizontalHeaderDefaultSectionSize">
