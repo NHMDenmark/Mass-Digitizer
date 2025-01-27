@@ -22,7 +22,7 @@ import time
 import traceback
 
 # PySide6 imports
-from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView
+from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QLineEdit, QComboBox, QRadioButton, QCheckBox
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile
 from PySide6.QtGui import QFont, QIcon, QScreen
@@ -32,16 +32,18 @@ from pathlib import Path
 import util
 import data_access
 import global_settings as gs
-import autoSuggest_popup
 from models import specimen
 from models import model
 from models import recordset
 from models import collection as coll
 import specify_interface
 
-class SpecimenDataEntry(QMainWindow):
+class SpecimenDataEntryUI(QMainWindow):
+
     def __init__(self, collection_id):
-        super(SpecimenDataEntry, self).__init__()
+        """
+        """
+        super(SpecimenDataEntryUI, self).__init__()
 
         # Set class variables
         self.collection_id = collection_id
@@ -54,7 +56,64 @@ class SpecimenDataEntry(QMainWindow):
         self.setup_connections()
         self.setup(collection_id)
 
+        self.collectionId = collection_id  # Set collection Id
+        self.collection = coll.Collection(collection_id)
+        self.window = None  # Create class level instance of window object
+        self.db = data_access.DataAccess(gs.databaseName)  # Instantiate database access module
+        self.collobj = specimen.Specimen(collection_id)  # Create blank specimen record instance
+
+        # Create recordset of last 3 saved records for the initial preview table
+        self.recordSet = recordset.RecordSet(collection_id, 3,specimen_id=self.collobj.id) 
+
+         # Load data
+        self.load_comboboxes()
+        self.load_previous_records()
+
+
+    def load_comboboxes(self):
+        """
+        """
+        
+        self.ui.cbxPrepType.addItem('-please select-', -1)
+        for item in self.collobj.prepTypes:
+            self.ui.cbxPrepType.addItem(str(item[2]), item[0])
+        
+        self.ui.cbxTypeStatus.addItem('-please select-', -1)
+        for item in self.collobj.typeStatuses:
+            self.ui.cbxTypeStatus.addItem(str(item[2]), item[0])
+        
+        self.ui.cbxGeoRegion.addItem('-please select-', -1)
+        for item in self.collobj.geoRegions:
+            self.ui.cbxGeoRegion.addItem(str(item[1]), item[0])
+
+    def load_previous_records(self):
+        """
+        Load previous records into the table widget.
+        """
+        # Clear existing rows
+        self.ui.tblPrevious.setRowCount(0)
+
+        # Specify the columns to display by their headers
+        columns_to_display = ['id', 'catalognumber', 'taxonfullname', 'containertype', 'georegionname', 'storagename']
+
+        # Iterate over the records in the recordSet
+        for record in self.recordSet.records:
+            row_position = self.ui.tblPrevious.rowCount()
+            self.ui.tblPrevious.insertRow(row_position)
+
+            # Add only the specified columns to the table
+            for column_index, column_header in enumerate(columns_to_display):
+                value = record[column_header]  # Access the value using the column header
+                self.ui.tblPrevious.setItem(row_position, column_index, QTableWidgetItem(str(value)))
+
+        # Adjust row height and column width to fit contents
+        self.ui.tblPrevious.resizeRowsToContents()
+        self.ui.tblPrevious.resizeColumnsToContents()
+
     def load_ui(self):
+        """
+        """
+
         loader = QUiLoader()
         ui_file = QFile("ui/specimendataentry.ui")
         ui_file.open(QFile.ReadOnly)
@@ -80,14 +139,39 @@ class SpecimenDataEntry(QMainWindow):
         self.ui.tblPrevious.setColumnWidth(4, 200)  # Set width for georegionname column
         self.ui.tblPrevious.setColumnWidth(5, 200)  # Set width for storagename column
 
-
     def setup_connections(self):
+        """
+        """
+
+        # Connect signals to slots
+        for line_edit in self.findChildren(QLineEdit):
+            line_edit.returnPressed.connect(self.focusNextChild)
+
+        for combo_box in self.findChildren(QComboBox):
+            combo_box.currentIndexChanged.connect(self.focusNextChild)
+        
+        for radio_button in self.findChildren(QRadioButton):
+            radio_button.toggled.connect(self.on_containerTypeToggle)
+
+        # Explicitly set focus for checkboxes
+        self.ui.chkDamage.clicked.connect(lambda: self.ui.chkSpecimenObscured.setFocus())
+        self.ui.chkSpecimenObscured.clicked.connect(lambda: self.ui.chkLabelObscured.setFocus())
+        self.ui.chkLabelObscured.clicked.connect(lambda: self.ui.radRadioSSO.setFocus())
+
+        # Explicitly set focus for radio buttons
+        #self.ui.radRadioSSO.toggled.connect(lambda: self.ui.inpNotes.setFocus())
+        #self.ui.radRadioMOS.toggled.connect(lambda: self.ui.inpContainerName.setFocus())
+        #self.ui.radRadioMSO.toggled.connect(lambda: self.ui.inpContainerName.setFocus())
+        
         self.ui.btnSave.clicked.connect(self.on_save_clicked)
         self.ui.btnBack.clicked.connect(self.on_back_clicked)
         self.ui.btnForward.clicked.connect(self.on_forward_clicked)
         self.ui.btnClear.clicked.connect(self.on_clear_clicked)
 
     def setup(self, collection_id):
+        """
+        """
+
         util.logger.info('*** Specimen data entry setup ***')
 
         self.ui.txtUserName.setText(gs.userName)
@@ -103,10 +187,12 @@ class SpecimenDataEntry(QMainWindow):
         else:
             self.ui.lblTaxonNumber.setVisible(False)
             self.ui.inpTaxonNumber.setVisible(False)
-
+        
         self.updateRecordCount()
 
     def setControlEvents(self):
+        """
+        """
         self.ui.inpNotes.returnPressed.connect(self.on_notes_return_pressed)
         self.ui.inpContainerName.returnPressed.connect(self.on_container_name_return_pressed)
 
@@ -128,12 +214,28 @@ class SpecimenDataEntry(QMainWindow):
     def on_container_name_return_pressed(self):
         print("Container name return pressed")
 
+    def on_containerTypeToggle(self, checked):
+        """
+        """
+        sender = self.sender()
+        print(sender)
+        
+        if checked:
+            if sender == self.ui.radRadioSSO:
+                self.ui.inpContainerName.setText('')
+                self.ui.inpContainerName.setEnabled(False)
+            elif sender == self.ui.radRadioMOS or sender == self.ui.radRadioMSO:
+                self.ui.inpContainerName.setText('12345678')
+                self.ui.inpContainerName.setEnabled(True)
+
+            self.ui.inpNotes.setFocus()
+
     def updateRecordCount(self):
         print("Update record count")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    specimen_data_entry = SpecimenDataEntry(collection_id=11)
+    specimen_data_entry = SpecimenDataEntryUI(collection_id=11)
     
     specimen_data_entry.show()
 
