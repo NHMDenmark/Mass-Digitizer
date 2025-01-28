@@ -2,7 +2,7 @@
 
 """
 Created on Fri Jan 24 2025 11:12:00 
-@authors: Fedor Alexander Steeman NHMD;
+Author: Fedor Alexander Steeman NHMD;
 
 Copyright 2022 Natural History Museum of Denmark (NHMD)
 
@@ -32,10 +32,8 @@ import util
 import data_access
 import global_settings as gs
 from models import specimen
-from models import model
 from models import recordset
 from models import collection as coll
-import specify_interface
 
 class SpecimenDataEntryUI(QMainWindow):
 
@@ -73,6 +71,10 @@ class SpecimenDataEntryUI(QMainWindow):
         documents_path = QStandardPaths.writableLocation(QStandardPaths.DocumentsLocation)
         image_path = os.path.join(documents_path, "DaSSCo", "img", "Warning_LinkedRecord.png")
         self.ui.imgWarningLinkedRecord.setPixmap(QPixmap(image_path))
+
+        # Start up interface
+        self.show()
+        self.center_screen() 
 
     def load_comboboxes(self):
         """
@@ -255,17 +257,24 @@ class SpecimenDataEntryUI(QMainWindow):
     def updateRecordCount(self):
         print("Update record count")
 
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    specimen_data_entry = SpecimenDataEntryUI(collection_id=11)
-    
-    specimen_data_entry.show()
+    def center_screen(self):
+        # Get the existing QApplication instance
+        app = QApplication.instance()
 
-    # Center the window on the screen
-    screen = app.primaryScreen()
-    center = screen.availableGeometry().center()
-    geo = specimen_data_entry.frameGeometry()
-    geo.moveCenter(center)
-    specimen_data_entry.move(geo.topLeft())
-    
+        # Center the window on the screen
+        screen = app.primaryScreen()
+        center = screen.availableGeometry().center()
+        geo = self.frameGeometry()
+        geo.moveCenter(center)
+        self.move(geo.topLeft())
+
+def main():
+    app = QApplication(sys.argv)
+    collection_id = 11  # Replace with the actual collection_id you want to use
+    specimen_data_entry = SpecimenDataEntryUI(collection_id)
+    specimen_data_entry.show()
+    specimen_data_entry.center_screen()
     sys.exit(app.exec_())
+
+if __name__ == "__main__":
+    main()

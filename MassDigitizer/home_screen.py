@@ -13,6 +13,7 @@
 """
 
 from pathlib import Path
+import traceback
 
 # PySide6 imports
 from PySide6.QtWidgets import QApplication, QMainWindow
@@ -136,6 +137,7 @@ class HomeScreen(QMainWindow):
                     self.close()
                     
                     sde.SpecimenDataEntryUI(collection_id)
+
                 else:
                     self.ui.lblAuthError.setVisible(True)
                     self.ui.lstSelectCollection.setCurrentIndex(0)
