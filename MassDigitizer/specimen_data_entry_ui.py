@@ -72,6 +72,12 @@ class SpecimenDataEntryUI(QMainWindow):
         image_path = os.path.join(documents_path, "DaSSCo", "img", "Warning_LinkedRecord.png")
         self.ui.imgWarningLinkedRecord.setPixmap(QPixmap(image_path))
 
+        # Set metadata
+        self.ui.txtUserName.setText(gs.userName)
+        self.ui.txtCollection.setText(self.collection.name)
+        self.ui.txtInstitution.setText(gs.institutionName)
+        self.ui.txtVersionNr.setText(util.getVersionNumber())
+
         # Start up interface
         self.show()
         self.center_screen() 
