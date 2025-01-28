@@ -48,6 +48,10 @@
     QLineEdit:focus {
     background-color: yellow; /* Background color when focused */
     }
+    QLineEdit:disabled {
+        background-color: #E1E1E1;
+        border: 1px solid rgb(128, 128, 128);
+    }
     QLabel {
         font-family: Bahnschrift;
         font-size: 13pt;
@@ -71,7 +75,7 @@
         color: black;
     }
     QPushButton {
-        border: none;
+        border: 1px solid rgb(128, 128, 128);
         padding: 5px;
         text-align: center;
         text-decoration: none;
@@ -429,180 +433,200 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayoutBlueAreaLeft">
         <item>
-         <layout class="QFormLayout" name="formLayout_3">
-          <item row="0" column="0">
-           <widget class="QLabel" name="lblSpecimenFlags">
-            <property name="text">
-             <string>Specimen flags</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <item>
-             <widget class="QCheckBox" name="chkDamage">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>142</width>
-                <height>0</height>
-               </size>
-              </property>
+         <layout class="QHBoxLayout" name="horizontalLayoutWarning">
+          <item>
+           <layout class="QFormLayout" name="formLayoutInputFieldsBlue">
+            <item row="0" column="0">
+             <widget class="QLabel" name="lblSpecimenFlags">
               <property name="text">
-               <string>Damaged specimen</string>
+               <string>Specimen flags</string>
               </property>
              </widget>
             </item>
-            <item>
-             <widget class="QCheckBox" name="chkSpecimenObscured">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>141</width>
-                <height>0</height>
-               </size>
-              </property>
+            <item row="0" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <item>
+               <widget class="QCheckBox" name="chkDamage">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>142</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Damaged specimen</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="chkSpecimenObscured">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>141</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Specimen obscured</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="chkLabelObscured">
+                <property name="text">
+                 <string>Label obscured</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Orientation::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>100</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="lblContainerType">
               <property name="text">
-               <string>Specimen obscured</string>
+               <string>Container type</string>
               </property>
              </widget>
             </item>
-            <item>
-             <widget class="QCheckBox" name="chkLabelObscured">
+            <item row="2" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <item>
+               <widget class="QRadioButton" name="radRadioSSO">
+                <property name="text">
+                 <string>Single specimen object</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="radRadioMOS">
+                <property name="toolTip">
+                 <string>One specimen on multiple objects</string>
+                </property>
+                <property name="toolTipDuration">
+                 <number>3</number>
+                </property>
+                <property name="text">
+                 <string>Multi object specimen</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="radRadioMSO">
+                <property name="toolTip">
+                 <string>Multiple specimens on one object</string>
+                </property>
+                <property name="toolTipDuration">
+                 <number>3</number>
+                </property>
+                <property name="text">
+                 <string>Multi specimen object</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_3">
+                <property name="orientation">
+                 <enum>Qt::Orientation::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>500</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="lblContainerID">
               <property name="text">
-               <string>Label obscured</string>
+               <string>Container ID</string>
               </property>
              </widget>
             </item>
-            <item>
-             <spacer name="horizontalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
+            <item row="3" column="1">
+             <widget class="QLineEdit" name="inpContainerName">
+              <property name="enabled">
+               <bool>false</bool>
               </property>
-              <property name="sizeHint" stdset="0">
+              <property name="maximumSize">
                <size>
-                <width>100</width>
-                <height>20</height>
+                <width>380</width>
+                <height>4096</height>
                </size>
               </property>
-             </spacer>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="lblNotes">
+              <property name="text">
+               <string>Notes</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QLineEdit" name="inpNotes"/>
+            </item>
+            <item row="5" column="0">
+             <widget class="QLabel" name="lblBarcode">
+              <property name="text">
+               <string>Barcode:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="QLineEdit" name="inpCatalogNumber">
+              <property name="maximumSize">
+               <size>
+                <width>380</width>
+                <height>4096</height>
+               </size>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="lblContainerType">
+          <item>
+           <widget class="QLabel" name="imgWarningLinkedRecord">
+            <property name="locale">
+             <locale language="English" country="Denmark"/>
+            </property>
             <property name="text">
-             <string>Container type</string>
+             <string/>
             </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
-             <widget class="QRadioButton" name="radRadioSSO">
-              <property name="text">
-               <string>Single specimen object</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="radRadioMOS">
-              <property name="toolTip">
-               <string>One specimen on multiple objects</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>3</number>
-              </property>
-              <property name="text">
-               <string>Multi object specimen</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="radRadioMSO">
-              <property name="toolTip">
-               <string>Multiple specimens on one object</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>3</number>
-              </property>
-              <property name="text">
-               <string>Multi specimen object</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>500</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="lblContainerID">
-            <property name="text">
-             <string>Container ID</string>
+            <property name="pixmap">
+             <pixmap>img/Warning_LinkedRecord.png</pixmap>
             </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLineEdit" name="inpContainerName">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>450</width>
-              <height>4096</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="lblNotes">
-            <property name="text">
-             <string>Notes</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLineEdit" name="inpNotes"/>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="lblBarcode">
-            <property name="text">
-             <string>Barcode:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QLineEdit" name="inpCatalogNumber">
-            <property name="maximumSize">
-             <size>
-              <width>450</width>
-              <height>4096</height>
-             </size>
+            <property name="visible">
+            <bool>false</bool>
             </property>
            </widget>
           </item>

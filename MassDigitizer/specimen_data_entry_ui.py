@@ -17,15 +17,14 @@ software distributed under the License is distributed on an "AS IS" BASIS, WITHO
 either express or implied. See the License for the specific language governing permissions and limitations under the License.
 """
 
+import os
 import sys
-import time 
-import traceback
 
 # PySide6 imports
 from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QLineEdit, QComboBox, QRadioButton, QCheckBox
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtCore import QFile
-from PySide6.QtGui import QFont, QIcon, QScreen
+from PySide6.QtCore import QFile, QStandardPaths
+from PySide6.QtGui import QFont, QIcon, QPixmap
 from pathlib import Path
 
 # Internal dependencies
@@ -42,6 +41,7 @@ class SpecimenDataEntryUI(QMainWindow):
 
     def __init__(self, collection_id):
         """
+        Constructor for the SpecimenDataEntryUI class.
         """
         super(SpecimenDataEntryUI, self).__init__()
 
@@ -69,9 +69,14 @@ class SpecimenDataEntryUI(QMainWindow):
         self.load_comboboxes()
         self.load_previous_records()
 
+        # Set image resource
+        documents_path = QStandardPaths.writableLocation(QStandardPaths.DocumentsLocation)
+        image_path = os.path.join(documents_path, "DaSSCo", "img", "Warning_LinkedRecord.png")
+        self.ui.imgWarningLinkedRecord.setPixmap(QPixmap(image_path))
 
     def load_comboboxes(self):
         """
+        Load comboboxes with data from the database.
         """
         
         self.ui.cbxPrepType.addItem('-please select-', -1)
@@ -88,8 +93,9 @@ class SpecimenDataEntryUI(QMainWindow):
 
     def load_previous_records(self):
         """
-        Load previous records into the table widget.
+        Load previous records into the tblPrevious table widget.
         """
+
         # Clear existing rows
         self.ui.tblPrevious.setRowCount(0)
 
@@ -112,6 +118,7 @@ class SpecimenDataEntryUI(QMainWindow):
 
     def load_ui(self):
         """
+        Load the UI from the .ui file and customize selected widgets.
         """
 
         loader = QUiLoader()
@@ -141,6 +148,7 @@ class SpecimenDataEntryUI(QMainWindow):
 
     def setup_connections(self):
         """
+        Setup connections between signals and slots.
         """
 
         # Connect signals to slots
@@ -170,6 +178,7 @@ class SpecimenDataEntryUI(QMainWindow):
 
     def setup(self, collection_id):
         """
+        Setup the specimen data entry form.
         """
 
         util.logger.info('*** Specimen data entry setup ***')
@@ -192,9 +201,38 @@ class SpecimenDataEntryUI(QMainWindow):
 
     def setControlEvents(self):
         """
+        Set specific control events for the specimen data entry form.
         """
         self.ui.inpNotes.returnPressed.connect(self.on_notes_return_pressed)
         self.ui.inpContainerName.returnPressed.connect(self.on_container_name_return_pressed)
+
+    def on_containerTypeToggle(self, checked):
+        """
+        Set container type controls events.
+        """
+        sender = self.sender()
+        print(sender)
+        
+        if checked:
+            if sender == self.ui.radRadioSSO:
+                # A single specimen object does not require a container name
+                self.ui.inpContainerName.setText('')
+                self.ui.inpContainerName.setEnabled(False)
+                self.ui.imgWarningLinkedRecord.setVisible(False)
+            elif sender == self.ui.radRadioMOS or sender == self.ui.radRadioMSO:
+                # A multi specimen object requires a container name and a warning to the user
+                containerNumber = util.getRandomNumberString()
+                containerType = ''
+                if sender == self.ui.radRadioMOS:
+                    containerType = 'MOS'
+                elif sender == self.ui.radRadioMSO:
+                    containerType = 'MSO'
+                newContainerName = containerType + str(containerNumber)
+                self.ui.inpContainerName.setText(newContainerName)
+                self.ui.inpContainerName.setEnabled(True)
+                self.ui.imgWarningLinkedRecord.setVisible(True)
+
+            self.ui.inpNotes.setFocus()
 
     def on_save_clicked(self):
         print("Save button clicked")
@@ -213,22 +251,6 @@ class SpecimenDataEntryUI(QMainWindow):
 
     def on_container_name_return_pressed(self):
         print("Container name return pressed")
-
-    def on_containerTypeToggle(self, checked):
-        """
-        """
-        sender = self.sender()
-        print(sender)
-        
-        if checked:
-            if sender == self.ui.radRadioSSO:
-                self.ui.inpContainerName.setText('')
-                self.ui.inpContainerName.setEnabled(False)
-            elif sender == self.ui.radRadioMOS or sender == self.ui.radRadioMSO:
-                self.ui.inpContainerName.setText('12345678')
-                self.ui.inpContainerName.setEnabled(True)
-
-            self.ui.inpNotes.setFocus()
 
     def updateRecordCount(self):
         print("Update record count")
