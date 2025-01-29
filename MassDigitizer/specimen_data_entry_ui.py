@@ -19,9 +19,11 @@ either express or implied. See the License for the specific language governing p
 
 import os
 import sys
+import time
+import traceback
 
 # PySide6 imports
-from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QLineEdit, QComboBox, QRadioButton, QCheckBox
+from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QLineEdit, QComboBox, QRadioButton, QCheckBox, QMessageBox
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, QStandardPaths
 from PySide6.QtGui import QFont, QIcon, QPixmap
@@ -41,18 +43,31 @@ class SpecimenDataEntryUI(QMainWindow):
         """
         Constructor for the SpecimenDataEntryUI class.
         """
+        print("Initializing SpecimenDataEntryUI")
         super(SpecimenDataEntryUI, self).__init__()
 
         # Set class variables
         self.collection_id = collection_id
         self.collection = coll.Collection(collection_id)
+        self.MSOterm = 'Multiple specimens on one object'
+        self.MOSterm = 'One specimen on multiple objects'
         self.db = data_access.DataAccess(gs.databaseName)  # Instantiate database access module
         self.collobj = specimen.Specimen(collection_id)  # Create blank specimen record instance
 
+        # Input field lists defining: Tabbing order, focus indicator, what fields to be cleared, and what fields are not 'sticky' i.e. not carrying their value over to the next record after saving current one 
+        #self.inputFieldList  = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured', 'radRadioSSO', 'radRadioMSO', 'radRadioMOS', 'inpContainerName', 'inpNotes', 'inpCatalogNumber', 'btnSave']
+        #self.focusIconList   = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrGeoRegion', 'inrTaxonName', 'inrTaxonNumber', 'inrDamage', 'inrSpecimenObscured', 'inrLabelObscured', 'inrRadioSSO', 'inrRadioMSO', 'inrRadioMOS', 'inrContainerName', 'inrNotes', 'inrCatalogNumber', 'inrSave']
+        self.clearingList    = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured','inpContainerName', 'inpCatalogNumber','txtRecordID', 'txtStorageFullname', 'inpNotes']
+        self.nonStickyFields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured', 'inpNotes']
+        self.sessionMode     = 'Default'
+        
         # Load UI and setup connections
+        print("Loading UI")
         self.load_ui()
-        self.setup_connections()
-        self.setup(collection_id)
+        print("Setting control events")
+        self.setControlEvents()
+        print("Setting up form")
+        self.setup_form(collection_id)
 
         self.collectionId = collection_id  # Set collection Id
         self.collection = coll.Collection(collection_id)
@@ -61,31 +76,40 @@ class SpecimenDataEntryUI(QMainWindow):
         self.collobj = specimen.Specimen(collection_id)  # Create blank specimen record instance
 
         # Create recordset of last 3 saved records for the initial preview table
+        self.tableHeaders = ['id', 'catalognumber', 'taxonfullname', 'containertype', 'georegionname','storagename'] 
+        print("Creating recordset")
         self.recordSet = recordset.RecordSet(collection_id, 3,specimen_id=self.collobj.id) 
 
          # Load data
+        print("Loading comboboxes")
         self.load_comboboxes()
+        print("Loading previous records")
         self.load_previous_records()
 
         # Set image resource
+        print("Setting image resource")
         documents_path = QStandardPaths.writableLocation(QStandardPaths.DocumentsLocation)
         image_path = os.path.join(documents_path, "DaSSCo", "img", "Warning_LinkedRecord.png")
         self.ui.imgWarningLinkedRecord.setPixmap(QPixmap(image_path))
 
         # Set metadata
         self.ui.txtUserName.setText(gs.userName)
-        self.ui.txtCollection.setText(self.collection.name)
+        self.ui.txtCollection.setText(self.collection.name)     
         self.ui.txtInstitution.setText(gs.institutionName)
         self.ui.txtVersionNr.setText(util.getVersionNumber())
 
         # Start up interface
+        print("Starting up interface")
         self.show()
         self.center_screen() 
+        
+        print("Initialization complete")
 
     def load_comboboxes(self):
         """
         Load comboboxes with data from the database.
         """
+        print("Loading comboboxes")
         
         self.ui.cbxPrepType.addItem('-please select-', -1)
         for item in self.collobj.prepTypes:
@@ -99,16 +123,16 @@ class SpecimenDataEntryUI(QMainWindow):
         for item in self.collobj.geoRegions:
             self.ui.cbxGeoRegion.addItem(str(item[1]), item[0])
 
+        print("Comboboxes loaded")
+
     def load_previous_records(self):
         """
         Load previous records into the tblPrevious table widget.
         """
+        print("Loading previous records")
 
         # Clear existing rows
         self.ui.tblPrevious.setRowCount(0)
-
-        # Specify the columns to display by their headers
-        columns_to_display = ['id', 'catalognumber', 'taxonfullname', 'containertype', 'georegionname', 'storagename']
 
         # Iterate over the records in the recordSet
         for record in self.recordSet.records:
@@ -116,7 +140,7 @@ class SpecimenDataEntryUI(QMainWindow):
             self.ui.tblPrevious.insertRow(row_position)
 
             # Add only the specified columns to the table
-            for column_index, column_header in enumerate(columns_to_display):
+            for column_index, column_header in enumerate(self.tableHeaders):
                 value = record[column_header]  # Access the value using the column header
                 self.ui.tblPrevious.setItem(row_position, column_index, QTableWidgetItem(str(value)))
 
@@ -124,11 +148,13 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.tblPrevious.resizeRowsToContents()
         self.ui.tblPrevious.resizeColumnsToContents()
 
+        print("Previous records loaded")
+
     def load_ui(self):
         """
         Load the UI from the .ui file and customize selected widgets.
         """
-
+        print("Loading UI")
         loader = QUiLoader()
         ui_file = QFile("ui/specimendataentry.ui")
         ui_file.open(QFile.ReadOnly)
@@ -154,41 +180,13 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.tblPrevious.setColumnWidth(4, 200)  # Set width for georegionname column
         self.ui.tblPrevious.setColumnWidth(5, 200)  # Set width for storagename column
 
-    def setup_connections(self):
-        """
-        Setup connections between signals and slots.
-        """
+        print("UI loaded")
 
-        # Connect signals to slots
-        for line_edit in self.findChildren(QLineEdit):
-            line_edit.returnPressed.connect(self.focusNextChild)
-
-        for combo_box in self.findChildren(QComboBox):
-            combo_box.currentIndexChanged.connect(self.focusNextChild)
-        
-        for radio_button in self.findChildren(QRadioButton):
-            radio_button.toggled.connect(self.on_containerTypeToggle)
-
-        # Explicitly set focus for checkboxes
-        self.ui.chkDamage.clicked.connect(lambda: self.ui.chkSpecimenObscured.setFocus())
-        self.ui.chkSpecimenObscured.clicked.connect(lambda: self.ui.chkLabelObscured.setFocus())
-        self.ui.chkLabelObscured.clicked.connect(lambda: self.ui.radRadioSSO.setFocus())
-
-        # Explicitly set focus for radio buttons
-        #self.ui.radRadioSSO.toggled.connect(lambda: self.ui.inpNotes.setFocus())
-        #self.ui.radRadioMOS.toggled.connect(lambda: self.ui.inpContainerName.setFocus())
-        #self.ui.radRadioMSO.toggled.connect(lambda: self.ui.inpContainerName.setFocus())
-        
-        self.ui.btnSave.clicked.connect(self.on_save_clicked)
-        self.ui.btnBack.clicked.connect(self.on_back_clicked)
-        self.ui.btnForward.clicked.connect(self.on_forward_clicked)
-        self.ui.btnClear.clicked.connect(self.on_clear_clicked)
-
-    def setup(self, collection_id):
+    def setup_form(self, collection_id):
         """
         Setup the specimen data entry form.
         """
-
+        print("Setting up form")
         util.logger.info('*** Specimen data entry setup ***')
 
         self.ui.txtUserName.setText(gs.userName)
@@ -207,43 +205,114 @@ class SpecimenDataEntryUI(QMainWindow):
         
         self.updateRecordCount()
 
+        print("Form setup complete")
+
     def setControlEvents(self):
         """
         Set specific control events for the specimen data entry form.
+        To ensure rapid form flow, each input field's edit event forwards focus to the next field on the form. 
+        Upon each edit, the internal state of the collection object data needs to be updated immediately.
+        Buttons for saving and navigations are connected to specific functions.
         """
-        self.ui.inpNotes.returnPressed.connect(self.on_notes_return_pressed)
-        self.ui.inpContainerName.returnPressed.connect(self.on_container_name_return_pressed)
+        print("Setting control events")
 
+        # Ensure next input receives focus upon edit 
+        for line_edit in self.findChildren(QLineEdit): 
+            line_edit.returnPressed.connect(self.focusNextChild)
+
+        for combo_box in self.findChildren(QComboBox):
+            combo_box.currentIndexChanged.connect(self.focusNextChild)
+        
+        for radio_button in self.findChildren(QRadioButton):
+            radio_button.toggled.connect(self.on_containerTypeToggle)
+
+        # Connect input field signals to data update functions
+        self.ui.cbxPrepType.currentIndexChanged.connect(self.on_cbxPrepType_currentIndexChanged)
+        self.ui.cbxTypeStatus.currentIndexChanged.connect(self.on_cbxTypeStatus_currentIndexChanged)
+        self.ui.cbxGeoRegion.currentIndexChanged.connect(self.on_cbxGeoRegion_currentIndexChanged)
+        self.ui.chkDamage.clicked.connect(self.on_chkDamage_clicked)
+        self.ui.chkSpecimenObscured.clicked.connect(self.on_chkSpecimenObscured_clicked)
+        self.ui.chkLabelObscured.clicked.connect(self.on_chkLabelObscured_clicked)
+        self.ui.radRadioSSO.toggled.connect(self.on_containerTypeToggle)
+        self.ui.radRadioMOS.toggled.connect(self.on_containerTypeToggle)
+        self.ui.radRadioMSO.toggled.connect(self.on_containerTypeToggle)
+        self.ui.inpContainerName.returnPressed.connect(self.on_container_name_return_pressed)
+        self.ui.inpNotes.returnPressed.connect(self.on_notes_return_pressed)
+        self.ui.inpCatalogNumber.returnPressed.connect(self.on_catalog_number_return_pressed)
+        
+        # Connect buttons to specific action functions
+        self.ui.btnSave.clicked.connect(self.on_save_clicked)
+        self.ui.btnBack.clicked.connect(self.on_back_clicked)
+        self.ui.btnForward.clicked.connect(self.on_forward_clicked)
+        self.ui.btnClear.clicked.connect(self.clearForm)
+
+        print("Control events set")
+
+    def on_save_clicked(self): self.saveForm()
+
+    def on_cbxPrepType_currentIndexChanged(self): self.collobj.setPrepTypeFields(self.ui.cbxPrepType.currentIndex() - 1)
+
+    def on_cbxTypeStatus_currentIndexChanged(self): self.collobj.setTypeStatusFields(self.ui.cbxTypeStatus.currentIndex() - 1)
+
+    def on_cbxGeoRegion_currentIndexChanged(self): self.collobj.setGeoRegionFields(self.ui.cbxGeoRegion.currentIndex() - 1)
+
+    def on_chkDamage_clicked(self): 
+        needsrepair = self.ui.chkDamage.isChecked()
+        if needsrepair: 
+            self.collobj.objectCondition = "Needs repair"
+        else: 
+            self.collobj.objectCondition = ""
+        self.ui.chkSpecimenObscured.setFocus()
+        
+    def on_chkSpecimenObscured_clicked(self):
+        self.collobj.specimenObscured = self.ui.chkSpecimenObscured.isChecked()
+        self.ui.chkLabelObscured.setFocus()
+
+    def on_chkLabelObscured_clicked(self):
+        self.collobj.labelObscured = self.ui.chkSpecimenObscured.isChecked()  
+        self.ui.radRadioSSO.setFocus()
+        
     def on_containerTypeToggle(self, checked):
         """
-        Set container type controls events.
+        Set container type controls events: 
+            - Multi objects require a randomized container id prefixed with type. 
+              And a user Warning needs to displayed. 
+            - A single specimen object does not need a container id
+            - Save changes to collection object for saving record data 
         """
-        sender = self.sender()
-        print(sender)
         
         if checked:
-            if sender == self.ui.radRadioSSO:
+            if self.sender() == self.ui.radRadioSSO:
                 # A single specimen object does not require a container name
                 self.ui.inpContainerName.setText('')
                 self.ui.inpContainerName.setEnabled(False)
                 self.ui.imgWarningLinkedRecord.setVisible(False)
-            elif sender == self.ui.radRadioMOS or sender == self.ui.radRadioMSO:
+                self.collobj.containername = ''
+                self.collobj.containertype = ''
+            elif self.sender() == self.ui.radRadioMOS or self.sender() == self.ui.radRadioMSO:
                 # A multi specimen object requires a container name and a warning to the user
                 containerNumber = util.getRandomNumberString()
                 containerType = ''
-                if sender == self.ui.radRadioMOS:
+                if self.sender() == self.ui.radRadioMOS:
                     containerType = 'MOS'
-                elif sender == self.ui.radRadioMSO:
+                    self.collobj.containertype = self.MOSterm
+                elif self.sender() == self.ui.radRadioMSO:
                     containerType = 'MSO'
+                    self.collobj.containertype = self.MSOterm
                 newContainerName = containerType + str(containerNumber)
+                self.collobj.containername = newContainerName
+
                 self.ui.inpContainerName.setText(newContainerName)
                 self.ui.inpContainerName.setEnabled(True)
                 self.ui.imgWarningLinkedRecord.setVisible(True)
 
             self.ui.inpNotes.setFocus()
+    
+    def on_container_name_return_pressed(self):self.collobj.containername = self.ui.inpContainerName.text()
 
-    def on_save_clicked(self):
-        print("Save button clicked")
+    def on_notes_return_pressed(self): self.collobj.notes = self.ui.inpNotes.text()
+
+    def on_catalog_number_return_pressed(self): self.collobj.catalogNumber = self.ui.inpCatalogNumber.text()
 
     def on_back_clicked(self):
         print("Back button clicked")
@@ -251,17 +320,221 @@ class SpecimenDataEntryUI(QMainWindow):
     def on_forward_clicked(self):
         print("Forward button clicked")
 
-    def on_clear_clicked(self):
-        print("Clear button clicked")
-
-    def on_notes_return_pressed(self):
-        print("Notes return pressed")
-
-    def on_container_name_return_pressed(self):
-        print("Container name return pressed")
-
     def updateRecordCount(self):
-        print("Update record count")
+        """
+        Simple method for retrieving and displaying record count
+        """
+        # Update record number counter 
+        specimenCount = len(self.db.getRows('specimen', limit=9999))
+        self.ui.txtNumberCounter.setText(str(specimenCount))
+
+    def saveForm(self):
+        """
+        Saving specimen data to database including validation of form input fields.
+        The contents of the form input fields should have been immediately been transferred to the fields of the specimen object instance.
+        A final validation and transfer of selected input fields is still performed to ensure data integrity.
+        """
+        print("Saving form")
+
+        try:
+            # Prepare for saving (new) record 
+            result = ''
+            newRecord = self.collobj.id == 0
+
+            # Run validations 
+            validated = self.validateBarCodeDigits(self.collobj.catalogNumber) and self.validateBarCodeLength(self.collobj.catalogNumber)
+
+            if validated:
+                # All checks out; Save specimen
+                savedRecord = self.collobj.save()
+                # Remember id of record just save and prepare for blank record
+                previousRecordId = savedRecord['id']  # Id to be used for refreshing the previous rows table.
+
+                # Refresh adjacent record set
+                self.recordSet.reload(savedRecord)
+
+                self.recordSet.getAdjacentRecordList(self.tableHeaders)
+                self.load_previous_records()
+
+                result = "Successfully saved specimen record."
+
+                util.logger.info(f'{result} : {previousRecordId} - {savedRecord}')
+
+                # If so, prepare for new blank record
+                if newRecord:
+                    # Create a new, blank specimen record (id pre-set to 0)
+                    self.collobj = specimen.Specimen(self.collectionId)                    
+
+                    # Transfer data in sticky fields to new record:
+                    #self.setSpecimenFields() # TODO Maybe defunct
+
+                    # Prepare form for next new record
+                    self.clearNonStickyFields()
+            else:
+                result = 'validation error'
+
+        except Exception as e:
+            errorMessage = f"Error occurred attempting to save specimen: {e}"
+            traceBack = traceback.format_exc()
+            util.logger.error(errorMessage)
+            self.show_error_popup(f'{e} \n\n {traceBack}', title='Error handle storage input')
+            result = errorMessage
+
+        self.ui.inpCatalogNumber.setFocus()
+
+        self.updateRecordCount()
+
+        util.logger.info(f'{result}')
+                         
+        return result
+    
+    def clearNonStickyFields(self):
+        """
+        Function for clearing all fields that are non-sticky
+        """        
+        print("Clearing non-sticky fields")
+        self.clearForm(self.nonStickyFields)
+
+    def clearForm(self, fieldList=None):
+        """
+        Function for clearing all fields listed in clearing list and setting up for a blank record
+        """
+        print("Clearing form")
+        
+        if not fieldList: fieldList = self.clearingList
+
+        # Clear fields defined in clearing list
+        for key in self.clearingList:
+            textfield = self.ui.findChild(QLineEdit, key)
+            if textfield: textfield.setText('')
+            listfield = self.ui.findChild(QComboBox, key)
+            if listfield: listfield.setCurrentIndex(0)
+            checkfield = self.ui.findChild(QCheckBox, key)
+            if checkfield: checkfield.setChecked(False)
+        
+        # Reset container type radio buttons  
+        self.ui.radRadioSSO.setChecked(True)
+        self.ui.radRadioMOS.setChecked(False) 
+        self.ui.radRadioMSO.setChecked(False)
+
+        # Set blank record
+        self.collobj = specimen.Specimen(self.collectionId)
+
+        # Storage location is set to "None" to represent a blank entry in the UI
+        self.ui.inpStorage.setText('None')
+
+        # Reset focus on the storage field
+        self.ui.chkSpecimenObscured.setFocus()      
+
+        print("Form cleared")
+
+    def setSpecimenFields(self, stickyFieldsOnly=True):
+        """
+        Method for synchronizing specimen data object instance (Model) with form input fields (View).
+        CONTRACT
+            stickyFieldsOnly (Boolean) : Indication of only sticky fields should be synchronized usually in case of a new blank record
+        """
+
+        # Set specimen object instance fields from input form
+        self.collobj.setStorageFieldsFromRecord(self.getStorageRecord())
+        self.collobj.setPrepTypeFields(self.ui.cbxPrepType.currentIndex())
+        self.collobj.setTypeStatusFields(self.ui.cbxTypeStatus.currentIndex())
+        self.collobj.notes = self.ui.inpNotes.text()
+        self.collobj.containername = self.ui.inpContainerName.text()
+        self.collobj.containertype = self.getContainerTypeFromInput()
+        self.collobj.setGeoRegionFields(self.ui.cbxGeoRegion.currentIndex())
+        taxonFullName = self.ui.inpTaxonName.text()
+        taxonFullName = taxonFullName.rstrip()
+        if self.collection.useTaxonNumbers:
+            self.collobj.taxonNumber = self.ui.inpTaxonNumber.text()
+        self.collobj.setTaxonNameFields(self.getTaxonNameRecord(taxonFullName))
+
+    def getContainerTypeFromInput(self):
+        """
+        Get container type based on what radio button was selected
+        """
+        containerType = '' # 'Single Specimen Object'
+
+        if self.ui.radRadioMSO.isChecked():
+            containerType = self.MSOterm
+        elif self.ui.radRadioMOS.isChecked():
+            containerType = self.MOSterm
+
+        return containerType
+
+    def getTaxonNameRecord(self, taxonFullName):
+        """
+        Retrieve taxon name record based on taxon name input field contents.
+        Search is to be done on taxon fullname and taxon tree definition derived from collection.
+        """
+        # taxonRecords = self.db.getRowsOnFilters('taxonname', {'fullname': f'="{taxonFullName}"',
+        #                                                       'treedefid': f'={self.collection.taxonTreeDefId}'}, 1)
+        sql = f"SELECT * FROM taxonname WHERE fullname = '{taxonFullName}' AND treedefid = {self.collection.taxonTreeDefId} LIMIT 1;"
+        taxonRecords = self.db.executeSqlStatement(sql)
+        if len(taxonRecords) > 0:
+            taxonRecord = taxonRecords[0]
+        else:
+            taxonRecord = None
+        return taxonRecord
+
+    def fillFormFields(self, record):
+        """
+        Function for setting form fields from specimen data record
+        """
+        self.ui.txtRecordID.setText('{}'.format(record['id']))
+        self.ui.inpStorage.setText(self.displayStorage(record['storagename']))
+        self.ui.txtStorageFullname.setText(record['storagefullname'])
+        self.ui.cbxPrepType.setCurrentText(record['preptypename'])
+        self.ui.cbxTypeStatus.setCurrentText(record['typestatusname'])
+
+        if record['objectcondition'] == 'Needs repair':
+            self.ui.chkDamage.setChecked(True)
+        else:
+            self.ui.chkDamage.setChecked(False)
+        self.ui.chkSpecimenObscured.setChecked(record['specimenobscured'])
+        self.ui.chkLabelObscured.setChecked(record['labelobscured'])
+
+        self.ui.inpNotes.setText(record['notes'])
+
+        if record['containername'] is not None:  # If not strip() is applied to none
+            self.ui.inpContainerName.setText(record['containername'].strip())
+
+        self.setContainerFields(record)
+
+        self.ui.cbxGeoRegion.setCurrentText(record['georegionname'])
+        self.ui.inpTaxonName.setText(record['taxonfullname'])
+        if self.collection.useTaxonNumbers:
+            self.ui.inpTaxonNumber.setText(record['taxonnumber'])
+        self.ui.inpCatalogNumber.setText(record['catalognumber'])
+    
+    def validateBarCodeLength(self, barcode):
+        # Ensure that the barcode has the correct length according to collection.
+        validation = None
+        
+        if len(barcode) == self.collection.catalogNrLength:
+            validation = True
+        else:
+            validation = False 
+            self.validationFeedback('Validation error: Barcode wrong length!')
+
+        return validation
+
+    def validateBarCodeDigits(self, catalogNumber):
+        # Validates if barcode is digits
+        validation = None
+        
+        if catalogNumber.isdigit():
+            validation = True
+        else:
+            validation = False
+            self.validationFeedback("Barcode/catalog number contains non numeric symbols.")
+        
+        return validation 
+
+    def validationFeedback(self, validationMessage):
+        """Gives a validation feedback message to the user"""
+        util.logger.error(validationMessage)
+        self.show_error_popup(validationMessage)
 
     def center_screen(self):
         # Get the existing QApplication instance
@@ -273,6 +546,15 @@ class SpecimenDataEntryUI(QMainWindow):
         geo = self.frameGeometry()
         geo.moveCenter(center)
         self.move(geo.topLeft())
+        pass
+
+    def show_error_popup(self, error_message, title='Error'):
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Critical)
+        msg_box.setWindowTitle(title)
+        msg_box.setText(error_message)
+        msg_box.setStandardButtons(QMessageBox.Ok)
+        msg_box.exec()
 
 def main():
     app = QApplication(sys.argv)
