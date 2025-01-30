@@ -307,7 +307,14 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="inpStorage"/>
+           <widget class="QLineEdit" name="inpStorage">
+            <property name="minimumSize">
+             <size>
+              <width>550</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="lblPreparation">
@@ -332,7 +339,7 @@
           <item row="3" column="0">
            <widget class="QLabel" name="lblGeoRegion">
             <property name="text">
-             <string>Broad geographic region:</string>
+             <string>Geographic region:</string>
             </property>
            </widget>
           </item>
@@ -383,11 +390,11 @@
            <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Policy::Fixed</enum>
+           <enum>QSizePolicy::Policy::Expanding</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>500</width>
+            <width>200</width>
             <height>20</height>
            </size>
           </property>
@@ -620,6 +627,9 @@
           </item>
           <item>
            <widget class="QLabel" name="imgWarningLinkedRecord">
+            <property name="visible">
+             <bool>false</bool>
+            </property>
             <property name="locale">
              <locale language="English" country="Denmark"/>
             </property>
@@ -628,9 +638,6 @@
             </property>
             <property name="pixmap">
              <pixmap>img/Warning_LinkedRecord.png</pixmap>
-            </property>
-            <property name="visible">
-            <bool>false</bool>
             </property>
            </widget>
           </item>
