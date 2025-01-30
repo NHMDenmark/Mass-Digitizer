@@ -16,7 +16,7 @@ from pathlib import Path
 import traceback
 
 # PySide6 imports
-from PySide6.QtWidgets import QApplication, QMainWindow
+from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PySide6.QtGui import QIcon
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile
@@ -59,7 +59,7 @@ class HomeScreen(QMainWindow):
         self.ui.header.setText(f"DaSSCo Mass Digitizer App - Version {current_version}")
 
         # Preload the contents of lstSelectInstitution
-        self.institutions = util.convert_dbrow_list(db.getRowsOnFilters('institution', {'visible = ': 1}))
+        self.institutions = util.convert_dbrow_list(db.getRowsOnFilters('institution', {'visible = ': 1})) or ["-please select-"]
         self.ui.lstSelectInstitution.addItem("-please select-")
         self.ui.lstSelectInstitution.addItems(self.institutions)
         self.ui.lstSelectInstitution.setCurrentIndex(0)
@@ -79,11 +79,11 @@ class HomeScreen(QMainWindow):
                 return
 
             util.logger.debug(f'Selected institution: {self.selected_institution}')
-            institution = db.getRowsOnFilters('institution', {' name = ':'"%s"' % self.selected_institution}, 1)
+            institution = db.getRowsOnFilters('institution', {' name = ':f'"{self.selected_institution}"'}, 1)
             self.institution_id = institution[0]['id']
             self.institution_url = institution[0]['url']
             gs.baseURL = self.institution_url
-            collections = util.convert_dbrow_list(db.getRowsOnFilters('collection', {' institutionid = ':'%s' % self.institution_id, 'visible = ': '1'}), True)
+            collections = util.convert_dbrow_list(db.getRowsOnFilters('collection', {' institutionid = ':f'{self.institution_id}', 'visible = ': '1'}), True)
             self.ui.lstSelectCollection.clear()
             self.ui.lstSelectCollection.addItems(collections)
         except Exception as e:
@@ -102,49 +102,76 @@ class HomeScreen(QMainWindow):
         password = self.ui.inpPassword.text()
         
         if not username or not password:
-            self.ui.lblAuthError.setVisible(True)
+            self.ui.lblIncomplete.setVisible(True)
             return
 
         selected_collection = self.ui.lstSelectCollection.currentText()
-        collection = db.getRowsOnFilters('collection', {'name = ':'"%s"' % selected_collection, 'institutionid = ':'%s' % self.institution_id,})
+        collection = db.getRowsOnFilters('collection', {'name = ':f'"{selected_collection}"' , 'institutionid = ':f'{self.institution_id}',})
         
-        if len(collection) > 0:
+        if collection and collection[0]['id'] > 0:
             collection_id = collection[0]['id']
+            gs.baseURL = self.institution_url
+            gs.csrfToken = sp.specifyLogin(username, password, collection[0]['spid'])
 
-            if collection_id > 0:
-                gs.baseURL = self.institution_url
-                gs.csrfToken = sp.specifyLogin(username, password, collection[0]['spid'])
+            if gs.csrfToken != '': # TODO Check token format for extra security 
+                # Login was successful
 
-                if gs.csrfToken != '': # TODO Check token format for extra security 
-                    # Login was successful
+                gs.userName = username
+                gs.collectionName = selected_collection
+                gs.collection = coll.Collection(collection_id)
+                gs.institutionId = self.institution_id
+                gs.institutionName = self.selected_institution 
 
-                    gs.userName = username
-                    gs.collectionName = selected_collection
-                    gs.collection = coll.Collection(collection_id)
-                    gs.institutionId = self.institution_id
-                    gs.institutionName = self.selected_institution 
+                # 1. Fetch SpecifyUser on username (/api/specify/specifyuser/?name=username)
+                users = sp.getSpecifyObjects('specifyuser', filters={"name": username})
+                if not users:
+                    self.show_error_message("User not found in Specify database.")
+                    return
+                user = users[0]
+                gs.spUserId = user['id']
 
-                    # 1. Fetch SpecifyUser on username (/api/specify/specifyuser/?name=username)
-                    user = sp.getSpecifyObjects('specifyuser', filters={"name":f"{username}"})[0]
-                    gs.spUserId = user['id']
-                    # 2. Fetch Agent on specifyuser primary key (/api/specify/agent/?specifyuser=n)
-                    agent = sp.getSpecifyObjects('agent', filters={"specifyuser": gs.spUserId})[0]
-                    # 3. Store full name in global settings (as single, concatenated string of first, middle, last)
-                    gs.firstName = agent['firstname']
-                    gs.middleInitial = agent['middleinitial']
-                    gs.lastName = agent['lastname']
+                # 2. Fetch Agent on specifyuser primary key (/api/specify/agent/?specifyuser=n)
+                agents = sp.getSpecifyObjects('agent', filters={"specifyuser": gs.spUserId})
+                if not agents:
+                    self.show_error_message("Agent details not found for the user.")
+                    return
+                agent = agents[0]
 
-                    self.close()
-                    
-                    sde.SpecimenDataEntryUI(collection_id)
+                # 3. Store full name in global settings (as single, concatenated string of first, middle, last)
+                gs.firstName = agent['firstname']
+                gs.middleInitial = agent['middleinitial']
+                gs.lastName = agent['lastname']
+
+                self.hide()
+                
+                try:
+                    util.logger.info("Login successful, launching SpecimenDataEntryUI")
+                    self.specimen_ui = sde.SpecimenDataEntryUI(collection_id)
+                    self.specimen_ui.show()
+                except Exception as e:
+                    util.logger.error(f"Failed to load SpecimenDataEntryUI: {e}")
+                    self.show()
+                    self.show_error_message(e)
 
                 else:
                     self.ui.lblAuthError.setVisible(True)
-                    self.ui.lstSelectCollection.setCurrentIndex(0)
             else:
                 self.ui.lblCollError.setVisible(True)
         else:
             self.ui.lblCollError.setVisible(True)
+        
+    def show_error_message(self, message):
+            # Log full traceback
+            util.logger.error(f"An unexpected error occurred: {message}\n{traceback.format_exc()}")
+
+            # Show error popup
+            error_dialog = QMessageBox(self)
+            error_dialog.setIcon(QMessageBox.Critical)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("An unexpected error occurred while loading the Specimen Data Entry UI.")
+            error_dialog.setInformativeText(str(message))  # Show the error message
+            error_dialog.setStandardButtons(QMessageBox.Ok)
+            error_dialog.exec()
 
 if __name__ == "__main__":
     app = QApplication([])

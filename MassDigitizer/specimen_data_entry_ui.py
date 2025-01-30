@@ -43,7 +43,6 @@ class SpecimenDataEntryUI(QMainWindow):
         """
         Constructor for the SpecimenDataEntryUI class.
         """
-        print("Initializing SpecimenDataEntryUI")
         super(SpecimenDataEntryUI, self).__init__()
 
         # Set class variables
@@ -62,11 +61,8 @@ class SpecimenDataEntryUI(QMainWindow):
         self.sessionMode     = 'Default'
         
         # Load UI and setup connections
-        print("Loading UI")
         self.load_ui()
-        print("Setting control events")
         self.setControlEvents()
-        print("Setting up form")
         self.setup_form(collection_id)
 
         self.collectionId = collection_id  # Set collection Id
@@ -77,17 +73,13 @@ class SpecimenDataEntryUI(QMainWindow):
 
         # Create recordset of last 3 saved records for the initial preview table
         self.tableHeaders = ['id', 'catalognumber', 'taxonfullname', 'containertype', 'georegionname','storagename'] 
-        print("Creating recordset")
         self.recordSet = recordset.RecordSet(collection_id, 3,specimen_id=self.collobj.id) 
 
          # Load data
-        print("Loading comboboxes")
         self.load_comboboxes()
-        print("Loading previous records")
         self.load_previous_records()
 
         # Set image resource
-        print("Setting image resource")
         documents_path = QStandardPaths.writableLocation(QStandardPaths.DocumentsLocation)
         image_path = os.path.join(documents_path, "DaSSCo", "img", "Warning_LinkedRecord.png")
         self.ui.imgWarningLinkedRecord.setPixmap(QPixmap(image_path))
@@ -98,18 +90,14 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.txtInstitution.setText(gs.institutionName)
         self.ui.txtVersionNr.setText(util.getVersionNumber())
 
-        # Start up interface
-        print("Starting up interface")
+        # Start up interface and center window
         self.show()
         self.center_screen() 
         
-        print("Initialization complete")
-
     def load_comboboxes(self):
         """
         Load comboboxes with data from the database.
         """
-        print("Loading comboboxes")
         
         self.ui.cbxPrepType.addItem('-please select-', -1)
         for item in self.collobj.prepTypes:
@@ -123,13 +111,10 @@ class SpecimenDataEntryUI(QMainWindow):
         for item in self.collobj.geoRegions:
             self.ui.cbxGeoRegion.addItem(str(item[1]), item[0])
 
-        print("Comboboxes loaded")
-
     def load_previous_records(self):
         """
         Load previous records into the tblPrevious table widget.
         """
-        print("Loading previous records")
 
         # Clear existing rows
         self.ui.tblPrevious.setRowCount(0)
@@ -148,13 +133,10 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.tblPrevious.resizeRowsToContents()
         self.ui.tblPrevious.resizeColumnsToContents()
 
-        print("Previous records loaded")
-
     def load_ui(self):
         """
         Load the UI from the .ui file and customize selected widgets.
         """
-        print("Loading UI")
         loader = QUiLoader()
         ui_file = QFile("ui/specimendataentry.ui")
         ui_file.open(QFile.ReadOnly)
@@ -180,13 +162,10 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.tblPrevious.setColumnWidth(4, 200)  # Set width for georegionname column
         self.ui.tblPrevious.setColumnWidth(5, 200)  # Set width for storagename column
 
-        print("UI loaded")
-
     def setup_form(self, collection_id):
         """
         Setup the specimen data entry form.
         """
-        print("Setting up form")
         util.logger.info('*** Specimen data entry setup ***')
 
         self.ui.txtUserName.setText(gs.userName)
@@ -205,8 +184,6 @@ class SpecimenDataEntryUI(QMainWindow):
         
         self.updateRecordCount()
 
-        print("Form setup complete")
-
     def setControlEvents(self):
         """
         Set specific control events for the specimen data entry form.
@@ -214,7 +191,6 @@ class SpecimenDataEntryUI(QMainWindow):
         Upon each edit, the internal state of the collection object data needs to be updated immediately.
         Buttons for saving and navigations are connected to specific functions.
         """
-        print("Setting control events")
 
         # Ensure next input receives focus upon edit 
         for line_edit in self.findChildren(QLineEdit): 
@@ -245,8 +221,6 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.btnBack.clicked.connect(self.on_back_clicked)
         self.ui.btnForward.clicked.connect(self.on_forward_clicked)
         self.ui.btnClear.clicked.connect(self.clearForm)
-
-        print("Control events set")
 
     def on_save_clicked(self): self.saveForm()
 
@@ -315,10 +289,10 @@ class SpecimenDataEntryUI(QMainWindow):
     def on_catalog_number_return_pressed(self): self.collobj.catalogNumber = self.ui.inpCatalogNumber.text()
 
     def on_back_clicked(self):
-        print("Back button clicked")
+        pass
 
     def on_forward_clicked(self):
-        print("Forward button clicked")
+        pass
 
     def updateRecordCount(self):
         """
@@ -334,7 +308,6 @@ class SpecimenDataEntryUI(QMainWindow):
         The contents of the form input fields should have been immediately been transferred to the fields of the specimen object instance.
         A final validation and transfer of selected input fields is still performed to ensure data integrity.
         """
-        print("Saving form")
 
         try:
             # Prepare for saving (new) record 
@@ -392,15 +365,13 @@ class SpecimenDataEntryUI(QMainWindow):
         """
         Function for clearing all fields that are non-sticky
         """        
-        print("Clearing non-sticky fields")
         self.clearForm(self.nonStickyFields)
 
     def clearForm(self, fieldList=None):
         """
         Function for clearing all fields listed in clearing list and setting up for a blank record
         """
-        print("Clearing form")
-        
+                
         if not fieldList: fieldList = self.clearingList
 
         # Clear fields defined in clearing list
@@ -424,9 +395,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.inpStorage.setText('None')
 
         # Reset focus on the storage field
-        self.ui.chkSpecimenObscured.setFocus()      
-
-        print("Form cleared")
+        self.ui.chkSpecimenObscured.setFocus()   
 
     def setSpecimenFields(self, stickyFieldsOnly=True):
         """
