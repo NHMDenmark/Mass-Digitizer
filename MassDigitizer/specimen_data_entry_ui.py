@@ -2,7 +2,7 @@
 
 """
 Created on Fri Jan 24 2025 11:12:00 
-Author: Fedor Alexander Steeman NHMD;
+@author: Fedor Alexander Steeman NHMD;
 
 Copyright 2022 Natural History Museum of Denmark (NHMD)
 
@@ -23,9 +23,11 @@ import time
 import traceback
 
 # PySide6 imports
-from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QLineEdit, QComboBox, QRadioButton, QCheckBox, QMessageBox
+from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView
+from PySide6.QtWidgets import QLineEdit, QComboBox, QRadioButton, QCheckBox, QMessageBox
+from PySide6.QtWidgets import QCompleter
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtCore import QFile, QStandardPaths
+from PySide6.QtCore import Qt, QFile, QStandardPaths, QStringListModel
 from PySide6.QtGui import QFont, QIcon, QPixmap
 from pathlib import Path
 
@@ -89,6 +91,13 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.txtCollection.setText(self.collection.name)     
         self.ui.txtInstitution.setText(gs.institutionName)
         self.ui.txtVersionNr.setText(util.getVersionNumber())
+
+        # Create QCompleter for inpStorage
+        self.storage_completer = QCompleter()
+        self.storage_completer.setCaseSensitivity(Qt.CaseInsensitive)
+        self.storage_completer.setFilterMode(Qt.MatchContains)
+        self.ui.inpStorage.setCompleter(self.storage_completer)
+        self.ui.inpStorage.textChanged.connect(self.update_storage_completer)
 
         # Start up interface and center window
         self.show()
@@ -203,6 +212,7 @@ class SpecimenDataEntryUI(QMainWindow):
             radio_button.toggled.connect(self.on_containerTypeToggle)
 
         # Connect input field signals to data update functions
+        self.ui.inpStorage.returnPressed.connect(self.on_inpStorage_return_pressed)
         self.ui.cbxPrepType.currentIndexChanged.connect(self.on_cbxPrepType_currentIndexChanged)
         self.ui.cbxTypeStatus.currentIndexChanged.connect(self.on_cbxTypeStatus_currentIndexChanged)
         self.ui.cbxGeoRegion.currentIndexChanged.connect(self.on_cbxGeoRegion_currentIndexChanged)
@@ -223,6 +233,15 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.btnClear.clicked.connect(self.clearForm)
 
     def on_save_clicked(self): self.saveForm()
+
+    def on_inpStorage_return_pressed(self): 
+        """
+        Set storage fields from storage input field and update the storage full name field.
+        """
+        self.ui.txtStorageFullname.setText(self.ui.inpStorage.text())
+        storage_record = self.getStorageRecord()
+        self.collobj.setStorageFieldsFromRecord(storage_record)
+        self.ui.txtStorageFullname.setText(self.collobj.storageFullName)
 
     def on_cbxPrepType_currentIndexChanged(self): self.collobj.setPrepTypeFields(self.ui.cbxPrepType.currentIndex() - 1)
 
@@ -339,7 +358,7 @@ class SpecimenDataEntryUI(QMainWindow):
                     self.collobj = specimen.Specimen(self.collectionId)                    
 
                     # Transfer data in sticky fields to new record:
-                    #self.setSpecimenFields() # TODO Maybe defunct
+                    self.setSpecimenFields() # TODO Maybe defunct
 
                     # Prepare form for next new record
                     self.clearNonStickyFields()
@@ -375,7 +394,7 @@ class SpecimenDataEntryUI(QMainWindow):
         if not fieldList: fieldList = self.clearingList
 
         # Clear fields defined in clearing list
-        for key in self.clearingList:
+        for key in fieldList:
             textfield = self.ui.findChild(QLineEdit, key)
             if textfield: textfield.setText('')
             listfield = self.ui.findChild(QComboBox, key)
@@ -406,17 +425,36 @@ class SpecimenDataEntryUI(QMainWindow):
 
         # Set specimen object instance fields from input form
         self.collobj.setStorageFieldsFromRecord(self.getStorageRecord())
-        self.collobj.setPrepTypeFields(self.ui.cbxPrepType.currentIndex())
-        self.collobj.setTypeStatusFields(self.ui.cbxTypeStatus.currentIndex())
+        self.collobj.setPrepTypeFields(self.ui.cbxPrepType.currentIndex() - 1)
+        self.collobj.setTypeStatusFields(self.ui.cbxTypeStatus.currentIndex() - 1)
         self.collobj.notes = self.ui.inpNotes.text()
         self.collobj.containername = self.ui.inpContainerName.text()
         self.collobj.containertype = self.getContainerTypeFromInput()
-        self.collobj.setGeoRegionFields(self.ui.cbxGeoRegion.currentIndex())
+        self.collobj.setGeoRegionFields(self.ui.cbxGeoRegion.currentIndex() - 1)
         taxonFullName = self.ui.inpTaxonName.text()
         taxonFullName = taxonFullName.rstrip()
         if self.collection.useTaxonNumbers:
             self.collobj.taxonNumber = self.ui.inpTaxonNumber.text()
         self.collobj.setTaxonNameFields(self.getTaxonNameRecord(taxonFullName))
+
+    def getStorageRecord(self):
+        """
+        Retrieve storage record based on storage input field contents.
+        Search is to be done on fullname since identical atomic values can occur across the storage tree with different parentage.
+        """
+        storageFullName = self.ui.txtStorageFullname.text()
+        try:
+            storageRecords = self.db.getRowsOnFilters('storage', {'fullname': f'="{storageFullName}"', 'collectionid': f'={self.collectionId}'}, 1)
+        except:
+            e = sys.exc_info()[0] + ' from getStorageRecord'
+            util.logger.error(e)
+            return None
+        if len(storageRecords) > 0:
+            storageRecord = storageRecords[0]
+        else:
+            storageRecord = None
+
+        return storageRecord
 
     def getContainerTypeFromInput(self):
         """
@@ -524,6 +562,29 @@ class SpecimenDataEntryUI(QMainWindow):
         msg_box.setText(error_message)
         msg_box.setStandardButtons(QMessageBox.Ok)
         msg_box.exec()
+
+    def update_storage_completer(self, keyStrokes):
+        """
+        Update the storage completer with suggestions based on the user's input.
+
+        Parameters:
+        keyStrokes (str): The current text input by the user in the storage field.
+        """
+        if isinstance(keyStrokes, str) and len(keyStrokes) >= 3:
+            fields = {'fullname': f'LIKE "%{keyStrokes.lower()}%"', 'collectionid': f'={self.collection_id}'}
+            rows = self.db.getRowsOnFilters('storage', fields, 50)
+            suggestions = []
+            for row in rows:
+                fullname = row['fullname']
+                # parts = fullname.split('|')
+                # if len(parts) > 2:
+                #     shortened_fullname = '|'.join(parts[2:]).strip()
+                #     suggestions.append(shortened_fullname)
+                # else:
+                suggestions.append(fullname.strip())
+            self.storage_completer.setModel(QStringListModel(suggestions))
+        else:
+            self.storage_completer.setModel(QStringListModel([]))
 
 def main():
     app = QApplication(sys.argv)
