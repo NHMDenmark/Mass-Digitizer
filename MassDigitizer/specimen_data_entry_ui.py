@@ -223,8 +223,9 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.radRadioMOS.toggled.connect(self.on_containerTypeToggle)
         self.ui.radRadioMSO.toggled.connect(self.on_containerTypeToggle)
         self.ui.inpContainerName.returnPressed.connect(self.on_container_name_return_pressed)
-        self.ui.inpNotes.returnPressed.connect(self.on_notes_return_pressed)
+        self.ui.inpNotes.returnPressed.connect(self.on_notes_return_pressed)        
         self.ui.inpCatalogNumber.returnPressed.connect(self.on_catalog_number_return_pressed)
+        self.ui.inpCatalogNumber.textChanged.connect(self.on_catalog_number_text_changed)
         
         # Connect buttons to specific action functions
         self.ui.btnSave.clicked.connect(self.on_save_clicked)
@@ -305,7 +306,11 @@ class SpecimenDataEntryUI(QMainWindow):
 
     def on_notes_return_pressed(self): self.collobj.notes = self.ui.inpNotes.text()
 
-    def on_catalog_number_return_pressed(self): self.collobj.catalogNumber = self.ui.inpCatalogNumber.text()
+    def on_catalog_number_return_pressed(self): 
+        self.collobj.catalogNumber = self.ui.inpCatalogNumber.text()
+        self.saveForm()
+
+    def on_catalog_number_text_changed(self): self.collobj.catalogNumber = self.ui.inpCatalogNumber.text()
 
     def on_back_clicked(self):
         pass
