@@ -310,7 +310,7 @@
            <widget class="QLineEdit" name="inpStorage">
             <property name="minimumSize">
              <size>
-              <width>550</width>
+              <width>600</width>
               <height>0</height>
              </size>
             </property>
