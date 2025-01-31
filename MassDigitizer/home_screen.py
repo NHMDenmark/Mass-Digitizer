@@ -156,7 +156,7 @@ class HomeScreen(QMainWindow):
                 else:
                     self.ui.lblAuthError.setVisible(True)
             else:
-                self.ui.lblCollError.setVisible(True)
+                self.ui.lblAuthError.setVisible(True)
         else:
             self.ui.lblCollError.setVisible(True)
         

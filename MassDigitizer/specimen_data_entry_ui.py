@@ -97,7 +97,15 @@ class SpecimenDataEntryUI(QMainWindow):
         self.storage_completer.setCaseSensitivity(Qt.CaseInsensitive)
         self.storage_completer.setFilterMode(Qt.MatchContains)
         self.ui.inpStorage.setCompleter(self.storage_completer)
-        self.ui.inpStorage.textChanged.connect(self.update_storage_completer)
+        self.ui.inpStorage.textChanged.connect(self.update_storage_completer)        
+
+        # Create QCompleter for inpTaxonName
+        self.taxonname_completer = QCompleter()
+        self.taxonname_completer.setCaseSensitivity(Qt.CaseInsensitive)
+        self.taxonname_completer.setFilterMode(Qt.MatchContains)
+        self.taxonname_completer.activated.connect(self.on_suggestion_selected)
+        self.ui.inpTaxonName.setCompleter(self.taxonname_completer)
+        self.ui.inpTaxonName.textChanged.connect(self.update_taxonname_completer)
 
         # Start up interface and center window
         self.show()
@@ -216,6 +224,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.cbxPrepType.currentIndexChanged.connect(self.on_cbxPrepType_currentIndexChanged)
         self.ui.cbxTypeStatus.currentIndexChanged.connect(self.on_cbxTypeStatus_currentIndexChanged)
         self.ui.cbxGeoRegion.currentIndexChanged.connect(self.on_cbxGeoRegion_currentIndexChanged)
+        self.ui.inpTaxonName.returnPressed.connect(self.on_inpTaxonName_return_pressed)
         self.ui.chkDamage.clicked.connect(self.on_chkDamage_clicked)
         self.ui.chkSpecimenObscured.clicked.connect(self.on_chkSpecimenObscured_clicked)
         self.ui.chkLabelObscured.clicked.connect(self.on_chkLabelObscured_clicked)
@@ -239,9 +248,15 @@ class SpecimenDataEntryUI(QMainWindow):
         """
         Set storage fields from storage input field and update the storage full name field.
         """
-        self.ui.txtStorageFullname.setText(self.ui.inpStorage.text())
+        storage_name_input = self.ui.inpStorage.text()
+        self.ui.txtStorageFullname.setText(storage_name_input)
         storage_record = self.getStorageRecord()
-        self.collobj.setStorageFieldsFromRecord(storage_record)
+        if storage_record:
+            self.collobj.setStorageFieldsFromRecord(storage_record)
+        else: 
+            self.collobj.storageName = storage_name_input
+            self.collobj.storageFullName = storage_name_input
+            self.collobj.storageId = 0
         self.ui.txtStorageFullname.setText(self.collobj.storageFullName)
 
     def on_cbxPrepType_currentIndexChanged(self): self.collobj.setPrepTypeFields(self.ui.cbxPrepType.currentIndex() - 1)
@@ -249,6 +264,21 @@ class SpecimenDataEntryUI(QMainWindow):
     def on_cbxTypeStatus_currentIndexChanged(self): self.collobj.setTypeStatusFields(self.ui.cbxTypeStatus.currentIndex() - 1)
 
     def on_cbxGeoRegion_currentIndexChanged(self): self.collobj.setGeoRegionFields(self.ui.cbxGeoRegion.currentIndex() - 1)
+
+    def on_inpTaxonName_return_pressed(self): 
+        """
+        Set taxon name fields from taxon name input field.
+        """
+        taxon_name_input = self.ui.inpTaxonName.text()
+        self.ui.txtStorageFullname.setText(taxon_name_input)
+        taxonname_record = self.getTaxonNameRecord(taxon_name_input)
+        if taxonname_record:
+            self.collobj.setTaxonNameFieldsFromRecord(taxonname_record)
+        else: 
+            self.collobj.taxonName = taxon_name_input
+            self.collobj.taxonFullName = taxon_name_input
+            self.collobj.taxonNameId = 0
+        self.ui.txtStorageFullname.setText(self.collobj.storageFullName)
 
     def on_chkDamage_clicked(self): 
         needsrepair = self.ui.chkDamage.isChecked()
@@ -570,10 +600,10 @@ class SpecimenDataEntryUI(QMainWindow):
 
     def update_storage_completer(self, keyStrokes):
         """
-        Update the storage completer with suggestions based on the user's input.
+        Update the storage input field with suggestions based on the user's key strokes.
 
         Parameters:
-        keyStrokes (str): The current text input by the user in the storage field.
+        keyStrokes (str): The current text input by the user in the storage input field.
         """
         if isinstance(keyStrokes, str) and len(keyStrokes) >= 3:
             fields = {'fullname': f'LIKE "%{keyStrokes.lower()}%"', 'collectionid': f'={self.collection_id}'}
@@ -590,6 +620,34 @@ class SpecimenDataEntryUI(QMainWindow):
             self.storage_completer.setModel(QStringListModel(suggestions))
         else:
             self.storage_completer.setModel(QStringListModel([]))
+
+    def update_taxonname_completer(self, keyStrokes):
+        """
+        Update the taxon name input field with suggestions based on the user's key strokes.
+
+        Parameters:
+        keyStrokes (str): The current text input by the user in the taxon name input field.
+        """
+        if isinstance(keyStrokes, str) and len(keyStrokes) >= 3:
+            # Format the search term with double quotation marks to work witch FTS MATCH
+            sanitized_input = keyStrokes.replace('.', '"."')  # Escapes periods in FTS5
+            search_term = f'{sanitized_input}*'
+            
+            sqlString = f"""SELECT * FROM taxonname WHERE id IN (SELECT id FROM taxonname_fts  
+                            WHERE fullname MATCH '{search_term}' AND institutionid = {self.collection.institutionId} 
+                            AND taxontreedefid = {self.collection.taxonTreeDefId} LIMIT 200 );"""
+            try:
+                rows = self.db.executeSqlStatement(sqlString)
+                suggestions = [row['fullname'].strip() for row in rows]
+                self.taxonname_completer.setModel(QStringListModel(suggestions))
+            except Exception as e:
+                util.logger.error(f"Error occurred while fetching taxon name suggestions: {e}")
+                self.taxonname_completer.setModel(QStringListModel([]))
+        else:
+            self.taxonname_completer.setModel(QStringListModel([]))
+    
+    def on_suggestion_selected(self, text):
+        print(f"User selected: {text}")
 
 def main():
     app = QApplication(sys.argv)
