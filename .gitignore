@@ -81,7 +81,6 @@ DaSSCo.exe
 
 # Ignore other miscellaneous files
 *.sqlite3-journal
-*.spec
 *.xlsx
 *.vsidx
 .vs

@@ -28,11 +28,16 @@
   <property name="styleSheet">
    <string notr="true">QWidget {
     background-color: #BFD1DF;
-}
-QLineEdit {
-    background-color: white;
-    color: black;
-}</string>
+    }
+    QLineEdit {
+        background-color: white;
+        color: black;
+    }   
+    QComboBox{
+        background-color: white;
+        color: black;
+    }
+</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -51,12 +56,12 @@ QLineEdit {
      </property>
      <property name="font">
       <font>
-       <family>Bahnschrift</family>
+       <family>Arial</family>
        <pointsize>20</pointsize>
       </font>
      </property>
      <property name="text">
-      <string>DaSSCo Mass Digitizer App - Version 2.0.0</string>
+      <string>DaSSCo Mass Digitizer App - Version 2.0.0 alpha</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignCenter</set>

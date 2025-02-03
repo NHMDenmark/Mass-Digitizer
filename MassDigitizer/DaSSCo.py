@@ -13,6 +13,7 @@
 """
 
 import sys
+import traceback 
 from PySide6.QtWidgets import QApplication, QMessageBox
 
 # Internal dependencies
@@ -33,9 +34,8 @@ def main():
         home_screen.show()
         sys.exit(app.exec())
     except Exception as e:
-        traceBack = util.get_traceback()
+        traceBack = traceback.format_exc()
         util.logger.error(f'{e} \n\n {traceBack}')
-        # Replace PySimpleGUI error popup with a QMessageBox
         error_msg = QMessageBox()
         error_msg.setIcon(QMessageBox.Critical)
         error_msg.setText(f'{e} \n\n {traceBack}')

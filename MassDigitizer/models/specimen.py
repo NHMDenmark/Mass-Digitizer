@@ -241,7 +241,7 @@ class Specimen(Model):
     def setListFields(self, fieldName, index):
         """
         Generic function for setting the respective list fields.
-        Listboxes and combos in PySimpleGui can't hold key/value pairs, so the index is needed to find the corresponding record.
+        Listboxes and combos in PySimpleGui can't hold key/value pairs, so the index was needed to find the corresponding record.
         CONTRACT
             fieldName (String) : Name of the input field to be set
             index (Integer)    : Index of the
