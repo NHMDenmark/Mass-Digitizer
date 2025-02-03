@@ -14,7 +14,7 @@ either express or implied. See the License for the specific language governing p
 - Be mindful that the autoSuggestObject gets populated as we progress through the code.
 """
 
-import PySimpleGUI as sg
+#import PySimpleGUI as sg
 
 # Internal Dependencies
 import util
@@ -71,41 +71,41 @@ class AutoSuggest_popup():
         input_width = 95
         lines_to_show = 7
 
-        layout = [
-            [sg.Text('Input name:', key="lblInputName", metadata='initial-name')],
-            # sg.Text(labelText,
-            #         key='lblNewName', visible=False, background_color='Turquoise3', metadata='invisible')],
+        # layout = [
+        #     [sg.Text('Input name:', key="lblInputName", metadata='initial-name')],
+        #     # sg.Text(labelText,
+        #     #         key='lblNewName', visible=False, background_color='Turquoise3', metadata='invisible')],
 
-            [sg.Input(default_text='', key='txtInput', size=(input_width, 1), enable_events=True),
-             sg.Button('Return', key='btnReturn', visible=False, bind_return_key=True),
-             sg.Button('Exit', visible=False)
-             # 'btnReturn' is for binding return to nothing in case of a new name and higher taxonomy lacking.
-             ],
-            [sg.Frame('New taxon name detected...', [
-                [sg.Text('Input family name:', key='lblHiTax'),
-                 sg.Input(size=(24, 1), key='txtHiTax', enable_events=True),
-                 sg.Button('OK', key='btnOK')],
-                 #[sg.Listbox(values=[], key='lstHiTax', size=(input_width, lines_to_show), enable_events=True, bind_return_key=True, select_mode='extended')]
-                 ],  
-                key='frmHiTax', expand_x=True, visible=False)],
-            [sg.pin(
-                sg.Col(
-                    [[sg.Listbox(values=[], key='lstSuggestions', size=(input_width, lines_to_show), enable_events=True, bind_return_key=True, select_mode='extended')]],
-                    key='lstSuggestionsContainer', pad=(0, 0), visible=True))], ]
+        #     [sg.Input(default_text='', key='txtInput', size=(input_width, 1), enable_events=True),
+        #      sg.Button('Return', key='btnReturn', visible=False, bind_return_key=True),
+        #      sg.Button('Exit', visible=False)
+        #      # 'btnReturn' is for binding return to nothing in case of a new name and higher taxonomy lacking.
+        #      ],
+        #     [sg.Frame('New taxon name detected...', [
+        #         [sg.Text('Input family name:', key='lblHiTax'),
+        #          sg.Input(size=(24, 1), key='txtHiTax', enable_events=True),
+        #          sg.Button('OK', key='btnOK')],
+        #          #[sg.Listbox(values=[], key='lstHiTax', size=(input_width, lines_to_show), enable_events=True, bind_return_key=True, select_mode='extended')]
+        #          ],  
+        #         key='frmHiTax', expand_x=True, visible=False)],
+        #     [sg.pin(
+        #         sg.Col(
+        #             [[sg.Listbox(values=[], key='lstSuggestions', size=(input_width, lines_to_show), enable_events=True, bind_return_key=True, select_mode='extended')]],
+        #             key='lstSuggestionsContainer', pad=(0, 0), visible=True))], ]
 
-        window = sg.Window('Auto Complete', layout, return_keyboard_events=True, finalize=True, modal=False,
-                           font=('Arial', 12), size=(810, 200))
+        # window = sg.Window('Auto Complete', layout, return_keyboard_events=True, finalize=True, modal=False,
+        #                    font=('Arial', 12), size=(810, 200))
         # The parameter "modal" is explicitly set to False. If True the auto close behavior won't work.
 
-        self.lstSuggestionsElement: sg.Listbox = window.Element(
-            'lstSuggestions')  # store listbox element for easier access and to get to docstrings
-        self.txtInput: sg.Text = window.Element('txtInput')
+        # self.lstSuggestionsElement: sg.Listbox = window.Element(
+        #     'lstSuggestions')  # store listbox element for easier access and to get to docstrings
+        # self.txtInput: sg.Text = window.Element('txtInput')
 
-        window['txtHiTax'].bind('<FocusIn>', '+INPUT FOCUS+')
-        window.Finalize = True  # Needed for being able to reactivate window, otherwise PySimpleGUI will throw an error
-        window.hide()
+        # window['txtHiTax'].bind('<FocusIn>', '+INPUT FOCUS+')
+        # window.Finalize = True  # Needed for being able to reactivate window, otherwise PySimpleGUI will throw an error
+        # window.hide()
 
-        return window
+        return None #window
 
     def captureSuggestion(self, keyStrokes, minimumCharacters=3):
         """
@@ -133,8 +133,7 @@ class AutoSuggest_popup():
             # Escape loop & close window when exiting or otherwise done
             if event is None: 
                 break
-            if event == sg.WIN_CLOSED or event == 'Exit': 
-                break
+            #if event == sg.WIN_CLOSED or event == 'Exit':                 break
             if event.startswith('Escape'): 
                 self.autoSuggestObject.fullName = values['txtInput']
                 break
@@ -372,7 +371,7 @@ class AutoSuggest_popup():
 
         except Exception as e:
             util.logger.error(e)
-            sg.PopupError(e)
+            #sg.PopupError(e)
             
         # Convert records to list of fullnames
         if self.suggestions:

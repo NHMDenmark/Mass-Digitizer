@@ -57,7 +57,7 @@
         border: 1px solid rgb(128, 128, 128);
     }
     QLabel {
-        font-family: Bahnschrift;
+        font-family: Arial;
         font-size: 13pt;
     }
     QLabel#appTitle {
@@ -145,7 +145,7 @@
        </property>
        <property name="font">
         <font>
-         <family>Bahnschrift</family>
+         <family>Arial</family>
          <pointsize>20</pointsize>
          <kerning>false</kerning>
         </font>

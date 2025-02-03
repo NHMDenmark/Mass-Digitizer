@@ -21,7 +21,7 @@ from datetime import datetime
 import random
 
 # Central place to manage version numbers
-versionNumber = "2.0.0"  # Before compiling exe, please set the version number above
+versionNumber = "2.0.0 alpha"  # Before compiling exe, please set the version number above
 logger = logging.getLogger()
 
 
@@ -87,6 +87,17 @@ def getUserPath():
     userPath = str(Path(homePath).joinpath('Documents').joinpath('DaSSCo'))
 
     return userPath
+
+# Define function to import external files when using PyInstaller.
+def resourcePath(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 
 def logLine(line, level='info'):

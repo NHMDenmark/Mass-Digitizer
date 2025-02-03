@@ -155,7 +155,8 @@ class SpecimenDataEntryUI(QMainWindow):
         Load the UI from the .ui file and customize selected widgets.
         """
         loader = QUiLoader()
-        ui_file = QFile("ui/specimendataentry.ui")
+        ui_path = util.resourcePath("ui/specimendataentry.ui")
+        ui_file = QFile(ui_path)
         ui_file.open(QFile.ReadOnly)
         self.ui = loader.load(ui_file, self)
         ui_file.close()

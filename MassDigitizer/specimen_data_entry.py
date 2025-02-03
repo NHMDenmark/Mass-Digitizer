@@ -26,7 +26,7 @@ CONVENTION :
 import sys
 import time 
 import traceback
-import PySimpleGUI as sg
+#import PySimpleGUI as sg
 from pathlib import Path
 
 # Internal dependencies
@@ -91,7 +91,7 @@ class SpecimenDataEntry():
         util.logger.info('*** Specimen data entry setup ***')
 
         # Define UI areas
-        sg.theme('SystemDefault')
+        #sg.theme('SystemDefault')
         greenArea = '#E8F4EA'  # Stable fields   (?)
         blueArea = '#99CDFF'  # Variable fields (?)
         greyArea = '#BFD1DF'  # Session & Settings
@@ -117,183 +117,183 @@ class SpecimenDataEntry():
 
         # NOTE Elements are stored  in variables to make it easier to include and position in the frames
 
-        storage = [
-            sg.Text("Storage location:", size=captionSize, justification='l', background_color=greenArea, font=captionFont),
-            # sg.Text(indicatorLeft, key='inlStorage', text_color='black', background_color=greenArea, visible=True, font=wingdingFont),
-            sg.InputText('None', key='inpStorage', focus=True, size=greenSize, text_color='black', pad=(0, 0), background_color='white', font=fieldFont, enable_events=True),
-            sg.pin(sg.Text(indicatorRight, key='inrStorage', background_color=greenArea, visible=True, font=wingdingFont)),
-            # 'Pin' because otherwise it's placed right of next element
-            #sg.Text("", key='txtStorageFullname', size=(50, 2), background_color=greenArea, font=smallLabelFont)
-        ]
+        # storage = [
+        #     #sg.Text("Storage location:", size=captionSize, justification='l', background_color=greenArea, font=captionFont),
+        #     # #sg.Text(indicatorLeft, key='inlStorage', text_color='black', background_color=greenArea, visible=True, font=wingdingFont),
+        #     #sg.InputText('None', key='inpStorage', focus=True, size=greenSize, text_color='black', pad=(0, 0), background_color='white', font=fieldFont, enable_events=True),
+        #     #sg.pin(#sg.Text(indicatorRight, key='inrStorage', background_color=greenArea, visible=True, font=wingdingFont)),
+        #     # 'Pin' because otherwise it's placed right of next element
+        #     ##sg.Text("", key='txtStorageFullname', size=(50, 2), background_color=greenArea, font=smallLabelFont)
+        # ]
 
-        preparation = [
-            sg.Text("Preparation type:", size=captionSize, justification='l', background_color=greenArea, font=captionFont),
-            # sg.Text(indicatorLeft, key='inlPrepType', text_color='black', background_color=greenArea, visible=True, font=wingdingFont),
-            sg.Combo(util.convert_dbrow_list(self.collobj.prepTypes), key='cbxPrepType', size=greenSize, text_color='black', background_color='white', font=fieldFont, readonly=True, enable_events=True, pad=(0, 0)),
-            sg.Text(indicatorRight, key='inrPrepType', background_color=greenArea, visible=False, font=wingdingFont)
-        ]
+        # preparation = [
+        #     #sg.Text("Preparation type:", size=captionSize, justification='l', background_color=greenArea, font=captionFont),
+        #     # #sg.Text(indicatorLeft, key='inlPrepType', text_color='black', background_color=greenArea, visible=True, font=wingdingFont),
+        #     #sg.Combo(util.convert_dbrow_list(self.collobj.prepTypes), key='cbxPrepType', size=greenSize, text_color='black', background_color='white', font=fieldFont, readonly=True, enable_events=True, pad=(0, 0)),
+        #     #sg.Text(indicatorRight, key='inrPrepType', background_color=greenArea, visible=False, font=wingdingFont)
+        # ]
 
-        type_status = [
-            sg.Text('Type status:', size=captionSize, background_color=greenArea, font=captionFont),
-            # sg.Text(indicatorLeft, key='inlTypeStatus', text_color='black', background_color=greenArea, visible=True, font=wingdingFont),
-            sg.Combo(util.convert_dbrow_list(self.collobj.typeStatuses), key='cbxTypeStatus', size=greenSize, text_color='black', background_color='white', font=fieldFont, readonly=True, enable_events=True, pad=(0, 0)),
-            sg.Text(indicatorRight, pad=(7, 0), key='inrTypeStatus', background_color=greenArea, visible=False, font=wingdingFont),
-        ]
+        # type_status = [
+        #     #sg.Text('Type status:', size=captionSize, background_color=greenArea, font=captionFont),
+        #     # #sg.Text(indicatorLeft, key='inlTypeStatus', text_color='black', background_color=greenArea, visible=True, font=wingdingFont),
+        #     #sg.Combo(util.convert_dbrow_list(self.collobj.typeStatuses), key='cbxTypeStatus', size=greenSize, text_color='black', background_color='white', font=fieldFont, readonly=True, enable_events=True, pad=(0, 0)),
+        #     #sg.Text(indicatorRight, pad=(7, 0), key='inrTypeStatus', background_color=greenArea, visible=False, font=wingdingFont),
+        # ]
 
-        broadGeo = [
-            sg.Text('Broad geographic region:', size=captionSize, background_color=greenArea, text_color='black', font=captionFont),
-            # sg.Text(indicatorLeft, key='inlGeoRegion', text_color='black', background_color=greenArea, visible=True, font=wingdingFont),
-            sg.Combo(util.convert_dbrow_list(self.collobj.geoRegions), key='cbxGeoRegion', size=blueSize, text_color='black', background_color='white', font=fieldFont, readonly=True, enable_events=True, pad=(0, 0)),
-            sg.Text(indicatorRight, key='inrGeoRegion', background_color=greenArea, visible=False, font=wingdingFont)
-        ]
+        # broadGeo = [
+        #     #sg.Text('Broad geographic region:', size=captionSize, background_color=greenArea, text_color='black', font=captionFont),
+        #     # #sg.Text(indicatorLeft, key='inlGeoRegion', text_color='black', background_color=greenArea, visible=True, font=wingdingFont),
+        #     #sg.Combo(util.convert_dbrow_list(self.collobj.geoRegions), key='cbxGeoRegion', size=blueSize, text_color='black', background_color='white', font=fieldFont, readonly=True, enable_events=True, pad=(0, 0)),
+        #     #sg.Text(indicatorRight, key='inrGeoRegion', background_color=greenArea, visible=False, font=wingdingFont)
+        # ]
 
-        taxonInput = [
-            sg.Text('Taxonomic name:', size=captionSize, background_color=greenArea, text_color='black',font=captionFont),
-            # sg.Text(indicatorLeft, key='inlTaxonName', text_color='black', background_color=greenArea, visible=True, font=wingdingFont),
-            sg.Multiline('', size=blueSize, key='inpTaxonName', rstrip=False, no_scrollbar=True, text_color='black', background_color='white',font=fieldFont, enable_events=True, pad=(0, 0)),
-            sg.Text(indicatorRight, key='inrTaxonName', background_color=greenArea, visible=True, font=wingdingFont),
-        ]
+        # taxonInput = [
+        #     #sg.Text('Taxonomic name:', size=captionSize, background_color=greenArea, text_color='black',font=captionFont),
+        #     # #sg.Text(indicatorLeft, key='inlTaxonName', text_color='black', background_color=greenArea, visible=True, font=wingdingFont),
+        #     #sg.Multiline('', size=blueSize, key='inpTaxonName', rstrip=False, no_scrollbar=True, text_color='black', background_color='white',font=fieldFont, enable_events=True, pad=(0, 0)),
+        #     #sg.Text(indicatorRight, key='inrTaxonName', background_color=greenArea, visible=True, font=wingdingFont),
+        # ]
 
-        taxonNr = [
-            sg.Text('Taxon Number:', key='txtTaxonNumber', font=captionFont, background_color=greenArea, text_color='black', visible=True),
-            sg.InputText('', size=(7, 1), key='inpTaxonNumber', text_color='black', background_color='white', font=fieldFont, enable_events=True, visible=True),
-            sg.Text(indicatorRight, key='inrTaxonNumber', background_color=greenArea, visible=True, font=wingdingFont),
-        ]
+        # taxonNr = [
+        #     #sg.Text('Taxon Number:', key='txtTaxonNumber', font=captionFont, background_color=greenArea, text_color='black', visible=True),
+        #     #sg.InputText('', size=(7, 1), key='inpTaxonNumber', text_color='black', background_color='white', font=fieldFont, enable_events=True, visible=True),
+        #     #sg.Text(indicatorRight, key='inrTaxonNumber', background_color=greenArea, visible=True, font=wingdingFont),
+        # ]
 
-        specimen_flags = [
-            sg.Text('Specimen flags', size=captionSize, background_color=blueArea, font=captionFont),
-            sg.Checkbox('Damaged specimen', key="chkDamage", background_color=blueArea, enable_events=True),
-            sg.Text('', pad=(0, 0), background_color=blueArea),
-            sg.Text(indicatorRight, pad=(0, 0), key='inrDamage', background_color=blueArea, visible=False, font=wingdingFont),
-            sg.Checkbox('Specimen obscured', key="chkSpecimenObscured", background_color=blueArea, enable_events=True),
-            sg.Text('', pad=(0, 0), background_color=blueArea),
-            sg.Text(indicatorRight, pad=(0, 0), key='inrSpecimenObscured', background_color=blueArea, visible=False, font=wingdingFont),
-            sg.Checkbox('Label obscured', key="chkLabelObscured", background_color=blueArea, enable_events=True),
-            sg.Text('', pad=(0, 0), background_color=blueArea),
-            sg.Text(indicatorRight, pad=(0, 0), key='inrLabelObscured', background_color=blueArea, visible=False, font=wingdingFont)
-        ]
+        # specimen_flags = [
+        #     #sg.Text('Specimen flags', size=captionSize, background_color=blueArea, font=captionFont),
+        #     #sg.Checkbox('Damaged specimen', key="chkDamage", background_color=blueArea, enable_events=True),
+        #     #sg.Text('', pad=(0, 0), background_color=blueArea),
+        #     #sg.Text(indicatorRight, pad=(0, 0), key='inrDamage', background_color=blueArea, visible=False, font=wingdingFont),
+        #     #sg.Checkbox('Specimen obscured', key="chkSpecimenObscured", background_color=blueArea, enable_events=True),
+        #     #sg.Text('', pad=(0, 0), background_color=blueArea),
+        #     #sg.Text(indicatorRight, pad=(0, 0), key='inrSpecimenObscured', background_color=blueArea, visible=False, font=wingdingFont),
+        #     #sg.Checkbox('Label obscured', key="chkLabelObscured", background_color=blueArea, enable_events=True),
+        #     #sg.Text('', pad=(0, 0), background_color=blueArea),
+        #     #sg.Text(indicatorRight, pad=(0, 0), key='inrLabelObscured', background_color=blueArea, visible=False, font=wingdingFont)
+        # ]
 
-        notes = [
-            sg.Text('Notes', size=captionSize, background_color=blueArea, font=captionFont),
-            # sg.Text(indicatorLeft, key='inlNotes', text_color='black', background_color=blueArea, visible=True, font=wingdingFont),
-            sg.InputText(size=(70, 5), key='inpNotes', pad=(0, 0), enable_events=False, font=fieldFont, background_color='white', text_color='black'),
-            sg.Text(indicatorRight, key='inrNotes', background_color=blueArea, visible=False, font=wingdingFont)
-        ]
+        # notes = [
+            #sg.Text('Notes', size=captionSize, background_color=blueArea, font=captionFont),
+            # #sg.Text(indicatorLeft, key='inlNotes', text_color='black', background_color=blueArea, visible=True, font=wingdingFont),
+            #sg.InputText(size=(70, 5), key='inpNotes', pad=(0, 0), enable_events=False, font=fieldFont, background_color='white', text_color='black'),
+            #sg.Text(indicatorRight, key='inrNotes', background_color=blueArea, visible=False, font=wingdingFont)
+        #]
 
         # Radio buttons for the three different container types
-        containertype_caption  = sg.Text('Container type', size=captionSize, background_color=blueArea, font=captionFont)
-        single_specimen_object = sg.Radio('Single specimen object', 'multi', default=True, enable_events=True, key="radRadioSSO", background_color=blueArea)
-        multi_specimen_object  = sg.Radio(self.MSOterm, 'multi', enable_events=True, key="radRadioMSO", background_color=blueArea)
-        multi_object_specimen  = sg.Radio(self.MOSterm, 'multi', enable_events=True, key="radRadioMOS", background_color=blueArea)
+        # containertype_caption  = #sg.Text('Container type', size=captionSize, background_color=blueArea, font=captionFont)
+        # single_specimen_object = #sg.Radio('Single specimen object', 'multi', default=True, enable_events=True, key="radRadioSSO", background_color=blueArea)
+        # multi_specimen_object  = #sg.Radio(self.MSOterm, 'multi', enable_events=True, key="radRadioMSO", background_color=blueArea)
+        # multi_object_specimen  = #sg.Radio(self.MOSterm, 'multi', enable_events=True, key="radRadioMOS", background_color=blueArea)
         
-        container_types = [containertype_caption,
-                           single_specimen_object, sg.Text(indicatorRight, key='inrRadioSSO', background_color=blueArea, visible=False, font=wingdingFont), 
-                           multi_specimen_object,  sg.Text(indicatorRight, key='inrRadioMSO', background_color=blueArea, visible=False, font=wingdingFont), 
-                           multi_object_specimen,  sg.Text(indicatorRight, key='inrRadioMOS', background_color=blueArea, visible=False, font=wingdingFont)
-        ]
+        # container_types = [containertype_caption,
+        #                    single_specimen_object, #sg.Text(indicatorRight, key='inrRadioSSO', background_color=blueArea, visible=False, font=wingdingFont), 
+        #                    multi_specimen_object,  #sg.Text(indicatorRight, key='inrRadioMSO', background_color=blueArea, visible=False, font=wingdingFont), 
+        #                    multi_object_specimen,  #sg.Text(indicatorRight, key='inrRadioMOS', background_color=blueArea, visible=False, font=wingdingFont)
+        # ]
 
-        containerID = [sg.Text('Container ID ', font=sessionInfoFont, background_color=blueArea, size=captionSize),
-                       sg.InputText(size=blueSize, key='inpContainerName', disabled=True, pad=(0, 0), enable_events=False, font=fieldFont, background_color='white', text_color='black'),
-                       sg.Text(indicatorRight, key='inrContainerName', background_color=blueArea, visible=False, font=wingdingFont), 
-                       ]
+        # containerID = [#sg.Text('Container ID ', font=sessionInfoFont, background_color=blueArea, size=captionSize),
+        #                #sg.InputText(size=blueSize, key='inpContainerName', disabled=True, pad=(0, 0), enable_events=False, font=fieldFont, background_color='white', text_color='black'),
+        #                #sg.Text(indicatorRight, key='inrContainerName', background_color=blueArea, visible=False, font=wingdingFont), 
+        #                ]
 
-        barcode = [
-            sg.Text('Barcode:', size=captionSize, background_color=blueArea, enable_events=True, text_color='black', font=captionFont),
-            # sg.Text(indicatorLeft, key='inlCatalogNumber', text_color='black', background_color=blueArea, visible=True, font=wingdingFont),
-            sg.InputText('', key='inpCatalogNumber', size=blueSize, text_color='black', background_color='white', font=fieldFont,  pad=(0, 0), enable_events=True),
-            sg.Text(indicatorRight, key='inrCatalogNumber', background_color=blueArea, visible=False,font=wingdingFont),
-            sg.Text('Validation Error', key='lblError', visible=False, background_color="#ff5588", border_width=3)
-        ]
+        # barcode = [
+        #     #sg.Text('Barcode:', size=captionSize, background_color=blueArea, enable_events=True, text_color='black', font=captionFont),
+        #     # #sg.Text(indicatorLeft, key='inlCatalogNumber', text_color='black', background_color=blueArea, visible=True, font=wingdingFont),
+        #     #sg.InputText('', key='inpCatalogNumber', size=blueSize, text_color='black', background_color='white', font=fieldFont,  pad=(0, 0), enable_events=True),
+        #     #sg.Text(indicatorRight, key='inrCatalogNumber', background_color=blueArea, visible=False,font=wingdingFont),
+        #     #sg.Text('Validation Error', key='lblError', visible=False, background_color="#ff5588", border_width=3)
+        # ]
 
-        # statusLabel = [sg.Text('Specimen record has been saved', font=('Arial',20),size=(20,10),justification='center',background_color='#4f280a',text_color= 'yellow',key='texto')]
+        # # statusLabel = [#sg.Text('Specimen record has been saved', font=('Arial',20),size=(20,10),justification='center',background_color='#4f280a',text_color= 'yellow',key='texto')]
 
         self.tableHeaders = ['id', 'catalognumber', 'taxonfullname', 'containertype', 'georegionname','storagename']  # Headers for previousRecordsTable
 
-        #lblExport = [sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
+        #lblExport = [#sg.Text('', key='lblExport', visible=False, size=(100, 2)), ]
         
         # Get data to populate previous records table:
-        adjacentRecords = self.recordSet.getAdjacentRecordList(self.tableHeaders)
-        previousRecordsTable = [sg.Table(values=adjacentRecords, key='tblPrevious', enable_events=False, hide_vertical_scroll=True,headings=self.tableHeaders, num_rows=3, 
-                                         font=('Arial', 13), justification='left', auto_size_columns=True, max_col_width=28, select_mode=sg.TABLE_SELECT_MODE_NONE)]
+        #adjacentRecords = self.recordSet.getAdjacentRecordList(self.tableHeaders)
+        # previousRecordsTable = [#sg.Table(values=adjacentRecords, key='tblPrevious', enable_events=False, hide_vertical_scroll=True,headings=self.tableHeaders, num_rows=3, 
+        #                                  font=('Arial', 13), justification='left', auto_size_columns=True, max_col_width=28, select_mode=#sg.TABLE_SELECT_MODE_NONE)]
 
-        # Add number counter showing the number of records currently held by the database
-        numberCounter = [sg.Text('Records added: ', key='lblNumberCounter', background_color=blueArea, visible=True, size=(15, 1), text_color='black', font=sessionInfoFont), 
-                         sg.Text('', key='txtNumberCounter', size=(4, 1), background_color=blueArea)]
+        # # Add number counter showing the number of records currently held by the database
+        # numberCounter = [#sg.Text('Records added: ', key='lblNumberCounter', background_color=blueArea, visible=True, size=(15, 1), text_color='black', font=sessionInfoFont), 
+        #                  #sg.Text('', key='txtNumberCounter', size=(4, 1), background_color=blueArea)]
 
-        # Set up control Area i.e. buttons and status indicators
-        controlArea = [
-            sg.Text('Record ID: ', key='lblRecordID', background_color='#99dcff', visible=True, size=(9, 1)),
-            sg.Text('', key='txtRecordID', size=(4, 1), background_color=blueArea),
-            sg.Text(' ', size=(7,1), background_color=blueArea), # spacer 
-            sg.Button('SAVE', key="btnSave", button_color='seagreen', size=9),
-            sg.Text('', key='inrSave', background_color=blueArea, visible=True),
-            #sg.StatusBar('', relief=None, size=(1, 1), background_color=blueArea),
-            sg.Text(' ', size=(4,1), background_color=blueArea), # spacer 
-            sg.Button('GO BACK', key="btnBack", button_color='#8b0000'),
-            sg.Button('GO FORWARDS', key='btnForward', button_color=('black', 'LemonChiffon2')),
-            sg.Button('CLEAR FORM', key='btnClear', button_color='black on white'),
-            #sg.Button('Export data', key='btnExport', button_color='royal blue'),  # Export data should be a backend feature says Pip
-            #sg.Button('Dismiss', key='btnDismiss', button_color='white on black'), # Notifications not needed says Pip
-        ]
+        # # Set up control Area i.e. buttons and status indicators
+        # controlArea = [
+        #     #sg.Text('Record ID: ', key='lblRecordID', background_color='#99dcff', visible=True, size=(9, 1)),
+        #     #sg.Text('', key='txtRecordID', size=(4, 1), background_color=blueArea),
+        #     #sg.Text(' ', size=(7,1), background_color=blueArea), # spacer 
+        #     #sg.Button('SAVE', key="btnSave", button_color='seagreen', size=9),
+        #     #sg.Text('', key='inrSave', background_color=blueArea, visible=True),
+        #     ##sg.StatusBar('', relief=None, size=(1, 1), background_color=blueArea),
+        #     #sg.Text(' ', size=(4,1), background_color=blueArea), # spacer 
+        #     #sg.Button('GO BACK', key="btnBack", button_color='#8b0000'),
+        #     #sg.Button('GO FORWARDS', key='btnForward', button_color=('black', 'LemonChiffon2')),
+        #     #sg.Button('CLEAR FORM', key='btnClear', button_color='black on white'),
+        #     ##sg.Button('Export data', key='btnExport', button_color='royal blue'),  # Export data should be a backend feature says Pip
+        #     ##sg.Button('Dismiss', key='btnDismiss', button_color='white on black'), # Notifications not needed says Pip
+        # ]
                 
-        storage_fullname = [sg.Text("", key='txtStorageFullname', size=(50, 2), background_color=greenArea, font=smallLabelFont)]
+        # storage_fullname = [#sg.Text("", key='txtStorageFullname', size=(50, 2), background_color=greenArea, font=smallLabelFont)]
         
-        placeholder1 = [sg.Text("", background_color=greenArea)]
-        placeholder2 = [sg.Text("", background_color=greenArea)]
-        placeholder3 = [sg.Text("", background_color=greenArea)]
+        # placeholder1 = [#sg.Text("", background_color=greenArea)]
+        # placeholder2 = [#sg.Text("", background_color=greenArea)]
+        # placeholder3 = [#sg.Text("", background_color=greenArea)]
 
-        stickyFields_column1 = sg.Column([storage, preparation, type_status, broadGeo, taxonInput], background_color=greenArea, size=(560,200), expand_x=True) 
-        stickyFields_column2 = sg.Column([storage_fullname, placeholder1, placeholder2, placeholder3, taxonNr], background_color=greenArea) #,vertical_alignment='b')
+        # stickyFields_column1 = #sg.Column([storage, preparation, type_status, broadGeo, taxonInput], background_color=greenArea, size=(560,200), expand_x=True) 
+        # stickyFields_column2 = #sg.Column([storage_fullname, placeholder1, placeholder2, placeholder3, taxonNr], background_color=greenArea) #,vertical_alignment='b')
 
-        layout_greenarea = [[stickyFields_column1, stickyFields_column2]]
+        # layout_greenarea = [[stickyFields_column1, stickyFields_column2]]
 
-        imgPath = str(Path(util.getUserPath()).joinpath(f'img/Warning_LinkedRecord.png'))
-        warning_linkedrecord = [sg.Image(imgPath,key="imgWarningLinkedRecord", visible=False, expand_x=True, expand_y=True, background_color=blueArea )] # [sg.Text("Test", background_color=blueArea)]
+        # imgPath = str(Path(util.getUserPath()).joinpath(f'img/Warning_LinkedRecord.png'))
+        # warning_linkedrecord = [#sg.Image(imgPath,key="imgWarningLinkedRecord", visible=False, expand_x=True, expand_y=True, background_color=blueArea )] # [#sg.Text("Test", background_color=blueArea)]
 
-        bluearea_maincol = sg.Column([specimen_flags, container_types, containerID, notes, barcode, controlArea], background_color=blueArea)
-        bluearea_sidecol = sg.Column([warning_linkedrecord], background_color=blueArea)
-        layout_bluearea  = [[bluearea_maincol, bluearea_sidecol],[sg.Column([previousRecordsTable])], [sg.Column([numberCounter], background_color=blueArea)]]
+        # bluearea_maincol = #sg.Column([specimen_flags, container_types, containerID, notes, barcode, controlArea], background_color=blueArea)
+        # bluearea_sidecol = #sg.Column([warning_linkedrecord], background_color=blueArea)
+        # layout_bluearea  = [[bluearea_maincol, bluearea_sidecol],[#sg.Column([previousRecordsTable])], [#sg.Column([numberCounter], background_color=blueArea)]]
 
-        # Grey Area (Header) elements
-        loggedIn = [
-            sg.Text('Logged in as:', size=sessionInfoSize, background_color=greyArea, font=sessionInfoFont),
-            sg.Text(gs.userName, key='txtUserName', size=(25, 1), background_color=greyArea, text_color='black', font=smallLabelFont), ]
+        # # Grey Area (Header) elements
+        # loggedIn = [
+        #     #sg.Text('Logged in as:', size=sessionInfoSize, background_color=greyArea, font=sessionInfoFont),
+        #     #sg.Text(gs.userName, key='txtUserName', size=(25, 1), background_color=greyArea, text_color='black', font=smallLabelFont), ]
 
-        institution_ = [
-            sg.Text('Institution: ', size=sessionInfoSize, background_color=greyArea, font=sessionInfoFont),
-            sg.Text(gs.institutionName, key='txtInstitution', size=(29, 1), background_color=greyArea, font=smallLabelFont)]
+        # institution_ = [
+        #     #sg.Text('Institution: ', size=sessionInfoSize, background_color=greyArea, font=sessionInfoFont),
+        #     #sg.Text(gs.institutionName, key='txtInstitution', size=(29, 1), background_color=greyArea, font=smallLabelFont)]
 
-        collection = [
-            sg.Text('Collection:', size=sessionInfoSize, background_color=greyArea, text_color='black', font=sessionInfoFont),
-            sg.Text(self.collection.name, key='txtCollection', size=(25, 1), background_color=greyArea, font=smallLabelFont)]
+        # collection = [
+        #     #sg.Text('Collection:', size=sessionInfoSize, background_color=greyArea, text_color='black', font=sessionInfoFont),
+        #     #sg.Text(self.collection.name, key='txtCollection', size=(25, 1), background_color=greyArea, font=smallLabelFont)]
 
-        version = [
-            sg.Text(f"Version number: ", size=sessionInfoSize, background_color=greyArea, text_color='black', font=sessionInfoFont),
-            sg.Text(util.getVersionNumber(), size=(20, 1), background_color=greyArea, font=smallLabelFont, text_color='black')]
+        # version = [
+        #     #sg.Text(f"Version number: ", size=sessionInfoSize, background_color=greyArea, text_color='black', font=sessionInfoFont),
+        #     #sg.Text(util.getVersionNumber(), size=(20, 1), background_color=greyArea, font=smallLabelFont, text_color='black')]
         
-        # Session mode control 
-        default_mode    = sg.Radio('Default entry mode', 'session', default=True, enable_events=True, key="radModeDefault", background_color=greyArea)
-        fast_entry_mode = sg.Radio('Fast entry mode', 'session', enable_events=True, key="radModeFastEntry", background_color=greyArea)
-        session_modes   = [default_mode, fast_entry_mode]
+        # # Session mode control 
+        # default_mode    = #sg.Radio('Default entry mode', 'session', default=True, enable_events=True, key="radModeDefault", background_color=greyArea)
+        # fast_entry_mode = #sg.Radio('Fast entry mode', 'session', enable_events=True, key="radModeFastEntry", background_color=greyArea)
+        # session_modes   = [default_mode, fast_entry_mode]
         
         # Header section
-        appTitle       = sg.Text('DaSSCo Mass Digitization App', size=(34, 2), background_color=greyArea, font=titleFont)
-        settingsButton = sg.Button('SETTINGS', key='btnSettings', button_color='grey30')
-        logoutButton   = sg.Button('LOG OUT', key='btnLogOut', button_color='grey10')
-        layoutTitle    = [[appTitle], [session_modes]]
-        layoutSettingLogout = [sg.Push(background_color=greyArea), settingsButton, logoutButton]
-        layoutMeta = [loggedIn, institution_, collection, version, layoutSettingLogout]
+        # appTitle       = #sg.Text('DaSSCo Mass Digitization App', size=(34, 2), background_color=greyArea, font=titleFont)
+        # settingsButton = #sg.Button('SETTINGS', key='btnSettings', button_color='grey30')
+        # logoutButton   = #sg.Button('LOG OUT', key='btnLogOut', button_color='grey10')
+        # layoutTitle    = [[appTitle], [session_modes]]
+        # layoutSettingLogout = [#sg.Push(background_color=greyArea), settingsButton, logoutButton]
+        # layoutMeta = [loggedIn, institution_, collection, version, layoutSettingLogout]
 
         # Combine elements into full layout - the first frame group is the grey metadata area.
-        layout = [[
-            sg.Frame('', layoutTitle, size=(550, 100), pad=(0, 0), background_color=greyArea, border_width=0),
-            sg.Frame('', layoutMeta, size=(500, 120), pad=(0, 0), border_width=0, background_color=greyArea)],
-            [sg.Frame('', [[sg.Column(layout_greenarea, background_color=greenArea)]], size=(500, 185), background_color=greenArea, expand_x=True, ), ],  # expand_y=True, 
-            [sg.Frame('', [[sg.Column(layout_bluearea,  background_color=blueArea )]], title_location=sg.TITLE_LOCATION_TOP, background_color=blueArea, expand_x=True, expand_y=True, )], ]
+        #layout = [[
+            #sg.Frame('', layoutTitle, size=(550, 100), pad=(0, 0), background_color=greyArea, border_width=0),
+            #sg.Frame('', layoutMeta, size=(500, 120), pad=(0, 0), border_width=0, background_color=greyArea)],
+            #[#sg.Frame('', [[#sg.Column(layout_greenarea, background_color=greenArea)]], size=(500, 185), background_color=greenArea, expand_x=True, ), ],  # expand_y=True, 
+            #[#sg.Frame('', [[#sg.Column(layout_bluearea,  background_color=blueArea )]], title_location=#sg.TITLE_LOCATION_TOP, background_color=blueArea, expand_x=True, expand_y=True, )], ]
 
         # Launch window
-        self.window = sg.Window("DaSSCo Mass Digitization App", layout, margins=(2, 2), size=(1100, 666), resizable=True, return_keyboard_events=True, finalize=True, background_color=greyArea)
-        self.window.TKroot.focus_force()  # Forces the app to be in focus.
+        #self.window = #sg.Window("DaSSCo Mass Digitization App", layout, margins=(2, 2), size=(1100, 666), resizable=True, return_keyboard_events=True, finalize=True, background_color=greyArea)
+        #self.window.TKroot.focus_force()  # Forces the app to be in focus.
 
         # Set session fields
         #self.winInpTaxon = self.window['inpTaxonName']
@@ -699,7 +699,7 @@ class SpecimenDataEntry():
                 pass
 
             # *** Close window Event
-            elif event == sg.WINDOW_CLOSED:
+            #elif event == #sg.WINDOW_CLOSED:
                 break
             
             # TODO Explain or remove below: 
@@ -833,7 +833,7 @@ class SpecimenDataEntry():
             errorMessage = f"Error occurred attempting to save specimen: {e}"
             traceBack = traceback.format_exc()
             util.logger.error(errorMessage)
-            sg.Popup(f'{e} \n\n {traceBack}', title='Error handle storage input', )
+            #sg.Popup(f'{e} \n\n {traceBack}', title='Error handle storage input', )
             result = errorMessage
 
         # self.initialStep = False
@@ -865,7 +865,7 @@ class SpecimenDataEntry():
             util.logger.error(str(e))
             traceBack = traceback.format_exc()
             util.logger.error(traceBack)
-            sg.popup_error(f'{e} \n\n {traceBack}', title='Error handle storage input', )
+            #sg.popup_error(f'{e} \n\n {traceBack}', title='Error handle storage input', )
 
         return ''
     
@@ -904,7 +904,7 @@ class SpecimenDataEntry():
             util.logger.error(str(e))
             traceBack = traceback.format_exc()
             util.logger.error(traceBack)
-            sg.popup_error(f'{e} \n\n {traceBack}', title='Error autoSuggestTaxonName', )
+            #sg.popup_error(f'{e} \n\n {traceBack}', title='Error autoSuggestTaxonName', )
 
         return 'Done'
 
@@ -1172,7 +1172,7 @@ class SpecimenDataEntry():
     def validationFeedback(self, validationMessage):
         """Gives a validation feedback message to the user"""
         util.logger.error(validationMessage)
-        sg.Popup(validationMessage)
+        #sg.Popup(validationMessage)
             
     def updateRecordCount(self):
         """

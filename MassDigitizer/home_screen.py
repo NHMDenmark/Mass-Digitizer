@@ -44,7 +44,8 @@ class HomeScreen(QMainWindow):
 
     def load_ui(self):
         loader = QUiLoader()
-        ui_file = QFile("ui/homescreen.ui")
+        ui_path = util.resourcePath("ui/homescreen.ui")
+        ui_file = QFile(ui_path)
         ui_file.open(QFile.ReadOnly)
         self.ui = loader.load(ui_file, self)
         ui_file.close()
