@@ -18,7 +18,7 @@ a = Analysis(
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
     cipher=block_cipher,
-    noarchive=True,  # Set noarchive to True for onefile mode
+    noarchive=False,  # Set noarchive to False for onefile mode
 )
 
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
@@ -27,13 +27,13 @@ exe = EXE(
     pyz,
     a.scripts,
     [],
-    exclude_binaries=True,
+    exclude_binaries=False,  # Include binaries in the single file
     name='DaSSCo',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=False,
+    console=False,  # Prevent console window from opening
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
