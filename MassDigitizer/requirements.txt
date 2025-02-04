@@ -1,8 +1,4 @@
 requests
-pysimplegui
 PySide6
 pytest
-pytz
-pandas
-openpyxl
 pyinstaller

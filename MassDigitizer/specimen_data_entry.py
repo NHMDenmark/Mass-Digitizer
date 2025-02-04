@@ -26,7 +26,6 @@ CONVENTION :
 import sys
 import time 
 import traceback
-#import PySimpleGUI as sg
 from pathlib import Path
 
 # Internal dependencies

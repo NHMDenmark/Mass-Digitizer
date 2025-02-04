@@ -39,6 +39,9 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "..\dist\DaSSCo\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\dist\DaSSCo\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\dist\DaSSCo\_internal\*"; DestDir: "{app}\_internal"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "ui\specimendataentry.ui"; DestDir: "{app}\ui"; Flags: ignoreversion
+Source: "ui\homescreen.ui"; DestDir: "{app}\ui"; Flags: ignoreversion
 Source: "sql\editions\temp\db.sqlite3"; DestDir: "{userdocs}\DaSSCo"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "img\*.*"; DestDir: "{userdocs}\DaSSCo\img"; Flags: ignoreversion recursesubdirs createallsubdirs
 
