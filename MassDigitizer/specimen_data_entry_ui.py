@@ -341,6 +341,9 @@ class SpecimenDataEntryUI(QMainWindow):
         self.collobj.catalogNumber = self.ui.inpCatalogNumber.text()
         self.saveForm()
 
+        util.logger.info(f'New collection object: {str(self.collobj)}')
+        pass
+
     def on_catalog_number_text_changed(self): self.collobj.catalogNumber = self.ui.inpCatalogNumber.text()
 
     def on_back_clicked(self):
@@ -375,8 +378,9 @@ class SpecimenDataEntryUI(QMainWindow):
             if validated:
                 # All checks out; Save specimen
                 savedRecord = self.collobj.save()
-                # Remember id of record just save and prepare for blank record
-                previousRecordId = savedRecord['id']  # Id to be used for refreshing the previous rows table.
+
+                # Remember id of record just saved and prepare for blank record
+                previousRecordId = savedRecord['id'] 
 
                 # Refresh adjacent record set
                 self.recordSet.reload(savedRecord)
@@ -394,8 +398,9 @@ class SpecimenDataEntryUI(QMainWindow):
                     self.collobj = specimen.Specimen(self.collectionId)                    
 
                     # Transfer data in sticky fields to new record:
-                    self.setSpecimenFields() # TODO Maybe defunct
-
+                    self.setSpecimenFields() 
+                    self.fillFormFields(self.collobj.getFieldsAsDict())
+                    
                     # Prepare form for next new record
                     self.clearNonStickyFields()
             else:
@@ -415,6 +420,28 @@ class SpecimenDataEntryUI(QMainWindow):
         util.logger.info(f'{result}')
                          
         return result
+
+    def setSpecimenFields(self, stickyFieldsOnly=True):
+        """
+        Method for synchronizing specimen data object instance (Model) with form input fields (View).
+        CONTRACT
+            stickyFieldsOnly (Boolean) : Indication of only sticky fields should be synchronized usually in case of a new blank record
+        """
+
+        # Set specimen object instance fields from input form
+        self.collobj.setStorageFieldsFromRecord(self.getStorageRecord())
+        self.collobj.setPrepTypeFields(self.ui.cbxPrepType.currentIndex() - 1)
+        self.collobj.setTypeStatusFields(self.ui.cbxTypeStatus.currentIndex() - 1)
+        self.collobj.notes = self.ui.inpNotes.text()
+        self.collobj.containername = self.ui.inpContainerName.text()
+        self.collobj.containertype = self.getContainerTypeFromInput()
+        self.collobj.setGeoRegionFields(self.ui.cbxGeoRegion.currentIndex() - 1)
+        taxonFullName = self.ui.inpTaxonName.text()
+        taxonFullName = taxonFullName.rstrip()
+        if self.collection.useTaxonNumbers:
+            self.collobj.taxonNumber = self.ui.inpTaxonNumber.text()
+        self.collobj.setTaxonNameFields(self.getTaxonNameRecord(taxonFullName))
+        pass
     
     def clearNonStickyFields(self):
         """
@@ -451,27 +478,6 @@ class SpecimenDataEntryUI(QMainWindow):
 
         # Reset focus on the storage field
         self.ui.chkSpecimenObscured.setFocus()   
-
-    def setSpecimenFields(self, stickyFieldsOnly=True):
-        """
-        Method for synchronizing specimen data object instance (Model) with form input fields (View).
-        CONTRACT
-            stickyFieldsOnly (Boolean) : Indication of only sticky fields should be synchronized usually in case of a new blank record
-        """
-
-        # Set specimen object instance fields from input form
-        self.collobj.setStorageFieldsFromRecord(self.getStorageRecord())
-        self.collobj.setPrepTypeFields(self.ui.cbxPrepType.currentIndex() - 1)
-        self.collobj.setTypeStatusFields(self.ui.cbxTypeStatus.currentIndex() - 1)
-        self.collobj.notes = self.ui.inpNotes.text()
-        self.collobj.containername = self.ui.inpContainerName.text()
-        self.collobj.containertype = self.getContainerTypeFromInput()
-        self.collobj.setGeoRegionFields(self.ui.cbxGeoRegion.currentIndex() - 1)
-        taxonFullName = self.ui.inpTaxonName.text()
-        taxonFullName = taxonFullName.rstrip()
-        if self.collection.useTaxonNumbers:
-            self.collobj.taxonNumber = self.ui.inpTaxonNumber.text()
-        self.collobj.setTaxonNameFields(self.getTaxonNameRecord(taxonFullName))
 
     def getStorageRecord(self):
         """
@@ -524,32 +530,69 @@ class SpecimenDataEntryUI(QMainWindow):
         """
         Function for setting form fields from specimen data record
         """
-        self.ui.txtRecordID.setText('{}'.format(record['id']))
-        self.ui.inpStorage.setText(self.displayStorage(record['storagename']))
-        self.ui.txtStorageFullname.setText(record['storagefullname'])
-        self.ui.cbxPrepType.setCurrentText(record['preptypename'])
-        self.ui.cbxTypeStatus.setCurrentText(record['typestatusname'])
+        def str_to_bool(value):
+            return value.lower() in ('true', '1', 'yes')
 
-        if record['objectcondition'] == 'Needs repair':
+        if record.get('id'):
+            self.ui.txtRecordID.setText(record.get('id', ''))
+        self.ui.inpStorage.setText(record.get('storagefullname', ''))
+        self.ui.txtStorageFullname.setText(record.get('storagefullname', ''))
+        self.ui.cbxPrepType.setCurrentText(record.get('preptypename', ''))
+        self.ui.cbxTypeStatus.setCurrentText(record.get('typestatusname', ''))
+
+        if record.get('objectcondition') == 'Needs repair':
             self.ui.chkDamage.setChecked(True)
         else:
             self.ui.chkDamage.setChecked(False)
-        self.ui.chkSpecimenObscured.setChecked(record['specimenobscured'])
-        self.ui.chkLabelObscured.setChecked(record['labelobscured'])
+        self.ui.chkSpecimenObscured.setChecked(str_to_bool(record.get('specimenobscured', 'False')))
+        self.ui.chkLabelObscured.setChecked(str_to_bool(record.get('labelobscured', 'False')))
 
-        self.ui.inpNotes.setText(record['notes'])
+        self.ui.inpNotes.setText(record.get('notes', ''))
 
-        if record['containername'] is not None:  # If not strip() is applied to none
-            self.ui.inpContainerName.setText(record['containername'].strip())
+        container_name = record.get('containername')
+        if container_name is not None:
+            self.ui.inpContainerName.setText(container_name.strip())
 
         self.setContainerFields(record)
 
-        self.ui.cbxGeoRegion.setCurrentText(record['georegionname'])
-        self.ui.inpTaxonName.setText(record['taxonfullname'])
+        self.ui.cbxGeoRegion.setCurrentText(record.get('georegionname', ''))
+        self.ui.inpTaxonName.setText(record.get('taxonfullname', ''))
         if self.collection.useTaxonNumbers:
-            self.ui.inpTaxonNumber.setText(record['taxonnumber'])
-        self.ui.inpCatalogNumber.setText(record['catalognumber'])
+            self.ui.inpTaxonNumber.setText(record.get('taxonnumber', ''))
+        self.ui.inpCatalogNumber.setText(record.get('catalognumber', ''))
     
+    def setContainerFields(self, record):
+        """
+        Method for setting container-related input fields on the basis of the record passed to it. 
+        CONTRACT
+            record (SQLite Row) : Specimen record with the container-related fields
+        """
+
+        if record['containername'] and record['containername'] != '':
+            # Container name set; multi-specimen assumed
+            containerName = record['containername'] # Get container name 
+            containerType = record['containertype'] # Get container type 
+
+            if containerType == self.MSOterm:
+                self.ui.radRadioMSO.setChecked(True) # Set MSO radiobutton 
+                self.ui.imgWarningLinkedRecord.setVisible(True)
+            elif containerType == self.MOSterm:
+                self.ui.radRadioMOS.setChecked(True) # Set MOS radiobutton
+                self.ui.imgWarningLinkedRecord.setVisible(True)
+            else:
+                self.ui.lblError.setText('Something went wrong!')
+                self.ui.lblError.setVisible=True
+            
+            self.ui.inpContainerName.setText(containerName)
+            self.ui.inpContainerName.setEnabled(True)
+        else:
+            # No container name set; single specimen assumed
+            self.ui.radRadioSSO.setChecked(True) # Set SSO radiobutton        
+            self.ui.inpContainerName.setText('') # Clear container name input field 
+            self.ui.inpContainerName.setEnabled(False) # Disable container name input field 
+            self.ui.imgWarningLinkedRecord.setVisible(False) # Hide linked record warning
+
+
     def validateBarCodeLength(self, barcode):
         # Ensure that the barcode has the correct length according to collection.
         validation = None
@@ -632,6 +675,11 @@ class SpecimenDataEntryUI(QMainWindow):
         if isinstance(keyStrokes, str) and len(keyStrokes) >= 3:
             # Format the search term with double quotation marks to work witch FTS MATCH
             sanitized_input = keyStrokes.replace('.', '"."')  # Escapes periods in FTS5
+            sanitized_input = sanitized_input.replace('-', '"-"')  # Escapes dashes in FTS5
+            sanitized_input = sanitized_input.replace('(', '"("')  # Escapes parenthesis open in FTS5
+            sanitized_input = sanitized_input.replace(')', '")"')  # Escapes parenthesis closed in FTS5
+            sanitized_input = sanitized_input.replace(',', '","')  # Escapes comma in FTS5
+            sanitized_input = sanitized_input.replace('&', '"&"')  # Escapes obelisk in FTS5
             search_term = f'{sanitized_input}*'
             
             sqlString = f"""SELECT * FROM taxonname WHERE id IN (SELECT id FROM taxonname_fts  
@@ -643,6 +691,9 @@ class SpecimenDataEntryUI(QMainWindow):
                 self.taxonname_completer.setModel(QStringListModel(suggestions))
             except Exception as e:
                 util.logger.error(f"Error occurred while fetching taxon name suggestions: {e}")
+                util.logger.error(f"SQL string: {sqlString}")
+                util.logger.error(f"Error stack: {e.__traceback__}")
+                self.show_error_popup(f"Error occurred while fetching taxon name suggestions: {e}")
                 self.taxonname_completer.setModel(QStringListModel([]))
         else:
             self.taxonname_completer.setModel(QStringListModel([]))
