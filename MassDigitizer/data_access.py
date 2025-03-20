@@ -44,9 +44,11 @@ class DataAccess():
             self.connection.row_factory = sqlite3.Row
             self.currentCursor = self.connection.cursor()
         except Exception as e:
-            util.logger.debug("SQLite connection failed. Error: %s" % e)
+            #util.logger.debug("SQLite connection failed. Error: %s" % e)
+            util.logger.error("SQLite connection failed. Error: %s" % e)
             logError = f"The path {self.dbFilePath} may not exist."
-            util.logger.debug(logError)
+            #util.logger.debug(logError)
+            util.logger.error(logError)
             raise e 
 
     def setDatabase(self, dbFileName='db'):
