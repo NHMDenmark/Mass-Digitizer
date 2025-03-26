@@ -708,7 +708,7 @@
              </font>
             </property>
             <property name="text">
-             <string>-no record-</string>
+             <string>-new record-</string>
             </property>
             <property name="class" stdset="0">
              <string>QLabelPlain</string>

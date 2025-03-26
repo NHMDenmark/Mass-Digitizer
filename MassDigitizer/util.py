@@ -170,6 +170,10 @@ def getVersionNumber():
 # DaSSCo.issfile which has this format:/ #define MyAppVersion "0.2.5" /
 # (Please ignore the forward slashes above)"""
 
+
+def str_to_bool(value):
+    return value.lower() in ('true', '1', 'yes')
+
 class Struct:
     """A structure that can have any fields defined."""
 

@@ -116,6 +116,7 @@ class Specimen(Model):
         if self.containername: #Check if containername is None
             self.containername = self.containername.strip()
         fieldsDict = {
+            'id': f'{self.id}',
             'catalognumber': f'{self.catalogNumber}',
             'taxonfullname': f'{self.taxonFullName}',
             'taxonname': f'{self.taxonName}',
