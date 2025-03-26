@@ -24,9 +24,9 @@ import traceback
 from pathlib import Path
 
 # PySide6 imports
-from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QAbstractItemView
 from PySide6.QtWidgets import QLineEdit, QComboBox, QRadioButton, QCheckBox, QMessageBox
-from PySide6.QtCore import Qt, QFile, QStandardPaths, QStringListModel, QEvent
+from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView
+from PySide6.QtCore import Qt, QFile, QStandardPaths, QStringListModel
 from PySide6.QtGui import QFont, QIcon, QPixmap
 from PySide6.QtWidgets import QCompleter
 from PySide6.QtUiTools import QUiLoader
@@ -335,7 +335,8 @@ class SpecimenDataEntryUI(QMainWindow):
     
     def on_container_name_return_pressed(self):self.collobj.containername = self.ui.inpContainerName.text()
 
-    def on_notes_return_pressed(self): self.collobj.notes = self.ui.inpNotes.text()
+    def on_notes_return_pressed(self): 
+        self.collobj.notes = self.ui.inpNotes.text()
 
     def on_catalog_number_return_pressed(self): 
         self.collobj.catalogNumber = self.ui.inpCatalogNumber.text()
@@ -347,10 +348,57 @@ class SpecimenDataEntryUI(QMainWindow):
     def on_catalog_number_text_changed(self): self.collobj.catalogNumber = self.ui.inpCatalogNumber.text()
 
     def on_back_clicked(self):
-        pass
+        # Fetch previous specimen record data on basis of current record ID, if any
+        record = self.collobj.loadPrevious()
+
+        # If no further record back, retrieve current record (if any) or last record (if any)
+        if not record:
+            # If there is a current record, reload current (meaning stay with current)
+            if self.collobj.id > 0:
+                record = self.collobj.load(self.collobj.id)
+            # Otherwise get latest record, if any
+            else:
+                record = self.db.getLastRow('specimen', self.collectionId)
+                # If no records at all, this may indicate an empty table
+
+        # If a record has finally been retrieved, present content in data fields
+        if record:
+            self.load_form(record)
+
+        # Fill form fields 
+        self.fillFormFields()
+
+        # Reset focus back to first field (Storage)
+        self.ui.inpStorage.setFocus()
 
     def on_forward_clicked(self):
-        pass
+        # First get current instance as record
+        record = self.collobj.loadNext()
+        
+        if not record:
+            # No further record: Prepare for blank record
+            self.collobj = specimen.Specimen(self.collectionId)
+            self.clearNonStickyFields()
+            # Transfer data in sticky fields to new record:
+            self.setSpecimenFields()
+        else:
+            # If a record has finally been retrieved, present content in data fields
+            self.load_form(record)
+
+        # Fill form fields 
+        self.fillFormFields()
+        
+        # Reset focus back to first field (Storage)
+        self.ui.inpStorage.setFocus()
+
+    def load_form(self, record):
+        """Load form with data from record."""
+        self.collobj.setFields(record)
+        self.fillFormFields()
+
+        # Reload recordset and repopulate table of adjacent records
+        self.recordSet.reload(record)
+        self.load_previous_records()
 
     def updateRecordCount(self):
         """
@@ -399,7 +447,7 @@ class SpecimenDataEntryUI(QMainWindow):
 
                     # Transfer data in sticky fields to new record:
                     self.setSpecimenFields() 
-                    self.fillFormFields(self.collobj.getFieldsAsDict())
+                    self.fillFormFields()
                     
                     # Prepare form for next new record
                     self.clearNonStickyFields()
@@ -465,6 +513,15 @@ class SpecimenDataEntryUI(QMainWindow):
             checkfield = self.ui.findChild(QCheckBox, key)
             if checkfield: checkfield.setChecked(False)
 
+        if 'inpContainerName' in fieldList:
+            self.ui.radRadioSSO.setChecked(True)
+
+        # If existing record, highlight record id
+        if self.collobj.id > 0:
+            self.ui.txtRecordID.setStyleSheet("QLabel { background-color: yellow }")
+        else:
+            self.ui.txtRecordID.setStyleSheet("")
+
         # Reset focus on the storage field
         self.ui.inpStorage.setFocus()   
 
@@ -515,15 +572,14 @@ class SpecimenDataEntryUI(QMainWindow):
             taxonRecord = None
         return taxonRecord
 
-    def fillFormFields(self, record):
+    def fillFormFields(self):
         """
         Function for setting form fields from specimen data record
-        """
-        def str_to_bool(value):
-            return value.lower() in ('true', '1', 'yes')
+        """        
+        record = self.collobj.getFieldsAsDict()
 
-        if record.get('id'):
-            self.ui.txtRecordID.setText(record.get('id', ''))
+        self.ui.txtRecordID.setText(record.get('id', '-new record-'))
+        if record.get('id') == '0': self.ui.txtRecordID.setText('-new record-')
         self.ui.inpStorage.setText(record.get('storagefullname', ''))
         self.ui.txtStorageFullname.setText(record.get('storagefullname', ''))
         self.ui.cbxPrepType.setCurrentText(record.get('preptypename', ''))
@@ -533,8 +589,8 @@ class SpecimenDataEntryUI(QMainWindow):
             self.ui.chkDamage.setChecked(True)
         else:
             self.ui.chkDamage.setChecked(False)
-        self.ui.chkSpecimenObscured.setChecked(str_to_bool(record.get('specimenobscured', 'False')))
-        self.ui.chkLabelObscured.setChecked(str_to_bool(record.get('labelobscured', 'False')))
+        self.ui.chkSpecimenObscured.setChecked(util.str_to_bool(record.get('specimenobscured', 'False')))
+        self.ui.chkLabelObscured.setChecked(util.str_to_bool(record.get('labelobscured', 'False')))
 
         self.ui.inpNotes.setText(record.get('notes', ''))
 
@@ -545,6 +601,8 @@ class SpecimenDataEntryUI(QMainWindow):
         if self.collection.useTaxonNumbers:
             self.ui.inpTaxonNumber.setText(record.get('taxonnumber', ''))
         self.ui.inpCatalogNumber.setText(record.get('catalognumber', ''))
+
+        self.ui.txtRecordID.setStyleSheet("")
     
     def setContainerFields(self, record):
         """
