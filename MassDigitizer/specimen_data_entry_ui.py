@@ -21,15 +21,15 @@ import os
 import sys
 import time
 import traceback
+from pathlib import Path
 
 # PySide6 imports
-from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView
+from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QAbstractItemView
 from PySide6.QtWidgets import QLineEdit, QComboBox, QRadioButton, QCheckBox, QMessageBox
+from PySide6.QtCore import Qt, QFile, QStandardPaths, QStringListModel, QEvent
+from PySide6.QtGui import QFont, QIcon, QPixmap
 from PySide6.QtWidgets import QCompleter
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtCore import Qt, QFile, QStandardPaths, QStringListModel
-from PySide6.QtGui import QFont, QIcon, QPixmap
-from pathlib import Path
 
 # Internal dependencies
 import util
@@ -96,14 +96,14 @@ class SpecimenDataEntryUI(QMainWindow):
         self.storage_completer = QCompleter()
         self.storage_completer.setCaseSensitivity(Qt.CaseInsensitive)
         self.storage_completer.setFilterMode(Qt.MatchContains)
+        self.storage_completer.setCompletionMode(QCompleter.UnfilteredPopupCompletion)
         self.ui.inpStorage.setCompleter(self.storage_completer)
-        self.ui.inpStorage.textChanged.connect(self.update_storage_completer)        
+        self.ui.inpStorage.textChanged.connect(self.update_storage_completer)  
 
         # Create QCompleter for inpTaxonName
         self.taxonname_completer = QCompleter()
         self.taxonname_completer.setCaseSensitivity(Qt.CaseInsensitive)
         self.taxonname_completer.setFilterMode(Qt.MatchContains)
-        self.taxonname_completer.activated.connect(self.on_suggestion_selected)
         self.ui.inpTaxonName.setCompleter(self.taxonname_completer)
         self.ui.inpTaxonName.textChanged.connect(self.update_taxonname_completer)
 
@@ -464,20 +464,9 @@ class SpecimenDataEntryUI(QMainWindow):
             if listfield: listfield.setCurrentIndex(0)
             checkfield = self.ui.findChild(QCheckBox, key)
             if checkfield: checkfield.setChecked(False)
-        
-        # Reset container type radio buttons  
-        self.ui.radRadioSSO.setChecked(True)
-        self.ui.radRadioMOS.setChecked(False) 
-        self.ui.radRadioMSO.setChecked(False)
-
-        # Set blank record
-        self.collobj = specimen.Specimen(self.collectionId)
-
-        # Storage location is set to "None" to represent a blank entry in the UI
-        self.ui.inpStorage.setText('None')
 
         # Reset focus on the storage field
-        self.ui.chkSpecimenObscured.setFocus()   
+        self.ui.inpStorage.setFocus()   
 
     def getStorageRecord(self):
         """
@@ -549,10 +538,6 @@ class SpecimenDataEntryUI(QMainWindow):
 
         self.ui.inpNotes.setText(record.get('notes', ''))
 
-        container_name = record.get('containername')
-        if container_name is not None:
-            self.ui.inpContainerName.setText(container_name.strip())
-
         self.setContainerFields(record)
 
         self.ui.cbxGeoRegion.setCurrentText(record.get('georegionname', ''))
@@ -591,7 +576,6 @@ class SpecimenDataEntryUI(QMainWindow):
             self.ui.inpContainerName.setText('') # Clear container name input field 
             self.ui.inpContainerName.setEnabled(False) # Disable container name input field 
             self.ui.imgWarningLinkedRecord.setVisible(False) # Hide linked record warning
-
 
     def validateBarCodeLength(self, barcode):
         # Ensure that the barcode has the correct length according to collection.
@@ -649,6 +633,7 @@ class SpecimenDataEntryUI(QMainWindow):
         Parameters:
         keyStrokes (str): The current text input by the user in the storage input field.
         """
+
         if isinstance(keyStrokes, str) and len(keyStrokes) >= 3:
             fields = {'fullname': f'LIKE "%{keyStrokes.lower()}%"', 'collectionid': f'={self.collection_id}'}
             rows = self.db.getRowsOnFilters('storage', fields, 50)
@@ -698,8 +683,6 @@ class SpecimenDataEntryUI(QMainWindow):
         else:
             self.taxonname_completer.setModel(QStringListModel([]))
     
-    def on_suggestion_selected(self, text):
-        print(f"User selected: {text}")
 
 def main():
     app = QApplication(sys.argv)
@@ -711,3 +694,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
