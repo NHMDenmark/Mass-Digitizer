@@ -235,7 +235,9 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.inpContainerName.returnPressed.connect(self.on_container_name_return_pressed)
         self.ui.inpNotes.returnPressed.connect(self.on_notes_return_pressed)        
         self.ui.inpCatalogNumber.returnPressed.connect(self.on_catalog_number_return_pressed)
-        self.ui.inpCatalogNumber.textChanged.connect(self.on_catalog_number_text_changed)
+        self.ui.inpCatalogNumber.textChanged.connect(self.on_catalog_number_text_changed)      
+        self.ui.inpTaxonNumber.returnPressed.connect(self.lookup_taxon_number)
+        self.ui.inpTaxonNumber.textChanged.connect(self.lookup_taxon_number)
         
         # Connect buttons to specific action functions
         self.ui.btnSave.clicked.connect(self.on_save_clicked)
@@ -272,9 +274,9 @@ class SpecimenDataEntryUI(QMainWindow):
         """
         taxon_name_input = self.ui.inpTaxonName.text()
         self.ui.txtStorageFullname.setText(taxon_name_input)
-        taxonname_record = self.getTaxonNameRecord(taxon_name_input)
-        if taxonname_record:
-            self.collobj.setTaxonNameFieldsFromRecord(taxonname_record)
+        record = self.getTaxonNameRecord(taxon_name_input)
+        if record:
+            self.collobj.setTaxonNameFieldsFromRecord(record)
         else: 
             self.collobj.taxonName = taxon_name_input
             self.collobj.taxonFullName = taxon_name_input
@@ -346,6 +348,21 @@ class SpecimenDataEntryUI(QMainWindow):
         pass
 
     def on_catalog_number_text_changed(self): self.collobj.catalogNumber = self.ui.inpCatalogNumber.text()
+
+    def lookup_taxon_number(self):
+        """Lookup taxon number in database and set taxon name fields accordingly."""
+        taxon_nr_input = self.ui.inpTaxonNumber.text()
+        if len(taxon_nr_input) > 1:
+            #self.collobj.taxonNumber = self.ui.inpTaxonNumber.text()
+            record = self.getTaxonNameRecordOnNumber(taxon_nr_input)
+            if record:
+                self.collobj.setTaxonNameFieldsFromRecord(record)            
+                self.ui.inpTaxonName.setText(self.collobj.taxonFullName)
+            else: 
+                self.collobj.taxonName = ''
+                self.collobj.taxonFullName = ''
+                self.collobj.taxonNameId = 0            
+                self.ui.inpTaxonName.setText('')
 
     def on_back_clicked(self):
         # Fetch previous specimen record data on basis of current record ID, if any
@@ -562,10 +579,21 @@ class SpecimenDataEntryUI(QMainWindow):
         Retrieve taxon name record based on taxon name input field contents.
         Search is to be done on taxon fullname and taxon tree definition derived from collection.
         """
-        # taxonRecords = self.db.getRowsOnFilters('taxonname', {'fullname': f'="{taxonFullName}"',
-        #                                                       'treedefid': f'={self.collection.taxonTreeDefId}'}, 1)
-        sql = f"SELECT * FROM taxonname WHERE fullname = '{taxonFullName}' AND treedefid = {self.collection.taxonTreeDefId} LIMIT 1;"
-        taxonRecords = self.db.executeSqlStatement(sql)
+
+        taxonRecords = self.db.getRowsOnFilters('taxonname', {'fullname': f'="{taxonFullName}"', 'institutionid': f'={self.collection.institutionId}', 'treedefid': f'={self.collection.taxonTreeDefId}'}, 1)
+        if len(taxonRecords) > 0:
+            taxonRecord = taxonRecords[0]
+        else:
+            taxonRecord = None
+        return taxonRecord
+    
+    def getTaxonNameRecordOnNumber(self, taxonNumber):
+        """
+        Retrieve taxon name record based on taxon number input field contents.
+        Search is to be done on taxon number and taxon tree definition derived from collection.
+        """
+
+        taxonRecords = self.db.getRowsOnFilters('taxonname', {'idnumber': f'="{taxonNumber}"', 'institutionid': f'={self.collection.institutionId}', 'treedefid': f'={self.collection.taxonTreeDefId}'}, 1)
         if len(taxonRecords) > 0:
             taxonRecord = taxonRecords[0]
         else:
