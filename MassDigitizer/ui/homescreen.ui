@@ -61,7 +61,7 @@
       </font>
      </property>
      <property name="text">
-      <string>DaSSCo Mass Digitizer App - Version 2.0.0 alpha</string>
+      <string>DaSSCo Mass Digitizer App - Version 2.0.1 alpha</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignCenter</set>

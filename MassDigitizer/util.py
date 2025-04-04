@@ -21,7 +21,7 @@ from datetime import datetime
 import random
 
 # Central place to manage version numbers
-versionNumber = "2.0.0 alpha"  # Before compiling exe, please set the version number above
+versionNumber = "2.0.1 alpha"  # Before compiling exe, please set the version number above
 logger = logging.getLogger()
 
 
