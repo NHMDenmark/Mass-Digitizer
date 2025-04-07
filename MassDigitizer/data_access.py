@@ -299,6 +299,8 @@ class DataAccess():
                     Numbers should be formatted as strings
             RETURNS inserted record row
         """
+
+        fields.pop('id')  # Remove the id field since we are inserting a new record 
         self.currentCursor = self.getDbCursor()
         fieldsString = []
         for key in fields:
