@@ -88,6 +88,7 @@ DaSSCo.exe
 .*OLD
 *OLD
 *.bzl
+*.autosave
 
 # Ignore temporary files
 /MassDigitizer/Output/*.zip
