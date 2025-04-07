@@ -422,7 +422,12 @@ class SpecimenDataEntryUI(QMainWindow):
         Simple method for retrieving and displaying record count
         """
         # Update record number counter 
-        specimenCount = len(self.db.getRows('specimen', limit=9999))
+        filter = {'institutionid':f'={self.collection.institutionId}','collectionid':f'={self.collection.id}'}
+        records = self.db.getRowsOnFilters('specimen', filters=filter, limit=9999)
+        if records:
+            specimenCount = len(records)
+        else: 
+            specimenCount = 0
         self.ui.txtNumberCounter.setText(str(specimenCount))
 
     def saveForm(self):
@@ -625,7 +630,11 @@ class SpecimenDataEntryUI(QMainWindow):
         self.setContainerFields(record)
 
         self.ui.cbxGeoRegion.setCurrentText(record.get('georegionname', ''))
-        self.ui.inpTaxonName.setText(record.get('taxonfullname', ''))
+
+        taxonfullname = record.get('taxonfullname', '')
+        taxonfamilyname = self.specimen.searchParentTaxon(record.get('parentfullname'), 140, self.collection.taxonTreeDefId)
+        self.ui.inpTaxonName.setText(taxonfullname)
+        self.ui.txtTaxonFullname.setText(taxonfullname + ' (' + taxonfamilyname + ')')
         if self.collection.useTaxonNumbers:
             self.ui.inpTaxonNumber.setText(record.get('taxonnumber', ''))
         self.ui.inpCatalogNumber.setText(record.get('catalognumber', ''))
