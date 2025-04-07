@@ -620,7 +620,7 @@ class Specimen(Model):
 
             else:
                 # Can't find (further) parent taxon
-                # taxonFullName = '-not found-'
+                taxonFullName = '-parent not found-'
                 # raise Exception(f"Could not retrieve parent taxon of target rank: {target_rankid} !")
                 break  # return current
 

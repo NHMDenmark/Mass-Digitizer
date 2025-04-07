@@ -106,7 +106,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.taxonname_completer.setFilterMode(Qt.MatchContains)
         self.ui.inpTaxonName.setCompleter(self.taxonname_completer)
         self.ui.inpTaxonName.textChanged.connect(self.update_taxonname_completer)
-
+        
         # Start up interface and center window
         self.show()
         self.center_screen() 
@@ -273,7 +273,6 @@ class SpecimenDataEntryUI(QMainWindow):
         Set taxon name fields from taxon name input field.
         """
         taxon_name_input = self.ui.inpTaxonName.text()
-        self.ui.txtStorageFullname.setText(taxon_name_input)
         record = self.getTaxonNameRecord(taxon_name_input)
         if record:
             self.collobj.setTaxonNameFieldsFromRecord(record)
@@ -281,7 +280,7 @@ class SpecimenDataEntryUI(QMainWindow):
             self.collobj.taxonName = taxon_name_input
             self.collobj.taxonFullName = taxon_name_input
             self.collobj.taxonNameId = 0
-        self.ui.txtStorageFullname.setText(self.collobj.storageFullName)
+        self.setTxtTaxonFullname(self.collobj.taxonFullName)
 
     def on_chkDamage_clicked(self): 
         needsrepair = self.ui.chkDamage.isChecked()
@@ -630,16 +629,20 @@ class SpecimenDataEntryUI(QMainWindow):
         self.setContainerFields(record)
 
         self.ui.cbxGeoRegion.setCurrentText(record.get('georegionname', ''))
-
+       
         taxonfullname = record.get('taxonfullname', '')
-        taxonfamilyname = self.specimen.searchParentTaxon(record.get('parentfullname'), 140, self.collection.taxonTreeDefId)
-        self.ui.inpTaxonName.setText(taxonfullname)
-        self.ui.txtTaxonFullname.setText(taxonfullname + ' (' + taxonfamilyname + ')')
+        self.setTxtTaxonFullname(taxonfullname)
+
         if self.collection.useTaxonNumbers:
             self.ui.inpTaxonNumber.setText(record.get('taxonnumber', ''))
         self.ui.inpCatalogNumber.setText(record.get('catalognumber', ''))
 
         self.ui.txtRecordID.setStyleSheet("")
+
+    def setTxtTaxonFullname(self, taxonfullname):
+        taxonfamilyname = self.collobj.searchParentTaxon(taxonfullname, 140, self.collection.taxonTreeDefId)
+        self.ui.inpTaxonName.setText(taxonfullname)
+        self.ui.txtTaxonFullname.setText(taxonfullname + ' (' + taxonfamilyname + ')')
     
     def setContainerFields(self, record):
         """

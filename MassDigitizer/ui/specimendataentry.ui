@@ -356,6 +356,28 @@
           <item row="4" column="1">
            <widget class="QLineEdit" name="inpTaxonName"/>
           </item>
+          <item row="5" column="1">
+           <widget class="QLabel" name="txtTaxonFullname">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>-no taxon selected-</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="class" stdset="0">
+             <string>QLabelMetaInfo</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>
@@ -401,34 +423,12 @@
          </spacer>
         </item>
         <item>
-         <widget class="QLabel" name="txtTaxonFullname">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>35</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>-no taxon selected-</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
-          </property>
-          <property name="class" stdset="0">
-           <string>QLabelMetaInfo</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <layout class="QFormLayout" name="formLayout_2">
           <property name="labelAlignment">
-           <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
           </property>
           <property name="formAlignment">
-           <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
           </property>
           <item row="0" column="0">
            <widget class="QLabel" name="lblTaxonNumber">
