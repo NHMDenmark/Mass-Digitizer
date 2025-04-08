@@ -489,6 +489,10 @@ class Specimen(Model):
           taxonFullName (string) : Fullname value of selected taxon
         RETURNS taxonNameId (int) : Primary key of selected taxon record
         """
+        
+        # Replace apostrophes with double quotes for SQL query
+        taxonFullName = taxonFullName.replace("'", "''")
+
         # Get taxon name record on fullname
         taxonNameRecord = self.db.getRowsOnFilters('taxonname', {'fullname =': f'"{taxonFullName}"'})
         resultsRowCount = len(taxonNameRecord)
@@ -587,6 +591,9 @@ class Specimen(Model):
             target_rankid: Target rank id of the parent taxon to be searched for
         RETURNS taxonFullName (string) : Name of the parent taxon 
         """
+        
+        # Replace apostrophes with double quotes for SQL query
+        taxonFullName = taxonFullName.replace("'", "''")
 
         taxonRankId = 270  # Start with lowest possible rank
 
@@ -597,9 +604,9 @@ class Specimen(Model):
 
             if len(taxonNameRecords) > 0:
                 # First check whether this is an accepted name or synonym; If the latter, use the accepted name instead as basis record
-                acceptedFullName = taxonNameRecords[0]['acceptedfullname']
+                acceptedFullName = taxonNameRecords[0]['acceptedfullname'].replace("'", "''")
                 if acceptedFullName != '' and acceptedFullName is not None:
-                    taxonNameRecords = self.db.getRowsOnFilters('taxonname', filters={'fullname': f"='{acceptedFullName}'",'treedefid': f"= '{treedefid}'"})                
+                    taxonNameRecords = self.db.getRowsOnFilters('taxonname', filters={'fullname': f"='{acceptedFullName}'",'treedefid': f"= '{treedefid}'"})
 
                 if len(taxonNameRecords) > 0:
                     taxonRankId = taxonNameRecords[0]['rankid']

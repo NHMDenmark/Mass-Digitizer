@@ -583,6 +583,8 @@ class SpecimenDataEntryUI(QMainWindow):
         Retrieve taxon name record based on taxon name input field contents.
         Search is to be done on taxon fullname and taxon tree definition derived from collection.
         """
+        # Replace apostrophes with double quotes for SQL query
+        taxonFullName = taxonFullName.replace("'", "''")
 
         taxonRecords = self.db.getRowsOnFilters('taxonname', {'fullname': f'="{taxonFullName}"', 'institutionid': f'={self.collection.institutionId}', 'treedefid': f'={self.collection.taxonTreeDefId}'}, 1)
         if len(taxonRecords) > 0:
@@ -630,7 +632,7 @@ class SpecimenDataEntryUI(QMainWindow):
 
         self.ui.cbxGeoRegion.setCurrentText(record.get('georegionname', ''))
        
-        taxonfullname = record.get('taxonfullname', '')
+        taxonfullname = record.get('taxonfullname', '-no taxon selected-')
         self.setTxtTaxonFullname(taxonfullname)
 
         if self.collection.useTaxonNumbers:
@@ -640,9 +642,12 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.txtRecordID.setStyleSheet("")
 
     def setTxtTaxonFullname(self, taxonfullname):
-        taxonfamilyname = self.collobj.searchParentTaxon(taxonfullname, 140, self.collection.taxonTreeDefId)
-        self.ui.inpTaxonName.setText(taxonfullname)
-        self.ui.txtTaxonFullname.setText(taxonfullname + ' (' + taxonfamilyname + ')')
+        if taxonfullname != '':
+            taxonfamilyname = self.collobj.searchParentTaxon(taxonfullname, 140, self.collection.taxonTreeDefId)
+            self.ui.inpTaxonName.setText(taxonfullname)
+            self.ui.txtTaxonFullname.setText(taxonfullname + ' (' + taxonfamilyname + ')')
+        else: 
+            self.ui.txtTaxonFullname.setText('-no taxon selected-')
     
     def setContainerFields(self, record):
         """

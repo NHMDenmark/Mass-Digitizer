@@ -295,6 +295,9 @@
       <enum>QFrame::Shadow::Raised</enum>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayoutGreenArea">
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
       <item>
        <layout class="QVBoxLayout" name="verticalLayoutGreenAreaLeft">
         <item>
