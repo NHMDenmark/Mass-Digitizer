@@ -239,21 +239,6 @@ class Specimen(Model):
         self.setPrepTypeFields(record)
         self.setTaxonNameFields(record)
 
-    def setListFields(self, fieldName, index):
-        """
-        Generic function for setting the respective list fields.
-        Listboxes and combos in PySimpleGui can't hold key/value pairs, so the index was needed to find the corresponding record.
-        CONTRACT
-            fieldName (String) : Name of the input field to be set
-            index (Integer)    : Index of the
-        """
-        if fieldName == 'cbxPrepType':
-            self.setPrepTypeFields(index)
-        elif fieldName == 'cbxTypeStatus':
-            self.setTypeStatusFields(index)
-        elif fieldName == 'cbxGeoRegion':
-            self.setgeoRegionFields(index)
-
     def setPrepTypeFields(self, index):
         """
         Get prep type record on the basis of list index
