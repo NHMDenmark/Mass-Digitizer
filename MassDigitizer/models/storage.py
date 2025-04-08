@@ -2,7 +2,6 @@
 """
   Created on September 28, 2022
   @author: Fedor Alexander Steeman, NHMD
-  Jan K. Legind, NHMD
   Copyright 2022 Natural History Museum of Denmark (NHMD)
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.

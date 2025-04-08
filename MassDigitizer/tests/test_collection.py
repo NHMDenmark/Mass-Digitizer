@@ -11,10 +11,6 @@
 
   PURPOSE: Test collection module
 """
-"""
-PLEASE RUN THIS TEST USING -s :
- python -m pytest -s .\tests\test_collection.py
-"""
 
 from models import collection
 import specify_interface
