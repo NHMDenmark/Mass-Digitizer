@@ -339,7 +339,5 @@ class SpecifyInterface():
       exception = True
       #util.logger.debug(f' - Response: {str(response.status_code)} {response.reason} {response.text}.')
       response = util.Struct(status_code='408')
-    
-    #print(response) 
 
     return response
