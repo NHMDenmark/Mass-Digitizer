@@ -84,16 +84,20 @@ def getUserPath():
 
     return userPath
 
-# Define function to import external files when using PyInstaller.
 def resourcePath(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
-    try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    if hasattr(sys, '_MEIPASS'):
+        # Running in a PyInstaller bundle
         base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
+    else:
+        # Running in a normal Python environment
+        base_path = os.path.abspath(os.path.dirname(__file__))
 
-    return os.path.join(base_path, relative_path)
+    # Construct the full path
+    full_path = os.path.join(base_path, relative_path)
+
+    return full_path
+
 
 def logLine(line, level='info'):
     """
@@ -132,23 +136,9 @@ def getRandomNumberString():
     randomNumberString = hash(f"{datetime.now()}{r1}")  # Get random number as container name
     if randomNumberString < 0: randomNumberString += sys.maxsize  # Ensure that it's a positive number
     return randomNumberString
-    
-def pretty_print_POST(req):
-    """
-    Format HTTP request header and body into easily legible output
-    """
-    print('{}\n{}\r\n{}\r\n\r\n{}'.format(
-      '-----------START-----------',
-      req.method + ' ' + req.url,
-      '\r\n'.join('{}: {}'.format(k, v) for k, v in req.headers.items()),
-      req.body,
-    ))
-    print('------------END------------')
 
 def getVersionNumber():
     return versionNumber
-# """This code can be modified to replace the version number in the
-# DaSSCo.issfile which has this format:/ #define MyAppVersion "0.2.5" /
 
 def str_to_bool(value):
     return value.lower() in ('true', '1', 'yes')
