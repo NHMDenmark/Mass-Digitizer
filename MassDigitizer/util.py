@@ -71,7 +71,7 @@ def getUserPath():
     homePath = str(Path(os.path.expanduser('~')))
 
     # Now check for existance of OneDrive user documents path
-    if "oneDrive" in os.environ:
+    if "OneDrive" in os.environ:
         # OneDrive system if full user documents path exists,
         #  because that is where installer creates it:
         oneDrivePath = os.environ['OneDrive']
