@@ -589,8 +589,9 @@ class Specimen(Model):
 
             if len(taxonNameRecords) > 0:
                 # First check whether this is an accepted name or synonym; If the latter, use the accepted name instead as basis record
-                acceptedFullName = taxonNameRecords[0]['acceptedfullname'].replace("'", "''")
+                acceptedFullName = taxonNameRecords[0]['acceptedfullname']
                 if acceptedFullName != '' and acceptedFullName is not None:
+                    acceptedFullName = acceptedFullName.replace("'", "''")
                     taxonNameRecords = self.db.getRowsOnFilters('taxonname', filters={'fullname': f"='{acceptedFullName}'",'treedefid': f"= '{treedefid}'"})
 
                 if len(taxonNameRecords) > 0:
