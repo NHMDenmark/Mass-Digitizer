@@ -21,7 +21,6 @@ import util
 import global_settings as gs
 import data_access
 import specify_interface
-import specimen_data_entry as sde
 from home_screen import HomeScreen
 
 db = data_access.DataAccess(gs.databaseName)
