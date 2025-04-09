@@ -17331,5 +17331,5 @@ INSERT INTO taxonname (spid,name,author,fullname,rankid,taxonRank,treedefid,inst
 (138020,"humeralis","(Gravenhorst","Zyras humeralis (Gravenhorst",220,"Species",5,1,"Zyras","",""), 
 (138017,"laticollis","(Märkel","Zyras laticollis (Märkel",220,"Species",5,1,"Zyras","",""), 
 (138039,"limbatus","(Paykull","Zyras limbatus (Paykull",220,"Species",5,1,"Zyras","",""), 
-(138018,"lugens","(Gravenhorst","Zyras lugens (Gravenhorst",220,"Species",5,1,"Zyras","",""), 
+(138018,"lugens","(Gravenhorst","Zyras lugens (Gravenhorst",220,"Species",5,1,"Zyras","","")
 ;
