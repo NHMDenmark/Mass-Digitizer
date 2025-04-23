@@ -258,7 +258,7 @@ class SpecimenDataEntryUI(QMainWindow):
             self.collobj.setStorageFieldsFromRecord(storage_record)
         else: 
             self.collobj.storageName = storage_name_input
-            self.collobj.storageFullName = storage_name_input
+            self.collobj.storageFullName = '-no storage record selected-'
             self.collobj.storageId = 0
         self.ui.txtStorageFullname.setText(self.collobj.storageFullName)
 
