@@ -199,6 +199,10 @@ class SpecimenDataEntryUI(QMainWindow):
         else:
             self.ui.lblTaxonNumber.setVisible(False)
             self.ui.inpTaxonNumber.setVisible(False)
+
+        # Hide data entry mode radio buttons for the time being:
+        self.ui.radModeDefault.setVisible(False)
+        self.ui.radModeFastEntry.setVisible(False)
         
         self.updateRecordCount()
 
