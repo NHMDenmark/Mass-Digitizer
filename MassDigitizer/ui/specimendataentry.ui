@@ -234,7 +234,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="layoutDataEntryModes">
      <item>
       <spacer name="horizontalSpacer_6">
        <property name="orientation">
