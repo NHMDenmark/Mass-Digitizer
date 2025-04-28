@@ -281,11 +281,10 @@ class SpecimenDataEntryUI(QMainWindow):
         record = self.getTaxonNameRecord(taxon_name_input)
         if record:
             self.collobj.setTaxonNameFieldsFromRecord(record)
-        else: 
-            self.collobj.taxonName = taxon_name_input
-            self.collobj.taxonFullName = taxon_name_input
-            self.collobj.taxonNameId = 0
-        self.setTxtTaxonFullname(self.collobj.taxonFullName)
+            self.setTxtTaxonFullname(self.collobj.taxonFullName)
+        else:             
+            # No record: Unknown or "new" taxon name
+            self.handleNewTaxonName(taxon_name_input)            
 
     def on_chkDamage_clicked(self): 
         needsrepair = self.ui.chkDamage.isChecked()
@@ -348,9 +347,7 @@ class SpecimenDataEntryUI(QMainWindow):
     def on_catalog_number_return_pressed(self): 
         self.collobj.catalogNumber = self.ui.inpCatalogNumber.text()
         self.saveForm()
-
         util.logger.info(f'New collection object: {str(self.collobj)}')
-        pass
 
     def on_catalog_number_text_changed(self): self.collobj.catalogNumber = self.ui.inpCatalogNumber.text()
 
@@ -515,7 +512,24 @@ class SpecimenDataEntryUI(QMainWindow):
         taxonFullName = taxonFullName.rstrip()
         if self.collection.useTaxonNumbers:
             self.collobj.taxonNumber = self.ui.inpTaxonNumber.text()
-        self.collobj.setTaxonNameFields(self.getTaxonNameRecord(taxonFullName))
+        taxonRecord = self.getTaxonNameRecord(taxonFullName)
+        self.collobj.setTaxonNameFields(taxonRecord)
+
+        # If no taxon record found, regard as new taxon name and set taxon name fields accordingly
+        if not taxonRecord:
+            self.handleNewTaxonName(taxonFullName)
+    
+    def handleNewTaxonName(self, taxonFullName):
+        """ Handle new taxon """
+        self.collobj.taxonNameId = 0
+        self.setTxtTaxonFullname(taxonFullName)
+        self.collobj.taxonFullName = taxonFullName
+        if ' ' in taxonFullName:
+            #genusname = taxonFullName.split(' ')[0].strip()
+            self.collobj.taxonName = ' '.join(taxonFullName.split(' ')[1:]).strip()
+        else:
+            #genusname = taxonFullName.strip() 
+            self.collobj.taxonName = taxonFullName.strip() 
         pass
     
     def clearNonStickyFields(self):
@@ -638,7 +652,8 @@ class SpecimenDataEntryUI(QMainWindow):
 
         self.ui.cbxGeoRegion.setCurrentText(record.get('georegionname', ''))
        
-        taxonfullname = record.get('taxonfullname', '-no taxon selected-')
+        taxonfullname = record.get('taxonfullname', '')
+        if taxonfullname == '': taxonfullname = self.ui.inpTaxonName.text()
         self.setTxtTaxonFullname(taxonfullname)
 
         if self.collection.useTaxonNumbers:
@@ -649,7 +664,12 @@ class SpecimenDataEntryUI(QMainWindow):
 
     def setTxtTaxonFullname(self, taxonfullname):
         if taxonfullname != '':
-            taxonfamilyname = self.collobj.searchParentTaxon(taxonfullname, 140, self.collection.taxonTreeDefId)
+            if ' ' in taxonfullname:
+                genusname = taxonfullname.split(' ')[0].strip()
+            else: 
+                genusname = taxonfullname.strip()
+            taxonfamilyname = self.collobj.searchParentTaxon(genusname, 140, self.collection.taxonTreeDefId)
+            self.collobj.familyName = taxonfamilyname
             self.ui.inpTaxonName.setText(taxonfullname)
             self.ui.txtTaxonFullname.setText(taxonfullname + ' (' + taxonfamilyname + ')')
         else: 
