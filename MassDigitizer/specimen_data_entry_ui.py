@@ -238,6 +238,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.radRadioMSO.toggled.connect(self.on_containerTypeToggle)
         self.ui.inpContainerName.returnPressed.connect(self.on_container_name_return_pressed)
         self.ui.inpNotes.returnPressed.connect(self.on_notes_return_pressed)        
+        self.ui.inpNotes.textChanged.connect(self.on_inpNotes_text_changed) 
         self.ui.inpCatalogNumber.returnPressed.connect(self.on_catalog_number_return_pressed)
         self.ui.inpCatalogNumber.textChanged.connect(self.on_catalog_number_text_changed)      
         self.ui.inpTaxonNumber.returnPressed.connect(self.lookup_taxon_number)
@@ -340,8 +341,9 @@ class SpecimenDataEntryUI(QMainWindow):
     
     def on_container_name_return_pressed(self):self.collobj.containername = self.ui.inpContainerName.text()
 
-    def on_notes_return_pressed(self): 
-        self.collobj.notes = self.ui.inpNotes.text()
+    def on_notes_return_pressed(self): self.collobj.notes = self.ui.inpNotes.text()
+
+    def on_inpNotes_text_changed(self): self.collobj.notes = self.ui.inpNotes.text()
 
     def on_catalog_number_return_pressed(self): 
         self.collobj.catalogNumber = self.ui.inpCatalogNumber.text()
