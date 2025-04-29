@@ -52,7 +52,7 @@ class SpecifyInterface():
        Returns csrftoken (String)
     """   
     #util.logger.debug('Get CSRF token from ', gs.baseURL)
-    response = self.spSession.get(gs.baseURL + 'context/login/', verify=False)
+    response = self.spSession.get(gs.baseURL + 'context/login/', verify=True)
     self.csrfToken = response.cookies.get('csrftoken')
     util.logger.debug(' - Response: %s %s' %(str(response.status_code), response.reason))
     util.logger.debug(' - CSRF Token: %s' % self.csrfToken)
@@ -86,7 +86,7 @@ class SpecifyInterface():
     """
     util.logger.debug('Log in using CSRF token & username/password')
     headers = {'content-type': 'application/json', 'X-CSRFToken': csrftoken, 'Referer': gs.baseURL}
-    response = self.spSession.put(gs.baseURL + "context/login/", json={"username": username, "password": passwd, "collection": collectionid}, headers=headers, verify=False) 
+    response = self.spSession.put(gs.baseURL + "context/login/", json={"username": username, "password": passwd, "collection": collectionid}, headers=headers, verify=True) 
     
     if response.status_code > 299:
       csrftoken = ''
@@ -185,7 +185,7 @@ class SpecifyInterface():
     headers = {'content-type': 'application/json', 'X-CSRFToken': self.csrfToken, 'Referer': gs.baseURL}
     apiCallString = f'{gs.baseURL}api/specify/{objectName}/{objectId}/' 
     util.logger.debug(apiCallString)
-    response = self.spSession.get(apiCallString, headers=headers, verify=False)
+    response = self.spSession.get(apiCallString, headers=headers, verify=True)
     util.logger.debug(f' - Response: {str(response.status_code)} {response.reason}')
     util.logger.debug(f' - Session cookies: {self.spSession.cookies.get_dict()}')
     if response.status_code < 299:
@@ -275,7 +275,7 @@ class SpecifyInterface():
       RETURNS collections list (dictionary)
     """ 
     util.logger.debug('Get initial collections')
-    response = self.spSession.get(gs.baseURL + "context/login/", verify=False)
+    response = self.spSession.get(gs.baseURL + "context/login/", verify=True)
     util.logger.debug(' - Response: ' + str(response.status_code) + " " + response.reason)
     collections = json.loads(response.text)['collections'] # get collections from json string and convert into dictionary
     collections = {k: v for v, k in collections.items()} # invert keys and values that for some reason are delivered switched around 
