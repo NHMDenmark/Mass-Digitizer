@@ -34,7 +34,7 @@ As specimens are digitised, their data will be added to the Species-Web database
 
 2. Run the SQL query located here: [Species-Web Export Query](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/Species-Web/speciesWebExportQuery.sql), changing the date in this line: 
 
-``WHERE s.date_asset_taken >= '2024-10-10'``
+``WHERE folders.approved_at > '2025-01-01' LIMIT 100000``
 
 3. Click the Export button and export the query results as a ; seperated CSV. Give the file a name matching the following format:
 
