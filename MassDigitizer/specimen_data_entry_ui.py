@@ -522,6 +522,7 @@ class SpecimenDataEntryUI(QMainWindow):
     def handleNewTaxonName(self, taxonFullName):
         """ Handle new taxon """
         self.collobj.taxonNameId = 0
+        self.collobj.setTaxonNameFields(None)
         self.setTxtTaxonFullname(taxonFullName)
         self.collobj.taxonFullName = taxonFullName
         if ' ' in taxonFullName:
@@ -664,14 +665,9 @@ class SpecimenDataEntryUI(QMainWindow):
 
     def setTxtTaxonFullname(self, taxonfullname):
         if taxonfullname != '':
-            if ' ' in taxonfullname:
-                genusname = taxonfullname.split(' ')[0].strip()
-            else: 
-                genusname = taxonfullname.strip()
-            taxonfamilyname = self.collobj.searchParentTaxon(genusname, 140, self.collection.taxonTreeDefId)
-            self.collobj.familyName = taxonfamilyname
             self.ui.inpTaxonName.setText(taxonfullname)
-            self.ui.txtTaxonFullname.setText(taxonfullname + ' (' + taxonfamilyname + ')')
+            if self.collobj.familyName == '': self.collobj.familyName = '-parent not found-'
+            self.ui.txtTaxonFullname.setText(taxonfullname + ' (' + self.collobj.familyName + ')')
         else: 
             self.ui.txtTaxonFullname.setText('-no taxon selected-')
     
