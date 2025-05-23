@@ -302,7 +302,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.chkLabelObscured.setFocus()
 
     def on_chkLabelObscured_clicked(self):
-        self.collobj.labelObscured = self.ui.chkSpecimenObscured.isChecked()  
+        self.collobj.labelObscured = self.ui.chkLabelObscured.isChecked()  
         self.ui.radRadioSSO.setFocus()
         
     def on_containerTypeToggle(self, checked):
