@@ -236,6 +236,9 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.radRadioSSO.toggled.connect(self.on_containerTypeToggle)
         self.ui.radRadioMOS.toggled.connect(self.on_containerTypeToggle)
         self.ui.radRadioMSO.toggled.connect(self.on_containerTypeToggle)
+        self.ui.radRadioSSO.clicked.connect(self.on_containerTypeClicked)
+        self.ui.radRadioMOS.clicked.connect(self.on_containerTypeClicked)
+        self.ui.radRadioMSO.clicked.connect(self.on_containerTypeClicked)
         self.ui.inpContainerName.returnPressed.connect(self.on_container_name_return_pressed)
         self.ui.inpNotes.returnPressed.connect(self.on_notes_return_pressed)        
         self.ui.inpNotes.textChanged.connect(self.on_inpNotes_text_changed) 
@@ -308,6 +311,7 @@ class SpecimenDataEntryUI(QMainWindow):
             - Multi objects require a randomized container id prefixed with type. 
               And a user Warning needs to displayed. 
             - A single specimen object does not need a container id
+            - Every toggle generates a new container id 
             - Save changes to collection object for saving record data 
         """
         
@@ -337,7 +341,32 @@ class SpecimenDataEntryUI(QMainWindow):
                 self.ui.imgWarningLinkedRecord.setVisible(True)
 
             self.ui.inpNotes.setFocus()
-    
+
+    def on_containerTypeClicked(self):
+        sender = self.sender()
+        if sender.isChecked():  # Only true if already checked
+            if sender == self.ui.radRadioSSO:
+                # SSO logic
+                self.ui.inpContainerName.setText('')
+                self.ui.inpContainerName.setEnabled(False)
+                self.ui.imgWarningLinkedRecord.setVisible(False)
+                self.collobj.containername = ''
+                self.collobj.containertype = ''
+            elif sender == self.ui.radRadioMOS or sender == self.ui.radRadioMSO:
+                containerNumber = util.getRandomNumberString()
+                if sender == self.ui.radRadioMOS:
+                    containerType = 'MOS'
+                    self.collobj.containertype = self.MOSterm
+                else:
+                    containerType = 'MSO'
+                    self.collobj.containertype = self.MSOterm
+                newContainerName = containerType + str(containerNumber)
+                self.collobj.containername = newContainerName
+                self.ui.inpContainerName.setText(newContainerName)
+                self.ui.inpContainerName.setEnabled(True)
+                self.ui.imgWarningLinkedRecord.setVisible(True)
+        self.ui.inpNotes.setFocus()
+
     def on_container_name_return_pressed(self):self.collobj.containername = self.ui.inpContainerName.text()
 
     def on_notes_return_pressed(self): self.collobj.notes = self.ui.inpNotes.text()
