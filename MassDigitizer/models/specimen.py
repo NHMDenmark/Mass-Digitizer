@@ -568,7 +568,7 @@ class Specimen(Model):
 
         return rankid
 
-    def searchParentTaxon(self, taxonFullName, target_rankid, treedefid):
+    def searchParentTaxon(self, taxonFullName, target_rankid, treedefid, on_fullname=True):
         """
         Will recursively traverse a given taxon's parental lineage until it hits the target rank
         CONTRACT
@@ -579,13 +579,17 @@ class Specimen(Model):
         
         # Replace apostrophes with double quotes for SQL query
         taxonFullName = taxonFullName.replace("'", "''")
+        if on_fullname:
+            name_filter = 'fullname'
+        else:   
+            name_filter = 'name'
 
         taxonRankId = 270  # Start with lowest possible rank
 
         # Keep on traversing parental branch until the specified rank level has been passed
         while (taxonRankId >= target_rankid):
             # Get current taxon record on fullname and taxon tree
-            taxonNameRecords = self.db.getRowsOnFilters('taxonname', filters={'fullname': f"='{taxonFullName}'",'treedefid': f"= '{treedefid}'"})
+            taxonNameRecords = self.db.getRowsOnFilters('taxonname', filters={name_filter: f"='{taxonFullName}'",'treedefid': f"= '{treedefid}'"})
 
             if len(taxonNameRecords) > 0:
                 # First check whether this is an accepted name or synonym; If the latter, use the accepted name instead as basis record
@@ -601,20 +605,18 @@ class Specimen(Model):
                 else: 
                     # Could not retrieved accepted taxonname: Abort 
                     taxonFullName = ''
-                    break
+                    break  # return current
 
                 # Return when given taxon already matches rank or is of higher rank
                 if taxonRankId <= target_rankid:
                     if taxonRankId < target_rankid: taxonFullName = ''  # Clear taxon name if higher than target rank
-                    break 
+                    break   # return current
                 else:
                     # Target rank not yet hit; check next parent in line
                     return (self.searchParentTaxon(parentName, target_rankid, treedefid)) 
-
             else:
                 # Can't find (further) parent taxon
                 taxonFullName = '-parent not found-'
-                # raise Exception(f"Could not retrieve parent taxon of target rank: {target_rankid} !")
                 break  # return current
 
         return taxonFullName
