@@ -570,19 +570,6 @@
                </widget>
               </item>
               <item>
-               <widget class="QRadioButton" name="radRadioMOS">
-                <property name="toolTip">
-                 <string>One specimen on multiple objects</string>
-                </property>
-                <property name="toolTipDuration">
-                 <number>3</number>
-                </property>
-                <property name="text">
-                 <string>Multi object specimen</string>
-                </property>
-               </widget>
-              </item>
-              <item>
                <widget class="QRadioButton" name="radRadioMSO">
                 <property name="toolTip">
                  <string>Multiple specimens on one object</string>
@@ -592,6 +579,19 @@
                 </property>
                 <property name="text">
                  <string>Multi specimen object</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="radRadioMOS">
+                <property name="toolTip">
+                 <string>One specimen on multiple objects</string>
+                </property>
+                <property name="toolTipDuration">
+                 <number>3</number>
+                </property>
+                <property name="text">
+                 <string>Multi object specimen</string>
                 </property>
                </widget>
               </item>
