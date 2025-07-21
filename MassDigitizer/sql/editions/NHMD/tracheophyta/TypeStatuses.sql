@@ -1,6 +1,5 @@
 INSERT INTO TypeStatus ("spid","name","value","ordinal","collectionid") VALUES 
- (3422,"None","|null|",0, (SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1))
-,(3425,"Type","type",1, (SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1))
+ (3425,"Type","type",1, (SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1))
 ,(3426,"Allolectotype","allolectotype",2, (SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1))
 ,(3427,"Alloneotype","alloneotype",3, (SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1))
 ,(3416,"Allotype","allotype",4, (SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1))
