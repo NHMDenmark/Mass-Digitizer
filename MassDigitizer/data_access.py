@@ -44,9 +44,11 @@ class DataAccess():
             self.connection.row_factory = sqlite3.Row
             self.currentCursor = self.connection.cursor()
         except Exception as e:
-            util.logger.debug("SQLite connection failed. Error: %s" % e)
+            #util.logger.debug("SQLite connection failed. Error: %s" % e)
+            util.logger.error("SQLite connection failed. Error: %s" % e)
             logError = f"The path {self.dbFilePath} may not exist."
-            util.logger.debug(logError)
+            #util.logger.debug(logError)
+            util.logger.error(logError)
             raise e 
 
     def setDatabase(self, dbFileName='db'):
@@ -125,20 +127,20 @@ class DataAccess():
         """
         self.currentCursor = self.getDbCursor()
 
-        sqlString = 'SELECT * FROM %s ' % tableName
+        sqlString = "SELECT * FROM %s " % tableName
 
         if filters.items():
             sqlString += "WHERE "
             for key, value in filters.items():
-                sqlString += f'{key} {value} AND '
+                sqlString += f"{key} {value} AND "
         sqlString = sqlString[0:len(sqlString) - 4]  # Remove trailing " AND "
 
         # Add sorting if set 
-        if sort: sqlString += f' ORDER BY {sort}'
+        if sort: sqlString += f" ORDER BY {sort}"
         # Add sorting direction if descending 
-        if descending: sqlString += ' DESC'
+        if descending: sqlString += " DESC"
         # Add range (row limit) if set 
-        if limit > 0: sqlString += f' LIMIT {limit}'
+        if limit > 0: sqlString += f" LIMIT {limit}"
         #util.logger.debug(sqlString)
 
         try:
@@ -297,6 +299,8 @@ class DataAccess():
                     Numbers should be formatted as strings
             RETURNS inserted record row
         """
+
+        fields.pop('id')  # Remove the id field since we are inserting a new record 
         self.currentCursor = self.getDbCursor()
         fieldsString = []
         for key in fields:

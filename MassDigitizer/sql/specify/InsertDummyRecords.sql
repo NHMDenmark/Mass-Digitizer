@@ -1,10 +1,10 @@
-SET @projectName   = 'DaSSCo'; 
-SET @remark        = 'test'; 
-SET @collection    = 'NHMD Vascular Plants'; 
-SET @catalogerMail = 'ahb@snm.ku.dk'; 
+SET @projectName   = 'Reserved for DaSSCo'; 
+SET @remark        = 'Reserved dummy records to be deleted before DaSSCo import'; 
+SET @collection    = 'NHMA Entomology'; 
+SET @catalogerMail = 'fedor.steeman@snm.ku.dk'; 
 SET @creatorMail   = 'fedor.steeman@snm.ku.dk'; 
-SET @amount        = 100;
-SET @baseline      = 0;
+SET @amount        = 1;
+SET @baseline      = 550000;
 
 SET @collectionid = 0;
 SELECT collectionid INTO @collectionid FROM collection WHERE collectionname = @collection LIMIT 1;
