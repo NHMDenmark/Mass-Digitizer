@@ -236,6 +236,10 @@ Taxon ->
 Species ->
 Is Hybrid
 
+**Important: Mapping Options for ishybrid**
+Match Behavior -> 
+  Ignore when Blank
+
 typestatusname ->
 Determinations ->
  #1 ->

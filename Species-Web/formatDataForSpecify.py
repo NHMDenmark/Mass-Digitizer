@@ -30,8 +30,8 @@ os.makedirs(archive_folder, exist_ok=True)
 
 # Data to be extracted from gbif_match_json
 keys_to_extract = [
-    "key", "order", "family", "genus", "species", "scientificName", "authorship", "taxonomicStatus",
-    "acceptedKey", "accepted"
+    "key", "kingdom", "phylum", "order", "family", "genus", "species", "scientificName", "authorship", "taxonomicStatus",
+    "acceptedKey", "accepted", "class"
 ]
 
 # Extract taxonomy and author from gbif_match_json
@@ -211,9 +211,8 @@ def create_synonyms(df, output_folder, filename):
     accepted_columns = [
         'accepted_genus_author', 'accepted_genus_taxon_key', 'accepted_genus_taxon_key_source',
         'accepted_species_author', 'accepted_species_taxon_key', 'accepted_species_taxon_key_source',
-        'accepted_ishybrid_species', 'accepted_subspecies_author', 'accepted_subspecies_taxon_key',
-        'accepted_subspecies_taxon_key_source', 'accepted_ishybrid_subspecies', 'accepted_variety_author',
-        'accepted_variety_taxon_key', 'accepted_variety_taxon_key_source'
+        'accepted_subspecies_author', 'accepted_subspecies_taxon_key', 'accepted_subspecies_taxon_key_source', 
+        'accepted_variety_author', 'accepted_variety_taxon_key', 'accepted_variety_taxon_key_source'
     ]
 
     for col in accepted_columns:
@@ -225,20 +224,31 @@ def create_synonyms(df, output_folder, filename):
 
     # Specify columns to include in the separate synonyms CSV
     columns_to_include = [
-        'order', 'family', 'genus', 'genus_author', 'genus_taxon_key', 'genus_taxon_key_source',
+        'kingdom', 'phylum', 'class', 'order', 'family', 'genus', 'genus_author', 'genus_taxon_key', 'genus_taxon_key_source',
         'species', 'species_author', 'species_taxon_key', 'species_taxon_key_source', 'ishybrid_species',
         'subspecies', 'subspecies_author', 'subspecies_taxon_key', 'subspecies_taxon_key_source', 'ishybrid_subspecies',
         'variety', 'variety_author', 'variety_taxon_key', 'variety_taxon_key_source',
         'accepted_genus', 'accepted_genus_author', 'accepted_genus_taxon_key', 'accepted_genus_taxon_key_source',
         'accepted_species', 'accepted_species_author', 'accepted_species_taxon_key', 'accepted_species_taxon_key_source',
-        'accepted_ishybrid_species', 'accepted_subspecies', 'accepted_subspecies_author', 'accepted_subspecies_taxon_key',
-        'accepted_subspecies_taxon_key_source', 'accepted_ishybrid_subspecies', 'accepted_variety',
+        'accepted_subspecies', 'accepted_subspecies_author', 'accepted_subspecies_taxon_key',
+        'accepted_subspecies_taxon_key_source', 'accepted_variety',
         'accepted_variety_author', 'accepted_variety_taxon_key', 'accepted_variety_taxon_key_source'
     ]
 
     # Only include column if it exists in the above list and the synonym_rows list
     columns_to_include = [col for col in columns_to_include if col in synonym_rows.columns]
     synonym_rows = synonym_rows[columns_to_include]
+
+    # Rename columns to match Sp7ApiToolbox formatting requirements
+    synonym_rows.rename(columns={'kingdom': 'Kingdom', 'phylum': 'Phylum', 'class': 'Class', 'order': 'Order', 'family': 'Family',
+                                 'genus': 'Genus', 'genus_author': 'GenusAuthor', 'species': 'Species', 'species_author': 'SpeciesAuthor',
+                                 'subspecies': 'Subspecies', 'subspecies_author': 'SubspeciesAuthor', 'accepted_genus': 'AcceptedGenus', 
+                                 'accepted_genus_author': 'AcceptedGenusAuthor', 'accepted_species': 'AcceptedSpecies', 
+                                 'accepted_species_author': 'AcceptedSpeciesAuthor', 'accepted_subspecies': 'AcceptedSubspecies',
+                                 'accepted_subspecies_author': 'AcceptedSubspeciesAuthor'}, inplace=True)
+
+    # Add the isAccepted column to the synonym rows
+    synonym_rows['isAccepted'] = True
     
     # Create the filename for the synonyms CSV
     synonyms_filename = updated_filename.replace('_processed.tsv', '_synonymsToImport.csv')
@@ -356,7 +366,7 @@ for filename in os.listdir(folder_path):
         # Desired column order
         desired_columns = [
             'catalognumber', 'catalogeddate', 'cataloger_firstname', 'cataloger_middle', 'cataloger_lastname',
-            'projectnumber', 'publish', 'order', 'family', 'genus', 'genus_author', 'genus_taxon_key', 'genus_taxon_key_source',
+            'projectnumber', 'publish', 'kingdom', 'phylum', 'class', 'order', 'family', 'genus', 'genus_author', 'genus_taxon_key', 'genus_taxon_key_source',
             'species', 'species_author', 'species_taxon_key', 'species_taxon_key_source', 'ishybrid_species',
             'subspecies', 'subspecies_author', 'subspecies_taxon_key', 'subspecies_taxon_key_source', 'ishybrid_subspecies',
             'variety', 'variety_author', 'variety_taxon_key', 'variety_taxon_key_source', 'storedunder', 'locality', 

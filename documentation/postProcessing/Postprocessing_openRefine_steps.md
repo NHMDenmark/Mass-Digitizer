@@ -83,7 +83,7 @@ Below you will find information on the steps performed by the GREL script.
 9. For the storage to be mapped correctly in Specify, the storage information in column "storagefullname" needs to be split up into separate columns. Column "storagefullname" is split by separator and columns for collection, cabinet, box, and shelf are created:
 	- Split column storagefullname by separator, the separator here is "|" 
 
-	- Create column Collection at index 25 based on column storagefullname 4 using expression `grel:if(cells[\"storagefullname 1\"].value.contains(\"Aarhus\"), value, \"\")`
+	- Create column 'collection' at index 25 based on 'storagefullname 4' (if it exists) and 'storagefullname 1' using expression `grel:if(filter([cells[\"storagefullname 1\"]], c, c.value.contains(\"Aarhus\")).length() > 0, if(filter([cells[\"storagefullname 4\"]], c, c.value != null).length() > 0, cells[\"storagefullname 4\"].value, \"\"), \"\")`
 
 	- Text transform on cells in column collection using expression `grel:if(cells[\"storagefullname 1\"].value.contains(\"Denmark\"), cells[\"storagefullname 3\"].value, value)`
 	
