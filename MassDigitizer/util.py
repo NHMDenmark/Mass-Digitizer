@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
   Created on June 24, 2022
-  @author: Fedor Alexander Steeman, NHMD / Jan K. Legind, NHMD
+  @author: Fedor Alexander Steeman, NHMD
   Copyright 2022 Natural History Museum of Denmark (NHMD)
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -21,9 +21,8 @@ from datetime import datetime
 import random
 
 # Central place to manage version numbers
-versionNumber = "1.2.3"  # Before compiling exe, please set the version number above
+versionNumber = "2.0.3 beta"  # Before compiling exe, please set the version number above
 logger = logging.getLogger()
-
 
 def clear():
     """
@@ -36,7 +35,6 @@ def clear():
     # for mac and linux
     else:
         _ = system('clear')
-
 
 def buildLogger():  # moduleName):
     """
@@ -62,10 +60,8 @@ def buildLogger():  # moduleName):
     logger.debug('Logging set up')
     logger.debug('--------------')
 
-
 def getLogsPath():
     return str(Path(getUserPath()).joinpath('logs'))
-
 
 def getUserPath():
     """
@@ -75,7 +71,7 @@ def getUserPath():
     homePath = str(Path(os.path.expanduser('~')))
 
     # Now check for existance of OneDrive user documents path
-    if "oneDrive" in os.environ:
+    if "OneDrive" in os.environ:
         # OneDrive system if full user documents path exists,
         #  because that is where installer creates it:
         oneDrivePath = os.environ['OneDrive']
@@ -87,6 +83,20 @@ def getUserPath():
     userPath = str(Path(homePath).joinpath('Documents').joinpath('DaSSCo'))
 
     return userPath
+
+def resourcePath(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    if hasattr(sys, '_MEIPASS'):
+        # Running in a PyInstaller bundle
+        base_path = sys._MEIPASS
+    else:
+        # Running in a normal Python environment
+        base_path = os.path.abspath(os.path.dirname(__file__))
+
+    # Construct the full path
+    full_path = os.path.join(base_path, relative_path)
+
+    return full_path
 
 
 def logLine(line, level='info'):
@@ -107,19 +117,6 @@ def logLine(line, level='info'):
 
     return line
 
-
-def shrink_dict(original_dict, input_string):
-    """
-    Filter entries in dictionary based on initial string (starts with)
-    """
-    shrunken_dict = {}
-
-    for j in original_dict:
-        if j[0:len(input_string)] == input_string:
-            shrunken_dict[j] = original_dict[j]
-    return shrunken_dict
-
-
 def convert_dbrow_list(list, addEmptyRow=False):
     """
     Converts datarow list to name array
@@ -131,7 +128,6 @@ def convert_dbrow_list(list, addEmptyRow=False):
 
     return new_list
 
-
 def getRandomNumberString():
     """
     Returns positive random number string based on date/time hash
@@ -140,24 +136,12 @@ def getRandomNumberString():
     randomNumberString = hash(f"{datetime.now()}{r1}")  # Get random number as container name
     if randomNumberString < 0: randomNumberString += sys.maxsize  # Ensure that it's a positive number
     return randomNumberString
-    
-def pretty_print_POST(req):
-    """
-    Format HTTP request header and body into easily legible output
-    """
-    print('{}\n{}\r\n{}\r\n\r\n{}'.format(
-      '-----------START-----------',
-      req.method + ' ' + req.url,
-      '\r\n'.join('{}: {}'.format(k, v) for k, v in req.headers.items()),
-      req.body,
-    ))
-    print('------------END------------')
 
 def getVersionNumber():
     return versionNumber
-# """This code can be modified to replace the version number in the
-# DaSSCo.issfile which has this format:/ #define MyAppVersion "0.2.5" /
-# (Please ignore the forward slashes above)"""
+
+def str_to_bool(value):
+    return value.lower() in ('true', '1', 'yes')
 
 class Struct:
     """A structure that can have any fields defined."""

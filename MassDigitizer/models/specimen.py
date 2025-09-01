@@ -76,7 +76,7 @@ class Specimen(Model):
         self.institutionId = gs.institutionId  # self.db.getRowOnId('collection',collection_id)['institutionid']
         self.institutionName = gs.institutionName
         self.collectionId = collection_id
-        self.collectionName = gs.collection.name
+        self.collectionName = gs.collectionName
         self.collection = coll.Collection(collection_id)
         self.userName = gs.userName
         self.userId = gs.spUserId
@@ -116,50 +116,51 @@ class Specimen(Model):
         if self.containername: #Check if containername is None
             self.containername = self.containername.strip()
         fieldsDict = {
+            'id': f'{self.id}',
             'catalognumber': f'{self.catalogNumber}',
-            'taxonfullname': f'"{self.taxonFullName}"',
-            'taxonname': f'"{self.taxonName}"',
-            'taxonauthor':f'"{self.taxonAuthor}"',
-            'taxonnameid': f'"{self.taxonNameId}"',
-            'familyname': f'"{self.familyName}"',
-            'taxonspid': f'"{self.taxonSpid}"',
-            'taxondasscoid': f'"{self.taxonDasscoId}"',
-            'highertaxonname': f'"{self.higherTaxonName}"',
-            'rankid': f'"{self.rankid}"',
-            'taxonrankname': f'"{self.taxonRankName}"',
-            'taxonnumber': f'"{self.taxonNumber}"',
-            'taxonnrsource': f'"{self.taxonNrSource}"',
-            'typestatusname': f'"{self.typeStatusName}"',
-            'typestatusid': f'"{self.typeStatusId}"',
-            'georegionname': f'"{self.geoRegionName}"',
-            'georegionsource': f'"{self.geoRegionSource}"',
-            'georegionid': f'"{self.geoRegionId}"',
-            'storagefullname': f'"{self.storageFullName}"',
-            'storagename': f'"{self.getStorageName()}"',
-            'storageid': f'"{self.storageId}"',
-            'storagerankName': f'"{self.storageRankName}"',
-            'preptypename': f'"{self.prepTypeName}"',
-            'preptypeid': f'"{self.prepTypeId}"',
+            'taxonfullname': f'{self.taxonFullName}',
+            'taxonname': f'{self.taxonName}',
+            'taxonauthor':f'{self.taxonAuthor}',
+            'taxonnameid': f'{self.taxonNameId}',
+            'familyname': f'{self.familyName}',
+            'taxonspid': f'{self.taxonSpid}',
+            'taxondasscoid': f'{self.taxonDasscoId}',
+            'highertaxonname': f'{self.higherTaxonName}',
+            'rankid': f'{self.rankid}',
+            'taxonrankname': f'{self.taxonRankName}',
+            'taxonnumber': f'{self.taxonNumber}',
+            'taxonnrsource': f'{self.taxonNrSource}',
+            'typestatusname': f'{self.typeStatusName}',
+            'typestatusid': f'{self.typeStatusId}',
+            'georegionname': f'{self.geoRegionName}',
+            'georegionsource': f'{self.geoRegionSource}',
+            'georegionid': f'{self.geoRegionId}',
+            'storagefullname': f'{self.storageFullName}',
+            'storagename': f'{self.getStorageName()}',
+            'storageid': f'{self.storageId}',
+            'storagerankName': f'{self.storageRankName}',
+            'preptypename': f'{self.prepTypeName}',
+            'preptypeid': f'{self.prepTypeId}',
             'objectcondition': f'{self.objectCondition}',
             'specimenobscured':f'{self.specimenObscured}',
             'labelobscured':f'{self.labelObscured}',
-            'notes': f'"{self.notes}"',
-            'containername': f'"{self.containername}"',
-            'containertype': f'"{self.containertype}"',
-            'institutionid': f'"{self.institutionId}"',
-            'institutionname': f'"{self.institutionName}"',
-            'collectionid': f'"{self.collectionId}"',
-            'collectionname': f'"{self.collectionName}"',
-            'username': f'"{self.userName}"',
-            'userid': f'"{self.userId}"',
-            'agentfirstname': f'"{self.firstName}"',
-            'agentmiddleinitial': f'"{self.middleInitial}"',
-            'agentlastname': f'"{self.lastName}"',
-            # 'workstation':     f'"{self.workStation}"',
-            'recorddatetime': f'"{self.recordDateTime}"',
-            'exported': f'"{self.exported}"',
-            'exportdatetime': f'"{self.exportDateTime}"',
-            'exportuserid': f'"{self.exportUserId}"'
+            'notes': f'{self.notes}',
+            'containername': f'{self.containername}',
+            'containertype': f'{self.containertype}',
+            'institutionid': f'{self.institutionId}',
+            'institutionname': f'{self.institutionName}',
+            'collectionid': f'{self.collectionId}',
+            'collectionname': f'{self.collectionName}',
+            'username': f'{self.userName}',
+            'userid': f'{self.userId}',
+            'agentfirstname': f'{self.firstName}',
+            'agentmiddleinitial': f'{self.middleInitial}',
+            'agentlastname': f'{self.lastName}',
+            # 'workstation':     f'{self.workStation}',
+            'recorddatetime': f'{self.recordDateTime}',
+            'exported': f'{self.exported}',
+            'exportdatetime': f'{self.exportDateTime}',
+            'exportuserid': f'{self.exportUserId}'
         }
 
         return fieldsDict
@@ -237,21 +238,6 @@ class Specimen(Model):
         self.setStorageFields(record)
         self.setPrepTypeFields(record)
         self.setTaxonNameFields(record)
-
-    def setListFields(self, fieldName, index):
-        """
-        Generic function for setting the respective list fields.
-        Listboxes and combos in PySimpleGui can't hold key/value pairs, so the index is needed to find the corresponding record.
-        CONTRACT
-            fieldName (String) : Name of the input field to be set
-            index (Integer)    : Index of the
-        """
-        if fieldName == 'cbxPrepType':
-            self.setPrepTypeFields(index)
-        elif fieldName == 'cbxTypeStatus':
-            self.setTypeStatusFields(index)
-        elif fieldName == 'cbxGeoRegion':
-            self.setgeoRegionFields(index)
 
     def setPrepTypeFields(self, index):
         """
@@ -488,6 +474,10 @@ class Specimen(Model):
           taxonFullName (string) : Fullname value of selected taxon
         RETURNS taxonNameId (int) : Primary key of selected taxon record
         """
+        
+        # Replace apostrophes with double quotes for SQL query
+        taxonFullName = taxonFullName.replace("'", "''")
+
         # Get taxon name record on fullname
         taxonNameRecord = self.db.getRowsOnFilters('taxonname', {'fullname =': f'"{taxonFullName}"'})
         resultsRowCount = len(taxonNameRecord)
@@ -578,7 +568,7 @@ class Specimen(Model):
 
         return rankid
 
-    def searchParentTaxon(self, taxonFullName, target_rankid, treedefid):
+    def searchParentTaxon(self, taxonFullName, target_rankid, treedefid, on_fullname=True):
         """
         Will recursively traverse a given taxon's parental lineage until it hits the target rank
         CONTRACT
@@ -586,19 +576,27 @@ class Specimen(Model):
             target_rankid: Target rank id of the parent taxon to be searched for
         RETURNS taxonFullName (string) : Name of the parent taxon 
         """
+        
+        # Replace apostrophes with double quotes for SQL query
+        taxonFullName = taxonFullName.replace("'", "''")
+        if on_fullname:
+            name_filter = 'fullname'
+        else:   
+            name_filter = 'name'
 
         taxonRankId = 270  # Start with lowest possible rank
 
         # Keep on traversing parental branch until the specified rank level has been passed
         while (taxonRankId >= target_rankid):
             # Get current taxon record on fullname and taxon tree
-            taxonNameRecords = self.db.getRowsOnFilters('taxonname', filters={'fullname': f"='{taxonFullName}'",'treedefid': f"= '{treedefid}'"})
+            taxonNameRecords = self.db.getRowsOnFilters('taxonname', filters={name_filter: f"='{taxonFullName}'",'treedefid': f"= '{treedefid}'"})
 
             if len(taxonNameRecords) > 0:
                 # First check whether this is an accepted name or synonym; If the latter, use the accepted name instead as basis record
                 acceptedFullName = taxonNameRecords[0]['acceptedfullname']
                 if acceptedFullName != '' and acceptedFullName is not None:
-                    taxonNameRecords = self.db.getRowsOnFilters('taxonname', filters={'fullname': f"='{acceptedFullName}'",'treedefid': f"= '{treedefid}'"})                
+                    acceptedFullName = acceptedFullName.replace("'", "''")
+                    taxonNameRecords = self.db.getRowsOnFilters('taxonname', filters={'fullname': f"='{acceptedFullName}'",'treedefid': f"= '{treedefid}'"})
 
                 if len(taxonNameRecords) > 0:
                     taxonRankId = taxonNameRecords[0]['rankid']
@@ -607,20 +605,18 @@ class Specimen(Model):
                 else: 
                     # Could not retrieved accepted taxonname: Abort 
                     taxonFullName = ''
-                    break
+                    break  # return current
 
                 # Return when given taxon already matches rank or is of higher rank
                 if taxonRankId <= target_rankid:
                     if taxonRankId < target_rankid: taxonFullName = ''  # Clear taxon name if higher than target rank
-                    break 
+                    break   # return current
                 else:
                     # Target rank not yet hit; check next parent in line
                     return (self.searchParentTaxon(parentName, target_rankid, treedefid)) 
-
             else:
                 # Can't find (further) parent taxon
-                # taxonFullName = '-not found-'
-                # raise Exception(f"Could not retrieve parent taxon of target rank: {target_rankid} !")
+                taxonFullName = '-parent not found-'
                 break  # return current
 
         return taxonFullName

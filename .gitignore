@@ -1,46 +1,56 @@
-
-MADD_app/.vscode/launch.json
+# Ignore Python bytecode and cache
 *.pyc
 *.py[cod]     # Will match .pyc, .pyo and .pyd files.
 __pycache__/  # Exclude the whole folder
 .pytest_cache
-/MassDigitizer/.vscode
-dist
-build
-.vscode
-src/.vscode/launch.json
-src/.vscode/launch.json
-.vscode
-*.sqlite3-journal
+
+# Ignore virtual environment and related files
 .venv
-/MassDigitizer/*.bak
-*.bak
+venv/
+
+# Ignore build artifacts
+build/
+dist/
 DaSSCo.build/
 DaSSCo.dist/
 DaSSCo.onefile-build/
 MassDigitizer/__main__.build/
 MassDigitizer/__main__.dist/
 MassDigitizer/__main__.onefile-build/
-DaSSCo.exe
-*.exe
-/MassDigitizer/Output/*.zip
-*.xlsx
-MassDigitizer/.idea/
-*.vsidx
-.vs
-.idea
-MassDigitizer/altgraph/*
-*.spec
-MassDigitizer/altgraph-0.17.3.dist-info/*
+bin/
+debug/
+release/
 
+# Ignore Qt Creator specific files
+*.pro.user
+*.pro.user.*
+*.qbs.user
+*.creator.user
+*.creator.user.*
+*.txt.user
+.qtc_clangd/
+.qmake.stash
+.qmake.cache
+
+# Ignore editor and IDE configurations
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Ignore project-specific files
+MADD_app/.vscode/launch.json
+src/.vscode/launch.json
+MassDigitizer/.idea/
+MassDigitizer/altgraph/*
+MassDigitizer/altgraph-0.17.3.dist-info/*
 MassDigitizer/db/db.sqlite3BIToLD
-*.txt
 MassDigitizer/future-0.18.2.dist-info/*
 MassDigitizer/future/backports/email/*
 MassDigitizer/future/*
 MassDigitizer/libfuturize/*
 MassDigitizer/libpasteurize/fixes/feature_base.py
-*.dll
+MassDigitizer/libpasteurize/*
 MassDigitizer/output/*
 MassDigitizer/pkg_resources/*
 MassDigitizer/PyInstaller/*
@@ -50,18 +60,36 @@ MassDigitizer/pefile-2022.5.30.dist-info/LICENSE
 MassDigitizer/pyapp/*
 MassDigitizer/pywin32_ctypes*
 MassDigitizer/_distutils_hack/*
-MassDigitizer/libpasteurize/*
-*.bzl
-.*old
-.*OLD
-*OLD
 MassDigitizer/pefile*
 MassDigitizer/kick_off_sql_searches.py
-/MassDigitizer/*.log
 MassDigitizer/log/*
 MassDigitizer/temp/db.sqlite3
 MassDigitizer/DaSSCo.dist - Copy/_asyncio.pyd
-*.log
 MassDigitizer/sql/editions/temp/db.sqlite3
 MassDigitizer/db/test.sqlite3
-.DS_Store
+
+# Ignore backup and log files
+*.bak
+/MassDigitizer/*.bak
+*.log
+/MassDigitizer/*.log
+
+# Ignore binaries and executables
+*.exe
+DaSSCo.exe
+*.dll
+
+# Ignore other miscellaneous files
+*.sqlite3-journal
+*.xlsx
+*.vsidx
+.vs
+.*old
+.*OLD
+*OLD
+*.bzl
+*.autosave
+
+# Ignore temporary files
+/MassDigitizer/Output/*.zip
+MassDigitizer/nuitka-crash-report.xml
