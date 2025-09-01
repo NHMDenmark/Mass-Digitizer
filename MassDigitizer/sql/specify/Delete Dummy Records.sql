@@ -10,6 +10,8 @@
 /*				catalogNumber BETWEEN xxx AND xxx OR 
 				catalogNumber BETWEEN xxx AND xxx */
 --			 ) 
-		 catalogNumber IN (000)
+		 catalogNumber IN (
+		 000
+		 )
 	      ;
 	      
