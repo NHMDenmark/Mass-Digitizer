@@ -295,14 +295,14 @@ class SpecimenDataEntryUI(QMainWindow):
             self.collobj.objectCondition = "Needs repair"
         else: 
             self.collobj.objectCondition = ""
-        self.ui.chkSpecimenObscured.setFocus()
-        
-    def on_chkSpecimenObscured_clicked(self):
-        self.collobj.specimenObscured = self.ui.chkSpecimenObscured.isChecked()
         self.ui.chkLabelObscured.setFocus()
 
     def on_chkLabelObscured_clicked(self):
         self.collobj.labelObscured = self.ui.chkLabelObscured.isChecked()  
+        self.ui.chkSpecimenObscured.setFocus()
+        
+    def on_chkSpecimenObscured_clicked(self):
+        self.collobj.specimenObscured = self.ui.chkSpecimenObscured.isChecked()
         self.ui.radRadioSSO.setFocus()
         
     def on_containerTypeToggle(self, checked):
