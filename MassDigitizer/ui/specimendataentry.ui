@@ -510,6 +510,13 @@
                </widget>
               </item>
               <item>
+               <widget class="QCheckBox" name="chkLabelObscured">
+                <property name="text">
+                 <string>Label obscured</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QCheckBox" name="chkSpecimenObscured">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -525,13 +532,6 @@
                 </property>
                 <property name="text">
                  <string>Specimen obscured</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="chkLabelObscured">
-                <property name="text">
-                 <string>Label obscured</string>
                 </property>
                </widget>
               </item>
