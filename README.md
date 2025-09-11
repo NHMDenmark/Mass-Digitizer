@@ -52,7 +52,6 @@ The application comes under the Apache-2.0 license which aligns with the Open So
   
 The authors of the application are :  
 Fedor A. Steeman, NHMD  
-Jan K. Legind, NHMD  
 Pip Brewer, NHMD
 
 ## Systems Architecture 
