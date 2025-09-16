@@ -15,11 +15,11 @@
 from pathlib import Path
 import csv
 import time
+import sqlite3
 
 # Local imports
 import data_access
 
-db = data_access.DataAccess('test', r'MassDigitizer\db\test.sqlite3')
 
 filePairs = [{'source' : r'data\taxon spines\Botany\Tracheophyta 01 higher taxa.tsv', 
               'destin' : r'MassDigitizer\sql\editions\NHMD\tracheophyta\Highertaxa.sql'},
@@ -46,26 +46,20 @@ filePairs = [{'source' : r'data\taxon spines\Botany\Tracheophyta 01 higher taxa.
               'destin' : r'MassDigitizer\sql\editions\NHMD\tracheophyta\Hybrids.sql'}
             ]
 
-
 class PrepareDatabase():
     """
-    TODO
+    Creates and prepares a fresh database filled with predefined data to be bundled with the MassDigitizer App.
     """
 
     def main(self):
         """
-        TODO
+        Main function to create and prepare the fresh database.
         """
 
-        path = r'data\taxon spines\Botany'
-        #all_files = Path(path).glob('*.tsv',)  
+        self.create_database(r'db\create_db.sqlite3.sql', r'MassDigitizer\db\massdigitizer.sqlite3')
+        db = data_access.DataAccess(r'MassDigitizer\db\massdigitizer.sqlite3')
 
-        i = 0
-        #for filename in all_files:
         for filePair in filePairs:
-            
-            i = i + 1
-            #if i > 1: break
 
             sourceFile = filePair['source']
             print('**************')
@@ -93,6 +87,22 @@ class PrepareDatabase():
             t2 = time.time() - t1
             print(f'time spent: {str(t2)}' )
 
+    def create_database(self, sql_file_path, db_file_path):
+        """
+        Creates a fresh skeleton database from the provided SQL file.
+        1) If a database file already exists at the provided path, it is deleted.
+        2) A new database file is created at the provided path, based on the provided SQL file.
+        """
+
+        #Remove existing database file if it exists
+        if Path(db_file_path).exists():
+            Path(db_file_path).unlink()
+
+        #Create new database from provided SQL file
+        with sqlite3.connect(db_file_path) as conn:
+            with open(sql_file_path, 'r', encoding='utf-8') as sql_file:
+                sql_script = sql_file.read()
+                conn.executescript(sql_script)
     
     def generateValuesClause(self, line, treedefid):
         """
