@@ -86,7 +86,8 @@ class Specimen(Model):
         self.recordDateTime = str(datetime.now())
         self.exported = 0
         self.exportDateTime = ''
-        self.exportUserId = ''
+        self.exportUserId = ''        
+        self.taxonomyUncertain = False
 
         # Predefined data fields
         self.storageLocations = None
@@ -132,6 +133,7 @@ class Specimen(Model):
             'taxonnrsource': f'{self.taxonNrSource}',
             'typestatusname': f'{self.typeStatusName}',
             'typestatusid': f'{self.typeStatusId}',
+            'taxonomyuncertain': f'{self.taxonomyUncertain}',
             'georegionname': f'{self.geoRegionName}',
             'georegionsource': f'{self.geoRegionSource}',
             'georegionid': f'{self.geoRegionId}',
@@ -194,6 +196,7 @@ class Specimen(Model):
             self.taxonNrSource = record['taxonnrsource']
             self.typeStatusName = record['typestatusname']
             self.typeStatusId = record['typestatusid']
+            self.taxonomyUncertain = record['taxonomyuncertain']
             self.objectCondition = record['objectcondition']
             self.specimenObscured = record['specimenobscured']
             self.labelObscured = record['labelobscured']

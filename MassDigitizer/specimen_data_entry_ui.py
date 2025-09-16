@@ -246,6 +246,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.inpCatalogNumber.textChanged.connect(self.on_catalog_number_text_changed)      
         self.ui.inpTaxonNumber.returnPressed.connect(self.lookup_taxon_number)
         self.ui.inpTaxonNumber.textChanged.connect(self.lookup_taxon_number)
+        self.ui.chkTaxonomyUncertain.clicked.connect(self.on_chkTaxonomyUncertain_clicked)
         
         # Connect buttons to specific action functions
         self.ui.btnSave.clicked.connect(self.on_save_clicked)
@@ -372,6 +373,10 @@ class SpecimenDataEntryUI(QMainWindow):
     def on_notes_return_pressed(self): self.collobj.notes = self.ui.inpNotes.text()
 
     def on_inpNotes_text_changed(self): self.collobj.notes = self.ui.inpNotes.text()
+    
+    def on_chkTaxonomyUncertain_clicked(self):
+        self.collobj.taxonomyUncertain = self.ui.chkTaxonomyUncertain.isChecked()
+        self.ui.chkDamage.setFocus()
 
     def on_catalog_number_return_pressed(self): 
         self.collobj.catalogNumber = self.ui.inpCatalogNumber.text()
@@ -668,6 +673,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.txtStorageFullname.setText(record.get('storagefullname', ''))
         self.ui.cbxPrepType.setCurrentText(record.get('preptypename', ''))
         self.ui.cbxTypeStatus.setCurrentText(record.get('typestatusname', ''))
+        self.ui.chkTaxonomyUncertain.setChecked(util.str_to_bool(record.get('taxonomyuncertain', 'False')))
 
         if record.get('objectcondition') == 'Needs repair':
             self.ui.chkDamage.setChecked(True)
