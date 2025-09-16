@@ -396,6 +396,9 @@
       </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayoutGreenAreaRight">
+        <property name="spacing">
+         <number>5</number>
+        </property>
         <item>
          <widget class="QLabel" name="txtStorageFullname">
           <property name="minimumSize">
@@ -442,20 +445,46 @@
           <property name="formAlignment">
            <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
           </property>
-          <item row="0" column="0">
+          <item row="1" column="0">
            <widget class="QLabel" name="lblTaxonNumber">
             <property name="text">
              <string>Taxon Number:</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item row="1" column="1">
            <widget class="QLineEdit" name="inpTaxonNumber">
             <property name="maximumSize">
              <size>
               <width>100</width>
-              <height>4096</height>
+              <height>20</height>
              </size>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Policy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>200</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QCheckBox" name="chkTaxonomyUncertain">
+            <property name="locale">
+             <locale language="English" country="Denmark"/>
+            </property>
+            <property name="text">
+             <string>Taxonomy Uncertain</string>
             </property>
            </widget>
           </item>
