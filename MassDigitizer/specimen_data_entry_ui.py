@@ -66,6 +66,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.load_ui()
         self.setControlEvents()
         self.setup_form(collection_id)
+        self.fast_entry_mode = False
 
         self.collectionId = collection_id  # Set collection Id
         self.collection = coll.Collection(collection_id)
@@ -199,10 +200,6 @@ class SpecimenDataEntryUI(QMainWindow):
         else:
             self.ui.lblTaxonNumber.setVisible(False)
             self.ui.inpTaxonNumber.setVisible(False)
-
-        # Hide data entry mode radio buttons for the time being:
-        self.ui.radModeDefault.setVisible(False)
-        self.ui.radModeFastEntry.setVisible(False)
         
         self.updateRecordCount()
 
@@ -247,6 +244,10 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.inpTaxonNumber.returnPressed.connect(self.lookup_taxon_number)
         self.ui.inpTaxonNumber.textChanged.connect(self.lookup_taxon_number)
         self.ui.chkTaxonomyUncertain.clicked.connect(self.on_chkTaxonomyUncertain_clicked)
+
+        # Set entry mode button events
+        self.ui.radModeDefault.toggled.connect(self.on_entry_mode_toggled)
+        self.ui.radModeFastEntry.toggled.connect(self.on_entry_mode_toggled)
         
         # Connect buttons to specific action functions
         self.ui.btnSave.clicked.connect(self.on_save_clicked)
@@ -296,15 +297,24 @@ class SpecimenDataEntryUI(QMainWindow):
             self.collobj.objectCondition = "Needs repair"
         else: 
             self.collobj.objectCondition = ""
-        self.ui.chkLabelObscured.setFocus()
+        if self.fast_entry_mode:
+            self.ui.inpCatalogNumber.setFocus()
+        else:
+            self.ui.chkLabelObscured.setFocus()
 
     def on_chkLabelObscured_clicked(self):
         self.collobj.labelObscured = self.ui.chkLabelObscured.isChecked()  
-        self.ui.chkSpecimenObscured.setFocus()
+        if self.fast_entry_mode:
+            self.ui.inpCatalogNumber.setFocus()
+        else:
+            self.ui.chkSpecimenObscured.setFocus()
         
     def on_chkSpecimenObscured_clicked(self):
         self.collobj.specimenObscured = self.ui.chkSpecimenObscured.isChecked()
-        self.ui.radRadioSSO.setFocus()
+        if self.fast_entry_mode:
+            self.ui.inpCatalogNumber.setFocus()
+        else:
+            self.ui.radRadioSSO.setFocus()
         
     def on_containerTypeToggle(self, checked):
         """
@@ -340,8 +350,12 @@ class SpecimenDataEntryUI(QMainWindow):
                 self.ui.inpContainerName.setText(newContainerName)
                 self.ui.inpContainerName.setEnabled(True)
                 self.ui.imgWarningLinkedRecord.setVisible(True)
-
-            self.ui.inpNotes.setFocus()
+            
+            # Switch focus to next field
+            if self.fast_entry_mode:
+                self.ui.inpCatalogNumber.setFocus()
+            else:
+                self.ui.inpNotes.setFocus()
 
     def on_containerTypeClicked(self):
         sender = self.sender()
@@ -366,7 +380,12 @@ class SpecimenDataEntryUI(QMainWindow):
                 self.ui.inpContainerName.setText(newContainerName)
                 self.ui.inpContainerName.setEnabled(True)
                 self.ui.imgWarningLinkedRecord.setVisible(True)
-        self.ui.inpNotes.setFocus()
+    
+        # Switch focus to next field
+        if self.fast_entry_mode:
+            self.ui.inpCatalogNumber.setFocus()
+        else:
+            self.ui.inpNotes.setFocus()
 
     def on_container_name_return_pressed(self):self.collobj.containername = self.ui.inpContainerName.text()
 
@@ -376,7 +395,11 @@ class SpecimenDataEntryUI(QMainWindow):
     
     def on_chkTaxonomyUncertain_clicked(self):
         self.collobj.taxonomyUncertain = self.ui.chkTaxonomyUncertain.isChecked()
-        self.ui.chkDamage.setFocus()
+        # Switch focus to next field
+        if self.fast_entry_mode:
+            self.ui.inpCatalogNumber.setFocus()
+        else:
+            self.ui.chkDamage.setFocus()
 
     def on_catalog_number_return_pressed(self): 
         self.collobj.catalogNumber = self.ui.inpCatalogNumber.text()
@@ -842,7 +865,17 @@ class SpecimenDataEntryUI(QMainWindow):
                 self.taxonname_completer.setModel(QStringListModel([]))
         else:
             self.taxonname_completer.setModel(QStringListModel([]))
-    
+
+    def on_entry_mode_toggled(self):
+        """ 
+        Handle toggling of entry mode radio buttons.
+        """
+        if self.ui.radModeDefault.isChecked():
+            self.fast_entry_mode = False
+            util.logger.info('Entry mode set to Default')
+        elif self.ui.radModeFastEntry.isChecked():
+            self.fast_entry_mode = True
+            util.logger.info('Entry mode set to Fast Entry')    
 
 def main():
     app = QApplication(sys.argv)
