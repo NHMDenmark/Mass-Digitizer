@@ -64,6 +64,7 @@ class Specimen(Model):
         self.geoRegionName = ''
         self.geoRegionSource = ''
         self.geoRegionId = 0
+        self.localityNotes = ''
         self.storageFullName = ''
         self.storageName = ''
         self.storageId = 0
@@ -137,6 +138,7 @@ class Specimen(Model):
             'georegionname': f'{self.geoRegionName}',
             'georegionsource': f'{self.geoRegionSource}',
             'georegionid': f'{self.geoRegionId}',
+            'localitynotes': f'{self.localityNotes}', 
             'storagefullname': f'{self.storageFullName}',
             'storagename': f'{self.getStorageName()}',
             'storageid': f'{self.storageId}',
@@ -203,6 +205,7 @@ class Specimen(Model):
             self.geoRegionName = record['georegionname']
             self.geoRegionSource = record['georegionsource']
             self.geoRegionId = record['georegionid']
+            self.localityNotes = record['localitynotes']
             self.storageFullName = record['storagefullname']
             self.storageName = record['storagename']
             self.storageId = record['storageid']
@@ -262,7 +265,7 @@ class Specimen(Model):
 
     def setGeoRegionFields(self, index):
         """
-        Get type status record on the basis of list index
+        Get geo region record on the basis of list index
             and set respective fields
         """
         if index >= 0:  # Apparently, index -1 selects the last item in the list

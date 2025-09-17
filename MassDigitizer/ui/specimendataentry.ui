@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1080</width>
-    <height>720</height>
+    <height>750</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,13 +19,13 @@
   <property name="minimumSize">
    <size>
     <width>1080</width>
-    <height>720</height>
+    <height>750</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>1080</width>
-    <height>720</height>
+    <width>1200</width>
+    <height>960</height>
    </size>
   </property>
   <property name="font">
@@ -384,17 +384,17 @@
           <item row="3" column="1">
            <widget class="QComboBox" name="cbxGeoRegion"/>
           </item>
-          <item row="4" column="0">
+          <item row="5" column="0">
            <widget class="QLabel" name="lblTaxonName">
             <property name="text">
              <string>Taxonomic name:</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
+          <item row="5" column="1">
            <widget class="QLineEdit" name="inpTaxonName"/>
           </item>
-          <item row="5" column="1">
+          <item row="6" column="1">
            <widget class="QLabel" name="txtTaxonFullname">
             <property name="minimumSize">
              <size>
@@ -415,6 +415,16 @@
              <string>QLabelMetaInfo</string>
             </property>
            </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Locality notes:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="inpLocalityNotes"/>
           </item>
          </layout>
         </item>
@@ -539,7 +549,7 @@
             <item row="0" column="0">
              <widget class="QLabel" name="lblSpecimenFlags">
               <property name="text">
-               <string>Specimen flags</string>
+               <string>Specimen flags:</string>
               </property>
              </widget>
             </item>
@@ -608,7 +618,7 @@
             <item row="2" column="0">
              <widget class="QLabel" name="lblContainerType">
               <property name="text">
-               <string>Container type</string>
+               <string>Container type:</string>
               </property>
              </widget>
             </item>
@@ -668,7 +678,7 @@
             <item row="3" column="0">
              <widget class="QLabel" name="lblContainerID">
               <property name="text">
-               <string>Container ID</string>
+               <string>Container ID:</string>
               </property>
              </widget>
             </item>
@@ -688,7 +698,7 @@
             <item row="4" column="0">
              <widget class="QLabel" name="lblNotes">
               <property name="text">
-               <string>Notes</string>
+               <string>Specimen notes:</string>
               </property>
              </widget>
             </item>
@@ -924,6 +934,12 @@
         </item>
         <item>
          <widget class="QTableWidget" name="tblPrevious">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>120</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>4096</width>
@@ -1055,6 +1071,34 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>radModeDefault</tabstop>
+  <tabstop>radModeFastEntry</tabstop>
+  <tabstop>radStickinessDefault</tabstop>
+  <tabstop>radStickinessExtended</tabstop>
+  <tabstop>inpStorage</tabstop>
+  <tabstop>cbxPrepType</tabstop>
+  <tabstop>cbxTypeStatus</tabstop>
+  <tabstop>cbxGeoRegion</tabstop>
+  <tabstop>inpLocalityNotes</tabstop>
+  <tabstop>inpTaxonNumber</tabstop>
+  <tabstop>inpTaxonName</tabstop>
+  <tabstop>chkTaxonomyUncertain</tabstop>
+  <tabstop>chkDamage</tabstop>
+  <tabstop>chkLabelObscured</tabstop>
+  <tabstop>chkSpecimenObscured</tabstop>
+  <tabstop>radRadioSSO</tabstop>
+  <tabstop>radRadioMSO</tabstop>
+  <tabstop>radRadioMOS</tabstop>
+  <tabstop>inpContainerName</tabstop>
+  <tabstop>inpNotes</tabstop>
+  <tabstop>inpCatalogNumber</tabstop>
+  <tabstop>btnSave</tabstop>
+  <tabstop>btnBack</tabstop>
+  <tabstop>btnForward</tabstop>
+  <tabstop>btnClear</tabstop>
+  <tabstop>tblPrevious</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
  <buttongroups>

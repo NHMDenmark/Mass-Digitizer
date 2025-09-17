@@ -58,9 +58,9 @@ class SpecimenDataEntryUI(QMainWindow):
         # Input field lists defining: Tabbing order, focus indicator, what fields to be cleared, and what fields are not 'sticky' i.e. not carrying their value over to the next record after saving current one 
         #self.inputFieldList  = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured', 'radRadioSSO', 'radRadioMSO', 'radRadioMOS', 'inpContainerName', 'inpNotes', 'inpCatalogNumber', 'btnSave']
         #self.focusIconList   = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrGeoRegion', 'inrTaxonName', 'inrTaxonNumber', 'inrDamage', 'inrSpecimenObscured', 'inrLabelObscured', 'inrRadioSSO', 'inrRadioMSO', 'inrRadioMOS', 'inrContainerName', 'inrNotes', 'inrCatalogNumber', 'inrSave']
-        self.clearingList    = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured','inpContainerName', 'inpCatalogNumber','txtRecordID', 'txtStorageFullname', 'inpNotes']
-        self.base_sticky_fields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured']
-        self.nonStickyFields = self.base_sticky_fields.copy() + ['inpNotes']
+        self.clearingList    = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'inpLocalityNotes', 'inpTaxonName', 'inpTaxonNumber', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured','inpContainerName', 'inpCatalogNumber','txtRecordID', 'txtStorageFullname', 'inpNotes']
+        self.base_nonsticky_fields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured', 'inpLocalityNotes']
+        self.nonStickyFields = self.base_nonsticky_fields.copy() + ['inpNotes']
         self.sessionMode     = 'Default'
         
         # Load UI and setup connections
@@ -227,6 +227,8 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.cbxPrepType.currentIndexChanged.connect(self.on_cbxPrepType_currentIndexChanged)
         self.ui.cbxTypeStatus.currentIndexChanged.connect(self.on_cbxTypeStatus_currentIndexChanged)
         self.ui.cbxGeoRegion.currentIndexChanged.connect(self.on_cbxGeoRegion_currentIndexChanged)
+        self.ui.inpLocalityNotes.returnPressed.connect(self.on_locality_notes_input)
+        self.ui.inpLocalityNotes.textChanged.connect(self.on_locality_notes_input)
         self.ui.inpTaxonName.returnPressed.connect(self.on_inpTaxonName_return_pressed)
         self.ui.chkDamage.clicked.connect(self.on_chkDamage_clicked)
         self.ui.chkSpecimenObscured.clicked.connect(self.on_chkSpecimenObscured_clicked)
@@ -238,8 +240,8 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.radRadioMOS.clicked.connect(self.on_containerTypeClicked)
         self.ui.radRadioMSO.clicked.connect(self.on_containerTypeClicked)
         self.ui.inpContainerName.returnPressed.connect(self.on_container_name_return_pressed)
-        self.ui.inpNotes.returnPressed.connect(self.on_notes_return_pressed)        
-        self.ui.inpNotes.textChanged.connect(self.on_inpNotes_text_changed) 
+        self.ui.inpNotes.returnPressed.connect(self.on_notes_changed)        
+        self.ui.inpNotes.textChanged.connect(self.on_notes_changed) 
         self.ui.inpCatalogNumber.returnPressed.connect(self.on_catalog_number_return_pressed)
         self.ui.inpCatalogNumber.textChanged.connect(self.on_catalog_number_text_changed)      
         self.ui.inpTaxonNumber.returnPressed.connect(self.lookup_taxon_number)
@@ -280,6 +282,8 @@ class SpecimenDataEntryUI(QMainWindow):
     def on_cbxTypeStatus_currentIndexChanged(self): self.collobj.setTypeStatusFields(self.ui.cbxTypeStatus.currentIndex() - 1)
 
     def on_cbxGeoRegion_currentIndexChanged(self): self.collobj.setGeoRegionFields(self.ui.cbxGeoRegion.currentIndex() - 1)
+
+    def on_locality_notes_input(self): self.collobj.localityNotes = self.ui.inpLocalityNotes.text()
 
     def on_inpTaxonName_return_pressed(self): 
         """
@@ -392,10 +396,8 @@ class SpecimenDataEntryUI(QMainWindow):
 
     def on_container_name_return_pressed(self):self.collobj.containername = self.ui.inpContainerName.text()
 
-    def on_notes_return_pressed(self): self.collobj.notes = self.ui.inpNotes.text()
+    def on_notes_changed(self): self.collobj.notes = self.ui.inpNotes.text()
 
-    def on_inpNotes_text_changed(self): self.collobj.notes = self.ui.inpNotes.text()
-    
     def on_chkTaxonomyUncertain_clicked(self):
         self.collobj.taxonomyUncertain = self.ui.chkTaxonomyUncertain.isChecked()
         # Switch focus to next field
@@ -709,6 +711,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.chkLabelObscured.setChecked(util.str_to_bool(record.get('labelobscured', 'False')))
 
         self.ui.inpNotes.setText(record.get('notes', ''))
+        self.ui.inpLocalityNotes.setText(record.get('localitynotes', ''))
 
         self.setContainerFields(record)
 
@@ -888,9 +891,9 @@ class SpecimenDataEntryUI(QMainWindow):
         Handle toggling of stickiness mode radio buttons.
         """
         if self.ui.radStickinessDefault.isChecked():
-            self.nonStickyFields = self.base_sticky_fields.copy() + ['inpNotes']
+            self.nonStickyFields = self.base_nonsticky_fields.copy() + ['inpNotes']
         elif self.ui.radStickinessExtended.isChecked():
-            self.nonStickyFields = self.base_sticky_fields.copy()
+            self.nonStickyFields = self.base_nonsticky_fields.copy()
 
         # Reset focus on the storage field
         self.ui.inpStorage.setFocus()   

@@ -67,6 +67,7 @@ CREATE TABLE "specimen" (
 	"georegionname"	TEXT,
 	"georegionsource"	TEXT,
 	"georegionid"	INTEGER,
+	"localitynotes"	TEXT,
 	"storagefullname"	TEXT,
 	"storagename"	TEXT,
 	"storageid"	NUMERIC,
