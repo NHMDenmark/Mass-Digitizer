@@ -59,7 +59,8 @@ class SpecimenDataEntryUI(QMainWindow):
         #self.inputFieldList  = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured', 'radRadioSSO', 'radRadioMSO', 'radRadioMOS', 'inpContainerName', 'inpNotes', 'inpCatalogNumber', 'btnSave']
         #self.focusIconList   = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrGeoRegion', 'inrTaxonName', 'inrTaxonNumber', 'inrDamage', 'inrSpecimenObscured', 'inrLabelObscured', 'inrRadioSSO', 'inrRadioMSO', 'inrRadioMOS', 'inrContainerName', 'inrNotes', 'inrCatalogNumber', 'inrSave']
         self.clearingList    = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured','inpContainerName', 'inpCatalogNumber','txtRecordID', 'txtStorageFullname', 'inpNotes']
-        self.nonStickyFields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured', 'inpNotes']
+        self.base_sticky_fields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured']
+        self.nonStickyFields = self.base_sticky_fields.copy() + ['inpNotes']
         self.sessionMode     = 'Default'
         
         # Load UI and setup connections
@@ -248,6 +249,8 @@ class SpecimenDataEntryUI(QMainWindow):
         # Set entry mode button events
         self.ui.radModeDefault.toggled.connect(self.on_entry_mode_toggled)
         self.ui.radModeFastEntry.toggled.connect(self.on_entry_mode_toggled)
+        self.ui.radStickinessDefault.toggled.connect(self.on_stickiness_toggled)
+        self.ui.radStickinessExtended.toggled.connect(self.on_stickiness_toggled)
         
         # Connect buttons to specific action functions
         self.ui.btnSave.clicked.connect(self.on_save_clicked)
@@ -876,6 +879,21 @@ class SpecimenDataEntryUI(QMainWindow):
         elif self.ui.radModeFastEntry.isChecked():
             self.fast_entry_mode = True
             util.logger.info('Entry mode set to Fast Entry')    
+
+        # Reset focus on the storage field
+        self.ui.inpStorage.setFocus()   
+
+    def on_stickiness_toggled(self):
+        """ 
+        Handle toggling of stickiness mode radio buttons.
+        """
+        if self.ui.radStickinessDefault.isChecked():
+            self.nonStickyFields = self.base_sticky_fields.copy() + ['inpNotes']
+        elif self.ui.radStickinessExtended.isChecked():
+            self.nonStickyFields = self.base_sticky_fields.copy()
+
+        # Reset focus on the storage field
+        self.ui.inpStorage.setFocus()   
 
 def main():
     app = QApplication(sys.argv)
