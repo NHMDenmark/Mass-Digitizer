@@ -112,6 +112,7 @@ class SpecimenDataEntryUI(QMainWindow):
         # Start up interface and center window
         self.show()
         self.center_screen() 
+        self.ui.inpStorage.setFocus()  # Set initial focus on storage input field
         
     def load_comboboxes(self):
         """
@@ -230,6 +231,8 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.inpLocalityNotes.returnPressed.connect(self.on_locality_notes_input)
         self.ui.inpLocalityNotes.textChanged.connect(self.on_locality_notes_input)
         self.ui.inpTaxonName.returnPressed.connect(self.on_inpTaxonName_return_pressed)
+        #self.ui.inpTaxonName.tabPressed.connect(self.on_inpTaxonName_return_pressed)
+        #self.ui.inpTaxonName.textChanged.connect(self.on_inpTaxonName_return_pressed)
         self.ui.chkDamage.clicked.connect(self.on_chkDamage_clicked)
         self.ui.chkSpecimenObscured.clicked.connect(self.on_chkSpecimenObscured_clicked)
         self.ui.chkLabelObscured.clicked.connect(self.on_chkLabelObscured_clicked)

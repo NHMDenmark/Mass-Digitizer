@@ -20,6 +20,7 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PySide6.QtGui import QIcon
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile
+from PySide6.QtCore import QTimer
 
 # Internal dependencies
 import util
@@ -41,6 +42,7 @@ class HomeScreen(QMainWindow):
         super(HomeScreen, self).__init__()
         self.load_ui()
         self.setup_connections()
+        QTimer.singleShot(0, self.auto_login) # Attempt auto-login if login.cfg exists
 
     def load_ui(self):
         loader = QUiLoader()
@@ -72,14 +74,61 @@ class HomeScreen(QMainWindow):
         self.ui.btnLogin.clicked.connect(self.on_login_clicked)  # Connect login button
         self.ui.btnExit.clicked.connect(self.close)
 
-    def on_institution_selected(self):
-        try:
-            self.selected_institution = self.ui.lstSelectInstitution.currentText()
-            if self.selected_institution == "-please select-":
-                self.ui.lstSelectCollection.clear()
-                self.ui.btnLogin.setEnabled(False)  # Disable login button
-                return
+    def auto_login(self):
+        """ 
+        Auto-login using credentials from login.cfg file if it exists 
+        """
 
+        config_path = Path(util.getUserPath()).joinpath('login.cfg')
+        if config_path.exists():
+            try:
+                with open(config_path, 'r') as f:
+                    lines = f.readlines()
+                    credentials = {line.split(':')[0].strip(): line.split(':')[1].strip() for line in lines if ':' in line}
+                
+                username = credentials.get('username', '')
+                password = credentials.get('password', '')
+                institution_name = credentials.get('institution', '')
+                collection_name = credentials.get('collection', '')
+
+                # Set username and password
+                if username: self.ui.inpUsername.setText(username)
+                if password: self.ui.inpPassword.setText(password)
+
+                if institution_name and collection_name:
+                    # Set institution
+                    index = self.ui.lstSelectInstitution.findText(institution_name)
+                    if index != -1:
+                        self.ui.lstSelectInstitution.setCurrentIndex(index)
+                        self.on_institution_selected()  # Manually trigger to load collections
+
+                        # Set collection
+                        index = self.ui.lstSelectCollection.findText(collection_name)
+                        if index != -1:
+                            self.ui.lstSelectCollection.setCurrentIndex(index)
+                            collection = self.select_collection(collection_name)
+
+                            # Attempt login
+                            self.login(username, password, collection)
+                        else:
+                            util.logger.warning(f'Collection "{collection_name}" not found for institution "{institution_name}".')
+                    else:
+                        util.logger.warning(f'Institution "{institution_name}" not found.')
+                else:
+                    util.logger.warning('Incomplete credentials in login.cfg.')
+            except Exception as e:
+                util.logger.error(f'Error during auto-login: {e}')
+        else:
+            util.logger.info('No login.cfg file found for auto-login.')
+
+    def on_institution_selected(self):        
+        self.selected_institution = self.ui.lstSelectInstitution.currentText()
+        if self.selected_institution == "-please select-":
+            self.ui.lstSelectCollection.clear()
+            self.ui.btnLogin.setEnabled(False)  # Disable login button
+            return
+        
+        try:
             util.logger.debug(f'Selected institution: {self.selected_institution}')
             institution = db.getRowsOnFilters('institution', {' name = ':f'"{self.selected_institution}"'}, 1)
             self.institution_id = institution[0]['id']
@@ -88,39 +137,55 @@ class HomeScreen(QMainWindow):
             collections = util.convert_dbrow_list(db.getRowsOnFilters('collection', {' institutionid = ':f'{self.institution_id}', 'visible = ': '1'}), True)
             self.ui.lstSelectCollection.clear()
             self.ui.lstSelectCollection.addItems(collections)
+            pass
         except Exception as e:
             util.logger.error(f'Error selecting institution: {e}')
             self.ui.lstSelectCollection.clear()
 
     def on_collection_selected(self):
-        selected_collection = self.ui.lstSelectCollection.currentText()
-        if selected_collection and selected_collection != "-please select-":
+        collection_name = self.ui.lstSelectCollection.currentText()
+        if collection_name and collection_name != "-please select-":
             self.ui.btnLogin.setEnabled(True)  # Enable login button
+            self.select_collection(collection_name)
         else:
             self.ui.btnLogin.setEnabled(False)  # Disable login button
+        
+    def select_collection(self, collection_name=None):
+        if collection_name:
+            collection_lookup = db.getRowsOnFilters('collection', {'name = ':f'"{collection_name}"' , 'institutionid = ':f'{self.institution_id}',})
+            if collection_lookup and collection_lookup[0]['id'] > 0:
+                self.selected_collection = coll.Collection(collection_lookup[0]['id'])
+                self.ui.lstSelectCollection.setCurrentText(collection_name)
+        
+        if self.selected_collection: 
+            util.logger.debug(f'Selected collection: {self.selected_collection.name}')
+        return self.selected_collection
 
     def on_login_clicked(self):
         username = self.ui.inpUsername.text()
         password = self.ui.inpPassword.text()
         
+        selected_collection = self.select_collection(self.ui.lstSelectCollection.currentText())
+
         if not username or not password:
             self.ui.lblIncomplete.setVisible(True)
             return
-
-        selected_collection = self.ui.lstSelectCollection.currentText()
-        collection = db.getRowsOnFilters('collection', {'name = ':f'"{selected_collection}"' , 'institutionid = ':f'{self.institution_id}',})
         
-        if collection and collection[0]['id'] > 0:
-            collection_id = collection[0]['id']
+        self.login(username, password, selected_collection)
+        
+    def login(self, username, password, collection):
+
+        if collection and collection.id > 0:
+            collection_id = collection.id
             gs.baseURL = self.institution_url
-            gs.csrfToken = sp.specifyLogin(username, password, collection[0]['spid'])
+            gs.csrfToken = sp.specifyLogin(username, password, collection.spid)
 
             if gs.csrfToken != '': # TODO Check token format for extra security 
                 # Login was successful
 
                 gs.userName = username
-                gs.collectionName = selected_collection
-                gs.collection = coll.Collection(collection_id)
+                gs.collection = collection 
+                gs.collectionName = collection.name
                 gs.institutionId = self.institution_id
                 gs.institutionName = self.selected_institution 
 
@@ -143,20 +208,16 @@ class HomeScreen(QMainWindow):
                 gs.firstName = agent['firstname']
                 gs.middleInitial = agent['middleinitial']
                 gs.lastName = agent['lastname']
-
-                self.hide()
                 
                 try:
                     util.logger.info("Login successful, launching SpecimenDataEntryUI")
                     self.specimen_ui = sde.SpecimenDataEntryUI(collection_id)
                     self.specimen_ui.show()
+                    self.hide()
                 except Exception as e:
                     util.logger.error(f"Failed to load SpecimenDataEntryUI: {e}")
                     self.show()
                     self.show_error_message(e)
-
-                else:
-                    self.ui.lblAuthError.setVisible(True)
             else:
                 self.ui.lblAuthError.setVisible(True)
         else:
