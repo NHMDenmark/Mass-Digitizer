@@ -79,7 +79,8 @@ class HomeScreen(QMainWindow):
         Auto-login using credentials from login.cfg file if it exists 
         """
 
-        config_path = Path(util.getUserPath()).joinpath('login.cfg')
+        config_path = Path(util.getUserPath()).joinpath('config').joinpath('login.cfg')
+        print(f'Checking for auto-login config at {config_path}')
         if config_path.exists():
             try:
                 with open(config_path, 'r') as f:
