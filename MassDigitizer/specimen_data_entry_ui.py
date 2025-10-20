@@ -30,6 +30,8 @@ from PySide6.QtCore import Qt, QFile, QStandardPaths, QStringListModel
 from PySide6.QtGui import QFont, QIcon, QPixmap
 from PySide6.QtWidgets import QCompleter
 from PySide6.QtUiTools import QUiLoader
+from PySide6.QtWidgets import QCompleter, QLineEdit, QApplication
+from PySide6.QtCore import Qt, QEvent, QObject
 
 # Internal dependencies
 import util
@@ -98,17 +100,22 @@ class SpecimenDataEntryUI(QMainWindow):
         self.storage_completer = QCompleter()
         self.storage_completer.setCaseSensitivity(Qt.CaseInsensitive)
         self.storage_completer.setFilterMode(Qt.MatchContains)
-        self.storage_completer.setCompletionMode(QCompleter.UnfilteredPopupCompletion)
+        self.storage_completer.setCompletionMode(QCompleter.PopupCompletion)
         self.ui.inpStorage.setCompleter(self.storage_completer)
         self.ui.inpStorage.textChanged.connect(self.update_storage_completer)  
-
+        self.storage_completer.popup().installEventFilter(PopupArrowFilter(self.storage_completer))
+        self.storage_completer.activated.connect(self.on_storage_selected)
+        
         # Create QCompleter for inpTaxonName
         self.taxonname_completer = QCompleter()
         self.taxonname_completer.setCaseSensitivity(Qt.CaseInsensitive)
         self.taxonname_completer.setFilterMode(Qt.MatchContains)
+        self.taxonname_completer.setCompletionMode(QCompleter.PopupCompletion)
         self.ui.inpTaxonName.setCompleter(self.taxonname_completer)
         self.ui.inpTaxonName.textChanged.connect(self.update_taxonname_completer)
-        
+        self.taxonname_completer.popup().installEventFilter(PopupArrowFilter(self.taxonname_completer))
+        self.taxonname_completer.activated.connect(self.on_taxonname_selected)
+
         # Start up interface and center window
         self.show()
         self.center_screen() 
@@ -224,7 +231,7 @@ class SpecimenDataEntryUI(QMainWindow):
             radio_button.toggled.connect(self.on_containerTypeToggle)
 
         # Connect input field signals to data update functions
-        self.ui.inpStorage.returnPressed.connect(self.on_inpStorage_return_pressed)
+        #self.ui.inpStorage.returnPressed.connect(self.on_inpStorage_return_pressed)
         self.ui.cbxPrepType.currentIndexChanged.connect(self.on_cbxPrepType_currentIndexChanged)
         self.ui.cbxTypeStatus.currentIndexChanged.connect(self.on_cbxTypeStatus_currentIndexChanged)
         self.ui.cbxGeoRegion.currentIndexChanged.connect(self.on_cbxGeoRegion_currentIndexChanged)
@@ -271,7 +278,7 @@ class SpecimenDataEntryUI(QMainWindow):
         """
         storage_name_input = self.ui.inpStorage.text()
         self.ui.txtStorageFullname.setText(storage_name_input)
-        storage_record = self.getStorageRecord()
+        storage_record = self.getStorageRecord(storage_name_input)
         if storage_record:
             self.collobj.setStorageFieldsFromRecord(storage_record)
         else: 
@@ -566,7 +573,7 @@ class SpecimenDataEntryUI(QMainWindow):
         """
 
         # Set specimen object instance fields from input form
-        self.collobj.setStorageFieldsFromRecord(self.getStorageRecord())
+        self.collobj.setStorageFieldsFromRecord(self.getStorageRecord(self.ui.txtStorageFullname.text()))
         self.collobj.setPrepTypeFields(self.ui.cbxPrepType.currentIndex() - 1)
         self.collobj.setTypeStatusFields(self.ui.cbxTypeStatus.currentIndex() - 1)
         self.collobj.notes = self.ui.inpNotes.text()
@@ -632,12 +639,14 @@ class SpecimenDataEntryUI(QMainWindow):
         # Reset focus on the storage field
         self.ui.inpStorage.setFocus()   
 
-    def getStorageRecord(self):
+    def getStorageRecord(self, storageFullName=None):
         """
         Retrieve storage record based on storage input field contents.
         Search is to be done on fullname since identical atomic values can occur across the storage tree with different parentage.
         """
-        storageFullName = self.ui.txtStorageFullname.text()
+        if not storageFullName:
+            storageFullName = self.ui.txtStorageFullname.text()
+
         try:
             storageRecords = self.db.getRowsOnFilters('storage', {'fullname': f'="{storageFullName}"', 'collectionid': f'={self.collectionId}'}, 1)
         except:
@@ -901,6 +910,32 @@ class SpecimenDataEntryUI(QMainWindow):
         # Reset focus on the storage field
         self.ui.inpStorage.setFocus()   
 
+    # add a slot for when a suggestion is chosen (click or enter)
+    def on_taxonname_selected(self, completion):
+        # 'completion' is the selected string; set editor / update model as needed
+        self.ui.inpTaxonName.setText(completion)
+        taxonname_record = self.getTaxonNameRecord(completion)
+        if taxonname_record:
+            self.collobj.setTaxonNameFieldsFromRecord(taxonname_record)
+        else:
+            self.collobj.taxonName = completion
+            self.collobj.taxonFullName = ''
+            self.collobj.taxonNameId = 0
+        self.ui.txtTaxonFullname.setText(self.collobj.taxonFullName)
+
+    # add a slot for when a suggestion is chosen (click or enter)
+    def on_storage_selected(self, completion):
+        # 'completion' is the selected string; set editor / update model as needed
+        self.ui.inpStorage.setText(completion)
+        storage_record = self.getStorageRecord(completion)
+        if storage_record:
+            self.collobj.setStorageFieldsFromRecord(storage_record)
+        else:
+            self.collobj.storageName = completion
+            self.collobj.storageFullName = '-no storage record selected-'
+            self.collobj.storageId = 0
+        self.ui.txtStorageFullname.setText(self.collobj.storageFullName)
+
 def main():
     app = QApplication(sys.argv)
     collection_id = 11  # Replace with the actual collection_id you want to use
@@ -911,4 +946,56 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+class PopupArrowFilter(QObject):
+    """
+        Event filter installed on completer.popup() to catch arrow keys there. 
+        This ensures that end users can use the arrow keys to navigate down 
+        to their selection without it being overwritten with the first suggestion, 
+        which would trigger an unwanted second round of suggestions, often removing
+        the desired selection from view. 
+    """
+    def __init__(self, completer):
+        super().__init__(completer)
+        self.completer = completer
+
+    def eventFilter(self, obj, event):
+        if event.type() == QEvent.KeyPress and event.key() in (Qt.Key_Up, Qt.Key_Down):
+            # handle navigation here without letting the default handler update the lineedit
+            view = self.completer.popup()
+            model = view.model()
+            if model and model.rowCount() > 0:
+                cur = view.currentIndex()
+                row = cur.row() if cur.isValid() else -1
+                row += 1 if event.key() == Qt.Key_Down else -1
+                row = max(0, min(model.rowCount() - 1, row))
+
+                # preserve editor contents and cursor
+                editor = self.completer.widget()
+                try:
+                    old_text = editor.text()
+                    old_pos = editor.cursorPosition()
+                except Exception:
+                    old_text = None
+                    old_pos = None
+
+                # prevent completer from reacting while we change the view
+                try:
+                    self.completer.blockSignals(True)
+                    view.setCurrentIndex(model.index(row, 0))
+                finally:
+                    self.completer.blockSignals(False)
+
+                # restore editor contents/cursor (prevents overwrite)
+                if old_text is not None:
+                    editor.setText(old_text)
+                    try:
+                        editor.setCursorPosition(old_pos)
+                    except Exception:
+                        pass
+
+            # swallow the event so QCompleter doesn't apply it to the editor
+            return True
+        return False
 
