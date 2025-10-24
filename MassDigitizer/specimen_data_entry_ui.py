@@ -28,7 +28,6 @@ from PySide6.QtWidgets import QLineEdit, QComboBox, QRadioButton, QCheckBox, QMe
 from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView
 from PySide6.QtCore import Qt, QFile, QStandardPaths, QStringListModel
 from PySide6.QtGui import QFont, QIcon, QPixmap
-from PySide6.QtWidgets import QCompleter
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QCompleter, QLineEdit, QApplication
 from PySide6.QtCore import Qt, QEvent, QObject
@@ -104,7 +103,8 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.inpStorage.setCompleter(self.storage_completer)
         self.ui.inpStorage.textChanged.connect(self.update_storage_completer)  
         self.storage_completer.popup().installEventFilter(PopupArrowFilter(self.storage_completer))
-        self.storage_completer.activated.connect(self.on_storage_selected)
+        # ensure we receive the selected text (use the str overload)
+        #self.storage_completer.activated[str].connect(self.on_storage_selected)
         
         # Create QCompleter for inpTaxonName
         self.taxonname_completer = QCompleter()
@@ -114,7 +114,8 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.inpTaxonName.setCompleter(self.taxonname_completer)
         self.ui.inpTaxonName.textChanged.connect(self.update_taxonname_completer)
         self.taxonname_completer.popup().installEventFilter(PopupArrowFilter(self.taxonname_completer))
-        self.taxonname_completer.activated.connect(self.on_taxonname_selected)
+        # ensure we receive the selected text (use the str overload)
+        #self.taxonname_completer.activated[str].connect(self.on_taxonname_selected)
 
         # Start up interface and center window
         self.show()
@@ -276,6 +277,25 @@ class SpecimenDataEntryUI(QMainWindow):
         """
         Set storage fields from storage input field and update the storage full name field.
         """
+        # If the completer popup is visible, prefer committing the popup selection
+        try:
+            popup = self.storage_completer.popup()
+        except Exception:
+            popup = None
+
+        if popup and popup.isVisible():
+            # Get the current index from the popup and commit it via the same handler
+            cur = popup.currentIndex()
+            if cur.isValid():
+                completion = cur.data()
+            else:
+                # fallback: use editor text
+                completion = self.ui.inpStorage.text()
+            # reuse the completer selection handler so behavior is consistent
+            self.on_storage_selected(completion)
+            return
+
+        # Normal Return behaviour when no popup is visible
         storage_name_input = self.ui.inpStorage.text()
         self.ui.txtStorageFullname.setText(storage_name_input)
         storage_record = self.getStorageRecord(storage_name_input)
@@ -286,6 +306,9 @@ class SpecimenDataEntryUI(QMainWindow):
             self.collobj.storageFullName = '-no storage record selected-'
             self.collobj.storageId = 0
         self.ui.txtStorageFullname.setText(self.collobj.storageFullName)
+        
+        # Switch focus to next field
+        self.ui.cbxPrepType.setFocus()
 
     def on_cbxPrepType_currentIndexChanged(self): self.collobj.setPrepTypeFields(self.ui.cbxPrepType.currentIndex() - 1)
 
@@ -299,14 +322,37 @@ class SpecimenDataEntryUI(QMainWindow):
         """
         Set taxon name fields from taxon name input field.
         """
+        # If the completer popup is visible, prefer committing the popup selection
+        try:
+            popup = self.taxonname_completer.popup()
+        except Exception:
+            popup = None
+
+        if popup and popup.isVisible():
+            # Get the current index from the popup and commit it via the same handler
+            cur = popup.currentIndex()
+            if cur.isValid():
+                completion = cur.data()
+            else:
+                # fallback: use editor text
+                completion = self.ui.inpTaxonName.text()
+            # reuse the completer selection handler so behavior is consistent
+            self.on_taxonname_selected(completion)
+            return
+
+        # Normal Return behaviour when no popup is visible
         taxon_name_input = self.ui.inpTaxonName.text()
         record = self.getTaxonNameRecord(taxon_name_input)
         if record:
             self.collobj.setTaxonNameFieldsFromRecord(record)
             self.setTxtTaxonFullname(self.collobj.taxonFullName)
-        else:             
+        else:
             # No record: Unknown or "new" taxon name
-            self.handleNewTaxonName(taxon_name_input)            
+            taxonname = self.collobj.handleNewTaxonName(taxon_name_input)
+            self.setTxtTaxonFullname(taxonname)
+
+        # Switch focus to next field
+        self.ui.chkTaxonomyUncertain.setFocus()            
 
     def on_chkDamage_clicked(self): 
         needsrepair = self.ui.chkDamage.isChecked()
@@ -585,25 +631,13 @@ class SpecimenDataEntryUI(QMainWindow):
         if self.collection.useTaxonNumbers:
             self.collobj.taxonNumber = self.ui.inpTaxonNumber.text()
         taxonRecord = self.getTaxonNameRecord(taxonFullName)
-        self.collobj.setTaxonNameFields(taxonRecord)
-
-        # If no taxon record found, regard as new taxon name and set taxon name fields accordingly
-        if not taxonRecord:
-            self.handleNewTaxonName(taxonFullName)
-    
-    def handleNewTaxonName(self, taxonFullName):
-        """ Handle new taxon """
-        self.collobj.taxonNameId = 0
-        self.collobj.setTaxonNameFields(None)
-        self.setTxtTaxonFullname(taxonFullName)
-        self.collobj.taxonFullName = taxonFullName
-        if ' ' in taxonFullName:
-            #genusname = taxonFullName.split(' ')[0].strip()
-            self.collobj.taxonName = ' '.join(taxonFullName.split(' ')[1:]).strip()
+        
+        if taxonRecord:
+            self.collobj.setTaxonNameFields(taxonRecord)
         else:
-            #genusname = taxonFullName.strip() 
-            self.collobj.taxonName = taxonFullName.strip() 
-        pass
+            # If no taxon record found, regard as new taxon name and set taxon name fields accordingly
+            self.collobj.handleNewTaxonName(taxonFullName)
+            self.setTxtTaxonFullname(self.collobj.taxonFullName)
     
     def clearNonStickyFields(self):
         """
@@ -912,6 +946,13 @@ class SpecimenDataEntryUI(QMainWindow):
 
     # add a slot for when a suggestion is chosen (click or enter)
     def on_taxonname_selected(self, completion):
+        # accept either str or QModelIndex (defensive)
+        try:
+            if not isinstance(completion, str):
+                completion = completion.data()
+        except Exception:
+            completion = str(completion)
+
         # 'completion' is the selected string; set editor / update model as needed
         self.ui.inpTaxonName.setText(completion)
         taxonname_record = self.getTaxonNameRecord(completion)
@@ -921,10 +962,17 @@ class SpecimenDataEntryUI(QMainWindow):
             self.collobj.taxonName = completion
             self.collobj.taxonFullName = ''
             self.collobj.taxonNameId = 0
-        self.ui.txtTaxonFullname.setText(self.collobj.taxonFullName)
+        self.ui.txtTaxonFullname.setText(self.collobj.taxonFullName + ' (' + self.collobj.familyName + ')')
 
     # add a slot for when a suggestion is chosen (click or enter)
     def on_storage_selected(self, completion):
+        # accept either str or QModelIndex (defensive)
+        try:
+            if not isinstance(completion, str):
+                completion = completion.data()
+        except Exception:
+            completion = str(completion)
+            
         # 'completion' is the selected string; set editor / update model as needed
         self.ui.inpStorage.setText(completion)
         storage_record = self.getStorageRecord(completion)

@@ -516,7 +516,19 @@ class Specimen(Model):
         else:
             return self.storageName
 
-    def determineRank(self, taxonNameEntry):
+    def handleNewTaxonName(self, taxonFullName):
+        """ Handle new taxon """
+        self.taxonNameId = 0
+        self.setTaxonNameFields(None) # Clear existing taxon name fields
+        self.taxonFullName = taxonFullName
+
+        self.determineRank()
+        parentName = taxonFullName.split(' ')[0]  # Get genus name as parent name
+        self.familyName = self.searchParentTaxon(parentName, 140, self.collection.taxonTreeDefId, False) # Get family name by searching parent taxon of genus
+        #print(f'New taxon handled: {self.taxonFullName}, rankid: {self.rankid}, family: {self.familyName}')
+        return self.taxonFullName
+
+    def determineRank(self):
         """
         Determine rank of given taxon name entry by analysing string pattern. 
         Typical patterns: 
@@ -532,18 +544,22 @@ class Specimen(Model):
           taxonNameEntry (string) : Full taxon name entry to be analysed
         RETURNS rankid (int)      : Rank id number 
         """
-        rankid = 999 # default rank id value corresponding to no rank at all in case the analysis fails. 
+        self.rankid = 999 # default rank id value corresponding to no rank at all in case the analysis fails. 
+        taxonNameEntry = self.taxonFullName
         try:
             # In case an author name is included in the full taxon name, this should be separated out by an underscore
-            #authorName = '' # Initialize author name string as blank 
-            #authorSplit = taxonNameEntry.split('_') # Split out author name part of entry, if it exists 
+            authorName = '' # Initialize author name string as blank 
+            authorSplit = taxonNameEntry.split('_') # Split out author name part of entry, if it exists 
 
             # If an underscore is detected, the second element of the split is assumed to be the author name
-            #if len(authorSplit) > 1: authorName = authorSplit[1]
-            #taxonName = authorSplit[0] # The first or only element is assumed to be the taxon name 
+            if len(authorSplit) > 1: authorName = authorSplit[1]
+            taxonName = authorSplit[0].strip() # The first or only element is assumed to be the taxon name 
+            self.taxonName = taxonName
+            self.taxonAuthor = authorName
+            self.taxonFullName = taxonName + ' ' + authorName 
 
             # Split taxon name in respective elements and get element count 
-            taxonNameSplit = taxonNameEntry.strip().split(' ')
+            taxonNameSplit = taxonName.strip().split(' ')
             elementCount = len(taxonNameSplit)
 
             # Check for subgenus; If present, the subgenus is the second element enclosed by parentheses 
@@ -552,34 +568,34 @@ class Specimen(Model):
                 subgenusCount = 1 # The subgenus adds another element to the total count 
 
             # Look for distinctive string patterns indicating rank 
-            if ' var. ' in taxonNameEntry:
-                rankid = 240 # Variety 
-            elif ' subvar.  ' in taxonNameEntry:
-                rankid = 250 # Subvariety 
-            elif ' f. ' in taxonNameEntry:
-                rankid = 260 # Forma 
-            elif ' subf. ' in taxonNameEntry:
-                rankid = 270 # Subforma
-            elif ' x ' in taxonNameEntry:
-                rankid = 220 # Hybrids are always of rank species 
+            if ' var. ' in taxonName:
+                self.rankid = 240 # Variety 
+            elif ' subvar.  ' in taxonName:
+                self.rankid = 250 # Subvariety 
+            elif ' f. ' in taxonName:
+                self.rankid = 260 # Forma 
+            elif ' subf. ' in taxonName:
+                self.rankid = 270 # Subforma
+            elif ' x ' in taxonName:
+                self.rankid = 220 # Hybrids are always of rank species 
             # Otherwise look for element count indicating rank:
             elif elementCount == 3 + subgenusCount:
-                rankid = 230 # Subspecies 
+                self.rankid = 230 # Subspecies 
             elif elementCount == 2 + subgenusCount:
-                rankid = 220 # Species 
+                self.rankid = 220 # Species 
             elif elementCount == 1 + subgenusCount:
-                rankid = 180 # Genus 
+                self.rankid = 180 # Genus 
         except:
             util.logger.error(f'Could not determine rank of novel taxon: {taxonNameEntry}')
 
-        return rankid
+        return ''
 
     def searchParentTaxon(self, taxonFullName, target_rankid, treedefid, on_fullname=True):
         """
         Will recursively traverse a given taxon's parental lineage until it hits the target rank
         CONTRACT
             taxonFullName (string) : The taxon name to acquire the parent taxon name for
-            target_rankid: Target rank id of the parent taxon to be searched for
+            target_rankid: Target rank id of the parent taxon to be searched for (usually family: 140)
         RETURNS taxonFullName (string) : Name of the parent taxon 
         """
         
