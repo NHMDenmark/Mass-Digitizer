@@ -122,7 +122,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.show()
         self.center_screen() 
         self.ui.inpStorage.setFocus()  # Set initial focus on storage input field
-        
+
     def load_comboboxes(self):
         """
         Load comboboxes with data from the database.
@@ -273,7 +273,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.btnClear.clicked.connect(self.clearForm)
 
     def on_save_clicked(self): self.saveForm()
-
+    
     def on_inpStorage_return_pressed(self): 
         """
         Set storage fields from storage input field and update the storage full name field.
@@ -353,7 +353,7 @@ class SpecimenDataEntryUI(QMainWindow):
             self.setTxtTaxonFullname(taxonname)
 
         # Switch focus to next field
-        self.ui.chkTaxonomyUncertain.setFocus()            
+        self.ui.chkTaxonomyUncertain.setFocus()
 
     def on_chkDamage_clicked(self): 
         needsrepair = self.ui.chkDamage.isChecked()
@@ -372,14 +372,14 @@ class SpecimenDataEntryUI(QMainWindow):
             self.ui.inpCatalogNumber.setFocus()
         else:
             self.ui.chkSpecimenObscured.setFocus()
-        
+
     def on_chkSpecimenObscured_clicked(self):
         self.collobj.specimenObscured = self.ui.chkSpecimenObscured.isChecked()
         if self.fast_entry_mode:
             self.ui.inpCatalogNumber.setFocus()
         else:
             self.ui.radRadioSSO.setFocus()
-        
+
     def on_containerTypeToggle(self, checked):
         """
         Set container type controls events: 
@@ -454,7 +454,7 @@ class SpecimenDataEntryUI(QMainWindow):
     def on_container_name_return_pressed(self):self.collobj.containername = self.ui.inpContainerName.text()
 
     def on_notes_changed(self): self.collobj.notes = self.ui.inpNotes.text()
-
+    
     def on_chkTaxonomyUncertain_clicked(self):
         self.collobj.taxonomyUncertain = self.ui.chkTaxonomyUncertain.isChecked()
         # Switch focus to next field
@@ -469,7 +469,7 @@ class SpecimenDataEntryUI(QMainWindow):
         util.logger.info(f'New collection object: {str(self.collobj)}')
 
     def on_catalog_number_text_changed(self): self.collobj.catalogNumber = self.ui.inpCatalogNumber.text()
-
+    
     def lookup_taxon_number(self):
         """Lookup taxon number in database and set taxon name fields accordingly."""
         taxon_nr_input = self.ui.inpTaxonNumber.text()
@@ -508,7 +508,7 @@ class SpecimenDataEntryUI(QMainWindow):
 
         # Reset focus back to first field (Storage)
         self.ui.inpStorage.setFocus()
-
+        
     def on_forward_clicked(self):
         # First get current instance as record
         record = self.collobj.loadNext()
@@ -528,7 +528,7 @@ class SpecimenDataEntryUI(QMainWindow):
         
         # Reset focus back to first field (Storage)
         self.ui.inpStorage.setFocus()
-
+        
     def load_form(self, record):
         """Load form with data from record."""
         self.collobj.setFields(record)
@@ -537,7 +537,7 @@ class SpecimenDataEntryUI(QMainWindow):
         # Reload recordset and repopulate table of adjacent records
         self.recordSet.reload(record)
         self.load_previous_records()
-
+    
     def updateRecordCount(self):
         """
         Simple method for retrieving and displaying record count
@@ -550,7 +550,7 @@ class SpecimenDataEntryUI(QMainWindow):
         else: 
             specimenCount = 0
         self.ui.txtNumberCounter.setText(str(specimenCount))
-
+        
     def saveForm(self):
         """
         Saving specimen data to database including validation of form input fields.
@@ -611,7 +611,7 @@ class SpecimenDataEntryUI(QMainWindow):
         util.logger.info(f'{result}')
                          
         return result
-
+    
     def setSpecimenFields(self, stickyFieldsOnly=True):
         """
         Method for synchronizing specimen data object instance (Model) with form input fields (View).
@@ -645,7 +645,7 @@ class SpecimenDataEntryUI(QMainWindow):
         Function for clearing all fields that are non-sticky
         """        
         self.clearForm(self.nonStickyFields)
-
+        
     def clearForm(self, fieldList=None):
         """
         Function for clearing all fields listed in clearing list and setting up for a blank record
@@ -672,8 +672,8 @@ class SpecimenDataEntryUI(QMainWindow):
             self.ui.txtRecordID.setStyleSheet("")
 
         # Reset focus on the storage field
-        self.ui.inpStorage.setFocus()   
-
+        self.ui.inpStorage.setFocus()
+    
     def getStorageRecord(self, storageFullName=None):
         """
         Retrieve storage record based on storage input field contents.
@@ -694,7 +694,7 @@ class SpecimenDataEntryUI(QMainWindow):
             storageRecord = None
 
         return storageRecord
-
+    
     def getContainerTypeFromInput(self):
         """
         Get container type based on what radio button was selected
@@ -732,7 +732,7 @@ class SpecimenDataEntryUI(QMainWindow):
         else:
             taxonRecord = None
         return taxonRecord
-
+    
     def fillFormFields(self):
         """
         Function for setting form fields from specimen data record
@@ -770,7 +770,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.inpCatalogNumber.setText(record.get('catalognumber', ''))
 
         self.ui.txtRecordID.setStyleSheet("")
-
+        
     def setTxtTaxonFullname(self, taxonfullname):
         if taxonfullname != '':
             self.ui.inpTaxonName.setText(taxonfullname)
@@ -778,7 +778,7 @@ class SpecimenDataEntryUI(QMainWindow):
             self.ui.txtTaxonFullname.setText(taxonfullname + ' (' + self.collobj.familyName + ')')
         else: 
             self.ui.txtTaxonFullname.setText('-no taxon selected-')
-    
+            
     def setContainerFields(self, record):
         """
         Method for setting container-related input fields on the basis of the record passed to it. 
@@ -809,7 +809,7 @@ class SpecimenDataEntryUI(QMainWindow):
             self.ui.inpContainerName.setText('') # Clear container name input field 
             self.ui.inpContainerName.setEnabled(False) # Disable container name input field 
             self.ui.imgWarningLinkedRecord.setVisible(False) # Hide linked record warning
-
+            
     def validateBarCodeLength(self, barcode):
         # Ensure that the barcode has the correct length according to collection.
         validation = None
@@ -821,7 +821,7 @@ class SpecimenDataEntryUI(QMainWindow):
             self.validationFeedback('Validation error: Barcode wrong length!')
 
         return validation
-
+    
     def validateBarCodeDigits(self, catalogNumber):
         # Validates if barcode is digits
         validation = None
@@ -833,12 +833,12 @@ class SpecimenDataEntryUI(QMainWindow):
             self.validationFeedback("Barcode/catalog number contains non numeric symbols.")
         
         return validation 
-
+    
     def validationFeedback(self, validationMessage):
         """Gives a validation feedback message to the user"""
         util.logger.error(validationMessage)
         self.show_error_popup(validationMessage)
-
+        
     def center_screen(self):
         # Get the existing QApplication instance
         app = QApplication.instance()
@@ -849,8 +849,7 @@ class SpecimenDataEntryUI(QMainWindow):
         geo = self.frameGeometry()
         geo.moveCenter(center)
         self.move(geo.topLeft())
-        pass
-
+    
     def show_error_popup(self, error_message, title='Error'):
         msg_box = QMessageBox()
         msg_box.setIcon(QMessageBox.Critical)
@@ -858,7 +857,7 @@ class SpecimenDataEntryUI(QMainWindow):
         msg_box.setText(error_message)
         msg_box.setStandardButtons(QMessageBox.Ok)
         msg_box.exec()
-
+        
     def update_storage_completer(self, keyStrokes):
         """
         Update the storage input field with suggestions based on the user's key strokes.
@@ -1004,7 +1003,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
 class PopupArrowFilter(QObject):
     """
