@@ -54,6 +54,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.collection = coll.Collection(collection_id)
         self.MSOterm = 'Multiple specimens on one object'
         self.MOSterm = 'One specimen on multiple objects'
+        self.Combiterm = 'MSO and MOS combined'
         self.db = data_access.DataAccess(gs.databaseName)  # Instantiate database access module
         self.collobj = specimen.Specimen(collection_id)  # Create blank specimen record instance
 
@@ -233,24 +234,24 @@ class SpecimenDataEntryUI(QMainWindow):
             radio_button.toggled.connect(self.on_containerTypeToggle)
 
         # Connect input field signals to data update functions
-        #self.ui.inpStorage.returnPressed.connect(self.on_inpStorage_return_pressed)
+        self.ui.inpStorage.returnPressed.connect(self.on_inpStorage_return_pressed)
         self.ui.cbxPrepType.currentIndexChanged.connect(self.on_cbxPrepType_currentIndexChanged)
         self.ui.cbxTypeStatus.currentIndexChanged.connect(self.on_cbxTypeStatus_currentIndexChanged)
         self.ui.cbxGeoRegion.currentIndexChanged.connect(self.on_cbxGeoRegion_currentIndexChanged)
         self.ui.inpLocalityNotes.returnPressed.connect(self.on_locality_notes_input)
         self.ui.inpLocalityNotes.textChanged.connect(self.on_locality_notes_input)
         self.ui.inpTaxonName.returnPressed.connect(self.on_inpTaxonName_return_pressed)
-        #self.ui.inpTaxonName.tabPressed.connect(self.on_inpTaxonName_return_pressed)
-        #self.ui.inpTaxonName.textChanged.connect(self.on_inpTaxonName_return_pressed)
         self.ui.chkDamage.clicked.connect(self.on_chkDamage_clicked)
         self.ui.chkSpecimenObscured.clicked.connect(self.on_chkSpecimenObscured_clicked)
         self.ui.chkLabelObscured.clicked.connect(self.on_chkLabelObscured_clicked)
         self.ui.radRadioSSO.toggled.connect(self.on_containerTypeToggle)
         self.ui.radRadioMOS.toggled.connect(self.on_containerTypeToggle)
-        self.ui.radRadioMSO.toggled.connect(self.on_containerTypeToggle)
+        self.ui.radRadioMSO.toggled.connect(self.on_containerTypeToggle)        
+        self.ui.radRadioCombi.toggled.connect(self.on_containerTypeToggle)
         self.ui.radRadioSSO.clicked.connect(self.on_containerTypeClicked)
         self.ui.radRadioMOS.clicked.connect(self.on_containerTypeClicked)
         self.ui.radRadioMSO.clicked.connect(self.on_containerTypeClicked)
+        self.ui.radRadioCombi.clicked.connect(self.on_containerTypeClicked)
         self.ui.inpContainerName.returnPressed.connect(self.on_container_name_return_pressed)
         self.ui.inpNotes.returnPressed.connect(self.on_notes_changed)        
         self.ui.inpNotes.textChanged.connect(self.on_notes_changed) 
@@ -408,6 +409,9 @@ class SpecimenDataEntryUI(QMainWindow):
                 elif self.sender() == self.ui.radRadioMSO:
                     containerType = 'MSO'
                     self.collobj.containertype = self.MSOterm
+                elif self.sender() == self.ui.radRadioCombi:
+                    containerType = 'COMBI'
+                    self.collobj.containertype = self.Combiterm
                 newContainerName = containerType + str(containerNumber)
                 self.collobj.containername = newContainerName
 
@@ -431,14 +435,21 @@ class SpecimenDataEntryUI(QMainWindow):
                 self.ui.imgWarningLinkedRecord.setVisible(False)
                 self.collobj.containername = ''
                 self.collobj.containertype = ''
-            elif sender == self.ui.radRadioMOS or sender == self.ui.radRadioMSO:
+            elif sender == self.ui.radRadioMOS or sender == self.ui.radRadioMSO or sender == self.ui.radRadioCombi:
                 containerNumber = util.getRandomNumberString()
                 if sender == self.ui.radRadioMOS:
                     containerType = 'MOS'
                     self.collobj.containertype = self.MOSterm
-                else:
+                elif sender == self.ui.radRadioMSO:
                     containerType = 'MSO'
                     self.collobj.containertype = self.MSOterm
+                elif sender == self.ui.radRadioCombi:
+                    containerType = 'COMBI'
+                    self.collobj.containertype = self.Combiterm
+                else:
+                    containerType = ''
+                    self.collobj.containertype = ''
+                
                 newContainerName = containerType + str(containerNumber)
                 self.collobj.containername = newContainerName
                 self.ui.inpContainerName.setText(newContainerName)
