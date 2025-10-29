@@ -22,6 +22,7 @@ import sys
 import time
 import traceback
 from pathlib import Path
+import re
 
 # PySide6 imports
 from PySide6.QtWidgets import QLineEdit, QComboBox, QRadioButton, QCheckBox, QMessageBox
@@ -712,9 +713,6 @@ class SpecimenDataEntryUI(QMainWindow):
         Retrieve taxon name record based on taxon name input field contents.
         Search is to be done on taxon fullname and taxon tree definition derived from collection.
         """
-        # Replace apostrophes with double quotes for SQL query
-        taxonFullName = taxonFullName.replace("'", "''")
-
         taxonRecords = self.db.getRowsOnFilters('taxonname', {'fullname': f'="{taxonFullName}"', 'institutionid': f'={self.collection.institutionId}', 'treedefid': f'={self.collection.taxonTreeDefId}'}, 1)
         if len(taxonRecords) > 0:
             taxonRecord = taxonRecords[0]
@@ -893,18 +891,30 @@ class SpecimenDataEntryUI(QMainWindow):
         keyStrokes (str): The current text input by the user in the taxon name input field.
         """
         if isinstance(keyStrokes, str) and len(keyStrokes) >= 3:
-            # Format the search term with double quotation marks to work witch FTS MATCH
-            sanitized_input = keyStrokes.replace('.', '"."')  # Escapes periods in FTS5
-            sanitized_input = sanitized_input.replace('-', '"-"')  # Escapes dashes in FTS5
-            sanitized_input = sanitized_input.replace('(', '"("')  # Escapes parenthesis open in FTS5
-            sanitized_input = sanitized_input.replace(')', '")"')  # Escapes parenthesis closed in FTS5
-            sanitized_input = sanitized_input.replace(',', '","')  # Escapes comma in FTS5
-            sanitized_input = sanitized_input.replace('&', '"&"')  # Escapes obelisk in FTS5
-            search_term = f'{sanitized_input}*'
-            
-            sqlString = f"""SELECT * FROM taxonname WHERE id IN (SELECT id FROM taxonname_fts  
-                            WHERE fullname MATCH '{search_term}' AND institutionid = {self.collection.institutionId} 
-                            AND taxontreedefid = {self.collection.taxonTreeDefId} LIMIT 200 );"""
+            # Tokenize into words and single-character punctuation/symbols
+            tokens = re.findall(r"\w+|[^\s\w]", keyStrokes, flags=re.UNICODE)
+
+            # Build MATCH string: quote punctuation tokens, append '*' to last alnum token
+            parts = []
+            for i, t in enumerate(tokens):
+                if re.match(r'^\w+$', t, flags=re.UNICODE):
+                    # alphanumeric token
+                    if i == len(tokens) - 1:
+                        parts.append(f"{t}*")   # prefix match the last token
+                    else:
+                        parts.append(t)
+                else:
+                    # punctuation / symbol — wrap in double quotes so FTS treats it as a token
+                    parts.append(f'"{t}"')
+
+            search_term = " ".join(parts)
+
+            # Escape single quotes for embedding into SQL literal
+            sql_search = search_term.replace("'", "''")
+
+            sqlString = (f"SELECT * FROM taxonname WHERE id IN (SELECT id FROM taxonname_fts "
+                         f"WHERE fullname MATCH '{sql_search}' AND institutionid = {self.collection.institutionId} "
+                         f"AND taxontreedefid = {self.collection.taxonTreeDefId} LIMIT 200 );")
             try:
                 rows = self.db.executeSqlStatement(sqlString)
                 suggestions = [row['fullname'].strip() for row in rows]
