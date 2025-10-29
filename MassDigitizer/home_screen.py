@@ -14,6 +14,8 @@
 
 from pathlib import Path
 import traceback
+import socket, requests
+from urllib3.exceptions import MaxRetryError
 
 # PySide6 imports
 from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox
@@ -179,7 +181,19 @@ class HomeScreen(QMainWindow):
         if collection and collection.id > 0:
             collection_id = collection.id
             gs.baseURL = self.institution_url
-            gs.csrfToken = sp.specifyLogin(username, password, collection.spid)
+            try:
+                gs.csrfToken = sp.specifyLogin(username, password, collection.spid)
+            except (requests.exceptions.RequestException, MaxRetryError, socket.gaierror, OSError) as e:
+                # Network / connection related errors
+                util.logger.error("Login failed: Unable to connect to Specify server.", exc_info=True)
+                self.show_error_message(f"Unable to connect to Specify server. Please check your network connection or try opening the site in a browser: \n {self.institution_url} ")
+                self.ui.lblConnectionError.setVisible(True)
+                return
+            except Exception as e:
+                # Fallback for any other unexpected exceptions
+                util.logger.error(f"An unexpected error occurred during login: {e}\n{traceback.format_exc()}")
+                self.show_error_message(str(e))
+                return
 
             if gs.csrfToken != '': # TODO Check token format for extra security 
                 # Login was successful
