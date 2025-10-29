@@ -61,7 +61,7 @@
       </font>
      </property>
      <property name="text">
-      <string>DaSSCo Mass Digitizer App - Version 2.1.9</string>
+      <string>DaSSCo Mass Digitizer App - Version 2.1.10</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -183,6 +183,19 @@
      </property>
      <property name="text">
       <string>Authentication Error!</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblConnectionError">
+     <property name="visible">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string>color: red;</string>
+     </property>
+     <property name="text">
+      <string>Connection Error!</string>
      </property>
     </widget>
    </item>
