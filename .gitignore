@@ -93,3 +93,4 @@ DaSSCo.exe
 # Ignore temporary files
 /MassDigitizer/Output/*.zip
 MassDigitizer/nuitka-crash-report.xml
+*.ps1
