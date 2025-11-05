@@ -94,3 +94,4 @@ DaSSCo.exe
 /MassDigitizer/Output/*.zip
 MassDigitizer/nuitka-crash-report.xml
 *.ps1
+*.sqlite3
