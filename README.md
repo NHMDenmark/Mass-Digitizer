@@ -1,18 +1,7 @@
-## DIRECTORY
-[DaSSCo Mass Digitization App ](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/README.md#dassco-mass-digitization-app)
-
-[Author backfill ](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/README.md#author-backfill)
-
-[Monitor_script ](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/README.md#monitor-script)
-
-
-
 # DaSSCo Mass Digitization App 
 
 ## Purpose of the application
 The DaSSCo project is tasked with digitizing millions of specimens. To speed this process along, there needs to be a way to rapidly fill in data on 'storage', 'taxonomy', etc. The Mass Digitization App is here to achieve this goal. 
-
-![This is an image](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/docs/AppUi28082023.png?raw=true)  
 
 ### Installation
 Installation is done using a setup file that will ensure all dependencies are in place. The installer will also add a clean local database for registering entries in a "DaSSCo" folder under the user's documents folder. Be mindful to backup the database file upon reinstallation, so it is not overwritten and and data in it erased.   
@@ -20,39 +9,35 @@ Installation is done using a setup file that will ensure all dependencies are in
 Downloads: 
 (https://github.com/NHMDenmark/DaSSCo/releases/)  
 
-For Windows users: Please press the green tick mark icon in the process line under 'Show hidden icons' which represents 'Request administrator access'. Before installing you need to right-click the installation icon and select 'Run as administrator'. This will trigger a prompt to submit your KU credentials (Swedish license plate username + pass phrase).
+#### University of Copenhagen PCs
+
+Please note that for any PCs administered by the University of Copenhagen, special permissions are required to install any non-standard software, which includes the DaSSCo Mass Digitization App. These permissions are mediated by the Heimdal Agent installed on all KU-IT computers. You can find instructions on how to do so on KUs intranet here: [Install software - administrator rights](https://kunet.ku.dk/employee-guide/Pages/IT/KU-computer.aspx?searchHitHighlight=heimdal)
 
 ### Usage
-There is a path to follow that requires only little training. A user must have credentials in order to employ the app. One could say that a specimen record is being created bit by bit and submitted to local DB at the end. 
-  
+
+#### Log in 
+Upon execution, users need to log in using their [Specify](https://www.specifysoftware.org/) account credentials. Any account from any installation (e.g. [NHMD](https://specify-snm.science.ku.dk/specify/), [NHMA](https://specify-nhma.science.ku.dk/specify/) or [AUH](https://specify-au.science.ku.dk/specify/)) would do, no matter what data specifically is being digitized. For this step, an internet connection is required, but once successfully logged in, the app can work offline. Anyone without a Specify account can request one by writing an e-mail to DNHM's Specify team here: specify@snm.ku.dk 
 
 #### Data entry  
-After log in, the first section focuses on specimen storage location which has an autosuggest feature. The path leads through prep type and status, and into Geographic region and taxonomy. The latter also has the auto suggest feature. Auto-suggest takes three keystroke to query among all the names and returns a row object of names. As the input to which the keystrokes contribute increases, the smaller the subset gets at which point it is feasible to arrow down through the result until the desired name is reached and press _Enter_.  
-The barcode is now ready for scanning. From there the record is ready to be 'saved'.  
+After log in, the data entry form is immediately shown, which is divided into three sections, with the header section holding general info and data entry controls. The two data entry sections (green & blue) feature a range of different types of fields for rapid data entry for each specimen. There are five types of fields: Auto-suggest fields, dropdownlists, free text fields, checkboxes and radio button groups. Whenever an entry is made into a field (i.e. followed by a press on the Enter key or mouse click respectively), focus is immediately transferred to the next field. The tab keys can also be used to navigate field, with Shift-Tab going backwards. 
 
-#### Novel taxon names
-Should the case be that a taxon name is inputted which is *not* contained in the taxonomic spine - a pop-up window appears in which the novel name can be inputted. There follows a similar event where the higher taxonomic name is asked for. If a higher taxon name returns suggestions (must be family rank or higher) then arrow down to the desired name and press enter.  
-If the higher taxon name is also novel, then finish typing it and tab into the Cancel button. Press the spacebar to commit and the record will be registered with a taxonomic comment in the record notes field.  
+Auto-suggest fields, such as *Storage location* and *Taxonomic name*  will show a range of possible choices based on a minimum of three keystrokes. The suggestions can be navigated using the arrow down (and up) keys and selected using the Enter key. Any taxonomic names unknown to the taxonomic spine bundled with the app at the time of compilation, will be saved verbatim as-is with the rank and parent taxon guessed by the app.
 
-##### Alternative taxonomic identifiers
-Certain collection will be using a different taxonomic name input system. For these specific cases a field "Taxonomic ID" will appear next to the main Taxonomic name input field. In this field you can add an identifier and press enter which populates the Taxonomic name field with the name corresponding to the identifier. 
+ Some of these fields are sticky, meaning that upon saving the data for one specimen, the contents of these fields are automatically transferred to the next entry. Exactly what fields are sticky can be modulated using the sticky field controls in the top right corner. To the top left there are the entry mode controls that help modulate what fields are skipped with focus more directly going to the record "SAVE" button. 
 
-##### Specimen needs repair
-A checkbox for damaged specimens has been addded to the app. Label = "Damaged specimen:". This should be checked if the specimen being digitized needs repair in any way.
-
+![Data Entry Form](documentation/img/screenshot_v2.2.0.png)
 
 #### Navigation between records  
-The "Back" and the "Forward" buttons are for paging through already entered records. You can follow the progress in the "Previous records table" near the bottom of the app. Once you go all the way back to the beginning of the records, you can press the Back-button again and the table will shoot to the top. The form will be populated by the latest (top) record. The app has a cyclical behavior in this regard.
+You can follow the progress in the "Previous records table" near the bottom of the app. The "Back" and the "Forward" buttons are for paging through already entered records. You can enter a new record, by pressing "GO FORWARDS" at the last record encountered. 
 
 ### Data export  
-As the app is designed to work "off line" all entries are stored locally. The entries thus registered can be exported to an Excel spreadsheet that can be imported into Specify. A smarter pipeline for getting the local data directly into Specify is currently being planned. 
+All entries are stored locally in a sqlite database in the end user's DaSSCo folder. The contents of the database can be viewed exported
 
 ### Licence and authorship
 The application comes under the Apache-2.0 license which aligns with the Open Source and Open Science frameworks. 
   
-The authors of the application are :  
-Fedor A. Steeman, NHMD  
-Pip Brewer, NHMD
+Primary author:  Fedor A. Steeman, NHMD  
+Primary designer: Pip Brewer, NHMD
 
 ## Systems Architecture 
 
@@ -63,21 +48,19 @@ More information on the Systems Architecture including a visual representation, 
 ## For Developers 
 
 ### Structure
-The app interfaces with a local SQLite database with tables for taxonomy (millions of names that are accessed according to the relevant discipline, say 'botany' for instance.) Storage while smaller also has its own table, as do Collection, Georegion and Institution. The table that is populated by the app is mainly 'specimen'.
-Eventually, the local DB instances will be uploaded to a server where the data will be processed into Specify. The application also interfaces directly with Specify through the Specify7 API (more information further below).  
-
-### Specify Interface 
-
-In order to exchange information with Specify, the app has a module for interfacing with the Specify7 API. For now, this is mainly used for user authentication and basic info, but eventually this is planned to be built out into full synchronization in both directions. 
+The app interfaces with a local SQLite database with tables containing predefined data needed for operations and data entry. The specimen data is recorded in the specimen table in a flat format to make exports easier. The exported data is to be imported into the respective Specify database using Workbench, although a more direct pipeline will eventually be established. The app is capable of interfacing directly with the Specify7 API of a given installation, chiefly used for . 
 
 ### Compilation  
 
+Whereas development is recommended to be done in the MassDigitizer subfolder, compilation should be done from the root. 
+
 Remember to activate the python virtual environment (venv) and then first run: 
 ```
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-For creating the executable, we use PyInstaller (https://pyinstaller.org/) using this command in the CLI from the root folder:
+For creating the executable, we use PyInstaller (https://pyinstaller.org/) using this CLI command run from the root folder:
 ```
 pyinstaller .\MassDigitizer\DaSSCo.py --onedir --noconsole --noconfirm --paths=MassDigitizer\
 ```  
@@ -86,15 +69,11 @@ For creating the installer, we use [Inno Setup](https://jrsoftware.org/isinfo.ph
 
 #### Preparing Database File for Bundling 
 
-As part of the source code, there is a skeleton sqlite database file that needs to be filled with pre-defined data, not in the least the taxonomic spines for each collection. Before creating the installer, a temporary copy of the database file is generated that is then filled with the predefined data. Under [MassDigitizer/sql/editions](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/MassDigitizer/sql/editions/) there are folders for each collection containing the SQL statements needed to insert not only taxonomic names, but also other predefined data specific for that collection such as storage locations, preparation types and type statuses. 
-
-This is done for two main reasons: 
-1. To keep the size of the skeleton database on the repository below the 50MB limit 
-2. To have version control of the predefined data by having it stored in SQL text files. 
+As part of the source code, there is a skeleton sqlite database file that needs to be filled with pre-defined data, not in the least the taxonomic spines for each collection. Before creating the installer, a temporary copy of the database file is generated that is then filled with the predefined data. Under [MassDigitizer/sql/editions](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/MassDigitizer/sql/editions/) there are folders for each collection containing the SQL statements needed to insert not only taxonomic names, but also other predefined data specific for that collection such as storage locations, preparation types and type statuses. The overall database structure is defined in a [dedicated SQL file](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/MassDigitizer/db/create_db.sqlite3.sql). This allows us to have version control of the entire database structure and its contents by storing it all as text files. 
 
 In the root of this folder there is a batch file ([prepare-db.bat](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/MassDigitizer/sql/editions/prepare-db.bat)) that needs to be run in order to execute the sql statements. The resulting updated db.sqlite3 file is located in the [temp](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/MassDigitizer/sql/editions/temp) folder from where it will be picked up by Inno Setup for being bundled with the installer.  
 
-In order to run the batch file, you need to install [sqlite command tools](https://sqlite.org/download.html) first and make sure its path is added to your machine's PATH environment variables. 
+**NOTE:** In order to run the batch file, you need to install [sqlite command tools](https://sqlite.org/download.html) first and make sure its path is added to your machine's PATH environment variables. 
 
 #### Collections currently supported
 
@@ -114,5 +93,6 @@ So the process for compilation is as follows:
 3. Run the Inno Setup script to create the installer
 
 The installer is then placed in folder Mass-Digitizer\MassDigitizer\Output ready for distribution. 
-NOTE: For NHMD Vascular Plants, the taxon spine is recorded as sets of csv files that are placed in folder ([Mass-Digitizer/tree/main/data/taxon spines/Botany](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/data/taxon%20spines/Botany)). The respective SQL statements have been generated on the basis of those files using the python script ([prepare-db.py](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/MassDigitizer/prepare-db.py)). If changes are made to the taxon spine files, this script will need to be rerun. This will take many hours and should therefore not be a part of the standard compilation process. 
+
+**NOTE:** For NHMD Vascular Plants, the taxon spine is recorded as sets of csv files that are placed in folder ([Mass-Digitizer/tree/main/data/taxon spines/Botany](https://github.com/NHMDenmark/Mass-Digitizer/tree/main/data/taxon%20spines/Botany)). The respective SQL statements have been generated on the basis of those files using the python script ([prepare-db.py](https://github.com/NHMDenmark/Mass-Digitizer/blob/main/MassDigitizer/prepare-db.py)). If changes are made to the taxon spine files, this script will need to be rerun. This will take many hours and should therefore not be a part of the standard compilation process. 
 
