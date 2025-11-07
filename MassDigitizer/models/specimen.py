@@ -329,9 +329,9 @@ class Specimen(Model):
             self.taxonFullName = record['fullname']
             self.higherTaxonName = record['parentfullname']
             self.rankid = record['rankid']  # TODO
+            self.taxonRankName = self.getTaxonRankname(self.rankid)
             self.taxonNumber = record['idnumber']
             self.taxonNrSource = record['taxonnrsource']
-            self.taxonRankName = self.getTaxonRankname(self.rankid)
             self.familyName = self.searchParentTaxon(self.taxonFullName, 140, self.collection.taxonTreeDefId)
             pass
             # self.notes = f"{self.notes} | {record['notes']}"
@@ -345,9 +345,9 @@ class Specimen(Model):
             self.taxonFullName = ''
             self.higherTaxonName = ''
             self.rankid = ''
+            self.taxonRankName = ''
             self.taxonNumber = ''
             self.taxonNrSource = ''
-            self.taxonRankName = ''
             self.familyName = ''
 
         return self.taxonNameId
@@ -585,6 +585,9 @@ class Specimen(Model):
                 self.rankid = 220 # Species 
             elif elementCount == 1 + subgenusCount:
                 self.rankid = 180 # Genus 
+                
+            # Also set taxon rank name
+            self.taxonRankName = self.getTaxonRankname(self.rankid)
         except:
             util.logger.error(f'Could not determine rank of novel taxon: {taxonNameEntry}')
 
