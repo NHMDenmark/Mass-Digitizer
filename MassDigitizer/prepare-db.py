@@ -10,6 +10,7 @@
   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
   PURPOSE: 
+  Prepares a fresh database filled with predefined data to be bundled with the MassDigitizer App.
 """
 
 from pathlib import Path
@@ -20,32 +21,6 @@ import sqlite3
 # Local imports
 import data_access
 
-
-filePairs = [{'source' : r'data\taxon spines\Botany\Tracheophyta 01 higher taxa.tsv', 
-              'destin' : r'MassDigitizer\sql\editions\NHMD\tracheophyta\Highertaxa.sql'},
-
-             {'source' : r'data\taxon spines\\Botany\Tracheophyta 02 species accepted.tsv', 
-              'destin' : r'MassDigitizer\sql\editions\NHMD\tracheophyta\Species-Batch1.sql'},
-
-             {'source' : r'data\taxon spines\\Botany\Tracheophyta 02 species synonyms part1.tsv', 
-              'destin' : r'MassDigitizer\sql\editions\NHMD\tracheophyta\Species-Batch2.sql'},
-
-             {'source' : r'data\taxon spines\\Botany\Tracheophyta 02 species synonyms part2.tsv', 
-              'destin' : r'MassDigitizer\sql\editions\NHMD\tracheophyta\Species-Batch3.sql'}, 
-
-             {'source' : r'data\taxon spines\\Botany\Tracheophyta 03 subspecies.tsv', 
-              'destin' : r'MassDigitizer\sql\editions\NHMD\tracheophyta\Subspecies.sql'}, 
-
-             {'source' : r'data\taxon spines\\Botany\Tracheophyta 04 infraspecific accepted.tsv', 
-              'destin' : r'MassDigitizer\sql\editions\NHMD\tracheophyta\VarForma-Batch1.sql'}, 
-
-             {'source' : r'data\taxon spines\\Botany\Tracheophyta 04 infraspecific synonyms.tsv', 
-              'destin' : r'MassDigitizer\sql\editions\NHMD\tracheophyta\VarForma-Batch2.sql'}, 
-
-             {'source' : r'data\taxon spines\\Botany\Tracheophyta 05 hybrids.tsv', 
-              'destin' : r'MassDigitizer\sql\editions\NHMD\tracheophyta\Hybrids.sql'}
-            ]
-
 class PrepareDatabase():
     """
     Creates and prepares a fresh database filled with predefined data to be bundled with the MassDigitizer App.
@@ -55,9 +30,66 @@ class PrepareDatabase():
         """
         Main function to create and prepare the fresh database.
         """
+       
+        db_file = self.create_database(Path(r'MassDigitizer\db'))
 
-        self.create_database(r'db\create_db.sqlite3.sql', r'MassDigitizer\db\massdigitizer.sqlite3')
-        db = data_access.DataAccess(r'MassDigitizer\db\massdigitizer.sqlite3')
+        # Populate tables with predefined data
+        self.populate_predefined_tables(Path(db_file))
+
+        # Populate taxonname table from taxon spine files
+        self.populate_taxonname_table(Path(r'MassDigitizer\db\db.sqlite3'))
+
+        # Run optimizations
+        self.run_optimizations(Path(db_file))
+
+    def create_database(self, file_path):
+        """
+        Creates a fresh skeleton database at the provided path.
+        Deletes any preexisting database file at that path.
+        """
+
+        db_file = file_path / 'db.sqlite3'
+        sql_file = file_path / 'create_db.sqlite3.sql'
+
+        #Remove existing database file if it exists
+        if Path(db_file).exists(): Path(db_file).unlink()
+
+        #Create new database 
+        with sqlite3.connect(db_file) as conn:
+            with open(sql_file, 'r', encoding='utf-8') as sql_file:
+                sql_script = sql_file.read()
+                conn.executescript(sql_script)
+        
+        return db_file
+        
+    def populate_predefined_tables(self,db_file_path):
+        """
+        Populates predefined tables in the database located at the provided path.
+        """
+
+        db = data_access.DataAccess('db', db_file_path)
+
+        # Define editions and SQL files
+        editions = [r'NHMD\tracheophyta', r'NHMD\entomology', r'NHMA\entomology']
+        sqlfiles = [r'PrepTypes', r'TypeStatuses', r'GeoRegions', r'Storage', r'Highertaxa', r'Species-Batch1', r'Species-Batch2', r'Species-Batch3', r'Species-Batch4', r'Subspecies', r'VarForma-Batch1', r'VarForma-Batch2', r'Hybrids']
+
+        for edition in editions:
+            for sqlfile in sqlfiles:
+                sql_file_path = Path(r'MassDigitizer\sql\editions') / edition / f'{sqlfile}.sql'
+                print(f'Populating from file: {str(sql_file_path)}')
+                sql_file = open(sql_file_path, 'r', encoding="utf-8")
+                sql_statement = sql_file.read()
+                sql_file.close()
+                db.executeSqlStatement(sql_statement)
+
+    def populate_taxonname_table(self, db_file_path):
+        """
+        Populates the taxonname table in the database located at the provided path.
+        """
+
+        filePairs = self.get_filepairs()
+
+        db = data_access.DataAccess(db_file_path)
 
         for filePair in filePairs:
 
@@ -83,27 +115,53 @@ class PrepareDatabase():
 
             print('* executing sql *')
             t1 = time.time()
-            #db.executeSqlStatement(sql_statement)
+            db.executeSqlStatement(sql_statement)
             t2 = time.time() - t1
             print(f'time spent: {str(t2)}' )
-
-    def create_database(self, sql_file_path, db_file_path):
-        """
-        Creates a fresh skeleton database from the provided SQL file.
-        1) If a database file already exists at the provided path, it is deleted.
-        2) A new database file is created at the provided path, based on the provided SQL file.
-        """
-
-        #Remove existing database file if it exists
-        if Path(db_file_path).exists():
-            Path(db_file_path).unlink()
-
-        #Create new database from provided SQL file
-        with sqlite3.connect(db_file_path) as conn:
-            with open(sql_file_path, 'r', encoding='utf-8') as sql_file:
-                sql_script = sql_file.read()
-                conn.executescript(sql_script)
     
+    def run_optimizations(self, db_file_path):
+        """
+        Runs optimizations on the database located at the provided path.
+        """
+
+        db = data_access.DataAccess('db', db_file_path)
+        optimization_sql_file = Path(r'MassDigitizer\sql\optimizations.sql')
+        print(f'Running optimizations from file: {str(optimization_sql_file)}')
+        sql_file = open(optimization_sql_file, 'r', encoding='utf-8')
+        sql_script = sql_file.read()
+        sql_file.close()
+        db.executeSqlStatement(sql_script) 
+
+    def get_filepairs(self):
+        """
+        Returns a list of dictionaries containing source and destination file paths for taxon spine files.
+        """        
+
+        return [{'source' : r'data\taxon spines\Botany\Tracheophyta 01 higher taxa.tsv', 
+              'destin' : r'MassDigitizer\sql\editions\NHMD\tracheophyta\Highertaxa.sql'},
+
+             {'source' : r'data\taxon spines\\Botany\Tracheophyta 02 species accepted.tsv', 
+              'destin' : r'MassDigitizer\sql\editions\NHMD\tracheophyta\Species-Batch1.sql'},
+
+             {'source' : r'data\taxon spines\\Botany\Tracheophyta 02 species synonyms part1.tsv', 
+              'destin' : r'MassDigitizer\sql\editions\NHMD\tracheophyta\Species-Batch2.sql'},
+
+             {'source' : r'data\taxon spines\\Botany\Tracheophyta 02 species synonyms part2.tsv', 
+              'destin' : r'MassDigitizer\sql\editions\NHMD\tracheophyta\Species-Batch3.sql'}, 
+
+             {'source' : r'data\taxon spines\\Botany\Tracheophyta 03 subspecies.tsv', 
+              'destin' : r'MassDigitizer\sql\editions\NHMD\tracheophyta\Subspecies.sql'}, 
+
+             {'source' : r'data\taxon spines\\Botany\Tracheophyta 04 infraspecific accepted.tsv', 
+              'destin' : r'MassDigitizer\sql\editions\NHMD\tracheophyta\VarForma-Batch1.sql'}, 
+
+             {'source' : r'data\taxon spines\\Botany\Tracheophyta 04 infraspecific synonyms.tsv', 
+              'destin' : r'MassDigitizer\sql\editions\NHMD\tracheophyta\VarForma-Batch2.sql'}, 
+
+             {'source' : r'data\taxon spines\\Botany\Tracheophyta 05 hybrids.tsv', 
+              'destin' : r'MassDigitizer\sql\editions\NHMD\tracheophyta\Hybrids.sql'}
+            ]
+
     def generateValuesClause(self, line, treedefid):
         """
         TODO
