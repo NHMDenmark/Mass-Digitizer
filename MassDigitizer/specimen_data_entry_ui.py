@@ -59,11 +59,8 @@ class SpecimenDataEntryUI(QMainWindow):
         self.collobj = specimen.Specimen(collection_id)  # Create blank specimen record instance
 
         # Input field lists defining: Tabbing order, focus indicator, what fields to be cleared, and what fields are not 'sticky' i.e. not carrying their value over to the next record after saving current one 
-        #self.inputFieldList  = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'inpTaxonName', 'inpTaxonNumber', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured', 'radRadioSSO', 'radRadioMSO', 'radRadioMOS', 'inpContainerName', 'inpNotes', 'inpCatalogNumber', 'btnSave']
-        #self.focusIconList   = ['inrStorage', 'inrPrepType', 'inrTypeStatus', 'inrGeoRegion', 'inrTaxonName', 'inrTaxonNumber', 'inrDamage', 'inrSpecimenObscured', 'inrLabelObscured', 'inrRadioSSO', 'inrRadioMSO', 'inrRadioMOS', 'inrContainerName', 'inrNotes', 'inrCatalogNumber', 'inrSave']
         self.clearingList    = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'inpLocalityNotes', 'inpTaxonName', 'inpTaxonNumber', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured','inpContainerName', 'inpCatalogNumber','txtRecordID', 'txtStorageFullname', 'inpNotes']
-        self.base_nonsticky_fields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured', 'inpLocalityNotes']
-        self.nonStickyFields = self.base_nonsticky_fields.copy() + ['inpNotes']
+        self.base_nonsticky_fields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured']
         self.sessionMode     = 'Default'
         
         # Load UI and setup connections
@@ -123,6 +120,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.show()
         self.center_screen() 
         self.ui.inpStorage.setFocus()  # Set initial focus on storage input field
+        self.toggle_stickiness_mode(default_mode=True)
 
     def load_comboboxes(self):
         """
@@ -635,6 +633,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.collobj.setPrepTypeFields(self.ui.cbxPrepType.currentIndex() - 1)
         self.collobj.setTypeStatusFields(self.ui.cbxTypeStatus.currentIndex() - 1)
         self.collobj.notes = self.ui.inpNotes.text()
+        self.collobj.localityNotes = self.ui.inpLocalityNotes.text()
         self.collobj.containername = self.ui.inpContainerName.text()
         self.collobj.containertype = self.getContainerTypeFromInput()
         self.collobj.setGeoRegionFields(self.ui.cbxGeoRegion.currentIndex() - 1)
@@ -952,12 +951,14 @@ class SpecimenDataEntryUI(QMainWindow):
         # Reset focus on the storage field
         self.ui.inpStorage.setFocus()   
 
-    def on_stickiness_toggled(self):
+    def on_stickiness_toggled(self): self.toggle_stickiness_mode(default_mode=False)
+
+    def toggle_stickiness_mode(self, default_mode=True):
         """ 
         Handle toggling of stickiness mode radio buttons.
         """
-        if self.ui.radStickinessDefault.isChecked():
-            self.nonStickyFields = self.base_nonsticky_fields.copy() + ['inpNotes']
+        if self.ui.radStickinessDefault.isChecked() or default_mode:
+            self.nonStickyFields = self.base_nonsticky_fields.copy() + ['inpNotes', 'inpLocalityNotes']
         elif self.ui.radStickinessExtended.isChecked():
             self.nonStickyFields = self.base_nonsticky_fields.copy()
 
