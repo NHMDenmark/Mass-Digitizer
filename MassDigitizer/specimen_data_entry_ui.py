@@ -718,6 +718,8 @@ class SpecimenDataEntryUI(QMainWindow):
             containerType = self.MSOterm
         elif self.ui.radRadioMOS.isChecked():
             containerType = self.MOSterm
+        elif self.ui.radRadioCombi.isChecked():
+            containerType = self.Combiterm
 
         return containerType
 
