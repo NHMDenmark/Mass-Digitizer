@@ -547,6 +547,7 @@ class Specimen(Model):
         """
         self.rankid = 999 # default rank id value corresponding to no rank at all in case the analysis fails. 
         taxonNameEntry = self.taxonFullName
+        if taxonNameEntry is None or taxonNameEntry.strip() == '': return None
         try:
             # In case an author name is included in the full taxon name, this should be separated out by an underscore
             authorName = '' # Initialize author name string as blank 
