@@ -26,7 +26,7 @@ import re
 
 # PySide6 imports
 from PySide6.QtWidgets import QLineEdit, QComboBox, QRadioButton, QCheckBox, QMessageBox
-from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView
+from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView, QLabel
 from PySide6.QtCore import Qt, QFile, QStandardPaths, QStringListModel
 from PySide6.QtGui import QFont, QIcon, QPixmap
 from PySide6.QtUiTools import QUiLoader
@@ -59,7 +59,8 @@ class SpecimenDataEntryUI(QMainWindow):
         self.collobj = specimen.Specimen(collection_id)  # Create blank specimen record instance
 
         # Input field lists defining: Tabbing order, focus indicator, what fields to be cleared, and what fields are not 'sticky' i.e. not carrying their value over to the next record after saving current one 
-        self.clearingList    = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'inpLocalityNotes', 'inpTaxonName', 'inpTaxonNumber', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured','inpContainerName', 'inpCatalogNumber','txtRecordID', 'txtStorageFullname', 'inpNotes']
+        self.clearingList    = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'inpLocalityNotes', 'inpTaxonName', 'inpTaxonNumber', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured',
+                                'inpContainerName', 'inpCatalogNumber','txtRecordID', 'txtStorageFullname', 'inpNotes', 'txtTaxonFullname']
         self.base_nonsticky_fields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured']
         self.sessionMode     = 'Default'
         
@@ -647,7 +648,7 @@ class SpecimenDataEntryUI(QMainWindow):
             self.collobj.setTaxonNameFields(taxonRecord)
         else:
             # If no taxon record found, regard as new taxon name and set taxon name fields accordingly
-            self.collobj.handleNewTaxonName(taxonFullName)
+            self.collobj.handleNewfTaxonName(taxonFullName)
             self.setTxtTaxonFullname(self.collobj.taxonFullName)
     
     def clearNonStickyFields(self):
@@ -671,6 +672,8 @@ class SpecimenDataEntryUI(QMainWindow):
             if listfield: listfield.setCurrentIndex(0)
             checkfield = self.ui.findChild(QCheckBox, key)
             if checkfield: checkfield.setChecked(False)
+            labelfield = self.ui.findChild(QLabel, key)
+            if labelfield: labelfield.setText('')
 
         if 'inpContainerName' in fieldList:
             self.ui.radRadioSSO.setChecked(True)
