@@ -525,6 +525,7 @@ class Specimen(Model):
         self.determineRank()
         parentName = taxonFullName.split(' ')[0]  # Get genus name as parent name
         self.familyName = self.searchParentTaxon(parentName, 140, self.collection.taxonTreeDefId, False) # Get family name by searching parent taxon of genus
+        self.higherTaxonName = self.familyName
         #print(f'New taxon handled: {self.taxonFullName}, rankid: {self.rankid}, family: {self.familyName}')
         return self.taxonFullName
 
