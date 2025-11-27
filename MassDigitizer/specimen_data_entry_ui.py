@@ -648,7 +648,7 @@ class SpecimenDataEntryUI(QMainWindow):
             self.collobj.setTaxonNameFields(taxonRecord)
         else:
             # If no taxon record found, regard as new taxon name and set taxon name fields accordingly
-            self.collobj.handleNewfTaxonName(taxonFullName)
+            self.collobj.handleNewTaxonName(taxonFullName)
             self.setTxtTaxonFullname(self.collobj.taxonFullName)
     
     def clearNonStickyFields(self):
