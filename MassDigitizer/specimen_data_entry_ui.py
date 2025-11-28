@@ -294,6 +294,7 @@ class SpecimenDataEntryUI(QMainWindow):
                 completion = self.ui.inpStorage.text()
             # reuse the completer selection handler so behavior is consistent
             self.on_storage_selected(completion)
+            self.on_storage_next_field()
             return
 
         # Normal Return behaviour when no popup is visible
@@ -307,9 +308,14 @@ class SpecimenDataEntryUI(QMainWindow):
             self.collobj.storageFullName = '-no storage record selected-'
             self.collobj.storageId = 0
         self.ui.txtStorageFullname.setText(self.collobj.storageFullName)
+        self.on_storage_next_field()
         
-        # Switch focus to next field
-        self.ui.cbxPrepType.setFocus()
+    def on_storage_next_field(self):
+        # Switch focus to next field       
+        if self.fast_entry_mode:
+            self.ui.inpCatalogNumber.setFocus()
+        else:
+            self.ui.cbxPrepType.setFocus()
 
     def on_cbxPrepType_currentIndexChanged(self): self.collobj.setPrepTypeFields(self.ui.cbxPrepType.currentIndex() - 1)
 
@@ -339,6 +345,7 @@ class SpecimenDataEntryUI(QMainWindow):
                 completion = self.ui.inpTaxonName.text()
             # reuse the completer selection handler so behavior is consistent
             self.on_taxonname_selected(completion)
+            self.on_taxonname_next_field()
             return
 
         # Normal Return behaviour when no popup is visible
@@ -351,9 +358,14 @@ class SpecimenDataEntryUI(QMainWindow):
             # No record: Unknown or "new" taxon name
             taxonname = self.collobj.handleNewTaxonName(taxon_name_input)
             self.setTxtTaxonFullname(taxonname)
+        self.on_taxonname_next_field()
 
-        # Switch focus to next field
-        self.ui.chkTaxonomyUncertain.setFocus()
+    def on_taxonname_next_field(self):
+        # Switch focus to next field        
+        if self.fast_entry_mode:
+            self.ui.inpCatalogNumber.setFocus()
+        else:
+            self.ui.chkTaxonomyUncertain.setFocus()
 
     def on_chkDamage_clicked(self): 
         needsrepair = self.ui.chkDamage.isChecked()
