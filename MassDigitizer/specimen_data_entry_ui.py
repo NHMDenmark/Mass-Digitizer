@@ -60,7 +60,7 @@ class SpecimenDataEntryUI(QMainWindow):
 
         # Input field lists defining: Tabbing order, focus indicator, what fields to be cleared, and what fields are not 'sticky' i.e. not carrying their value over to the next record after saving current one 
         self.clearingList    = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'inpLocalityNotes', 'inpTaxonName', 'inpTaxonNumber', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured',
-                                'inpContainerName', 'inpCatalogNumber','txtRecordID', 'txtStorageFullname', 'inpNotes', 'txtTaxonFullname']
+                                'inpContainerName', 'inpCatalogNumber','txtRecordID', 'txtStorageFullname', 'inpNotes', 'txtTaxonFullname', 'chkTaxonomyUncertain']
         self.base_nonsticky_fields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured']
         self.sessionMode     = 'Default'
         
@@ -649,13 +649,15 @@ class SpecimenDataEntryUI(QMainWindow):
         self.collobj.localityNotes = self.ui.inpLocalityNotes.text()
         self.collobj.containername = self.ui.inpContainerName.text()
         self.collobj.containertype = self.getContainerTypeFromInput()
-        self.collobj.setGeoRegionFields(self.ui.cbxGeoRegion.currentIndex() - 1)
+        self.collobj.setGeoRegionFields(self.ui.cbxGeoRegion.currentIndex() - 1)        
+        self.collobj.taxonomyUncertain = self.ui.chkTaxonomyUncertain.isChecked()
+
+        # Handle taxon name fields
         taxonFullName = self.ui.inpTaxonName.text()
         taxonFullName = taxonFullName.rstrip()
         if self.collection.useTaxonNumbers:
             self.collobj.taxonNumber = self.ui.inpTaxonNumber.text()
         taxonRecord = self.getTaxonNameRecord(taxonFullName)
-        
         if taxonRecord:
             self.collobj.setTaxonNameFields(taxonRecord)
         else:
