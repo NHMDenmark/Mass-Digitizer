@@ -103,8 +103,6 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.inpStorage.setCompleter(self.storage_completer)
         self.ui.inpStorage.textChanged.connect(self.update_storage_completer)  
         self.storage_completer.popup().installEventFilter(PopupArrowFilter(self.storage_completer))
-        # ensure we receive the selected text (use the str overload)
-        #self.storage_completer.activated[str].connect(self.on_storage_selected)
         
         # Create QCompleter for inpTaxonName
         self.taxonname_completer = QCompleter()
@@ -113,9 +111,13 @@ class SpecimenDataEntryUI(QMainWindow):
         self.taxonname_completer.setCompletionMode(QCompleter.PopupCompletion)
         self.ui.inpTaxonName.setCompleter(self.taxonname_completer)
         self.ui.inpTaxonName.textChanged.connect(self.update_taxonname_completer)
+        self.ui.inpTaxonName.clicked.connect(self.update_taxonname_completer)
         self.taxonname_completer.popup().installEventFilter(PopupArrowFilter(self.taxonname_completer))
-        # ensure we receive the selected text (use the str overload)
-        #self.taxonname_completer.activated[str].connect(self.on_taxonname_selected)
+        # ensure Enter and mouse-clicks call the same handlers for taxon name completer
+        def _taxon_popup_clicked(idx):
+            completion = idx.data() if idx is not None else self.ui.inpTaxonName.text()
+            self.on_taxonname_selected(completion)
+        self.taxonname_completer.popup().clicked.connect(_taxon_popup_clicked)
 
         # Start up interface and center window
         self.show()
@@ -1003,6 +1005,7 @@ class SpecimenDataEntryUI(QMainWindow):
             self.collobj.taxonFullName = ''
             self.collobj.taxonNameId = 0
         self.ui.txtTaxonFullname.setText(self.collobj.taxonFullName + ' (' + self.collobj.familyName + ')')
+        self.on_taxonname_next_field()
 
     # add a slot for when a suggestion is chosen (click or enter)
     def on_storage_selected(self, completion):
