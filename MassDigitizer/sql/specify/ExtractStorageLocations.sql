@@ -1,90 +1,175 @@
-SELECT DISTINCT storage_ FROM (
-SELECT CONCAT('("', t1.unit, '",', CONCAT(t1.stor), ' | ', t1.unit, '", ', '"', t1.rank_name, '", ', '(SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1)),') AS storage_
-	 	 ,t1.sort_unit, t1.sort_coll -- Include sorting in the final output
-FROM (
-    SELECT CONCAT_WS(' | ', '"Natural History Museum of Denmark', st1.Name) AS stor,
-           stdi.name AS rank_name,
-           st2.Name AS unit,
-           stdi.Name AS rankname,
-           st2.name AS index_,
-           st2.name AS sort_coll,
-           CAST(REGEXP_REPLACE(st2.Name, '[^0-9]', '') AS UNSIGNED) AS sort_unit
-    FROM storage AS st1
-    LEFT JOIN storage AS st2 ON st2.ParentID = st1.storageID
-    LEFT JOIN storagetreedefitem stdi ON st2.RankID = stdi.RankID
-    WHERE st2.storageid IN (81648, 89805) 
 
-    UNION ALL
-    
-    SELECT CONCAT_WS(' | ', '"Natural History Museum of Denmark', st1.Name, st2.name) AS stor,
-           stdi.name AS rank_name,
-           CASE 
-               WHEN st2.storageid = 81648 THEN CONCAT('Box ', st3.Name)
-               WHEN st2.storageid = 89805 THEN CONCAT('Shelf ', st3.Name)
-               ELSE st3.Name
-           END AS unit,
-           stdi.Name AS rankname,
-           st3.name AS index_,
-           st2.name AS sort_coll,
-           CAST(REGEXP_REPLACE(st3.Name, '[^0-9]', '') AS UNSIGNED) AS sort_unit
-    FROM storage AS st1
-    LEFT JOIN storage AS st2 ON st2.ParentID = st1.storageID
-    LEFT JOIN storage AS st3 ON st3.parentID = st2.storageID
-    LEFT JOIN storagetreedefitem stdi ON st3.RankID = stdi.RankID
-    WHERE st2.storageid IN (81648, 89805)
-) t1
+WITH t1 AS (
+  /* Room (RankID 200 at st2) */
+  SELECT 
+    CONCAT_WS(' | ', 'Natural History Museum of Denmark', st1.Name, st2.Name) AS stor,
+    stdi.Name AS rank_name,
+    stdi.RankID AS rank_id,
+    st2.Name AS unit,
+    st2.StorageID,
+    stdi.Name AS rankname,
+    st2.Name AS index_,
+    st2.Name AS sort_coll,
+    CAST(REGEXP_REPLACE(st2.Name, '[^0-9]', '') AS UNSIGNED) AS sort_unit
+  FROM storage AS st1
+  LEFT JOIN storage AS st2 ON st2.ParentID = st1.StorageID
+  LEFT JOIN storagetreedefitem stdi ON st2.RankID = stdi.RankID
+  WHERE st2.StorageID IN (81648, 89805, 372531, 1433)
+    AND stdi.RankID = 200
 
-UNION ALL
+  UNION ALL
 
-SELECT CONCAT('("', t2.unit, '",', CONCAT(t2.stor), ' | ', t2.unit, '", ', '"', t2.rank_name, '", ', '(SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1)),') AS storage_
-		 ,t2.sort_unit, t2.sort_coll -- Include sorting in the final output
-FROM (
-    SELECT CONCAT_WS(' | ', '"Natural History Museum of Denmark', st1.Name) AS stor,
-           stdi.name AS rank_name,
-           st2.Name AS unit,
-           stdi.Name AS rankname,
-           st2.name AS index_,
-           st2.name AS sort_coll,
-           CAST(REGEXP_REPLACE(st2.Name, '[^0-9]', '') AS UNSIGNED) AS sort_unit
-    FROM storage AS st1
-    LEFT JOIN storage AS st2 ON st2.ParentID = st1.storageID
-    LEFT JOIN storagetreedefitem stdi ON st2.RankID = stdi.RankID
-    WHERE st2.storageid IN (372531) 
+  /* Aisle (RankID 250 at st3) */
+  SELECT 
+    CONCAT_WS(' | ', 'Natural History Museum of Denmark', st1.Name, st2.Name, st3.Name) AS stor,
+    stdi.Name AS rank_name,
+    stdi.RankID AS rank_id,
+    st3.Name AS unit,
+    st3.StorageID,
+    stdi.Name AS rankname,
+    st3.Name AS index_,
+    st2.Name AS sort_coll,
+    CAST(REGEXP_REPLACE(st3.Name, '[^0-9]', '') AS UNSIGNED) AS sort_unit
+  FROM storage AS st1
+  LEFT JOIN storage AS st2 ON st2.ParentID = st1.StorageID
+  LEFT JOIN storage AS st3 ON st3.ParentID = st2.StorageID
+  LEFT JOIN storagetreedefitem stdi ON st3.RankID = stdi.RankID
+  WHERE st2.StorageID IN (81648, 89805, 372531, 1433)
+    AND stdi.RankID = 250
 
-    UNION ALL
-    
-    SELECT CONCAT_WS(' | ', '"Natural History Museum of Denmark', st1.Name, st2.name) AS stor,
-           stdi.name AS rank_name,
-           CONCAT('Cabinet ', st3.Name) AS unit,
-           stdi.Name AS rankname,
-           st3.name AS index_,
-           st2.name AS sort_coll,
-           CAST(REGEXP_REPLACE(st3.Name, '[^0-9]', '') AS UNSIGNED) AS sort_unit
-    FROM storage AS st1
-    LEFT JOIN storage AS st2 ON st2.ParentID = st1.storageID
-    LEFT JOIN storage AS st3 ON st3.parentID = st2.storageID
-    LEFT JOIN storagetreedefitem stdi ON st3.RankID = stdi.RankID
-    WHERE st2.storageid IN (372531) 
+  UNION ALL
 
-    UNION ALL
+  /* Cabinet (RankID 300 at st4) */
+  SELECT 
+    CONCAT_WS(' | ', 'Natural History Museum of Denmark', st1.Name, st2.Name, st3.Name, CONCAT('Cabinet ', st4.Name)) AS stor, 
+    stdi.Name AS rank_name,
+    stdi.RankID AS rank_id,
+    CONCAT('Cabinet ', st4.Name) AS unit,         
+    st4.StorageID,
+    stdi.Name AS rankname,
+    st4.Name AS index_,
+    st2.Name AS sort_coll,
+    CAST(REGEXP_REPLACE(st4.Name, '[^0-9]', '') AS UNSIGNED) AS sort_unit
+  FROM storage AS st1
+  LEFT JOIN storage AS st2 ON st2.ParentID = st1.StorageID
+  LEFT JOIN storage AS st3 ON st3.ParentID = st2.StorageID
+  LEFT JOIN storage AS st4 ON st4.ParentID = st3.StorageID
+  LEFT JOIN storagetreedefitem AS stdi ON st4.RankID = stdi.RankID
+  WHERE st2.StorageID IN (81648, 89805, 372531, 1433)
+    AND stdi.RankID = 300
 
-    SELECT CONCAT_WS(' | ', '"Natural History Museum of Denmark', st1.Name, st2.name, CONCAT('Cabinet ', st3.name)) AS stor,
-           stdi.name AS rank_name,
-           CONCAT('Shelf ', st4.Name) AS unit,
-           stdi.Name AS rankname,
-           st4.name AS index_,
-           st2.name AS sort_coll,
-           CAST(REGEXP_REPLACE(st3.Name, '[^0-9]', '') AS UNSIGNED) AS sort_unit
-    FROM storage AS st1
-    LEFT JOIN storage AS st2 ON st2.ParentID = st1.storageID
-    LEFT JOIN storage AS st3 ON st3.parentID = st2.storageID
-    LEFT JOIN storage AS st4 ON st4.parentID = st3.storageID
-    LEFT JOIN storagetreedefitem stdi ON st4.RankID = stdi.RankID
-    WHERE st2.storageid IN (372531) 
-    
-) t2
+  UNION ALL
 
-ORDER BY sort_coll, sort_unit
-) t_all
-;
--- 39.288
+  /* Shelf under Aisle (RankID 350 at st4) */
+  SELECT DISTINCT 
+    CONCAT_WS(' | ', 'Natural History Museum of Denmark', st1.Name, st2.Name, st3.Name, CONCAT('Shelf ', st4.Name)) AS stor, 
+    stdi.Name AS rank_name,
+    stdi.RankID AS rank_id,
+    CONCAT('Shelf ', st4.Name) AS unit,
+    st4.StorageID,
+    stdi.Name AS rankname,
+    st4.Name AS index_,
+    st2.Name AS sort_coll,
+    CAST(REGEXP_REPLACE(st4.Name, '[^0-9]', '') AS UNSIGNED) AS sort_unit
+  FROM storage AS st1
+  LEFT JOIN storage AS st2 ON st2.ParentID = st1.StorageID
+  LEFT JOIN storage AS st3 ON st3.ParentID = st2.StorageID
+  LEFT JOIN storage AS st4 ON st4.ParentID = st3.StorageID
+  LEFT JOIN storagetreedefitem AS stdi ON st4.RankID = stdi.RankID
+  WHERE st2.StorageID IN (81648, 89805, 372531, 1433)
+    AND stdi.RankID = 350
+
+  UNION ALL
+
+  /* Shelf under Cabinet (RankID 350 at st5) */
+  SELECT 
+    CONCAT_WS(' | ', 'Natural History Museum of Denmark', st1.Name, st2.Name, st3.Name, st4.Name, CONCAT('Shelf ', st5.Name)) AS stor, 
+    stdi.Name AS rank_name,
+    stdi.RankID AS rank_id,
+    CONCAT('Shelf ', st5.Name) AS unit,
+    st5.StorageID,
+    stdi.Name AS rankname,
+    st5.Name AS index_,
+    st2.Name AS sort_coll,
+    CAST(REGEXP_REPLACE(st5.Name, '[^0-9]', '') AS UNSIGNED) AS sort_unit
+  FROM storage AS st1
+  LEFT JOIN storage AS st2 ON st2.ParentID = st1.StorageID
+  LEFT JOIN storage AS st3 ON st3.ParentID = st2.StorageID
+  LEFT JOIN storage AS st4 ON st4.ParentID = st3.StorageID
+  LEFT JOIN storage AS st5 ON st5.ParentID = st4.StorageID
+  LEFT JOIN storagetreedefitem AS stdi ON st5.RankID = stdi.RankID
+  WHERE st2.StorageID IN (81648, 89805, 372531, 1433)
+    AND stdi.RankID = 350
+
+  UNION ALL
+
+  /* Rack under Shelf (RankID 450 at st5) */
+  SELECT 
+    CONCAT_WS(' | ', 'Natural History Museum of Denmark', st1.Name, st2.Name, st3.Name, CONCAT('Shelf ', st4.Name), CONCAT('Rack ', st5.Name)) AS stor, 
+    stdi.Name AS rank_name,
+    stdi.RankID AS rank_id,
+    CONCAT('Rack ', st5.Name) AS unit,
+    st5.StorageID,
+    stdi.Name AS rankname,
+    st5.Name AS index_,
+    st2.Name AS sort_coll,
+    CAST(REGEXP_REPLACE(st5.Name, '[^0-9]', '') AS UNSIGNED) AS sort_unit
+  FROM storage AS st1
+  LEFT JOIN storage AS st2 ON st2.ParentID = st1.StorageID
+  LEFT JOIN storage AS st3 ON st3.ParentID = st2.StorageID
+  LEFT JOIN storage AS st4 ON st4.ParentID = st3.StorageID
+  LEFT JOIN storage AS st5 ON st5.ParentID = st4.StorageID
+  LEFT JOIN storagetreedefitem AS stdi ON st5.RankID = stdi.RankID
+  WHERE st2.StorageID IN (81648, 89805, 372531, 1433)
+    AND stdi.RankID = 450
+
+  UNION ALL
+
+  /* Rack under Aisle (RankID 450 at st4) */
+  SELECT 
+    CONCAT_WS(' | ', 'Natural History Museum of Denmark', st1.Name, st2.Name, st3.Name, CONCAT('Rack ', st4.Name)) AS stor, 
+    stdi.Name AS rank_name,
+    stdi.RankID AS rank_id,
+    CONCAT('Rack ', st4.Name) AS unit,
+    st4.StorageID,
+    stdi.Name AS rankname,
+    st4.Name AS index_,
+    st2.Name AS sort_coll,
+    CAST(REGEXP_REPLACE(st4.Name, '[^0-9]', '') AS UNSIGNED) AS sort_unit
+  FROM storage AS st1
+  LEFT JOIN storage AS st2 ON st2.ParentID = st1.StorageID
+  LEFT JOIN storage AS st3 ON st3.ParentID = st2.StorageID
+  LEFT JOIN storage AS st4 ON st4.ParentID = st3.StorageID
+  LEFT JOIN storagetreedefitem AS stdi ON st4.RankID = stdi.RankID
+  WHERE st2.StorageID IN (81648, 89805, 372531, 1433)
+    AND stdi.RankID = 450
+),
+prepared AS (
+  SELECT
+    CONCAT(
+      '("', unit, '", ',
+      '"', stor, '", ',
+      '"', rank_name, '", ',
+      '(SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1))'
+    ) AS storage_,
+    sort_coll,
+    sort_unit,
+    rank_id
+  FROM t1
+),
+dedup AS (
+  SELECT
+    storage_,
+    sort_coll,
+    sort_unit,
+    rank_id,
+    ROW_NUMBER() OVER (
+      PARTITION BY storage_
+      ORDER BY rank_id, sort_coll, sort_unit
+    ) AS rn
+  FROM prepared
+)
+SELECT storage_
+FROM dedup
+WHERE rn = 1
+ORDER BY rank_id, sort_coll, sort_unit;
