@@ -111,7 +111,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.taxonname_completer.setCompletionMode(QCompleter.PopupCompletion)
         self.ui.inpTaxonName.setCompleter(self.taxonname_completer)
         self.ui.inpTaxonName.textChanged.connect(self.update_taxonname_completer)
-        self.ui.inpTaxonName.clicked.connect(self.update_taxonname_completer)
+        #self.ui.inpTaxonName.clicked.connect(self.update_taxonname_completer)
         self.taxonname_completer.popup().installEventFilter(PopupArrowFilter(self.taxonname_completer))
         # ensure Enter and mouse-clicks call the same handlers for taxon name completer
         def _taxon_popup_clicked(idx):
