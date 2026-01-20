@@ -633,7 +633,7 @@ class Ui_SpecimenDataEntry(object):
         self.txtStorageFullname.setProperty(u"class", QCoreApplication.translate("SpecimenDataEntry", u"QLabelMetaInfo", None))
         self.lblTaxonNumber.setText(QCoreApplication.translate("SpecimenDataEntry", u"Taxon Number:", None))
         self.lblSpecimenFlags.setText(QCoreApplication.translate("SpecimenDataEntry", u"Specimen flags", None))
-        self.chkDamage.setText(QCoreApplication.translate("SpecimenDataEntry", u"Damaged specimen", None))
+        self.chkDamage.setText(QCoreApplication.translate("SpecimenDataEntry", u"Needs Repair", None))
         self.chkSpecimenObscured.setText(QCoreApplication.translate("SpecimenDataEntry", u"Specimen obscured", None))
         self.chkLabelObscured.setText(QCoreApplication.translate("SpecimenDataEntry", u"Label obscured", None))
         self.lblContainerType.setText(QCoreApplication.translate("SpecimenDataEntry", u"Container type", None))
