@@ -570,7 +570,7 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>Damaged specimen</string>
+                 <string>Needs Repair</string>
                 </property>
                </widget>
               </item>
