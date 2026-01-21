@@ -2,7 +2,7 @@
 WITH t1 AS (
   /* Room (RankID 200 at st2) */
   SELECT 
-    CONCAT_WS(' | ', 'Natural History Museum of Denmark', st1.Name, st2.Name) AS stor,
+    CONCAT_WS(' | ', st1.Name, st2.Name) AS stor,
     stdi.Name AS rank_name,
     stdi.RankID AS rank_id,
     st2.Name AS unit,
@@ -21,7 +21,7 @@ WITH t1 AS (
 
   /* Aisle (RankID 250 at st3) */
   SELECT 
-    CONCAT_WS(' | ', 'Natural History Museum of Denmark', st1.Name, st2.Name, st3.Name) AS stor,
+    CONCAT_WS(' | ', st1.Name, st2.Name, st3.Name) AS stor,
     stdi.Name AS rank_name,
     stdi.RankID AS rank_id,
     st3.Name AS unit,
@@ -41,7 +41,7 @@ WITH t1 AS (
 
   /* Cabinet (RankID 300 at st4) */
   SELECT 
-    CONCAT_WS(' | ', 'Natural History Museum of Denmark', st1.Name, st2.Name, st3.Name, CONCAT('Cabinet ', st4.Name)) AS stor, 
+    CONCAT_WS(' | ', st1.Name, st2.Name, st3.Name, CONCAT('Cabinet ', st4.Name)) AS stor, 
     stdi.Name AS rank_name,
     stdi.RankID AS rank_id,
     CONCAT('Cabinet ', st4.Name) AS unit,         
@@ -62,7 +62,7 @@ WITH t1 AS (
 
   /* Shelf under Aisle (RankID 350 at st4) */
   SELECT DISTINCT 
-    CONCAT_WS(' | ', 'Natural History Museum of Denmark', st1.Name, st2.Name, st3.Name, CONCAT('Shelf ', st4.Name)) AS stor, 
+    CONCAT_WS(' | ', st1.Name, st2.Name, st3.Name, CONCAT('Shelf ', st4.Name)) AS stor, 
     stdi.Name AS rank_name,
     stdi.RankID AS rank_id,
     CONCAT('Shelf ', st4.Name) AS unit,
@@ -83,7 +83,7 @@ WITH t1 AS (
 
   /* Shelf under Cabinet (RankID 350 at st5) */
   SELECT 
-    CONCAT_WS(' | ', 'Natural History Museum of Denmark', st1.Name, st2.Name, st3.Name, st4.Name, CONCAT('Shelf ', st5.Name)) AS stor, 
+    CONCAT_WS(' | ', st1.Name, st2.Name, st3.Name, CONCAT('Cabinet ', st4.Name), CONCAT('Shelf ', st5.Name)) AS stor, 
     stdi.Name AS rank_name,
     stdi.RankID AS rank_id,
     CONCAT('Shelf ', st5.Name) AS unit,
@@ -105,7 +105,7 @@ WITH t1 AS (
 
   /* Rack under Shelf (RankID 450 at st5) */
   SELECT 
-    CONCAT_WS(' | ', 'Natural History Museum of Denmark', st1.Name, st2.Name, st3.Name, CONCAT('Shelf ', st4.Name), CONCAT('Rack ', st5.Name)) AS stor, 
+    CONCAT_WS(' | ', st1.Name, st2.Name, st3.Name, CONCAT('Shelf ', st4.Name), CONCAT('Rack ', st5.Name)) AS stor, 
     stdi.Name AS rank_name,
     stdi.RankID AS rank_id,
     CONCAT('Rack ', st5.Name) AS unit,
@@ -127,7 +127,7 @@ WITH t1 AS (
 
   /* Rack under Aisle (RankID 450 at st4) */
   SELECT 
-    CONCAT_WS(' | ', 'Natural History Museum of Denmark', st1.Name, st2.Name, st3.Name, CONCAT('Rack ', st4.Name)) AS stor, 
+    CONCAT_WS(' | ', st1.Name, st2.Name, st3.Name, CONCAT('Rack ', st4.Name)) AS stor, 
     stdi.Name AS rank_name,
     stdi.RankID AS rank_id,
     CONCAT('Rack ', st4.Name) AS unit,
