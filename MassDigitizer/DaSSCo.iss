@@ -44,7 +44,7 @@ Source: "ui\specimendataentry.ui"; DestDir: "{app}\_internal\ui"; Flags: ignorev
 Source: "ui\homescreen.ui"; DestDir: "{app}\_internal\ui"; Flags: ignoreversion
 Source: "sql\editions\temp\db.sqlite3"; DestDir: "{userdocs}\DaSSCo"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "img\*.*"; DestDir: "{userdocs}\DaSSCo\img"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "config\*.*"; DestDir: "{userdocs}\DaSSCo\config"; Flags: ignoreversion recursesubdirs createallsubdirs onlyifdoesntexist
+Source: "config\login.cfg"; DestDir: "{userdocs}\DaSSCo\config"; Flags: ignoreversion recursesubdirs createallsubdirs onlyifdoesntexist
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
