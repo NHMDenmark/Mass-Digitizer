@@ -143,6 +143,34 @@ WITH t1 AS (
   LEFT JOIN storagetreedefitem AS stdi ON st4.RankID = stdi.RankID
   WHERE st2.StorageID IN (81648, 89805, 372531, 1433)
     AND stdi.RankID = 450
+    
+    
+	UNION ALL
+	
+	/* Box under Aisle (RankID 400 at st4) */
+	SELECT 
+	  CONCAT_WS(' | ',
+	    st1.Name,
+	    st2.Name,
+	    st3.Name,
+	    CONCAT('Box ', st4.Name)
+	  ) AS stor,
+	  stdi.Name AS rank_name,
+	  stdi.RankID AS rank_id,
+	  CONCAT('Box ', st4.Name) AS unit,
+	  st4.StorageID,
+	  stdi.Name AS rankname,
+	  st4.Name AS index_,
+	  st2.Name AS sort_coll,
+	  CAST(REGEXP_REPLACE(st4.Name, '[^0-9]', '') AS UNSIGNED) AS sort_unit
+	FROM storage AS st1
+	LEFT JOIN storage AS st2 ON st2.ParentID = st1.StorageID       -- Room
+	LEFT JOIN storage AS st3 ON st3.ParentID = st2.StorageID       -- Aisle
+	LEFT JOIN storage AS st4 ON st4.ParentID = st3.StorageID       -- Box
+	LEFT JOIN storagetreedefitem AS stdi ON st4.RankID = stdi.RankID
+	WHERE st2.StorageID IN (81648, 89805, 372531, 1433)
+	  AND stdi.RankID = 400  -- Box
+    
 ),
 prepared AS (
   SELECT
