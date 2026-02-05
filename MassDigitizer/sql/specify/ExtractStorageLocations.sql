@@ -170,7 +170,6 @@ WITH t1 AS (
 	LEFT JOIN storagetreedefitem AS stdi ON st4.RankID = stdi.RankID
 	WHERE st2.StorageID IN (81648, 89805, 372531, 1433)
 	  AND stdi.RankID = 400  -- Box
-    
 ),
 prepared AS (
   SELECT
