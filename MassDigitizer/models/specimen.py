@@ -253,6 +253,9 @@ class Specimen(Model):
         if index >= 0:  # Apparently, index -1 selects the last item in the list
             self.prepTypeId = self.prepTypes[index]['id']
             self.prepTypeName = self.prepTypes[index]['name']
+        else:
+            self.prepTypeId = 0
+            self.prepTypeName = ''
 
     def setTypeStatusFields(self, index):
         """
@@ -262,6 +265,9 @@ class Specimen(Model):
         if index >= 0:  # Apparently, index -1 selects the last item in the list
             self.typeStatusId = self.typeStatuses[index]['id']
             self.typeStatusName = self.typeStatuses[index]['name']
+        else:
+            self.typeStatusId = 0
+            self.typeStatusName = ''
 
     def setGeoRegionFields(self, index):
         """
@@ -272,6 +278,10 @@ class Specimen(Model):
             self.geoRegionId = self.geoRegions[index]['id']
             self.geoRegionName = self.geoRegions[index]['name']
             self.geoRegionSource = self.geoRegions[index]['source']
+        else:
+            self.geoRegionId = 0
+            self.geoRegionName = ''
+            self.geoRegionSource = ''
 
     def setStorageFields(self, index):
         """
