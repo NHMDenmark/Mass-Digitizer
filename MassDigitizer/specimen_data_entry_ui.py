@@ -653,19 +653,26 @@ class SpecimenDataEntryUI(QMainWindow):
         self.collobj.containertype = self.getContainerTypeFromInput()
         self.collobj.setGeoRegionFields(self.ui.cbxGeoRegion.currentIndex() - 1)        
         self.collobj.taxonomyUncertain = self.ui.chkTaxonomyUncertain.isChecked()
+        self.handleTaxonNameFields()
 
+    def handleTaxonNameFields(self):
+        """
+        Method for handling taxon name fields since they require specific handling due to the possibility of new taxon names not present in the taxon name table.
+        """    
         # Handle taxon name fields
         taxonFullName = self.ui.inpTaxonName.text()
         taxonFullName = taxonFullName.rstrip()
         if self.collection.useTaxonNumbers:
-            self.collobj.taxonNumber = self.ui.inpTaxonNumber.text()
-        taxonRecord = self.getTaxonNameRecord(taxonFullName)
-        if taxonRecord:
-            self.collobj.setTaxonNameFields(taxonRecord)
-        else:
-            # If no taxon record found, regard as new taxon name and set taxon name fields accordingly
-            self.collobj.handleNewTaxonName(taxonFullName)
-            self.setTxtTaxonFullname(self.collobj.taxonFullName)
+            self.collobj.taxonNumber = self.ui.inpTaxonNumber.text()        
+        if taxonFullName.strip() != '':
+        # Only attempt to retrieve taxon record if name has been entered
+            taxonRecord = self.getTaxonNameRecord(taxonFullName)
+            if taxonRecord:
+                self.collobj.setTaxonNameFields(taxonRecord)
+            else:
+                # If no taxon record found, regard as new taxon name and set taxon name fields accordingly
+                self.collobj.handleNewTaxonName(taxonFullName)
+                self.setTxtTaxonFullname(self.collobj.taxonFullName)
     
     def clearNonStickyFields(self):
         """
