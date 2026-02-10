@@ -74,7 +74,7 @@ CREATE TABLE "specimen" (
 	"storagerankname"	TEXT,
 	"preptypename"	TEXT,
 	"preptypeid"	INTEGER,
-	"notes"	TEXT,
+	"specimennotes"	TEXT,
 	"objectcondition"	TEXT,
 	"labelobscured"	INTEGER,
 	"specimenobscured"	INTEGER,
