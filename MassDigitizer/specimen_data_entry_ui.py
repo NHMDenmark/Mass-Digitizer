@@ -477,7 +477,7 @@ class SpecimenDataEntryUI(QMainWindow):
 
     def on_container_name_return_pressed(self):self.collobj.containername = self.ui.inpContainerName.text()
 
-    def on_notes_changed(self): self.collobj.notes = self.ui.inpNotes.text()
+    def on_notes_changed(self): self.collobj.specimennotes = self.ui.inpNotes.text()
     
     def on_chkTaxonomyUncertain_clicked(self):
         self.collobj.taxonomyUncertain = self.ui.chkTaxonomyUncertain.isChecked()
@@ -647,7 +647,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.collobj.setStorageFieldsFromRecord(self.getStorageRecord(self.ui.txtStorageFullname.text()))
         self.collobj.setPrepTypeFields(self.ui.cbxPrepType.currentIndex() - 1)
         self.collobj.setTypeStatusFields(self.ui.cbxTypeStatus.currentIndex() - 1)
-        self.collobj.notes = self.ui.inpNotes.text()
+        self.collobj.specimennotes = self.ui.inpNotes.text()
         self.collobj.localityNotes = self.ui.inpLocalityNotes.text()
         self.collobj.containername = self.ui.inpContainerName.text()
         self.collobj.containertype = self.getContainerTypeFromInput()
@@ -699,7 +699,9 @@ class SpecimenDataEntryUI(QMainWindow):
             if labelfield: labelfield.setText('')
 
         if 'inpContainerName' in fieldList:
+            self.ui.radRadioSSO.blockSignals(True) # Prevent triggering the toggled event which would generate a new container name
             self.ui.radRadioSSO.setChecked(True)
+            self.ui.radRadioSSO.blockSignals(False)
 
         # If existing record, highlight record id
         if self.collobj.id > 0:
@@ -781,8 +783,20 @@ class SpecimenDataEntryUI(QMainWindow):
         if record.get('id') == '0': self.ui.txtRecordID.setText('-new record-')
         self.ui.inpStorage.setText(record.get('storagefullname', ''))
         self.ui.txtStorageFullname.setText(record.get('storagefullname', ''))
-        self.ui.cbxPrepType.setCurrentText(record.get('preptypename', ''))
-        self.ui.cbxTypeStatus.setCurrentText(record.get('typestatusname', ''))
+
+        if record.get('preptypename', '') != '':
+            self.ui.cbxPrepType.setCurrentText(record.get('preptypename', ''))
+        else:
+            self.ui.cbxPrepType.setCurrentIndex(0)
+        if record.get('typestatusname', '') != '':
+            self.ui.cbxTypeStatus.setCurrentText(record.get('typestatusname', ''))
+        else:
+            self.ui.cbxTypeStatus.setCurrentIndex(0)
+        if record.get('georegionname', '') != '':            
+            self.ui.cbxGeoRegion.setCurrentText(record.get('georegionname', ''))
+        else:
+            self.ui.cbxGeoRegion.setCurrentIndex(0)
+
         self.ui.chkTaxonomyUncertain.setChecked(util.str_to_bool(record.get('taxonomyuncertain', 'False')))
 
         if record.get('objectcondition') == 'Needs repair':
@@ -792,15 +806,16 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.chkSpecimenObscured.setChecked(util.str_to_bool(record.get('specimenobscured', 'False')))
         self.ui.chkLabelObscured.setChecked(util.str_to_bool(record.get('labelobscured', 'False')))
 
-        self.ui.inpNotes.setText(record.get('notes', ''))
+        self.ui.inpNotes.setText(record.get('specimennotes', ''))
         self.ui.inpLocalityNotes.setText(record.get('localitynotes', ''))
 
         self.setContainerFields(record)
-
-        self.ui.cbxGeoRegion.setCurrentText(record.get('georegionname', ''))
        
         taxonfullname = record.get('taxonfullname', '')
-        if taxonfullname == '': taxonfullname = self.ui.inpTaxonName.text()
+        if taxonfullname == '': 
+            #taxonfullname = self.ui.inpTaxonName.text()
+            self.ui.inpTaxonName.setText('')
+            self.ui.inpTaxonNumber.setText('')
         self.setTxtTaxonFullname(taxonfullname)
 
         if self.collection.useTaxonNumbers:
@@ -830,10 +845,14 @@ class SpecimenDataEntryUI(QMainWindow):
             containerType = record['containertype'] # Get container type 
 
             if containerType == self.MSOterm:
+                self.ui.radRadioMSO.blockSignals(True) # Prevent triggering the toggled event which would generate a new container name
                 self.ui.radRadioMSO.setChecked(True) # Set MSO radiobutton 
+                self.ui.radRadioMSO.blockSignals(False)
                 self.ui.imgWarningLinkedRecord.setVisible(True)
             elif containerType == self.MOSterm:
+                self.ui.radRadioMOS.blockSignals(True) # Prevent triggering the toggled event which would generate a new container name
                 self.ui.radRadioMOS.setChecked(True) # Set MOS radiobutton
+                self.ui.radRadioMOS.blockSignals(False)
                 self.ui.imgWarningLinkedRecord.setVisible(True)
             else:
                 self.ui.lblError.setText('Something went wrong!')
@@ -843,7 +862,9 @@ class SpecimenDataEntryUI(QMainWindow):
             self.ui.inpContainerName.setEnabled(True)
         else:
             # No container name set; single specimen assumed
+            self.ui.radRadioSSO.blockSignals(True) # Prevent triggering the toggled event which would generate a new container name
             self.ui.radRadioSSO.setChecked(True) # Set SSO radiobutton        
+            self.ui.radRadioSSO.blockSignals(False)
             self.ui.inpContainerName.setText('') # Clear container name input field 
             self.ui.inpContainerName.setEnabled(False) # Disable container name input field 
             self.ui.imgWarningLinkedRecord.setVisible(False) # Hide linked record warning
