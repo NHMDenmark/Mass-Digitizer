@@ -103,6 +103,11 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.inpStorage.setCompleter(self.storage_completer)
         self.ui.inpStorage.textChanged.connect(self.update_storage_completer)  
         self.storage_completer.popup().installEventFilter(PopupArrowFilter(self.storage_completer))
+        # ensure Enter and mouse-clicks call the same handlers for storage completer
+        def storage_popup_clicked(idx):
+            completion = idx.data() if idx is not None else self.ui.inpStorage.text()
+            self.on_storage_selected(completion)
+        self.storage_completer.popup().clicked.connect(storage_popup_clicked)
         
         # Create QCompleter for inpTaxonName
         self.taxonname_completer = QCompleter()
