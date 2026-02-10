@@ -53,7 +53,7 @@ class Model:
         self.idNumber = ''    # TODO Too specific! Solve in a different way ...
         self.idSource = ''    # TODO Too specific! Solve in a different way ...
         self.remarks = ' '
-        self.notes = ''
+        self.specimennotes = ''
         self.collectionId = collection_id
         self.status = 0
         self.source = 'Unspecified'
@@ -293,4 +293,4 @@ class Model:
     # Generic functions
 
     def __str__(self):
-        return f'[{self.table}] id:{self.id}, name:{self.name}, fullname = {self.fullName}, notes = {self.notes}'
+        return f'[{self.table}] id:{self.id}, name:{self.name}, fullname = {self.fullName}, specimennotes = {self.specimennotes}'

@@ -71,7 +71,7 @@ class Specimen(Model):
         self.storageRankName = ''
         self.prepTypeName = ''
         self.prepTypeId = 0
-        self.notes = ''
+        self.specimennotes = ''
         self.containername = ''
         self.containertype = ''
         self.institutionId = gs.institutionId  # self.db.getRowOnId('collection',collection_id)['institutionid']
@@ -148,7 +148,7 @@ class Specimen(Model):
             'objectcondition': f'{self.objectCondition}',
             'specimenobscured':f'{self.specimenObscured}',
             'labelobscured':f'{self.labelObscured}',
-            'notes': f'{self.notes}',
+            'specimennotes': f'{self.specimennotes}',
             'containername': f'{self.containername}',
             'containertype': f'{self.containertype}',
             'institutionid': f'{self.institutionId}',
@@ -212,7 +212,7 @@ class Specimen(Model):
             self.storageRankName = record['storagerankname']
             self.prepTypeName = record['preptypename']
             self.prepTypeId = record['preptypeid']
-            self.notes = record['notes']
+            self.specimennotes = record['specimennotes']
             self.containername = record['containername']
             self.containertype = record['containertype']
             self.institutionId = record['institutionid']
@@ -343,8 +343,6 @@ class Specimen(Model):
             self.taxonNumber = record['idnumber']
             self.taxonNrSource = record['taxonnrsource']
             self.familyName = self.searchParentTaxon(self.taxonFullName, 140, self.collection.taxonTreeDefId)
-            pass
-            # self.notes = f"{self.notes} | {record['notes']}"
         else:
             # Empty record
             self.taxonNameId = 0
@@ -659,4 +657,4 @@ class Specimen(Model):
         return taxonFullName
 
     def __str__(self):
-        return f'[{self.table}] id:{self.id}, name:{self.name}, fullname = {self.fullName}, notes = {self.notes}'
+        return f'[{self.table}] id:{self.id}, name:{self.name}, fullname = {self.fullName}, specimennotes = {self.specimennotes}'
