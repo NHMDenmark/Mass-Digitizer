@@ -239,8 +239,8 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.cbxPrepType.currentIndexChanged.connect(self.on_cbxPrepType_currentIndexChanged)
         self.ui.cbxTypeStatus.currentIndexChanged.connect(self.on_cbxTypeStatus_currentIndexChanged)
         self.ui.cbxGeoRegion.currentIndexChanged.connect(self.on_cbxGeoRegion_currentIndexChanged)
-        self.ui.inpLocalityNotes.returnPressed.connect(self.on_locality_notes_input)
-        self.ui.inpLocalityNotes.textChanged.connect(self.on_locality_notes_input)
+        self.ui.inpLocalityNotes.returnPressed.connect(self.on_locality_notes_return_pressed)
+        self.ui.inpLocalityNotes.textChanged.connect(self.on_locality_notes_text_changed)
         self.ui.inpTaxonName.returnPressed.connect(self.on_inpTaxonName_return_pressed)
         self.ui.chkDamage.clicked.connect(self.on_chkDamage_clicked)
         self.ui.chkSpecimenObscured.clicked.connect(self.on_chkSpecimenObscured_clicked)
@@ -319,13 +319,25 @@ class SpecimenDataEntryUI(QMainWindow):
         else:
             self.ui.cbxPrepType.setFocus()
 
-    def on_cbxPrepType_currentIndexChanged(self): self.collobj.setPrepTypeFields(self.ui.cbxPrepType.currentIndex() - 1)
+    def on_cbxPrepType_currentIndexChanged(self): 
+        self.collobj.setPrepTypeFields(self.ui.cbxPrepType.currentIndex() - 1)
+        if self.fast_entry_mode: self.ui.inpCatalogNumber.setFocus()
 
-    def on_cbxTypeStatus_currentIndexChanged(self): self.collobj.setTypeStatusFields(self.ui.cbxTypeStatus.currentIndex() - 1)
+    def on_cbxTypeStatus_currentIndexChanged(self): 
+        self.collobj.setTypeStatusFields(self.ui.cbxTypeStatus.currentIndex() - 1)
+        if self.fast_entry_mode: self.ui.inpCatalogNumber.setFocus()
 
-    def on_cbxGeoRegion_currentIndexChanged(self): self.collobj.setGeoRegionFields(self.ui.cbxGeoRegion.currentIndex() - 1)
+    def on_cbxGeoRegion_currentIndexChanged(self): 
+        self.collobj.setGeoRegionFields(self.ui.cbxGeoRegion.currentIndex() - 1)
+        if self.fast_entry_mode: self.ui.inpCatalogNumber.setFocus()
 
-    def on_locality_notes_input(self): self.collobj.localityNotes = self.ui.inpLocalityNotes.text()
+    def on_locality_notes_text_changed(self): 
+        self.collobj.localityNotes = self.ui.inpLocalityNotes.text()
+
+    def on_locality_notes_return_pressed(self):
+        self.collobj.localityNotes = self.ui.inpLocalityNotes.text()
+        if self.fast_entry_mode:
+            self.ui.inpCatalogNumber.setFocus()
 
     def on_inpTaxonName_return_pressed(self): 
         """
