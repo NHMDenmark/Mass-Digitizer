@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1080</width>
-    <height>750</height>
+    <height>697</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -16,16 +16,10 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <property name="minimumSize">
-   <size>
-    <width>1080</width>
-    <height>750</height>
-   </size>
-  </property>
   <property name="maximumSize">
    <size>
-    <width>1200</width>
-    <height>960</height>
+    <width>1280</width>
+    <height>800</height>
    </size>
   </property>
   <property name="font">
@@ -127,6 +121,18 @@
    </string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>5</number>
+   </property>
+   <property name="topMargin">
+    <number>5</number>
+   </property>
+   <property name="rightMargin">
+    <number>5</number>
+   </property>
+   <property name="bottomMargin">
+    <number>5</number>
+   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayoutHeader">
      <item>
@@ -156,82 +162,88 @@
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayoutMeta">
-       <item>
-        <layout class="QFormLayout" name="formLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="lblUserName">
-           <property name="text">
-            <string>Logged in as:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="lblInstitution">
-           <property name="text">
-            <string>Institution:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="lblCollection">
-           <property name="text">
-            <string>Collection:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="lblVersion">
-           <property name="text">
-            <string>Version number:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="txtUserName">
-           <property name="text">
-            <string>-not set-</string>
-           </property>
-           <property name="class" stdset="0">
-            <string>QLabelMetaInfo</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLabel" name="txtInstitution">
-           <property name="text">
-            <string>-not set-</string>
-           </property>
-           <property name="class" stdset="0">
-            <string>QLabelMetaInfo</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLabel" name="txtCollection">
-           <property name="text">
-            <string>-not set-</string>
-           </property>
-           <property name="class" stdset="0">
-            <string>QLabelMetaInfo</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QLabel" name="txtVersionNr">
-           <property name="text">
-            <string>-not set-</string>
-           </property>
-           <property name="class" stdset="0">
-            <string>QLabelMetaInfo</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="1" column="0">
+        <widget class="QLabel" name="lblVersion">
+         <property name="text">
+          <string>Version number:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLabel" name="lblCollection">
+         <property name="text">
+          <string>Collection:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLabel" name="lblInstitution">
+         <property name="text">
+          <string>Institution:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLabel" name="txtVersionNr">
+         <property name="text">
+          <string>-not set-</string>
+         </property>
+         <property name="class" stdset="0">
+          <string>QLabelMetaInfo</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QLabel" name="txtCollection">
+         <property name="text">
+          <string>-not set-</string>
+         </property>
+         <property name="class" stdset="0">
+          <string>QLabelMetaInfo</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="txtUserName">
+         <property name="text">
+          <string>-not set-</string>
+         </property>
+         <property name="class" stdset="0">
+          <string>QLabelMetaInfo</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QLabel" name="txtInstitution">
+         <property name="text">
+          <string>-not set-</string>
+         </property>
+         <property name="class" stdset="0">
+          <string>QLabelMetaInfo</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="lblUserName">
+         <property name="text">
+          <string>Logged in as:</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line">
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="layoutDataEntryModes">
@@ -314,6 +326,12 @@
    </item>
    <item>
     <widget class="QFrame" name="frmGreenArea">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>225</height>
+      </size>
+     </property>
      <property name="frameShape">
       <enum>QFrame::Shape::StyledPanel</enum>
      </property>
@@ -325,10 +343,13 @@
        <number>5</number>
       </property>
       <property name="leftMargin">
-       <number>10</number>
+       <number>5</number>
       </property>
       <property name="topMargin">
-       <number>10</number>
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>5</number>
       </property>
       <property name="bottomMargin">
        <number>0</number>
@@ -399,7 +420,13 @@
             <property name="minimumSize">
              <size>
               <width>0</width>
-              <height>20</height>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>600</width>
+              <height>50</height>
              </size>
             </property>
             <property name="text">
@@ -533,6 +560,12 @@
    </item>
    <item>
     <widget class="QFrame" name="frmBlueArea">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>370</height>
+      </size>
+     </property>
      <property name="frameShape">
       <enum>QFrame::Shape::StyledPanel</enum>
      </property>
@@ -540,6 +573,21 @@
       <enum>QFrame::Shadow::Raised</enum>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayoutBlueArea">
+      <property name="spacing">
+       <number>5</number>
+      </property>
+      <property name="leftMargin">
+       <number>5</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>5</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
       <item>
        <layout class="QVBoxLayout" name="verticalLayoutBlueAreaLeft">
         <item>

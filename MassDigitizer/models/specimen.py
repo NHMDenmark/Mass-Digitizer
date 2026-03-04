@@ -574,8 +574,9 @@ class Specimen(Model):
 
             # Check for subgenus; If present, the subgenus is the second element enclosed by parentheses 
             subgenusCount = 0
-            if taxonNameSplit[1][1] == '(': 
-                subgenusCount = 1 # The subgenus adds another element to the total count 
+            if elementCount > 1:
+                if taxonNameSplit[1][1] == '(': 
+                    subgenusCount = 1 # The subgenus adds another element to the total count 
 
             # Look for distinctive string patterns indicating rank 
             if ' var. ' in taxonName:
