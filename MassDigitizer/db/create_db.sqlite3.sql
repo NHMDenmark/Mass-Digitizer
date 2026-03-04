@@ -63,7 +63,7 @@ CREATE TABLE "specimen" (
 	"taxonnrsource"	TEXT,
 	"typestatusname"	TEXT,
 	"typestatusid"	NUMERIC,
-	"taxonomyuncertain"	INTEGER,
+	"taxonomyuncertain"	TEXT,
 	"georegionname"	TEXT,
 	"georegionsource"	TEXT,
 	"georegionid"	INTEGER,
