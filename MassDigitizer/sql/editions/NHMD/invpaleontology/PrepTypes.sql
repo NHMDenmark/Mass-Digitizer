@@ -1,0 +1,17 @@
+INSERT INTO preptype ("spid","name","collectionid") VALUES 
+(36,"Jar", (SELECT id FROM collection WHERE spid = 327682 AND institutionid = 1)),
+(228,"Specimen in matrix", (SELECT id FROM collection WHERE spid = 327682 AND institutionid = 1)),
+(231,"Cast", (SELECT id FROM collection WHERE spid = 327682 AND institutionid = 1)),
+(232,"Impression", (SELECT id FROM collection WHERE spid = 327682 AND institutionid = 1)),
+(233,"Matrix residue", (SELECT id FROM collection WHERE spid = 327682 AND institutionid = 1)),
+(234,"Matrix sample", (SELECT id FROM collection WHERE spid = 327682 AND institutionid = 1)),
+(235,"Microfossil slide", (SELECT id FROM collection WHERE spid = 327682 AND institutionid = 1)),
+(236,"SEM stub", (SELECT id FROM collection WHERE spid = 327682 AND institutionid = 1)),
+(237,"Smear section", (SELECT id FROM collection WHERE spid = 327682 AND institutionid = 1)),
+(238,"Specimen", (SELECT id FROM collection WHERE spid = 327682 AND institutionid = 1)),
+(239,"Thin section", (SELECT id FROM collection WHERE spid = 327682 AND institutionid = 1)),
+(240,"Trace fossil", (SELECT id FROM collection WHERE spid = 327682 AND institutionid = 1)),
+(241,"Sorted container - partially digitized", (SELECT id FROM collection WHERE spid = 327682 AND institutionid = 1)),
+(242,"Sorted container - fully digitized", (SELECT id FROM collection WHERE spid = 327682 AND institutionid = 1)),
+(243,"Unsorted container - partially digitized", (SELECT id FROM collection WHERE spid = 327682 AND institutionid = 1)),
+(244,"Unsorted container - fully digitized", (SELECT id FROM collection WHERE spid = 327682 AND institutionid = 1));

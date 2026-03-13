@@ -1,5 +1,19 @@
+WITH 
+-- CHOOSE COLLECTION BY COMMENTING OUT THE OTHER SELECT STATEMENT
 
-WITH t1 AS (
+-- NHMD Vascular Plants:
+-- cfg AS (SELECT 688130 AS spid), 
+	 
+-- NHMD Invertebrate Palaeontology:
+cfg AS (SELECT 327682 AS spid), 
+
+-- NHMD Vascular Plants:
+-- arr AS (SELECT 81648 AS val UNION ALL SELECT 89805 UNION ALL SELECT 372531 UNION ALL SELECT 1433),
+
+-- NHMD Invertebrate Palaeontology:
+arr AS (SELECT 414099 AS val),
+
+t1 AS (
   /* Room (RankID 200 at st2) */
   SELECT 
     CONCAT_WS(' | ', st1.Name, st2.Name) AS stor,
@@ -14,7 +28,7 @@ WITH t1 AS (
   FROM storage AS st1
   LEFT JOIN storage AS st2 ON st2.ParentID = st1.StorageID
   LEFT JOIN storagetreedefitem stdi ON st2.RankID = stdi.RankID
-  WHERE st2.StorageID IN (81648, 89805, 372531, 1433)
+  WHERE st2.StorageID IN (SELECT val FROM arr)
     AND stdi.RankID = 200
 
   UNION ALL
@@ -34,7 +48,7 @@ WITH t1 AS (
   LEFT JOIN storage AS st2 ON st2.ParentID = st1.StorageID
   LEFT JOIN storage AS st3 ON st3.ParentID = st2.StorageID
   LEFT JOIN storagetreedefitem stdi ON st3.RankID = stdi.RankID
-  WHERE st2.StorageID IN (81648, 89805, 372531, 1433)
+  WHERE st2.StorageID IN (SELECT val FROM arr)
     AND stdi.RankID = 250
 
   UNION ALL
@@ -55,7 +69,7 @@ WITH t1 AS (
   LEFT JOIN storage AS st3 ON st3.ParentID = st2.StorageID
   LEFT JOIN storage AS st4 ON st4.ParentID = st3.StorageID
   LEFT JOIN storagetreedefitem AS stdi ON st4.RankID = stdi.RankID
-  WHERE st2.StorageID IN (81648, 89805, 372531, 1433)
+  WHERE st2.StorageID IN (SELECT val FROM arr)
     AND stdi.RankID = 300
 
   UNION ALL
@@ -76,7 +90,7 @@ WITH t1 AS (
   LEFT JOIN storage AS st3 ON st3.ParentID = st2.StorageID
   LEFT JOIN storage AS st4 ON st4.ParentID = st3.StorageID
   LEFT JOIN storagetreedefitem AS stdi ON st4.RankID = stdi.RankID
-  WHERE st2.StorageID IN (81648, 89805, 372531, 1433)
+  WHERE st2.StorageID IN (SELECT val FROM arr)
     AND stdi.RankID = 350
 
   UNION ALL
@@ -98,7 +112,7 @@ WITH t1 AS (
   LEFT JOIN storage AS st4 ON st4.ParentID = st3.StorageID
   LEFT JOIN storage AS st5 ON st5.ParentID = st4.StorageID
   LEFT JOIN storagetreedefitem AS stdi ON st5.RankID = stdi.RankID
-  WHERE st2.StorageID IN (81648, 89805, 372531, 1433)
+  WHERE st2.StorageID IN (SELECT val FROM arr)
     AND stdi.RankID = 350
 
   UNION ALL
@@ -120,7 +134,7 @@ WITH t1 AS (
   LEFT JOIN storage AS st4 ON st4.ParentID = st3.StorageID
   LEFT JOIN storage AS st5 ON st5.ParentID = st4.StorageID
   LEFT JOIN storagetreedefitem AS stdi ON st5.RankID = stdi.RankID
-  WHERE st2.StorageID IN (81648, 89805, 372531, 1433)
+  WHERE st2.StorageID IN (SELECT val FROM arr)
     AND stdi.RankID = 450
 
   UNION ALL
@@ -141,49 +155,45 @@ WITH t1 AS (
   LEFT JOIN storage AS st3 ON st3.ParentID = st2.StorageID
   LEFT JOIN storage AS st4 ON st4.ParentID = st3.StorageID
   LEFT JOIN storagetreedefitem AS stdi ON st4.RankID = stdi.RankID
-  WHERE st2.StorageID IN (81648, 89805, 372531, 1433)
+  WHERE st2.StorageID IN (SELECT val FROM arr)
     AND stdi.RankID = 450
-    
-    
-	UNION ALL
-	
-	/* Box under Aisle (RankID 400 at st4) */
-	SELECT 
-	  CONCAT_WS(' | ',
-	    st1.Name,
-	    st2.Name,
-	    st3.Name,
-	    CONCAT('Box ', st4.Name)
-	  ) AS stor,
-	  stdi.Name AS rank_name,
-	  stdi.RankID AS rank_id,
-	  CONCAT('Box ', st4.Name) AS unit,
-	  st4.StorageID,
-	  stdi.Name AS rankname,
-	  st4.Name AS index_,
-	  st2.Name AS sort_coll,
-	  CAST(REGEXP_REPLACE(st4.Name, '[^0-9]', '') AS UNSIGNED) AS sort_unit
-	FROM storage AS st1
-	LEFT JOIN storage AS st2 ON st2.ParentID = st1.StorageID       -- Room
-	LEFT JOIN storage AS st3 ON st3.ParentID = st2.StorageID       -- Aisle
-	LEFT JOIN storage AS st4 ON st4.ParentID = st3.StorageID       -- Box
-	LEFT JOIN storagetreedefitem AS stdi ON st4.RankID = stdi.RankID
-	WHERE st2.StorageID IN (81648, 89805, 372531, 1433)
-	  AND stdi.RankID = 400  -- Box
+
+  UNION ALL
+
+  /* Box under Aisle (RankID 400 at st4) */
+  SELECT 
+    CONCAT_WS(' | ', st1.Name, st2.Name, st3.Name, CONCAT('Box ', st4.Name)) AS stor,
+    stdi.Name AS rank_name,
+    stdi.RankID AS rank_id,
+    CONCAT('Box ', st4.Name) AS unit,
+    st4.StorageID,
+    stdi.Name AS rankname,
+    st4.Name AS index_,
+    st2.Name AS sort_coll,
+    CAST(REGEXP_REPLACE(st4.Name, '[^0-9]', '') AS UNSIGNED) AS sort_unit
+  FROM storage AS st1
+  LEFT JOIN storage AS st2 ON st2.ParentID = st1.StorageID
+  LEFT JOIN storage AS st3 ON st3.ParentID = st2.StorageID
+  LEFT JOIN storage AS st4 ON st4.ParentID = st3.StorageID
+  LEFT JOIN storagetreedefitem AS stdi ON st4.RankID = stdi.RankID
+  WHERE st2.StorageID IN (SELECT val FROM arr)
+    AND stdi.RankID = 400
 ),
+
 prepared AS (
   SELECT
     CONCAT(
       '("', unit, '", ',
       '"', stor, '", ',
       '"', rank_name, '", ',
-      '(SELECT id FROM collection WHERE spid = 688130 AND institutionid = 1))'
+      CONCAT('(SELECT id FROM collection WHERE spid = ', cfg.spid ,' AND institutionid = 1)),')
     ) AS storage_,
     sort_coll,
     sort_unit,
     rank_id
-  FROM t1
+  FROM t1, cfg
 ),
+
 dedup AS (
   SELECT
     storage_,
@@ -196,6 +206,7 @@ dedup AS (
     ) AS rn
   FROM prepared
 )
+
 SELECT storage_
 FROM dedup
 WHERE rn = 1

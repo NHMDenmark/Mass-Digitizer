@@ -23,8 +23,15 @@ if %errorlevel% neq 0 (
 echo New database created.
 
 REM Define editions and SQL files
-set editions=NHMD\tracheophyta NHMD\entomology NHMA\entomology
+set editions=NHMD\tracheophyta NHMD\entomology NHMA\entomology NHMD\invpaleontology
 set sqlfiles=PrepTypes TypeStatuses GeoRegions Storage Highertaxa Species-Batch1 Species-Batch2 Species-Batch3 Species-Batch4 Subspecies VarForma-Batch1 VarForma-Batch2 Hybrids
+
+REM Add base tables 
+REM echo **** Adding base tables ****
+REM sqlite3 db.sqlite3 ".read ../../InsertInstitutions.sql"
+REM sqlite3 db.sqlite3 ".read ../../InsertCollections.sql"
+REM sqlite3 db.sqlite3 ".read ../../CreateVirtualTableTaxonNameFTS.sql"
+REM echo Done.
 
 REM Process each edition and SQL file
 for %%e in (%editions%) do (
