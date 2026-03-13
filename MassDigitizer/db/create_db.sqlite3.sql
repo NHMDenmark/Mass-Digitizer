@@ -1,4 +1,17 @@
 BEGIN TRANSACTION;
+DROP TABLE IF EXISTS "chronostratigraphy";
+CREATE TABLE "chronostratigraphy" (
+	"id"	INTEGER,
+	"spid"	INTEGER,
+	"name"	TEXT,
+	"fullname"	TEXT,
+	"parentfullname"	TEXT,
+	"collectionid"	INTEGER,
+	"treedefid"	INTEGER,
+	"rankname"	TEXT,
+	"rankid"	INTEGER,
+	PRIMARY KEY("id")
+);
 DROP TABLE IF EXISTS "collection";
 CREATE TABLE "collection" (
 	"id"	INTEGER NOT NULL UNIQUE,
@@ -93,6 +106,10 @@ CREATE TABLE "specimen" (
 	"agentfirstname"	TEXT,
 	"agentmiddleinitial"	TEXT,
 	"agentlastname"	TEXT,
+	"chronostratigraphyfullname"	TEXT,
+	"chronostratigraphyname"	TEXT,
+	"chronostratigraphyid"	INTEGER,
+	"chronostratigraphyrankname"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT),
 	FOREIGN KEY("collectionid") REFERENCES "collection"("id"),
 	FOREIGN KEY("institutionid") REFERENCES "institution"("id")
@@ -166,7 +183,7 @@ CREATE TABLE "user" (
 );
 INSERT INTO "collection" ("id","spid","name","institutionid","taxontreedefid","visible","catalognrlength","usetaxonnumbers") VALUES (1,4,'NHMD Vertebrate Paleontology',1,1,0,9,NULL),
  (2,163841,'NHMD Entomology',1,5,1,9,NULL),
- (3,327682,'NHMD Invertebrate Paleontology',1,7,0,9,NULL),
+ (3,327682,'NHMD Invertebrate Paleontology',1,7,1,9,NULL),
  (4,425985,'NHMD Invertebrate Zoology',1,9,0,9,NULL),
  (5,458754,'NHMD Ornithology',1,10,0,9,NULL),
  (6,491522,'NHMD Mammalogy',1,11,0,9,NULL),

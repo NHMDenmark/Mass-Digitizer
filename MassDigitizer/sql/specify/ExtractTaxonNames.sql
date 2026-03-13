@@ -2,17 +2,16 @@
   --    Add to top:
   --       INSERT INTO taxonname (spid,name,author,fullname,rankid,taxonRank,treedefid,institutionid,parentfullname,idnumber,taxonnrsource) VALUES 
   SELECT
-	 CONCAT('(', t.TaxonID, ',"', t.Name, '","', COALESCE(t.author,'') , '","', 
-	 
+	 CONCAT('(', t.TaxonID, ',"', t.Name, '","', COALESCE(t.author,'') , '","', 	 
     TRIM(CONCAT(t.FullName, ' ', COALESCE(t.author,''))), 
---	 t.FullName, -- For higher taxa: Don't include author name 
-	 
+--	 t.FullName, -- For higher taxa: Don't include author name 	 
 	 '",', t.RankID ,',"', ttd.Name ,'",', 
 	 t.TaxonTreeDefID, 
 	 ',1', ',"', -- institutionid: '1' for NHMD, '2' for NHMA ... 
 	 p1.FullName, '","', COALESCE(t.text1,''), '","', COALESCE(t.text2,''), '"), ' ) 
 	 sqlstatement 
-    -- , t.TaxonID, t.Name, t.author, t.FullName, t.RankID rankid, ttd.Name rankname, t.TaxonTreeDefID treedefid, '2' institutionid, p1.FullName parentfullname, t.text1 taxonnr, t.text2 taxonnrsource 
+--    , t.TaxonID, t.Name, t.author, t.FullName, t.RankID rankid, ttd.Name rankname, t.TaxonTreeDefID treedefid, '2' institutionid, p1.FullName parentfullname, t.text1 taxonnr, t.text2 taxonnrsource
+--    , t.FullName, p1.FullName, p2.FullName IN  ('Echinoidea'), p3.FullName IN ('Echinoidea'), p4.FullName IN ('Echinoidea') 
  FROM taxon t
 	LEFT JOIN taxon p1 ON p1.TaxonID = t.ParentID
 	LEFT JOIN taxon p2 ON p2.TaxonID = p1.ParentID
@@ -21,15 +20,15 @@
 	LEFT JOIN taxontreedefitem ttd ON t.rankID = ttd.RankID AND t.TaxonTreeDefID = ttd.TaxonTreeDefID
 
 	WHERE
-		t.taxontreedefid = 5 -- 13 for NHMD Botany, 5 for NHMD Entomology, 2 for NHMA Entomology
+		t.taxontreedefid = 1 -- 13 for NHMD Botany, 5 for NHMD Entomology, 1 for NHMD Invertebrate Paleontology, 2 for NHMA Entomology
 -- The following lines filter on taxon rank and should be adjusted accordingly
 		-- AND t.RankID > 230 -- VarForma 
 		-- AND t.RankID = 230 -- Subspecies
 		-- AND t.RankID = 220 -- Species
-		 AND t.RankID <= 190   -- Highertaxa (including Genus & Subgenus) 
-		
+		-- AND t.RankID <= 190   -- Highertaxa (including Genus & Subgenus) 
+
 -- The following lines are needed to restrict the taxa pulled out for NHMD Entomology 
-  
+/*  
  		AND (t.FullName IN ('Animalia', 'Arthropoda', 'Hexapoda', 'Insecta', 'Lepidoptera', 'Coleoptera', 
 		                    'Aderidae','Agyrtidae','Alexiidae','Anthicidae','Anthribidae','Apionidae','Attelabidae','Biphyllidae','Bolboceratidae','Bostrichidae','Bothrideridae','Buprestidae','Byrrhidae','Byturidae','Cantharidae','Carabidae','Cerambycidae','Cerylonidae','Chrysomelidae','Ciidae','Clambidae','Cleridae','Coccinellidae','Corylophidae','Cryptophagidae','Cucujidae','Curculionidae','Dascillidae','Dasytidae','Dermestidae','Derodontidae','Drilidae','Dryopidae','Dytiscidae','Elateridae','Elmidae','Endomychidae','Erotylidae','Eucinetidae','Eucnemidae','Georissidae','Geotrupidae','Gyrinidae','Haliplidae','Helophoridae','Heteroceridae','Histeridae','Hydraenidae','Hydrochidae','Hydrophilidae','Hygrobiidae','Kateretidae','Laemophloeidae','Lampyridae','Latridiidae','Leiodidae','Limnichidae','Lucanidae','Lycidae','Lymexylidae','Malachiidae','Megalopodidae','Melandryidae','Meloidae','Microsporidae','Monotomidae','Mordellidae','Mycetophagidae','Nanophyidae','Nemonychidae','Nitidulidae','Nosodendridae','Noteridae','Oedemeridae','Orsodacnidae','Phalacridae','Phloeostichidae','Phloiophilidae','Prostomidae','Psephenidae','Ptiliidae','Ptinidae','Pyrochroidae','Pythidae','Rhynchitidae','Ripiphoridae','Salpingidae','Scarabaeidae','Scirtidae','Scraptiidae','Silphidae','Silvanidae','Spercheidae','Sphaeritidae','Sphindidae','Staphylinidae','Tenebrionidae','Tetratomidae','Throscidae','Trogidae','Trogossitidae','Zopheridae','Adelidae','Alucitidae','Argyresthiidae','Autostichidae','Batrachedridae','Bedelliidae','Blastobasidae','Bombycidae','Brahmaeidae','Bucculatricidae','Castniidae','Chimabachidae','Choreutidae','Coleophoridae','Cosmopterigidae','Cossidae','Crambidae','Depressariidae','Douglasiidae','Drepanidae','Elachistidae','Endromidae','Epermeniidae','Erebidae','Eriocraniidae','Ethmiidae','Euteliidae','Gelechiidae','Geometridae','Glyphipterigidae','Gracillariidae','Heliozelidae','Hepialidae','Hesperiidae','Incurvariidae','Lasiocampidae','Limacodidae','Lycaenidae','Lyonetiidae','Lypusidae','Micropterigidae','Momphidae','Nepticulidae','Noctuidae','Nolidae','Notodontidae','Nymphalidae','Oecophoridae','Opostegidae','Papilionidae','Parametriotidae','Peleopodidae','Pieridae','Plutellidae','Praydidae','Prodoxidae','Psychidae','Pterophoridae','Pyralidae','Riodinidae','Roeslerstammiidae','Saturniidae','Schreckensteiniidae','Scythrididae','Sesiidae','Sphingidae','Stathmopodidae','Tineidae','Tischeriidae','Tortricidae','Urodidae','Yponomeutidae','Ypsolophidae','Zygaenidae')
  		OR  p1.FullName IN ('Aderidae','Agyrtidae','Alexiidae','Anthicidae','Anthribidae','Apionidae','Attelabidae','Biphyllidae','Bolboceratidae','Bostrichidae','Bothrideridae','Buprestidae','Byrrhidae','Byturidae','Cantharidae','Carabidae','Cerambycidae','Cerylonidae','Chrysomelidae','Ciidae','Clambidae','Cleridae','Coccinellidae','Corylophidae','Cryptophagidae','Cucujidae','Curculionidae','Dascillidae','Dasytidae','Dermestidae','Derodontidae','Drilidae','Dryopidae','Dytiscidae','Elateridae','Elmidae','Endomychidae','Erotylidae','Eucinetidae','Eucnemidae','Georissidae','Geotrupidae','Gyrinidae','Haliplidae','Helophoridae','Heteroceridae','Histeridae','Hydraenidae','Hydrochidae','Hydrophilidae','Hygrobiidae','Kateretidae','Laemophloeidae','Lampyridae','Latridiidae','Leiodidae','Limnichidae','Lucanidae','Lycidae','Lymexylidae','Malachiidae','Megalopodidae','Melandryidae','Meloidae','Microsporidae','Monotomidae','Mordellidae','Mycetophagidae','Nanophyidae','Nemonychidae','Nitidulidae','Nosodendridae','Noteridae','Oedemeridae','Orsodacnidae','Phalacridae','Phloeostichidae','Phloiophilidae','Prostomidae','Psephenidae','Ptiliidae','Ptinidae','Pyrochroidae','Pythidae','Rhynchitidae','Ripiphoridae','Salpingidae','Scarabaeidae','Scirtidae','Scraptiidae','Silphidae','Silvanidae','Spercheidae','Sphaeritidae','Sphindidae','Staphylinidae','Tenebrionidae','Tetratomidae','Throscidae','Trogidae','Trogossitidae','Zopheridae','Adelidae','Alucitidae','Argyresthiidae','Autostichidae','Batrachedridae','Bedelliidae','Blastobasidae','Bombycidae','Brahmaeidae','Bucculatricidae','Castniidae','Chimabachidae','Choreutidae','Coleophoridae','Cosmopterigidae','Cossidae','Crambidae','Depressariidae','Douglasiidae','Drepanidae','Elachistidae','Endromidae','Epermeniidae','Erebidae','Eriocraniidae','Ethmiidae','Euteliidae','Gelechiidae','Geometridae','Glyphipterigidae','Gracillariidae','Heliozelidae','Hepialidae','Hesperiidae','Incurvariidae','Lasiocampidae','Limacodidae','Lycaenidae','Lyonetiidae','Lypusidae','Micropterigidae','Momphidae','Nepticulidae','Noctuidae','Nolidae','Notodontidae','Nymphalidae','Oecophoridae','Opostegidae','Papilionidae','Parametriotidae','Peleopodidae','Pieridae','Plutellidae','Praydidae','Prodoxidae','Psychidae','Pterophoridae','Pyralidae','Riodinidae','Roeslerstammiidae','Saturniidae','Schreckensteiniidae','Scythrididae','Sesiidae','Sphingidae','Stathmopodidae','Tineidae','Tischeriidae','Tortricidae','Urodidae','Yponomeutidae','Ypsolophidae','Zygaenidae')
@@ -37,7 +36,7 @@
  		OR  p3.FullName IN ('Aderidae','Agyrtidae','Alexiidae','Anthicidae','Anthribidae','Apionidae','Attelabidae','Biphyllidae','Bolboceratidae','Bostrichidae','Bothrideridae','Buprestidae','Byrrhidae','Byturidae','Cantharidae','Carabidae','Cerambycidae','Cerylonidae','Chrysomelidae','Ciidae','Clambidae','Cleridae','Coccinellidae','Corylophidae','Cryptophagidae','Cucujidae','Curculionidae','Dascillidae','Dasytidae','Dermestidae','Derodontidae','Drilidae','Dryopidae','Dytiscidae','Elateridae','Elmidae','Endomychidae','Erotylidae','Eucinetidae','Eucnemidae','Georissidae','Geotrupidae','Gyrinidae','Haliplidae','Helophoridae','Heteroceridae','Histeridae','Hydraenidae','Hydrochidae','Hydrophilidae','Hygrobiidae','Kateretidae','Laemophloeidae','Lampyridae','Latridiidae','Leiodidae','Limnichidae','Lucanidae','Lycidae','Lymexylidae','Malachiidae','Megalopodidae','Melandryidae','Meloidae','Microsporidae','Monotomidae','Mordellidae','Mycetophagidae','Nanophyidae','Nemonychidae','Nitidulidae','Nosodendridae','Noteridae','Oedemeridae','Orsodacnidae','Phalacridae','Phloeostichidae','Phloiophilidae','Prostomidae','Psephenidae','Ptiliidae','Ptinidae','Pyrochroidae','Pythidae','Rhynchitidae','Ripiphoridae','Salpingidae','Scarabaeidae','Scirtidae','Scraptiidae','Silphidae','Silvanidae','Spercheidae','Sphaeritidae','Sphindidae','Staphylinidae','Tenebrionidae','Tetratomidae','Throscidae','Trogidae','Trogossitidae','Zopheridae','Adelidae','Alucitidae','Argyresthiidae','Autostichidae','Batrachedridae','Bedelliidae','Blastobasidae','Bombycidae','Brahmaeidae','Bucculatricidae','Castniidae','Chimabachidae','Choreutidae','Coleophoridae','Cosmopterigidae','Cossidae','Crambidae','Depressariidae','Douglasiidae','Drepanidae','Elachistidae','Endromidae','Epermeniidae','Erebidae','Eriocraniidae','Ethmiidae','Euteliidae','Gelechiidae','Geometridae','Glyphipterigidae','Gracillariidae','Heliozelidae','Hepialidae','Hesperiidae','Incurvariidae','Lasiocampidae','Limacodidae','Lycaenidae','Lyonetiidae','Lypusidae','Micropterigidae','Momphidae','Nepticulidae','Noctuidae','Nolidae','Notodontidae','Nymphalidae','Oecophoridae','Opostegidae','Papilionidae','Parametriotidae','Peleopodidae','Pieridae','Plutellidae','Praydidae','Prodoxidae','Psychidae','Pterophoridae','Pyralidae','Riodinidae','Roeslerstammiidae','Saturniidae','Schreckensteiniidae','Scythrididae','Sesiidae','Sphingidae','Stathmopodidae','Tineidae','Tischeriidae','Tortricidae','Urodidae','Yponomeutidae','Ypsolophidae','Zygaenidae')
  		OR  p4.FullName IN ('Aderidae','Agyrtidae','Alexiidae','Anthicidae','Anthribidae','Apionidae','Attelabidae','Biphyllidae','Bolboceratidae','Bostrichidae','Bothrideridae','Buprestidae','Byrrhidae','Byturidae','Cantharidae','Carabidae','Cerambycidae','Cerylonidae','Chrysomelidae','Ciidae','Clambidae','Cleridae','Coccinellidae','Corylophidae','Cryptophagidae','Cucujidae','Curculionidae','Dascillidae','Dasytidae','Dermestidae','Derodontidae','Drilidae','Dryopidae','Dytiscidae','Elateridae','Elmidae','Endomychidae','Erotylidae','Eucinetidae','Eucnemidae','Georissidae','Geotrupidae','Gyrinidae','Haliplidae','Helophoridae','Heteroceridae','Histeridae','Hydraenidae','Hydrochidae','Hydrophilidae','Hygrobiidae','Kateretidae','Laemophloeidae','Lampyridae','Latridiidae','Leiodidae','Limnichidae','Lucanidae','Lycidae','Lymexylidae','Malachiidae','Megalopodidae','Melandryidae','Meloidae','Microsporidae','Monotomidae','Mordellidae','Mycetophagidae','Nanophyidae','Nemonychidae','Nitidulidae','Nosodendridae','Noteridae','Oedemeridae','Orsodacnidae','Phalacridae','Phloeostichidae','Phloiophilidae','Prostomidae','Psephenidae','Ptiliidae','Ptinidae','Pyrochroidae','Pythidae','Rhynchitidae','Ripiphoridae','Salpingidae','Scarabaeidae','Scirtidae','Scraptiidae','Silphidae','Silvanidae','Spercheidae','Sphaeritidae','Sphindidae','Staphylinidae','Tenebrionidae','Tetratomidae','Throscidae','Trogidae','Trogossitidae','Zopheridae','Adelidae','Alucitidae','Argyresthiidae','Autostichidae','Batrachedridae','Bedelliidae','Blastobasidae','Bombycidae','Brahmaeidae','Bucculatricidae','Castniidae','Chimabachidae','Choreutidae','Coleophoridae','Cosmopterigidae','Cossidae','Crambidae','Depressariidae','Douglasiidae','Drepanidae','Elachistidae','Endromidae','Epermeniidae','Erebidae','Eriocraniidae','Ethmiidae','Euteliidae','Gelechiidae','Geometridae','Glyphipterigidae','Gracillariidae','Heliozelidae','Hepialidae','Hesperiidae','Incurvariidae','Lasiocampidae','Limacodidae','Lycaenidae','Lyonetiidae','Lypusidae','Micropterigidae','Momphidae','Nepticulidae','Noctuidae','Nolidae','Notodontidae','Nymphalidae','Oecophoridae','Opostegidae','Papilionidae','Parametriotidae','Peleopodidae','Pieridae','Plutellidae','Praydidae','Prodoxidae','Psychidae','Pterophoridae','Pyralidae','Riodinidae','Roeslerstammiidae','Saturniidae','Schreckensteiniidae','Scythrididae','Sesiidae','Sphingidae','Stathmopodidae','Tineidae','Tischeriidae','Tortricidae','Urodidae','Yponomeutidae','Ypsolophidae','Zygaenidae')
  		    )
-
+*/
  
 -- The following lines are needed to restrict the taxa pulled out for NHMHD Botany for Vascular Plants 
 /* 
@@ -49,8 +48,18 @@
  		    )
 */
 
+-- The following lines are needed to restrict the taxa pulled out for NHMD Invertebrate Paleontology 
+
+     AND (t.FullName IN ('Echinoidea', 'Echinodermata', 'Animalia')
+ 		OR p1.FullName IN  ('Echinoidea')
+ 		OR p2.FullName IN  ('Echinoidea')
+ 		OR p3.FullName IN ('Echinoidea')
+ 		OR p4.FullName IN ('Echinoidea')
+ 		)
+
  		-- Leave out any trash taxa: 
- 		AND t.Name NOT LIKE '%.%' AND t.Name NOT LIKE '%#%' AND t.Name NOT LIKE '%?%'  AND t.Name NOT LIKE '%:%' AND t.Name NOT LIKE '%*%'
+ 		AND t.Name NOT LIKE '%.%' AND t.Name NOT LIKE '%#%' AND t.Name NOT LIKE '%?%'  AND t.Name NOT LIKE '%:%' AND t.Name NOT LIKE '%*%' 
+		AND t.FullName NOT LIKE '%not on sheet%'
  		-- AND t.author COLLATE utf8mb3_bin NOT LIKE '%Ã¼%'
  		-- AND t.Author IS NOT NULL
       -- AND t.Author LIKE '%ü%'
