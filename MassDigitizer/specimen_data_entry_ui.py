@@ -627,12 +627,12 @@ class SpecimenDataEntryUI(QMainWindow):
                 # If so, prepare for new blank record
                 if newRecord:
                     # Create a new, blank specimen record (id pre-set to 0)
-                    self.collobj = specimen.Specimen(self.collectionId)                    
+                    self.collobj = specimen.Specimen(self.collectionId)  
 
                     # Transfer data in sticky fields to new record:
                     self.setSpecimenFields() 
                     self.fillFormFields()
-                    
+
                     # Prepare form for next new record
                     self.clearNonStickyFields()
             else:
@@ -736,11 +736,10 @@ class SpecimenDataEntryUI(QMainWindow):
         """
         if not storageFullName:
             storageFullName = self.ui.txtStorageFullname.text()
-
         try:
             storageRecords = self.db.getRowsOnFilters('storage', {'fullname': f'="{storageFullName}"', 'collectionid': f'={self.collectionId}'}, 1)
         except:
-            e = sys.exc_info()[0] + ' from getStorageRecord'
+            e = str(sys.exc_info()[0]) + ' from getStorageRecord'
             util.logger.error(e)
             return None
         if len(storageRecords) > 0:
@@ -845,7 +844,7 @@ class SpecimenDataEntryUI(QMainWindow):
         if taxonfullname != '':
             self.ui.inpTaxonName.setText(taxonfullname)
             if self.collobj.familyName == '': self.collobj.familyName = '-parent not found-'
-            self.ui.txtTaxonFullname.setText(taxonfullname + ' (' + self.collobj.familyName + ')')
+            self.ui.txtTaxonFullname.setText(taxonfullname.replace('_', ' ') + ' (' + self.collobj.familyName + ')')
         else: 
             self.ui.txtTaxonFullname.setText('-no taxon selected-')
             
