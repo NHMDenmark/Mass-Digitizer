@@ -51,6 +51,7 @@ class Specimen(Model):
         self.taxonNameId = 0
         self.taxonSpid = 0
         self.taxonDasscoId = 0
+        self.taxonRankId = 0
         self.taxonRankName = ''  # TODO
         self.familyName = ''  # TODO
         self.higherTaxonName = ''
@@ -128,7 +129,7 @@ class Specimen(Model):
             'taxonspid': f'{self.taxonSpid}',
             'taxondasscoid': f'{self.taxonDasscoId}',
             'highertaxonname': f'{self.higherTaxonName}',
-            'rankid': f'{self.rankid}',
+            'rankid': f'{self.taxonRankId}',
             'taxonrankname': f'{self.taxonRankName}',
             'taxonnumber': f'{self.taxonNumber}',
             'taxonnrsource': f'{self.taxonNrSource}',
@@ -192,7 +193,7 @@ class Specimen(Model):
             self.taxonSpid = record['taxonspid']
             self.taxonDasscoId = record['taxondasscoid']
             self.higherTaxonName = record['highertaxonname']
-            self.rankid = record['rankid']
+            self.taxonRankId = record['rankid']
             self.taxonRankName = record['taxonrankname']
             self.taxonNumber = record['taxonnumber']
             self.taxonNrSource = record['taxonnrsource']
@@ -235,15 +236,6 @@ class Specimen(Model):
         self.loadPredefinedData()
 
     # Specimen class specific functions
-
-    def setStickyFields(self, record):
-        """
-        Set all sticky fields for a given record
-        """
-
-        self.setStorageFields(record)
-        self.setPrepTypeFields(record)
-        self.setTaxonNameFields(record)
 
     def setPrepTypeFields(self, index):
         """
@@ -338,8 +330,8 @@ class Specimen(Model):
             self.taxonAuthor = record['author']
             self.taxonFullName = record['fullname']
             self.higherTaxonName = record['parentfullname']
-            self.rankid = record['rankid']  # TODO
-            self.taxonRankName = self.getTaxonRankname(self.rankid)
+            self.taxonRankId = record['rankid']  # TODO
+            self.taxonRankName = self.getTaxonRankname(self.taxonRankId)
             self.taxonNumber = record['idnumber']
             self.taxonNrSource = record['taxonnrsource']
             self.familyName = self.searchParentTaxon(self.taxonFullName, 140, self.collection.taxonTreeDefId)
@@ -352,7 +344,7 @@ class Specimen(Model):
             self.taxonAuthor = ''
             self.taxonFullName = ''
             self.higherTaxonName = ''
-            self.rankid = ''
+            self.taxonRankId = ''
             self.taxonRankName = ''
             self.taxonNumber = ''
             self.taxonNrSource = ''
@@ -403,7 +395,7 @@ class Specimen(Model):
             self.taxonName = record['name']
             self.taxonAuthor = record['author']
             self.taxonFullName = record['fullName']
-            self.rankid = record['rankid']  # TODO: taxonrankid
+            self.taxonRankId = record['rankid']  # TODO: taxonrankid
             self.taxonRankName = self.getTaxonRankname(record['rankid'])
             self.higherTaxonName = record['parentFullName']
             self.familyName = self.searchParentTaxon(self.taxonFullName, 140, self.collection.taxonTreeDefId)
@@ -430,7 +422,7 @@ class Specimen(Model):
             self.taxonName = object.name
             self.taxonAuthor = object.author
             self.taxonFullName = object.fullName
-            self.rankid = object.rankid  # TODO: taxonrankid
+            self.taxonRankId = object.rankid  # TODO: taxonrankid
             self.taxonRankName = self.getTaxonRankname(object.rankid)
             self.higherTaxonName = object.parentFullName
             self.familyName = self.searchParentTaxon(self.taxonFullName, 140, self.collection.taxonTreeDefId)
@@ -531,10 +523,13 @@ class Specimen(Model):
         self.taxonFullName = taxonFullName
 
         self.determineRank()
-        parentName = taxonFullName.split(' ')[0]  # Get genus name as parent name
-        self.familyName = self.searchParentTaxon(parentName, 140, self.collection.taxonTreeDefId, False) # Get family name by searching parent taxon of genus
+        if int(self.taxonRankId) >= 220:
+            parentName = taxonFullName.split(' ')[0]  # Get genus name as parent name
+            self.familyName = self.searchParentTaxon(parentName, 140, self.collection.taxonTreeDefId, False) # Get family name by searching parent taxon of genus
+        else: 
+            parentName = ''
         self.higherTaxonName = self.familyName
-        #print(f'New taxon handled: {self.taxonFullName}, rankid: {self.rankid}, family: {self.familyName}')
+        #print(f'New taxon handled: {self.taxonFullName}, rankid: {self.taxonRankId}, family: {self.familyName}')
         return self.taxonFullName
 
     def determineRank(self):
@@ -553,7 +548,7 @@ class Specimen(Model):
           taxonNameEntry (string) : Full taxon name entry to be analysed
         RETURNS rankid (int)      : Rank id number 
         """
-        self.rankid = 999 # default rank id value corresponding to no rank at all in case the analysis fails. 
+        self.taxonRankId = 999 # default rank id value corresponding to no rank at all in case the analysis fails. 
         taxonNameEntry = self.taxonFullName
         if taxonNameEntry is None or taxonNameEntry.strip() == '': return None
         try:
@@ -566,7 +561,7 @@ class Specimen(Model):
             taxonName = authorSplit[0].strip() # The first or only element is assumed to be the taxon name 
             self.taxonName = taxonName
             self.taxonAuthor = authorName
-            self.taxonFullName = taxonName + ' ' + authorName 
+            #self.taxonFullName = taxonName + ' ' + authorName 
 
             # Split taxon name in respective elements and get element count 
             taxonNameSplit = taxonName.strip().split(' ')
@@ -580,25 +575,25 @@ class Specimen(Model):
 
             # Look for distinctive string patterns indicating rank 
             if ' var. ' in taxonName:
-                self.rankid = 240 # Variety 
+                self.taxonRankId = 240 # Variety 
             elif ' subvar.  ' in taxonName:
-                self.rankid = 250 # Subvariety 
+                self.taxonRankId = 250 # Subvariety 
             elif ' f. ' in taxonName:
-                self.rankid = 260 # Forma 
+                self.taxonRankId = 260 # Forma 
             elif ' subf. ' in taxonName:
-                self.rankid = 270 # Subforma
+                self.taxonRankId = 270 # Subforma
             elif ' x ' in taxonName:
-                self.rankid = 220 # Hybrids are always of rank species 
+                self.taxonRankId = 220 # Hybrids are always of rank species 
             # Otherwise look for element count indicating rank:
             elif elementCount == 3 + subgenusCount:
-                self.rankid = 230 # Subspecies 
+                self.taxonRankId = 230 # Subspecies 
             elif elementCount == 2 + subgenusCount:
-                self.rankid = 220 # Species 
+                self.taxonRankId = 220 # Species 
             elif elementCount == 1 + subgenusCount:
-                self.rankid = 180 # Genus 
+                self.taxonRankId = 180 # Genus 
                 
             # Also set taxon rank name
-            self.taxonRankName = self.getTaxonRankname(self.rankid)
+            self.taxonRankName = self.getTaxonRankname(self.taxonRankId)
         except:
             util.logger.error(f'Could not determine rank of novel taxon: {taxonNameEntry}')
 
@@ -612,7 +607,8 @@ class Specimen(Model):
             target_rankid: Target rank id of the parent taxon to be searched for (usually family: 140)
         RETURNS taxonFullName (string) : Name of the parent taxon 
         """
-        
+        if taxonFullName == '': return '-parent not found-'
+
         # Replace apostrophes with double quotes for SQL query
         taxonFullName = taxonFullName.replace("'", "''")
         if on_fullname:

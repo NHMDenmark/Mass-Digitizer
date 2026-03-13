@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "DaSSCo Mass Digitizer"
-#define MyAppVersion "2.2.14"
+#define MyAppVersion "2.2.15"
 ; Remember to update the version in the version_number.py script
 #define MyAppPublisher "NHMD"
 #define MyAppExeName "DaSSCo.exe"
@@ -44,13 +44,15 @@ Source: "ui\specimendataentry.ui"; DestDir: "{app}\_internal\ui"; Flags: ignorev
 Source: "ui\homescreen.ui"; DestDir: "{app}\_internal\ui"; Flags: ignoreversion
 Source: "sql\editions\temp\db.sqlite3"; DestDir: "{userdocs}\DaSSCo"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "img\*.*"; DestDir: "{userdocs}\DaSSCo\img"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "img\DaSCCo-logo.ico"; DestDir: "{app}\img"
 Source: "config\login.cfg"; DestDir: "{userdocs}\DaSSCo\config"; Flags: ignoreversion recursesubdirs createallsubdirs onlyifdoesntexist
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
-Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\img\DaSCCo-logo.ico"
+
+Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; IconFilename: "{app}\img\DaSCCo-logo.ico"
 
 ;[Run]
 ;Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
