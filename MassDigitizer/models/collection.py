@@ -31,6 +31,7 @@ class Collection(model.Model):
         self.discipline      = None 
         self.catalogNrLength = 9
         self.useTaxonNumbers  = None
+        self.useChronostratigraphy = None
 
         # Predefined data fields
         self.storageLocations = None 
@@ -70,7 +71,8 @@ class Collection(model.Model):
                 'taxontreedefid':   f'{self.taxonTreeDefId}', 
                 'visible':          f'{self.visible}', 
                 'catalognrlength':  f'{self.catalogNrLength}',
-                'usetaxonnumbers':  f'{self.useTaxonNumbers}'
+                'usetaxonnumbers':  f'{self.useTaxonNumbers}',
+                'usechronostratigraphy': f'{self.useChronostratigraphy}'
                 }
         
         return fieldsDict
@@ -90,6 +92,7 @@ class Collection(model.Model):
         self.visible         = record['visible']      
         self.catalogNrLength = record['catalognrlength']   
         self.useTaxonNumbers = record['usetaxonnumbers']
+        self.useChronostratigraphy = record['usechronostratigraphy']
         pass 
 
 # Specify Interfacing functions 
