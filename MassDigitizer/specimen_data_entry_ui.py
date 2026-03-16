@@ -59,7 +59,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.collobj = specimen.Specimen(collection_id)  # Create blank specimen record instance
 
         # Input field lists defining: Tabbing order, focus indicator, what fields to be cleared, and what fields are not 'sticky' i.e. not carrying their value over to the next record after saving current one 
-        self.clearingList    = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'inpLocalityNotes', 'inpTaxonName', 'inpTaxonNumber', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured',
+        self.clearingList    = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'cbxChronostratigraphy', 'inpLocalityNotes', 'inpTaxonName', 'inpTaxonNumber', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured',
                                 'inpContainerName', 'inpCatalogNumber','txtRecordID', 'txtStorageFullname', 'inpNotes', 'txtTaxonFullname', 'chkTaxonomyUncertain']
         self.base_nonsticky_fields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured']
         self.sessionMode     = 'Default'
@@ -146,6 +146,10 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.cbxGeoRegion.addItem('-please select-', -1)
         for item in self.collobj.geoRegions:
             self.ui.cbxGeoRegion.addItem(str(item[1]), item[0])
+        
+        self.ui.cbxChronostratigraphy.addItem('-please select-', -1)
+        for item in self.collobj.chronoStratigraphies:
+            self.ui.cbxChronostratigraphy.addItem(str(item[2]), item[0])
 
     def load_previous_records(self):
         """
@@ -219,6 +223,13 @@ class SpecimenDataEntryUI(QMainWindow):
             self.ui.lblTaxonNumber.setVisible(False)
             self.ui.inpTaxonNumber.setVisible(False)
         
+        if self.collection.useChronostratigraphy:
+            self.ui.lblChronostratigraphy.setVisible(True)
+            self.ui.cbxChronostratigraphy.setVisible(True)
+        else:
+            self.ui.lblChronostratigraphy.setVisible(False)
+            self.ui.cbxChronostratigraphy.setVisible(False)
+
         self.updateRecordCount()
 
     def setControlEvents(self):
@@ -244,6 +255,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.cbxPrepType.currentIndexChanged.connect(self.on_cbxPrepType_currentIndexChanged)
         self.ui.cbxTypeStatus.currentIndexChanged.connect(self.on_cbxTypeStatus_currentIndexChanged)
         self.ui.cbxGeoRegion.currentIndexChanged.connect(self.on_cbxGeoRegion_currentIndexChanged)
+        self.ui.cbxChronostratigraphy.currentIndexChanged.connect(self.on_cbxChronostratigraphy_currentIndexChanged)
         self.ui.inpLocalityNotes.returnPressed.connect(self.on_locality_notes_return_pressed)
         self.ui.inpLocalityNotes.textChanged.connect(self.on_locality_notes_text_changed)
         self.ui.inpTaxonName.returnPressed.connect(self.on_inpTaxonName_return_pressed)
@@ -334,6 +346,10 @@ class SpecimenDataEntryUI(QMainWindow):
 
     def on_cbxGeoRegion_currentIndexChanged(self): 
         self.collobj.setGeoRegionFields(self.ui.cbxGeoRegion.currentIndex() - 1)
+        if self.fast_entry_mode: self.ui.inpCatalogNumber.setFocus()
+    
+    def on_cbxChronostratigraphy_currentIndexChanged(self):
+        self.collobj.setChronostratigraphyFields(self.ui.cbxChronostratigraphy.currentIndex() - 1)
         if self.fast_entry_mode: self.ui.inpCatalogNumber.setFocus()
 
     def on_locality_notes_text_changed(self): 
