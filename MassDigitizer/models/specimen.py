@@ -65,6 +65,10 @@ class Specimen(Model):
         self.geoRegionName = ''
         self.geoRegionSource = ''
         self.geoRegionId = 0
+        self.chronoStratigraphyFullName = ''
+        self.chronoStratigraphyName = ''
+        self.chronoStratigraphyId = 0
+        self.chronoStratigraphyRankName = ''
         self.localityNotes = ''
         self.storageFullName = ''
         self.storageName = ''
@@ -85,6 +89,7 @@ class Specimen(Model):
         self.firstName = gs.firstName
         self.middleInitial = gs.middleInitial
         self.lastName = gs.lastName
+
         self.recordDateTime = str(datetime.now())
         self.exported = 0
         self.exportDateTime = ''
@@ -96,6 +101,7 @@ class Specimen(Model):
         self.prepTypes = None
         self.typeStatuses = None
         self.geoRegions = None
+        self.chronoStratigraphies = None
         # self.geoRegionSources = None
 
         self.loadPredefinedData()
@@ -109,6 +115,7 @@ class Specimen(Model):
         self.prepTypes = self.db.getRowsOnFilters('preptype', {'collectionid =': f'{self.collectionId}'}, 100, 'name')
         self.typeStatuses = self.db.getRowsOnFilters('typestatus', {'collectionid =': f'{self.collectionId}'}, 100, 'ordinal')
         self.geoRegions = self.db.getRowsOnFilters('georegion', {'collectionid =': f'{self.collectionId}'})
+        self.chronoStratigraphies = self.db.getRowsOnFilters('chronostratigraphy', {'collectionid =': f'{self.collectionId}'})
         # self.geoRegionSources = self.db.getRowsOnFilters('georegionsource', {'collectionid =': f'{self.collectionId}'})
 
     def getFieldsAsDict(self):
@@ -139,6 +146,10 @@ class Specimen(Model):
             'georegionname': f'{self.geoRegionName}',
             'georegionsource': f'{self.geoRegionSource}',
             'georegionid': f'{self.geoRegionId}',
+           	'chronostratigraphyfullname': f'{self.chronoStratigraphyFullName}',
+	        "chronostratigraphyname": f'{self.chronoStratigraphyName}',
+	        "chronostratigraphyid": f'{self.chronoStratigraphyId}',
+	        "chronostratigraphyrankname": f'{self.chronoStratigraphyRankName}',
             'localitynotes': f'{self.localityNotes}', 
             'storagefullname': f'{self.storageFullName}',
             'storagename': f'{self.getStorageName()}',
@@ -206,6 +217,10 @@ class Specimen(Model):
             self.geoRegionName = record['georegionname']
             self.geoRegionSource = record['georegionsource']
             self.geoRegionId = record['georegionid']
+            self.chronoStratigraphyFullName = record['chronostratigraphyfullname']
+            self.chronoStratigraphyName = record['chronostratigraphyname']
+            self.chronoStratigraphyId = record['chronostratigraphyid']
+            self.chronoStratigraphyRankName = record['chronostratigraphyrankname']
             self.localityNotes = record['localitynotes']
             self.storageFullName = record['storagefullname']
             self.storageName = record['storagename']
@@ -225,6 +240,7 @@ class Specimen(Model):
             self.firstName = record['agentfirstname']
             self.middleInitial = record['agentmiddleinitial']
             self.lastName = record['agentlastname']
+
             self.recordDateTime = record['recorddatetime']
             self.exported = record['exported']
             self.exportDateTime = record['exportdatetime']
@@ -274,6 +290,38 @@ class Specimen(Model):
             self.geoRegionId = 0
             self.geoRegionName = ''
             self.geoRegionSource = ''
+    
+    def setChronostratigraphyFields(self, index):
+        """
+        Get chronostratigraphy record on the basis of list index
+            and set respective fields
+        """
+        if index >= 0:  # Apparently, index -1 selects the last item in the list
+            self.chronoStratigraphyId = self.chronoStratigraphies[index]['id']
+            self.chronoStratigraphyName = self.chronoStratigraphies[index]['name']
+            self.chronoStratigraphyFullName = self.chronoStratigraphies[index]['fullname']
+            self.chronoStratigraphyRankName = self.chronoStratigraphies[index]['rankname']
+        else:
+            self.chronoStratigraphyId = 0
+            self.chronoStratigraphyName = ''
+            self.chronoStratigraphyFullName = ''
+            self.chronoStratigraphyRankName = ''
+
+    def setChronoStratigraphyFields(self, index):
+        """
+        Get chronostratigraphy record on the basis of list index
+            and set respective fields
+        """
+        if index >= 0:  # Apparently, index -1 selects the last item in the list
+            self.chronoStratigraphyId = self.chronoStratigraphies[index]['id']
+            self.chronoStratigraphyName = self.chronoStratigraphies[index]['name']
+            self.chronoStratigraphyFullName = self.chronoStratigraphies[index]['fullname']
+            self.chronoStratigraphyRankName = self.chronoStratigraphies[index]['rankname']
+        else:
+            self.chronoStratigraphyId = 0
+            self.chronoStratigraphyName = ''
+            self.chronoStratigraphyFullName = ''
+            self.chronoStratigraphyRankName = ''
 
     def setStorageFields(self, index):
         """

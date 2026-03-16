@@ -3,7 +3,7 @@
   --       INSERT INTO taxonname (spid,name,author,fullname,rankid,taxonRank,treedefid,institutionid,parentfullname,idnumber,taxonnrsource) VALUES 
   SELECT
 	 CONCAT('(', t.TaxonID, ',"', t.Name, '","', COALESCE(t.author,'') , '","', 	 
-    TRIM(CONCAT(t.FullName, ' ', COALESCE(t.author,''))), 
+    -- TRIM(CONCAT(t.FullName, ' ', COALESCE(t.author,''))), 
 --	 t.FullName, -- For higher taxa: Don't include author name 	 
 	 '",', t.RankID ,',"', ttd.Name ,'",', 
 	 t.TaxonTreeDefID, 
@@ -25,7 +25,7 @@
 		-- AND t.RankID > 230 -- VarForma 
 		-- AND t.RankID = 230 -- Subspecies
 		-- AND t.RankID = 220 -- Species
-		-- AND t.RankID <= 190   -- Highertaxa (including Genus & Subgenus) 
+		 AND t.RankID <= 190   -- Highertaxa (including Genus & Subgenus) 
 
 -- The following lines are needed to restrict the taxa pulled out for NHMD Entomology 
 /*  

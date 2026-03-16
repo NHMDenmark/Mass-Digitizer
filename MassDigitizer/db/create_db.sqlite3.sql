@@ -22,6 +22,7 @@ CREATE TABLE "collection" (
 	"visible"	INTEGER,
 	"catalognrlength"	INTEGER,
 	"usetaxonnumbers"	INTEGER,
+	"usechronostratigraphy"	INTEGER,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 DROP TABLE IF EXISTS "dummyrecord";
@@ -181,27 +182,28 @@ CREATE TABLE "user" (
 	"username"	INTEGER,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
-INSERT INTO "collection" ("id","spid","name","institutionid","taxontreedefid","visible","catalognrlength","usetaxonnumbers") VALUES (1,4,'NHMD Vertebrate Paleontology',1,1,0,9,NULL),
- (2,163841,'NHMD Entomology',1,5,1,9,NULL),
- (3,327682,'NHMD Invertebrate Paleontology',1,7,1,9,NULL),
- (4,425985,'NHMD Invertebrate Zoology',1,9,0,9,NULL),
- (5,458754,'NHMD Ornithology',1,10,0,9,NULL),
- (6,491522,'NHMD Mammalogy',1,11,0,9,NULL),
- (7,557056,'NHMD Quaternary Zoology',1,1,0,9,NULL),
- (8,589825,'NHMD Herpetology',1,12,0,9,NULL),
- (9,622592,'NHMD Archaeozoology Comparative Birds',1,10,0,9,NULL),
- (10,655360,'NHMD Archaeozoology Comparative Mammals',1,11,0,9,NULL),
- (11,688130,'NHMD Vascular Plants',1,13,1,8,NULL),
- (12,720897,'NHMD Biocultural Collection',1,14,0,9,NULL),
- (13,753665,'NHMD Danekrae',1,15,0,9,NULL),
- (14,786432,'NHMD Amber',1,5,0,9,NULL),
- (15,851970,'NHMD Ichthyology',1,17,0,9,NULL),
- (16,884736,'NHMD Mycology',1,13,0,9,NULL),
- (17,950274,'NHMD Exhibitions',1,18,0,9,NULL),
- (18,983040,'NHMD Micropaleontology',1,7,0,9,NULL),
- (19,32769,'NHMA Entomology',2,2,1,9,1),
- (20,3,'AU Herbarium',3,1,0,9,NULL),
- (21,950272,'NHMD Micropaleontology',1,7,0,9,NULL);
+INSERT INTO "collection" ("id","spid","name","institutionid","taxontreedefid","visible","catalognrlength","usetaxonnumbers","usechronostratigraphy") VALUES 
+ (1,4,'NHMD Vertebrate Paleontology',1,1,0,9,NULL,NULL),
+ (2,163841,'NHMD Entomology',1,5,1,9,NULL,NULL),
+ (3,327682,'NHMD Invertebrate Paleontology',1,1,1,9,NULL,1),
+ (4,425985,'NHMD Invertebrate Zoology',1,9,0,9,NULL,NULL),
+ (5,458754,'NHMD Ornithology',1,10,0,9,NULL,NULL),
+ (6,491522,'NHMD Mammalogy',1,11,0,9,NULL,NULL),
+ (7,557056,'NHMD Quaternary Zoology',1,1,0,9,NULL,NULL),
+ (8,589825,'NHMD Herpetology',1,12,0,9,NULL,NULL),
+ (9,622592,'NHMD Archaeozoology Comparative Birds',1,10,0,9,NULL,NULL),
+ (10,655360,'NHMD Archaeozoology Comparative Mammals',1,11,0,9,NULL,NULL),
+ (11,688130,'NHMD Vascular Plants',1,13,1,8,NULL,NULL),
+ (12,720897,'NHMD Biocultural Collection',1,14,0,9,NULL,NULL),
+ (13,753665,'NHMD Danekrae',1,15,0,9,NULL,NULL),
+ (14,786432,'NHMD Amber',1,5,0,9,NULL,NULL),
+ (15,851970,'NHMD Ichthyology',1,17,0,9,NULL,NULL),
+ (16,884736,'NHMD Mycology',1,13,0,9,NULL,NULL),
+ (17,950274,'NHMD Exhibitions',1,18,0,9,NULL,NULL),
+ (18,983040,'NHMD Micropaleontology',1,7,0,9,NULL,NULL),
+ (19,32769,'NHMA Entomology',2,2,1,9,1,NULL),
+ (20,3,'AU Herbarium',3,1,0,9,NULL,NULL),
+ (21,950272,'NHMD Micropaleontology',1,7,0,9,NULL,NULL);
 INSERT INTO "dummyrecord" ("id","spid","name","fullname") VALUES (0,0,'-error loading rows-','-error loading rows-');
 INSERT INTO "institution" ("id","code","name","url","visible") VALUES (1,'NHMD','Natural History Museum of Denmark','https://specify-snm.science.ku.dk/',1),
  (2,'NHMA','Natural History Museum Aarhus','https://specify-nhma.science.ku.dk/',1),
