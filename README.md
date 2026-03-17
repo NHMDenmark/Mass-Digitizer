@@ -4,14 +4,14 @@
 The DaSSCo project is tasked with digitizing millions of specimens. To speed this process along, there needs to be a way to rapidly fill in data on 'storage', 'taxonomy', etc. The Mass Digitization App is here to achieve this goal. 
 
 ### Installation
-Installation is done using a setup file that will ensure all dependencies are in place. The installer will also add a clean local database for registering entries in a "DaSSCo" folder under the user's documents folder. Be mindful to backup the database file upon reinstallation, so it is not overwritten and and data in it erased.   
+Installation is done using a setup file that will ensure all dependencies are in place. The installer will also add a clean local database for registering entries in a "DaSSCo" folder under the user's documents folder. Be mindful to backup the database file upon reinstallation, so it is not overwritten.   
 
 Downloads: 
 (https://github.com/NHMDenmark/DaSSCo/releases/)  
 
 #### University of Copenhagen PCs
 
-Please note that for any PCs administered by the University of Copenhagen, special permissions are required to install any non-standard software, which includes the DaSSCo Mass Digitization App. These permissions are mediated by the Heimdal Agent installed on all KU-IT computers. You can find instructions on how to do so on KUs intranet here: [Install software - administrator rights](https://kunet.ku.dk/employee-guide/Pages/IT/KU-computer.aspx?searchHitHighlight=heimdal)
+Please note that for any PCs administered by the University of Copenhagen, special permissions are required to install any non-standard software, which includes the DaSSCo Mass Digitization App. These permissions are mediated by the Heimdal Agent installed on all KU-IT computers. You can find instructions on how to do so on KUs intranet here: [Install software - administrator rights](https://kunet.ku.dk/employee-guide/Pages/IT/KU-computer.aspx?searchHitHighlight=heimdal). Also, during the very first installation, you may be confronted with a Windows security window, since the software has not been signed digitally by Microsoft. You can ignore the security warning and click to install anyway.
 
 ### Usage
 
