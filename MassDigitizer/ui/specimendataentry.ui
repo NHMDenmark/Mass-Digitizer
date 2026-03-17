@@ -1145,6 +1145,7 @@
   <tabstop>cbxPrepType</tabstop>
   <tabstop>cbxTypeStatus</tabstop>
   <tabstop>cbxGeoRegion</tabstop>
+  <tabstop>cbxChronostratigraphy</tabstop>
   <tabstop>inpLocalityNotes</tabstop>
   <tabstop>inpTaxonNumber</tabstop>
   <tabstop>inpTaxonName</tabstop>
@@ -1155,6 +1156,7 @@
   <tabstop>radRadioSSO</tabstop>
   <tabstop>radRadioMSO</tabstop>
   <tabstop>radRadioMOS</tabstop>
+  <tabstop>radRadioCombi</tabstop>
   <tabstop>inpContainerName</tabstop>
   <tabstop>inpNotes</tabstop>
   <tabstop>inpCatalogNumber</tabstop>
