@@ -162,7 +162,30 @@
       </widget>
      </item>
      <item>
+      <spacer name="horizontalSpacer_10">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
       <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="1">
+        <widget class="QLabel" name="txtUserName">
+         <property name="text">
+          <string>-not set-</string>
+         </property>
+         <property name="class" stdset="0">
+          <string>QLabelMetaInfo</string>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="0">
         <widget class="QLabel" name="lblVersion">
          <property name="text">
@@ -170,17 +193,44 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="2">
+       <item row="0" column="3">
+        <widget class="QLabel" name="lblInstitution">
+         <property name="text">
+          <string>Institution:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
         <widget class="QLabel" name="lblCollection">
          <property name="text">
           <string>Collection:</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
-        <widget class="QLabel" name="lblInstitution">
+       <item row="0" column="0">
+        <widget class="QLabel" name="lblUserName">
          <property name="text">
-          <string>Institution:</string>
+          <string>Logged in as:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4">
+        <widget class="QLabel" name="txtCollection">
+         <property name="text">
+          <string>-not set-</string>
+         </property>
+         <property name="class" stdset="0">
+          <string>QLabelMetaInfo</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="4">
+        <widget class="QLabel" name="txtInstitution">
+         <property name="text">
+          <string>-not set-</string>
+         </property>
+         <property name="class" stdset="0">
+          <string>QLabelMetaInfo</string>
          </property>
         </widget>
        </item>
@@ -194,42 +244,18 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="3">
-        <widget class="QLabel" name="txtCollection">
-         <property name="text">
-          <string>-not set-</string>
+       <item row="0" column="2">
+        <spacer name="horizontalSpacer_9">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
-         <property name="class" stdset="0">
-          <string>QLabelMetaInfo</string>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
          </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="txtUserName">
-         <property name="text">
-          <string>-not set-</string>
-         </property>
-         <property name="class" stdset="0">
-          <string>QLabelMetaInfo</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="QLabel" name="txtInstitution">
-         <property name="text">
-          <string>-not set-</string>
-         </property>
-         <property name="class" stdset="0">
-          <string>QLabelMetaInfo</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="lblUserName">
-         <property name="text">
-          <string>Logged in as:</string>
-         </property>
-        </widget>
+        </spacer>
        </item>
       </layout>
      </item>
@@ -1169,7 +1195,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="grpStickFields"/>
   <buttongroup name="grpEntryMode"/>
+  <buttongroup name="grpStickFields"/>
  </buttongroups>
 </ui>
