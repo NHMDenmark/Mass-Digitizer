@@ -72,7 +72,6 @@ class SpecimenDataEntryUI(QMainWindow):
 
         self.collectionId = collection_id  # Set collection Id
         self.collection = coll.Collection(collection_id)
-        self.window = None  # Create class level instance of window object
         self.db = data_access.DataAccess(gs.databaseName)  # Instantiate database access module
         self.collobj = specimen.Specimen(collection_id)  # Create blank specimen record instance
 
@@ -127,6 +126,7 @@ class SpecimenDataEntryUI(QMainWindow):
         # Start up interface and center window
         self.show()
         self.center_screen() 
+        self.setFixedSize(self.size())  # Fix window size to prevent resizing which can cause UI issues
         self.ui.inpStorage.setFocus()  # Set initial focus on storage input field
         self.toggle_stickiness_mode(default_mode=True)
 
