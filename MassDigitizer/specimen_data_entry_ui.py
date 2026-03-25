@@ -1062,7 +1062,7 @@ class SpecimenDataEntryUI(QMainWindow):
             self.collobj.setTaxonNameFieldsFromRecord(taxonname_record)
         else:
             self.collobj.taxonName = completion
-            self.collobj.taxonFullName = ''
+            self.collobj.taxonFullName = completion
             self.collobj.taxonNameId = 0
         self.ui.txtTaxonFullname.setText(self.collobj.taxonFullName + ' (' + self.collobj.familyName + ')')
         self.on_taxonname_next_field()
