@@ -31,7 +31,7 @@ Auto-suggest fields, such as *Storage location* and *Taxonomic name*  will show 
 You can follow the progress in the "Previous records table" near the bottom of the app. The "Back" and the "Forward" buttons are for paging through already entered records. You can enter a new record, by pressing "GO FORWARDS" at the last record encountered. 
 
 ### Data export  
-All entries are stored locally in a sqlite database in the end user's DaSSCo folder. The contents of the database can be viewed exported
+All entries are stored locally in a sqlite database in the end user's DaSSCo folder. The contents of the database can be viewed using a SQLite database viewer. We generally recommend the free [DB Browser for SQLite](https://sqlitebrowser.org/).   
 
 ### Licence and authorship
 The application comes under the Apache-2.0 license which aligns with the Open Source and Open Science frameworks. 
