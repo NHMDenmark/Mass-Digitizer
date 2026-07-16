@@ -52,6 +52,7 @@ class SpecimenDataEntryUI(QMainWindow):
         # Set class variables
         self.collection_id = collection_id
         self.collection = coll.Collection(collection_id)
+        self.SSOterm = 'Single specimen on one object'
         self.MSOterm = 'Multiple specimens on one object'
         self.MOSterm = 'One specimen on multiple objects'
         self.Combiterm = 'MSO and MOS combined'
@@ -290,6 +291,27 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.btnBack.clicked.connect(self.on_back_clicked)
         self.ui.btnForward.clicked.connect(self.on_forward_clicked)
         self.ui.btnClear.clicked.connect(self.clearForm)
+        self.ui.btnCopyContainerID.clicked.connect(self.on_copy_container_id_clicked)
+
+    def on_copy_container_id_clicked(self):
+        """
+        Copy the next container ID to the current record's container name field and update the collection object accordingly. 
+        """
+        next_record = specimen.Specimen(self.collectionId)
+        next_record.id = self.collobj.id
+        next_record.loadNext()
+        container_id = next_record.containername
+        container_type = next_record.containertype
+        self.setContainerTypeField(container_type)
+        self.collobj.containertype = container_type
+        self.collobj.containername = container_id
+        self.ui.inpContainerName.setText(container_id)
+        if container_type in [self.MSOterm, self.MOSterm, self.Combiterm]:
+            self.ui.inpContainerName.setEnabled(True)
+            self.ui.imgWarningLinkedRecord.setVisible(True)
+        else:
+            self.ui.inpContainerName.setEnabled(False)
+            self.ui.imgWarningLinkedRecord.setVisible(False)
 
     def on_save_clicked(self): self.saveForm()
     
@@ -445,7 +467,7 @@ class SpecimenDataEntryUI(QMainWindow):
                 self.ui.imgWarningLinkedRecord.setVisible(False)
                 self.collobj.containername = ''
                 self.collobj.containertype = ''
-            elif self.sender() == self.ui.radRadioMOS or self.sender() == self.ui.radRadioMSO:
+            elif self.sender() == self.ui.radRadioMOS or self.sender() == self.ui.radRadioMSO or self.sender() == self.ui.radRadioCombi:
                 # A multi specimen object requires a container name and a warning to the user
                 containerNumber = util.getRandomNumberString()
                 containerType = ''
@@ -876,19 +898,7 @@ class SpecimenDataEntryUI(QMainWindow):
             containerName = record['containername'] # Get container name 
             containerType = record['containertype'] # Get container type 
 
-            if containerType == self.MSOterm:
-                self.ui.radRadioMSO.blockSignals(True) # Prevent triggering the toggled event which would generate a new container name
-                self.ui.radRadioMSO.setChecked(True) # Set MSO radiobutton 
-                self.ui.radRadioMSO.blockSignals(False)
-                self.ui.imgWarningLinkedRecord.setVisible(True)
-            elif containerType == self.MOSterm:
-                self.ui.radRadioMOS.blockSignals(True) # Prevent triggering the toggled event which would generate a new container name
-                self.ui.radRadioMOS.setChecked(True) # Set MOS radiobutton
-                self.ui.radRadioMOS.blockSignals(False)
-                self.ui.imgWarningLinkedRecord.setVisible(True)
-            else:
-                self.ui.lblError.setText('Something went wrong!')
-                self.ui.lblError.setVisible=True
+            self.setContainerTypeField(containerType)
             
             self.ui.inpContainerName.setText(containerName)
             self.ui.inpContainerName.setEnabled(True)
@@ -900,6 +910,34 @@ class SpecimenDataEntryUI(QMainWindow):
             self.ui.inpContainerName.setText('') # Clear container name input field 
             self.ui.inpContainerName.setEnabled(False) # Disable container name input field 
             self.ui.imgWarningLinkedRecord.setVisible(False) # Hide linked record warning
+
+    def setContainerTypeField(self, containerType):
+        """
+        Sets the container type radio button based on the container type string provided.
+        """
+        if containerType == self.MSOterm:
+            self.ui.radRadioMSO.blockSignals(True) # Prevent triggering the toggled event which would generate a new container name
+            self.ui.radRadioMSO.setChecked(True) # Set MSO radiobutton 
+            self.ui.radRadioMSO.blockSignals(False)
+            self.ui.imgWarningLinkedRecord.setVisible(True)
+        elif containerType == self.MOSterm:
+            self.ui.radRadioMOS.blockSignals(True) # Prevent triggering the toggled event which would generate a new container name
+            self.ui.radRadioMOS.setChecked(True) # Set MOS radiobutton
+            self.ui.radRadioMOS.blockSignals(False)
+            self.ui.imgWarningLinkedRecord.setVisible(True)
+        elif containerType == self.Combiterm:
+            self.ui.radRadioCombi.blockSignals(True) # Prevent triggering the toggled event which would generate a new container name
+            self.ui.radRadioCombi.setChecked(True) # Set COMBI radiobutton
+            self.ui.radRadioCombi.blockSignals(False)
+            self.ui.imgWarningLinkedRecord.setVisible(True)
+        elif containerType == '': # self.SSOterm:
+            self.ui.radRadioSSO.blockSignals(True) # Prevent triggering the toggled event which would generate a new container name
+            self.ui.radRadioSSO.setChecked(True) # Set SSO radiobutton
+            self.ui.radRadioSSO.blockSignals(False)
+            self.ui.imgWarningLinkedRecord.setVisible(False)
+        else:
+            self.ui.lblError.setText('Something went wrong!')
+            self.ui.lblError.setVisible=True# Hide linked record warning
             
     def validateBarCodeLength(self, barcode):
         # Ensure that the barcode has the correct length according to collection.

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1251</width>
-    <height>698</height>
+    <height>703</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -773,19 +773,6 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
-             <widget class="QLineEdit" name="inpContainerName">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>380</width>
-                <height>4096</height>
-               </size>
-              </property>
-             </widget>
-            </item>
             <item row="4" column="0">
              <widget class="QLabel" name="lblNotes">
               <property name="text">
@@ -812,6 +799,58 @@
                </size>
               </property>
              </widget>
+            </item>
+            <item row="3" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout_7">
+              <item>
+               <widget class="QLineEdit" name="inpContainerName">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>380</width>
+                  <height>4096</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnCopyContainerID">
+                <property name="minimumSize">
+                 <size>
+                  <width>220</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+    background-color: #C8E3FF;
+    border: 1px Solid rgb(128,128,128);
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin: 0px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>COPY FROM NEXT RECORD</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_11">
+                <property name="orientation">
+                 <enum>Qt::Orientation::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
             </item>
            </layout>
           </item>
@@ -1190,7 +1229,6 @@
   <tabstop>radRadioMSO</tabstop>
   <tabstop>radRadioMOS</tabstop>
   <tabstop>radRadioCombi</tabstop>
-  <tabstop>inpContainerName</tabstop>
   <tabstop>inpNotes</tabstop>
   <tabstop>inpCatalogNumber</tabstop>
   <tabstop>btnSave</tabstop>
@@ -1202,7 +1240,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="grpEntryMode"/>
   <buttongroup name="grpStickFields"/>
+  <buttongroup name="grpEntryMode"/>
  </buttongroups>
 </ui>
