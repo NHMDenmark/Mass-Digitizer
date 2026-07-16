@@ -706,7 +706,8 @@ class SpecimenDataEntryUI(QMainWindow):
         self.collobj.localityNotes = self.ui.inpLocalityNotes.text()
         self.collobj.containername = self.ui.inpContainerName.text()
         self.collobj.containertype = self.getContainerTypeFromInput()
-        self.collobj.setGeoRegionFields(self.ui.cbxGeoRegion.currentIndex() - 1)        
+        self.collobj.setGeoRegionFields(self.ui.cbxGeoRegion.currentIndex() - 1)     
+        self.collobj.setChronostratigraphyFields(self.ui.cbxChronostratigraphy.currentIndex() - 1)   
         self.collobj.taxonomyUncertain = self.ui.chkTaxonomyUncertain.isChecked()
         self.handleTaxonNameFields()
 
@@ -842,14 +843,21 @@ class SpecimenDataEntryUI(QMainWindow):
             self.ui.cbxPrepType.setCurrentText(record.get('preptypename', ''))
         else:
             self.ui.cbxPrepType.setCurrentIndex(0)
+        
         if record.get('typestatusname', '') != '':
             self.ui.cbxTypeStatus.setCurrentText(record.get('typestatusname', ''))
         else:
             self.ui.cbxTypeStatus.setCurrentIndex(0)
+        
         if record.get('georegionname', '') != '':            
             self.ui.cbxGeoRegion.setCurrentText(record.get('georegionname', ''))
         else:
             self.ui.cbxGeoRegion.setCurrentIndex(0)
+
+        if record.get('chronostratigraphyname', '') != '':
+            self.ui.cbxChronostratigraphy.setCurrentText(record.get('chronostratigraphyname', ''))
+        else:
+            self.ui.cbxChronostratigraphy.setCurrentIndex(0)
 
         self.ui.chkTaxonomyUncertain.setChecked(util.str_to_bool(record.get('taxonomyuncertain', 'False')))
 
