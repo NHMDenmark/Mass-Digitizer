@@ -1,8 +1,14 @@
   -- To be run on Specify database
   --    Add to top:
   --       INSERT INTO taxonname (spid,name,author,fullname,rankid,taxonRank,treedefid,institutionid,parentfullname,idnumber,taxonnrsource) VALUES 
-  SELECT
-	 CONCAT('(', t.TaxonID, ',"', t.Name, '","', COALESCE(t.author,'') , '","', 	 
+  --       INSERT INTO taxonname (spid,dwcid,dasscoid,name,author,fullname,rankid,taxonrank,parentfullname,acceptedfullname,treedefid,institutionid,idnumber,taxonnrsource) VALUES 
+  SELECT 
+	 CONCAT(
+	        '(', t.TaxonID, ',"',       -- Specify ID 
+	        -- ???                      -- GBIF ID 
+			  COALESCE(t.Text4,''), ',"', -- DaSSCo ID 
+			  t.Name, '","', 
+			  COALESCE(t.author,'') , '","', 	 
     -- TRIM(CONCAT(t.FullName, ' ', COALESCE(t.author,''))), 
 --	 t.FullName, -- For higher taxa: Don't include author name 	 
 	 '",', t.RankID ,',"', ttd.Name ,'",', 
@@ -20,7 +26,7 @@
 	LEFT JOIN taxontreedefitem ttd ON t.rankID = ttd.RankID AND t.TaxonTreeDefID = ttd.TaxonTreeDefID
 
 	WHERE
-		t.taxontreedefid = 1 -- 13 for NHMD Botany, 5 for NHMD Entomology, 1 for NHMD Invertebrate Paleontology, 2 for NHMA Entomology
+		t.taxontreedefid = 13 -- 13 for NHMD Botany, 5 for NHMD Entomology, 1 for NHMD Invertebrate Paleontology, 2 for NHMA Entomology
 -- The following lines filter on taxon rank and should be adjusted accordingly
 		-- AND t.RankID > 230 -- VarForma 
 		-- AND t.RankID = 230 -- Subspecies
@@ -39,24 +45,24 @@
 */
  
 -- The following lines are needed to restrict the taxa pulled out for NHMHD Botany for Vascular Plants 
-/* 
+ 
  		AND (t.FullName IN ('Tracheophyta')
  		OR p1.FullName IN  ('Tracheophyta')
  		OR p2.FullName IN  ('Tracheophyta')
  		OR  p3.FullName IN ('Tracheophyta')
  		OR  p4.FullName IN ('Tracheophyta')
  		    )
-*/
+
 
 -- The following lines are needed to restrict the taxa pulled out for NHMD Invertebrate Paleontology 
-
+/*
      AND (t.FullName IN ('Echinoidea', 'Echinodermata', 'Animalia')
  		OR p1.FullName IN  ('Echinoidea')
  		OR p2.FullName IN  ('Echinoidea')
  		OR p3.FullName IN ('Echinoidea')
  		OR p4.FullName IN ('Echinoidea')
  		)
-
+*/
  		-- Leave out any trash taxa: 
  		AND t.Name NOT LIKE '%.%' AND t.Name NOT LIKE '%#%' AND t.Name NOT LIKE '%?%'  AND t.Name NOT LIKE '%:%' AND t.Name NOT LIKE '%*%' 
 		AND t.FullName NOT LIKE '%not on sheet%'
