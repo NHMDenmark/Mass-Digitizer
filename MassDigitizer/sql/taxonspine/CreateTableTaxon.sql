@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS taxon;
+DROP TABLE IF EXISTS taxa;
 
-CREATE TABLE taxon (
+CREATE TABLE taxa (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 
     dassco_taxonID               CHAR(32) NOT NULL,
@@ -12,20 +12,20 @@ CREATE TABLE taxon (
     dassco_rankid                CHAR(3) NULL,
     dassco_extinct               VARCHAR(5) NULL,
 
-    dwc_taxonID                  VARCHAR(32) NULL,
+    dwc_taxonID                  INT NULL,
     dwc_scientificName           VARCHAR(1024) NULL,
     dwc_scientificNameAuthorship VARCHAR(256) NULL,
 
-    dwc_parentNameUsageID        VARCHAR(32) NULL,
+    dwc_parentNameUsageID        INT NULL,
     dwc_parentNameUsage          VARCHAR(512) NULL,
 
-    dwc_acceptedNameUsageID      VARCHAR(32) NULL,
+    dwc_acceptedNameUsageID      INT NULL,
     dwc_acceptedNameUsage        VARCHAR(512) NULL,
 
     dwc_taxonomicStatus          VARCHAR(64) NULL,
     dwc_taxonRank                VARCHAR(32) NULL,
 
-    sp_taxonID                   VARCHAR(32) NULL,
+    sp_taxonID                   INT NULL,
     sp_fullname                  VARCHAR(1024) NULL,
     sp_author                    VARCHAR(256) NULL,
     sp_rankid                    CHAR(3) NULL,
