@@ -27,7 +27,7 @@
 
 	WHERE
 		t.taxontreedefid = 13 -- 13 for NHMD Botany, 5 for NHMD Entomology, 1 for NHMD Invertebrate Paleontology, 2 for NHMA Entomology
--- The following lines filter on taxon rank and should be adjusted accordingly
+-- The following lines filter on taxon rank and should be adjusted accordingly to create separate sql files
 		-- AND t.RankID > 230 -- VarForma 
 		-- AND t.RankID = 230 -- Subspecies
 		-- AND t.RankID = 220 -- Species
@@ -64,7 +64,7 @@
  		)
 */
  		-- Leave out any trash taxa: 
- 		AND t.Name NOT LIKE '%.%' AND t.Name NOT LIKE '%#%' AND t.Name NOT LIKE '%?%'  AND t.Name NOT LIKE '%:%' AND t.Name NOT LIKE '%*%' 
+ 		AND t.Name NOT LIKE '%#%' AND t.Name NOT LIKE '%?%'  AND t.Name NOT LIKE '%:%' AND t.Name NOT LIKE '%*%' 
 		AND t.FullName NOT LIKE '%not on sheet%'
  		-- AND t.author COLLATE utf8mb3_bin NOT LIKE '%Ã¼%'
  		-- AND t.Author IS NOT NULL
