@@ -148,18 +148,15 @@ CREATE TABLE "taxonname" (
 	"collectionid"	INTEGER,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
-DROP TABLE IF EXISTS "taxonname_fts";
+--DROP TABLE IF EXISTS "taxonname_fts";
 CREATE VIRTUAL TABLE taxonname_fts USING fts5(id, name, fullname, rankid, taxontreedefid, institutionid);
-DROP TABLE IF EXISTS "taxonname_fts_config";
+/*
 CREATE TABLE 'taxonname_fts_config'(k PRIMARY KEY, v) WITHOUT ROWID;
-DROP TABLE IF EXISTS "taxonname_fts_content";
 CREATE TABLE 'taxonname_fts_content'(id INTEGER PRIMARY KEY, c0, c1, c2, c3, c4, c5);
-DROP TABLE IF EXISTS "taxonname_fts_data";
 CREATE TABLE 'taxonname_fts_data'(id INTEGER PRIMARY KEY, block BLOB);
-DROP TABLE IF EXISTS "taxonname_fts_docsize";
 CREATE TABLE 'taxonname_fts_docsize'(id INTEGER PRIMARY KEY, sz BLOB);
-DROP TABLE IF EXISTS "taxonname_fts_idx";
 CREATE TABLE 'taxonname_fts_idx'(segid, term, pgno, PRIMARY KEY(segid, term)) WITHOUT ROWID;
+*/
 DROP TABLE IF EXISTS "taxonrank";
 CREATE TABLE taxonrank (
 	rankid INT,
@@ -214,9 +211,8 @@ INSERT INTO "institution" ("id","code","name","url","visible") VALUES (1,'NHMD',
  (7,'S','Naturama','https://specify-naturama.science.ku.dk/',0),
  (8,'OESM','Østsjællands Museum (Faxe)','https://specify-oesm.science.ku.dk/',0),
  (99,'TEST','Test Institution','https://specify-test.science.ku.dk/',0);
-INSERT INTO "taxonname_fts_config" ("k","v") VALUES ('version',4);
-INSERT INTO "taxonname_fts_data" ("id","block") VALUES (1,X''),
- (10,X'00000000000000');
+-- INSERT INTO "taxonname_fts_config" ("k","v") VALUES ('version',4);
+-- INSERT INTO "taxonname_fts_data" ("id","block") VALUES (1,X''), (10,X'00000000000000');
 INSERT INTO "taxonrank" ("rankid","rankname") VALUES (0,'Life'),
  (10,'Kingdom'),
  (20,'Subkingdom'),

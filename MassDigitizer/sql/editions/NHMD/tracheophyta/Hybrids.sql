@@ -1,2 +1,2 @@
-INSERT INTO taxonname (spid, dwcid,dasscoid,name,author,fullname,rankid,taxonrank,parentfullname,acceptedfullname,treedefid,institutionid,idnumber,taxonnrsource) VALUES 
-;
+-- INSERT INTO taxonname (spid, dwcid,dasscoid,name,author,fullname,rankid,taxonrank,parentfullname,acceptedfullname,treedefid,institutionid,idnumber,taxonnrsource) VALUES 
+-- ;

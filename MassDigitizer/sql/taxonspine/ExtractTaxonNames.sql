@@ -75,13 +75,9 @@ SELECT
     
 FROM taxa
 WHERE 
-      -- dassco_rankid <= '190' -- Highertaxa
-       dassco_rankid = '220'  -- Species 
-       AND dassco_fullname NOT LIKE '% x %' 
-		 AND dassco_fullname NOT LIKE '% × %'  
-       AND dassco_fullname NOT LIKE 'x %' 
-		 AND dassco_fullname NOT LIKE '× %' 
-       -- AND (dwc_taxonomicStatus = 'accepted' OR dwc_taxonid IS NULL)
+       dassco_rankid <= '190' -- Highertaxa
+      -- dassco_rankid = '220'  -- Species 
+      -- AND dassco_fullname NOT LIKE '% x %' AND dassco_fullname NOT LIKE '% × %' AND dassco_fullname NOT LIKE 'x %' AND dassco_fullname NOT LIKE '× %' -- leave out Hybrids
       -- dassco_rankid = '230'  -- Subspecies 
       -- dassco_rankid > '230'  -- VarForma
 ORDER BY dassco_fullname
