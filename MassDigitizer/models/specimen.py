@@ -689,14 +689,22 @@ class Specimen(Model):
 
                 # Return when given taxon already matches rank or is of higher rank
                 if taxonRankId <= target_rankid:
-                    if taxonRankId < target_rankid: taxonFullName = ''  # Clear taxon name if higher than target rank
+                    #if taxonRankId < target_rankid: taxonFullName = ''  # Clear taxon name if higher than target rank
                     break   # return current
                 else:
-                    # Target rank not yet hit; check next parent in line
-                    return (self.searchParentTaxon(parentName, target_rankid, treedefid)) 
+                    # Target rank not yet hit; move up to the next parent in line
+                    # Guard against infinite recursion / loops: if parentName is empty
+                    # or the same as the current name, abort search
+                    if not parentName or parentName == taxonFullName:
+                        taxonFullName = '-parent not found-'
+                        break
+                    # update taxonFullName to the parent and continue the while-loop
+                    taxonFullName = parentName
+                    # continue looping to fetch the parent's record
+                    continue
             else:
                 # Can't find (further) parent taxon
-                taxonFullName = '-parent not found-'
+                #taxonFullName = '-parent not found-'
                 break  # return current
 
         return taxonFullName
