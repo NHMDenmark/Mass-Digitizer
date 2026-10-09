@@ -17,7 +17,7 @@ from getpass import getpass
 # Internal Dependencies
 import data_access
 import global_settings as gs
-import specify_interface
+from sp7apitoolbox import specify_interface
 
 db = data_access.DataAccess(gs.databaseName)
 sp = specify_interface.SpecifyInterface()

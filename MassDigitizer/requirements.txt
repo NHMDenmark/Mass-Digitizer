@@ -2,3 +2,4 @@ requests
 PySide6
 pytest
 pyinstaller
+git+https://github.com/NHMDenmark/Sp7ApiToolbox.git

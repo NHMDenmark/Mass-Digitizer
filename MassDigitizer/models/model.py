@@ -17,7 +17,7 @@ import sys
 
 # Internal dependencies
 import global_settings as gs
-import specify_interface
+from sp7apitoolbox import specify_interface
 import util
 import data_access
 

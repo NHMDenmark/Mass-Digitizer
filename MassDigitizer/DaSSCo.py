@@ -20,7 +20,7 @@ from PySide6.QtWidgets import QApplication, QMessageBox
 import util
 import global_settings as gs
 import data_access
-import specify_interface
+from sp7apitoolbox import specify_interface
 from home_screen import HomeScreen
 
 db = data_access.DataAccess(gs.databaseName)

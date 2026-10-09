@@ -29,11 +29,13 @@ import util
 import global_settings as gs
 import models.collection as coll
 import data_access
-import specify_interface
 import specimen_data_entry_ui as sde
 
+# External dependencies
+from sp7apitoolbox.specify_interface import SpecifyInterface
+
 db = data_access.DataAccess(gs.databaseName)
-sp = specify_interface.SpecifyInterface()
+sp = SpecifyInterface()
 
 class HomeScreen(QMainWindow):
     # Get version number to set into the homeScreen welcome menu.
@@ -42,6 +44,7 @@ class HomeScreen(QMainWindow):
 
     def __init__(self):
         super(HomeScreen, self).__init__()
+        util.buildLogger()
         self.load_ui()
         self.setup_connections()
         QTimer.singleShot(0, self.auto_login) # Attempt auto-login if login.cfg exists
@@ -82,7 +85,7 @@ class HomeScreen(QMainWindow):
         """
 
         config_path = Path(util.getUserPath()).joinpath('config').joinpath('login.cfg')
-        print(f'Checking for auto-login config at {config_path}')
+        util.logger.debug(f'Checking for auto-login config at {config_path}')
         if config_path.exists():
             try:
                 with open(config_path, 'r') as f:
@@ -137,6 +140,7 @@ class HomeScreen(QMainWindow):
             self.institution_id = institution[0]['id']
             self.institution_url = institution[0]['url']
             gs.baseURL = self.institution_url
+            sp.baseURL = self.institution_url
             collections = util.convert_dbrow_list(db.getRowsOnFilters('collection', {' institutionid = ':f'{self.institution_id}', 'visible = ': '1'}), True)
             self.ui.lstSelectCollection.clear()
             self.ui.lstSelectCollection.addItems(collections)

@@ -18,7 +18,7 @@ from datetime import datetime
 from models import model
 import data_access
 import global_settings as gs
-import specify_interface
+from sp7apitoolbox import specify_interface
 
 db = data_access.DataAccess(gs.databaseName)
 sp = specify_interface.SpecifyInterface()
@@ -39,11 +39,7 @@ class Storage(model.Model):
         self.name = ''
         self.fullName = ''
         self.spid = 0
-
-
-
         # self.loadPredefinedData() # TODO Turned off for now until needed
-
 
     def getFieldsAsDict(self):
         """
