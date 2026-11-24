@@ -60,7 +60,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.collobj = specimen.Specimen(collection_id)  # Create blank specimen record instance
 
         # Input field lists defining: Tabbing order, focus indicator, what fields to be cleared, and what fields are not 'sticky' i.e. not carrying their value over to the next record after saving current one 
-        self.clearingList    = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'cbxChronostratigraphy', 'inpLocalityNotes', 'inpTaxonName', 'inpTaxonNumber', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured',
+        self.clearingList    = ['inpStorage', 'cbxPrepType', 'cbxTypeStatus', 'cbxGeoRegion', 'cbxChronostratigraphy', 'inpLocalityNotes', 'inpTaxonName', 'inpTaxonNumber', 'inpTaxonVerbatim', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured',
                                 'inpContainerName', 'inpCatalogNumber','txtRecordID', 'txtStorageFullname', 'inpNotes', 'txtTaxonFullname', 'chkTaxonomyUncertain']
         self.base_nonsticky_fields = ['inpCatalogNumber', 'txtRecordID', 'chkDamage', 'chkSpecimenObscured', 'chkLabelObscured']
         self.sessionMode     = 'Default'
@@ -260,6 +260,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.inpLocalityNotes.returnPressed.connect(self.on_locality_notes_return_pressed)
         self.ui.inpLocalityNotes.textChanged.connect(self.on_locality_notes_text_changed)
         self.ui.inpTaxonName.returnPressed.connect(self.on_inpTaxonName_return_pressed)
+        self.ui.inpTaxonVerbatim.returnPressed.connect(self.on_inpTaxonVerbatim_return_pressed)
         self.ui.chkDamage.clicked.connect(self.on_chkDamage_clicked)
         self.ui.chkSpecimenObscured.clicked.connect(self.on_chkSpecimenObscured_clicked)
         self.ui.chkLabelObscured.clicked.connect(self.on_chkLabelObscured_clicked)
@@ -417,12 +418,19 @@ class SpecimenDataEntryUI(QMainWindow):
             self.setTxtTaxonFullname(taxonname)
         self.on_taxonname_next_field()
 
+    def on_inpTaxonVerbatim_return_pressed(self):
+        self.collobj.taxonVerbatim = self.ui.inpTaxonVerbatim.text()
+        if self.fast_entry_mode:
+            self.ui.inpCatalogNumber.setFocus()
+        else:
+            self.ui.chkTaxonomyUncertain.setFocus()
+
     def on_taxonname_next_field(self):
         # Switch focus to next field        
         if self.fast_entry_mode:
             self.ui.inpCatalogNumber.setFocus()
         else:
-            self.ui.chkTaxonomyUncertain.setFocus()
+            self.ui.inpTaxonVerbatim.setFocus()
 
     def on_chkDamage_clicked(self): 
         needsrepair = self.ui.chkDamage.isChecked()

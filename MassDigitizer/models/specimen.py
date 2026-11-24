@@ -46,6 +46,7 @@ class Specimen(Model):
         self.id = 0
         self.catalogNumber = ''
         self.taxonFullName = ''
+        self.taxonVerbatim = ''
         self.taxonName = ''
         self.taxonAuthor = ''
         self.taxonNameId = 0
@@ -129,6 +130,7 @@ class Specimen(Model):
             'id': f'{self.id}',
             'catalognumber': f'{self.catalogNumber}',
             'taxonfullname': f'{self.taxonFullName}',
+            'taxonverbatim': f'{self.taxonVerbatim}',
             'taxonname': f'{self.taxonName}',
             'taxonauthor':f'{self.taxonAuthor}',
             'taxonnameid': f'{self.taxonNameId}',
@@ -178,7 +180,6 @@ class Specimen(Model):
             'exportdatetime': f'{self.exportDateTime}',
             'exportuserid': f'{self.exportUserId}'
         }
-
         return fieldsDict
 
     def setFields(self, record):
@@ -197,6 +198,7 @@ class Specimen(Model):
             self.containername = record['containername']
             self.containertype = record['containertype']
             self.taxonFullName = record['taxonfullname']
+            self.taxonVerbatim = record['taxonverbatim']
             self.taxonName = record['taxonname']
             self.taxonAuthor = record['taxonauthor']
             self.taxonNameId = record['taxonnameid']

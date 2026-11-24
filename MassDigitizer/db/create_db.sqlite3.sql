@@ -64,6 +64,7 @@ CREATE TABLE "specimen" (
 	"spid"	INTEGER,
 	"catalognumber"	TEXT,
 	"taxonfullname"	TEXT,
+	"taxonverbatim"	TEXT,
 	"taxonname"	TEXT,
 	"taxonauthor"	TEXT,
 	"taxonnameid"	INTEGER,
