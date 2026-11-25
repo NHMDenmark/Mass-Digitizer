@@ -1117,6 +1117,16 @@
             <string>storagename</string>
            </property>
           </column>
+          <column>
+           <property name="text">
+            <string>preptypename</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>typestatusname</string>
+           </property>
+          </column>
          </widget>
         </item>
         <item>

@@ -77,7 +77,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.collobj = specimen.Specimen(collection_id)  # Create blank specimen record instance
 
         # Create recordset of last 3 saved records for the initial preview table
-        self.tableHeaders = ['id', 'catalognumber', 'taxonfullname', 'containertype', 'georegionname','storagename'] 
+        self.tableHeaders = ['id', 'catalognumber', 'taxonfullname', 'containertype', 'georegionname','storagename', 'preptypename', 'typestatusname'] 
         self.recordSet = recordset.RecordSet(collection_id, 3,specimen_id=self.collobj.id) 
 
          # Load data
@@ -197,12 +197,6 @@ class SpecimenDataEntryUI(QMainWindow):
 
         # Set column widths for previous records table
         self.ui.tblPrevious.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
-        self.ui.tblPrevious.setColumnWidth(0, 50)  # Set width for id column
-        self.ui.tblPrevious.setColumnWidth(1, 150)  # Set width for catalognr column
-        self.ui.tblPrevious.setColumnWidth(2, 200)  # Set width for taxonfullname column
-        self.ui.tblPrevious.setColumnWidth(3, 200)  # Set width for containertype column
-        self.ui.tblPrevious.setColumnWidth(4, 200)  # Set width for georegionname column
-        self.ui.tblPrevious.setColumnWidth(5, 200)  # Set width for storagename column
 
     def setup_form(self, collection_id):
         """
@@ -260,7 +254,6 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.inpLocalityNotes.returnPressed.connect(self.on_locality_notes_return_pressed)
         self.ui.inpLocalityNotes.textChanged.connect(self.on_locality_notes_text_changed)
         self.ui.inpTaxonName.returnPressed.connect(self.on_inpTaxonName_return_pressed)
-        self.ui.inpTaxonVerbatim.returnPressed.connect(self.on_inpTaxonVerbatim_return_pressed)
         self.ui.chkDamage.clicked.connect(self.on_chkDamage_clicked)
         self.ui.chkSpecimenObscured.clicked.connect(self.on_chkSpecimenObscured_clicked)
         self.ui.chkLabelObscured.clicked.connect(self.on_chkLabelObscured_clicked)
@@ -280,6 +273,8 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.inpTaxonNumber.returnPressed.connect(self.lookup_taxon_number)
         self.ui.inpTaxonNumber.textChanged.connect(self.lookup_taxon_number)
         self.ui.chkTaxonomyUncertain.clicked.connect(self.on_chkTaxonomyUncertain_clicked)
+        self.ui.inpTaxonVerbatim.returnPressed.connect(self.on_inpTaxonVerbatim_return_pressed)
+        self.ui.inpTaxonVerbatim.textChanged.connect(self.on_inpTaxonVerbatim_changed)
 
         # Set entry mode button events
         self.ui.radModeDefault.toggled.connect(self.on_entry_mode_toggled)
@@ -404,6 +399,7 @@ class SpecimenDataEntryUI(QMainWindow):
             # reuse the completer selection handler so behavior is consistent
             self.on_taxonname_selected(completion)
             self.on_taxonname_next_field()
+            self.ui.inpTaxonVerbatim.setText('') # Clear verbatim taxon as it may no longer apply
             return
 
         # Normal Return behaviour when no popup is visible
@@ -416,7 +412,11 @@ class SpecimenDataEntryUI(QMainWindow):
             # No record: Unknown or "new" taxon name
             taxonname = self.collobj.handleNewTaxonName(taxon_name_input)
             self.setTxtTaxonFullname(taxonname)
+        
+        self.ui.inpTaxonVerbatim.setText('') # Clear verbatim taxon as it may no longer apply
         self.on_taxonname_next_field()
+
+    def on_inpTaxonVerbatim_changed(self): self.collobj.taxonVerbatim = self.ui.inpTaxonVerbatim.text()
 
     def on_inpTaxonVerbatim_return_pressed(self):
         self.collobj.taxonVerbatim = self.ui.inpTaxonVerbatim.text()
@@ -711,6 +711,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.collobj.setPrepTypeFields(self.ui.cbxPrepType.currentIndex() - 1)
         self.collobj.setTypeStatusFields(self.ui.cbxTypeStatus.currentIndex() - 1)
         self.collobj.specimennotes = self.ui.inpNotes.text()
+        self.collobj.taxonVerbatim = self.ui.inpTaxonVerbatim.text()
         self.collobj.localityNotes = self.ui.inpLocalityNotes.text()
         self.collobj.containername = self.ui.inpContainerName.text()
         self.collobj.containertype = self.getContainerTypeFromInput()
@@ -877,6 +878,7 @@ class SpecimenDataEntryUI(QMainWindow):
         self.ui.chkLabelObscured.setChecked(util.str_to_bool(record.get('labelobscured', 'False')))
 
         self.ui.inpNotes.setText(record.get('specimennotes', ''))
+        self.ui.inpTaxonVerbatim.setText(record.get('taxonverbatim', ''))
         self.ui.inpLocalityNotes.setText(record.get('localitynotes', ''))
 
         self.setContainerFields(record)
