@@ -2,16 +2,21 @@ WITH
 -- CHOOSE COLLECTION BY COMMENTING OUT THE OTHER SELECT STATEMENT
 
 -- NHMD Vascular Plants:
--- cfg AS (SELECT 688130 AS spid), 
+cfg AS (SELECT 688130 AS spid), 
 	 
 -- NHMD Invertebrate Palaeontology:
-cfg AS (SELECT 327682 AS spid), 
+-- cfg AS (SELECT 327682 AS spid), 
 
 -- NHMD Vascular Plants:
--- arr AS (SELECT 81648 AS val UNION ALL SELECT 89805 UNION ALL SELECT 372531 UNION ALL SELECT 1433),
+ arr AS (SELECT 81648 AS val 
+         UNION ALL SELECT 89805 
+			UNION ALL SELECT 372531 
+			UNION ALL SELECT 374482 
+			UNION ALL SELECT 437054 AS val 
+			UNION SELECT 1433),
 
 -- NHMD Invertebrate Palaeontology:
-arr AS (SELECT 414099 AS val),
+-- arr AS (SELECT 414099 AS val),
 
 t1 AS (
   /* Room (RankID 200 at st2) */
